@@ -5,15 +5,6 @@ import android.widget.ImageView;
 
 public class BoardButton extends ImageView
 {
-	private int piece = 0;
-	private boolean isHighlighted = false;
-	private boolean isCheck = false;
-	private final int squareColor;
-	private final int squareIndex;
-
-	private static final int WHITE = 0;
-	private static final int BLACK = 1;
-
 	private static final int[][] pieceImages = {
 		{R.drawable.black_king_light,	R.drawable.black_king_dark},
 		{R.drawable.black_queen_light,	R.drawable.black_queen_dark},
@@ -48,6 +39,16 @@ public class BoardButton extends ImageView
 		{R.drawable.black_king_light_c,		R.drawable.black_king_dark_c},
 		{R.drawable.white_king_light_c,		R.drawable.white_king_dark_c} };
 
+	private static final int WHITE = 0;
+	private static final int BLACK = 1;
+
+	private int piece = 0;
+	private int squareColor;
+	private int squareIndex;
+
+	private boolean isHighlighted = false;
+	private boolean isCheck = false;
+
 	public BoardButton(Context context, int index)
 	{
 		super(context);
@@ -56,6 +57,7 @@ public class BoardButton extends ImageView
 		squareColor = ((index / 8) % 2 == 1)? 
 				((index % 2 == 1)? WHITE : BLACK) :
 				((index % 2 == 1)? BLACK : WHITE);
+
 		setId(squareIndex);
 		setSquareImage();
 		setAdjustViewBounds(true);
@@ -74,15 +76,17 @@ public class BoardButton extends ImageView
 
 	public void resetSquare()
 	{
+		piece = 0;
 		isHighlighted = false;
 		isCheck = false;
-		piece = 0;
+
 		setSquareImage();
 	}
 
 	public void setPiece(int Piece)
 	{
 		piece = Piece;
+
 		setSquareImage();
 	}
 
@@ -99,12 +103,14 @@ public class BoardButton extends ImageView
 	public void setHighlight(boolean mode)
 	{
 		isHighlighted = mode;
+
 		setSquareImage();
 	}
 
 	public void setCheck(boolean mode)
 	{
 		isCheck = mode;
+
 		setSquareImage();
 	}
 }

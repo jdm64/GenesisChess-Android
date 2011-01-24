@@ -2,6 +2,16 @@ package com.chess.genesis;
 
 public class Board
 {
+	public static final int[] pieceType = {
+		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
+		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
+		Piece.BLACK_KNIGHT, Piece.BLACK_KNIGHT, Piece.BLACK_BISHOP, Piece.BLACK_BISHOP,
+		Piece.BLACK_ROOK,   Piece.BLACK_ROOK,   Piece.BLACK_QUEEN,  Piece.BLACK_KING,
+		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
+		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
+		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
+		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
+
 	public static final int NOT_MATE = 1;
 	public static final int CHECK_MATE = 2;
 	public static final int STALE_MATE = 3;
@@ -16,16 +26,6 @@ public class Board
 	public static final int INVALID_MOVEMENT = 7;
 	public static final int IN_CHECK = 8;
 	public static final int IN_CHECK_PLACE = 9;
-
-	public static final int[] pieceType = {
-		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
-		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
-		Piece.BLACK_KNIGHT, Piece.BLACK_KNIGHT, Piece.BLACK_BISHOP, Piece.BLACK_BISHOP,
-		Piece.BLACK_ROOK,   Piece.BLACK_ROOK,   Piece.BLACK_QUEEN,  Piece.BLACK_KING,
-		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
-		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
-		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
-		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
 	private int[] square;
 	private int[] piece;
@@ -43,11 +43,13 @@ public class Board
 		square = new int[64];
 		for (int i = 0; i < 64; i++)
 			square[i] = Piece.EMPTY;
+
 		piece = new int[32];
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.PLACEABLE;
-		stm = Piece.WHITE;
+
 		ply = 0;
+		stm = Piece.WHITE;
 	}
 
 	public int getStm()
@@ -111,7 +113,6 @@ public class Board
 
 		stm ^= -2;
 		ply--;
-
 	}
 
 	public boolean incheck(int color)

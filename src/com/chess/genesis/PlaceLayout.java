@@ -16,8 +16,8 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	{
 		super(context);
 
-		int count = 0;
 		int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
+		int count = 0;
 
 		setOrientation(LinearLayout.VERTICAL);
 

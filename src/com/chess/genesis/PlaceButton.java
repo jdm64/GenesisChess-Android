@@ -5,14 +5,6 @@ import android.widget.ImageView;
 
 public class PlaceButton extends ImageView
 {
-	private int count;
-	private boolean isHighlighted = false;
-
-	private final int type;
-	private final int maxCount;
-
-	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
-
 	private static final int[][] pieceImages = {
 		{R.drawable.black_king_1,	R.drawable.black_king_0},
 		{R.drawable.black_queen_1,	R.drawable.black_queen_0},
@@ -51,6 +43,14 @@ public class PlaceButton extends ImageView
 		{R.drawable.white_queen_1h,	R.drawable.white_queen_0h},
 		{R.drawable.white_king_1h,	R.drawable.white_king_0h} };
 
+	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
+
+	private int type;
+	private int count;
+	private int maxCount;
+
+	private boolean isHighlighted = false;
+
 	public PlaceButton(Context context, int Type)
 	{
 		super(context);
@@ -78,6 +78,7 @@ public class PlaceButton extends ImageView
 	{
 		isHighlighted = false;
 		count = maxCount;
+
 		setPieceImage();
 	}
 
@@ -94,18 +95,21 @@ public class PlaceButton extends ImageView
 	public void minusPiece()
 	{
 		count--;
+
 		setPieceImage();
 	}
 	
 	public void plusPiece()
 	{
 		count++;
+
 		setPieceImage();
 	}
 
 	public void setHighlight(boolean mode)
 	{
 		isHighlighted = mode;
+
 		setPieceImage();
 	}
 }

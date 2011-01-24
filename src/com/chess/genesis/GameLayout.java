@@ -9,7 +9,7 @@ import android.widget.TextView;
 public class GameLayout extends LinearLayout
 {
 	private ViewFlip3D board_flip;
-	private TextView stm_str;
+	private TextView stm_view;
 
 	public GameLayout(Context context)
 	{
@@ -28,9 +28,9 @@ public class GameLayout extends LinearLayout
 		addView(board_flip);
 
 		// Bottom Content
-		stm_str = new TextView(context);
-		stm_str.setText("White's Turn");
-		addView(stm_str);
+		stm_view = new TextView(context);
+		stm_view.setText("White's Turn");
+		addView(stm_view);
 
 		OnClickListener listen = new OnClickListener() {
 			public void onClick(View v) {

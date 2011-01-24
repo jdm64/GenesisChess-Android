@@ -44,6 +44,7 @@ public class GameActivity extends Activity
 		menu.add(Menu.NONE, TAKEBACK_MOVE, Menu.NONE, "Take Back Move");
 		menu.add(Menu.NONE, FORWARD_MOVE, Menu.NONE, "Forward Move");
 		menu.add(Menu.NONE, RESET_GAME, Menu.NONE, "Reset Game");
+
 		return true;
 	}
 

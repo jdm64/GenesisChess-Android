@@ -16,9 +16,9 @@ public class ObjectArray<Type>
 		return list.length;
 	}
 
-	public void resize(int Size)
+	public void resize(int size)
 	{
-		list = Arrays.copyOf(list, Size);
+		list = Arrays.copyOf(list, size);
 	}
 
 	public Type get(int index)
