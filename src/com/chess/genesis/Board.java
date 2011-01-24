@@ -57,6 +57,17 @@ public class Board
 		return stm;
 	}
 
+	public Position getPosition()
+	{
+		Position pos = new Position();
+
+		pos.square = square;
+		pos.piece = piece;
+		pos.ply = ply;
+
+		return pos;
+	}
+
 	private int pieceIndex(int loc)
 	{
 		for (int i = 0; i < 32; i++)
@@ -81,6 +92,22 @@ public class Board
 	public int kingIndex(int color)
 	{
 		return (Piece.WHITE == color)? piece[31] : piece[15];
+	}
+
+	public int[] getPieceCounts()
+	{
+		int[] counts = new int[13];
+
+		for (int i = 0; i < 32; i++) {
+			if (piece[i] == Piece.PLACEABLE)
+				counts[pieceType[i] + 6]++;
+		}
+		return counts;
+	}
+
+	public int[] getBoardArray()
+	{
+		return square;
 	}
 
 	public void make(Move move)

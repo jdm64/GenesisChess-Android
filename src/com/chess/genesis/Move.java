@@ -19,8 +19,8 @@ public class Move
 		StringBuffer str = new StringBuffer();
 
 		if (loc > Piece.PLACEABLE) {
-			str.append('a' + (loc % 8));
-			str.append('8' - (loc / 8));
+			str.append((char)((int)'a' + (loc % 8)));
+			str.append((char)((int)'8' - (loc / 8)));
 			return str;
 		} else if (loc == Piece.PLACEABLE) {
 			str = new StringBuffer("aval");
@@ -43,8 +43,9 @@ public class Move
 		return out.toString();
 	}
 
-	public boolean parse(char[] s)
+	public boolean parse(String str)
 	{
+		char[] s = str.toCharArray();
 		int piece = Piece.NONE;
 		boolean place = true;
 

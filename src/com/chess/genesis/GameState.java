@@ -1,22 +1,118 @@
 package com.chess.genesis;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.View;
+import java.util.Date;
 
 public class GameState
 {
 	private IntArray callstack;
-	private ObjectArray<Move> history;
 	private int hindex = -1;
 
-	public GameState()
+	public Board board;
+
+	private ObjectArray<Move> history;
+
+	private GameLayout gamelayout;
+
+	private Bundle settings;
+
+	public GameState(Bundle _settings, GameLayout _gamelayout)
 	{
+		gamelayout = _gamelayout;
+		settings = _settings;
+
 		callstack = new IntArray();
 		history = new ObjectArray<Move>();
+		board = new Board();
 
+		String tmp = settings.getString("history");
+		if (tmp == null)
+			return;
+		if (tmp.length() < 3)
+			return;
+		String[] movehistory = tmp.split(" ");
+
+		for (int i = 0; i < movehistory.length; i++) {
+			Move move = new Move();
+			move.parse(movehistory[i]);
+
+			if (board.validMove(move) != Board.VALID_MOVE)
+				break;
+			board.make(move);
+			history.push(move);
+			hindex++;
+		}
+		setBoard();
 	}
 
-	public void pause()
+	public void setBoard()
 	{
+		// set place piece counts
+		int[] pieces = board.getPieceCounts();
+		for (int i = -6; i < 0; i++) {
+			PlaceButton button = (PlaceButton) gamelayout.findViewById(i + 100);
+			button.setCount(pieces[i + 6]);
+		}
+		for (int i = 1; i < 7; i++) {
+			PlaceButton button = (PlaceButton) gamelayout.findViewById(i + 100);
+			button.setCount(pieces[i + 6]);
+		}
+
+		// set board pieces
+		int[] squares = board.getBoardArray();
+		for (int i = 0; i < 64; i++) {
+			BoardButton button = (BoardButton) gamelayout.findViewById(i);
+			button.setPiece(squares[i]);
+		}
+		// move caused check
+		if (board.incheck(board.getStm())) {
+			int king = board.kingIndex(board.getStm());
+			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			kingI.setCheck(true);
+		}
+
+		setStm();
+	}
+
+	public void setStm()
+	{
+		String check = " ", stm;
+
+		stm = (board.getStm() > 0)? "White's Turn" : "Black's Turn";
+		switch (board.isMate()) {
+		case Board.NOT_MATE:
+			if (board.incheck(board.getStm()))
+				check = " (check)";
+			break;
+		case Board.CHECK_MATE:
+			check = " (checkmate)";
+			break;
+		case Board.STALE_MATE:
+			check = " (stalemate)";
+			break;
+		}
+		gamelayout.setStm(stm + check);
+	}
+
+	public void save(Context context)
+	{
+		GameDataDB db = new GameDataDB(context);
+		String id = settings.getString("id");
+
+		if (hindex < 0) {
+			db.deleteLocalGame(id);
+			db.close();
+			return;
+		}
+		long stime = (new Date()).getTime();
+		String zfen = board.getPosition().printZfen();
+		String hist = history.toString();
+
+		db.saveLocalGame(id, stime, zfen, hist);
+		db.close();
 	}
 
 	public void reset()
@@ -24,9 +120,9 @@ public class GameState
 		hindex = -1;
 		callstack.clear();
 		history.clear();
-		GameActivity.self.board.reset();
-		GameActivity.self.gamelayout.setStm();
-		GameActivity.self.gamelayout.resetPieces();
+		board.reset();
+		setStm();
+		gamelayout.resetPieces();
 	}
 
 	public void backMove()
@@ -59,7 +155,7 @@ public class GameState
 		move.to = callstack.get(1);
 
 		// return if move isn't valid
-		if (GameActivity.self.board.validMove(move) != Board.VALID_MOVE) {
+		if (board.validMove(move) != Board.VALID_MOVE) {
 			callstack.pop();
 			return;
 		}
@@ -71,21 +167,21 @@ public class GameState
 	{
 		// legal move always ends with king not in check
 		if (hindex > 1) {
-			int king = GameActivity.self.board.kingIndex(GameActivity.self.board.getStm());
-			BoardButton kingI = (BoardButton) GameActivity.self.gamelayout.findViewById(king);
+			int king = board.kingIndex(board.getStm());
+			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			PlaceButton from = (PlaceButton) GameActivity.self.gamelayout.findViewById(Board.pieceType[move.index] + 100);
-			BoardButton to = (BoardButton) GameActivity.self.gamelayout.findViewById(move.to);
+			PlaceButton from = (PlaceButton) gamelayout.findViewById(Board.pieceType[move.index] + 100);
+			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
 
 			from.setHighlight(false);
 			from.minusPiece();
 			to.setPiece(from.getPiece());
 		} else {
-			BoardButton from = (BoardButton) GameActivity.self.gamelayout.findViewById(move.from);
-			BoardButton to = (BoardButton) GameActivity.self.gamelayout.findViewById(move.to);
+			BoardButton from = (BoardButton) gamelayout.findViewById(move.from);
+			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
 			from.setPiece(0);
@@ -93,43 +189,44 @@ public class GameState
 		}
 
 		// apply move to board
-		GameActivity.self.board.make(move);
+		board.make(move);
 		// update hindex, history
 		if (erase) {
 			hindex++;
 			if (hindex < history.size())
 				history.resize(hindex);
 			history.push(move);
+			save(gamelayout.getContext());
 		}
 
 		// move caused check
-		if (GameActivity.self.board.incheck(GameActivity.self.board.getStm())) {
-			int king = GameActivity.self.board.kingIndex(GameActivity.self.board.getStm());
-			BoardButton kingI = (BoardButton) GameActivity.self.gamelayout.findViewById(king);
+		if (board.incheck(board.getStm())) {
+			int king = board.kingIndex(board.getStm());
+			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
 			kingI.setCheck(true);
 		}
 
-		GameActivity.self.gamelayout.setStm();
+		setStm();
 	}
 
 	private void revertMove(Move move)
 	{
 		// legal move always ends with king not in check
 		if (hindex > 1) {
-			int king = GameActivity.self.board.kingIndex(GameActivity.self.board.getStm());
-			BoardButton kingI = (BoardButton) GameActivity.self.gamelayout.findViewById(king);
+			int king = board.kingIndex(board.getStm());
+			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			PlaceButton from = (PlaceButton) GameActivity.self.gamelayout.findViewById(Board.pieceType[move.index] + 100);
-			BoardButton to = (BoardButton) GameActivity.self.gamelayout.findViewById(move.to);
+			PlaceButton from = (PlaceButton) gamelayout.findViewById(Board.pieceType[move.index] + 100);
+			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
 
 			to.setPiece(0);
 			from.plusPiece();
 		} else {
-			BoardButton from = (BoardButton) GameActivity.self.gamelayout.findViewById(move.from);
-			BoardButton to = (BoardButton) GameActivity.self.gamelayout.findViewById(move.to);
+			BoardButton from = (BoardButton) gamelayout.findViewById(move.from);
+			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
 
 			from.setPiece(to.getPiece());
 
@@ -139,16 +236,16 @@ public class GameState
 				to.setPiece(Board.pieceType[move.xindex]);
 		}
 		hindex--;
-		GameActivity.self.board.unmake(move);
+		board.unmake(move);
 
 		// move caused check
-		if (GameActivity.self.board.incheck(GameActivity.self.board.getStm())) {
-			int king = GameActivity.self.board.kingIndex(GameActivity.self.board.getStm());
-			BoardButton kingI = (BoardButton) GameActivity.self.gamelayout.findViewById(king);
+		if (board.incheck(board.getStm())) {
+			int king = board.kingIndex(board.getStm());
+			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
 			kingI.setCheck(true);
 		}
 
-		GameActivity.self.gamelayout.setStm();
+		setStm();
 	}
 
 	public void boardClick(View v)
@@ -159,7 +256,7 @@ public class GameState
 		if (callstack.size() == 0) {
 		// No active clicks
 			// first click must be non empty and your own
-			if (to.getPiece() == 0 || to.getPiece() * GameActivity.self.board.getStm() < 0)
+			if (to.getPiece() == 0 || to.getPiece() * board.getStm() < 0)
 				return;
 			callstack.push(index);
 			to.setHighlight(true);
@@ -176,7 +273,7 @@ public class GameState
 				return;
 		} else {
 		// piece move action
-			BoardButton from = (BoardButton) GameActivity.self.gamelayout.findViewById(callstack.get(0));
+			BoardButton from = (BoardButton) gamelayout.findViewById(callstack.get(0));
 			// capturing your own piece
 			if (from.getPiece() * to.getPiece() > 0)
 				return;
@@ -191,14 +288,14 @@ public class GameState
 		int type = from.getPiece();
 
 		// only select your own pieces where count > 0
-		if (type * GameActivity.self.board.getStm() < 0 || from.getCount() <= 0)
+		if (type * board.getStm() < 0 || from.getCount() <= 0)
 			return;
 		if (callstack.size() == 0) {
 		// No active clicks
 			callstack.push(type + 100);
 		} else if (callstack.get(0) < 64) {
 		// switching from board to place piece
-			BoardButton to = (BoardButton) GameActivity.self.gamelayout.findViewById(callstack.get(0));
+			BoardButton to = (BoardButton) gamelayout.findViewById(callstack.get(0));
 			to.setHighlight(false);
 			callstack.set(0, type + 100);
 		} else if (callstack.get(0) == type + 100) {
@@ -208,13 +305,13 @@ public class GameState
 			return;
 		} else {
 		// switching to another place piece
-			PlaceButton fromold = (PlaceButton) GameActivity.self.gamelayout.findViewById(callstack.get(0));
+			PlaceButton fromold = (PlaceButton) gamelayout.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
 			callstack.set(0, type + 100);
 			from.setHighlight(true);
 			return;
 		}
 		from.setHighlight(true);
-		GameActivity.self.gamelayout.placeButtonClick();
+		gamelayout.onClick(v);
 	}
 }

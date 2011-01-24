@@ -43,7 +43,7 @@ public class MainMenuActivity extends Activity implements OnClickListener
 	{
 		switch (v.getId()) {
 		case LOCAL_GAME:
-			startActivity(new Intent(this, GameActivity.class));
+			startActivity(new Intent(this, GameListActivity.class));
 			break;
 		}
 	}

@@ -43,4 +43,14 @@ public class ObjectArray<Type>
 		list = Arrays.copyOf(list, list.length - 1);
 		return end;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuffer str = new StringBuffer();
+
+		for (int i = 0; i < list.length; i++)
+			str.append(list[i].toString() + " ");
+		return str.toString();
+	}
 }

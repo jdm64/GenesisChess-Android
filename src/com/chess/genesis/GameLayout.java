@@ -6,7 +6,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class GameLayout extends LinearLayout
+public class GameLayout extends LinearLayout implements OnClickListener
 {
 	private ViewFlip3D board_flip;
 	private TextView stm_view;
@@ -32,18 +32,13 @@ public class GameLayout extends LinearLayout
 		stm_view.setText("White's Turn");
 		addView(stm_view);
 
-		OnClickListener listen = new OnClickListener() {
-			public void onClick(View v) {
-				placeButtonClick();
-			}
-		};
 		MyImageView button = new MyImageView(context);
 		button.setImageResource(R.drawable.placebar);
-		button.setOnClickListener(listen);
+		button.setOnClickListener(this);
 		addView(button);
 	}
 
-	public void placeButtonClick()
+	public void onClick(View v)
 	{
 		board_flip.flip();
 	}
@@ -64,23 +59,8 @@ public class GameLayout extends LinearLayout
 		}
 	}
 
-	public void setStm()
+	public void setStm(String stm)
 	{
-		String check = " ", stm;
-
-		stm = (GameActivity.self.board.getStm() > 0)? "White's Turn" : "Black's Turn";
-		switch (GameActivity.self.board.isMate()) {
-		case Board.NOT_MATE:
-			if (GameActivity.self.board.incheck(GameActivity.self.board.getStm()))
-				check = " (check)";
-			break;
-		case Board.CHECK_MATE:
-			check = " (checkmate)";
-			break;
-		case Board.STALE_MATE:
-			check = " (stalemate)";
-			break;
-		}
-		stm_str.setText(stm + check);
+		stm_view.setText(stm);
 	}
 }

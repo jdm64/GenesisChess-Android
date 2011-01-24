@@ -92,6 +92,13 @@ public class PlaceButton extends ImageView
 		return count;
 	}
 
+	public void setCount(int Count)
+	{
+		count = Count;
+
+		setPieceImage();
+	}
+
 	public void minusPiece()
 	{
 		count--;

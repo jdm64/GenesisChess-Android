@@ -15,11 +15,7 @@ public class GameActivity extends Activity
 
 	public static GameActivity self;
 
-	public GameLayout gamelayout;
-
-	public final GameState gamestate = new GameState();
-
-	public final Board board = new Board();
+	public GameState gamestate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -34,8 +30,17 @@ public class GameActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		// set content view
-		gamelayout = new GameLayout(this);
+		GameLayout gamelayout = new GameLayout(this);
 		setContentView(gamelayout);
+
+		// create new game
+		gamestate = new GameState(getIntent().getExtras(), gamelayout);
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
 	}
 
 	@Override
