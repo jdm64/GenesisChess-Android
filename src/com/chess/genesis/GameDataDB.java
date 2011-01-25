@@ -55,6 +55,12 @@ public class GameDataDB
 		db.execSQL("DELETE FROM localgames WHERE id=?;", data);
 	}
 
+	public void renameLocalGame(String id, String name)
+	{
+		Object[] data = {name, id};
+		db.execSQL("UPDATE localgames SET name=? WHERE id=?;", data);
+	}
+
 	public SQLiteCursor getGameList()
 	{
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM localgames ORDER BY stime DESC", null);

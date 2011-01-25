@@ -22,7 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import java.util.Date;
 
-public class GameListLayout extends LinearLayout implements OnItemClickListener, OnItemLongClickListener, OnTouchListener
+public class GameListLayout extends LinearLayout implements OnItemClickListener, OnTouchListener
 {
 	public static final int TOPBAR = 1;
 	public static final int NEW_GAME = 2;
@@ -60,19 +60,12 @@ public class GameListLayout extends LinearLayout implements OnItemClickListener,
 		gamelistview = new ListView(context);
 		gamelistview.setAdapter(gamelist);
 		gamelistview.setOnItemClickListener(this);
-		gamelistview.setOnItemLongClickListener(this);
-
 		addView(gamelistview);
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		GameListActivity.self.selectGame(parent, position);
-	}
-
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-	{
-		return true;
 	}
 
 	public boolean onTouch(View v, MotionEvent event)
@@ -99,7 +92,7 @@ public class GameListLayout extends LinearLayout implements OnItemClickListener,
 		gamelist.update();
 	}
 
-	private class GameList extends BaseAdapter implements ListAdapter
+	public class GameList extends BaseAdapter implements ListAdapter
 	{
 		private SQLiteCursor list;
 
