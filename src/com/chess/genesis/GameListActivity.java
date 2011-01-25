@@ -13,8 +13,6 @@ import android.widget.AdapterView;
 
 public class GameListActivity extends Activity implements OnClickListener
 {
-	public static final int NEW_GAME = 1;
-
 	public static GameListActivity self;
 
 	private GameListLayout view;
@@ -39,13 +37,13 @@ public class GameListActivity extends Activity implements OnClickListener
 	public void onClick(View v)
 	{
 		switch (v.getId()) {
-		case NEW_GAME:
+		case GameListLayout.NEW_GAME:
 			GameDataDB db = new GameDataDB(v.getContext());
 			Intent intent = new Intent(this, GameActivity.class);
 
 			intent.putExtras(db.newLocalGame("genesis", "local"));
 			db.close();			
-			startActivity(intent);
+			startActivityForResult(intent, 1);
 			break;
 		}
 	}

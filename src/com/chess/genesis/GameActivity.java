@@ -41,6 +41,7 @@ public class GameActivity extends Activity
 	public void onPause()
 	{
 		super.onPause();
+		gamestate.save(this, true);
 	}
 
 	@Override

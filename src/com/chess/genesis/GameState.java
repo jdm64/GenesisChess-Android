@@ -97,13 +97,17 @@ public class GameState
 		gamelayout.setStm(stm + check);
 	}
 
-	public void save(Context context)
+	public void save(Context context, boolean exitgame)
 	{
 		GameDataDB db = new GameDataDB(context);
 		String id = settings.getString("id");
 
-		if (hindex < 0) {
+		if (history.size() < 1) {
 			db.deleteLocalGame(id);
+			db.close();
+			return;
+		}
+		if (exitgame) {
 			db.close();
 			return;
 		}
@@ -196,7 +200,7 @@ public class GameState
 			if (hindex < history.size())
 				history.resize(hindex);
 			history.push(move);
-			save(gamelayout.getContext());
+			save(gamelayout.getContext(), false);
 		}
 
 		// move caused check

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,13 +16,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import java.util.Date;
 
-public class GameListLayout extends LinearLayout implements OnItemClickListener, OnItemLongClickListener
+public class GameListLayout extends LinearLayout implements OnItemClickListener, OnItemLongClickListener, OnTouchListener
 {
+	public static final int TOPBAR = 1;
+	public static final int NEW_GAME = 2;
+
 	public GameList gamelist;
 	public ListView gamelistview;
 
@@ -29,15 +35,25 @@ public class GameListLayout extends LinearLayout implements OnItemClickListener,
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
 
-		LinearLayout row = new LinearLayout(context);
+		LinearLayout table = new LinearLayout(context);
 
-		Button button = new Button(context);
-		button.setText("New Game");
-		button.setId(MainMenuActivity.LOCAL_GAME);
+		MyImageView button = new MyImageView(context);
+		button.setImageResource(R.drawable.topbar_genesis);
+		button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+		button.setId(TOPBAR);
+		button.setOnTouchListener(this);
 		button.setOnClickListener(GameListActivity.self);
-		row.addView(button);
+		table.addView(button);
 
-		addView(row);
+		button = new MyImageView(context);
+		button.setImageResource(R.drawable.topbar_plus);
+		button.setId(NEW_GAME);
+		button.setOnClickListener(GameListActivity.self);
+		button.setOnTouchListener(this);
+		button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 6.35f));
+		table.addView(button);
+
+		addView(table);
 
 		gamelist = new GameList(context);
 
@@ -57,6 +73,25 @@ public class GameListLayout extends LinearLayout implements OnItemClickListener,
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		return true;
+	}
+
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		switch (v.getId()) {
+		case NEW_GAME:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_plus_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar_plus);
+			break;
+		case TOPBAR:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar_genesis);
+			break;
+		}
+		return false;
 	}
 
 	public void updateList()
@@ -100,6 +135,9 @@ public class GameListLayout extends LinearLayout implements OnItemClickListener,
 			Bundle data = (Bundle) getItem(index);
 
 			TableLayout newcell = new TableLayout(parent.getContext());
+			newcell.setShrinkAllColumns(true);
+			newcell.setStretchAllColumns(true);
+
 			TableRow row = new TableRow(parent.getContext());
 			
 			TextView txt = new TextView(parent.getContext());
