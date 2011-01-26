@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -12,9 +13,9 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
-	public PlaceLayout(Context context)
+	public PlaceLayout(Context context, AttributeSet attrs)
 	{
-		super(context);
+		super(context, attrs);
 
 		int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
 		int count = 0;
@@ -77,6 +78,6 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 
 	public void onClick(View v)
 	{
-		GameActivity.self.gamestate.placeClick(v);
+		GameState.self.placeClick(v);
 	}
 }

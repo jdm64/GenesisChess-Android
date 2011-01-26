@@ -11,17 +11,17 @@ public class GameState
 	private IntArray callstack;
 	private int hindex = -1;
 
-	public Board board;
+	private Board board;
 
 	private ObjectArray<Move> history;
 
-	private GameLayout gamelayout;
-
 	private Bundle settings;
 
-	public GameState(Bundle _settings, GameLayout _gamelayout)
+	public static GameState self;
+
+	public GameState(Bundle _settings)
 	{
-		gamelayout = _gamelayout;
+		self = this;
 		settings = _settings;
 
 		callstack = new IntArray();
@@ -29,10 +29,10 @@ public class GameState
 		board = new Board();
 
 		String tmp = settings.getString("history");
-		if (tmp == null)
+		if (tmp == null || tmp.length() < 3) {
+			setStm();
 			return;
-		if (tmp.length() < 3)
-			return;
+		}
 		String[] movehistory = tmp.split(" ");
 
 		for (int i = 0; i < movehistory.length; i++) {
@@ -53,27 +53,26 @@ public class GameState
 		// set place piece counts
 		int[] pieces = board.getPieceCounts();
 		for (int i = -6; i < 0; i++) {
-			PlaceButton button = (PlaceButton) gamelayout.findViewById(i + 100);
+			PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			PlaceButton button = (PlaceButton) gamelayout.findViewById(i + 100);
+			PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			BoardButton button = (BoardButton) gamelayout.findViewById(i);
+			BoardButton button = (BoardButton) Game.self.findViewById(i);
 			button.setPiece(squares[i]);
 		}
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			int king = board.kingIndex(board.getStm());
-			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
-
 		setStm();
 	}
 
@@ -94,7 +93,7 @@ public class GameState
 			check = " (stalemate)";
 			break;
 		}
-		gamelayout.setStm(stm + check);
+		Game.self.stm_txt.setText(stm + check);
 	}
 
 	public void save(Context context, boolean exitgame)
@@ -125,8 +124,7 @@ public class GameState
 		callstack.clear();
 		history.clear();
 		board.reset();
-		setStm();
-		gamelayout.resetPieces();
+		Game.self.reset();
 	}
 
 	public void backMove()
@@ -172,20 +170,20 @@ public class GameState
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			int king = board.kingIndex(board.getStm());
-			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			PlaceButton from = (PlaceButton) gamelayout.findViewById(Board.pieceType[move.index] + 100);
-			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
+			PlaceButton from = (PlaceButton) Game.self.findViewById(Board.pieceType[move.index] + 100);
+			BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			from.setHighlight(false);
 			from.minusPiece();
 			to.setPiece(from.getPiece());
 		} else {
-			BoardButton from = (BoardButton) gamelayout.findViewById(move.from);
-			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
+			BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+			BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
 			from.setPiece(0);
@@ -200,16 +198,15 @@ public class GameState
 			if (hindex < history.size())
 				history.resize(hindex);
 			history.push(move);
-			save(gamelayout.getContext(), false);
+			save(Game.self.game_board.getContext(), false);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			int king = board.kingIndex(board.getStm());
-			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
-
 		setStm();
 	}
 
@@ -218,19 +215,19 @@ public class GameState
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			int king = board.kingIndex(board.getStm());
-			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			PlaceButton from = (PlaceButton) gamelayout.findViewById(Board.pieceType[move.index] + 100);
-			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
+			PlaceButton from = (PlaceButton) Game.self.findViewById(Board.pieceType[move.index] + 100);
+			BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setPiece(0);
 			from.plusPiece();
 		} else {
-			BoardButton from = (BoardButton) gamelayout.findViewById(move.from);
-			BoardButton to = (BoardButton) gamelayout.findViewById(move.to);
+			BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+			BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			from.setPiece(to.getPiece());
 
@@ -245,10 +242,9 @@ public class GameState
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			int king = board.kingIndex(board.getStm());
-			BoardButton kingI = (BoardButton) gamelayout.findViewById(king);
+			BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
-
 		setStm();
 	}
 
@@ -277,7 +273,7 @@ public class GameState
 				return;
 		} else {
 		// piece move action
-			BoardButton from = (BoardButton) gamelayout.findViewById(callstack.get(0));
+			BoardButton from = (BoardButton) Game.self.findViewById(callstack.get(0));
 			// capturing your own piece
 			if (from.getPiece() * to.getPiece() > 0)
 				return;
@@ -299,7 +295,7 @@ public class GameState
 			callstack.push(type + 100);
 		} else if (callstack.get(0) < 64) {
 		// switching from board to place piece
-			BoardButton to = (BoardButton) gamelayout.findViewById(callstack.get(0));
+			BoardButton to = (BoardButton) Game.self.findViewById(callstack.get(0));
 			to.setHighlight(false);
 			callstack.set(0, type + 100);
 		} else if (callstack.get(0) == type + 100) {
@@ -309,13 +305,13 @@ public class GameState
 			return;
 		} else {
 		// switching to another place piece
-			PlaceButton fromold = (PlaceButton) gamelayout.findViewById(callstack.get(0));
+			PlaceButton fromold = (PlaceButton) Game.self.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
 			callstack.set(0, type + 100);
 			from.setHighlight(true);
 			return;
 		}
 		from.setHighlight(true);
-		gamelayout.onClick(v);
+		Game.self.game_board.flip();
 	}
 }

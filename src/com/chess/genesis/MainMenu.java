@@ -7,43 +7,40 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 
-public class MainMenuActivity extends Activity implements OnClickListener
+public class MainMenu extends Activity implements OnClickListener
 {
-	public static final int LOCAL_GAME = 1;
-	public static final int ONLINE_GAME = 2;
-	public static final int SETTINGS = 3;
-	
-	public static MainMenuActivity self;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
 
-		// Set only portrait
+		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// Remove title
+		// remove title
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		// set content view
-		MainMenuLayout view = new MainMenuLayout(this);
-		setContentView(view);
+		setContentView(R.layout.mainmenu);
+
+		// setup click listeners
+		Button button = (Button) findViewById(R.id.local_game);
+		button.setOnClickListener(this);
 	}
 
 	@Override
 	public void onBackPressed()
 	{
-		moveTaskToBack(true);		
+		moveTaskToBack(true);
 	}
 
 	public void onClick(View v)
 	{
 		switch (v.getId()) {
-		case LOCAL_GAME:
-			startActivity(new Intent(this, GameListActivity.class));
+		case R.id.local_game:
+			startActivity(new Intent(this, GameList.class));
 			break;
 		}
 	}

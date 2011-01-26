@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TableLayout;
@@ -8,9 +9,9 @@ import android.widget.TableRow;
 
 public class BoardLayout extends TableLayout implements OnClickListener
 {
-	public BoardLayout(Context context)
+	public BoardLayout(Context context, AttributeSet attrs)
 	{
-		super(context);
+		super(context, attrs);
 
 		setShrinkAllColumns(true);
 		setStretchAllColumns(true);
@@ -29,6 +30,6 @@ public class BoardLayout extends TableLayout implements OnClickListener
 
 	public void onClick(View v)
 	{
-		GameActivity.self.gamestate.boardClick(v);
+		GameState.self.boardClick(v);
 	}
 }

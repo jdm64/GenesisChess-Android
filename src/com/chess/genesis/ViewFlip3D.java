@@ -3,6 +3,7 @@ package com.chess.genesis;
 import android.content.Context;
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.util.AttributeSet;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -13,9 +14,9 @@ import android.widget.ViewSwitcher;
 
 public class ViewFlip3D extends ViewSwitcher
 {
-	public ViewFlip3D(Context context)
+	public ViewFlip3D(Context context, AttributeSet attrs)
 	{
-		super(context);
+		super(context, attrs);
 	}
 
 	public void flip()
