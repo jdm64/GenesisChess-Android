@@ -3,11 +3,10 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content">
-	<ImageView
+	<com.chess.genesis.MyImageView
 	android:id="@+id/topbar"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:adjustViewBounds="true"
 	android:src="@drawable/topbar" />
 	<com.chess.genesis.ViewFlip3D
 	android:id="@+id/board_flip"
@@ -28,9 +27,8 @@ android:layout_height="wrap_content">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:layout_below="@id/board_flip" />
-	<ImageView
+	<com.chess.genesis.MyImageView
 	android:id="@+id/place_piece"
-	android:adjustViewBounds="true"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:src="@drawable/place_piece"

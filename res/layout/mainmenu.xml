@@ -3,11 +3,10 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content">
-	<ImageView
+	<com.chess.genesis.MyImageView
 	android:id="@+id/topbar"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:adjustViewBounds="true"
 	android:src="@drawable/topbar" />
 	<Button
 	android:id="@+id/local_game"
@@ -27,8 +26,7 @@ android:layout_height="wrap_content">
 	android:layout_height="wrap_content"
 	android:text="Settings"
 	android:layout_below="@id/network_game" />
-	<ImageView
-	android:adjustViewBounds="true"
+	<com.chess.genesis.MyImageView
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:src="@drawable/botbar"
