@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:shrinkColumns="*"
+android:stretchColumns="1"
+android:background="#fff">
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+		<com.chess.genesis.MyImageView
+		android:id="@+id/topbar"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:src="@drawable/topbar"
+		android:layout_span="2"/>
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:text="User Name: "
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="#000" />
+		<EditText
+		android:id="@+id/username"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:maxLength="16" />
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:text="Password: "
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:textColor="#000" />
+		<EditText
+		android:id="@+id/password"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:maxLength="22"
+		android:password="true" />
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:text="Password: "
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="#000" />
+		<EditText
+		android:id="@+id/password2"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:maxLength="22"
+		android:password="true" />
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+		<Button
+		android:id="@+id/submit"
+		android:text="Submit"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_span="2"/>
+	</TableRow>
+</TableLayout>

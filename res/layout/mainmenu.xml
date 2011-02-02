@@ -21,10 +21,10 @@ android:layout_height="wrap_content">
 	android:text="Online Game"
 	android:layout_below="@id/local_game" />
 	<Button
-	android:id="@+id/settings"
+	android:id="@+id/register"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:text="Settings"
+	android:text="Register"
 	android:layout_below="@id/network_game" />
 	<com.chess.genesis.MyImageView
 	android:layout_width="fill_parent"

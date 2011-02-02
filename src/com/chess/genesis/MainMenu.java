@@ -28,6 +28,9 @@ public class MainMenu extends Activity implements OnClickListener
 		// setup click listeners
 		Button button = (Button) findViewById(R.id.local_game);
 		button.setOnClickListener(this);
+
+		button = (Button) findViewById(R.id.register);
+		button.setOnClickListener(this);
 	}
 
 	@Override
@@ -41,6 +44,9 @@ public class MainMenu extends Activity implements OnClickListener
 		switch (v.getId()) {
 		case R.id.local_game:
 			startActivity(new Intent(this, GameList.class));
+			break;
+		case R.id.register:
+			startActivity(new Intent(this, Register.class));
 			break;
 		}
 	}
