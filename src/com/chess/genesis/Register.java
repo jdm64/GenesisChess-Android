@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -18,10 +19,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class Register extends Activity implements OnClickListener
 {
+	private static Register self;
+
 	private Handler handle = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -30,16 +31,16 @@ public class Register extends Activity implements OnClickListener
 
 			try {
 				if (json.getString("result").equals("error")) {
-					Toast.makeText(getApplication(), "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
 				
-				Editor settings = getPreferences(Context.MODE_PRIVATE).edit();
+				Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
 				settings.putBoolean("isRegistered", true);
 				settings.putString("username", json.getString("username"));
 				settings.putString("passhash", json.getString("passhash"));
-				
+
 				settings.commit();
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -53,6 +54,7 @@ public class Register extends Activity implements OnClickListener
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		self = this;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -71,7 +73,7 @@ public class Register extends Activity implements OnClickListener
 		button.setOnClickListener(this);
 
 		// set text
-		SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (settings.getBoolean("isRegistered", false)) {
 			EditText txt = (EditText) findViewById(R.id.username);
@@ -93,7 +95,7 @@ public class Register extends Activity implements OnClickListener
 
 	public void register_user()
 	{
-		SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (settings.getBoolean("isRegistered", false)) {
 			Toast.makeText(getApplication(), "You're already registered", Toast.LENGTH_LONG).show();

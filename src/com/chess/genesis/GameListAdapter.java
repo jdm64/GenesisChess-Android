@@ -14,11 +14,21 @@ import java.util.Date;
 public class GameListAdapter extends BaseAdapter implements ListAdapter
 {
 	private SQLiteCursor list;
+	private int type;
 
-	public GameListAdapter(Context context)
+	public GameListAdapter(Context context, Bundle settings)
 	{
 		GameDataDB db = new GameDataDB(context);
-		list = db.getGameList();
+		type = settings.getInt("type");
+
+		switch (type) {
+		case Enums.LOCAL_GAME:
+			list = db.getLocalGameList();
+			break;
+		case Enums.ONLINE_GAME:
+			list = db.getOnlineGameList();
+			break;
+		}
 	}
 
 	public int getCount()
@@ -48,10 +58,29 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 
 		if (cell == null) {
 			TableLayout newcell = new TableLayout(parent.getContext());
-			newcell.inflate(parent.getContext(), R.layout.gamelist_cell, newcell);
+			switch (type) {
+			case Enums.LOCAL_GAME:
+				newcell.inflate(parent.getContext(), R.layout.gamelist_cell, newcell);
+				break;
+			case Enums.ONLINE_GAME:
+				newcell.inflate(parent.getContext(), R.layout.gamelist_cell, newcell);
+				break;
+			}
 			cell = newcell;
 		}
+		switch (type) {
+		case Enums.LOCAL_GAME:
+			setupLocal(cell, data);
+			break;
+		case Enums.ONLINE_GAME:
+			setupOnline(cell, data);
+			break;
+		}
+		return cell;
+	}
 
+	public void setupLocal(View cell, Bundle data)
+	{
 		TextView txt = (TextView) cell.findViewById(R.id.game_name);
 		txt.setText(data.getString("name"));
 
@@ -59,7 +88,10 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 
 		txt = (TextView) cell.findViewById(R.id.game_date);
 		txt.setText(date);
-
-		return cell;
 	}
+
+	public void setupOnline(View cell, Bundle data)
+	{
+	}
+
 }

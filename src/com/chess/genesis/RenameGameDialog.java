@@ -13,10 +13,10 @@ import android.widget.TextView.BufferType;
 class RenameGameDialog extends AlertDialog implements OnClickListener
 {
 	private EditText txtinput;
-	private String gameid;
+	private int gameid;
 	private String gamename;
 
-	public RenameGameDialog(Context context, String id, String name)
+	public RenameGameDialog(Context context, int id, String name)
 	{
 		super(context);
 

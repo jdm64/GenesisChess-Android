@@ -3,7 +3,11 @@ package com.chess.genesis;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -18,14 +22,67 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ImageView;
+import android.widget.Toast;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
 	private ListView gamelist_view;
 
+	private Bundle settings;
+
 	public GameListAdapter gamelist_adapter;
 
 	public static GameList self;
+
+	private NetworkClient net;
+
+	private Handler handle = new Handler()
+	{
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what) {
+			case 1:
+				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplication());
+
+				Bundle data = (Bundle) msg.obj;
+
+				String username = settings.getString("username", "error!");
+				String gametype;
+
+				switch (data.getInt("gametype")) {
+				default:
+				case Enums.GENESIS_CHESS:
+					gametype = "genesis";
+					break;
+				case Enums.REGULAR_CHESS:
+					gametype = "regular";
+					break;
+				}
+				if (data.getInt("opponent") == Enums.RANDOM)
+					net.join_game(username, gametype);
+				else
+					net.new_game(username, gametype, data.getString("opp_name"));
+
+				(new Thread(net)).start();
+				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
+				break;
+			case 2:
+			case 3:
+				JSONObject json = (JSONObject) msg.obj;
+				try {
+					if (json.getString("result").equals("error")) {
+						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -39,6 +96,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		// Remove title
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+		// store settings from main menu
+		settings = getIntent().getExtras();
+
+		net = new NetworkClient(handle);
+
 		// set content view
 		setContentView(R.layout.gamelist);
 
@@ -51,7 +113,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		button.setOnTouchListener(this);
 		button.setOnClickListener(this);
 
-		gamelist_adapter = new GameListAdapter(this);
+		gamelist_adapter = new GameListAdapter(this, settings);
 
 		gamelist_view = (ListView) findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);
@@ -83,12 +145,17 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (v.getId()) {
 		case R.id.topbar_plus:
-			GameDataDB db = new GameDataDB(v.getContext());
 			Intent intent = new Intent(this, Game.class);
 
-			intent.putExtras(db.newLocalGame("genesis", "local"));
-			db.close();
-			startActivityForResult(intent, 1);
+			if (settings.getInt("type") == Enums.LOCAL_GAME) {
+				GameDataDB db = new GameDataDB(v.getContext());
+
+				intent.putExtras(db.newLocalGame(Enums.GENESIS_CHESS, Enums.HUMAN_OPPONENT));
+				db.close();
+				startActivityForResult(intent, 1);
+			} else {
+				(new NewOnlineGameDialog(v.getContext(), handle)).show();
+			}
 			break;
 		}
 	}
@@ -110,6 +177,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		Intent intent = new Intent(this, Game.class);
 
 		intent.putExtras(data);
+		intent.putExtras(settings);
 		startActivityForResult(intent, 1);
 	}
 
@@ -130,12 +198,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		switch (item.getItemId()) {
 		case R.id.delete_game:
 			GameDataDB db = new GameDataDB(this);
-			db.deleteLocalGame(bundle.getString("id"));
+			db.deleteLocalGame(Integer.valueOf(bundle.getString("id")));
 			db.close();
 			gamelist_adapter.update();
 			break;
 		case R.id.rename_game:
-			(new RenameGameDialog(this, bundle.getString("id"), bundle.getString("name"))).show();
+			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
 			break;
 		default:
 			return super.onContextItemSelected(item);

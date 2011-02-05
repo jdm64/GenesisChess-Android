@@ -31,38 +31,44 @@ public class GameDataDB
 		return bundle;
 	}
 
-	public Bundle newLocalGame(String type, String opponent)
+	public Bundle newLocalGame(int gametype, int opponent)
 	{
 		long time = (new Date()).getTime();
-		Object[] data = {time, time, type, opponent};
+		Object[] data = {time, time, gametype, opponent};
 		String[] data2 = {String.valueOf(time)};
 
-		db.execSQL("INSERT INTO localgames (ctime, stime, type, opponent) VALUES (?, ?, ?, ?);", data);
+		db.execSQL("INSERT INTO localgames (ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?);", data);
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
 
 		return rowToBundle(cursor, 0);
 	}
 
-	public void saveLocalGame(String id, long stime, String zfen, String history)
+	public void saveLocalGame(int id, long stime, String zfen, String history)
 	{
 		Object[] data = {stime, zfen, history, id};
 		db.execSQL("UPDATE localgames SET stime=?, zfen=?, history=? WHERE id=?;", data);
 	}
 
-	public void deleteLocalGame(String id)
+	public void deleteLocalGame(int id)
 	{
 		Object[] data = {id};
 		db.execSQL("DELETE FROM localgames WHERE id=?;", data);
 	}
 
-	public void renameLocalGame(String id, String name)
+	public void renameLocalGame(int id, String name)
 	{
 		Object[] data = {name, id};
 		db.execSQL("UPDATE localgames SET name=? WHERE id=?;", data);
 	}
 
-	public SQLiteCursor getGameList()
+	public SQLiteCursor getLocalGameList()
 	{
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM localgames ORDER BY stime DESC", null);
 	}
+
+	public SQLiteCursor getOnlineGameList()
+	{
+		return (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames ORDER BY yourturn DESC, stime DESC", null);
+	}
+
 }

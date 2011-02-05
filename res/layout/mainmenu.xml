@@ -15,7 +15,7 @@ android:layout_height="wrap_content">
 	android:layout_height="wrap_content"
 	android:layout_below="@id/topbar" />
 	<Button
-	android:id="@+id/network_game"
+	android:id="@+id/online_game"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:text="Online Game"
@@ -25,7 +25,7 @@ android:layout_height="wrap_content">
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:text="Register"
-	android:layout_below="@id/network_game" />
+	android:layout_below="@id/online_game" />
 	<com.chess.genesis.MyImageView
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"

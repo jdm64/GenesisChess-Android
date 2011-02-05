@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:shrinkColumns="*"
+android:stretchColumns="*" >
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Game Type:" />
+		<Spinner
+		android:id="@+id/game_type"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Opponent:" />
+		<RadioGroup
+		android:id="@+id/radio_group"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" >
+			<RadioButton
+			android:id="@+id/random_opp"
+			android:text="Random"
+			android:checked="true" />
+			<RadioButton
+			android:id="@+id/invite_opp"
+			android:text="Invite"
+			android:checked="false" />
+		</RadioGroup>
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Username:" />
+		<EditText
+		android:id="@+id/opp_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:enabled="false" />
+	</TableRow>
+	<TableRow
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" >
+		<Button
+		android:id="@+id/newgame_cancel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Cancel" />
+		<Button
+		android:id="@+id/newgame_ok"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Submit" />
+	</TableRow>
+</TableLayout>

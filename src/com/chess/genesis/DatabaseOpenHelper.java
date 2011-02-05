@@ -14,23 +14,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 		"id INTEGER PRIMARY KEY ASC, " +
 		"ctime INTEGER," +
 		"stime INTEGER," +
-		"type TEXT," +
-		"opponent TEXT," +
+		"gametype INTEGER," +
+		"opponent INTEGER," +
 		"name TEXT DEFAULT 'Untitled'," +
 		"zfen TEXT," +
 		"history TEXT);";
 
-/*
-	private static final String ONLINE_GAME_CREATE_TABEL =
+	private static final String NETWORK_GAME_CREATE_TABLE =
 		"CREATE TABLE onlinegames (" +
-		"id INT PRIMARY KEY," +
-		"time INT," +
-		"whiteuser TEXT," +
-		"blackuser TEXT," +
+		"gameid STRING PRIMARY KEY," +
+		"gametype INTEGER," +
+		"ctime INTEGER," +
+		"stime INTEGER," +
+		"yourturn INTEGER," + // 1 = your turn, 0 = opponent's turn
+		"ply INTEGER," +
+		"white TEXT," +
+		"black TEXT," +
 		"zfen TEXT," +
-		"movehistory TEXT," +
-		
-*/
+		"history TEXT);";
 
 	DatabaseOpenHelper(Context context)
 	{
@@ -41,6 +42,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		db.execSQL(LOCAL_GAME_CREATE_TABLE);
+		db.execSQL(NETWORK_GAME_CREATE_TABLE);
 	}
 
 	@Override

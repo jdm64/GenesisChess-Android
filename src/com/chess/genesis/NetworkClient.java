@@ -13,12 +13,13 @@ class NetworkClient implements Runnable
 	public final static int NONE = 0;
 	public final static int REGISTER = 1;
 	public final static int JOIN_GAME = 2;
-	public final static int SUBMIT_MOVE = 3;
-	public final static int SUBMIT_MSG = 4;
-	public final static int GAME_STATUS = 5;
-	public final static int GAME_INFO = 6;
-	public final static int READ_INBOX = 7;
-	public final static int CLEAR_INBOX = 8;
+	public final static int NEW_GAME = 3;
+	public final static int READ_INBOX = 4;
+	public final static int CLEAR_INBOX = 5;
+	public final static int GAME_STATUS = 6;
+	public final static int GAME_INFO = 7;
+	public final static int SUBMIT_MOVE = 8;
+	public final static int SUBMIT_MSG = 9;
 
 	private Handler callback;
 	private JSONObject json;
@@ -62,8 +63,12 @@ class NetworkClient implements Runnable
 		}
 		try {
 			json2 = net.read();
-			json2.put("username", json.getString("username"));
-			json2.put("passhash", json.getString("passhash"));
+
+			// FIXME: register shouldn't be special like this
+			if (fid == REGISTER) {
+				json2.put("username", json.getString("username"));
+				json2.put("passhash", json.getString("passhash"));
+			}
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -120,7 +125,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void join_game(String username, String type)
+	public void join_game(String username, String gametype)
 	{
 		fid = JOIN_GAME;
 
@@ -128,11 +133,28 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "joingame");
-			json.put("type", type);
 			json.put("username", username);
+			json.put("gametype", gametype);
 		} catch (Throwable t) {
 			throw new RuntimeException();
 		}
+	}
+
+	public void new_game(String username, String gametype, String opponent)
+	{
+		fid = NEW_GAME;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "newgame");
+			json.put("username", username);
+			json.put("gametype", gametype);
+			json.put("opponent", opponent);
+		} catch (Throwable t) {
+			throw new RuntimeException();
+		}
+
 	}
 
 	public void submit_move(String username, String gameid, String move)

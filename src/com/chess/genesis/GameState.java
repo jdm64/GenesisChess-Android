@@ -99,7 +99,7 @@ public class GameState
 	public void save(Context context, boolean exitgame)
 	{
 		GameDataDB db = new GameDataDB(context);
-		String id = settings.getString("id");
+		int id = Integer.valueOf(settings.getString("id"));
 
 		if (history.size() < 1) {
 			db.deleteLocalGame(id);
