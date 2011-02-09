@@ -22,16 +22,24 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 
 	private static final String NETWORK_GAME_CREATE_TABLE =
 		"CREATE TABLE onlinegames (" +
-		"gameid STRING PRIMARY KEY," +
+		"gameid TEXT PRIMARY KEY," +
 		"gametype INTEGER," +
 		"ctime INTEGER," +
-		"stime INTEGER," +
-		"yourturn INTEGER," + // 1 = your turn, 0 = opponent's turn
-		"ply INTEGER," +
+		"stime INTEGER DEFAULT 0," +
+		"yourturn INTEGER DEFAULT 0," + // 1 = your turn, 0 = opponent's turn
+		"ply INTEGER DEFAULT 0," +
 		"white TEXT," +
 		"black TEXT," +
-		"zfen TEXT," +
-		"history TEXT);";
+		"zfen TEXT DEFAULT ' '," +
+		"history TEXT DEFAULT ' ');";
+
+	private final static String MSG_CREATE_TABLE =
+		"CREATE TABLE msgtable (" +
+		"id INTEGER PRIMARY KEY ASC, " +
+		"gameid TEXT," +
+		"time INTEGER," +
+		"username TEXT," +
+		"msg TEXT);";
 
 	DatabaseOpenHelper(Context context)
 	{
@@ -43,6 +51,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	{
 		db.execSQL(LOCAL_GAME_CREATE_TABLE);
 		db.execSQL(NETWORK_GAME_CREATE_TABLE);
+		db.execSQL(MSG_CREATE_TABLE);
 	}
 
 	@Override

@@ -43,12 +43,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		public void handleMessage(Message msg)
 		{
 			switch (msg.what) {
-			case 1:
-				SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplication());
+			case NewOnlineGameDialog.MSG:
 
 				Bundle data = (Bundle) msg.obj;
 
-				String username = settings.getString("username", "error!");
+				String username = settings.getString("username");
 				String gametype;
 
 				switch (data.getInt("gametype")) {
@@ -68,8 +67,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
-			case 2:
-			case 3:
+			case SyncGameList.MSG:
+			case NetworkClient.JOIN_GAME:
+			case NetworkClient.NEW_GAME:
 				JSONObject json = (JSONObject) msg.obj;
 				try {
 					if (json.getString("result").equals("error")) {
@@ -77,9 +77,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 						return;
 					}
 					Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
+
+					if (msg.what == SyncGameList.MSG)
+						gamelist_adapter.update();
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				break;
 			}
 		}
 	};
@@ -97,7 +101,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		// store settings from main menu
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 		settings = getIntent().getExtras();
+		settings.putString("username", prefs.getString("username", "!error!"));
 
 		net = new NetworkClient(handle);
 
@@ -120,6 +127,25 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		gamelist_view.setOnItemClickListener(this);
 
 		registerForContextMenu(gamelist_view);
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
+			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			(new Thread(sync)).start();
+			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		gamelist_adapter.close();
 	}
 
 	public boolean onTouch(View v, MotionEvent event)

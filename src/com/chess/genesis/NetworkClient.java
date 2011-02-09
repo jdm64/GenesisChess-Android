@@ -233,9 +233,9 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void clear_inbox(String username, String time)
+	public void clear_inbox(String username, long time)
 	{
-		fid = READ_INBOX;
+		fid = CLEAR_INBOX;
 
 		json = new JSONObject();
 

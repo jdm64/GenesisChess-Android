@@ -17,6 +17,8 @@ import android.widget.TextView.BufferType;
 
 class NewOnlineGameDialog extends AlertDialog implements OnClickListener, OnCheckedChangeListener
 {
+	public final static int MSG = 100;
+
 	private Handler handle;
 	private Spinner spinner;
 
@@ -62,7 +64,7 @@ class NewOnlineGameDialog extends AlertDialog implements OnClickListener, OnChec
 			data.putInt("gametype", ((GameTypeItem) spinner.getSelectedItem()).id);
 			data.putInt("opponent", Enums.RANDOM); // Enums.INVITE
 			// data.putString("opp_name", name);
-			handle.sendMessage(handle.obtainMessage(1, data));
+			handle.sendMessage(handle.obtainMessage(MSG, data));
 		}
 		dismiss();
 	}

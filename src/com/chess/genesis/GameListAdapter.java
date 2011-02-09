@@ -13,12 +13,13 @@ import java.util.Date;
 
 public class GameListAdapter extends BaseAdapter implements ListAdapter
 {
+	private GameDataDB db;
 	private SQLiteCursor list;
 	private int type;
 
 	public GameListAdapter(Context context, Bundle settings)
 	{
-		GameDataDB db = new GameDataDB(context);
+		db = new GameDataDB(context);
 		type = settings.getInt("type");
 
 		switch (type) {
@@ -42,6 +43,11 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 		notifyDataSetChanged();
 	}
 
+	public void close()
+	{
+		db.close();
+	}
+
 	public long getItemId(int index)
 	{
 		return index;
@@ -60,10 +66,10 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 			TableLayout newcell = new TableLayout(parent.getContext());
 			switch (type) {
 			case Enums.LOCAL_GAME:
-				newcell.inflate(parent.getContext(), R.layout.gamelist_cell, newcell);
+				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_local, newcell);
 				break;
 			case Enums.ONLINE_GAME:
-				newcell.inflate(parent.getContext(), R.layout.gamelist_cell, newcell);
+				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_online, newcell);
 				break;
 			}
 			cell = newcell;
@@ -92,6 +98,17 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 
 	public void setupOnline(View cell, Bundle data)
 	{
-	}
+		int ply = Integer.valueOf(data.getString("ply"));
+		int yourturn = Integer.valueOf(data.getString("yourturn"));
 
+		String opponent = (ply % 2 == yourturn)? data.getString("white") : data.getString("black");
+
+		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
+		txt.setText(opponent);
+
+		String date = (new PrettyDate(data.getString("stime"))).stdFormat();
+
+		txt = (TextView) cell.findViewById(R.id.game_date);
+		txt.setText(date);
+	}
 }

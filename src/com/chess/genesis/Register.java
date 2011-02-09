@@ -123,10 +123,10 @@ public class Register extends Activity implements OnClickListener
 	public boolean valid_username(String name)
 	{
 		if (name.length() < 3) {
-			Toast.makeText(getApplication(), "Username too short", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Username too short", Toast.LENGTH_LONG).show();
 			return false;
-		} else if (!name.matches("[a-zA-Z0-9]*")) {
-			Toast.makeText(getApplication(), "Username can only contain letters or numbers", Toast.LENGTH_LONG).show();
+		} else if (!name.matches("[a-zA-Z0-9]+")) {
+			Toast.makeText(this, "Username can only contain letters or numbers", Toast.LENGTH_LONG).show();
 			return false;
 		}
 		return true;

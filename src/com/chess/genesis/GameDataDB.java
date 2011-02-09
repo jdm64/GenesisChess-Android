@@ -9,9 +9,11 @@ import java.util.Date;
 public class GameDataDB
 {
 	private SQLiteDatabase db;
+	private Context context;
 
-	public GameDataDB(Context context)
+	public GameDataDB(Context _context)
 	{
+		context = _context;
 		db = (new DatabaseOpenHelper(context)).getWritableDatabase();
 	}
 
@@ -71,4 +73,44 @@ public class GameDataDB
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames ORDER BY yourturn DESC, stime DESC", null);
 	}
 
+	public ObjectArray<String> getOnlineGameIds()
+	{
+		ObjectArray<String> list = new ObjectArray<String>();
+
+		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames", null);
+
+		cursor.moveToFirst();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			list.push(cursor.getString(0));
+			cursor.moveToNext();
+		}
+		return list;
+	}
+
+	public void insertMsg(String gameid, long time, String username, String msg)
+	{
+		Object[] data = {gameid, time, username, msg};
+		db.execSQL("INSERT INTO msgtable (gameid, time, username, msg) VALUES (?, ?, ?, ?);", data);
+	}
+
+	public void updateOnlineGame(String gameid, long stime, String zfen, String history)
+	{
+		String[] data1 = {gameid};
+
+		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
+		Bundle row = rowToBundle(cursor, 0);
+
+		GameInfo info = new GameInfo(context, row.getString("history"), row.getString("white"), row.getString("black"));
+
+		int ply = info.getPly(), yourturn = info.getYourTurn();
+
+		Object[] data2 = {stime, ply, yourturn, zfen, history, gameid};
+		db.execSQL("UPDATE onlinegames SET stime=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
+	}
+
+	public void insertOnlineGame(String gameid, int gametype, long ctime, String white, String black)
+	{
+		Object[] data = {gameid, gametype, ctime, white, black};
+		db.execSQL("INSERT INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
+	}
 }
