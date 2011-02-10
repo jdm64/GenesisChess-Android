@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-public class MoveLookup
+class MoveLookup
 {
 	private static final int[] mailbox = {
 		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,

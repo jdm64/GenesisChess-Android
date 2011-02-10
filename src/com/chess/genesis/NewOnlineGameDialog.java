@@ -88,8 +88,8 @@ class NewOnlineGameDialog extends AlertDialog implements OnClickListener, OnChec
 
 	private class GameTypeItem
 	{
-		public String name;
-		public int id;
+		private String name;
+		private int id;
 
 		public GameTypeItem(String Name, int Id)
 		{

@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-public class PlaceLayout extends LinearLayout implements OnClickListener
+class PlaceLayout extends LinearLayout implements OnClickListener
 {
 	public static final LinearLayout.LayoutParams linearparams =
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,

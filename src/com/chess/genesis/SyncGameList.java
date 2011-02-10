@@ -6,7 +6,6 @@ import android.os.Message;
 import java.lang.InterruptedException;
 import java.lang.Runnable;
 import java.lang.Thread;
-import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,7 +101,7 @@ class SyncGameList implements Runnable
 		}
 	}
 
-	public void read_inbox(JSONObject json)
+	private void read_inbox(JSONObject json)
 	{
 	try {
 		JSONArray games = json.getJSONArray("games");
@@ -150,7 +149,7 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	public void update_gamestatus()
+	private void update_gamestatus()
 	{
 		GameDataDB db = new GameDataDB(context);
 		ObjectArray<String> list = db.getOnlineGameIds();
@@ -166,7 +165,7 @@ class SyncGameList implements Runnable
 		}
 	}
 
-	public void game_info(JSONObject json)
+	private void game_info(JSONObject json)
 	{
 	try {
 		String gameid = json.getString("gameid");
@@ -183,7 +182,7 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	public void game_status(JSONObject json)
+	private void game_status(JSONObject json)
 	{
 	try {
 		String gameid = json.getString("gameid");

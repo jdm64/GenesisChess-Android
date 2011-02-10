@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-public class Move
+class Move
 {
 	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 

@@ -20,13 +20,13 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
+class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
 	private ListView gamelist_view;
 

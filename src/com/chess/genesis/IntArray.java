@@ -2,7 +2,7 @@ package com.chess.genesis;
 
 import java.util.Arrays;
 
-public class IntArray
+class IntArray
 {
 	int[] list = new int[0];
 

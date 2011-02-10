@@ -4,15 +4,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import java.util.Date;
 import android.os.Message;
+import android.view.View;
+import android.widget.Toast;
+import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.widget.Toast;
-import android.content.Context;
 
-public class GameState
+class GameState
 {
 	private IntArray callstack;
 	private int hindex = -1;
@@ -88,7 +87,7 @@ public class GameState
 		setBoard();
 	}
 
-	public void setBoard()
+	private void setBoard()
 	{
 		// set place piece counts
 		int[] pieces = board.getPieceCounts();
@@ -116,7 +115,7 @@ public class GameState
 		setStm();
 	}
 
-	public void setStm()
+	private void setStm()
 	{
 		String check = " ", stm;
 

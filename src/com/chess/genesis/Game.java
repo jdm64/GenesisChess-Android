@@ -14,7 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
+class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
 {
 	public static Game self;
 
@@ -22,7 +22,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 
 	public static TextView stm_txt;
 
-	public GameState gamestate;
+	private GameState gamestate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)

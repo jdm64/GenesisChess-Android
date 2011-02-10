@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import java.util.Date;
 
-public class GameDataDB
+class GameDataDB
 {
 	private SQLiteDatabase db;
 	private Context context;

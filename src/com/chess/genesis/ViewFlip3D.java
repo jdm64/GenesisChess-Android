@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ViewSwitcher;
 
-public class ViewFlip3D extends ViewSwitcher
+class ViewFlip3D extends ViewSwitcher
 {
 	public ViewFlip3D(Context context, AttributeSet attrs)
 	{
@@ -40,7 +40,7 @@ public class ViewFlip3D extends ViewSwitcher
 		view.startAnimation(animIn);
 	}
 
-	public class Flip3D extends Animation
+	private class Flip3D extends Animation
 	{
 		private final float mFromDegrees;
 		private final float mToDegrees;

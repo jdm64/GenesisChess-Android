@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-public class BoardLayout extends TableLayout implements OnClickListener
+class BoardLayout extends TableLayout implements OnClickListener
 {
 	public BoardLayout(Context context, AttributeSet attrs)
 	{

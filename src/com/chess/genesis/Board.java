@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-public class Board
+class Board
 {
 	public static final int[] pieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
@@ -15,7 +15,7 @@ public class Board
 	public static final int NOT_MATE = 1;
 	public static final int CHECK_MATE = 2;
 	public static final int STALE_MATE = 3;
-	
+
 	public static final int VALID_MOVE = 0;
 	public static final int INVALID_FORMAT = 1;
 	public static final int NOPIECE_ERROR = 2;
@@ -202,7 +202,7 @@ public class Board
 		return ret;
 	}
 
-	public int getNumMoves(int color)
+	private int getNumMoves(int color)
 	{
 		MoveLookup movelookup = new MoveLookup(square);
 		int num = 0;

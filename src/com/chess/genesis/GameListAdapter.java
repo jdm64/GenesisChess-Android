@@ -11,7 +11,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import java.util.Date;
 
-public class GameListAdapter extends BaseAdapter implements ListAdapter
+class GameListAdapter extends BaseAdapter implements ListAdapter
 {
 	private GameDataDB db;
 	private SQLiteCursor list;
@@ -85,7 +85,7 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 		return cell;
 	}
 
-	public void setupLocal(View cell, Bundle data)
+	private void setupLocal(View cell, Bundle data)
 	{
 		TextView txt = (TextView) cell.findViewById(R.id.game_name);
 		txt.setText(data.getString("name"));
@@ -96,7 +96,7 @@ public class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt.setText(date);
 	}
 
-	public void setupOnline(View cell, Bundle data)
+	private void setupOnline(View cell, Bundle data)
 	{
 		int ply = Integer.valueOf(data.getString("ply"));
 		int yourturn = Integer.valueOf(data.getString("yourturn"));

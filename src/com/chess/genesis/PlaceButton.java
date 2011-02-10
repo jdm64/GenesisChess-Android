@@ -3,7 +3,7 @@ package com.chess.genesis;
 import android.content.Context;
 import android.widget.ImageView;
 
-public class PlaceButton extends MyImageView
+class PlaceButton extends MyImageView
 {
 	private static final int[][] pieceImages = {
 		{R.drawable.black_king_1,	R.drawable.black_king_0},

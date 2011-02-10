@@ -2,7 +2,7 @@ package com.chess.genesis;
 
 import java.util.Arrays;
 
-public class ObjectArray<Type>
+class ObjectArray<Type>
 {
 	private Type[] list = (Type[]) new Object[0];
 

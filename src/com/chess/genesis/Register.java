@@ -19,7 +19,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends Activity implements OnClickListener
+class Register extends Activity implements OnClickListener
 {
 	private static Register self;
 
@@ -93,7 +93,7 @@ public class Register extends Activity implements OnClickListener
 		}
 	}
 
-	public void register_user()
+	private void register_user()
 	{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -120,7 +120,7 @@ public class Register extends Activity implements OnClickListener
 		Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 	}
 
-	public boolean valid_username(String name)
+	private boolean valid_username(String name)
 	{
 		if (name.length() < 3) {
 			Toast.makeText(this, "Username too short", Toast.LENGTH_LONG).show();
@@ -132,7 +132,7 @@ public class Register extends Activity implements OnClickListener
 		return true;
 	}
 
-	public boolean valid_password(String pass1, String pass2)
+	private boolean valid_password(String pass1, String pass2)
 	{
 		if (!pass1.equals(pass2)) {
 			Toast.makeText(getApplication(), "Passwords don't match", Toast.LENGTH_LONG).show();

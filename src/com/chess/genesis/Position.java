@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-public class Position
+class Position
 {
 	private static final int[] type = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
@@ -14,7 +14,7 @@ public class Position
 
 	public int ply;
 
-	public void reset()
+	private void reset()
 	{
 		square = new int[64];
 		for (int i = 0; i < 64; i++)

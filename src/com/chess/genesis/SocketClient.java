@@ -22,7 +22,7 @@ class SocketClient
 		
 	}
 	
-	public void connect() throws SocketException, IOException
+	private void connect() throws SocketException, IOException
 	{
 		if (sock.isConnected())
 			return;
