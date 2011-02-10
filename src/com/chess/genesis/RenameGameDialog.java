@@ -13,8 +13,9 @@ import android.widget.TextView.BufferType;
 class RenameGameDialog extends AlertDialog implements OnClickListener
 {
 	private EditText txtinput;
-	private int gameid;
 	private String gamename;
+
+	private int gameid;
 
 	public RenameGameDialog(Context context, int id, String name)
 	{

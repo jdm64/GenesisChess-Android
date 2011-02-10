@@ -15,6 +15,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 {
 	private GameDataDB db;
 	private SQLiteCursor list;
+
 	private int type;
 
 	public GameListAdapter(Context context, Bundle settings)

@@ -19,7 +19,6 @@ class Game extends Activity implements OnClickListener, OnLongClickListener, OnT
 	public static Game self;
 
 	public static ViewFlip3D game_board;
-
 	public static TextView stm_txt;
 
 	private GameState gamestate;

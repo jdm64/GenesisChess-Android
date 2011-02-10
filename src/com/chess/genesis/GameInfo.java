@@ -9,6 +9,7 @@ class GameInfo
 	private String history;
 	private String white;
 	private String black;
+
 	private Context context;
 
 	public GameInfo(Context _context, String History, String White, String Black)

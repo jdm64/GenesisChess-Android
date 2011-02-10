@@ -13,22 +13,19 @@ import org.json.JSONObject;
 
 class GameState
 {
-	private IntArray callstack;
+	public static GameState self;
+
 	private int hindex = -1;
 	private int ycol = 5;
 	private boolean isOnline = false;
 
+	private IntArray callstack;
 	private Board board;
-
 	private ObjectArray<Move> history;
-
 	private Bundle settings;
-
 	private NetworkClient net;
 
 	private Context context;
-
-	public static GameState self;
 
 	private Handler handle = new Handler()
 	{

@@ -23,6 +23,8 @@ class Register extends Activity implements OnClickListener
 {
 	private static Register self;
 
+	private NetworkClient net;
+
 	private Handler handle = new Handler()
 	{
 		public void handleMessage(Message msg)
@@ -47,8 +49,6 @@ class Register extends Activity implements OnClickListener
 			}
 		}
 	};
-
-	private NetworkClient net;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)

@@ -28,14 +28,12 @@ import org.json.JSONObject;
 
 class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
-	private ListView gamelist_view;
-
-	private Bundle settings;
+	public static GameList self;
 
 	public GameListAdapter gamelist_adapter;
 
-	public static GameList self;
-
+	private Bundle settings;
+	private ListView gamelist_view;
 	private NetworkClient net;
 
 	private Handler handle = new Handler()

@@ -14,13 +14,15 @@ class SyncGameList implements Runnable
 {
 	public final static int MSG = 101;
 
+	private int lock = 0;
 	private boolean error = false;
-	private int lock;
+
+	private String username;
 
 	private Handler callback;
 	private NetworkClient net;
+
 	private Context context;
-	private String username;
 
 	private Handler handle = new Handler()
 	{
@@ -65,7 +67,6 @@ class SyncGameList implements Runnable
 		username = Username;
 
 		net = new NetworkClient(handle);
-		lock = 0;
 	}
 
 	public void run()

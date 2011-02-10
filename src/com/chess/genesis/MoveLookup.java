@@ -67,7 +67,7 @@ class MoveLookup
 		return (A * B <= 0);
 	}
 	
-	int[] genAll(int from)
+	public int[] genAll(int from)
 	{
 		int type = Math.abs(square[from]), next = 0, mfrom = mailbox64[from], to;
 		int[] list = new int[28], offset = offsets[type];

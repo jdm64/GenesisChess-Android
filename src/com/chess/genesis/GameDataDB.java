@@ -9,6 +9,7 @@ import java.util.Date;
 class GameDataDB
 {
 	private SQLiteDatabase db;
+
 	private Context context;
 
 	public GameDataDB(Context _context)

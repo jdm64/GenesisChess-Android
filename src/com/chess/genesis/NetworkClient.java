@@ -23,6 +23,7 @@ class NetworkClient implements Runnable
 
 	private Handler callback;
 	private JSONObject json;
+
 	private int fid = NONE;
 
 	public NetworkClient(Handler handler)

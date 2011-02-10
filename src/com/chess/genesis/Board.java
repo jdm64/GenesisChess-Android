@@ -12,10 +12,6 @@ class Board
 		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
 		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
-	public static final int NOT_MATE = 1;
-	public static final int CHECK_MATE = 2;
-	public static final int STALE_MATE = 3;
-
 	public static final int VALID_MOVE = 0;
 	public static final int INVALID_FORMAT = 1;
 	public static final int NOPIECE_ERROR = 2;
@@ -27,6 +23,10 @@ class Board
 	public static final int IN_CHECK = 8;
 	public static final int IN_CHECK_PLACE = 9;
 
+	public static final int NOT_MATE = 1;
+	public static final int CHECK_MATE = 2;
+	public static final int STALE_MATE = 3;
+
 	private int[] square;
 	private int[] piece;
 
@@ -36,36 +36,6 @@ class Board
 	public Board()
 	{
 		reset();
-	}
-
-	public void reset()
-	{
-		square = new int[64];
-		for (int i = 0; i < 64; i++)
-			square[i] = Piece.EMPTY;
-
-		piece = new int[32];
-		for (int i = 0; i < 32; i++)
-			piece[i] = Piece.PLACEABLE;
-
-		ply = 0;
-		stm = Piece.WHITE;
-	}
-
-	public int getStm()
-	{
-		return stm;
-	}
-
-	public Position getPosition()
-	{
-		Position pos = new Position();
-
-		pos.square = square;
-		pos.piece = piece;
-		pos.ply = ply;
-
-		return pos;
 	}
 
 	private int pieceIndex(int loc)
@@ -89,9 +59,39 @@ class Board
 		return Piece.NONE;
 	}
 
+	public void reset()
+	{
+		square = new int[64];
+		for (int i = 0; i < 64; i++)
+			square[i] = Piece.EMPTY;
+
+		piece = new int[32];
+		for (int i = 0; i < 32; i++)
+			piece[i] = Piece.PLACEABLE;
+
+		ply = 0;
+		stm = Piece.WHITE;
+	}
+
+	public int getStm()
+	{
+		return stm;
+	}
+
 	public int kingIndex(int color)
 	{
 		return (Piece.WHITE == color)? piece[31] : piece[15];
+	}
+
+	public Position getPosition()
+	{
+		Position pos = new Position();
+
+		pos.square = square;
+		pos.piece = piece;
+		pos.ply = ply;
+
+		return pos;
 	}
 
 	public int[] getPieceCounts()
@@ -202,7 +202,7 @@ class Board
 		return ret;
 	}
 
-	private int getNumMoves(int color)
+	public int getNumMoves(int color)
 	{
 		MoveLookup movelookup = new MoveLookup(square);
 		int num = 0;
