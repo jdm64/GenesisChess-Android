@@ -3,13 +3,21 @@ package com.chess.genesis;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import java.util.Date;
+import android.os.Message;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.widget.Toast;
+import android.content.Context;
 
 public class GameState
 {
 	private IntArray callstack;
 	private int hindex = -1;
+	private int ycol = 5;
+	private boolean isOnline = false;
 
 	private Board board;
 
@@ -17,23 +25,55 @@ public class GameState
 
 	private Bundle settings;
 
+	private NetworkClient net;
+
+	private Context context;
+
 	public static GameState self;
 
-	public GameState(Bundle _settings)
+	private Handler handle = new Handler()
+	{
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what) {
+			case NetworkClient.SUBMIT_MOVE:
+				JSONObject json = (JSONObject) msg.obj;
+				try {
+					if (json.getString("result").equals("error")) {
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					Toast.makeText(context, json.getString("reason"), Toast.LENGTH_LONG).show();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+	};
+
+	public GameState(Context _context, Bundle _settings)
 	{
 		self = this;
+		context = _context;
 		settings = _settings;
 
 		callstack = new IntArray();
 		history = new ObjectArray<Move>();
 		board = new Board();
 
+		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
+			isOnline = true;
+			ycol = settings.getString("username").equals(settings.getString("white"))? 1:-1;
+			net = new NetworkClient(handle);
+		}
+
 		String tmp = settings.getString("history");
-		if (tmp == null || tmp.length() < 3) {
+		if (tmp == null) {
 			setStm();
 			return;
 		}
-		String[] movehistory = tmp.split(" ");
+		String[] movehistory = tmp.trim().split(" +");
 
 		for (int i = 0; i < movehistory.length; i++) {
 			Move move = new Move();
@@ -98,24 +138,35 @@ public class GameState
 
 	public void save(Context context, boolean exitgame)
 	{
-		GameDataDB db = new GameDataDB(context);
-		int id = Integer.valueOf(settings.getString("id"));
+		if (isOnline) {
+			if (exitgame)
+				return;
+			String username = settings.getString("username");
+			String gameid = settings.getString("gameid");
+			String move = history.top().toString();
 
-		if (history.size() < 1) {
-			db.deleteLocalGame(id);
-			db.close();
-			return;
-		}
-		if (exitgame) {
-			db.close();
-			return;
-		}
-		long stime = (new Date()).getTime();
-		String zfen = board.getPosition().printZfen();
-		String hist = history.toString();
+			net.submit_move(username, gameid, move);
+			(new Thread(net)).run();
+		} else {
+			GameDataDB db = new GameDataDB(context);
+			int id = Integer.valueOf(settings.getString("id"));
 
-		db.saveLocalGame(id, stime, zfen, hist);
-		db.close();
+			if (history.size() < 1) {
+				db.deleteLocalGame(id);
+				db.close();
+				return;
+			}
+			if (exitgame) {
+				db.close();
+				return;
+			}
+			long stime = (new Date()).getTime();
+			String zfen = board.getPosition().printZfen();
+			String hist = history.toString();
+
+			db.saveLocalGame(id, stime, zfen, hist);
+			db.close();
+		}
 	}
 
 	public void reset()
@@ -145,6 +196,14 @@ public class GameState
 	
 	private void handleMove()
 	{
+		if (isOnline) {
+			// you can't edit the past in online games
+			if (hindex + 1 < history.size()) {
+				callstack.pop();
+				return;
+			}
+		}
+
 		Move move = new Move();
 
 		// create move
@@ -255,8 +314,9 @@ public class GameState
 
 		if (callstack.size() == 0) {
 		// No active clicks
+			int col = isOnline? ycol : board.getStm();
 			// first click must be non empty and your own
-			if (to.getPiece() == 0 || to.getPiece() * board.getStm() < 0)
+			if (to.getPiece() == 0 || to.getPiece() * board.getStm() < 0 || col != board.getStm())
 				return;
 			callstack.push(index);
 			to.setHighlight(true);
@@ -285,10 +345,11 @@ public class GameState
 	public void placeClick(View v)
 	{
 		PlaceButton from = (PlaceButton) v;
+		int col = isOnline? ycol : board.getStm();
 		int type = from.getPiece();
 
 		// only select your own pieces where count > 0
-		if (type * board.getStm() < 0 || from.getCount() <= 0)
+		if (board.getStm() != col || type * board.getStm() < 0 || from.getCount() <= 0)
 			return;
 		if (callstack.size() == 0) {
 		// No active clicks

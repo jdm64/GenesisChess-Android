@@ -53,7 +53,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
-		gamestate = new GameState(getIntent().getExtras());
+		gamestate = new GameState(this, getIntent().getExtras());
 	}
 
 	@Override

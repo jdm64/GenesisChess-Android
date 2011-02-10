@@ -44,6 +44,11 @@ public class ObjectArray<Type>
 		return end;
 	}
 
+	public Type top()
+	{
+		return list[list.length - 1];
+	}
+
 	@Override
 	public String toString()
 	{
