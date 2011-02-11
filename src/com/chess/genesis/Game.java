@@ -14,7 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
+public class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
 {
 	public static Game self;
 

@@ -13,7 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
-class MainMenu extends Activity implements OnClickListener
+public class MainMenu extends Activity implements OnClickListener
 {
 	@Override
 	public void onCreate(Bundle savedInstanceState)

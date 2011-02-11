@@ -26,7 +26,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
+public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
 	public static GameList self;
 

@@ -19,7 +19,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class Register extends Activity implements OnClickListener
+public class Register extends Activity implements OnClickListener
 {
 	private static Register self;
 
