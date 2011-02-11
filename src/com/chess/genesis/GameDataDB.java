@@ -101,7 +101,7 @@ class GameDataDB
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
 		Bundle row = rowToBundle(cursor, 0);
 
-		GameInfo info = new GameInfo(context, row.getString("history"), row.getString("white"), row.getString("black"));
+		GameInfo info = new GameInfo(context, history, row.getString("white"), row.getString("black"));
 
 		int ply = info.getPly(), yourturn = info.getYourTurn();
 
