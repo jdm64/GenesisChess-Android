@@ -21,6 +21,8 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	public static ViewFlip3D game_board;
 	public static TextView stm_txt;
 
+	private int type;
+
 	private GameState gamestate;
 
 	@Override
@@ -52,7 +54,9 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
-		gamestate = new GameState(this, getIntent().getExtras());
+		Bundle bundle = getIntent().getExtras();
+		type = bundle.getInt("type");
+		gamestate = new GameState(this, bundle);
 	}
 
 	@Override
@@ -105,7 +109,10 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.game_options, menu);
+		if (type == Enums.ONLINE_GAME)
+			getMenuInflater().inflate(R.menu.game_options_online, menu);
+		else
+			getMenuInflater().inflate(R.menu.game_options_local, menu);
 
 		return true;
 	}
