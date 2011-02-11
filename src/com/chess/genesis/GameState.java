@@ -65,7 +65,7 @@ class GameState
 		}
 
 		String tmp = settings.getString("history");
-		if (tmp == null) {
+		if (tmp == null || tmp.length() < 3) {
 			setStm();
 			return;
 		}
