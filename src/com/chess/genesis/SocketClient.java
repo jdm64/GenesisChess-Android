@@ -19,7 +19,6 @@ class SocketClient
 	public SocketClient()
 	{
 		sock = new Socket();
-		
 	}
 	
 	private void connect() throws SocketException, IOException
@@ -51,7 +50,7 @@ class SocketClient
 	{
 		connect();
 
-		byte[] buff = new byte[1000];
+		byte[] buff = new byte[1440];
 
 		input.read(buff);
 
