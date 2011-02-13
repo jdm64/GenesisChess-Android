@@ -38,4 +38,59 @@ class PrettyDate extends Date
 
 		return week + ", " + month + " " + day + ", " + year + " @ " + hr + ":" + min + ":" + sec + " " + ampm;
 	}
+
+	public String agoFormat()
+	{
+		StringBuffer buff = new StringBuffer();
+		Date now = new Date();
+
+		long diff = Math.abs(now.getTime() - getTime());
+		int count = 0;
+
+		// months
+		if (diff >= 2629743830L) {
+			buff.append(String.valueOf(diff / 2629743830L) + " months ");
+			diff %= 2629743830L;
+			count++;
+		}
+		// weeks
+		if (diff >= 604800000) {
+			buff.append(String.valueOf(diff / 604800000) + " weeks ");
+			diff %= 604800000;
+			count++;
+
+			if (count >= 2)
+				return buff.toString() + "ago";
+		}
+		// days
+		if (diff >= 86400000) {
+			buff.append(String.valueOf(diff / 86400000) + " days ");
+			diff %= 86400000;
+			count++;
+
+			if (count >= 2)
+				return buff.toString() + "ago";
+		}
+		// hours
+		if (diff >= 3600000) {
+			buff.append(String.valueOf(diff / 3600000) + " hours ");
+			diff %= 3600000;
+			count++;
+
+			if (count >= 2)
+				return buff.toString() + "ago";
+		}
+		// minutes
+		if (diff >= 60000) {
+			buff.append(String.valueOf(diff / 60000) + " minutes ");
+			diff %= 60000;
+			count++;
+
+			if (count >= 2)
+				return buff.toString() + "ago";
+		}
+		// seconds
+		buff.append(String.valueOf(diff / 1000) + " seconds ");
+		return buff.toString() + "ago";
+	}
 }
