@@ -1,53 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content">
+xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow
-	android:id="@+id/table_01"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
+	android:id="@+id/table_01">
 		<com.chess.genesis.MyImageView
 		android:id="@+id/topbar_genesis"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:layout_weight="74"
-		android:src="@drawable/topbar_genesis" />
+		android:src="@drawable/topbar_genesis"/>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/topbar_plus"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:layout_weight="407"
-		android:src="@drawable/topbar_plus" />
+		android:src="@drawable/topbar_plus"/>
 	</TableRow>
 	<TableRow
 	android:id="@+id/table_02"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
+	style="@style/FillWidth"
 	android:layout_below="@id/table_01">
 		<Button
 		android:id="@+id/your_move"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Your Move"/>
 		<Button
 		android:id="@+id/there_move"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Their Move"/>
 	</TableRow>
 	<ListView
 	android:id="@+id/game_list"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
 	android:layout_below="@id/table_02"
 	android:layout_above="@id/botbar"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:src="@drawable/botbar"
-	android:layout_alignParentBottom="true" />
+	android:layout_alignParentBottom="true"
+	android:src="@drawable/botbar"/>
 </RelativeLayout>

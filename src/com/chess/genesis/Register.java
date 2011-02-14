@@ -59,9 +59,6 @@ public class Register extends Activity implements OnClickListener
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// remove title
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		// create network client instance
 		net = new NetworkClient(handle);
 

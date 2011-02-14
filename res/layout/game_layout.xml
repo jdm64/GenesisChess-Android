@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content">
+xmlns:android="http://schemas.android.com/apk/res/android">
 	<com.chess.genesis.MyImageView
 	android:id="@+id/topbar"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:src="@drawable/topbar" />
+	style="@style/FillWidth"
+	android:src="@drawable/topbar"/>
 	<com.chess.genesis.ViewFlip3D
 	android:id="@+id/board_flip"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:layout_below="@id/topbar" >
+	android:layout_below="@id/topbar">
 		<com.chess.genesis.BoardLayout
-		android:id="@+id/board_layout"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+		android:id="@+id/board_layout"/>
 		<com.chess.genesis.PlaceLayout
-		android:id="@+id/place_layout"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+		android:id="@+id/place_layout"/>
 	</com.chess.genesis.ViewFlip3D>
 	<TextView
 	android:id="@+id/stm_txt"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:layout_below="@id/board_flip" />
+	android:layout_below="@id/board_flip"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/place_piece"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:src="@drawable/place_piece"
-	android:layout_alignParentBottom="true" />
+	style="@style/FillWidth"
+	android:layout_alignParentBottom="true"
+	android:src="@drawable/place_piece"/>
 </RelativeLayout>

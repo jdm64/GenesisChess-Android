@@ -98,9 +98,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// Remove title
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		// store settings from main menu
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 

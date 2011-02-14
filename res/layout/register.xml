@@ -1,76 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
 android:shrinkColumns="*"
-android:stretchColumns="1"
-android:background="#fff">
-	<TableRow
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
+android:stretchColumns="1">
+	<TableRow>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/topbar"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:src="@drawable/topbar"
-		android:layout_span="2"/>
+		style="@style/FillWidth"
+		android:layout_span="2"
+		android:src="@drawable/topbar"/>
 	</TableRow>
-	<TableRow
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" >
+	<TableRow>
 		<TextView
-		android:text="User Name: "
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textColor="#000" />
+		android:text="User Name: "/>
 		<EditText
 		android:id="@+id/username"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:singleLine="true"
-		android:maxLength="16" />
+		android:maxLength="16"/>
 	</TableRow>
-	<TableRow
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" >
+	<TableRow>
 		<TextView
-		android:text="Password: "
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
-		android:textColor="#000" />
+		android:text="Password: "/>
 		<EditText
 		android:id="@+id/password"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:singleLine="true"
 		android:maxLength="22"
-		android:password="true" />
+		android:password="true"/>
 	</TableRow>
-	<TableRow
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" >
+	<TableRow>
 		<TextView
-		android:text="Password: "
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textColor="#000" />
+		android:text="Password: "/>
 		<EditText
 		android:id="@+id/password2"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		style="@style/FillWidth"
 		android:singleLine="true"
 		android:maxLength="22"
-		android:password="true" />
+		android:password="true"/>
 	</TableRow>
-	<TableRow
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content">
+	<TableRow>
 		<Button
 		android:id="@+id/submit"
-		android:text="Submit"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_span="2"/>
+		style="@style/FillWidth"
+		android:layout_span="2"
+		android:text="Submit"/>
 	</TableRow>
 </TableLayout>

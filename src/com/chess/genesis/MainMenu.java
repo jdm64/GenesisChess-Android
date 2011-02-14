@@ -23,9 +23,6 @@ public class MainMenu extends Activity implements OnClickListener
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// remove title
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		// set content view
 		setContentView(R.layout.mainmenu);
 

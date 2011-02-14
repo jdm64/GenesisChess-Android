@@ -34,9 +34,6 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// Remove title
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 		// set content view
 		setContentView(R.layout.game_layout);
 
