@@ -17,19 +17,94 @@ class PrettyDate extends Date
 		super(Long.valueOf(milliseconds).longValue());
 	}
 
+	// !SICK!
+	// This only exists because Calendar.getDisplayName was added
+	// in API Level 9
+	private String dayOfWeekToString(int day)
+	{
+		switch (day) {
+		case Calendar.SUNDAY:
+			return "Sun";
+		case Calendar.MONDAY:
+			return "Mon";
+		case Calendar.TUESDAY:
+			return "Tue";
+		case Calendar.WEDNESDAY:
+			return "Wed";
+		case Calendar.THURSDAY:
+			return "Thu";
+		case Calendar.FRIDAY:
+			return "Fri";
+		case Calendar.SATURDAY:
+			return "Sat";
+		default:
+			return "Err" + String.valueOf(day);
+		}
+	}
+
+	// !SICK!
+	// This only exists because Calendar.getDisplayName was added
+	// in API Level 9
+	private String monthToString(int month)
+	{
+		switch (month) {
+		case Calendar.JANUARY:
+			return "Jan";
+		case Calendar.FEBRUARY:
+			return "Feb";
+		case Calendar.MARCH:
+			return "Mar";
+		case Calendar.APRIL:
+			return "Apr";
+		case Calendar.MAY:
+			return "May";
+		case Calendar.JUNE:
+			return "Jun";
+		case Calendar.JULY:
+			return "Jul";
+		case Calendar.AUGUST:
+			return "Aug";
+		case Calendar.SEPTEMBER:
+			return "Sep";
+		case Calendar.OCTOBER:
+			return "Oct";
+		case Calendar.NOVEMBER:
+			return "Nov";
+		case Calendar.DECEMBER:
+			return "Dec";
+		default:
+			return "Err" + String.valueOf(month);
+		}
+	}
+
+	// !SICK!
+	// This only exists because Calendar.getDisplayName was added
+	// in API Level 9
+	private String ampmToString(int ampm)
+	{
+		switch (ampm) {
+		case Calendar.AM:
+			return "AM";
+		case Calendar.PM:
+			return "PM";
+		default:
+			return "Err" + String.valueOf(ampm);
+		}
+	}
+
 	public String stdFormat()
 	{
 		Calendar cal = new GregorianCalendar();
 
 		cal.setTime(this);
 
-		String week = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US),
-			month = cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US),
+		String week = dayOfWeekToString(cal.get(Calendar.DAY_OF_WEEK)),
+			month = monthToString(cal.get(Calendar.MONTH)),
 			day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)),
 			year = String.valueOf(cal.get(Calendar.YEAR)),
 			min = String.valueOf(cal.get(Calendar.MINUTE)),
 			sec = String.valueOf(cal.get(Calendar.SECOND)),
-			ampm = cal.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US);
+			ampm = ampmToString(cal.get(Calendar.AM_PM));
 
 		int hr_i = cal.get(Calendar.HOUR);
 		if (hr_i == 0)
