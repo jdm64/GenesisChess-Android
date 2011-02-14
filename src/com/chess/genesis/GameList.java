@@ -13,6 +13,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
@@ -20,6 +21,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,8 +34,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 	public GameListAdapter gamelist_adapter;
 
+	private int type;
+
 	private Bundle settings;
-	private ListView gamelist_view;
 	private NetworkClient net;
 
 	private Handler handle = new Handler()
@@ -103,11 +106,22 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		settings = getIntent().getExtras();
 		settings.putString("username", prefs.getString("username", "!error!"));
+		type = settings.getInt("type", Enums.ONLINE_GAME);
 
 		net = new NetworkClient(handle);
 
 		// set content view
-		setContentView(R.layout.gamelist);
+		if (type == Enums.ONLINE_GAME) {
+			setContentView(R.layout.gamelist_online);
+
+			Button button = (Button) findViewById(R.id.your_move);
+			button.setOnClickListener(this);
+
+			button = (Button) findViewById(R.id.there_move);
+			button.setOnClickListener(this);
+		} else {
+			setContentView(R.layout.gamelist_local);
+		}
 
 		// set click listeners
 		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
@@ -118,9 +132,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		button.setOnTouchListener(this);
 		button.setOnClickListener(this);
 
+		// set list adapters
 		gamelist_adapter = new GameListAdapter(this, settings);
 
-		gamelist_view = (ListView) findViewById(R.id.game_list);
+		ListView gamelist_view = (ListView) findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);
 		gamelist_view.setOnItemClickListener(this);
 
@@ -136,6 +151,8 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
+		} else {
+			gamelist_adapter.update();
 		}
 	}
 
@@ -175,12 +192,20 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				GameDataDB db = new GameDataDB(v.getContext());
 
 				intent.putExtras(db.newLocalGame(Enums.GENESIS_CHESS, Enums.HUMAN_OPPONENT));
+				intent.putExtras(settings);
 				db.close();
 				startActivityForResult(intent, 1);
 			} else {
 				(new NewOnlineGameDialog(v.getContext(), handle)).show();
 			}
 			break;
+		case R.id.your_move:
+			Button button = (Button) findViewById(R.id.your_move);
+			gamelist_adapter.setYourturn(1);
+			break;
+		case R.id.there_move:
+			button = (Button) findViewById(R.id.there_move);
+			gamelist_adapter.setYourturn(0);
 		}
 	}
 
@@ -233,10 +258,5 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			return super.onContextItemSelected(item);
 		}
 		return true;
-	}
-
-	public void onActivityResult(int request, int result, Intent data)
-	{
-		gamelist_adapter.update();
 	}
 }

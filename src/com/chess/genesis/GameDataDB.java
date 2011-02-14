@@ -69,9 +69,10 @@ class GameDataDB
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM localgames ORDER BY stime DESC", null);
 	}
 
-	public SQLiteCursor getOnlineGameList()
+	public SQLiteCursor getOnlineGameList(int yourturn)
 	{
-		return (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames ORDER BY yourturn DESC, stime DESC", null);
+		String[] data = {String.valueOf(yourturn)};
+		return (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE yourturn=? ORDER BY stime DESC", data);
 	}
 
 	public ObjectArray<String> getOnlineGameIds()

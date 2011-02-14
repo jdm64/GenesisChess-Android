@@ -28,7 +28,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			list = db.getLocalGameList();
 			break;
 		case Enums.ONLINE_GAME:
-			list = db.getOnlineGameList();
+			list = db.getOnlineGameList(1);
 			break;
 		}
 	}
@@ -41,6 +41,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	public void update()
 	{
 		list.requery();
+		notifyDataSetChanged();
+	}
+
+	public void setYourturn(int yourturn)
+	{
+		list = db.getOnlineGameList(yourturn);
 		notifyDataSetChanged();
 	}
 
