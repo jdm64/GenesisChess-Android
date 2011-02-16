@@ -19,6 +19,7 @@ android:versionName="1.0">
 		</activity>
 		<activity android:name="GameList"/>
 		<activity android:name="Game"/>
+		<activity android:name="Login"/>
 		<activity android:name="Register"/>
 	</application>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>

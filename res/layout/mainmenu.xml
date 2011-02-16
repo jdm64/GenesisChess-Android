@@ -16,10 +16,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/local_game"
 	android:text="Online Game"/>
 	<Button
-	android:id="@+id/register"
+	android:id="@+id/login"
 	style="@style/FillWidth"
 	android:layout_below="@id/online_game"
-	android:text="Register"/>
+	android:text="Login"/>
 	<com.chess.genesis.MyImageView
 	style="@style/FillWidth"
 	android:layout_alignParentBottom="true"

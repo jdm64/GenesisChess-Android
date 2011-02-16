@@ -10,16 +10,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends Activity implements OnClickListener
+public class Register extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
 {
 	private static Register self;
 
@@ -39,7 +43,7 @@ public class Register extends Activity implements OnClickListener
 				Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
 				
 				Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
-				settings.putBoolean("isRegistered", true);
+				settings.putBoolean("isLoggedIn", true);
 				settings.putString("username", json.getString("username"));
 				settings.putString("passhash", json.getString("passhash"));
 
@@ -66,38 +70,57 @@ public class Register extends Activity implements OnClickListener
 		setContentView(R.layout.register);
 
 		// setup click listeners
-		Button button = (Button) findViewById(R.id.submit);
+		Button button = (Button) findViewById(R.id.register);
 		button.setOnClickListener(this);
 
-		// set text
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		button = (Button) findViewById(R.id.back);
+		button.setOnClickListener(this);
 
-		if (settings.getBoolean("isRegistered", false)) {
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText(settings.getString("username", ""));
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText(settings.getString("passhash", ""));
-		}
+		ImageView image = (ImageView) findViewById(R.id.topbar);
+		image.setOnTouchListener(this);
+		image.setOnLongClickListener(this);
 	}
 
 	public void onClick(View v)
 	{
 		switch (v.getId()) {
-		case R.id.submit:
+		case R.id.register:
 			register_user();
 			break;
+		case R.id.back:
+			finish();
+			break;
 		}
+	}
+
+	public boolean onLongClick(View v)
+	{
+		switch (v.getId()) {
+		case R.id.topbar:
+			finish();
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean onTouch(View v, MotionEvent event)
+	{
+		switch (v.getId()) {
+		case R.id.topbar:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
+		}
+		return false;
 	}
 
 	private void register_user()
 	{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-		if (settings.getBoolean("isRegistered", false)) {
-			Toast.makeText(getApplication(), "You're already registered", Toast.LENGTH_LONG).show();
-			return;
-		}
 		EditText txt = (EditText) findViewById(R.id.username);
 		String username = txt.getText().toString();
 
@@ -114,7 +137,7 @@ public class Register extends Activity implements OnClickListener
 
 		net.register(username, password);
 		(new Thread(net)).start();
-		Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 	}
 
 	private boolean valid_username(String name)

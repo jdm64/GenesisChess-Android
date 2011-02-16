@@ -11,15 +11,17 @@ import org.json.JSONObject;
 class NetworkClient implements Runnable
 {
 	public final static int NONE = 0;
-	public final static int REGISTER = 1;
-	public final static int JOIN_GAME = 2;
-	public final static int NEW_GAME = 3;
-	public final static int READ_INBOX = 4;
-	public final static int CLEAR_INBOX = 5;
-	public final static int GAME_STATUS = 6;
-	public final static int GAME_INFO = 7;
-	public final static int SUBMIT_MOVE = 8;
-	public final static int SUBMIT_MSG = 9;
+	public final static int LOGIN = 1;
+	public final static int REGISTER = 2;
+	public final static int JOIN_GAME = 3;
+	public final static int NEW_GAME = 4;
+	public final static int READ_INBOX = 5;
+	public final static int CLEAR_INBOX = 6;
+	public final static int GAME_STATUS = 7;
+	public final static int GAME_INFO = 8;
+	public final static int SUBMIT_MOVE = 9;
+	public final static int SUBMIT_MSG = 10;
+	public final static int SYNC_GAMIDS = 11;
 
 	private Handler callback;
 	private JSONObject json;
@@ -67,6 +69,9 @@ class NetworkClient implements Runnable
 
 			// FIXME: register shouldn't be special like this
 			if (fid == REGISTER) {
+				json2.put("username", json.getString("username"));
+				json2.put("passhash", json.getString("passhash"));
+			} else if (fid == LOGIN) {
 				json2.put("username", json.getString("username"));
 				json2.put("passhash", json.getString("passhash"));
 			}
@@ -119,6 +124,21 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "register");
+			json.put("username", username);
+			json.put("passhash", password);
+		} catch (Throwable t) {
+			throw new RuntimeException();
+		}
+	}
+
+	public void login_user(String username, String password)
+	{
+		fid = LOGIN;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "login");
 			json.put("username", username);
 			json.put("passhash", password);
 		} catch (Throwable t) {
@@ -245,6 +265,21 @@ class NetworkClient implements Runnable
 			json.put("username", username);
 			json.put("time", time);
 		} catch (Throwable t) {
+			throw new RuntimeException();
+		}
+	}
+
+	public void sync_gameids(String username, String type)
+	{
+		fid = SYNC_GAMIDS;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "gameids");
+			json.put("type", type);
+			json.put("username", username);
+		} catch (Throwable e) {
 			throw new RuntimeException();
 		}
 	}

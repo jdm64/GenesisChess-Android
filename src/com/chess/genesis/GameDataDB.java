@@ -1,9 +1,11 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import java.util.Date;
 
 class GameDataDB
@@ -71,15 +73,24 @@ class GameDataDB
 
 	public SQLiteCursor getOnlineGameList(int yourturn)
 	{
-		String[] data = {String.valueOf(yourturn)};
-		return (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE yourturn=? ORDER BY stime DESC", data);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+		String username = pref.getString("username", "!error!");
+		String[] data = {username, username, String.valueOf(yourturn)};
+		String query = "SELECT * FROM onlinegames WHERE (white=? OR black=?) AND yourturn=? ORDER BY stime DESC";
+
+		return (SQLiteCursor) db.rawQuery(query, data);
 	}
 
 	public ObjectArray<String> getOnlineGameIds()
 	{
 		ObjectArray<String> list = new ObjectArray<String>();
 
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames", null);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String username = pref.getString("username", "!error!");
+		String[] data = {username, username};
+
+		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
 
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {

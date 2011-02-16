@@ -33,7 +33,7 @@ public class MainMenu extends Activity implements OnClickListener
 		button = (Button) findViewById(R.id.online_game);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.register);
+		button = (Button) findViewById(R.id.login);
 		button.setOnClickListener(this);
 	}
 
@@ -52,7 +52,6 @@ public class MainMenu extends Activity implements OnClickListener
 		case R.id.local_game:
 			bundle = new Bundle();
 			bundle.putInt("type", Enums.LOCAL_GAME);
-			bundle.putInt("gametype", Enums.GENESIS_CHESS);
 
 			intent = new Intent(this, GameList.class);
 			intent.putExtras(bundle);
@@ -62,21 +61,20 @@ public class MainMenu extends Activity implements OnClickListener
 		case R.id.online_game:
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-			if (!settings.getBoolean("isRegistered", false)) {
-				Toast.makeText(getApplication(), "You must register\nbefore playing online", Toast.LENGTH_LONG).show();
+			if (!settings.getBoolean("isLoggedIn", false)) {
+				Toast.makeText(getApplication(), "You must login\nbefore playing online", Toast.LENGTH_LONG).show();
 				return;
 			}
 			bundle = new Bundle();
 			bundle.putInt("type", Enums.ONLINE_GAME);
-			bundle.putInt("gametype", Enums.GENESIS_CHESS);
 
 			intent = new Intent(this, GameList.class);
 			intent.putExtras(bundle);
 
 			startActivity(intent);
 			break;
-		case R.id.register:
-			startActivity(new Intent(this, Register.class));
+		case R.id.login:
+			startActivity(new Intent(this, Login.class));
 			break;
 		}
 	}

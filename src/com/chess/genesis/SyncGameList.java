@@ -6,6 +6,7 @@ import android.os.Message;
 import java.lang.InterruptedException;
 import java.lang.Runnable;
 import java.lang.Thread;
+import java.util.Vector;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ class SyncGameList implements Runnable
 
 	private int lock = 0;
 	private boolean error = false;
+	private boolean fullsync = false;
 
 	private String username;
 
@@ -56,6 +58,10 @@ class SyncGameList implements Runnable
 			case NetworkClient.CLEAR_INBOX:
 				lock--;
 				break;
+			case NetworkClient.SYNC_GAMIDS:
+				full_sync(json);
+				lock--;
+				break;
 			}
 		}
 	};
@@ -69,10 +75,8 @@ class SyncGameList implements Runnable
 		net = new NetworkClient(handle);
 	}
 
-	public void run()
+	private void trylock()
 	{
-		net.read_inbox(username);
-		net.run();
 	try {
 		lock = 1;
 		while (lock > 0 && !error)
@@ -80,15 +84,28 @@ class SyncGameList implements Runnable
 	} catch (java.lang.InterruptedException e) {
 		e.printStackTrace();
 	}
-
-		if (!error)
-			update_gamestatus();
-	try {
-		while (lock > 0 && !error)
-			Thread.sleep(16);
-	} catch (java.lang.InterruptedException e) {
-		e.printStackTrace();
 	}
+
+	public void setFullSync(boolean value)
+	{
+		fullsync = value;
+	}
+
+	public void run()
+	{
+		net.read_inbox(username);
+		net.run();
+		trylock();
+
+		if (!error) {
+			if (fullsync) {
+				net.sync_gameids(username, "active");
+				net.run();
+			} else {
+				update_gamestatus();
+			}
+		}
+		trylock();
 
 		if (!error) {
 			JSONObject json = new JSONObject();
@@ -148,6 +165,37 @@ class SyncGameList implements Runnable
 	} catch (JSONException e) {
 		e.printStackTrace();
 	}
+	}
+
+	private void full_sync(JSONObject json)
+	{
+		GameDataDB db = new GameDataDB(context);
+		ObjectArray<String> list = db.getOnlineGameIds();
+		db.close();
+
+		Vector<String> list_have = new Vector<String>();
+		for (int i = 0; i < list.size(); i++)
+			list_have.add(list.get(i));
+
+		Vector<String> list_need = new Vector<String>();
+	try {
+		JSONArray ids = json.getJSONArray("gameids");
+		for (int i = 0; i < ids.length(); i++)
+			list_need.add(ids.getString(i));
+	} catch (JSONException e) {
+		e.printStackTrace();
+	}
+
+		list_need.removeAll(list_have);
+
+		for (int i = 0; i < list_need.size(); i++) {
+			if (error)
+				return;
+			net.game_info(username, list_need.get(i));
+			net.run();
+
+			lock++;
+		}
 	}
 
 	private void update_gamestatus()
