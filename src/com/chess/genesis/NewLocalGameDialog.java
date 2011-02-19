@@ -48,6 +48,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 			 new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		gametype_spin = (Spinner) findViewById(R.id.game_type);
 		gametype_spin.setAdapter(adapter);
@@ -56,6 +57,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 			 new AdapterItem("Computer", Enums.COMPUTER_OPPONENT) };
 
 		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		opponent_spin = (Spinner) findViewById(R.id.opponent);
 		opponent_spin.setAdapter(adapter);

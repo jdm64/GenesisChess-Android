@@ -50,6 +50,7 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedCh
 			 new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		spinner = (Spinner) findViewById(R.id.game_type);
 		spinner.setAdapter(adapter);
@@ -76,7 +77,6 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedCh
 
 		switch (checkedId) {
 		case R.id.random_opp:
-			state = false;
 			text.setText("");
 			break;
 		case R.id.invite_opp:
