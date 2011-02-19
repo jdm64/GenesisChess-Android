@@ -15,14 +15,15 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView.BufferType;
 
-class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedChangeListener
+class NewLocalGameDialog extends Dialog implements OnClickListener
 {
-	public final static int MSG = 100;
+	public final static int MSG = 102;
 
 	private Handler handle;
-	private Spinner spinner;
+	private Spinner gametype_spin;
+	private Spinner opponent_spin;
 
-	public NewOnlineGameDialog(Context context, Handler handler)
+	public NewLocalGameDialog(Context context, Handler handler)
 	{
 		super(context);
 
@@ -32,9 +33,9 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedCh
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		setTitle("New Online Game");
+		setTitle("New Local Game");
 
-		setContentView(R.layout.newnetworkgame);
+		setContentView(R.layout.newlocalgame);
 
 		Button button = (Button) findViewById(R.id.newgame_ok);
 		button.setOnClickListener(this);
@@ -42,17 +43,22 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedCh
 		button = (Button) findViewById(R.id.newgame_cancel);
 		button.setOnClickListener(this);
 
-		RadioGroup group = (RadioGroup) findViewById(R.id.radio_group);
-		group.setOnCheckedChangeListener(this);
-
 		AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
 			 new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
 
-		spinner = (Spinner) findViewById(R.id.game_type);
-		spinner.setAdapter(adapter);
+		gametype_spin = (Spinner) findViewById(R.id.game_type);
+		gametype_spin.setAdapter(adapter);
+
+		list = new AdapterItem[] {new AdapterItem("Human", Enums.HUMAN_OPPONENT),
+			 new AdapterItem("Computer", Enums.COMPUTER_OPPONENT) };
+
+		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+
+		opponent_spin = (Spinner) findViewById(R.id.opponent);
+		opponent_spin.setAdapter(adapter);
 	}
 
 	public void onClick(View v)
@@ -60,29 +66,14 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener, OnCheckedCh
 		switch (v.getId()) {
 		case R.id.newgame_ok:
 			Bundle data = new Bundle();
+			EditText text = (EditText) findViewById(R.id.game_name);
 
-			data.putInt("gametype", ((AdapterItem) spinner.getSelectedItem()).id);
-			data.putInt("opponent", Enums.RANDOM); // Enums.INVITE
-			// data.putString("opp_name", name);
+			data.putString("name", text.getText().toString());
+			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);
+			data.putInt("opponent", ((AdapterItem) opponent_spin.getSelectedItem()).id);
+
 			handle.sendMessage(handle.obtainMessage(MSG, data));
 		}
 		dismiss();
-	}
-
-	public void onCheckedChanged(RadioGroup group, int checkedId)
-	{
-		EditText text = (EditText) findViewById(R.id.opp_name);
-		boolean state = false;
-
-		switch (checkedId) {
-		case R.id.random_opp:
-			state = false;
-			text.setText("");
-			break;
-		case R.id.invite_opp:
-			state = true;
-			break;
-		}
-		text.setEnabled(state);
 	}
 }

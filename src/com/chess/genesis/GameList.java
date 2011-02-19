@@ -68,6 +68,23 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
+			case NewLocalGameDialog.MSG:
+				GameDataDB db = new GameDataDB(self);
+				Bundle bundle = (Bundle) msg.obj;
+
+				int gametype2 = bundle.getInt("gametype");
+				int gameopp = bundle.getInt("opponent");
+				String gamename = bundle.getString("name");
+				if (gamename.length() < 1)
+					gamename = "untitled";
+
+				Intent intent = new Intent(self, Game.class);
+				intent.putExtras(db.newLocalGame(gamename, gametype2, gameopp));
+				intent.putExtras(settings);
+				db.close();
+
+				startActivity(intent);
+				break;
 			case SyncGameList.MSG:
 			case NetworkClient.JOIN_GAME:
 			case NetworkClient.NEW_GAME:
@@ -185,16 +202,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		case R.id.topbar_plus:
 			Intent intent = new Intent(this, Game.class);
 
-			if (settings.getInt("type") == Enums.LOCAL_GAME) {
-				GameDataDB db = new GameDataDB(v.getContext());
-
-				intent.putExtras(db.newLocalGame(Enums.GENESIS_CHESS, Enums.HUMAN_OPPONENT));
-				intent.putExtras(settings);
-				db.close();
-				startActivityForResult(intent, 1);
-			} else {
+			if (settings.getInt("type") == Enums.LOCAL_GAME)
+				(new NewLocalGameDialog(v.getContext(), handle)).show();
+			else
 				(new NewOnlineGameDialog(v.getContext(), handle)).show();
-			}
 			break;
 		case R.id.your_move:
 			Button button = (Button) findViewById(R.id.your_move);
@@ -224,7 +235,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		intent.putExtras(data);
 		intent.putExtras(settings);
-		startActivityForResult(intent, 1);
+		startActivity(intent);
 	}
 
 	@Override

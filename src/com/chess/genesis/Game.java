@@ -35,7 +35,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// set content view
-		setContentView(R.layout.game_layout);
+		setContentView(R.layout.game);
 
 		// set click listeners
 		ImageView button = (ImageView) findViewById(R.id.topbar);

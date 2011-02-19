@@ -36,13 +36,13 @@ class GameDataDB
 		return bundle;
 	}
 
-	public Bundle newLocalGame(int gametype, int opponent)
+	public Bundle newLocalGame(String gamename, int gametype, int opponent)
 	{
 		long time = (new Date()).getTime();
-		Object[] data = {time, time, gametype, opponent};
+		Object[] data = {gamename, time, time, gametype, opponent};
 		String[] data2 = {String.valueOf(time)};
 
-		db.execSQL("INSERT INTO localgames (ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?);", data);
+		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?, ?);", data);
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
 
 		return rowToBundle(cursor, 0);

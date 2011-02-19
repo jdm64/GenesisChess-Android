@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView.BufferType;
 
-class RenameGameDialog extends AlertDialog implements OnClickListener
+class RenameGameDialog extends Dialog implements OnClickListener
 {
 	private EditText txtinput;
 	private String gamename;
@@ -30,7 +30,7 @@ class RenameGameDialog extends AlertDialog implements OnClickListener
 	{
 		setTitle("Rename Game");
 
-		setContentView(R.layout.rename_game);
+		setContentView(R.layout.renamegame);
 
 		txtinput = (EditText) findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<TableLayout
+	android:id="@+id/table01"
+	android:background="#ffffff"
+	android:paddingTop="12dp"
+	android:paddingBottom="12dp"
+	android:paddingLeft="6dp"
+	android:paddingRight="6dp"
+	android:shrinkColumns="*"
+	android:stretchColumns="1">
+		<TableRow>
+			<TextView
+			android:paddingRight="6dp"
+			android:textColor="#000000"
+			android:text="Game Type:"/>
+			<Spinner
+			android:id="@+id/game_type"/>
+		</TableRow>
+		<TableRow>
+			<TextView
+			android:textColor="#000000"
+			android:text="Opponent:"/>
+			<RadioGroup
+			android:id="@+id/radio_group">
+				<RadioButton
+				android:id="@+id/random_opp"
+				android:textColor="#000000"
+				android:text="Random"
+				android:checked="true"/>
+				<RadioButton
+				android:id="@+id/invite_opp"
+				android:textColor="#000000"
+				android:text="Invite"
+				android:checked="false"/>
+			</RadioGroup>
+		</TableRow>
+		<TableRow>
+			<TextView
+			android:textColor="#000000"
+			android:text="Username:"/>
+			<EditText
+			android:id="@+id/opp_name"
+			android:enabled="false"/>
+		</TableRow>
+	</TableLayout>
+	<TableRow
+	style="@style/FillWidth"
+	android:layout_below="@id/table01"
+	android:paddingTop="6dp">
+		<Button
+		android:id="@+id/newgame_cancel"
+		style="@style/FillWidth"
+		android:layout_weight="50"
+		android:text="Cancel"/>
+		<Button
+		android:id="@+id/newgame_ok"
+		style="@style/FillWidth"
+		android:layout_weight="50"
+		android:text="Submit"/>
+	</TableRow>
+</RelativeLayout>
