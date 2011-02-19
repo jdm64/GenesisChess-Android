@@ -119,18 +119,26 @@ class PrettyDate extends Date
 		StringBuffer buff = new StringBuffer();
 		Date now = new Date();
 
-		long diff = Math.abs(now.getTime() - getTime());
+		long tmp, diff = Math.abs(now.getTime() - getTime());
 		int count = 0;
 
 		// months
 		if (diff >= 2629743830L) {
-			buff.append(String.valueOf(diff / 2629743830L) + " months ");
+			tmp = diff / 2629743830L;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " months ");
+			else
+				buff.append(String.valueOf(tmp) + " month ");
 			diff %= 2629743830L;
 			count++;
 		}
 		// weeks
 		if (diff >= 604800000) {
-			buff.append(String.valueOf(diff / 604800000) + " weeks ");
+			tmp = diff / 604800000;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " weeks ");
+			else
+				buff.append(String.valueOf(tmp) + " week ");
 			diff %= 604800000;
 			count++;
 
@@ -139,7 +147,11 @@ class PrettyDate extends Date
 		}
 		// days
 		if (diff >= 86400000) {
-			buff.append(String.valueOf(diff / 86400000) + " days ");
+			tmp = diff / 86400000;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " days ");
+			else
+				buff.append(String.valueOf(tmp) + " day ");
 			diff %= 86400000;
 			count++;
 
@@ -148,7 +160,11 @@ class PrettyDate extends Date
 		}
 		// hours
 		if (diff >= 3600000) {
-			buff.append(String.valueOf(diff / 3600000) + " hours ");
+			tmp = diff / 3600000;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " hours ");
+			else
+				buff.append(String.valueOf(tmp) + " hour ");
 			diff %= 3600000;
 			count++;
 
@@ -157,7 +173,11 @@ class PrettyDate extends Date
 		}
 		// minutes
 		if (diff >= 60000) {
-			buff.append(String.valueOf(diff / 60000) + " minutes ");
+			tmp = diff / 60000;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " minutes ");
+			else
+				buff.append(String.valueOf(tmp) + " minute ");
 			diff %= 60000;
 			count++;
 
@@ -165,7 +185,11 @@ class PrettyDate extends Date
 				return buff.toString() + "ago";
 		}
 		// seconds
-		buff.append(String.valueOf(diff / 1000) + " seconds ");
+		tmp = diff / 1000;
+		if (tmp > 1)
+			buff.append(String.valueOf(tmp) + " seconds ");
+		else
+			buff.append(String.valueOf(tmp) + " second ");
 		return buff.toString() + "ago";
 	}
 }
