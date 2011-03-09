@@ -31,22 +31,76 @@ class GameState
 	{
 		public void handleMessage(Message msg)
 		{
+		try {
 			switch (msg.what) {
 			case NetworkClient.SUBMIT_MOVE:
 				JSONObject json = (JSONObject) msg.obj;
-				try {
-					if (json.getString("result").equals("error")) {
-						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					Toast.makeText(context, json.getString("reason"), Toast.LENGTH_LONG).show();
-				} catch (JSONException e) {
-					e.printStackTrace();
+
+				if (json.getString("result").equals("error")) {
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
+				}
+				Toast.makeText(context, json.getString("reason"), Toast.LENGTH_LONG).show();
+				net.game_status(settings.getString("username"), settings.getString("gameid"));
+				(new Thread(net)).start();
+				break;
+			case NetworkClient.GAME_STATUS:
+				json = (JSONObject) msg.obj;
+
+				if (json.getString("result").equals("error")) {
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
+				}
+				String gameid = json.getString("gameid");
+				String zfen = json.getString("zfen");
+				String history = json.getString("history");
+				int status = Enums.GameStatus(json.getString("status"));
+				long stime = json.getLong("stime");
+
+				GameDataDB db = new GameDataDB(context);
+				db.updateOnlineGame(gameid, status, stime, zfen, history);
+				db.close();
+
+				if (status != Enums.ACTIVE) {
+					settings.putString("status", String.valueOf(status));
+					net.game_score(settings.getString("username"), settings.getString("gameid"));
+					(new Thread(net)).start();
 				}
 				break;
+			case NetworkClient.GAME_SCORE:
+				json = (JSONObject) msg.obj;
+
+				if (json.getString("result").equals("error")) {
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
+				}
+				json.put("yourcolor", ycol);
+				json.put("white_name", settings.getString("white"));
+				json.put("black_name", settings.getString("black"));
+				json.put("status", settings.getString("status"));
+				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+				json.put("gameid", settings.getString("gameid"));
+
+				(new EndGameDialog(context, json)).show();
+				break;
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		}
 	};
+
+	private void check_endgame()
+	{
+		if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE)
+			return;
+
+		String username = settings.getString("username");
+		String gameid = settings.getString("gameid");
+
+		net.game_score(username, gameid);
+		(new Thread(net)).run();
+	}
 
 	public GameState(Context _context, Bundle _settings)
 	{
@@ -82,6 +136,9 @@ class GameState
 			hindex++;
 		}
 		setBoard();
+
+		if (settings.getInt("type") == Enums.ONLINE_GAME)
+			check_endgame();
 	}
 
 	private void setBoard()

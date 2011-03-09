@@ -106,24 +106,42 @@ class GameDataDB
 		db.execSQL("INSERT INTO msgtable (gameid, time, username, msg) VALUES (?, ?, ?, ?);", data);
 	}
 
-	public void updateOnlineGame(String gameid, long stime, String zfen, String history)
+	public void updateOnlineGame(String gameid, int status, long stime, String zfen, String history)
 	{
 		String[] data1 = {gameid};
 
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
 		Bundle row = rowToBundle(cursor, 0);
 
-		GameInfo info = new GameInfo(context, history, row.getString("white"), row.getString("black"));
+		GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
 
 		int ply = info.getPly(), yourturn = info.getYourTurn();
 
-		Object[] data2 = {stime, ply, yourturn, zfen, history, gameid};
-		db.execSQL("UPDATE onlinegames SET stime=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
+		Object[] data2 = {stime, status, ply, yourturn, zfen, history, gameid};
+		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
 	}
 
 	public void insertOnlineGame(String gameid, int gametype, long ctime, String white, String black)
 	{
 		Object[] data = {gameid, gametype, ctime, white, black};
 		db.execSQL("INSERT INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
+	}
+
+	public void archiveNetworkGame(String gameid, int psr_from, int psr_to)
+	{
+		String[] data = {gameid};
+
+		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
+		Bundle row = rowToBundle(cursor, 0);
+
+		String tnames = "(gameid, gametype, status, psrfrom, psrto, ctime, stime, ply, white, black, zfen, history)";
+		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("status"),
+			psr_from, psr_to, row.get("ctime"), row.get("stime"), row.get("ply"),
+			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
+
+		db.execSQL("INSERT INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);
+		db.execSQL("DELETE FROM onlinegames WHERE gameid=?", data);
 	}
 }

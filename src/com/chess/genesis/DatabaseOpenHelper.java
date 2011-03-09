@@ -20,13 +20,29 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"zfen TEXT," +
 		"history TEXT);";
 
-	private static final String NETWORK_GAME_CREATE_TABLE =
+	private static final String ONLINE_GAME_CREATE_TABLE =
 		"CREATE TABLE onlinegames (" +
 		"gameid TEXT PRIMARY KEY," +
 		"gametype INTEGER," +
+		"status INTEGER," +
 		"ctime INTEGER," +
 		"stime INTEGER DEFAULT 0," +
 		"yourturn INTEGER DEFAULT 0," + // 1 = your turn, 0 = opponent's turn
+		"ply INTEGER DEFAULT 0," +
+		"white TEXT," +
+		"black TEXT," +
+		"zfen TEXT DEFAULT ' '," +
+		"history TEXT DEFAULT ' ');";
+
+	private static final String ARCHIVE_GAME_CREATE_TABLE =
+		"CREATE TABLE archivegames (" +
+		"gameid TEXT PRIMARY KEY," +
+		"gametype INTEGER," +
+		"status INTEGER," +
+		"psrfrom INTEGER," +
+		"psrto INTEGER," +
+		"ctime INTEGER," +
+		"stime INTEGER DEFAULT 0," +
 		"ply INTEGER DEFAULT 0," +
 		"white TEXT," +
 		"black TEXT," +
@@ -50,8 +66,9 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		db.execSQL(LOCAL_GAME_CREATE_TABLE);
-		db.execSQL(NETWORK_GAME_CREATE_TABLE);
+		db.execSQL(ONLINE_GAME_CREATE_TABLE);
 		db.execSQL(MSG_CREATE_TABLE);
+		db.execSQL(ARCHIVE_GAME_CREATE_TABLE);
 	}
 
 	@Override

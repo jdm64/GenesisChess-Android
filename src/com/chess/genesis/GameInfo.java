@@ -9,14 +9,16 @@ class GameInfo
 	private String history;
 	private String white;
 	private String black;
+	private int status;
 
 	private Context context;
 
-	public GameInfo(Context _context, String History, String White, String Black)
+	public GameInfo(Context _context, int Status, String History, String White, String Black)
 	{
 		history = History;
 		white = White;
 		black = Black;
+		status = Status;
 		context = _context;
 	}
 
@@ -32,8 +34,9 @@ class GameInfo
 	{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
+		if (status != Enums.ACTIVE)
+			return 1;
 		String color = (getPly() % 2 == 0)? white : black;
-
 		return color.equals(settings.getString("username", "!error!"))? 1:0;
 	}
 }

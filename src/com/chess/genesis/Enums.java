@@ -18,13 +18,51 @@ class Enums
 	public final static int RANDOM = 1;
 	public final static int INVITE = 2;
 
+	// Game Status
+	public final static int ACTIVE = 1;
+	public final static int WHITEMATE = 2;
+	public final static int BLACKMATE = 3;
+	public final static int STALEMATE = 4;
+	public final static int IMPOSSIBLE = 5;
+	public final static int WHITERESIGN = 6;
+	public final static int BLACKRESIGN = 7;
+
 	public static int GameType(String gametype)
 	{
 		if (gametype.equals("genesis"))
 			return GENESIS_CHESS;
 		if (gametype.equals("regular"))
 			return REGULAR_CHESS;
-		else
-			return GENESIS_CHESS;
+		throw new RuntimeException("unknown gametype: " + gametype);
+	}
+
+	public static String GameType(int gametype)
+	{
+		switch (gametype) {
+		case GENESIS_CHESS:
+			return "genesis";
+		case REGULAR_CHESS:
+			return "regular";
+		}
+		throw new RuntimeException("unknown gametype: " + String.valueOf(gametype));
+	}
+
+	public static int GameStatus(String gamestatus)
+	{
+		if (gamestatus.equals("active"))
+			return ACTIVE;
+		if (gamestatus.equals("whitemate"))
+			return WHITEMATE;
+		if (gamestatus.equals("blackmate"))
+			return BLACKMATE;
+		if (gamestatus.equals("stalemate"))
+			return STALEMATE;
+		if (gamestatus.equals("impossible"))
+			return IMPOSSIBLE;
+		if (gamestatus.equals("whiteresign"))
+			return WHITERESIGN;
+		if (gamestatus.equals("blackresign"))
+			return BLACKRESIGN;
+		throw new RuntimeException("unknown gamestatus: " + gamestatus);
 	}
 }

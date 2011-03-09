@@ -22,6 +22,7 @@ class NetworkClient implements Runnable
 	public final static int SUBMIT_MOVE = 9;
 	public final static int SUBMIT_MSG = 10;
 	public final static int SYNC_GAMIDS = 11;
+	public final static int GAME_SCORE = 12;
 
 	private Handler callback;
 	private JSONObject json;
@@ -279,6 +280,21 @@ class NetworkClient implements Runnable
 			json.put("request", "gameids");
 			json.put("type", type);
 			json.put("username", username);
+		} catch (Throwable e) {
+			throw new RuntimeException();
+		}
+	}
+
+	public void game_score(String username, String gameid)
+	{
+		fid = GAME_SCORE;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "gamescore");
+			json.put("username", username);
+			json.put("gameid", gameid);
 		} catch (Throwable e) {
 			throw new RuntimeException();
 		}

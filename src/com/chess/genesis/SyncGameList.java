@@ -238,9 +238,10 @@ class SyncGameList implements Runnable
 		String zfen = json.getString("zfen");
 		String history = json.getString("history");
 		long stime = json.getLong("stime");
+		int status = Enums.GameStatus(json.getString("status"));
 
 		GameDataDB db = new GameDataDB(context);
-		db.updateOnlineGame(gameid, stime, zfen, history);
+		db.updateOnlineGame(gameid, status, stime, zfen, history);
 		db.close();
 	} catch (JSONException e) {
 		e.printStackTrace();
