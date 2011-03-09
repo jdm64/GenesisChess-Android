@@ -159,7 +159,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 			return false;
 		}
 		if (pass1.length() < 4) {
-			Toast.makeText(getApplication(), "Username can only contain letters or numbers", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplication(), "Password too short", Toast.LENGTH_LONG).show();
 			return false;
 		}
 		for (int i = 0; i < pass1.length(); i++) {
