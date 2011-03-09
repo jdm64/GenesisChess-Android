@@ -16,11 +16,13 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	private GameDataDB db;
 	private SQLiteCursor list;
 
+	private String username;
 	private int type;
 
 	public GameListAdapter(Context context, Bundle settings)
 	{
 		db = new GameDataDB(context);
+		username = settings.getString("username");
 		type = settings.getInt("type");
 
 		switch (type) {
@@ -108,7 +110,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		int ply = Integer.valueOf(data.getString("ply"));
 		int yourturn = Integer.valueOf(data.getString("yourturn"));
 
-		String opponent = (ply % 2 == yourturn)? data.getString("white") : data.getString("black");
+		String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
 
 		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
 		txt.setText(opponent);
