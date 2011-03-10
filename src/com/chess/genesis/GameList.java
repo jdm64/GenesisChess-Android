@@ -125,7 +125,8 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		net = new NetworkClient(handle);
 
 		// set content view
-		if (type == Enums.ONLINE_GAME) {
+		switch (type) {
+		case Enums.ONLINE_GAME:
 			setContentView(R.layout.gamelist_online);
 
 			Button button = (Button) findViewById(R.id.your_move);
@@ -133,8 +134,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 			button = (Button) findViewById(R.id.there_move);
 			button.setOnClickListener(this);
-		} else {
+			break;
+		case Enums.LOCAL_GAME:
+		case Enums.ARCHIVE_GAME:
+		default:
 			setContentView(R.layout.gamelist_local);
+			break;
 		}
 
 		// set click listeners

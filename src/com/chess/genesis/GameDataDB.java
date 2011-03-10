@@ -82,6 +82,11 @@ class GameDataDB
 		return (SQLiteCursor) db.rawQuery(query, data);
 	}
 
+	public SQLiteCursor getArchiveGameList()
+	{
+		return (SQLiteCursor) db.rawQuery("SELECT * FROM archivegames ORDER BY stime DESC", null);
+	}
+
 	public ObjectArray<String> getOnlineGameIds()
 	{
 		ObjectArray<String> list = new ObjectArray<String>();

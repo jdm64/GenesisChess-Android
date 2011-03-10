@@ -32,6 +32,9 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		case Enums.ONLINE_GAME:
 			list = db.getOnlineGameList(1);
 			break;
+		case Enums.ARCHIVE_GAME:
+			list = db.getArchiveGameList();
+			break;
 		}
 	}
 
@@ -80,6 +83,9 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			case Enums.ONLINE_GAME:
 				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_online, newcell);
 				break;
+			case Enums.ARCHIVE_GAME:
+				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_archive, newcell);
+				break;
 			}
 			cell = newcell;
 		}
@@ -89,6 +95,9 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			break;
 		case Enums.ONLINE_GAME:
 			setupOnline(cell, data);
+			break;
+		case Enums.ARCHIVE_GAME:
+			setupArchive(cell, data);
 			break;
 		}
 		return cell;
@@ -108,7 +117,21 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	private void setupOnline(View cell, Bundle data)
 	{
 		int ply = Integer.valueOf(data.getString("ply"));
-		int yourturn = Integer.valueOf(data.getString("yourturn"));
+
+		String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+
+		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
+		txt.setText(opponent);
+
+		String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+
+		txt = (TextView) cell.findViewById(R.id.game_date);
+		txt.setText(date);
+	}
+
+	private void setupArchive(View cell, Bundle data)
+	{
+		int ply = Integer.valueOf(data.getString("ply"));
 
 		String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
 

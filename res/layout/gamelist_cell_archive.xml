@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:shrinkColumns="*"
+android:stretchColumns="1">
+	<TableRow>
+		<TextView
+		android:text="Game With: "
+		android:textSize="16sp"/>
+		<TextView
+		android:id="@+id/game_opp"
+		android:textSize="16sp"/>
+	</TableRow>
+	<TableRow>
+		<TextView
+		android:text="Date: "
+		android:textSize="16sp"/>
+		<TextView
+		android:id="@+id/game_date"
+		android:textSize="16sp"/>
+	</TableRow>
+</TableLayout>

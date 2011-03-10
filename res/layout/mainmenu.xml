@@ -9,16 +9,21 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/local_game"
 	style="@style/FillWidth"
 	android:layout_below="@id/topbar"
-	android:text="Local Game"/>
+	android:text="Local Games"/>
 	<Button
 	android:id="@+id/online_game"
 	style="@style/FillWidth"
 	android:layout_below="@id/local_game"
-	android:text="Online Game"/>
+	android:text="Online Games"/>
+	<Button
+	android:id="@+id/archive_game"
+	style="@style/FillWidth"
+	android:layout_below="@id/online_game"
+	android:text="Archived Games"/>
 	<Button
 	android:id="@+id/login"
 	style="@style/FillWidth"
-	android:layout_below="@id/online_game"
+	android:layout_below="@id/archive_game"
 	android:text="Login"/>
 	<com.chess.genesis.MyImageView
 	style="@style/FillWidth"

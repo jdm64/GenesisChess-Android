@@ -17,7 +17,7 @@ class GameState
 
 	private int hindex = -1;
 	private int ycol = 5;
-	private boolean isOnline = false;
+	private int type = Enums.LOCAL_GAME;
 
 	private IntArray callstack;
 	private Board board;
@@ -112,8 +112,8 @@ class GameState
 		history = new ObjectArray<Move>();
 		board = new Board();
 
-		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
-			isOnline = true;
+		type = settings.getInt("type", Enums.ONLINE_GAME);
+		if (type == Enums.ONLINE_GAME) {
 			ycol = settings.getString("username").equals(settings.getString("white"))? 1:-1;
 			net = new NetworkClient(handle);
 		}
@@ -191,16 +191,8 @@ class GameState
 
 	public void save(Context context, boolean exitgame)
 	{
-		if (isOnline) {
-			if (exitgame)
-				return;
-			String username = settings.getString("username");
-			String gameid = settings.getString("gameid");
-			String move = history.top().toString();
-
-			net.submit_move(username, gameid, move);
-			(new Thread(net)).run();
-		} else {
+		switch (type) {
+		case Enums.LOCAL_GAME:
 			GameDataDB db = new GameDataDB(context);
 			int id = Integer.valueOf(settings.getString("id"));
 
@@ -219,6 +211,18 @@ class GameState
 
 			db.saveLocalGame(id, stime, zfen, hist);
 			db.close();
+			break;
+		case Enums.ONLINE_GAME:
+			if (exitgame)
+				return;
+			String username = settings.getString("username");
+			String gameid = settings.getString("gameid");
+			String move = history.top().toString();
+
+			net.submit_move(username, gameid, move);
+			(new Thread(net)).run();
+		case Enums.ARCHIVE_GAME:
+			break;
 		}
 	}
 
@@ -249,12 +253,16 @@ class GameState
 	
 	private void handleMove()
 	{
-		if (isOnline) {
+		switch (type) {
+		case Enums.ONLINE_GAME:
 			// you can't edit the past in online games
 			if (hindex + 1 < history.size()) {
 				callstack.pop();
 				return;
 			}
+			break;
+		case Enums.ARCHIVE_GAME:
+			return;
 		}
 
 		Move move = new Move();
@@ -367,7 +375,7 @@ class GameState
 
 		if (callstack.size() == 0) {
 		// No active clicks
-			int col = isOnline? ycol : board.getStm();
+			int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
 			// first click must be non empty and your own
 			if (to.getPiece() == 0 || to.getPiece() * board.getStm() < 0 || col != board.getStm())
 				return;
@@ -398,7 +406,7 @@ class GameState
 	public void placeClick(View v)
 	{
 		PlaceButton from = (PlaceButton) v;
-		int col = isOnline? ycol : board.getStm();
+		int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
 		int type = from.getPiece();
 
 		// only select your own pieces where count > 0

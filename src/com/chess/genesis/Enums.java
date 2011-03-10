@@ -5,6 +5,7 @@ class Enums
 	// Play Types
 	public final static int LOCAL_GAME = 1;
 	public final static int ONLINE_GAME = 2;
+	public final static int ARCHIVE_GAME = 3;
 
 	// Game Types
 	public final static int REGULAR_CHESS = 1;
