@@ -259,6 +259,14 @@ class GameState
 		Move move = history.get(++hindex);
 		applyMove(move, false);
 	}
+
+	public void currentMove()
+	{
+		while (hindex + 1 < history.size()) {
+			Move move = history.get(++hindex);
+			applyMove(move, false);
+		}
+	}
 	
 	private void handleMove()
 	{

@@ -46,6 +46,18 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		button.setOnTouchListener(this);
 		button.setOnClickListener(this);
 
+		button = (ImageView) findViewById(R.id.backwards);
+		button.setOnTouchListener(this);
+		button.setOnClickListener(this);
+
+		button = (ImageView) findViewById(R.id.forwards);
+		button.setOnTouchListener(this);
+		button.setOnClickListener(this);
+
+		button = (ImageView) findViewById(R.id.current);
+		button.setOnTouchListener(this);
+		button.setOnClickListener(this);
+
 		// initialize variables
 		stm_txt = (TextView) findViewById(R.id.stm_txt);
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
@@ -68,6 +80,15 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		switch (v.getId()) {
 		case R.id.place_piece:
 			game_board.flip();
+			break;
+		case R.id.backwards:
+			gamestate.backMove();
+			break;
+		case R.id.forwards:
+			gamestate.forwardMove();
+			break;
+		case R.id.current:
+			gamestate.currentMove();
 			break;
 		}
 	}
@@ -98,6 +119,24 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
+		case R.id.backwards:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.backwards_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.backwards);
+			break;
+		case R.id.forwards:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.forwards_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.forwards);
+			break;
+		case R.id.current:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.current_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.current);
 			break;
 		}
 		return false;
