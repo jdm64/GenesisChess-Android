@@ -39,8 +39,10 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"gameid TEXT PRIMARY KEY," +
 		"gametype INTEGER," +
 		"status INTEGER," +
-		"psrfrom INTEGER," +
-		"psrto INTEGER," +
+		"w_psrfrom INTEGER," +
+		"w_psrto INTEGER," +
+		"b_psrfrom INTEGER," +
+		"b_psrto INTEGER," +
 		"ctime INTEGER," +
 		"stime INTEGER DEFAULT 0," +
 		"ply INTEGER DEFAULT 0," +

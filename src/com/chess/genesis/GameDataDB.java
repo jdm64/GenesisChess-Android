@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 class GameDataDB
 {
@@ -105,6 +107,20 @@ class GameDataDB
 		return list;
 	}
 
+	public ObjectArray<String> getArchiveGameIds()
+	{
+		ObjectArray<String> list = new ObjectArray<String>();
+
+		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames", null);
+
+		cursor.moveToFirst();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			list.push(cursor.getString(0));
+			cursor.moveToNext();
+		}
+		return list;
+	}
+
 	public void insertMsg(String gameid, long time, String username, String msg)
 	{
 		Object[] data = {gameid, time, username, msg};
@@ -132,18 +148,52 @@ class GameDataDB
 		db.execSQL("INSERT INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
 	}
 
-	public void archiveNetworkGame(String gameid, int psr_from, int psr_to)
+	public void insertArchiveGame(JSONObject json)
+	{
+	try {
+		String gameid = json.getString("gameid");
+		int gametype = Enums.GameType(json.getString("gametype"));
+		int status = Enums.GameStatus(json.getString("status"));
+		int w_psrfrom = json.getJSONObject("score").getJSONObject("white").getInt("from");
+		int w_psrto = json.getJSONObject("score").getJSONObject("white").getInt("to");
+		int b_psrfrom = json.getJSONObject("score").getJSONObject("black").getInt("from");
+		int b_psrto = json.getJSONObject("score").getJSONObject("black").getInt("to");
+		long ctime = json.getLong("ctime");
+		long stime = json.getLong("stime");
+		String white = json.getString("white");
+		String black = json.getString("black");
+		String zfen = json.getString("zfen");
+		String history = json.getString("history");
+
+		String tmp[] = zfen.split(":");
+		int ply = Integer.valueOf(tmp[tmp.length - 1]);
+
+		Object[] data = {gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
+			ctime, stime, ply, white, black, zfen, history};
+
+		String q1 = "INSERT INTO archivegames ";
+		String q2 = "(gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
+		String q3 = "ctime, stime, ply, white, black, zfen, history) ";
+		String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+		db.execSQL(q1 + q2 + q3 + q4, data);
+	} catch (JSONException e) {
+		e.printStackTrace();
+	}
+	}
+
+	public void archiveNetworkGame(String gameid, int w_from, int w_to, int b_from, int b_to)
 	{
 		String[] data = {gameid};
 
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
 		Bundle row = rowToBundle(cursor, 0);
 
-		String tnames = "(gameid, gametype, status, psrfrom, psrto, ctime, stime, ply, white, black, zfen, history)";
-		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String tnames = "(gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
+		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("status"),
-			psr_from, psr_to, row.get("ctime"), row.get("stime"), row.get("ply"),
+			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 
 		db.execSQL("INSERT INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);

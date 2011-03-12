@@ -113,9 +113,11 @@ class GameState
 		board = new Board();
 
 		type = settings.getInt("type", Enums.ONLINE_GAME);
-		if (type == Enums.ONLINE_GAME) {
-			ycol = settings.getString("username").equals(settings.getString("white"))? 1:-1;
+		switch (type) {
+		case Enums.ONLINE_GAME:
 			net = new NetworkClient(handle);
+		case Enums.ARCHIVE_GAME:
+			ycol = settings.getString("username").equals(settings.getString("white"))? 1:-1;
 		}
 
 		String tmp = settings.getString("history");
@@ -137,8 +139,15 @@ class GameState
 		}
 		setBoard();
 
-		if (settings.getInt("type") == Enums.ONLINE_GAME)
+		switch (settings.getInt("type")) {
+		case Enums.ONLINE_GAME:
 			check_endgame();
+			break;
+		case Enums.ARCHIVE_GAME:
+			settings.putInt("yourcolor", ycol);
+			(new GameStatsDialog(context, settings)).show();
+			break;
+		}
 	}
 
 	private void setBoard()

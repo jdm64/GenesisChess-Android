@@ -12,7 +12,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class EndGameDialog extends Dialog implements OnClickListener
+class GameStatsDialog extends Dialog implements OnClickListener
 {
 	private static final String[] won_check = {"You Won", "Checkmate"};
 	private static final String[] lost_check = {"You Lost", "Checkmate"};
@@ -49,45 +49,35 @@ class EndGameDialog extends Dialog implements OnClickListener
 	private String psr_score;
 	private int diff;
 
-	public EndGameDialog(Context context, JSONObject json)
+	public GameStatsDialog(Context context, Bundle bundle)
 	{
 		super(context);
 
-		String[] statusArr = null;
-		String gametype = null, gameid = null, sign = null;
-		int ycol = 0, w_from = 0, w_to = 0, b_from = 0, b_to = 0;;
-	
-		try {
-			gameid = json.getString("gameid");
-			ycol = json.getInt("yourcolor");
-			statusArr = statusMap.get(json.getInt("status") * ycol);
-			gametype = json.getString("gametype");
+		int from, to;
 
-			if (ycol == Piece.WHITE)
-				opponent = json.getString("black_name");
-			else
-				opponent = json.getString("white_name");
+		int status = Integer.valueOf(bundle.getString("status"));
+		int ycol = bundle.getInt("yourcolor");
 
-			w_from = json.getJSONObject("white").getInt("from");
-			w_to = json.getJSONObject("white").getInt("to");
+		String[] statusArr = statusMap.get(status * ycol);
+		String gametype = Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
 
-			b_from = json.getJSONObject("black").getInt("from");
-			b_to = json.getJSONObject("black").getInt("to");
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (ycol == Piece.WHITE) {
+			opponent = bundle.getString("black");
+			from = Integer.valueOf(bundle.getString("w_psrfrom"));
+			to = Integer.valueOf(bundle.getString("w_psrto"));
+		} else {
+			opponent = bundle.getString("white");
+			from = Integer.valueOf(bundle.getString("b_psrfrom"));
+			to = Integer.valueOf(bundle.getString("b_psrto"));
 		}
-		int to = (ycol == Piece.WHITE)? w_to : b_to;
-		diff = (ycol == Piece.WHITE)? (w_to - w_from) : (b_to - b_from);
-		sign = (diff >= 0)? "+" : "-";
+
+		diff = to - from;
+		String sign = (diff >= 0)? "+" : "-";
 
 		title = statusArr[0];
 		result = statusArr[1];
 		psr_type = gametype + " PSR :";
 		psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
-
-		GameDataDB db = new GameDataDB(context);
-		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);
-		db.close();
 	}
 
 	@Override

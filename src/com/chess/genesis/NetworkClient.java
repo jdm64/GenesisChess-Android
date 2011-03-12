@@ -23,6 +23,7 @@ class NetworkClient implements Runnable
 	public final static int SUBMIT_MSG = 10;
 	public final static int SYNC_GAMIDS = 11;
 	public final static int GAME_SCORE = 12;
+	public final static int GAME_DATA = 13;
 
 	private Handler callback;
 	private JSONObject json;
@@ -234,6 +235,21 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "gameinfo");
+			json.put("username", username);
+			json.put("gameid", gameid);
+		} catch (Throwable t) {
+			throw new RuntimeException();
+		}
+	}
+
+	public void game_data(String username, String gameid)
+	{
+		fid = GAME_DATA;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "gamedata");
 			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (Throwable t) {

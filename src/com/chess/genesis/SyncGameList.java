@@ -16,6 +16,7 @@ class SyncGameList implements Runnable
 	public final static int MSG = 101;
 
 	private int lock = 0;
+	private int sync_type = Enums.ONLINE_GAME;
 	private boolean error = false;
 	private boolean fullsync = false;
 
@@ -51,6 +52,10 @@ class SyncGameList implements Runnable
 				game_info(json);
 				lock--;
 				break;
+			case NetworkClient.GAME_DATA:
+				game_data(json);
+				lock--;
+				break;
 			case NetworkClient.READ_INBOX:
 				read_inbox(json);
 				lock--;
@@ -59,7 +64,10 @@ class SyncGameList implements Runnable
 				lock--;
 				break;
 			case NetworkClient.SYNC_GAMIDS:
-				full_sync(json);
+				if (sync_type == Enums.ONLINE_GAME)
+					sync_active(json);
+				else
+					sync_archive(json);
 				lock--;
 				break;
 			}
@@ -99,7 +107,14 @@ class SyncGameList implements Runnable
 
 		if (!error) {
 			if (fullsync) {
+				sync_type = Enums.ONLINE_GAME;
 				net.sync_gameids(username, "active");
+				net.run();
+
+				trylock();
+
+				sync_type = Enums.ARCHIVE_GAME;
+				net.sync_gameids(username, "archive");
 				net.run();
 			} else {
 				update_gamestatus();
@@ -167,7 +182,7 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	private void full_sync(JSONObject json)
+	private void sync_active(JSONObject json)
 	{
 		GameDataDB db = new GameDataDB(context);
 		ObjectArray<String> list = db.getOnlineGameIds();
@@ -192,6 +207,37 @@ class SyncGameList implements Runnable
 			if (error)
 				return;
 			net.game_info(username, list_need.get(i));
+			net.run();
+
+			lock++;
+		}
+	}
+
+	private void sync_archive(JSONObject json)
+	{
+		GameDataDB db = new GameDataDB(context);
+		ObjectArray<String> list = db.getArchiveGameIds();
+		db.close();
+
+		Vector<String> list_have = new Vector<String>();
+		for (int i = 0; i < list.size(); i++)
+			list_have.add(list.get(i));
+
+		Vector<String> list_need = new Vector<String>();
+	try {
+		JSONArray ids = json.getJSONArray("gameids");
+		for (int i = 0; i < ids.length(); i++)
+			list_need.add(ids.getString(i));
+	} catch (JSONException e) {
+		e.printStackTrace();
+	}
+
+		list_need.removeAll(list_have);
+
+		for (int i = 0; i < list_need.size(); i++) {
+			if (error)
+				return;
+			net.game_data(username, list_need.get(i));
 			net.run();
 
 			lock++;
@@ -246,5 +292,12 @@ class SyncGameList implements Runnable
 	} catch (JSONException e) {
 		e.printStackTrace();
 	}
+	}
+
+	private void game_data(JSONObject json)
+	{
+		GameDataDB db = new GameDataDB(context);
+		db.insertArchiveGame(json);
+		db.close();
 	}
 }
