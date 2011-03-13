@@ -82,16 +82,15 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		setContentView(R.layout.login);
 
 		// setup click listeners
-		Button button = (Button) findViewById(R.id.login);
-		button.setOnClickListener(this);
+		ImageView image = (ImageView) findViewById(R.id.login);
+		image.setOnTouchListener(this);
+		image.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.logout);
-		button.setOnClickListener(this);
+		image = (ImageView) findViewById(R.id.register);
+		image.setOnTouchListener(this);
+		image.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.register);
-		button.setOnClickListener(this);
-
-		ImageView image = (ImageView) findViewById(R.id.topbar);
+		image = (ImageView) findViewById(R.id.topbar);
 		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
 
@@ -121,17 +120,6 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			(new Thread(net)).start();
 			Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 			break;
-		case R.id.logout:
-			Editor settings = PreferenceManager.getDefaultSharedPreferences(this).edit();
-			settings.putBoolean("isLoggedIn", false);
-			settings.commit();
-
-			txt = (EditText) findViewById(R.id.username);
-			txt.setText("");
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText("");
-			break;
 		case R.id.register:
 			startActivityForResult(new Intent(this, Register.class), 1);
 			break;
@@ -157,6 +145,18 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
+		case R.id.login:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.login_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.login);
+			break;
+		case R.id.register:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.signup_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.signup);
 			break;
 		}
 		return false;

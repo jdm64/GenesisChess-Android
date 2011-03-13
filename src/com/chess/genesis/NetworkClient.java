@@ -118,7 +118,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void register(String username, String password)
+	public void register(String username, String password, String email)
 	{
 		fid = REGISTER;
 
@@ -128,6 +128,7 @@ class NetworkClient implements Runnable
 			json.put("request", "register");
 			json.put("username", username);
 			json.put("passhash", password);
+			json.put("email", email);
 		} catch (Throwable t) {
 			throw new RuntimeException();
 		}

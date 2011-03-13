@@ -70,13 +70,11 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		setContentView(R.layout.register);
 
 		// setup click listeners
-		Button button = (Button) findViewById(R.id.register);
-		button.setOnClickListener(this);
+		ImageView image = (ImageView) findViewById(R.id.register);
+		image.setOnTouchListener(this);
+		image.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.back);
-		button.setOnClickListener(this);
-
-		ImageView image = (ImageView) findViewById(R.id.topbar);
+		image = (ImageView) findViewById(R.id.topbar);
 		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
 	}
@@ -86,9 +84,6 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		switch (v.getId()) {
 		case R.id.register:
 			register_user();
-			break;
-		case R.id.back:
-			finish();
 			break;
 		}
 	}
@@ -113,6 +108,12 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar);
 			break;
+		case R.id.register:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.submit_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.submit);
+			break;
 		}
 		return false;
 	}
@@ -130,12 +131,17 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		txt = (EditText) findViewById(R.id.password2);
 		String password2 = txt.getText().toString();
 
+		txt = (EditText) findViewById(R.id.email);
+		String email = txt.getText().toString();
+
 		if (!valid_username(username))
 			return;
 		if (!valid_password(password, password2))
 			return;
+		if (!valid_email(email))
+			return;
 
-		net.register(username, password);
+		net.register(username, password, email);
 		(new Thread(net)).start();
 		Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 	}
@@ -167,6 +173,15 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 				Toast.makeText(getApplication(), "Password can only contain ASCII characters", Toast.LENGTH_LONG).show();
 				return false;
 			}
+		}
+		return true;
+	}
+
+	private boolean valid_email(String email)
+	{
+		if (!email.matches("[^\\s@]+@[^\\s@]")) {
+			Toast.makeText(this, "Invalid email address", Toast.LENGTH_LONG).show();
+			return false;
 		}
 		return true;
 	}
