@@ -179,7 +179,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 
 	private boolean valid_email(String email)
 	{
-		if (!email.matches("[^\\s@]+@[^\\s@]")) {
+		if (!email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) {
 			Toast.makeText(this, "Invalid email address", Toast.LENGTH_LONG).show();
 			return false;
 		}
