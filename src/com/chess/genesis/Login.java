@@ -154,9 +154,9 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			break;
 		case R.id.register:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.signup_pressed);
+				((ImageView) v).setImageResource(R.drawable.register_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.signup);
+				((ImageView) v).setImageResource(R.drawable.register);
 			break;
 		}
 		return false;

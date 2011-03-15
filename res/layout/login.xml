@@ -55,7 +55,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentRight="true"
 	android:paddingBottom="6dp"
 	android:paddingRight="8dp"
-	android:src="@drawable/signup"/>
+	android:src="@drawable/register"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"
 	style="@style/FillWidth"

@@ -81,7 +81,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentRight="true"
 	android:paddingTop="6dp"
 	android:paddingRight="8dp"
-	android:src="@drawable/submit"/>
+	android:src="@drawable/rsubmit"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"
 	style="@style/FillWidth"

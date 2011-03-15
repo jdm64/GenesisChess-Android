@@ -110,9 +110,9 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 			break;
 		case R.id.register:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.submit_pressed);
+				((ImageView) v).setImageResource(R.drawable.rsubmit_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.submit);
+				((ImageView) v).setImageResource(R.drawable.rsubmit);
 			break;
 		}
 		return false;
