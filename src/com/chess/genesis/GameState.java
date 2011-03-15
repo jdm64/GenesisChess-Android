@@ -224,12 +224,7 @@ class GameState
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			String username = settings.getString("username");
-			String gameid = settings.getString("gameid");
-			String move = history.top().toString();
-
-			net.submit_move(username, gameid, move);
-			(new Thread(net)).run();
+			Game.self.displaySubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
@@ -267,7 +262,26 @@ class GameState
 			applyMove(move, false);
 		}
 	}
-	
+
+	public void undoMove()
+	{
+		if (hindex < 0)
+			return;
+		Move move = history.get(hindex);
+		revertMove(move);
+		history.pop();
+	}
+
+	public void submitMove()
+	{
+		String username = settings.getString("username");
+		String gameid = settings.getString("gameid");
+		String move = history.top().toString();
+
+		net.submit_move(username, gameid, move);
+		(new Thread(net)).run();
+	}
+
 	private void handleMove()
 	{
 		switch (type) {

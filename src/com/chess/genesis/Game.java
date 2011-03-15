@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
@@ -170,6 +171,23 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
+	}
+
+	public void onActivityResult(int reques, int result, Intent data)
+	{
+		switch (result) {
+		case RESULT_OK:
+			gamestate.submitMove();
+			break;
+		case RESULT_CANCELED:
+			gamestate.undoMove();
+			break;
+		}
+	}
+
+	public void displaySubmitMove()
+	{
+		startActivityForResult(new Intent(self, SubmitMove.class), 1);
 	}
 
 	public void reset()

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<com.chess.genesis.MyImageView
+	android:id="@+id/cancel"
+	style="@style/FillWidth"
+	android:layout_weight="50"
+	android:src="@drawable/cancel"/>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/submit"
+	style="@style/FillWidth"
+	android:layout_weight="50"
+	android:src="@drawable/submit"/>
+</LinearLayout>
