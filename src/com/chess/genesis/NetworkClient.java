@@ -127,7 +127,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "register");
 			json.put("username", username);
-			json.put("passhash", password);
+			json.put("passhash", Crypto.HashPasswd(password));
 			json.put("email", email);
 		} catch (Throwable t) {
 			throw new RuntimeException();
@@ -143,7 +143,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "login");
 			json.put("username", username);
-			json.put("passhash", password);
+			json.put("passhash", Crypto.LoginKey(password));
 		} catch (Throwable t) {
 			throw new RuntimeException();
 		}

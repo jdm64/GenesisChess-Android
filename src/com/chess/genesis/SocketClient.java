@@ -12,6 +12,7 @@ import org.json.JSONTokener;
 
 class SocketClient
 {
+	private static String loginHash = null;
 	private static Socket sock = new Socket();
 
 	private static InputStream input;
@@ -21,7 +22,20 @@ class SocketClient
 	{
 		NetActive.inc();
 	}
-	
+
+	public static String getHash()
+	{
+	try {
+		if (loginHash == null)
+			connect();
+	} catch (SocketException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+		return loginHash;
+	}
+
 	private static void connect() throws SocketException, IOException
 	{
 		if (sock.isConnected())
@@ -29,6 +43,10 @@ class SocketClient
 		sock.connect(new InetSocketAddress("jdserver.homelinux.org", 8338));
 		input = sock.getInputStream();
 		output = sock.getOutputStream();
+
+		byte[] buff = new byte[1440];
+		input.read(buff);
+		loginHash = (new String(buff)).trim();
 	}
 
 	public static void hard_disconnect()
@@ -38,6 +56,7 @@ class SocketClient
 			return;
 		sock.close();
 		sock = new Socket();
+		loginHash = null;
 	} catch (IOException e) {
 		throw new RuntimeException();
 	}
