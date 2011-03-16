@@ -41,13 +41,6 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 					return;
 				}
 				Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
-				
-				Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
-				settings.putBoolean("isLoggedIn", true);
-				settings.putString("username", json.getString("username"));
-				settings.putString("passhash", json.getString("passhash"));
-
-				settings.commit();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

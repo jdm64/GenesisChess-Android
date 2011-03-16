@@ -93,25 +93,29 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		image = (ImageView) findViewById(R.id.topbar);
 		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
-
-		// set text
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
-		if (settings.getBoolean("isLoggedIn", false)) {
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText(settings.getString("username", ""));
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText(settings.getString("password", ""));
-		}
 	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-
 		NetActive.inc();
+
+		// Always show the currently logged in user
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		if (settings.getBoolean("isLoggedIn", false)) {
+			EditText txt = (EditText) findViewById(R.id.username);
+			txt.setText(settings.getString("username", ""));
+
+			txt = (EditText) findViewById(R.id.password);
+			txt.setText("");
+		} else {
+			EditText txt = (EditText) findViewById(R.id.username);
+			txt.setText("");
+
+			txt = (EditText) findViewById(R.id.password);
+			txt.setText("");
+		}
 	}
 
 	@Override
@@ -176,24 +180,5 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			break;
 		}
 		return false;
-	}
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
-		if (settings.getBoolean("isLoggedIn", false)) {
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText(settings.getString("username", ""));
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText(settings.getString("password", ""));
-		} else {
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText("");
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText("");
-		}
 	}
 }

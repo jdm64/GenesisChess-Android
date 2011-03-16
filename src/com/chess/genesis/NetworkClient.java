@@ -69,11 +69,8 @@ class NetworkClient implements Runnable
 		try {
 			json2 = net.read();
 
-			// FIXME: register shouldn't be special like this
-			if (fid == REGISTER) {
-				json2.put("username", json.getString("username"));
-				json2.put("passhash", json.getString("passhash"));
-			} else if (fid == LOGIN) {
+			// FIXME: login shouldn't be special like this
+			if (fid == LOGIN) {
 				json2.put("username", json.getString("username"));
 				json2.put("passhash", json.getString("passhash"));
 			}
