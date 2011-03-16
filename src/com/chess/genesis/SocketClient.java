@@ -12,16 +12,17 @@ import org.json.JSONTokener;
 
 class SocketClient
 {
-	private Socket sock;
-	private InputStream input;
-	private OutputStream output;
+	private static Socket sock = new Socket();
+
+	private static InputStream input;
+	private static OutputStream output;
 
 	public SocketClient()
 	{
-		sock = new Socket();
+		NetActive.inc();
 	}
 	
-	private void connect() throws SocketException, IOException
+	private static void connect() throws SocketException, IOException
 	{
 		if (sock.isConnected())
 			return;
@@ -30,14 +31,24 @@ class SocketClient
 		output = sock.getOutputStream();
 	}
 
-	public void disconnect() throws IOException
+	public static void hard_disconnect()
 	{
+	try {
 		if (!sock.isConnected())
 			return;
 		sock.close();
+		sock = new Socket();
+	} catch (IOException e) {
+		throw new RuntimeException();
+	}
 	}
 
-	public void write(JSONObject data) throws SocketException, IOException
+	public static void disconnect() throws IOException
+	{
+		NetActive.dec();
+	}
+
+	public static void write(JSONObject data) throws SocketException, IOException
 	{
 		connect();
 
@@ -46,7 +57,7 @@ class SocketClient
 		output.write(str.getBytes());
 	}
 
-	public JSONObject read() throws SocketException, IOException, JSONException
+	public static JSONObject read() throws SocketException, IOException, JSONException
 	{
 		connect();
 

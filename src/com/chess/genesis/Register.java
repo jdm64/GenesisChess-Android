@@ -79,6 +79,22 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		image.setOnLongClickListener(this);
 	}
 
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		NetActive.inc();
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+
+		NetActive.dec();
+	}
+
 	public void onClick(View v)
 	{
 		switch (v.getId()) {

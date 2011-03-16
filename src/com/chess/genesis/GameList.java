@@ -167,12 +167,23 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		super.onResume();
 
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
+			NetActive.inc();
+
 			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 		} else {
 			gamelist_adapter.update();
 		}
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+
+		if (settings.getInt("type") == Enums.ONLINE_GAME)
+			NetActive.dec();
 	}
 
 	@Override

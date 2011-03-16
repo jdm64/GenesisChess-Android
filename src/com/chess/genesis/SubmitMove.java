@@ -32,6 +32,22 @@ public class SubmitMove extends Activity implements OnClickListener, OnTouchList
 	}
 
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		NetActive.inc();
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+
+		NetActive.dec();
+	}
+
+	@Override
 	public void onBackPressed()
 	{
 		setResult(RESULT_CANCELED);

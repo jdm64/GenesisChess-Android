@@ -70,10 +70,22 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	}
 
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		if (type == Enums.ONLINE_GAME)
+			NetActive.inc();
+	}
+
+	@Override
 	public void onPause()
 	{
 		super.onPause();
+
 		gamestate.save(this, true);
+		if (type == Enums.ONLINE_GAME)
+			NetActive.dec();
 	}
 
 	public void onClick(View v)

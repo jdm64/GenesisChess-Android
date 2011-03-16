@@ -106,6 +106,22 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		}
 	}
 
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		NetActive.inc();
+	}
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+
+		NetActive.dec();
+	}
+
 	public void onClick(View v)
 	{
 		switch (v.getId()) {
