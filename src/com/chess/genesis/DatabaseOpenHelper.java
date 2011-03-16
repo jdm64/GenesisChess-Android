@@ -24,6 +24,7 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"CREATE TABLE onlinegames (" +
 		"gameid TEXT PRIMARY KEY," +
 		"gametype INTEGER," +
+		"eventtype INTEGER DEFAULT 1," +
 		"status INTEGER," +
 		"ctime INTEGER," +
 		"stime INTEGER DEFAULT 0," +
@@ -38,6 +39,7 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"CREATE TABLE archivegames (" +
 		"gameid TEXT PRIMARY KEY," +
 		"gametype INTEGER," +
+		"eventtype INTEGER DEFAULT 1," + // 1 = random game
 		"status INTEGER," +
 		"w_psrfrom INTEGER," +
 		"w_psrto INTEGER," +

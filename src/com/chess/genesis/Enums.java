@@ -7,6 +7,11 @@ class Enums
 	public final static int ONLINE_GAME = 2;
 	public final static int ARCHIVE_GAME = 3;
 
+	// Event Types
+	public final static int RANDOM_EVENT = 1;
+	public final static int INVITE_EVENT = 2;
+	public final static int TOURNAMENT_EVENT = 3;
+
 	// Game Types
 	public final static int REGULAR_CHESS = 1;
 	public final static int GENESIS_CHESS = 2;
