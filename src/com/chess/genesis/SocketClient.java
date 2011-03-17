@@ -41,7 +41,7 @@ class SocketClient
 	{
 		if (sock.isConnected())
 			return;
-		sock.connect(new InetSocketAddress("jdserver.homelinux.org", 8338));
+		sock.connect(new InetSocketAddress("genesischess.com", 8338));
 		input = sock.getInputStream();
 		output = sock.getOutputStream();
 
