@@ -12,6 +12,7 @@ import org.json.JSONTokener;
 
 class SocketClient
 {
+	public static boolean isLoggedin = false;
 	private static String loginHash = null;
 	private static Socket sock = new Socket();
 
@@ -57,12 +58,13 @@ class SocketClient
 		sock.close();
 		sock = new Socket();
 		loginHash = null;
+		isLoggedin = false;
 	} catch (IOException e) {
 		throw new RuntimeException();
 	}
 	}
 
-	public static void disconnect() throws IOException
+	public static void disconnect()
 	{
 		NetActive.dec();
 	}

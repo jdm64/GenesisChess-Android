@@ -43,11 +43,19 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				switch (msg.what) {
 				case NetworkClient.LOGIN:
 					Toast.makeText(self, json.getString("reason"), Toast.LENGTH_LONG).show();
-				
+
+					SocketClient.isLoggedin = true;
+
+					EditText txt = (EditText) findViewById(R.id.username);
+					String username = txt.getText().toString();
+
+					txt = (EditText) findViewById(R.id.password);
+					String password = txt.getText().toString();
+
 					Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
 					settings.putBoolean("isLoggedIn", true);
-					settings.putString("username", json.getString("username"));
-					settings.putString("passhash", json.getString("passhash"));
+					settings.putString("username", username);
+					settings.putString("passhash", password);
 					settings.commit();
 
 					SyncGameList sync = new SyncGameList(self, handle, json.getString("username"));
@@ -76,7 +84,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// create network client instance
-		net = new NetworkClient(handle);
+		net = new NetworkClient(this, handle);
 
 		// set content view
 		setContentView(R.layout.login);

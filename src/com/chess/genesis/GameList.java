@@ -122,7 +122,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		settings.putString("username", prefs.getString("username", "!error!"));
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 
-		net = new NetworkClient(handle);
+		net = new NetworkClient(this, handle);
 
 		// set content view
 		switch (type) {

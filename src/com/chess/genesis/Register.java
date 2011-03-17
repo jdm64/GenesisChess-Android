@@ -57,7 +57,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// create network client instance
-		net = new NetworkClient(handle);
+		net = new NetworkClient(this, handle);
 
 		// set content view
 		setContentView(R.layout.register);

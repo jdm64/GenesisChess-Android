@@ -1,7 +1,10 @@
 package com.chess.genesis;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import java.io.IOException;
 import java.lang.Runnable;
 import java.net.SocketException;
@@ -25,14 +28,107 @@ class NetworkClient implements Runnable
 	public final static int GAME_SCORE = 12;
 	public final static int GAME_DATA = 13;
 
+	private Context context;
 	private Handler callback;
 	private JSONObject json;
 
 	private int fid = NONE;
+	private boolean loginRequired;
 
-	public NetworkClient(Handler handler)
+	public NetworkClient(Context _context, Handler handler)
 	{
 		callback = handler;
+		context = _context;
+	}
+
+	private boolean relogin(SocketClient net)
+	{
+		if (SocketClient.isLoggedin)
+			return true;
+
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		String username = settings.getString("username", "!error!");
+		String password = settings.getString("passhash", "!error!");
+
+		JSONObject json2 = new JSONObject();
+		boolean error = false;
+
+		try {
+			json2.put("request", "login");
+			json2.put("username", username);
+			json2.put("passhash", Crypto.LoginKey(password));
+		} catch (Throwable t) {
+			throw new RuntimeException();
+		}
+
+		try {
+			net.write(json2);
+		} catch (SocketException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		}
+		if (error) {
+			callback.sendMessage(Message.obtain(callback, fid, json2));
+			return false;
+		}
+
+		try {
+			json2 = net.read();
+		} catch (SocketException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for recieving data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+		} catch (IOException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring recieving data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+		} catch (JSONException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Server response illogical");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+		}
+		if (error) {
+			callback.sendMessage(Message.obtain(callback, fid, json2));
+			return false;
+		}
+
+		try {
+			if (!json2.getString("result").equals("ok")) {
+				callback.sendMessage(Message.obtain(callback, fid, json2));
+				return false;
+			}
+			SocketClient.isLoggedin = true;
+			return true;
+		} catch (JSONException e) {
+			return false;
+		}
 	}
 
 	public void run()
@@ -40,6 +136,13 @@ class NetworkClient implements Runnable
 		SocketClient net = new SocketClient();
 		JSONObject json2 = null;
 		boolean error = false;
+
+		if (loginRequired) {
+			if (!relogin(net)) {
+				net.disconnect();
+				return;
+			}
+		}
 
 		try {
 			net.write(json);
@@ -68,12 +171,6 @@ class NetworkClient implements Runnable
 		}
 		try {
 			json2 = net.read();
-
-			// FIXME: login shouldn't be special like this
-			if (fid == LOGIN) {
-				json2.put("username", json.getString("username"));
-				json2.put("passhash", json.getString("passhash"));
-			}
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -100,24 +197,13 @@ class NetworkClient implements Runnable
 			}
 		}
 		callback.sendMessage(Message.obtain(callback, fid, json2));
-
-		try {
-			net.disconnect();
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring disconnect");
-			} catch (Throwable t) {
-				throw new RuntimeException();
-			}
-			callback.sendMessage(Message.obtain(callback, fid, json2));
-		}
+		net.disconnect();
 	}
 
 	public void register(String username, String password, String email)
 	{
 		fid = REGISTER;
+		loginRequired = false;
 
 		json = new JSONObject();
 
@@ -134,6 +220,7 @@ class NetworkClient implements Runnable
 	public void login_user(String username, String password)
 	{
 		fid = LOGIN;
+		loginRequired = false;
 
 		json = new JSONObject();
 
@@ -149,6 +236,7 @@ class NetworkClient implements Runnable
 	public void join_game(String username, String gametype)
 	{
 		fid = JOIN_GAME;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -164,6 +252,7 @@ class NetworkClient implements Runnable
 	public void new_game(String username, String gametype, String opponent)
 	{
 		fid = NEW_GAME;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -181,6 +270,7 @@ class NetworkClient implements Runnable
 	public void submit_move(String username, String gameid, String move)
 	{
 		fid = SUBMIT_MOVE;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -197,6 +287,7 @@ class NetworkClient implements Runnable
 	public void submit_msg(String username, String gameid, String msg)
 	{
 		fid = SUBMIT_MSG;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -213,6 +304,7 @@ class NetworkClient implements Runnable
 	public void game_status(String username, String gameid)
 	{
 		fid = GAME_STATUS;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -228,6 +320,7 @@ class NetworkClient implements Runnable
 	public void game_info(String username, String gameid)
 	{
 		fid = GAME_INFO;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -243,6 +336,7 @@ class NetworkClient implements Runnable
 	public void game_data(String username, String gameid)
 	{
 		fid = GAME_DATA;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -258,6 +352,7 @@ class NetworkClient implements Runnable
 	public void read_inbox(String username)
 	{
 		fid = READ_INBOX;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -272,6 +367,7 @@ class NetworkClient implements Runnable
 	public void clear_inbox(String username, long time)
 	{
 		fid = CLEAR_INBOX;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -287,6 +383,7 @@ class NetworkClient implements Runnable
 	public void sync_gameids(String username, String type)
 	{
 		fid = SYNC_GAMIDS;
+		loginRequired = true;
 
 		json = new JSONObject();
 
@@ -302,6 +399,7 @@ class NetworkClient implements Runnable
 	public void game_score(String username, String gameid)
 	{
 		fid = GAME_SCORE;
+		loginRequired = true;
 
 		json = new JSONObject();
 

@@ -115,7 +115,7 @@ class GameState
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 		switch (type) {
 		case Enums.ONLINE_GAME:
-			net = new NetworkClient(handle);
+			net = new NetworkClient(context, handle);
 		case Enums.ARCHIVE_GAME:
 			ycol = settings.getString("username").equals(settings.getString("white"))? 1:-1;
 		}

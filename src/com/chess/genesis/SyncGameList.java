@@ -80,7 +80,7 @@ class SyncGameList implements Runnable
 		callback = handler;
 		username = Username;
 
-		net = new NetworkClient(handle);
+		net = new NetworkClient(context, handle);
 	}
 
 	private void trylock()
