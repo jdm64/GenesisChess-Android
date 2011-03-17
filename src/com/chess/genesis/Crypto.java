@@ -40,22 +40,10 @@ class Crypto
 		e.printStackTrace();
 	}
 		digst.update(HashPasswd(str).getBytes());
+		digst.update(SocketClient.getHash().getBytes());
 
 		byte[] shabytes = digst.digest();
 		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < shabytes.length; i++) {
-			String n = Integer.toHexString(shabytes[i] & 0xff);
-			if (n.length() < 2)
-				buff.append('0');
-			buff.append(n);
-		}
-
-		digst.reset();
-		digst.update(buff.toString().getBytes());
-		digst.update(SocketClient.getHash().getBytes());
-
-		shabytes = digst.digest();
-		buff = new StringBuffer();
 		for (int i = 0; i < shabytes.length; i++) {
 			String n = Integer.toHexString(shabytes[i] & 0xff);
 			if (n.length() < 2)
