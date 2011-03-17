@@ -60,6 +60,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 
 		String[] statusArr = statusMap.get(status * ycol);
 		String gametype = Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
+		gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
 
 		if (ycol == Piece.WHITE) {
 			opponent = bundle.getString("black");

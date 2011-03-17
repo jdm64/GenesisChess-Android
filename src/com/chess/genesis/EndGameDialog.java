@@ -62,6 +62,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 			ycol = json.getInt("yourcolor");
 			statusArr = statusMap.get(json.getInt("status") * ycol);
 			gametype = json.getString("gametype");
+			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
 
 			if (ycol == Piece.WHITE)
 				opponent = json.getString("black_name");
