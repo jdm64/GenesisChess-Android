@@ -21,9 +21,19 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/online_game"
 	android:text="Archived Games"/>
 	<Button
-	android:id="@+id/login"
+	android:id="@+id/howtoplay"
 	style="@style/FillWidth"
 	android:layout_below="@id/archive_game"
+	android:text="How To Play"/>
+	<Button
+	android:id="@+id/likefacebook"
+	style="@style/FillWidth"
+	android:layout_below="@id/howtoplay"
+	android:text="Like On Facebook"/>
+	<Button
+	android:id="@+id/login"
+	style="@style/FillWidth"
+	android:layout_below="@id/likefacebook"
 	android:text="Login"/>
 	<com.chess.genesis.MyImageView
 	style="@style/FillWidth"

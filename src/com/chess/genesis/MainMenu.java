@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -34,6 +35,12 @@ public class MainMenu extends Activity implements OnClickListener
 		button.setOnClickListener(this);
 
 		button = (Button) findViewById(R.id.archive_game);
+		button.setOnClickListener(this);
+
+		button = (Button) findViewById(R.id.howtoplay);
+		button.setOnClickListener(this);
+
+		button = (Button) findViewById(R.id.likefacebook);
 		button.setOnClickListener(this);
 
 		button = (Button) findViewById(R.id.login);
@@ -84,6 +91,14 @@ public class MainMenu extends Activity implements OnClickListener
 			intent.putExtras(bundle);
 
 			startActivity(intent);
+			break;
+		case R.id.howtoplay:
+			Uri uri = Uri.parse("http://goo.gl/eyLYY");
+			startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			break;
+		case R.id.likefacebook:
+			uri = Uri.parse("http://goo.gl/tQVOh");
+			startActivity(new Intent(Intent.ACTION_VIEW, uri));
 			break;
 		case R.id.login:
 			startActivity(new Intent(this, Login.class));

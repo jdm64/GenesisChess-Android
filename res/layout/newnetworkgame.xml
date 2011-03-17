@@ -32,7 +32,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 				<RadioButton
 				android:id="@+id/invite_opp"
 				android:textColor="#000000"
-				android:text="Invite"
+				android:text="Invite (comming soon)"
 				android:checked="false"/>
 			</RadioGroup>
 		</TableRow>

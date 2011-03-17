@@ -18,7 +18,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/game_list"
 	style="@style/FillBoth"
 	android:layout_below="@id/table_01"
-	android:layout_above="@+id/botbar"/>
+	android:layout_above="@id/botbar"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"
 	style="@style/FillWidth"

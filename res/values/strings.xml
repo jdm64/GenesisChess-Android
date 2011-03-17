@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Genesis Chess</string>
+	<string name="app_name">Genesis Chess Beta</string>
+	<string name="register_notice">
+		NOTICE: Accounts must be verified before logging in.
+		An activation link will be sent to the email address.
+	</string>
 </resources>

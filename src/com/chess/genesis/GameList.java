@@ -136,20 +136,33 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			button.setOnClickListener(this);
 			break;
 		case Enums.LOCAL_GAME:
-		case Enums.ARCHIVE_GAME:
 		default:
 			setContentView(R.layout.gamelist_local);
+			break;
+		case Enums.ARCHIVE_GAME:
+			setContentView(R.layout.gamelist_archive);
 			break;
 		}
 
 		// set click listeners
-		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
-		button.setOnTouchListener(this);
-		button.setOnLongClickListener(this);
+		switch (type) {
+		case Enums.ONLINE_GAME:
+		case Enums.LOCAL_GAME:
+		default:
+			ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
+			button.setOnTouchListener(this);
+			button.setOnLongClickListener(this);
 
-		button = (ImageView) findViewById(R.id.topbar_plus);
-		button.setOnTouchListener(this);
-		button.setOnClickListener(this);
+			button = (ImageView) findViewById(R.id.topbar_plus);
+			button.setOnTouchListener(this);
+			button.setOnClickListener(this);
+			break;
+		case Enums.ARCHIVE_GAME:
+			button = (ImageView) findViewById(R.id.topbar);
+			button.setOnTouchListener(this);
+			button.setOnLongClickListener(this);
+			break;
+		}
 
 		// set list adapters
 		gamelist_adapter = new GameListAdapter(this, settings);
@@ -196,6 +209,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public boolean onTouch(View v, MotionEvent event)
 	{
 		switch (v.getId()) {
+		case R.id.topbar:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
 		case R.id.topbar_genesis:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
@@ -236,6 +255,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public boolean onLongClick(View v)
 	{
 		switch (v.getId()) {
+		case R.id.topbar:
+			finish();
+			return true;
 		case R.id.topbar_genesis:
 			finish();
 			return true;
