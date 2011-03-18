@@ -66,6 +66,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					break;
 				case SyncGameList.MSG:
 					Toast.makeText(self, "Syncing complete", Toast.LENGTH_LONG).show();
+					finish();
 					break;
 				}
 			} catch (JSONException e) {
@@ -149,7 +150,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.register:
-			startActivityForResult(new Intent(this, Register.class), 1);
+			startActivity(new Intent(this, Register.class));
 			break;
 		}
 	}

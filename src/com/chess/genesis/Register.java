@@ -33,16 +33,23 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	{
 		public void handleMessage(Message msg)
 		{
-			JSONObject json = (JSONObject) msg.obj;
+			switch (msg.what) {
+			case NetworkClient.REGISTER:
+				JSONObject json = (JSONObject) msg.obj;
 
-			try {
-				if (json.getString("result").equals("error")) {
-					Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
+				try {
+					if (json.getString("result").equals("error")) {
+						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					(new RegisterActivation(self, handle)).show();
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-				Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
-			} catch (JSONException e) {
-				e.printStackTrace();
+				break;
+			case RegisterActivation.MSG:
+				finish();
+				break;
 			}
 		}
 	};
