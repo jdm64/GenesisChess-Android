@@ -446,25 +446,24 @@ class GameState
 		if (callstack.size() == 0) {
 		// No active clicks
 			callstack.push(type + 100);
+			from.setHighlight(true);
 		} else if (callstack.get(0) < 64) {
 		// switching from board to place piece
 			BoardButton to = (BoardButton) Game.self.findViewById(callstack.get(0));
 			to.setHighlight(false);
 			callstack.set(0, type + 100);
+			from.setHighlight(true);
 		} else if (callstack.get(0) == type + 100) {
 		// clicking the same square
 			callstack.clear();
 			from.setHighlight(false);
-			return;
 		} else {
 		// switching to another place piece
 			PlaceButton fromold = (PlaceButton) Game.self.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
 			callstack.set(0, type + 100);
 			from.setHighlight(true);
-			return;
 		}
-		from.setHighlight(true);
 		Game.self.game_board.flip();
 	}
 }
