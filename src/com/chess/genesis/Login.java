@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,6 +68,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					break;
 				case SyncGameList.MSG:
 					Toast.makeText(self, "Syncing complete", Toast.LENGTH_LONG).show();
+					setResult(RESULT_OK);
 					finish();
 					break;
 				}
@@ -189,5 +192,36 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.login_options, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId()) {
+		case R.id.logout:
+			Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+
+			settings.putBoolean("isLoggedIn", false);
+			settings.putString("username", "!error!");
+			settings.putString("passhash", "!error!");
+			settings.commit();
+
+			EditText txt = (EditText) findViewById(R.id.username);
+			txt.setText("");
+
+			txt = (EditText) findViewById(R.id.password);
+			txt.setText("");
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		return true;
 	}
 }

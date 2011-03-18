@@ -53,6 +53,20 @@ public class MainMenu extends Activity implements OnClickListener
 		moveTaskToBack(true);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (resultCode == RESULT_OK) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("type", Enums.ONLINE_GAME);
+
+			Intent intent = new Intent(this, GameList.class);
+			intent.putExtras(bundle);
+
+			startActivity(intent);
+		}
+	}
+
 	public void onClick(View v)
 	{
 		Bundle bundle;
@@ -72,7 +86,7 @@ public class MainMenu extends Activity implements OnClickListener
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 			if (!settings.getBoolean("isLoggedIn", false)) {
-				Toast.makeText(getApplication(), "You must login\nbefore playing online", Toast.LENGTH_LONG).show();
+				startActivityForResult(new Intent(this, Login.class), 1);
 				return;
 			}
 			bundle = new Bundle();
