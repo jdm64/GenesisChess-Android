@@ -145,7 +145,7 @@ class GameDataDB
 	public void insertOnlineGame(String gameid, int gametype, long ctime, String white, String black)
 	{
 		Object[] data = {gameid, gametype, ctime, white, black};
-		db.execSQL("INSERT INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
+		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
 	}
 
 	public void insertArchiveGame(JSONObject json)
@@ -196,7 +196,7 @@ class GameDataDB
 			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 
-		db.execSQL("INSERT INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);
+		db.execSQL("INSERT OR REPLACE INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);
 		db.execSQL("DELETE FROM onlinegames WHERE gameid=?", data);
 	}
 }
