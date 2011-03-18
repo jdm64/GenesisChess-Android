@@ -281,8 +281,17 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		if (type == Enums.LOCAL_GAME)
-			getMenuInflater().inflate(R.menu.gamelist_context, menu);
+		switch (type) {
+		case Enums.LOCAL_GAME:
+			getMenuInflater().inflate(R.menu.gamelist_context_local, menu);
+			break;
+		case Enums.ONLINE_GAME:
+			getMenuInflater().inflate(R.menu.gamelist_context_online, menu);
+			break;
+		case Enums.ARCHIVE_GAME:
+			getMenuInflater().inflate(R.menu.gamelist_context_archive, menu);
+			break;
+		}
 	}
 
 	@Override
