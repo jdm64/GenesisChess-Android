@@ -58,7 +58,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					settings.putString("passhash", password);
 					settings.commit();
 
-					SyncGameList sync = new SyncGameList(self, handle, json.getString("username"));
+					SyncGameList sync = new SyncGameList(self, handle, username);
 					sync.setFullSync(true);
 					(new Thread(sync)).start();
 
