@@ -1,5 +1,7 @@
 package com.chess.genesis;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -31,7 +33,7 @@ class Crypto
 		return Sha1Hash(Sha1Hash(str));
 	}
 
-	public static String LoginKey(String str)
+	public static String LoginKey(String str) throws SocketException, IOException
 	{
 		MessageDigest digst = null;
 	try {

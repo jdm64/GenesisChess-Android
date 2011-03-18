@@ -24,16 +24,10 @@ class SocketClient
 		NetActive.inc();
 	}
 
-	public static String getHash()
+	public static String getHash() throws SocketException, IOException
 	{
-	try {
 		if (loginHash == null)
 			connect();
-	} catch (SocketException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
 		return loginHash;
 	}
 
@@ -41,6 +35,7 @@ class SocketClient
 	{
 		if (sock.isConnected())
 			return;
+		hard_disconnect();
 		sock.connect(new InetSocketAddress("genesischess.com", 8338));
 		input = sock.getInputStream();
 		output = sock.getOutputStream();
@@ -53,8 +48,6 @@ class SocketClient
 	public static void hard_disconnect()
 	{
 	try {
-		if (!sock.isConnected())
-			return;
 		sock.close();
 		sock = new Socket();
 		loginHash = null;

@@ -34,6 +34,7 @@ class NetworkClient implements Runnable
 
 	private int fid = NONE;
 	private boolean loginRequired;
+	private boolean error = false;
 
 	public NetworkClient(Context _context, Handler handler)
 	{
@@ -51,14 +52,38 @@ class NetworkClient implements Runnable
 		String password = settings.getString("passhash", "!error!");
 
 		JSONObject json2 = new JSONObject();
-		boolean error = false;
 
 		try {
-			json2.put("request", "login");
-			json2.put("username", username);
-			json2.put("passhash", Crypto.LoginKey(password));
-		} catch (Throwable t) {
-			throw new RuntimeException();
+			try {
+				json2.put("request", "login");
+				json2.put("username", username);
+				json2.put("passhash", Crypto.LoginKey(password));
+			} catch (JSONException e) {
+				throw new RuntimeException();
+			}
+		} catch (SocketException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		}
+		if (error) {
+			callback.sendMessage(Message.obtain(callback, fid, json2));
+			error = false;
+			return false;
 		}
 
 		try {
@@ -84,6 +109,7 @@ class NetworkClient implements Runnable
 		}
 		if (error) {
 			callback.sendMessage(Message.obtain(callback, fid, json2));
+			error = false;
 			return false;
 		}
 
@@ -116,6 +142,7 @@ class NetworkClient implements Runnable
 		}
 		if (error) {
 			callback.sendMessage(Message.obtain(callback, fid, json2));
+			error = false;
 			return false;
 		}
 
@@ -135,8 +162,11 @@ class NetworkClient implements Runnable
 	{
 		SocketClient net = new SocketClient();
 		JSONObject json2 = null;
-		boolean error = false;
 
+		if (error) {
+			error = false;
+			return;
+		}
 		if (loginRequired) {
 			if (!relogin(net)) {
 				net.disconnect();
@@ -167,8 +197,10 @@ class NetworkClient implements Runnable
 		}
 		if (error) {
 			callback.sendMessage(Message.obtain(callback, fid, json2));
+			error = false;
 			return;
 		}
+
 		try {
 			json2 = net.read();
 		} catch (SocketException e) {
@@ -196,6 +228,8 @@ class NetworkClient implements Runnable
 				throw new RuntimeException();
 			}
 		}
+		if (error)
+			error = false;
 		callback.sendMessage(Message.obtain(callback, fid, json2));
 		net.disconnect();
 	}
@@ -222,14 +256,39 @@ class NetworkClient implements Runnable
 		fid = LOGIN;
 		loginRequired = false;
 
+		JSONObject json2 = null;
 		json = new JSONObject();
 
 		try {
-			json.put("request", "login");
-			json.put("username", username);
-			json.put("passhash", Crypto.LoginKey(password));
-		} catch (Throwable t) {
-			throw new RuntimeException();
+			try {
+				json.put("request", "login");
+				json.put("username", username);
+				json.put("passhash", Crypto.LoginKey(password));
+			} catch (JSONException e) {
+				throw new RuntimeException();
+			}
+		} catch (SocketException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring sending data");
+			} catch (Throwable t) {
+				throw new RuntimeException();
+			}
+			error = true;
+		}
+		if (error) {
+			callback.sendMessage(Message.obtain(callback, fid, json2));
+			error = true;
 		}
 	}
 
