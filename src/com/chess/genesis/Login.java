@@ -105,13 +105,6 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		image = (ImageView) findViewById(R.id.topbar);
 		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-		NetActive.inc();
 
 		// Always show the currently logged in user
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -121,13 +114,14 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 			txt = (EditText) findViewById(R.id.password);
 			txt.setText("");
-		} else {
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText("");
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText("");
 		}
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		NetActive.inc();
 	}
 
 	@Override
@@ -153,7 +147,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.register:
-			startActivity(new Intent(this, Register.class));
+			startActivityForResult(new Intent(this, Register.class), 1);
 			break;
 		}
 	}
@@ -223,5 +217,20 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
+	}
+
+	public void onActivityResult(int reques, int result, Intent data)
+	{
+		String username = "";
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+		if (settings.getBoolean("isLoggedIn", false))
+			username = settings.getString("username", "");
+
+		EditText txt = (EditText) findViewById(R.id.username);
+		txt.setText(username);
+
+		txt = (EditText) findViewById(R.id.password);
+		txt.setText("");
 	}
 }
