@@ -9,4 +9,7 @@
 		An activation link has been sent to the email address used to register.\n\nPlease
 		make sure that your spam filter doesn\'t block:\n\tnoreply@genesischess.com
 	</string>
+	<string name="delete_local">
+		Are you sure you want to delete the game? The game can not be recovered.
+	</string>
 </resources>

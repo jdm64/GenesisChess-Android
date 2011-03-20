@@ -302,10 +302,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
-			GameDataDB db = new GameDataDB(this);
-			db.deleteLocalGame(Integer.valueOf(bundle.getString("id")));
-			db.close();
-			gamelist_adapter.update();
+			(new DeleteLocalDialog(this, Integer.valueOf(bundle.getString("id")))).show();
 			break;
 		case R.id.rename_game:
 			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
