@@ -7,7 +7,7 @@
 	<string name="register_activation">
 		Your account\'s email address must be verified before logging in.
 		An activation link has been sent to the email address used to register.\n\nPlease
-		make sure that your spam filter doesn\'t block:\n\tnoreply@genesischess.com
+		make sure that your spam filter doesn\'t block:\n\tactivation@genesischess.com
 	</string>
 	<string name="delete_local">
 		Are you sure you want to delete the game? The game can not be recovered.
