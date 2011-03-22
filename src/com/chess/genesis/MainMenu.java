@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener
@@ -45,6 +46,19 @@ public class MainMenu extends Activity implements OnClickListener
 
 		button = (Button) findViewById(R.id.login);
 		button.setOnClickListener(this);
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+		if (settings.getBoolean("isLoggedIn", false)) {
+			TextView text = (TextView) findViewById(R.id.welcome);
+			text.setText("Welcome " + settings.getString("username", ""));
+		}
 	}
 
 	@Override
