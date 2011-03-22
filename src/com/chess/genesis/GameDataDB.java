@@ -142,10 +142,10 @@ class GameDataDB
 		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
 	}
 
-	public void insertOnlineGame(String gameid, int gametype, long ctime, String white, String black)
+	public void insertOnlineGame(String gameid, int gametype, int eventtype, long ctime, String white, String black)
 	{
-		Object[] data = {gameid, gametype, ctime, white, black};
-		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, ctime, white, black) VALUES (?, ?, ?, ?, ?);", data);
+		Object[] data = {gameid, gametype, eventtype, ctime, white, black};
+		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, eventtype, ctime, white, black) VALUES (?, ?, ?, ?, ?, ?);", data);
 	}
 
 	public void insertArchiveGame(JSONObject json)
@@ -153,6 +153,7 @@ class GameDataDB
 	try {
 		String gameid = json.getString("gameid");
 		int gametype = Enums.GameType(json.getString("gametype"));
+		int eventtype = Enums.EventType(json.getString("eventtype"));
 		int status = Enums.GameStatus(json.getString("status"));
 		int w_psrfrom = json.getJSONObject("score").getJSONObject("white").getInt("from");
 		int w_psrto = json.getJSONObject("score").getJSONObject("white").getInt("to");
@@ -168,11 +169,11 @@ class GameDataDB
 		String tmp[] = zfen.split(":");
 		int ply = Integer.valueOf(tmp[tmp.length - 1]);
 
-		Object[] data = {gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
+		Object[] data = {gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
 			ctime, stime, ply, white, black, zfen, history};
 
 		String q1 = "INSERT INTO archivegames ";
-		String q2 = "(gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
+		String q2 = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
 		String q3 = "ctime, stime, ply, white, black, zfen, history) ";
 		String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
@@ -189,10 +190,10 @@ class GameDataDB
 		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
 		Bundle row = rowToBundle(cursor, 0);
 
-		String tnames = "(gameid, gametype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
+		String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
 		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("status"),
+		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("eventtype"), row.get("status"),
 			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 

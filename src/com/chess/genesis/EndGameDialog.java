@@ -55,7 +55,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 
 		String[] statusArr = null;
 		String gametype = null, gameid = null, sign = null;
-		int ycol = 0, w_from = 0, w_to = 0, b_from = 0, b_to = 0;;
+		int eventtype = 0, ycol = 0, w_from = 0, w_to = 0, b_from = 0, b_to = 0;
 	
 		try {
 			gameid = json.getString("gameid");
@@ -63,17 +63,20 @@ class EndGameDialog extends Dialog implements OnClickListener
 			statusArr = statusMap.get(json.getInt("status") * ycol);
 			gametype = json.getString("gametype");
 			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
+			eventtype = Integer.valueOf(json.getString("eventtype"));
 
 			if (ycol == Piece.WHITE)
 				opponent = json.getString("black_name");
 			else
 				opponent = json.getString("white_name");
 
-			w_from = json.getJSONObject("white").getInt("from");
-			w_to = json.getJSONObject("white").getInt("to");
+			if (eventtype != Enums.INVITE) {
+				w_from = json.getJSONObject("white").getInt("from");
+				w_to = json.getJSONObject("white").getInt("to");
 
-			b_from = json.getJSONObject("black").getInt("from");
-			b_to = json.getJSONObject("black").getInt("to");
+				b_from = json.getJSONObject("black").getInt("from");
+				b_to = json.getJSONObject("black").getInt("to");
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +87,11 @@ class EndGameDialog extends Dialog implements OnClickListener
 		title = statusArr[0];
 		result = statusArr[1];
 		psr_type = gametype + " PSR :";
-		psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+
+		if (eventtype == Enums.INVITE)
+			psr_score = "None (Invite Game)";
+		else
+			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
 
 		GameDataDB db = new GameDataDB(context);
 		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);

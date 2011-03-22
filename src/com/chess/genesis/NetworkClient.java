@@ -308,7 +308,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void new_game(String username, String gametype, String opponent)
+	public void new_game(String username, String opponent, String gametype, String color)
 	{
 		fid = NEW_GAME;
 		loginRequired = true;
@@ -318,8 +318,9 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "newgame");
 			json.put("username", username);
-			json.put("gametype", gametype);
 			json.put("opponent", opponent);
+			json.put("gametype", gametype);
+			json.put("color", color);
 		} catch (Throwable t) {
 			throw new RuntimeException();
 		}

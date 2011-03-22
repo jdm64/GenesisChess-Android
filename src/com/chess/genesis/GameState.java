@@ -62,6 +62,18 @@ class GameState
 				db.close();
 
 				if (status != Enums.ACTIVE) {
+					if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+						json.put("yourcolor", ycol);
+						json.put("white_name", settings.getString("white"));
+						json.put("black_name", settings.getString("black"));
+						json.put("eventtype", settings.getString("eventtype"));
+						json.put("status", settings.getString("status"));
+						json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+						json.put("gameid", settings.getString("gameid"));
+
+						(new EndGameDialog(context, json)).show();
+						return;
+					}
 					settings.putString("status", String.valueOf(status));
 					net.game_score(settings.getString("username"), settings.getString("gameid"));
 					(new Thread(net)).start();
@@ -77,6 +89,7 @@ class GameState
 				json.put("yourcolor", ycol);
 				json.put("white_name", settings.getString("white"));
 				json.put("black_name", settings.getString("black"));
+				json.put("eventtype", settings.getString("eventtype"));
 				json.put("status", settings.getString("status"));
 				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 				json.put("gameid", settings.getString("gameid"));
@@ -98,7 +111,10 @@ class GameState
 		String username = settings.getString("username");
 		String gameid = settings.getString("gameid");
 
-		net.game_score(username, gameid);
+		if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE)
+			net.game_status(username, gameid);
+		else
+			net.game_score(username, gameid);
 		(new Thread(net)).run();
 	}
 

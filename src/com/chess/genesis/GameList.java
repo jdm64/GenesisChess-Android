@@ -45,26 +45,27 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		{
 			switch (msg.what) {
 			case NewOnlineGameDialog.MSG:
-
 				Bundle data = (Bundle) msg.obj;
 
-				String username = settings.getString("username");
-				String gametype;
-
-				switch (data.getInt("gametype")) {
-				default:
-				case Enums.GENESIS_CHESS:
-					gametype = "genesis";
-					break;
-				case Enums.REGULAR_CHESS:
-					gametype = "regular";
-					break;
+				if (data.getInt("opponent") == Enums.INVITE) {
+					(new InviteOptionsDialog(self, handle, data)).show();
+					return;
 				}
-				if (data.getInt("opponent") == Enums.RANDOM)
-					net.join_game(username, gametype);
-				else
-					net.new_game(username, gametype, data.getString("opp_name"));
+				String username = settings.getString("username");
+				String gametype = Enums.GameType(data.getInt("gametype"));
 
+				net.join_game(username, gametype);
+				(new Thread(net)).start();
+				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
+				break;
+			case InviteOptionsDialog.MSG:
+				data = (Bundle) msg.obj;
+
+				username = settings.getString("username");
+				gametype = Enums.GameType(data.getInt("gametype"));
+				String color = Enums.ColorType(data.getInt("color"));
+
+				net.new_game(username, data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;

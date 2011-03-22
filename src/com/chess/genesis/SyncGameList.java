@@ -268,9 +268,10 @@ class SyncGameList implements Runnable
 		String black = json.getString("black");
 		long ctime = json.getLong("ctime");
 		int gametype = Enums.GameType(json.getString("gametype"));
+		int eventtype = Enums.EventType(json.getString("eventtype"));
 
 		GameDataDB db = new GameDataDB(context);
-		db.insertOnlineGame(gameid, gametype, ctime, white, black);
+		db.insertOnlineGame(gameid, gametype, eventtype, ctime, white, black);
 		db.close();
 	} catch (JSONException e) {
 		e.printStackTrace();

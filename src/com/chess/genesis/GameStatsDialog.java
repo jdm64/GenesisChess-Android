@@ -56,6 +56,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 		int from, to;
 
 		int status = Integer.valueOf(bundle.getString("status"));
+		int eventtype = Integer.valueOf(bundle.getString("eventtype"));
 		int ycol = bundle.getInt("yourcolor");
 
 		String[] statusArr = statusMap.get(status * ycol);
@@ -78,7 +79,11 @@ class GameStatsDialog extends Dialog implements OnClickListener
 		title = statusArr[0];
 		result = statusArr[1];
 		psr_type = gametype + " PSR :";
-		psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+
+		if (eventtype == Enums.INVITE)
+			psr_score = "None (Invite Game)";
+		else
+			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
 	}
 
 	@Override

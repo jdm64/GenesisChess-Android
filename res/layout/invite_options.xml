@@ -15,27 +15,32 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:layout_gravity="right"
 			android:paddingRight="6dp"
 			android:textColor="#000000"
-			android:text="Game Type:"/>
-			<Spinner
-			android:id="@+id/game_type"/>
+			android:text="Username:"/>
+			<EditText
+			android:id="@+id/opp_name"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:layout_gravity="right"
 			android:paddingRight="6dp"
 			android:textColor="#000000"
-			android:text="Opponent:"/>
+			android:text="Your Color:"/>
 			<RadioGroup
-			android:id="@+id/opp_type">
+			android:id="@+id/invite_color">
 				<RadioButton
-				android:id="@+id/random_opp"
+				android:id="@+id/random_color"
 				android:textColor="#000000"
 				android:text="Random"
 				android:checked="true"/>
 				<RadioButton
-				android:id="@+id/invite_opp"
+				android:id="@+id/white_color"
 				android:textColor="#000000"
-				android:text="Invite"
+				android:text="White"
+				android:checked="false"/>
+				<RadioButton
+				android:id="@+id/black_color"
+				android:textColor="#000000"
+				android:text="Black"
 				android:checked="false"/>
 			</RadioGroup>
 		</TableRow>

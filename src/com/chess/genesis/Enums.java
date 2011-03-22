@@ -7,11 +7,6 @@ class Enums
 	public final static int ONLINE_GAME = 2;
 	public final static int ARCHIVE_GAME = 3;
 
-	// Event Types
-	public final static int RANDOM_EVENT = 1;
-	public final static int INVITE_EVENT = 2;
-	public final static int TOURNAMENT_EVENT = 3;
-
 	// Game Types
 	public final static int REGULAR_CHESS = 1;
 	public final static int GENESIS_CHESS = 2;
@@ -24,6 +19,11 @@ class Enums
 	public final static int RANDOM = 1;
 	public final static int INVITE = 2;
 
+	// Color Types
+	public final static int WHITE_OPP = 1;
+	public final static int BLACK_OPP = 2;
+	public final static int RANDOM_OPP = 3;
+
 	// Game Status
 	public final static int ACTIVE = 1;
 	public final static int WHITEMATE = 2;
@@ -32,6 +32,29 @@ class Enums
 	public final static int IMPOSSIBLE = 5;
 	public final static int WHITERESIGN = 6;
 	public final static int BLACKRESIGN = 7;
+
+	public static String ColorType(int color)
+	{
+		switch (color) {
+		case WHITE_OPP:
+			return "white";
+		case BLACK_OPP:
+			return "black";
+		case RANDOM_OPP:
+		default:
+			return "random";
+		}
+	}
+
+	public static int EventType(String eventtype)
+	{
+		if (eventtype.equals("random"))
+			return RANDOM;
+		else if (eventtype.equals("invite"))
+			return INVITE;
+		else
+			throw new RuntimeException("unknown eventtype: " + eventtype);
+	}
 
 	public static int GameType(String gametype)
 	{
