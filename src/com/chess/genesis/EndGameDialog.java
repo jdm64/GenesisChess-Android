@@ -119,9 +119,10 @@ class EndGameDialog extends Dialog implements OnClickListener
 
 		msg = (TextView) findViewById(R.id.psr_score);
 		msg.setText(psr_score);
-		if (diff >= 0)
+
+		if (diff > 0)
 			msg.setTextColor(0xFF00FF00);
-		else
+		else if (diff < 0)
 			msg.setTextColor(0xFFFF0000);
 	}
 
