@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -53,18 +56,56 @@ public class MainMenu extends Activity implements OnClickListener
 	{
 		super.onResume();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		String welcome = "";
+		int visible = View.VISIBLE;
 
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		if (settings.getBoolean("isLoggedIn", false)) {
-			TextView text = (TextView) findViewById(R.id.welcome);
-			text.setText("Welcome " + settings.getString("username", ""));
+			welcome = "Welcome " + settings.getString("username", "");
+			visible = View.GONE;
 		}
+		TextView text = (TextView) findViewById(R.id.welcome);
+		text.setText(welcome);
+
+		Button button = (Button) findViewById(R.id.login);
+		button.setVisibility(visible);
 	}
 
 	@Override
 	public void onBackPressed()
 	{
 		moveTaskToBack(true);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.mainmenu_options, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId()) {
+		case R.id.logout:
+			Editor settings = PreferenceManager.getDefaultSharedPreferences(this).edit();
+
+			settings.putBoolean("isLoggedIn", false);
+			settings.putString("username", "!error!");
+			settings.putString("passhash", "!error!");
+			settings.commit();
+
+			TextView text = (TextView) findViewById(R.id.welcome);
+			text.setText("");
+
+			Button button = (Button) findViewById(R.id.login);
+			button.setVisibility(View.VISIBLE);
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		return true;
 	}
 
 	@Override
