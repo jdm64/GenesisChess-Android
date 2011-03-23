@@ -51,6 +51,17 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 
 		Spinner spinner = (Spinner) findViewById(R.id.game_type);
 		spinner.setAdapter(adapter);
+
+		// EventType dropdown
+		list = new AdapterItem[]
+			{new AdapterItem("Random", Enums.RANDOM),
+			new AdapterItem("Invite", Enums.INVITE) };
+
+		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+
+		spinner = (Spinner) findViewById(R.id.opp_type);
+		spinner.setAdapter(adapter);
 	}
 
 	public void onClick(View v)
@@ -59,11 +70,11 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 		case R.id.newgame_ok:
 			Bundle data = new Bundle();
 
-			Spinner spinner = (Spinner) findViewById(R.id.game_type);
-			RadioButton opp_type = (RadioButton) findViewById(R.id.random_opp);
+			Spinner gametype = (Spinner) findViewById(R.id.game_type);
+			Spinner eventtype = (Spinner) findViewById(R.id.opp_type);
 
-			data.putInt("gametype", ((AdapterItem) spinner.getSelectedItem()).id);
-			data.putInt("opponent", opp_type.isChecked()? Enums.RANDOM :Enums.INVITE);
+			data.putInt("gametype", ((AdapterItem) gametype.getSelectedItem()).id);
+			data.putInt("opponent", ((AdapterItem) eventtype.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
 		}

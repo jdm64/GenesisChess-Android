@@ -43,6 +43,18 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 
 		button = (Button) findViewById(R.id.newgame_cancel);
 		button.setOnClickListener(this);
+
+		// ColorType dropdown
+		AdapterItem[] list = new AdapterItem[]
+			{new AdapterItem("Random", Enums.RANDOM_OPP),
+			new AdapterItem("White", Enums.WHITE_OPP),
+			new AdapterItem("Black", Enums.BLACK_OPP) };
+
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+
+		Spinner spinner = (Spinner) findViewById(R.id.invite_color);
+		spinner.setAdapter(adapter);
 	}
 
 	public void onClick(View v)
@@ -50,13 +62,10 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 		switch (v.getId()) {
 		case R.id.newgame_ok:
 			EditText opp_name = (EditText) findViewById(R.id.opp_name);
-			RadioButton white = (RadioButton) findViewById(R.id.white_color);
-			RadioButton black = (RadioButton) findViewById(R.id.black_color);
-
-			int color = white.isChecked()? Enums.WHITE_OPP : (black.isChecked()? Enums.BLACK_OPP : Enums.RANDOM_OPP);
+			Spinner color = (Spinner) findViewById(R.id.invite_color);
 
 			settings.putString("opp_name", opp_name.getText().toString());
-			settings.putInt("color", color);
+			settings.putInt("color", ((AdapterItem) color.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, settings));
 		}

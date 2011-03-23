@@ -12,7 +12,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:stretchColumns="1">
 		<TableRow>
 			<TextView
-			android:layout_gravity="right"
+			android:layout_gravity="right|center_vertical"
 			android:paddingRight="6dp"
 			android:textColor="#000000"
 			android:text="Game Type:"/>
@@ -21,23 +21,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		</TableRow>
 		<TableRow>
 			<TextView
-			android:layout_gravity="right"
+			android:layout_gravity="right|center_vertical"
 			android:paddingRight="6dp"
 			android:textColor="#000000"
 			android:text="Opponent:"/>
-			<RadioGroup
-			android:id="@+id/opp_type">
-				<RadioButton
-				android:id="@+id/random_opp"
-				android:textColor="#000000"
-				android:text="Random"
-				android:checked="true"/>
-				<RadioButton
-				android:id="@+id/invite_opp"
-				android:textColor="#000000"
-				android:text="Invite"
-				android:checked="false"/>
-			</RadioGroup>
+			<Spinner
+			android:id="@+id/opp_type"/>
 		</TableRow>
 	</TableLayout>
 	<TableRow
