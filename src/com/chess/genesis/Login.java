@@ -71,6 +71,20 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					setResult(RESULT_OK);
 					finish();
 					break;
+				case LogoutConfirm.MSG:
+					settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+
+					settings.putBoolean("isLoggedIn", false);
+					settings.putString("username", "!error!");
+					settings.putString("passhash", "!error!");
+					settings.commit();
+
+					txt = (EditText) findViewById(R.id.username);
+					txt.setText("");
+
+					txt = (EditText) findViewById(R.id.password);
+					txt.setText("");
+					break;
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -200,18 +214,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	{
 		switch (item.getItemId()) {
 		case R.id.logout:
-			Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
-
-			settings.putBoolean("isLoggedIn", false);
-			settings.putString("username", "!error!");
-			settings.putString("passhash", "!error!");
-			settings.commit();
-
-			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText("");
-
-			txt = (EditText) findViewById(R.id.password);
-			txt.setText("");
+			(new LogoutConfirm(this, handle)).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

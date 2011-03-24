@@ -13,4 +13,8 @@
 	<string name="delete_local">
 		Are you sure you want to delete the game? The game can not be recovered.
 	</string>
+	<string name="logout_confirm">
+		Are you sure you want to logout of your account?
+		Online games will be unavailable until you login.
+	</string>
 </resources>

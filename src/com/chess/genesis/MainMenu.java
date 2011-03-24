@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +22,36 @@ import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener
 {
+	private static MainMenu self;
+
+	private Handler handle = new Handler()
+	{
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what) {
+			case LogoutConfirm.MSG:
+				Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+
+				settings.putBoolean("isLoggedIn", false);
+				settings.putString("username", "!error!");
+				settings.putString("passhash", "!error!");
+				settings.commit();
+
+				TextView text = (TextView) findViewById(R.id.welcome);
+				text.setText("");
+
+				Button button = (Button) findViewById(R.id.login);
+				button.setVisibility(View.VISIBLE);
+				break;
+			}
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		self = this;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -89,18 +117,7 @@ public class MainMenu extends Activity implements OnClickListener
 	{
 		switch (item.getItemId()) {
 		case R.id.logout:
-			Editor settings = PreferenceManager.getDefaultSharedPreferences(this).edit();
-
-			settings.putBoolean("isLoggedIn", false);
-			settings.putString("username", "!error!");
-			settings.putString("passhash", "!error!");
-			settings.commit();
-
-			TextView text = (TextView) findViewById(R.id.welcome);
-			text.setText("");
-
-			Button button = (Button) findViewById(R.id.login);
-			button.setVisibility(View.VISIBLE);
+			(new LogoutConfirm(this, handle)).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
