@@ -71,7 +71,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginLeft="6dp"
 	android:layout_marginRight="6dp"
 	android:singleLine="true"
-	android:maxLength="22"
+	android:maxLength="36"
 	android:inputType="textEmailAddress"/>
 
 	<com.chess.genesis.MyImageView
