@@ -303,7 +303,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
-			(new DeleteLocalDialog(this, Integer.valueOf(bundle.getString("id")))).show();
+			if (type == Enums.LOCAL_GAME)
+				(new DeleteLocalDialog(this, Integer.valueOf(bundle.getString("id")))).show();
+			else if (type == Enums.ARCHIVE_GAME)
+				(new DeleteArchiveDialog(this, bundle.getString("gameid"))).show();
 			break;
 		case R.id.rename_game:
 			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();

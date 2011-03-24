@@ -11,7 +11,10 @@
 		make sure that your spam filter doesn\'t block:\n\tactivation@genesischess.com
 	</string>
 	<string name="delete_local">
-		Are you sure you want to delete the game? The game can not be recovered.
+		Are you sure you want to delete this game? The game can not be recovered.
+	</string>
+	<string name="delete_archive">
+		Are you sure you want to delete this archived game? The game will not be deleted from the server.
 	</string>
 	<string name="logout_confirm">
 		Are you sure you want to logout of your account?

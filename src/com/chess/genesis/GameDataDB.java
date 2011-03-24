@@ -62,6 +62,12 @@ class GameDataDB
 		db.execSQL("DELETE FROM localgames WHERE id=?;", data);
 	}
 
+	public void deleteArchiveGame(String gameid)
+	{
+		Object[] data = {gameid};
+		db.execSQL("DELETE FROM archivegames WHERE gameid=?;", data);
+	}
+
 	public void renameLocalGame(int id, String name)
 	{
 		Object[] data = {name, id};
