@@ -47,6 +47,13 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 					e.printStackTrace();
 				}
 				break;
+			case RegisterConfirm.MSG:
+				Bundle data = (Bundle) msg.obj;
+
+				net.register(data.getString("username"), data.getString("password"), data.getString("email"));
+				(new Thread(net)).start();
+				Toast.makeText(self, "Connecting to server...", Toast.LENGTH_LONG).show();
+				break;
 			case RegisterActivation.MSG:
 				finish();
 				break;
@@ -99,7 +106,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	{
 		switch (v.getId()) {
 		case R.id.register:
-			register_user();
+			register_validate();
 			break;
 		}
 	}
@@ -134,10 +141,8 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		return false;
 	}
 
-	private void register_user()
+	private void register_validate()
 	{
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
 		EditText txt = (EditText) findViewById(R.id.username);
 		String username = txt.getText().toString();
 
@@ -157,9 +162,12 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		if (!valid_email(email))
 			return;
 
-		net.register(username, password, email);
-		(new Thread(net)).start();
-		Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
+		Bundle bundle = new Bundle();
+		bundle.putString("username", username);
+		bundle.putString("password", password);
+		bundle.putString("email", email);
+
+		(new RegisterConfirm(this, handle, bundle)).show();
 	}
 
 	private boolean valid_username(String name)

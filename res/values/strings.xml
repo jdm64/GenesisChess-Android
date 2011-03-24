@@ -17,4 +17,7 @@
 		Are you sure you want to logout of your account?
 		Online games will be unavailable until you login.
 	</string>
+	<string name="register_confirm">
+		Are you sure you want to register an account with the following information?
+	</string>
 </resources>
