@@ -170,14 +170,8 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		switch (item.getItemId()) {
-		case R.id.takeback_move:
-			gamestate.backMove();
-			break;
-		case R.id.forward_move:
-			gamestate.forwardMove();
-			break;
-		case R.id.reset_game:
-			gamestate.reset();
+		case R.id.first_move:
+			gamestate.firstMove();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

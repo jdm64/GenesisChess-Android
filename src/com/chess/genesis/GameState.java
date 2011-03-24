@@ -279,6 +279,14 @@ class GameState
 		}
 	}
 
+	public void firstMove()
+	{
+		while (hindex > 0) {
+			Move move = history.get(hindex);
+			revertMove(move);
+		}
+	}
+
 	public void undoMove()
 	{
 		if (hindex < 0)
