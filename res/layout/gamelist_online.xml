@@ -18,20 +18,25 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/table_02"
 	style="@style/FillWidth"
 	android:layout_below="@id/table_01">
-		<Button
+		<com.chess.genesis.MyImageView
 		android:id="@+id/your_move"
 		style="@style/FillWidth"
 		android:layout_weight="50"
-		android:text="Your Move"/>
-		<Button
-		android:id="@+id/there_move"
+		android:src="@drawable/yourmove_selected"/>
+		<com.chess.genesis.MyImageView
+		android:id="@+id/their_move"
 		style="@style/FillWidth"
 		android:layout_weight="50"
-		android:text="Their Move"/>
+		android:src="@drawable/theirmove_notselected"/>
 	</TableRow>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/move_divider"
+	style="@style/FillWidth"
+	android:layout_below="@id/table_02"
+	android:src="@drawable/move_divider"/>
 	<ListView
 	android:id="@+id/game_list"
-	android:layout_below="@id/table_02"
+	android:layout_below="@id/move_divider"
 	android:layout_above="@id/botbar"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"

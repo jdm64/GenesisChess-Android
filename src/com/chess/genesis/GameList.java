@@ -35,6 +35,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public GameListAdapter gamelist_adapter;
 
 	private int type;
+	private boolean yourmove;
 
 	private Bundle settings;
 	private NetworkClient net;
@@ -122,6 +123,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		settings = getIntent().getExtras();
 		settings.putString("username", prefs.getString("username", "!error!"));
 		type = settings.getInt("type", Enums.ONLINE_GAME);
+		yourmove = true;
 
 		net = new NetworkClient(this, handle);
 
@@ -130,10 +132,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		case Enums.ONLINE_GAME:
 			setContentView(R.layout.gamelist_online);
 
-			Button button = (Button) findViewById(R.id.your_move);
+			ImageView button = (ImageView) findViewById(R.id.your_move);
+			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
 
-			button = (Button) findViewById(R.id.there_move);
+			button = (ImageView) findViewById(R.id.their_move);
+			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
 			break;
 		case Enums.LOCAL_GAME:
@@ -228,6 +232,32 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar_plus);
 			break;
+		case R.id.your_move:
+			if (yourmove) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.yourmove_selected_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.yourmove_selected);
+			} else {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.yourmove_notselected_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.yourmove_notselected);
+			}
+			break;
+		case R.id.their_move:
+			if (yourmove) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.theirmove_notselected_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.theirmove_notselected);
+			} else {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.theirmove_selected_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.theirmove_selected);
+			}
+			break;
 		}
 		return false;
 	}
@@ -244,12 +274,29 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				(new NewOnlineGameDialog(v.getContext(), handle)).show();
 			break;
 		case R.id.your_move:
-			Button button = (Button) findViewById(R.id.your_move);
+			if (yourmove)
+				return;
+			yourmove = true;
 			gamelist_adapter.setYourturn(1);
+
+			ImageView button = (ImageView) findViewById(R.id.your_move);
+			button.setImageResource(R.drawable.yourmove_selected);
+
+			button = (ImageView) findViewById(R.id.their_move);
+			button.setImageResource(R.drawable.theirmove_notselected);
 			break;
-		case R.id.there_move:
-			button = (Button) findViewById(R.id.there_move);
+		case R.id.their_move:
+			if (!yourmove)
+				return;
+			yourmove = false;
 			gamelist_adapter.setYourturn(0);
+
+			button = (ImageView) findViewById(R.id.your_move);
+			button.setImageResource(R.drawable.yourmove_notselected);
+
+			button = (ImageView) findViewById(R.id.their_move);
+			button.setImageResource(R.drawable.theirmove_selected);
+			break;
 		}
 	}
 
