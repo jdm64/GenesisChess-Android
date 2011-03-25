@@ -427,12 +427,12 @@ class GameState
 	{
 		BoardButton to = (BoardButton) v;
 		int index = to.getIndex();
+		int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
 
 		if (callstack.size() == 0) {
 		// No active clicks
-			int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
 			// first click must be non empty and your own
-			if (to.getPiece() == 0 || to.getPiece() * board.getStm() < 0 || col != board.getStm())
+			if (to.getPiece() * col <= 0)
 				return;
 			callstack.push(index);
 			to.setHighlight(true);
@@ -445,14 +445,25 @@ class GameState
 		} else if (callstack.get(0) > 64) {
 		// Place piece action
 			// can't place on another piece
-			if (to.getPiece() != 0)
+			if (to.getPiece() * col < 0) {
 				return;
+			} else if (to.getPiece() * col > 0) {
+				PlaceButton from = (PlaceButton) Game.self.findViewById(callstack.get(0));
+				from.setHighlight(false);
+				to.setHighlight(true);
+				callstack.set(0, index);
+				return;
+			}
 		} else {
 		// piece move action
 			BoardButton from = (BoardButton) Game.self.findViewById(callstack.get(0));
-			// capturing your own piece
-			if (from.getPiece() * to.getPiece() > 0)
+			// capturing your own piece (switch to piece)
+			if (from.getPiece() * to.getPiece() > 0) {
+				from.setHighlight(false);
+				to.setHighlight(true);
+				callstack.set(0, index);
 				return;
+			}
 		}
 		callstack.push(index);
 		handleMove();
