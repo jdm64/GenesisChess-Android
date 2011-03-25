@@ -20,7 +20,6 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	public static Game self;
 
 	public static ViewFlip3D game_board;
-	public static TextView stm_txt;
 
 	private int type;
 
@@ -60,7 +59,6 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		button.setOnClickListener(this);
 
 		// initialize variables
-		stm_txt = (TextView) findViewById(R.id.stm_txt);
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
@@ -210,6 +208,6 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 			PlaceButton piece = (PlaceButton) findViewById(i);
 			piece.reset();
 		}
-		stm_txt.setText("White's Turn");
+		gamestate.setStm();
 	}
 }

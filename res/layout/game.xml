@@ -14,8 +14,13 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:id="@+id/place_layout"/>
 	</com.chess.genesis.ViewFlip3D>
 	<TextView
-	android:id="@+id/stm_txt"
+	android:id="@+id/white_name"
+	android:paddingLeft="6dp"
 	android:layout_below="@id/board_flip"/>
+	<TextView
+	android:id="@+id/black_name"
+	android:paddingLeft="6dp"
+	android:layout_below="@id/white_name"/>
 	<TableRow
 	android:layout_alignParentBottom="true">
 		<com.chess.genesis.MyImageView

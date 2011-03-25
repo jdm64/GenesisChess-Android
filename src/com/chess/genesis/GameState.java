@@ -2,10 +2,12 @@ package com.chess.genesis;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Date;
 import org.json.JSONException;
@@ -194,11 +196,11 @@ class GameState
 		setStm();
 	}
 
-	private void setStm()
+	public void setStm()
 	{
-		String check = " ", stm;
+		String check = "", stm;
 
-		stm = (board.getStm() > 0)? "White's Turn" : "Black's Turn";
+		stm = (board.getStm() == Piece.WHITE)? "White's Turn" : "Black's Turn";
 		switch (board.isMate()) {
 		case Board.NOT_MATE:
 			if (board.incheck(board.getStm()))
@@ -211,7 +213,25 @@ class GameState
 			check = " (stalemate)";
 			break;
 		}
-		Game.self.stm_txt.setText(stm + check);
+		if (type == Enums.LOCAL_GAME) {
+			TextView txt = (TextView) Game.self.findViewById(R.id.white_name);
+			txt.setText(stm + check);
+			return;
+		}
+		TextView white = (TextView) Game.self.findViewById(R.id.white_name);
+		TextView black = (TextView) Game.self.findViewById(R.id.black_name);
+
+		if (board.getStm() == Piece.WHITE) {
+			white.setText(settings.getString("white") + check);
+			black.setText(settings.getString("black"));
+			white.setTypeface(Typeface.DEFAULT_BOLD);
+			black.setTypeface(Typeface.DEFAULT);
+		} else {
+			white.setText(settings.getString("white"));
+			black.setText(settings.getString("black") + check);
+			white.setTypeface(Typeface.DEFAULT);
+			black.setTypeface(Typeface.DEFAULT_BOLD);
+		}
 	}
 
 	public void save(Context context, boolean exitgame)
