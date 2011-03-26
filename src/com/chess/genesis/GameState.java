@@ -46,6 +46,21 @@ class GameState
 				net.game_status(settings.getString("username"), settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
+			case ResignConfirm.MSG:
+				Toast.makeText(context, "Sending resignation", Toast.LENGTH_LONG).show();
+				net.resign_game(settings.getString("username"), settings.getString("gameid"));
+				(new Thread(net)).start();
+				break;
+			case NetworkClient.RESIGN_GAME:
+				json = (JSONObject) msg.obj;
+
+				if (json.getString("result").equals("error")) {
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
+				}
+				net.game_status(settings.getString("username"), settings.getString("gameid"));
+				(new Thread(net)).run();
+				break;
 			case NetworkClient.GAME_STATUS:
 				json = (JSONObject) msg.obj;
 
@@ -58,6 +73,8 @@ class GameState
 				String history = json.getString("history");
 				int status = Enums.GameStatus(json.getString("status"));
 				long stime = json.getLong("stime");
+
+				settings.putString("status", String.valueOf(status));
 
 				GameDataDB db = new GameDataDB(context);
 				db.updateOnlineGame(gameid, status, stime, zfen, history);
@@ -280,6 +297,11 @@ class GameState
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
+	}
+
+	public void resign()
+	{
+		(new ResignConfirm(context, handle)).show();
 	}
 
 	public void resync()
