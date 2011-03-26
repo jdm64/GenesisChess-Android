@@ -198,13 +198,15 @@ class GameState
 
 	public void setStm()
 	{
-		String check = "", stm;
+		String check, wstr, bstr;
 
-		stm = (board.getStm() == Piece.WHITE)? "White's Turn" : "Black's Turn";
 		switch (board.isMate()) {
 		case Board.NOT_MATE:
+		default:
 			if (board.incheck(board.getStm()))
 				check = " (check)";
+			else
+				check = "";
 			break;
 		case Board.CHECK_MATE:
 			check = " (checkmate)";
@@ -214,21 +216,23 @@ class GameState
 			break;
 		}
 		if (type == Enums.LOCAL_GAME) {
-			TextView txt = (TextView) Game.self.findViewById(R.id.white_name);
-			txt.setText(stm + check);
-			return;
+			wstr = "White";
+			bstr = "Black";
+		} else {
+			wstr = settings.getString("white");
+			bstr = settings.getString("black");
 		}
+
 		TextView white = (TextView) Game.self.findViewById(R.id.white_name);
 		TextView black = (TextView) Game.self.findViewById(R.id.black_name);
-
 		if (board.getStm() == Piece.WHITE) {
-			white.setText(settings.getString("white") + check);
-			black.setText(settings.getString("black"));
+			white.setText(wstr + check);
+			black.setText(bstr);
 			white.setTypeface(Typeface.DEFAULT_BOLD);
 			black.setTypeface(Typeface.DEFAULT);
 		} else {
-			white.setText(settings.getString("white"));
-			black.setText(settings.getString("black") + check);
+			white.setText(wstr);
+			black.setText(bstr + check);
 			white.setTypeface(Typeface.DEFAULT);
 			black.setTypeface(Typeface.DEFAULT_BOLD);
 		}
