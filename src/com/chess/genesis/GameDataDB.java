@@ -197,7 +197,7 @@ class GameDataDB
 		Bundle row = rowToBundle(cursor, 0);
 
 		String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
-		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("eventtype"), row.get("status"),
 			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
