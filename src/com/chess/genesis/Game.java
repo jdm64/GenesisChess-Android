@@ -171,6 +171,9 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		case R.id.first_move:
 			gamestate.firstMove();
 			break;
+		case R.id.resync:
+			gamestate.resync();
+			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

@@ -10,6 +10,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -360,6 +361,30 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			break;
 		default:
 			return super.onContextItemSelected(item);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		if (type == Enums.ONLINE_GAME)
+			getMenuInflater().inflate(R.menu.gamelist_options_online, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId()) {
+		case R.id.resync:
+			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			(new Thread(sync)).start();
+			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 		return true;
 	}

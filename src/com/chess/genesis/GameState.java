@@ -63,6 +63,7 @@ class GameState
 				db.updateOnlineGame(gameid, status, stime, zfen, history);
 				db.close();
 
+				applyRemoteMove(history);
 				if (status != Enums.ACTIVE) {
 					if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
 						json.put("yourcolor", ycol);
@@ -110,13 +111,24 @@ class GameState
 		if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE)
 			return;
 
-		String username = settings.getString("username");
-		String gameid = settings.getString("gameid");
+		if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+		try {
+			JSONObject json = new JSONObject();
+			json.put("yourcolor", ycol);
+			json.put("white_name", settings.getString("white"));
+			json.put("black_name", settings.getString("black"));
+			json.put("eventtype", settings.getString("eventtype"));
+			json.put("status", settings.getString("status"));
+			json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+			json.put("gameid", settings.getString("gameid"));
 
-		if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE)
-			net.game_status(username, gameid);
-		else
-			net.game_score(username, gameid);
+			(new EndGameDialog(context, json)).show();
+			return;
+		} catch (JSONException e) {
+			throw new RuntimeException();
+		}
+		}
+		net.game_score(settings.getString("username"), settings.getString("gameid"));
 		(new Thread(net)).run();
 	}
 
@@ -270,6 +282,33 @@ class GameState
 		}
 	}
 
+	public void resync()
+	{
+		Toast.makeText(context, "Checking for new move...", Toast.LENGTH_LONG).show();
+		net.game_status(settings.getString("username"), settings.getString("gameid"));
+		(new Thread(net)).run();
+	}
+
+	public void applyRemoteMove(String hist)
+	{
+		if (hist == null || hist.length() < 3)
+			return;
+
+		String[] movehistory = hist.trim().split(" +");
+		if (movehistory[movehistory.length - 1].equals(history.top().toString()))
+			return;
+
+		// must be on most current move to apply it
+		currentMove();
+		Toast.makeText(context, "New move loaded...", Toast.LENGTH_LONG).show();
+
+		Move move = new Move();
+		move.parse(movehistory[movehistory.length - 1]);
+		if (board.validMove(move) != Board.VALID_MOVE)
+			return;
+		applyMove(move, true, false);
+	}
+
 	public void reset()
 	{
 		hindex = -1;
@@ -292,14 +331,14 @@ class GameState
 		if (hindex + 1 >= history.size())
 			return;
 		Move move = history.get(++hindex);
-		applyMove(move, false);
+		applyMove(move, false, true);
 	}
 
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
 			Move move = history.get(++hindex);
-			applyMove(move, false);
+			applyMove(move, false, true);
 		}
 	}
 
@@ -361,10 +400,10 @@ class GameState
 			return;
 		}
 		callstack.clear();
-		applyMove(move, true);
+		applyMove(move, true, true);
 	}
 
-	private void applyMove(Move move, boolean erase)
+	private void applyMove(Move move, boolean erase, boolean localmove)
 	{
 		// legal move always ends with king not in check
 		if (hindex > 1) {
@@ -397,7 +436,8 @@ class GameState
 			if (hindex < history.size())
 				history.resize(hindex);
 			history.push(move);
-			save(Game.self.game_board.getContext(), false);
+			if (localmove)
+				save(Game.self.game_board.getContext(), false);
 		}
 
 		// move caused check
