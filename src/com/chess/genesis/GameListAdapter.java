@@ -45,6 +45,8 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 
 	public void update()
 	{
+		if (list.isClosed())
+			return;
 		list.requery();
 		notifyDataSetChanged();
 	}
