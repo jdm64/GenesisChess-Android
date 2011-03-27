@@ -161,16 +161,24 @@ class GameDataDB
 		int gametype = Enums.GameType(json.getString("gametype"));
 		int eventtype = Enums.EventType(json.getString("eventtype"));
 		int status = Enums.GameStatus(json.getString("status"));
-		int w_psrfrom = json.getJSONObject("score").getJSONObject("white").getInt("from");
-		int w_psrto = json.getJSONObject("score").getJSONObject("white").getInt("to");
-		int b_psrfrom = json.getJSONObject("score").getJSONObject("black").getInt("from");
-		int b_psrto = json.getJSONObject("score").getJSONObject("black").getInt("to");
 		long ctime = json.getLong("ctime");
 		long stime = json.getLong("stime");
 		String white = json.getString("white");
 		String black = json.getString("black");
 		String zfen = json.getString("zfen");
 		String history = json.getString("history");
+
+		int w_psrfrom = 0;
+		int w_psrto = 0;
+		int b_psrfrom = 0;
+		int b_psrto = 0;
+
+		if (eventtype != Enums.INVITE) {
+			w_psrfrom = json.getJSONObject("score").getJSONObject("white").getInt("from");
+			w_psrto = json.getJSONObject("score").getJSONObject("white").getInt("to");
+			b_psrfrom = json.getJSONObject("score").getJSONObject("black").getInt("from");
+			b_psrto = json.getJSONObject("score").getJSONObject("black").getInt("to");
+		}
 
 		String tmp[] = zfen.split(":");
 		int ply = Integer.valueOf(tmp[tmp.length - 1]);
@@ -181,7 +189,7 @@ class GameDataDB
 		String q1 = "INSERT INTO archivegames ";
 		String q2 = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
 		String q3 = "ctime, stime, ply, white, black, zfen, history) ";
-		String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (JSONException e) {
