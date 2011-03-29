@@ -31,11 +31,11 @@ class GameInfo
 
 	public int getYourTurn()
 	{
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		if (status != Enums.ACTIVE)
 			return 1;
 		final String color = (getPly() % 2 == 0)? white : black;
-		return color.equals(settings.getString("username", "!error!"))? 1:0;
+		return color.equals(pref.getString("username", "!error!"))? 1:0;
 	}
 }

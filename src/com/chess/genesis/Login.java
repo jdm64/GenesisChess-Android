@@ -51,11 +51,11 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					txt = (EditText) findViewById(R.id.password);
 					final String password = txt.getText().toString();
 
-					Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
-					settings.putBoolean("isLoggedIn", true);
-					settings.putString("username", username);
-					settings.putString("passhash", password);
-					settings.commit();
+					Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					pref.putBoolean("isLoggedIn", true);
+					pref.putString("username", username);
+					pref.putString("passhash", password);
+					pref.commit();
 
 					final SyncGameList sync = new SyncGameList(self, handle, username);
 					sync.setFullSync(true);
@@ -69,12 +69,12 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					finish();
 					break;
 				case LogoutConfirm.MSG:
-					settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
 
-					settings.putBoolean("isLoggedIn", false);
-					settings.putString("username", "!error!");
-					settings.putString("passhash", "!error!");
-					settings.commit();
+					pref.putBoolean("isLoggedIn", false);
+					pref.putString("username", "!error!");
+					pref.putString("passhash", "!error!");
+					pref.commit();
 
 					txt = (EditText) findViewById(R.id.username);
 					txt.setText("");
@@ -118,10 +118,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		image.setOnLongClickListener(this);
 
 		// Always show the currently logged in user
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		if (settings.getBoolean("isLoggedIn", false)) {
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (pref.getBoolean("isLoggedIn", false)) {
 			EditText txt = (EditText) findViewById(R.id.username);
-			txt.setText(settings.getString("username", ""));
+			txt.setText(pref.getString("username", ""));
 
 			txt = (EditText) findViewById(R.id.password);
 			txt.setText("");
@@ -221,10 +221,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
 		String username = "";
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		if (settings.getBoolean("isLoggedIn", false))
-			username = settings.getString("username", "");
+		if (pref.getBoolean("isLoggedIn", false))
+			username = pref.getString("username", "");
 
 		EditText txt = (EditText) findViewById(R.id.username);
 		txt.setText(username);

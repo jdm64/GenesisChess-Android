@@ -47,9 +47,9 @@ class NetworkClient implements Runnable
 		if (SocketClient.isLoggedin)
 			return true;
 
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = settings.getString("username", "!error!");
-		final String password = settings.getString("passhash", "!error!");
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String password = pref.getString("passhash", "!error!");
 
 		JSONObject json2 = new JSONObject();
 

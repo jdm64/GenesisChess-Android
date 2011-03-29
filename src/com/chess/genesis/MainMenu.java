@@ -27,12 +27,12 @@ public class MainMenu extends Activity implements OnClickListener
 		{
 			switch (msg.what) {
 			case LogoutConfirm.MSG:
-				final Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
 
-				settings.putBoolean("isLoggedIn", false);
-				settings.putString("username", "!error!");
-				settings.putString("passhash", "!error!");
-				settings.commit();
+				pref.putBoolean("isLoggedIn", false);
+				pref.putString("username", "!error!");
+				pref.putString("passhash", "!error!");
+				pref.commit();
 
 				final TextView text = (TextView) findViewById(R.id.welcome);
 				text.setText("");
@@ -84,9 +84,9 @@ public class MainMenu extends Activity implements OnClickListener
 		String welcome = "";
 		int visible = View.VISIBLE;
 
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		if (settings.getBoolean("isLoggedIn", false)) {
-			welcome = "Welcome " + settings.getString("username", "");
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (pref.getBoolean("isLoggedIn", false)) {
+			welcome = "Welcome " + pref.getString("username", "");
 			visible = View.GONE;
 		}
 		final TextView text = (TextView) findViewById(R.id.welcome);
@@ -152,9 +152,9 @@ public class MainMenu extends Activity implements OnClickListener
 			startActivity(intent);
 			break;
 		case R.id.online_game:
-			final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-			if (!settings.getBoolean("isLoggedIn", false)) {
+			if (!pref.getBoolean("isLoggedIn", false)) {
 				startActivityForResult(new Intent(this, Login.class), 1);
 				return;
 			}
