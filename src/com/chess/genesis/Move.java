@@ -14,7 +14,7 @@ class Move
 		index = xindex = from = to = -1;
 	}
 
-	private StringBuffer printLoc(int loc)
+	private StringBuffer printLoc(final int loc)
 	{
 		StringBuffer str = new StringBuffer();
 
@@ -43,9 +43,9 @@ class Move
 		return out.toString();
 	}
 
-	public boolean parse(String str)
+	public boolean parse(final String str)
 	{
-		char[] s = str.toCharArray();
+		final char[] s = str.toCharArray();
 		int piece = Piece.NONE;
 		boolean place = true;
 

@@ -2,6 +2,10 @@ package com.chess.genesis;
 
 class Piece
 {
+	private Piece()
+	{
+	}
+
 	public static final int WHITE = 1;
 	public static final int BLACK = -1;
 

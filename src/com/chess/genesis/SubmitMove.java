@@ -13,7 +13,7 @@ import android.widget.ImageView;
 public class SubmitMove extends Activity implements OnClickListener, OnTouchListener
 {
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
@@ -35,16 +35,14 @@ public class SubmitMove extends Activity implements OnClickListener, OnTouchList
 	public void onResume()
 	{
 		super.onResume();
-
 		NetActive.inc();
 	}
 
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
 		NetActive.dec();
+		super.onPause();
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class SubmitMove extends Activity implements OnClickListener, OnTouchList
 		setResult(RESULT_CANCELED);
 	}
 
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
 		case R.id.submit:
@@ -72,7 +70,7 @@ public class SubmitMove extends Activity implements OnClickListener, OnTouchList
 		return false;
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.submit:

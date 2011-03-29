@@ -3,16 +3,15 @@ package com.chess.genesis;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 class PrettyDate extends Date
 {
-	public PrettyDate(long milliseconds)
+	public PrettyDate(final long milliseconds)
 	{
 		super(milliseconds);
 	}
 
-	public PrettyDate(String milliseconds)
+	public PrettyDate(final String milliseconds)
 	{
 		super(Long.valueOf(milliseconds).longValue());
 	}
@@ -20,7 +19,7 @@ class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String dayOfWeekToString(int day)
+	private String dayOfWeekToString(final int day)
 	{
 		switch (day) {
 		case Calendar.SUNDAY:
@@ -45,7 +44,7 @@ class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String monthToString(int month)
+	private String monthToString(final int month)
 	{
 		switch (month) {
 		case Calendar.JANUARY:
@@ -80,7 +79,7 @@ class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String ampmToString(int ampm)
+	private String ampmToString(final int ampm)
 	{
 		switch (ampm) {
 		case Calendar.AM:
@@ -94,11 +93,11 @@ class PrettyDate extends Date
 
 	public String stdFormat()
 	{
-		Calendar cal = new GregorianCalendar();
+		final Calendar cal = new GregorianCalendar();
 
 		cal.setTime(this);
 
-		String week = dayOfWeekToString(cal.get(Calendar.DAY_OF_WEEK)),
+		final String week = dayOfWeekToString(cal.get(Calendar.DAY_OF_WEEK)),
 			month = monthToString(cal.get(Calendar.MONTH)),
 			day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)),
 			year = String.valueOf(cal.get(Calendar.YEAR)),
@@ -109,15 +108,15 @@ class PrettyDate extends Date
 		int hr_i = cal.get(Calendar.HOUR);
 		if (hr_i == 0)
 			hr_i = 12;
-		String hr = String.valueOf(hr_i);
+		final String hr = String.valueOf(hr_i);
 
 		return week + ", " + month + " " + day + ", " + year + " @ " + hr + ":" + min + ":" + sec + " " + ampm;
 	}
 
 	public String agoFormat()
 	{
-		StringBuffer buff = new StringBuffer();
-		Date now = new Date();
+		final StringBuffer buff = new StringBuffer();
+		final Date now = new Date();
 
 		long tmp, diff = Math.abs(now.getTime() - getTime());
 		int count = 0;

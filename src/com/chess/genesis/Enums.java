@@ -33,7 +33,11 @@ class Enums
 	public final static int WHITERESIGN = 6;
 	public final static int BLACKRESIGN = 7;
 
-	public static String ColorType(int color)
+	private Enums()
+	{
+	}
+
+	public static String ColorType(final int color)
 	{
 		switch (color) {
 		case WHITE_OPP:
@@ -46,7 +50,7 @@ class Enums
 		}
 	}
 
-	public static int EventType(String eventtype)
+	public static int EventType(final String eventtype)
 	{
 		if (eventtype.equals("random"))
 			return RANDOM;
@@ -56,7 +60,7 @@ class Enums
 			throw new RuntimeException("unknown eventtype: " + eventtype);
 	}
 
-	public static int GameType(String gametype)
+	public static int GameType(final String gametype)
 	{
 		if (gametype.equals("genesis"))
 			return GENESIS_CHESS;
@@ -65,7 +69,7 @@ class Enums
 		throw new RuntimeException("unknown gametype: " + gametype);
 	}
 
-	public static String GameType(int gametype)
+	public static String GameType(final int gametype)
 	{
 		switch (gametype) {
 		case GENESIS_CHESS:
@@ -76,7 +80,7 @@ class Enums
 		throw new RuntimeException("unknown gametype: " + String.valueOf(gametype));
 	}
 
-	public static int GameStatus(String gamestatus)
+	public static int GameStatus(final String gamestatus)
 	{
 		if (gamestatus.equals("active"))
 			return ACTIVE;

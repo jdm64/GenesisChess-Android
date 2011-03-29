@@ -14,15 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -35,15 +32,14 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 	public GameListAdapter gamelist_adapter;
 
+	private Bundle settings;
+	private NetworkClient net;
 	private int type;
 	private boolean yourmove;
 
-	private Bundle settings;
-	private NetworkClient net;
-
-	private Handler handle = new Handler()
+	private final Handler handle = new Handler()
 	{
-		public void handleMessage(Message msg)
+		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
 			case NewOnlineGameDialog.MSG:
@@ -65,23 +61,23 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 				username = settings.getString("username");
 				gametype = Enums.GameType(data.getInt("gametype"));
-				String color = Enums.ColorType(data.getInt("color"));
+				final String color = Enums.ColorType(data.getInt("color"));
 
 				net.new_game(username, data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
 			case NewLocalGameDialog.MSG:
-				GameDataDB db = new GameDataDB(self);
-				Bundle bundle = (Bundle) msg.obj;
+				final GameDataDB db = new GameDataDB(self);
+				final Bundle bundle = (Bundle) msg.obj;
 
-				int gametype2 = bundle.getInt("gametype");
-				int gameopp = bundle.getInt("opponent");
+				final int gametype2 = bundle.getInt("gametype");
+				final int gameopp = bundle.getInt("opponent");
 				String gamename = bundle.getString("name");
 				if (gamename.length() < 1)
 					gamename = "untitled";
 
-				Intent intent = new Intent(self, Game.class);
+				final Intent intent = new Intent(self, Game.class);
 				intent.putExtras(db.newLocalGame(gamename, gametype2, gameopp));
 				intent.putExtras(settings);
 				db.close();
@@ -91,7 +87,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			case SyncGameList.MSG:
 			case NetworkClient.JOIN_GAME:
 			case NetworkClient.NEW_GAME:
-				JSONObject json = (JSONObject) msg.obj;
+				final JSONObject json = (JSONObject) msg.obj;
 				try {
 					if (json.getString("result").equals("error")) {
 						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
@@ -110,7 +106,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
@@ -119,7 +115,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// store settings from main menu
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		settings = getIntent().getExtras();
 		settings.putString("username", prefs.getString("username", "!error!"));
@@ -173,7 +169,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		// set list adapters
 		gamelist_adapter = new GameListAdapter(this, settings);
 
-		ListView gamelist_view = (ListView) findViewById(R.id.game_list);
+		final ListView gamelist_view = (ListView) findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);
 		gamelist_view.setOnItemClickListener(this);
 
@@ -188,7 +184,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
 			NetActive.inc();
 
-			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			final SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 		} else {
@@ -199,20 +195,20 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
 		if (settings.getInt("type") == Enums.ONLINE_GAME)
 			NetActive.dec();
+
+		super.onPause();
 	}
 
 	@Override
 	public void onDestroy()
 	{
-		super.onDestroy();
 		gamelist_adapter.close();
+		super.onDestroy();
 	}
 
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -263,12 +259,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		return false;
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.topbar_plus:
-			Intent intent = new Intent(this, Game.class);
-
 			if (settings.getInt("type") == Enums.LOCAL_GAME)
 				(new NewLocalGameDialog(v.getContext(), handle)).show();
 			else
@@ -301,7 +295,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		}
 	}
 
-	public boolean onLongClick(View v)
+	public boolean onLongClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -315,10 +309,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)
 	{
-		Bundle data = (Bundle) parent.getItemAtPosition(position);
-		Intent intent = new Intent(this, Game.class);
+		final Bundle data = (Bundle) parent.getItemAtPosition(position);
+		final Intent intent = new Intent(this, Game.class);
 
 		intent.putExtras(data);
 		intent.putExtras(settings);
@@ -326,7 +320,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
 
@@ -344,10 +338,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item)
+	public boolean onContextItemSelected(final MenuItem item)
 	{
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		Bundle bundle = (Bundle) gamelist_adapter.getItem((int) info.id);
+		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		final Bundle bundle = (Bundle) gamelist_adapter.getItem((int) info.id);
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
@@ -366,7 +360,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		if (type == Enums.ONLINE_GAME)
 			getMenuInflater().inflate(R.menu.gamelist_options_online, menu);
@@ -375,11 +369,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		switch (item.getItemId()) {
 		case R.id.resync:
-			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			final SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 			break;

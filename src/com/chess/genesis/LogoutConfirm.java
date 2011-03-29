@@ -6,23 +6,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView.BufferType;
 
 class LogoutConfirm extends Dialog implements OnClickListener
 {
 	public final static int MSG = 105;
 
-	private Handler handle;
+	private final Handler handle;
 
-	public LogoutConfirm(Context context, Handler handler)
+	public LogoutConfirm(final Context context, final Handler handler)
 	{
 		super(context);
 
@@ -30,7 +22,7 @@ class LogoutConfirm extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Logout Confirmation");
 
@@ -43,7 +35,7 @@ class LogoutConfirm extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.logout_ok:

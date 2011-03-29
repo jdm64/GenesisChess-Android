@@ -38,7 +38,7 @@ class Board
 		reset();
 	}
 
-	private int pieceIndex(int loc)
+	private int pieceIndex(final int loc)
 	{
 		for (int i = 0; i < 32; i++)
 			if (piece[i] == loc)
@@ -46,10 +46,10 @@ class Board
 		return Piece.NONE;
 	}
 
-	private int pieceIndex(int loc, int type)
+	private int pieceIndex(final int loc, final int type)
 	{
 		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
-		int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
+		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 
 		for (int i = start; i < end; i++) {
@@ -59,7 +59,7 @@ class Board
 		return Piece.NONE;
 	}
 
-	public void reset()
+	public final void reset()
 	{
 		square = new int[64];
 		for (int i = 0; i < 64; i++)
@@ -78,14 +78,14 @@ class Board
 		return stm;
 	}
 
-	public int kingIndex(int color)
+	public int kingIndex(final int color)
 	{
 		return (Piece.WHITE == color)? piece[31] : piece[15];
 	}
 
 	public Position getPosition()
 	{
-		Position pos = new Position();
+		final Position pos = new Position();
 
 		pos.square = square;
 		pos.piece = piece;
@@ -110,7 +110,7 @@ class Board
 		return square;
 	}
 
-	public void make(Move move)
+	public void make(final Move move)
 	{
 		// update board information
 		square[move.to] = pieceType[move.index];
@@ -125,7 +125,7 @@ class Board
 		ply++;
 	}
 
-	public void unmake(Move move)
+	public void unmake(final Move move)
 	{
 		// TODO could this function fail?
 		piece[move.index] = move.from;
@@ -142,12 +142,12 @@ class Board
 		ply--;
 	}
 
-	public boolean incheck(int color)
+	public boolean incheck(final int color)
 	{
-		MoveLookup ml = new MoveLookup(square);
-		int king = (color == Piece.WHITE)? 31:15;
+		final MoveLookup ml = new MoveLookup(square);
+		final int king = (color == Piece.WHITE)? 31:15;
 
-		return (piece[king] != Piece.PLACEABLE)? ml.isAttacked(piece[king]) : false;
+		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
 	}
 
 	public int isMate()
@@ -160,7 +160,7 @@ class Board
 			return STALE_MATE;
 	}
 
-	public int validMove(Move move)
+	public int validMove(final Move move)
 	{
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
@@ -185,7 +185,7 @@ class Board
 			return KING_FIRST;
 
 		if (move.from != Piece.PLACEABLE) {
-			MoveLookup ml = new MoveLookup(square);
+			final MoveLookup ml = new MoveLookup(square);
 			if (!ml.fromto(move.from, move.to))
 				return INVALID_MOVEMENT;
 		}
@@ -195,22 +195,22 @@ class Board
 		// curr is opponent after make
 		if (incheck(stm ^ -2))
 			ret = IN_CHECK;
-		if (move.from == Piece.PLACEABLE && incheck(stm))
+		else if (move.from == Piece.PLACEABLE && incheck(stm))
 			ret = IN_CHECK_PLACE;
 		unmake(move);
 
 		return ret;
 	}
 
-	public int getNumMoves(int color)
+	public int getNumMoves(final int color)
 	{
-		MoveLookup movelookup = new MoveLookup(square);
+		final MoveLookup movelookup = new MoveLookup(square);
+		final Move move = new Move();
 		int num = 0;
-		Move move = new Move();
 
 		// we must place king first
 		if (ply < 2) {
-			int idx = pieceIndex(Piece.PLACEABLE, Piece.KING * color);
+			final int idx = pieceIndex(Piece.PLACEABLE, Piece.KING * color);
 
 			for (int loc = 0; loc < 64; loc++) {
 				if (square[loc] != Piece.EMPTY)
@@ -229,12 +229,12 @@ class Board
 			return num;
 		}
 		// generate piece moves
-		int start = (color == Piece.BLACK)? 0:16, end = (color == Piece.BLACK)? 16:32;
+		final int start = (color == Piece.BLACK)? 0:16, end = (color == Piece.BLACK)? 16:32;
 		for (int idx = start; idx < end; idx++) {
 			if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 				continue;
 			int n = 0;
-			int[] loc = movelookup.genAll(piece[idx]);
+			final int[] loc = movelookup.genAll(piece[idx]);
 			while (loc[n] != -1) {
 				move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 				move.to = loc[n];
@@ -251,7 +251,7 @@ class Board
 		}
 		// generate piece place moves
 		for (int type = Piece.PAWN; type <= Piece.KING; type++) {
-			int idx = pieceIndex(Piece.PLACEABLE, type * color);
+			final int idx = pieceIndex(Piece.PLACEABLE, type * color);
 			if (idx == Piece.NONE)
 				continue;
 			for (int loc = 0; loc < 64; loc++) {

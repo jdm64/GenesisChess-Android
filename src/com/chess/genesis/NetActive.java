@@ -6,6 +6,10 @@ class NetActive
 {
 	private static AtomicInteger active = new AtomicInteger(0);
 
+	private NetActive()
+	{
+	}
+
 	public static int get()
 	{
 		return active.get();

@@ -1,14 +1,12 @@
 package com.chess.genesis;
 
-import java.util.Arrays;
-
 class ObjectArray<Type>
 {
 	private Type[] list = (Type[]) new Object[0];
 
 	// !SICK!
 	// This only exists because Arrays.copyOf was added in API Level 9
-	private Type[] copyOf(Type[] arr, int size)
+	private Type[] copyOf(final Type[] arr, final int size)
 	{
 		Type[] temp = (Type[]) new Object[size];
 
@@ -27,22 +25,22 @@ class ObjectArray<Type>
 		return list.length;
 	}
 
-	public void resize(int size)
+	public void resize(final int size)
 	{
 		list = copyOf(list, size);
 	}
 
-	public Type get(int index)
+	public Type get(final int index)
 	{
 		return list[index];
 	}
 
-	public void set(int index, Type value)
+	public void set(final int index, final Type value)
 	{
 		list[index] = value;
 	}
 
-	public void push(Type value)
+	public void push(final Type value)
 	{
 		list = copyOf(list, list.length + 1);
 		list[list.length - 1] = value;
@@ -50,7 +48,7 @@ class ObjectArray<Type>
 
 	public Type pop()
 	{
-		Type end = list[list.length - 1];
+		final Type end = list[list.length - 1];
 		list = copyOf(list, list.length - 1);
 		return end;
 	}
@@ -63,7 +61,7 @@ class ObjectArray<Type>
 	@Override
 	public String toString()
 	{
-		StringBuffer str = new StringBuffer();
+		final StringBuffer str = new StringBuffer();
 
 		for (int i = 0; i < list.length; i++)
 			str.append(list[i].toString() + " ");

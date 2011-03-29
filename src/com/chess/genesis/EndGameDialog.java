@@ -14,42 +14,43 @@ import org.json.JSONObject;
 
 class EndGameDialog extends Dialog implements OnClickListener
 {
-	private static final String[] won_check = {"You Won", "Checkmate"};
-	private static final String[] lost_check = {"You Lost", "Checkmate"};
-	private static final String[] lost_resign = {"You Lost", "Resigned"};
-	private static final String[] won_resign = {"You Won", "Resigned"};
-	private static final String[] tied_imp = {"Game Tied", "Imposibility of Checkmate"};
-	private static final String[] tied_stale = {"Game Tied", "Stalemate"};
+	private static final String[] WON_CHECK = {"You Won", "Checkmate"};
+	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
+	private static final String[] LOST_RESIGN = {"You Lost", "Resigned"};
+	private static final String[] WON_RESIGN = {"You Won", "Resigned"};
+	private static final String[] TIED_IMP = {"Game Tied", "Imposibility of Checkmate"};
+	private static final String[] TIED_STALE = {"Game Tied", "Stalemate"};
 
-	private static final Map<Integer,String[]> statusMap = createMap();
+	private static final Map<Integer,String[]> STATUS_MAP = createMap();
 	
 	private static Map<Integer, String[]> createMap()
 	{
-		Map<Integer, String[]> map = new HashMap<Integer, String[]>();
-		map.put(Piece.WHITE * Enums.WHITEMATE, won_check);
-		map.put(Piece.WHITE * Enums.BLACKMATE, lost_check);
-		map.put(Piece.WHITE * Enums.WHITERESIGN, lost_resign);
-		map.put(Piece.WHITE * Enums.BLACKRESIGN, won_resign);
-		map.put(Piece.WHITE * Enums.IMPOSSIBLE, tied_imp);
-		map.put(Piece.WHITE * Enums.STALEMATE, tied_stale);
+		final Map<Integer, String[]> map = new HashMap<Integer, String[]>();
+		map.put(Piece.WHITE * Enums.WHITEMATE, WON_CHECK);
+		map.put(Piece.WHITE * Enums.BLACKMATE, LOST_CHECK);
+		map.put(Piece.WHITE * Enums.WHITERESIGN, LOST_RESIGN);
+		map.put(Piece.WHITE * Enums.BLACKRESIGN, WON_RESIGN);
+		map.put(Piece.WHITE * Enums.IMPOSSIBLE, TIED_IMP);
+		map.put(Piece.WHITE * Enums.STALEMATE, TIED_STALE);
 
-		map.put(Piece.BLACK * Enums.WHITEMATE, lost_check);
-		map.put(Piece.BLACK * Enums.BLACKMATE, won_check);
-		map.put(Piece.BLACK * Enums.WHITERESIGN, won_resign);
-		map.put(Piece.BLACK * Enums.BLACKRESIGN, lost_resign);
-		map.put(Piece.BLACK * Enums.IMPOSSIBLE, tied_imp);
-		map.put(Piece.BLACK * Enums.STALEMATE, tied_stale);
+		map.put(Piece.BLACK * Enums.WHITEMATE, LOST_CHECK);
+		map.put(Piece.BLACK * Enums.BLACKMATE, WON_CHECK);
+		map.put(Piece.BLACK * Enums.WHITERESIGN, WON_RESIGN);
+		map.put(Piece.BLACK * Enums.BLACKRESIGN, LOST_RESIGN);
+		map.put(Piece.BLACK * Enums.IMPOSSIBLE, TIED_IMP);
+		map.put(Piece.BLACK * Enums.STALEMATE, TIED_STALE);
 		return map;
 	}
 
-	private String title;
+	private final String title;
+	private final String result;
+	private final String psr_type;
+	private final int diff;
+	
 	private String opponent;
-	private String result;
-	private String psr_type;
 	private String psr_score;
-	private int diff;
 
-	public EndGameDialog(Context context, JSONObject json)
+	public EndGameDialog(final Context context, final JSONObject json)
 	{
 		super(context);
 
@@ -60,7 +61,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 		try {
 			gameid = json.getString("gameid");
 			ycol = json.getInt("yourcolor");
-			statusArr = statusMap.get(json.getInt("status") * ycol);
+			statusArr = STATUS_MAP.get(json.getInt("status") * ycol);
 			gametype = json.getString("gametype");
 			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
 			eventtype = Integer.valueOf(json.getString("eventtype"));
@@ -80,7 +81,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		int to = (ycol == Piece.WHITE)? w_to : b_to;
+		final int to = (ycol == Piece.WHITE)? w_to : b_to;
 		diff = (ycol == Piece.WHITE)? (w_to - w_from) : (b_to - b_from);
 		sign = (diff >= 0)? "+" : "-";
 
@@ -93,19 +94,19 @@ class EndGameDialog extends Dialog implements OnClickListener
 		else
 			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
 
-		GameDataDB db = new GameDataDB(context);
+		final GameDataDB db = new GameDataDB(context);
 		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);
 		db.close();
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle(title);
 
 		setContentView(R.layout.endgame);
 
-		Button close = (Button) findViewById(R.id.close);
+		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);
 
 		TextView msg = (TextView) findViewById(R.id.opponent);
@@ -126,7 +127,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 			msg.setTextColor(0xFFFF0000);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		dismiss();
 	}

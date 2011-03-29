@@ -9,57 +9,56 @@ import android.widget.Button;
 import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 class GameStatsDialog extends Dialog implements OnClickListener
 {
-	private static final String[] won_check = {"You Won", "Checkmate"};
-	private static final String[] lost_check = {"You Lost", "Checkmate"};
-	private static final String[] lost_resign = {"You Lost", "Resigned"};
-	private static final String[] won_resign = {"You Won", "Resigned"};
-	private static final String[] tied_imp = {"Game Tied", "Imposibility of Checkmate"};
-	private static final String[] tied_stale = {"Game Tied", "Stalemate"};
+	private static final String[] WON_CHECK = {"You Won", "Checkmate"};
+	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
+	private static final String[] LOST_RESIGN = {"You Lost", "Resigned"};
+	private static final String[] WON_RESIGN = {"You Won", "Resigned"};
+	private static final String[] TIED_IMP = {"Game Tied", "Imposibility of Checkmate"};
+	private static final String[] TIED_STALE = {"Game Tied", "Stalemate"};
 
-	private static final Map<Integer,String[]> statusMap = createMap();
+	private static final Map<Integer,String[]> STATUS_MAP = createMap();
 	
 	private static Map<Integer, String[]> createMap()
 	{
-		Map<Integer, String[]> map = new HashMap<Integer, String[]>();
-		map.put(Piece.WHITE * Enums.WHITEMATE, won_check);
-		map.put(Piece.WHITE * Enums.BLACKMATE, lost_check);
-		map.put(Piece.WHITE * Enums.WHITERESIGN, lost_resign);
-		map.put(Piece.WHITE * Enums.BLACKRESIGN, won_resign);
-		map.put(Piece.WHITE * Enums.IMPOSSIBLE, tied_imp);
-		map.put(Piece.WHITE * Enums.STALEMATE, tied_stale);
+		final Map<Integer, String[]> map = new HashMap<Integer, String[]>();
+		map.put(Piece.WHITE * Enums.WHITEMATE, WON_CHECK);
+		map.put(Piece.WHITE * Enums.BLACKMATE, LOST_CHECK);
+		map.put(Piece.WHITE * Enums.WHITERESIGN, LOST_RESIGN);
+		map.put(Piece.WHITE * Enums.BLACKRESIGN, WON_RESIGN);
+		map.put(Piece.WHITE * Enums.IMPOSSIBLE, TIED_IMP);
+		map.put(Piece.WHITE * Enums.STALEMATE, TIED_STALE);
 
-		map.put(Piece.BLACK * Enums.WHITEMATE, lost_check);
-		map.put(Piece.BLACK * Enums.BLACKMATE, won_check);
-		map.put(Piece.BLACK * Enums.WHITERESIGN, won_resign);
-		map.put(Piece.BLACK * Enums.BLACKRESIGN, lost_resign);
-		map.put(Piece.BLACK * Enums.IMPOSSIBLE, tied_imp);
-		map.put(Piece.BLACK * Enums.STALEMATE, tied_stale);
+		map.put(Piece.BLACK * Enums.WHITEMATE, LOST_CHECK);
+		map.put(Piece.BLACK * Enums.BLACKMATE, WON_CHECK);
+		map.put(Piece.BLACK * Enums.WHITERESIGN, WON_RESIGN);
+		map.put(Piece.BLACK * Enums.BLACKRESIGN, LOST_RESIGN);
+		map.put(Piece.BLACK * Enums.IMPOSSIBLE, TIED_IMP);
+		map.put(Piece.BLACK * Enums.STALEMATE, TIED_STALE);
 		return map;
 	}
 
-	private String title;
-	private String opponent;
-	private String result;
-	private String psr_type;
-	private String psr_score;
-	private int diff;
+	private final String title;
+	private final String result;
+	private final String psr_type;
+	private final int diff;
 
-	public GameStatsDialog(Context context, Bundle bundle)
+	private String opponent;
+	private String psr_score;
+
+	public GameStatsDialog(final Context context, final Bundle bundle)
 	{
 		super(context);
 
 		int from, to;
 
-		int status = Integer.valueOf(bundle.getString("status"));
-		int eventtype = Integer.valueOf(bundle.getString("eventtype"));
-		int ycol = bundle.getInt("yourcolor");
+		final int status = Integer.valueOf(bundle.getString("status"));
+		final int eventtype = Integer.valueOf(bundle.getString("eventtype"));
+		final int ycol = bundle.getInt("yourcolor");
 
-		String[] statusArr = statusMap.get(status * ycol);
+		final String[] statusArr = STATUS_MAP.get(status * ycol);
 		String gametype = Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
 		gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
 
@@ -74,7 +73,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 		}
 
 		diff = to - from;
-		String sign = (diff >= 0)? "+" : "-";
+		final String sign = (diff >= 0)? "+" : "-";
 
 		title = statusArr[0];
 		result = statusArr[1];
@@ -87,13 +86,13 @@ class GameStatsDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle(title);
 
 		setContentView(R.layout.endgame);
 
-		Button close = (Button) findViewById(R.id.close);
+		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);
 
 		TextView msg = (TextView) findViewById(R.id.opponent);
@@ -114,7 +113,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 			msg.setTextColor(0xFFFF0000);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		dismiss();
 	}

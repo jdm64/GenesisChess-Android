@@ -1,22 +1,15 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,13 +22,13 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 
 	private NetworkClient net;
 
-	private Handler handle = new Handler()
+	private final Handler handle = new Handler()
 	{
-		public void handleMessage(Message msg)
+		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
 			case NetworkClient.REGISTER:
-				JSONObject json = (JSONObject) msg.obj;
+				final JSONObject json = (JSONObject) msg.obj;
 
 				try {
 					if (json.getString("result").equals("error")) {
@@ -48,7 +41,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 				}
 				break;
 			case RegisterConfirm.MSG:
-				Bundle data = (Bundle) msg.obj;
+				final Bundle data = (Bundle) msg.obj;
 
 				net.register(data.getString("username"), data.getString("password"), data.getString("email"));
 				(new Thread(net)).start();
@@ -62,7 +55,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
@@ -90,19 +83,17 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	public void onResume()
 	{
 		super.onResume();
-
 		NetActive.inc();
 	}
 
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
 		NetActive.dec();
+		super.onPause();
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.register:
@@ -111,7 +102,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		}
 	}
 
-	public boolean onLongClick(View v)
+	public boolean onLongClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -122,7 +113,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		}
 	}
 
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -144,16 +135,16 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	private void register_validate()
 	{
 		EditText txt = (EditText) findViewById(R.id.username);
-		String username = txt.getText().toString();
+		final String username = txt.getText().toString();
 
 		txt = (EditText) findViewById(R.id.password);
-		String password = txt.getText().toString();
+		final String password = txt.getText().toString();
 
 		txt = (EditText) findViewById(R.id.password2);
-		String password2 = txt.getText().toString();
+		final String password2 = txt.getText().toString();
 
 		txt = (EditText) findViewById(R.id.email);
-		String email = txt.getText().toString();
+		final String email = txt.getText().toString();
 
 		if (!valid_username(username))
 			return;
@@ -162,7 +153,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		if (!valid_email(email))
 			return;
 
-		Bundle bundle = new Bundle();
+		final Bundle bundle = new Bundle();
 		bundle.putString("username", username);
 		bundle.putString("password", password);
 		bundle.putString("email", email);
@@ -170,7 +161,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		(new RegisterConfirm(this, handle, bundle)).show();
 	}
 
-	private boolean valid_username(String name)
+	private boolean valid_username(final String name)
 	{
 		if (name.length() < 3) {
 			Toast.makeText(this, "Username too short", Toast.LENGTH_LONG).show();
@@ -182,7 +173,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		return true;
 	}
 
-	private boolean valid_password(String pass1, String pass2)
+	private boolean valid_password(final String pass1, final String pass2)
 	{
 		if (!pass1.equals(pass2)) {
 			Toast.makeText(getApplication(), "Passwords don't match", Toast.LENGTH_LONG).show();
@@ -201,7 +192,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		return true;
 	}
 
-	private boolean valid_email(String email)
+	private boolean valid_email(final String email)
 	{
 		if (!email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) {
 			Toast.makeText(this, "Invalid email address", Toast.LENGTH_LONG).show();

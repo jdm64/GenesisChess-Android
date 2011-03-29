@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.content.Context;
-import android.widget.ImageView;
 
 class BoardButton extends MyImageView
 {
@@ -42,14 +41,14 @@ class BoardButton extends MyImageView
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
 
-	private int piece = 0;
-	private int squareColor;
-	private int squareIndex;
+	private final int squareColor;
+	private final int squareIndex;
 
+	private int piece = 0;
 	private boolean isHighlighted = false;
 	private boolean isCheck = false;
 
-	public BoardButton(Context context, int index)
+	public BoardButton(final Context context, final int index)
 	{
 		super(context);
 
@@ -64,7 +63,7 @@ class BoardButton extends MyImageView
 
 	private void setSquareImage()
 	{
-		int image = isHighlighted?
+		final int image = isHighlighted?
 			pieceImagesH[piece + 6][squareColor] :
 			(isCheck?
 				kingImages[(piece > 0)? 1:0][squareColor] :
@@ -82,7 +81,7 @@ class BoardButton extends MyImageView
 		setSquareImage();
 	}
 
-	public void setPiece(int Piece)
+	public void setPiece(final int Piece)
 	{
 		piece = Piece;
 
@@ -99,14 +98,14 @@ class BoardButton extends MyImageView
 		return squareIndex;
 	}
 
-	public void setHighlight(boolean mode)
+	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
 
 		setSquareImage();
 	}
 
-	public void setCheck(boolean mode)
+	public void setCheck(final boolean mode)
 	{
 		isCheck = mode;
 

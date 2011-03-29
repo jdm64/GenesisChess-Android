@@ -13,9 +13,9 @@ import org.json.JSONTokener;
 class SocketClient
 {
 	public static boolean isLoggedin = false;
+
 	private static String loginHash = null;
 	private static Socket sock = new Socket();
-
 	private static InputStream input;
 	private static OutputStream output;
 
@@ -40,7 +40,7 @@ class SocketClient
 		input = sock.getInputStream();
 		output = sock.getOutputStream();
 
-		byte[] buff = new byte[1440];
+		final byte[] buff = new byte[1440];
 		input.read(buff);
 		loginHash = (new String(buff)).trim();
 	}
@@ -62,11 +62,11 @@ class SocketClient
 		NetActive.dec();
 	}
 
-	public static void write(JSONObject data) throws SocketException, IOException
+	public static void write(final JSONObject data) throws SocketException, IOException
 	{
 		connect();
 
-		String str = data.toString() + "\n";
+		final String str = data.toString() + "\n";
 
 		output.write(str.getBytes());
 	}
@@ -75,7 +75,7 @@ class SocketClient
 	{
 		connect();
 
-		byte[] buff = new byte[1440];
+		final byte[] buff = new byte[1440];
 
 		input.read(buff);
 

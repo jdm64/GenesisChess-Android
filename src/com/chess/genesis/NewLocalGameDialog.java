@@ -9,21 +9,18 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
-import android.widget.TextView.BufferType;
 
 class NewLocalGameDialog extends Dialog implements OnClickListener
 {
 	public final static int MSG = 102;
 
-	private Handler handle;
+	private final Handler handle;
+
 	private Spinner gametype_spin;
 	private Spinner opponent_spin;
 
-	public NewLocalGameDialog(Context context, Handler handler)
+	public NewLocalGameDialog(final Context context, final Handler handler)
 	{
 		super(context);
 
@@ -31,7 +28,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("New Local Game");
 
@@ -63,18 +60,19 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 		opponent_spin.setAdapter(adapter);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.newgame_ok:
-			Bundle data = new Bundle();
-			EditText text = (EditText) findViewById(R.id.game_name);
+			final Bundle data = new Bundle();
+			final EditText text = (EditText) findViewById(R.id.game_name);
 
 			data.putString("name", text.getText().toString());
 			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);
 			data.putInt("opponent", ((AdapterItem) opponent_spin.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
+			break;
 		}
 		dismiss();
 	}

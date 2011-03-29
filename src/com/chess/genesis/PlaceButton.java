@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.content.Context;
-import android.widget.ImageView;
 
 class PlaceButton extends MyImageView
 {
@@ -45,13 +44,13 @@ class PlaceButton extends MyImageView
 
 	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
-	private int type;
-	private int count;
-	private int maxCount;
+	private final int type;
+	private final int maxCount;
 
+	private int count;
 	private boolean isHighlighted = false;
 
-	public PlaceButton(Context context, int Type)
+	public PlaceButton(final Context context, final int Type)
 	{
 		super(context);
 
@@ -61,12 +60,12 @@ class PlaceButton extends MyImageView
 		
 		setPieceImage();
 		setId(type + 100);
-		setLayoutParams(PlaceLayout.linearparams);
+		setLayoutParams(PlaceLayout.LINEAR_PARAMS);
 	}
 
 	private void setPieceImage()
 	{
-		int image = (isHighlighted)?
+		final int image = (isHighlighted)?
 			pieceImagesH[type + 6][maxCount - count] :
 			pieceImages[type + 6][maxCount - count];
 
@@ -91,7 +90,7 @@ class PlaceButton extends MyImageView
 		return count;
 	}
 
-	public void setCount(int Count)
+	public void setCount(final int Count)
 	{
 		count = Count;
 
@@ -112,7 +111,7 @@ class PlaceButton extends MyImageView
 		setPieceImage();
 	}
 
-	public void setHighlight(boolean mode)
+	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
 

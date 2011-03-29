@@ -5,19 +5,18 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
 class PlaceLayout extends LinearLayout implements OnClickListener
 {
-	public static final LinearLayout.LayoutParams linearparams =
+	public static final LinearLayout.LayoutParams LINEAR_PARAMS =
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
-	public PlaceLayout(Context context, AttributeSet attrs)
+	public PlaceLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 
-		int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
+		final int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
 		int count = 0;
 
 		setOrientation(LinearLayout.VERTICAL);
@@ -32,7 +31,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 
 			padding = new MyImageView(context);
 			padding.setImageResource(R.drawable.padding_96x96);
-			padding.setLayoutParams(linearparams);
+			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
 			for (int j = 0; j < 3; j++) {
@@ -42,7 +41,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 			}
 			padding = new MyImageView(context);
 			padding.setImageResource(R.drawable.padding_96x96);
-			padding.setLayoutParams(linearparams);
+			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 			addView(row);
 		}
@@ -60,7 +59,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 
 			padding = new MyImageView(context);
 			padding.setImageResource(R.drawable.padding_96x96);
-			padding.setLayoutParams(linearparams);
+			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
 			for (int j = 0; j < 3; j++) {
@@ -70,13 +69,13 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 			}
 			padding = new MyImageView(context);
 			padding.setImageResource(R.drawable.padding_96x96);
-			padding.setLayoutParams(linearparams);
+			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 			addView(row);
 		}
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		GameState.self.placeClick(v);
 	}

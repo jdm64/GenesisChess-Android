@@ -14,29 +14,29 @@ import android.widget.ViewSwitcher;
 
 class ViewFlip3D extends ViewSwitcher
 {
-	public ViewFlip3D(Context context, AttributeSet attrs)
+	public ViewFlip3D(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 	public void flip()
 	{
-		float centerX = getWidth() / 2.0f;
-		float centerY = getHeight() / 2.0f;
+		final float centerX = getWidth() / 2.0f;
+		final float centerY = getHeight() / 2.0f;
 
-		Flip3D animOut = new Flip3D(-90, 0, centerX, centerY);
+		final Flip3D animOut = new Flip3D(-90, 0, centerX, centerY);
 		animOut.setDuration(500);
 		animOut.setInterpolator(new AccelerateInterpolator());
 		animOut.setFillAfter(true);
 
-		Flip3D animIn = new Flip3D(0, 90, centerX, centerY);
+		final Flip3D animIn = new Flip3D(0, 90, centerX, centerY);
 		animIn.setDuration(500);
 		animIn.setInterpolator(new DecelerateInterpolator());
 		animIn.setFillAfter(true);
 
 		animIn.setAnimationListener(new ShowNextView(this, animOut));
 
-		ViewGroup view = (ViewGroup) getCurrentView();
+		final ViewGroup view = (ViewGroup) getCurrentView();
 		view.startAnimation(animIn);
 	}
 
@@ -49,8 +49,10 @@ class ViewFlip3D extends ViewSwitcher
 
 		private Camera mCamera;
 
-		public Flip3D(float fromDegrees, float toDegrees, float centerX, float centerY)
+		public Flip3D(final float fromDegrees, final float toDegrees, final float centerX, final float centerY)
 		{
+			super();
+
 			mFromDegrees = fromDegrees;
 			mToDegrees = toDegrees;
 			mCenterX = centerX;
@@ -58,17 +60,17 @@ class ViewFlip3D extends ViewSwitcher
 		}
 
 		@Override
-		public void initialize(int width, int height, int parentWidth, int parentHeight)
+		public void initialize(final int width, final int height, final int parentWidth, final int parentHeight)
 		{
 			super.initialize(width, height, parentWidth, parentHeight);
 			mCamera = new Camera();
 		}
 
 		@Override
-		protected void applyTransformation(float interpolatedTime, Transformation t)
+		protected void applyTransformation(final float interpolatedTime, final Transformation t)
 		{
 			final float fromDegrees = mFromDegrees;
-			float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime);
+			final float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime);
 			final float centerX = mCenterX;
 			final float centerY = mCenterY;
 			final Camera camera = mCamera;
@@ -89,30 +91,30 @@ class ViewFlip3D extends ViewSwitcher
 
 	private final class ShowNextView implements Animation.AnimationListener
 	{
-		private Flip3D flipin;
-		private ViewFlip3D container;
+		private final Flip3D flipin;
+		private final ViewFlip3D container;
 
-		public ShowNextView(ViewFlip3D Container, Flip3D Flipin)
+		public ShowNextView(final ViewFlip3D Container, final Flip3D Flipin)
 		{
 			flipin = Flipin;
 			container = Container;
 		}
 
-		public void onAnimationRepeat(Animation animation)
+		public void onAnimationRepeat(final Animation animation)
 		{
 		}
 
-		public void onAnimationStart(Animation animation)
+		public void onAnimationStart(final Animation animation)
 		{
 		}
 
-		public void onAnimationEnd(Animation animation)
+		public void onAnimationEnd(final Animation animation)
 		{
 			ViewGroup view = (ViewGroup) container.getCurrentView();
 
 			// Disable clicks
 			for (int i = 0; i < view.getChildCount(); i++) {
-				View child = view.getChildAt(i);
+				final View child = view.getChildAt(i);
 				child.setVisibility(View.INVISIBLE);
 			}
 
@@ -121,7 +123,7 @@ class ViewFlip3D extends ViewSwitcher
 
 			// Enable clicks
 			for (int i = 0; i < view.getChildCount(); i++) {
-				View child = view.getChildAt(i);
+				final View child = view.getChildAt(i);
 				child.setVisibility(View.VISIBLE);
 			}
 			view.startAnimation(flipin);

@@ -6,25 +6,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView.BufferType;
 
 class RegisterConfirm extends Dialog implements OnClickListener
 {
 	public final static int MSG = 106;
 
-	private Handler handle;
-	private Bundle data;
+	private final Handler handle;
+	private final Bundle data;
 
-	public RegisterConfirm(Context context, Handler handler, Bundle bundle)
+	public RegisterConfirm(final Context context, final Handler handler, final Bundle bundle)
 	{
 		super(context);
 
@@ -33,7 +25,7 @@ class RegisterConfirm extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Register Confirmation");
 
@@ -52,7 +44,7 @@ class RegisterConfirm extends Dialog implements OnClickListener
 		text.setText(data.getString("email"));
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.register_ok:

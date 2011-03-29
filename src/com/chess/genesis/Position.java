@@ -2,7 +2,7 @@ package com.chess.genesis;
 
 class Position
 {
-	private static final int[] type = {
+	private static final int[] TYPE = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
 		Piece.EMPTY,		Piece.BLACK_KNIGHT,	Piece.EMPTY,		Piece.BLACK_PAWN,
 		Piece.BLACK_QUEEN,	Piece.BLACK_ROOK,	Piece.EMPTY,		Piece.EMPTY,
@@ -11,7 +11,6 @@ class Position
 
 	public int[] square;
 	public int[] piece;
-
 	public int ply;
 
 	private void reset()
@@ -24,10 +23,10 @@ class Position
 			piece[i] = Piece.DEAD;
 	}
 
-	private boolean setPiece(int loc, int type)
+	private boolean setPiece(final int loc, final int type)
 	{
 		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
-		int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
+		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 
 		for (int i = start; i < end; i++) {
@@ -41,18 +40,18 @@ class Position
 		return false;
 	}
 
-	private boolean incheck(int color)
+	private boolean incheck(final int color)
 	{
-		MoveLookup ml = new MoveLookup(square);
-		int king = (color == Piece.WHITE)? 31:15;
+		final MoveLookup ml = new MoveLookup(square);
+		final int king = (color == Piece.WHITE)? 31:15;
 
-		return (piece[king] != Piece.PLACEABLE)? ml.isAttacked(piece[king]) : false;
+		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
 	}
 
-	public boolean parseZfen(String pos)
+	public boolean parseZfen(final String pos)
 	{
 		reset();
-		char[] st = pos.toCharArray();
+		final char[] st = pos.toCharArray();
 
 		// index counter for pos
 		int n = 0;
@@ -70,7 +69,7 @@ class Position
 					num = new StringBuffer();
 					act = false;
 				}
-				if (!setPiece(loc, type[st[n] % 21]))
+				if (!setPiece(loc, TYPE[st[n] % 21]))
 					return false;
 				loc++;
 			} else if (st[n] == ':') {
@@ -88,7 +87,7 @@ class Position
 				break;
 			} else if (!Character.isLetter(st[n])) {
 				return false;
-			} else if (!setPiece(Piece.PLACEABLE, type[st[n] % 21])) {
+			} else if (!setPiece(Piece.PLACEABLE, TYPE[st[n] % 21])) {
 				return false;
 			}
 		}
@@ -118,7 +117,7 @@ class Position
 			return false;
 
 		// check if color not on move is in check
-		int ctm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
+		final int ctm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
 		if (incheck(ctm ^ -2))
 			return false;
 		return true;
@@ -127,7 +126,7 @@ class Position
 	public String printZfen()
 	{
 		// StringBuffer buf = new StringBuffer();
-		StringBuffer fen = new StringBuffer();
+		final StringBuffer fen = new StringBuffer();
 
 		for (int i = 0, empty = 0; i < 64; i++) {
 			if (square[i] == Piece.EMPTY) {
@@ -158,9 +157,9 @@ class Position
 		return fen.toString();
 	}
 
-	public boolean equal(Position pos)
+	public boolean equal(final Position pos)
 	{
-		String a = pos.printZfen(), b = printZfen();
+		final String a = pos.printZfen(), b = printZfen();
 		
 		return a.equals(b);
 	}

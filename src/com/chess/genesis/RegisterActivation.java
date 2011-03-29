@@ -12,9 +12,9 @@ public class RegisterActivation extends Dialog implements OnClickListener
 {
 	public final static int MSG = 103;
 
-	private Handler handle;
+	private final Handler handle;
 
-	public RegisterActivation(Context context, Handler handler)
+	public RegisterActivation(final Context context, final Handler handler)
 	{
 		super(context);
 
@@ -22,17 +22,17 @@ public class RegisterActivation extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Activate Account");
 
 		setContentView(R.layout.register_activation);
 
-		Button close = (Button) findViewById(R.id.close);
+		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		handle.sendMessage(handle.obtainMessage(MSG, new Bundle()));
 

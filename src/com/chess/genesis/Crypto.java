@@ -3,11 +3,14 @@ package com.chess.genesis;
 import java.io.IOException;
 import java.net.SocketException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 class Crypto
 {
-	private static String Sha1Hash(String str)
+	private Crypto()
+	{
+	}
+
+	private static String Sha1Hash(final String str)
 	{
 		MessageDigest digst = null;
 	try {
@@ -17,10 +20,10 @@ class Crypto
 	}
 		digst.update(str.getBytes());
 
-		byte[] shabytes = digst.digest();
-		StringBuffer buff = new StringBuffer();
+		final byte[] shabytes = digst.digest();
+		final StringBuffer buff = new StringBuffer();
 		for (int i = 0; i < shabytes.length; i++) {
-			String n = Integer.toHexString(shabytes[i] & 0xff);
+			final String n = Integer.toHexString(shabytes[i] & 0xff);
 			if (n.length() < 2)
 				buff.append('0');
 			buff.append(n);
@@ -28,12 +31,12 @@ class Crypto
 		return buff.toString();
 	}
 
-	public static String HashPasswd(String str)
+	public static String HashPasswd(final String str)
 	{
 		return Sha1Hash(Sha1Hash(str));
 	}
 
-	public static String LoginKey(String str) throws SocketException, IOException
+	public static String LoginKey(final String str) throws SocketException, IOException
 	{
 		MessageDigest digst = null;
 	try {
@@ -44,10 +47,10 @@ class Crypto
 		digst.update(HashPasswd(str).getBytes());
 		digst.update(SocketClient.getHash().getBytes());
 
-		byte[] shabytes = digst.digest();
-		StringBuffer buff = new StringBuffer();
+		final byte[] shabytes = digst.digest();
+		final StringBuffer buff = new StringBuffer();
 		for (int i = 0; i < shabytes.length; i++) {
-			String n = Integer.toHexString(shabytes[i] & 0xff);
+			final String n = Integer.toHexString(shabytes[i] & 0xff);
 			if (n.length() < 2)
 				buff.append('0');
 			buff.append(n);

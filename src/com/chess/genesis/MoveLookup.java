@@ -35,42 +35,45 @@ class MoveLookup
 		{-11, -10,  -9, -1,   1,  9, 10, 11},
 		{-11, -10,  -9, -1,   1,  9, 10, 11} };
 
-	private int[] square;
+	private final int[] square;
 
-	public MoveLookup(int[] Square)
+	public MoveLookup(final int[] Square)
 	{
 		square = Square;
 	}
 
-	private boolean NOT_CAPTURE(int A, int B)
+	private boolean NOT_CAPTURE(final int A, final int B)
 	{
 		return (A * B >= 0);
 	}
 	
-	private boolean OWN_PIECE(int A, int B)
+	private boolean OWN_PIECE(final int A, final int B)
 	{
 		return (A * B >  0);
 	}
 
-	private boolean EMPTY_MOVE(int A, int B)
+	private boolean EMPTY_MOVE(final int A, final int B)
 	{
 		return (A * B == 0);
 	}
 	
-	private boolean CAPTURE_MOVE(int A, int B)
+	private boolean CAPTURE_MOVE(final int A, final int B)
 	{
 		return (A * B <  0);
 	}
 
-	private boolean ANY_MOVE(int A, int B)
+	private boolean ANY_MOVE(final int A, final int B)
 	{
 		return (A * B <= 0);
 	}
 	
-	public int[] genAll(int from)
+	public int[] genAll(final int from)
 	{
-		int type = Math.abs(square[from]), next = 0, mfrom = mailbox64[from], to;
-		int[] list = new int[28], offset = offsets[type];
+		final int type = Math.abs(square[from]), mfrom = mailbox64[from];
+		final int[] offset = offsets[type];
+
+		int next = 0, to;
+		int[] list = new int[28];
 
 		switch (type) {
 		case Piece.PAWN:
@@ -139,10 +142,12 @@ class MoveLookup
 		return list;
 	}
 
-	public boolean fromto(int From, int To)
+	public boolean fromto(final int From, final int To)
 	{
-		int type = Math.abs(square[From]), mfrom = mailbox64[From], to;
-		int[] offset = offsets[type];
+		final int type = Math.abs(square[From]), mfrom = mailbox64[From];
+		final int[] offset = offsets[type];
+
+		int to;
 
 		switch (type) {
 		case Piece.PAWN:
@@ -184,9 +189,8 @@ class MoveLookup
 						if (to == To)
 							return true;
 						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						if (to == To)
-							return true;
+					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
+						return true;
 					}
 					break;
 				}
@@ -202,9 +206,8 @@ class MoveLookup
 						if (to == To)
 							return true;
 						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						if (to == To)
-							return true;
+					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
+						return true;
 					}
 					break;
 				}
@@ -214,12 +217,12 @@ class MoveLookup
 		return false;
 	}
 
-	public boolean isAttacked(int from)
+	public boolean isAttacked(final int from)
 	{
-		int mfrom = mailbox64[from], to;
-		int[] offset;
+		final int mfrom = mailbox64[from];
+		int to;
 
-		offset = offsets[Piece.ROOK];
+		int[] offset = offsets[Piece.ROOK];
 		for (int dir = 0; dir < 4; dir++) {
 			for (int k = 1; k < 8; k++) {
 				to = mailbox[mfrom + k * offset[dir]];

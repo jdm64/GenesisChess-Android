@@ -1,9 +1,5 @@
 package com.chess.genesis;
 
-import java.lang.InterruptedException;
-import java.lang.Runnable;
-import java.lang.Thread;
-
 class NetDisconnect implements Runnable
 {
 	public void run()

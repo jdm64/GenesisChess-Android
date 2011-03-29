@@ -6,7 +6,7 @@ import android.widget.ImageView;
 
 class MyImageView extends ImageView
 {
-	public MyImageView(Context context)
+	public MyImageView(final Context context)
 	{
 		super(context);
 
@@ -15,7 +15,7 @@ class MyImageView extends ImageView
 		setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 
-	public MyImageView(Context context, AttributeSet attrs)
+	public MyImageView(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 

@@ -8,21 +8,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
-import android.widget.TextView.BufferType;
 
 class NewOnlineGameDialog extends Dialog implements OnClickListener
 {
 	public final static int MSG = 100;
 
-	private Handler handle;
+	private final Handler handle;
 
-	public NewOnlineGameDialog(Context context, Handler handler)
+	public NewOnlineGameDialog(final Context context, final Handler handler)
 	{
 		super(context);
 
@@ -30,7 +24,7 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("New Online Game");
 
@@ -64,19 +58,20 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 		spinner.setAdapter(adapter);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.newgame_ok:
-			Bundle data = new Bundle();
+			final Bundle data = new Bundle();
 
-			Spinner gametype = (Spinner) findViewById(R.id.game_type);
-			Spinner eventtype = (Spinner) findViewById(R.id.opp_type);
+			final Spinner gametype = (Spinner) findViewById(R.id.game_type);
+			final Spinner eventtype = (Spinner) findViewById(R.id.opp_type);
 
 			data.putInt("gametype", ((AdapterItem) gametype.getSelectedItem()).id);
 			data.putInt("opponent", ((AdapterItem) eventtype.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
+			break;
 		}
 		dismiss();
 	}

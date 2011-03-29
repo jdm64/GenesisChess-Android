@@ -9,9 +9,9 @@ import android.widget.Button;
 
 public class DeleteLocalDialog extends Dialog implements OnClickListener
 {
-	private int gameid;
+	private final int gameid;
 
-	public DeleteLocalDialog(Context context, int _gameid)
+	public DeleteLocalDialog(final Context context, final int _gameid)
 	{
 		super(context);
 
@@ -19,7 +19,7 @@ public class DeleteLocalDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Delete Game");
 
@@ -32,11 +32,11 @@ public class DeleteLocalDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.delete_ok:
-			GameDataDB db = new GameDataDB(v.getContext());
+			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteLocalGame(gameid);
 			db.close();
 			GameList.self.gamelist_adapter.update();

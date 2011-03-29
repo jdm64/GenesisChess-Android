@@ -11,22 +11,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
 {
 	public static Game self;
-
 	public static ViewFlip3D game_board;
 
+	private GameState gamestate;
 	private int type;
 
-	private GameState gamestate;
-
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
@@ -62,7 +58,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
-		Bundle bundle = getIntent().getExtras();
+		final Bundle bundle = getIntent().getExtras();
 		type = bundle.getInt("type");
 		gamestate = new GameState(this, bundle);
 	}
@@ -79,14 +75,14 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
 		gamestate.save(this, true);
 		if (type == Enums.ONLINE_GAME)
 			NetActive.dec();
+
+		super.onPause();
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.place_piece:
@@ -104,7 +100,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		}
 	}
 
-	public boolean onLongClick(View v)
+	public boolean onLongClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -116,7 +112,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		}
 	}
 
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
 		case R.id.place_piece:
@@ -154,7 +150,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		if (type == Enums.ONLINE_GAME)
 			getMenuInflater().inflate(R.menu.game_options_online, menu);
@@ -165,7 +161,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		switch (item.getItemId()) {
 		case R.id.first_move:
@@ -183,7 +179,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		return true;
 	}
 
-	public void onActivityResult(int reques, int result, Intent data)
+	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
 		switch (result) {
 		case RESULT_OK:
@@ -203,15 +199,15 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	public void reset()
 	{
 		for (int i = 0; i < 64; i++) {
-			BoardButton square = (BoardButton) findViewById(i);
+			final BoardButton square = (BoardButton) findViewById(i);
 			square.resetSquare();
 		}
 		for (int i = 94; i < 100; i++) {
-			PlaceButton piece = (PlaceButton) findViewById(i);
+			final PlaceButton piece = (PlaceButton) findViewById(i);
 			piece.reset();
 		}
 		for (int i = 101; i < 107; i++) {
-			PlaceButton piece = (PlaceButton) findViewById(i);
+			final PlaceButton piece = (PlaceButton) findViewById(i);
 			piece.reset();
 		}
 		gamestate.setStm();

@@ -9,7 +9,7 @@ import android.widget.TableRow;
 
 class BoardLayout extends TableLayout implements OnClickListener
 {
-	public BoardLayout(Context context, AttributeSet attrs)
+	public BoardLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 
@@ -17,10 +17,10 @@ class BoardLayout extends TableLayout implements OnClickListener
 		setStretchAllColumns(true);
 
 		for (int i = 0; i < 8; i++) {
-			TableRow row = new TableRow(context);
+			final TableRow row = new TableRow(context);
 						
 			for (int j = 0; j < 8; j++) {
-				BoardButton button = new BoardButton(context, i * 8 + j);
+				final BoardButton button = new BoardButton(context, i * 8 + j);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
@@ -28,7 +28,7 @@ class BoardLayout extends TableLayout implements OnClickListener
 		}
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		GameState.self.boardClick(v);
 	}

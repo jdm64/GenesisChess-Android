@@ -9,21 +9,16 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
-import android.widget.TextView.BufferType;
 
 class InviteOptionsDialog extends Dialog implements OnClickListener
 {
 	public final static int MSG = 104;
 
-	private Handler handle;
-	private Bundle settings;
+	private final Handler handle;
+	private final Bundle settings;
 
-	public InviteOptionsDialog(Context context, Handler handler, Bundle _settings)
+	public InviteOptionsDialog(final Context context, final Handler handler, final Bundle _settings)
 	{
 		super(context);
 
@@ -32,7 +27,7 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Invite Game Options");
 
@@ -45,29 +40,30 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 
 		// ColorType dropdown
-		AdapterItem[] list = new AdapterItem[]
+		final AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Random", Enums.RANDOM_OPP),
 			new AdapterItem("White", Enums.WHITE_OPP),
 			new AdapterItem("Black", Enums.BLACK_OPP) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		Spinner spinner = (Spinner) findViewById(R.id.invite_color);
+		final Spinner spinner = (Spinner) findViewById(R.id.invite_color);
 		spinner.setAdapter(adapter);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.newgame_ok:
-			EditText opp_name = (EditText) findViewById(R.id.opp_name);
-			Spinner color = (Spinner) findViewById(R.id.invite_color);
+			final EditText opp_name = (EditText) findViewById(R.id.opp_name);
+			final Spinner color = (Spinner) findViewById(R.id.invite_color);
 
 			settings.putString("opp_name", opp_name.getText().toString());
 			settings.putInt("color", ((AdapterItem) color.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, settings));
+			break;
 		}
 		dismiss();
 	}

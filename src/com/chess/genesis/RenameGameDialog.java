@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView.BufferType;
 
 class RenameGameDialog extends Dialog implements OnClickListener
 {
+	private final String gamename;
+	private final int gameid;
+
 	private EditText txtinput;
-	private String gamename;
 
-	private int gameid;
-
-	public RenameGameDialog(Context context, int id, String name)
+	public RenameGameDialog(final Context context, final int id, final String name)
 	{
 		super(context);
 
@@ -26,7 +25,7 @@ class RenameGameDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Rename Game");
 
@@ -42,14 +41,15 @@ class RenameGameDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.rename_ok:
-			GameDataDB db = new GameDataDB(v.getContext());
+			final GameDataDB db = new GameDataDB(v.getContext());
 			db.renameLocalGame(gameid, txtinput.getText().toString());
 			db.close();
 			GameList.self.gamelist_adapter.update();
+			break;
 		}
 		dismiss();
 	}

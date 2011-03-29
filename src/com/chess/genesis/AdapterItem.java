@@ -5,7 +5,7 @@ class AdapterItem
 	public String name;
 	public int id;
 
-	public AdapterItem(String Name, int Id)
+	public AdapterItem(final String Name, final int Id)
 	{
 		name = Name;
 		id = Id;

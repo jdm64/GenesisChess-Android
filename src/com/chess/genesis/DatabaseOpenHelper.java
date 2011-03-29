@@ -61,13 +61,13 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"username TEXT," +
 		"msg TEXT);";
 
-	public DatabaseOpenHelper(Context context)
+	public DatabaseOpenHelper(final Context context)
 	{
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase db)
+	public void onCreate(final SQLiteDatabase db)
 	{
 		db.execSQL(LOCAL_GAME_CREATE_TABLE);
 		db.execSQL(ONLINE_GAME_CREATE_TABLE);
@@ -76,7 +76,7 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion)
 	{
 	}
 }

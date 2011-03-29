@@ -9,9 +9,9 @@ import android.widget.Button;
 
 public class DeleteArchiveDialog extends Dialog implements OnClickListener
 {
-	private String gameid;
+	private final String gameid;
 
-	public DeleteArchiveDialog(Context context, String _gameid)
+	public DeleteArchiveDialog(final Context context, final String _gameid)
 	{
 		super(context);
 
@@ -19,7 +19,7 @@ public class DeleteArchiveDialog extends Dialog implements OnClickListener
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		setTitle("Delete Game");
 
@@ -32,11 +32,11 @@ public class DeleteArchiveDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.delete_ok:
-			GameDataDB db = new GameDataDB(v.getContext());
+			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteArchiveGame(gameid);
 			db.close();
 			GameList.self.gamelist_adapter.update();

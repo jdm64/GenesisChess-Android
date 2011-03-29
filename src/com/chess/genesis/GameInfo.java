@@ -6,14 +6,13 @@ import android.preference.PreferenceManager;
 
 class GameInfo
 {
-	private String history;
-	private String white;
-	private String black;
-	private int status;
+	private final Context context;
+	private final String history;
+	private final String white;
+	private final String black;
+	private final int status;
 
-	private Context context;
-
-	public GameInfo(Context _context, int Status, String History, String White, String Black)
+	public GameInfo(final Context _context, final int Status, final String History, final String White, final String Black)
 	{
 		history = History;
 		white = White;
@@ -26,17 +25,17 @@ class GameInfo
 	{
 		if (history == null || history.length() < 3)
 			return 0;
-		String[] count = history.trim().split(" +");
+		final String[] count = history.trim().split(" +");
 		return count.length;
 	}
 
 	public int getYourTurn()
 	{
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
 		if (status != Enums.ACTIVE)
 			return 1;
-		String color = (getPly() % 2 == 0)? white : black;
+		final String color = (getPly() % 2 == 0)? white : black;
 		return color.equals(settings.getString("username", "!error!"))? 1:0;
 	}
 }

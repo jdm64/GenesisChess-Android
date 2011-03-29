@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -15,32 +14,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener
 {
 	private static MainMenu self;
 
-	private Handler handle = new Handler()
+	private final Handler handle = new Handler()
 	{
-		public void handleMessage(Message msg)
+		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
 			case LogoutConfirm.MSG:
-				Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
+				final Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
 
 				settings.putBoolean("isLoggedIn", false);
 				settings.putString("username", "!error!");
 				settings.putString("passhash", "!error!");
 				settings.commit();
 
-				TextView text = (TextView) findViewById(R.id.welcome);
+				final TextView text = (TextView) findViewById(R.id.welcome);
 				text.setText("");
 
-				Button button = (Button) findViewById(R.id.login);
+				final Button button = (Button) findViewById(R.id.login);
 				button.setVisibility(View.VISIBLE);
 				break;
 			}
@@ -48,7 +45,7 @@ public class MainMenu extends Activity implements OnClickListener
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
@@ -87,15 +84,15 @@ public class MainMenu extends Activity implements OnClickListener
 		String welcome = "";
 		int visible = View.VISIBLE;
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		if (settings.getBoolean("isLoggedIn", false)) {
 			welcome = "Welcome " + settings.getString("username", "");
 			visible = View.GONE;
 		}
-		TextView text = (TextView) findViewById(R.id.welcome);
+		final TextView text = (TextView) findViewById(R.id.welcome);
 		text.setText(welcome);
 
-		Button button = (Button) findViewById(R.id.login);
+		final Button button = (Button) findViewById(R.id.login);
 		button.setVisibility(visible);
 	}
 
@@ -106,14 +103,14 @@ public class MainMenu extends Activity implements OnClickListener
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.mainmenu_options, menu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		switch (item.getItemId()) {
 		case R.id.logout:
@@ -126,20 +123,20 @@ public class MainMenu extends Activity implements OnClickListener
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
 		if (resultCode == RESULT_OK) {
-			Bundle bundle = new Bundle();
+			final Bundle bundle = new Bundle();
 			bundle.putInt("type", Enums.ONLINE_GAME);
 
-			Intent intent = new Intent(this, GameList.class);
+			final Intent intent = new Intent(this, GameList.class);
 			intent.putExtras(bundle);
 
 			startActivity(intent);
 		}
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		Bundle bundle;
 		Intent intent;
@@ -155,7 +152,7 @@ public class MainMenu extends Activity implements OnClickListener
 			startActivity(intent);
 			break;
 		case R.id.online_game:
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+			final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 			if (!settings.getBoolean("isLoggedIn", false)) {
 				startActivityForResult(new Intent(this, Login.class), 1);

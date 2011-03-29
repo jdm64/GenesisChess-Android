@@ -3,10 +3,7 @@ package com.chess.genesis;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import java.lang.InterruptedException;
-import java.lang.Runnable;
-import java.lang.Thread;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,23 +12,21 @@ class SyncGameList implements Runnable
 {
 	public final static int MSG = 101;
 
+	private final Context context;
+	private final Handler callback;
+	private final NetworkClient net;
+	private final String username;
+
 	private int lock = 0;
 	private int sync_type = Enums.ONLINE_GAME;
 	private boolean error = false;
 	private boolean fullsync = false;
 
-	private String username;
-
-	private Handler callback;
-	private NetworkClient net;
-
-	private Context context;
-
-	private Handler handle = new Handler()
+	private final Handler handle = new Handler()
 	{
-		public void handleMessage(Message msg)
+		public void handleMessage(final Message msg)
 		{
-			JSONObject json = (JSONObject) msg.obj;
+			final JSONObject json = (JSONObject) msg.obj;
 
 		try {
 			if (json.getString("result").equals("error")) {
@@ -74,7 +69,7 @@ class SyncGameList implements Runnable
 		}
 	};
 
-	public SyncGameList(Context _context, Handler handler, String Username)
+	public SyncGameList(final Context _context, final Handler handler, final String Username)
 	{
 		context = _context;
 		callback = handler;
@@ -94,7 +89,7 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	public void setFullSync(boolean value)
+	public void setFullSync(final boolean value)
 	{
 		fullsync = value;
 	}
@@ -123,7 +118,7 @@ class SyncGameList implements Runnable
 		trylock();
 
 		if (!error) {
-			JSONObject json = new JSONObject();
+			final JSONObject json = new JSONObject();
 			try {
 				json.put("result", "ok");
 				json.put("reason", "gamelist updated");
@@ -134,21 +129,21 @@ class SyncGameList implements Runnable
 		}
 	}
 
-	private void read_inbox(JSONObject json)
+	private void read_inbox(final JSONObject json)
 	{
 	try {
-		JSONArray games = json.getJSONArray("games");
-		JSONArray msgs = json.getJSONArray("msgs");
+		final JSONArray games = json.getJSONArray("games");
+		final JSONArray msgs = json.getJSONArray("msgs");
 
 		long mtime = 0;
 
 		for (int i = 0; i < games.length(); i++) {
-			JSONObject data = games.getJSONObject(i);
+			final JSONObject data = games.getJSONObject(i);
 
-			long time = data.getLong("time");
+			final long time = data.getLong("time");
 			mtime = Math.max(time, mtime);
 
-			String gameid = data.getString("gameid");
+			final String gameid = data.getString("gameid");
 
 			if (error)
 				return;
@@ -158,16 +153,16 @@ class SyncGameList implements Runnable
 			lock++;
 		}
 		for (int i = 0; i < msgs.length(); i++) {
-			JSONObject data = msgs.getJSONObject(i);
+			final JSONObject data = msgs.getJSONObject(i);
 
-			long time = data.getLong("time");
+			final long time = data.getLong("time");
 			mtime = Math.max(time, mtime);
 
-			String gameid = data.getString("gameid");
-			String msg = data.getString("msg");
-			String name = data.getString("username");
+			final String gameid = data.getString("gameid");
+			final String msg = data.getString("msg");
+			final String username = data.getString("username");
 
-			GameDataDB db = new GameDataDB(context);
+			final GameDataDB db = new GameDataDB(context);
 			db.insertMsg(gameid, time, username, msg);
 			db.close();
 		}
@@ -182,19 +177,19 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	private void sync_active(JSONObject json)
+	private void sync_active(final JSONObject json)
 	{
-		GameDataDB db = new GameDataDB(context);
-		ObjectArray<String> list = db.getOnlineGameIds();
+		final GameDataDB db = new GameDataDB(context);
+		final ObjectArray<String> list = db.getOnlineGameIds();
 		db.close();
 
-		Vector<String> list_have = new Vector<String>();
+		final ArrayList<String> list_have = new ArrayList<String>();
 		for (int i = 0; i < list.size(); i++)
 			list_have.add(list.get(i));
 
-		Vector<String> list_need = new Vector<String>();
+		final ArrayList<String> list_need = new ArrayList<String>();
 	try {
-		JSONArray ids = json.getJSONArray("gameids");
+		final JSONArray ids = json.getJSONArray("gameids");
 		for (int i = 0; i < ids.length(); i++)
 			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
@@ -213,19 +208,19 @@ class SyncGameList implements Runnable
 		}
 	}
 
-	private void sync_archive(JSONObject json)
+	private void sync_archive(final JSONObject json)
 	{
-		GameDataDB db = new GameDataDB(context);
-		ObjectArray<String> list = db.getArchiveGameIds();
+		final GameDataDB db = new GameDataDB(context);
+		final ObjectArray<String> list = db.getArchiveGameIds();
 		db.close();
 
-		Vector<String> list_have = new Vector<String>();
+		final ArrayList<String> list_have = new ArrayList<String>();
 		for (int i = 0; i < list.size(); i++)
 			list_have.add(list.get(i));
 
-		Vector<String> list_need = new Vector<String>();
+		final ArrayList<String> list_need = new ArrayList<String>();
 	try {
-		JSONArray ids = json.getJSONArray("gameids");
+		final JSONArray ids = json.getJSONArray("gameids");
 		for (int i = 0; i < ids.length(); i++)
 			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
@@ -246,8 +241,8 @@ class SyncGameList implements Runnable
 
 	private void update_gamestatus()
 	{
-		GameDataDB db = new GameDataDB(context);
-		ObjectArray<String> list = db.getOnlineGameIds();
+		final GameDataDB db = new GameDataDB(context);
+		final ObjectArray<String> list = db.getOnlineGameIds();
 		db.close();
 
 		for (int i = 0; i < list.size(); i++) {
@@ -260,17 +255,17 @@ class SyncGameList implements Runnable
 		}
 	}
 
-	private void game_info(JSONObject json)
+	private void game_info(final JSONObject json)
 	{
 	try {
-		String gameid = json.getString("gameid");
-		String white = json.getString("white");
-		String black = json.getString("black");
-		long ctime = json.getLong("ctime");
-		int gametype = Enums.GameType(json.getString("gametype"));
-		int eventtype = Enums.EventType(json.getString("eventtype"));
+		final String gameid = json.getString("gameid");
+		final String white = json.getString("white");
+		final String black = json.getString("black");
+		final long ctime = json.getLong("ctime");
+		final int gametype = Enums.GameType(json.getString("gametype"));
+		final int eventtype = Enums.EventType(json.getString("eventtype"));
 
-		GameDataDB db = new GameDataDB(context);
+		final GameDataDB db = new GameDataDB(context);
 		db.insertOnlineGame(gameid, gametype, eventtype, ctime, white, black);
 		db.close();
 	} catch (JSONException e) {
@@ -278,16 +273,16 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	private void game_status(JSONObject json)
+	private void game_status(final JSONObject json)
 	{
 	try {
-		String gameid = json.getString("gameid");
-		String zfen = json.getString("zfen");
-		String history = json.getString("history");
-		long stime = json.getLong("stime");
-		int status = Enums.GameStatus(json.getString("status"));
+		final String gameid = json.getString("gameid");
+		final String zfen = json.getString("zfen");
+		final String history = json.getString("history");
+		final long stime = json.getLong("stime");
+		final int status = Enums.GameStatus(json.getString("status"));
 
-		GameDataDB db = new GameDataDB(context);
+		final GameDataDB db = new GameDataDB(context);
 		db.updateOnlineGame(gameid, status, stime, zfen, history);
 		db.close();
 	} catch (JSONException e) {
@@ -295,9 +290,9 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	private void game_data(JSONObject json)
+	private void game_data(final JSONObject json)
 	{
-		GameDataDB db = new GameDataDB(context);
+		final GameDataDB db = new GameDataDB(context);
 		db.insertArchiveGame(json);
 		db.close();
 	}

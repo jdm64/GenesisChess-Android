@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import java.io.IOException;
-import java.lang.Runnable;
 import java.net.SocketException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,28 +28,28 @@ class NetworkClient implements Runnable
 	public final static int GAME_DATA = 13;
 	public final static int RESIGN_GAME = 14;
 
-	private Context context;
-	private Handler callback;
+	private final Context context;
+	private final Handler callback;
+	
 	private JSONObject json;
-
 	private int fid = NONE;
 	private boolean loginRequired;
 	private boolean error = false;
 
-	public NetworkClient(Context _context, Handler handler)
+	public NetworkClient(final Context _context, final Handler handler)
 	{
 		callback = handler;
 		context = _context;
 	}
 
-	private boolean relogin(SocketClient net)
+	private boolean relogin(final SocketClient net)
 	{
 		if (SocketClient.isLoggedin)
 			return true;
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		String username = settings.getString("username", "!error!");
-		String password = settings.getString("passhash", "!error!");
+		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = settings.getString("username", "!error!");
+		final String password = settings.getString("passhash", "!error!");
 
 		JSONObject json2 = new JSONObject();
 
@@ -161,18 +160,16 @@ class NetworkClient implements Runnable
 
 	public void run()
 	{
-		SocketClient net = new SocketClient();
+		final SocketClient net = new SocketClient();
 		JSONObject json2 = null;
 
 		if (error) {
 			error = false;
 			return;
 		}
-		if (loginRequired) {
-			if (!relogin(net)) {
-				net.disconnect();
-				return;
-			}
+		if (loginRequired && !relogin(net)) {
+			net.disconnect();
+			return;
 		}
 
 		try {
@@ -235,7 +232,7 @@ class NetworkClient implements Runnable
 		net.disconnect();
 	}
 
-	public void register(String username, String password, String email)
+	public void register(final String username, final String password, final String email)
 	{
 		fid = REGISTER;
 		loginRequired = false;
@@ -252,7 +249,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void login_user(String username, String password)
+	public void login_user(final String username, final String password)
 	{
 		fid = LOGIN;
 		loginRequired = false;
@@ -293,7 +290,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void join_game(String username, String gametype)
+	public void join_game(final String username, final String gametype)
 	{
 		fid = JOIN_GAME;
 		loginRequired = true;
@@ -309,7 +306,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void new_game(String username, String opponent, String gametype, String color)
+	public void new_game(final String username, final String opponent, final String gametype, final String color)
 	{
 		fid = NEW_GAME;
 		loginRequired = true;
@@ -328,7 +325,7 @@ class NetworkClient implements Runnable
 
 	}
 
-	public void submit_move(String username, String gameid, String move)
+	public void submit_move(final String username, final String gameid, final String move)
 	{
 		fid = SUBMIT_MOVE;
 		loginRequired = true;
@@ -345,7 +342,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void resign_game(String username, String gameid)
+	public void resign_game(final String username, final String gameid)
 	{
 		fid = RESIGN_GAME;
 		loginRequired = true;
@@ -361,7 +358,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void submit_msg(String username, String gameid, String msg)
+	public void submit_msg(final String username, final String gameid, final String msg)
 	{
 		fid = SUBMIT_MSG;
 		loginRequired = true;
@@ -378,7 +375,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_status(String username, String gameid)
+	public void game_status(final String username, final String gameid)
 	{
 		fid = GAME_STATUS;
 		loginRequired = true;
@@ -394,7 +391,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_info(String username, String gameid)
+	public void game_info(final String username, final String gameid)
 	{
 		fid = GAME_INFO;
 		loginRequired = true;
@@ -410,7 +407,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_data(String username, String gameid)
+	public void game_data(final String username, final String gameid)
 	{
 		fid = GAME_DATA;
 		loginRequired = true;
@@ -426,7 +423,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void read_inbox(String username)
+	public void read_inbox(final String username)
 	{
 		fid = READ_INBOX;
 		loginRequired = true;
@@ -441,7 +438,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void clear_inbox(String username, long time)
+	public void clear_inbox(final String username, final long time)
 	{
 		fid = CLEAR_INBOX;
 		loginRequired = true;
@@ -457,7 +454,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void sync_gameids(String username, String type)
+	public void sync_gameids(final String username, final String type)
 	{
 		fid = SYNC_GAMIDS;
 		loginRequired = true;
@@ -473,7 +470,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_score(String username, String gameid)
+	public void game_score(final String username, final String gameid)
 	{
 		fid = GAME_SCORE;
 		loginRequired = true;

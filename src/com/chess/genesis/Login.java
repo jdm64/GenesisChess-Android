@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -17,8 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,11 +28,11 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 	private NetworkClient net;
 
-	private Handler handle = new Handler()
+	private final Handler handle = new Handler()
 	{
-		public void handleMessage(Message msg)
+		public void handleMessage(final Message msg)
 		{
-			JSONObject json = (JSONObject) msg.obj;
+			final JSONObject json = (JSONObject) msg.obj;
 
 			try {
 				if (json.getString("result").equals("error")) {
@@ -49,10 +46,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					SocketClient.isLoggedin = true;
 
 					EditText txt = (EditText) findViewById(R.id.username);
-					String username = txt.getText().toString();
+					final String username = txt.getText().toString();
 
 					txt = (EditText) findViewById(R.id.password);
-					String password = txt.getText().toString();
+					final String password = txt.getText().toString();
 
 					Editor settings = PreferenceManager.getDefaultSharedPreferences(self).edit();
 					settings.putBoolean("isLoggedIn", true);
@@ -60,7 +57,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					settings.putString("passhash", password);
 					settings.commit();
 
-					SyncGameList sync = new SyncGameList(self, handle, username);
+					final SyncGameList sync = new SyncGameList(self, handle, username);
 					sync.setFullSync(true);
 					(new Thread(sync)).start();
 
@@ -93,7 +90,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
@@ -121,7 +118,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		image.setOnLongClickListener(this);
 
 		// Always show the currently logged in user
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		if (settings.getBoolean("isLoggedIn", false)) {
 			EditText txt = (EditText) findViewById(R.id.username);
 			txt.setText(settings.getString("username", ""));
@@ -141,20 +138,19 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
 		NetActive.dec();
+		super.onPause();
 	}
 
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.login:
 			EditText txt = (EditText) findViewById(R.id.username);
-			String username = txt.getText().toString();
+			final String username = txt.getText().toString();
 
 			txt = (EditText) findViewById(R.id.password);
-			String password = txt.getText().toString();
+			final String password = txt.getText().toString();
 
 			net.login_user(username, password);
 			(new Thread(net)).start();
@@ -166,7 +162,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		}
 	}
 
-	public boolean onLongClick(View v)
+	public boolean onLongClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -177,7 +173,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		}
 	}
 
-	public boolean onTouch(View v, MotionEvent event)
+	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
@@ -203,14 +199,14 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.login_options, menu);
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		switch (item.getItemId()) {
 		case R.id.logout:
@@ -222,10 +218,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		return true;
 	}
 
-	public void onActivityResult(int reques, int result, Intent data)
+	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
 		String username = "";
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (settings.getBoolean("isLoggedIn", false))
 			username = settings.getString("username", "");

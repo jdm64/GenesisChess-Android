@@ -12,11 +12,10 @@ import org.json.JSONObject;
 
 class GameDataDB
 {
-	private SQLiteDatabase db;
+	private final SQLiteDatabase db;
+	private final Context context;
 
-	private Context context;
-
-	public GameDataDB(Context _context)
+	public GameDataDB(final Context _context)
 	{
 		context = _context;
 		db = (new DatabaseOpenHelper(context)).getWritableDatabase();
@@ -27,10 +26,10 @@ class GameDataDB
 		db.close();
 	}
 
-	public static Bundle rowToBundle(SQLiteCursor cursor, int index)
+	public static Bundle rowToBundle(final SQLiteCursor cursor, final int index)
 	{
-		Bundle bundle = new Bundle();
-		String[] column = cursor.getColumnNames();
+		final Bundle bundle = new Bundle();
+		final String[] column = cursor.getColumnNames();
 
 		cursor.moveToPosition(index);
 		for (int i = 0; i < cursor.getColumnCount(); i++)
@@ -38,39 +37,39 @@ class GameDataDB
 		return bundle;
 	}
 
-	public Bundle newLocalGame(String gamename, int gametype, int opponent)
+	public Bundle newLocalGame(final String gamename, final int gametype, final int opponent)
 	{
-		long time = (new Date()).getTime();
-		Object[] data = {gamename, time, time, gametype, opponent};
-		String[] data2 = {String.valueOf(time)};
+		final long time = (new Date()).getTime();
+		final Object[] data = {gamename, time, time, gametype, opponent};
+		final String[] data2 = {String.valueOf(time)};
 
 		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?, ?);", data);
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
 
 		return rowToBundle(cursor, 0);
 	}
 
-	public void saveLocalGame(int id, long stime, String zfen, String history)
+	public void saveLocalGame(final int id, final long stime, final String zfen, final String history)
 	{
-		Object[] data = {stime, zfen, history, id};
+		final Object[] data = {stime, zfen, history, id};
 		db.execSQL("UPDATE localgames SET stime=?, zfen=?, history=? WHERE id=?;", data);
 	}
 
-	public void deleteLocalGame(int id)
+	public void deleteLocalGame(final int id)
 	{
-		Object[] data = {id};
+		final Object[] data = {id};
 		db.execSQL("DELETE FROM localgames WHERE id=?;", data);
 	}
 
-	public void deleteArchiveGame(String gameid)
+	public void deleteArchiveGame(final String gameid)
 	{
-		Object[] data = {gameid};
+		final Object[] data = {gameid};
 		db.execSQL("DELETE FROM archivegames WHERE gameid=?;", data);
 	}
 
-	public void renameLocalGame(int id, String name)
+	public void renameLocalGame(final int id, final String name)
 	{
-		Object[] data = {name, id};
+		final Object[] data = {name, id};
 		db.execSQL("UPDATE localgames SET name=? WHERE id=?;", data);
 	}
 
@@ -79,13 +78,13 @@ class GameDataDB
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM localgames ORDER BY stime DESC", null);
 	}
 
-	public SQLiteCursor getOnlineGameList(int yourturn)
+	public SQLiteCursor getOnlineGameList(final int yourturn)
 	{
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		String username = pref.getString("username", "!error!");
-		String[] data = {username, username, String.valueOf(yourturn)};
-		String query = "SELECT * FROM onlinegames WHERE (white=? OR black=?) AND yourturn=? ORDER BY stime DESC";
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {username, username, String.valueOf(yourturn)};
+		final String query = "SELECT * FROM onlinegames WHERE (white=? OR black=?) AND yourturn=? ORDER BY stime DESC";
 
 		return (SQLiteCursor) db.rawQuery(query, data);
 	}
@@ -97,13 +96,13 @@ class GameDataDB
 
 	public ObjectArray<String> getOnlineGameIds()
 	{
-		ObjectArray<String> list = new ObjectArray<String>();
+		final ObjectArray<String> list = new ObjectArray<String>();
 
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String username = pref.getString("username", "!error!");
-		String[] data = {username, username};
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {username, username};
 
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
 
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -115,9 +114,9 @@ class GameDataDB
 
 	public ObjectArray<String> getArchiveGameIds()
 	{
-		ObjectArray<String> list = new ObjectArray<String>();
+		final ObjectArray<String> list = new ObjectArray<String>();
 
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames", null);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames", null);
 
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -127,46 +126,46 @@ class GameDataDB
 		return list;
 	}
 
-	public void insertMsg(String gameid, long time, String username, String msg)
+	public void insertMsg(final String gameid, final long time, final String username, final String msg)
 	{
-		Object[] data = {gameid, time, username, msg};
+		final Object[] data = {gameid, time, username, msg};
 		db.execSQL("INSERT INTO msgtable (gameid, time, username, msg) VALUES (?, ?, ?, ?);", data);
 	}
 
-	public void updateOnlineGame(String gameid, int status, long stime, String zfen, String history)
+	public void updateOnlineGame(final String gameid, final int status, final long stime, final String zfen, final String history)
 	{
-		String[] data1 = {gameid};
+		final String[] data1 = {gameid};
 
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
-		Bundle row = rowToBundle(cursor, 0);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
+		final Bundle row = rowToBundle(cursor, 0);
 
-		GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
+		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
 
-		int ply = info.getPly(), yourturn = info.getYourTurn();
+		final int ply = info.getPly(), yourturn = info.getYourTurn();
 
-		Object[] data2 = {stime, status, ply, yourturn, zfen, history, gameid};
+		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, gameid};
 		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
 	}
 
-	public void insertOnlineGame(String gameid, int gametype, int eventtype, long ctime, String white, String black)
+	public void insertOnlineGame(final String gameid, final int gametype, final int eventtype, final long ctime, final String white, final String black)
 	{
-		Object[] data = {gameid, gametype, eventtype, ctime, white, black};
+		final Object[] data = {gameid, gametype, eventtype, ctime, white, black};
 		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, eventtype, ctime, white, black) VALUES (?, ?, ?, ?, ?, ?);", data);
 	}
 
-	public void insertArchiveGame(JSONObject json)
+	public void insertArchiveGame(final JSONObject json)
 	{
 	try {
-		String gameid = json.getString("gameid");
-		int gametype = Enums.GameType(json.getString("gametype"));
-		int eventtype = Enums.EventType(json.getString("eventtype"));
-		int status = Enums.GameStatus(json.getString("status"));
-		long ctime = json.getLong("ctime");
-		long stime = json.getLong("stime");
-		String white = json.getString("white");
-		String black = json.getString("black");
-		String zfen = json.getString("zfen");
-		String history = json.getString("history");
+		final String gameid = json.getString("gameid");
+		final int gametype = Enums.GameType(json.getString("gametype"));
+		final int eventtype = Enums.EventType(json.getString("eventtype"));
+		final int status = Enums.GameStatus(json.getString("status"));
+		final long ctime = json.getLong("ctime");
+		final long stime = json.getLong("stime");
+		final String white = json.getString("white");
+		final String black = json.getString("black");
+		final String zfen = json.getString("zfen");
+		final String history = json.getString("history");
 
 		int w_psrfrom = 0;
 		int w_psrto = 0;
@@ -180,16 +179,16 @@ class GameDataDB
 			b_psrto = json.getJSONObject("score").getJSONObject("black").getInt("to");
 		}
 
-		String tmp[] = zfen.split(":");
-		int ply = Integer.valueOf(tmp[tmp.length - 1]);
+		final String tmp[] = zfen.split(":");
+		final int ply = Integer.valueOf(tmp[tmp.length - 1]);
 
-		Object[] data = {gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
+		final Object[] data = {gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
 			ctime, stime, ply, white, black, zfen, history};
 
-		String q1 = "INSERT INTO archivegames ";
-		String q2 = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
-		String q3 = "ctime, stime, ply, white, black, zfen, history) ";
-		String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		final String q1 = "INSERT INTO archivegames ";
+		final String q2 = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
+		final String q3 = "ctime, stime, ply, white, black, zfen, history) ";
+		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (JSONException e) {
@@ -197,17 +196,17 @@ class GameDataDB
 	}
 	}
 
-	public void archiveNetworkGame(String gameid, int w_from, int w_to, int b_from, int b_to)
+	public void archiveNetworkGame(final String gameid, final int w_from, final int w_to, final int b_from, final int b_to)
 	{
-		String[] data = {gameid};
+		final String[] data = {gameid};
 
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
-		Bundle row = rowToBundle(cursor, 0);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
+		final Bundle row = rowToBundle(cursor, 0);
 
-		String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
-		String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		final String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
+		final String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("eventtype"), row.get("status"),
+		final Object[] data2 = {row.get("gameid"), row.get("gametype"), row.get("eventtype"), row.get("status"),
 			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 

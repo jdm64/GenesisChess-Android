@@ -9,18 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import java.util.Date;
 
 class GameListAdapter extends BaseAdapter implements ListAdapter
 {
-	private GameDataDB db;
+	private final GameDataDB db;
+	private final String username;
+	private final int type;
+
 	private SQLiteCursor list;
 
-	private String username;
-	private int type;
-
-	public GameListAdapter(Context context, Bundle settings)
+	public GameListAdapter(final Context context, final Bundle settings)
 	{
+		super();
+
 		db = new GameDataDB(context);
 		username = settings.getString("username");
 		type = settings.getInt("type");
@@ -51,7 +52,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		notifyDataSetChanged();
 	}
 
-	public void setYourturn(int yourturn)
+	public void setYourturn(final int yourturn)
 	{
 		list = db.getOnlineGameList(yourturn);
 		notifyDataSetChanged();
@@ -62,22 +63,22 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		db.close();
 	}
 
-	public long getItemId(int index)
+	public long getItemId(final int index)
 	{
 		return index;
 	}
 
-	public Object getItem(int index)
+	public Object getItem(final int index)
 	{
 		return GameDataDB.rowToBundle(list, index);
 	}
 
-	public View getView(int index, View cell, ViewGroup parent)
+	public View getView(final int index, View cell, final ViewGroup parent)
 	{
-		Bundle data = (Bundle) getItem(index);
+		final Bundle data = (Bundle) getItem(index);
 
 		if (cell == null) {
-			TableLayout newcell = new TableLayout(parent.getContext());
+			final TableLayout newcell = new TableLayout(parent.getContext());
 			switch (type) {
 			case Enums.LOCAL_GAME:
 				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_local, newcell);
@@ -105,42 +106,38 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		return cell;
 	}
 
-	private void setupLocal(View cell, Bundle data)
+	private void setupLocal(final View cell, final Bundle data)
 	{
 		TextView txt = (TextView) cell.findViewById(R.id.game_name);
 		txt.setText(data.getString("name"));
 
-		String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
 
 		txt = (TextView) cell.findViewById(R.id.game_date);
 		txt.setText(date);
 	}
 
-	private void setupOnline(View cell, Bundle data)
+	private void setupOnline(final View cell, final Bundle data)
 	{
-		int ply = Integer.valueOf(data.getString("ply"));
-
-		String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
 
 		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
 		txt.setText(opponent);
 
-		String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
 
 		txt = (TextView) cell.findViewById(R.id.game_date);
 		txt.setText(date);
 	}
 
-	private void setupArchive(View cell, Bundle data)
+	private void setupArchive(final View cell, final Bundle data)
 	{
-		int ply = Integer.valueOf(data.getString("ply"));
-
-		String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
 
 		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
 		txt.setText(opponent);
 
-		String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
 
 		txt = (TextView) cell.findViewById(R.id.game_date);
 		txt.setText(date);
