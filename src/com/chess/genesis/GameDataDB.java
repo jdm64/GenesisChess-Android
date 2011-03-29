@@ -91,7 +91,11 @@ class GameDataDB
 
 	public SQLiteCursor getArchiveGameList()
 	{
-		return (SQLiteCursor) db.rawQuery("SELECT * FROM archivegames ORDER BY stime DESC", null);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {username, username};
+
+		return (SQLiteCursor) db.rawQuery("SELECT * FROM archivegames WHERE white=? OR black=? ORDER BY stime DESC", data);
 	}
 
 	public ObjectArray<String> getOnlineGameIds()
@@ -116,7 +120,11 @@ class GameDataDB
 	{
 		final ObjectArray<String> list = new ObjectArray<String>();
 
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames", null);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {username, username};
+
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames WHERE white=? OR black=?", data);
 
 		cursor.moveToFirst();
 		for (int i = 0; i < cursor.getCount(); i++) {
