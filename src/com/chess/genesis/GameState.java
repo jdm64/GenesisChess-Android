@@ -123,28 +123,37 @@ class GameState
 
 	private void check_endgame()
 	{
-		if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE)
+		switch (type) {
+		case Enums.LOCAL_GAME:
 			return;
+		case Enums.ONLINE_GAME:
+			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
+				return;
+			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+			try {
+				final JSONObject json = new JSONObject();
+				json.put("yourcolor", ycol);
+				json.put("white_name", settings.getString("white"));
+				json.put("black_name", settings.getString("black"));
+				json.put("eventtype", settings.getString("eventtype"));
+				json.put("status", settings.getString("status"));
+				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+				json.put("gameid", settings.getString("gameid"));
 
-		if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
-		try {
-			final JSONObject json = new JSONObject();
-			json.put("yourcolor", ycol);
-			json.put("white_name", settings.getString("white"));
-			json.put("black_name", settings.getString("black"));
-			json.put("eventtype", settings.getString("eventtype"));
-			json.put("status", settings.getString("status"));
-			json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-			json.put("gameid", settings.getString("gameid"));
-
-			(new EndGameDialog(context, json)).show();
-			return;
-		} catch (JSONException e) {
-			throw new RuntimeException();
+				(new EndGameDialog(context, json)).show();
+			} catch (JSONException e) {
+				throw new RuntimeException();
+			}
+			} else {
+				net.game_score(settings.getString("username"), settings.getString("gameid"));
+				(new Thread(net)).run();
+			}
+			break;
+		case Enums.ARCHIVE_GAME:
+			settings.putInt("yourcolor", ycol);
+			(new GameStatsDialog(context, settings)).show();
+			break;
 		}
-		}
-		net.game_score(settings.getString("username"), settings.getString("gameid"));
-		(new Thread(net)).run();
 	}
 
 	public GameState(final Context _context, final Bundle _settings)
@@ -177,6 +186,7 @@ class GameState
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
 			setStm();
+			check_endgame();
 			return;
 		}
 		final String[] movehistory = tmp.trim().split(" +");
@@ -192,16 +202,7 @@ class GameState
 			hindex++;
 		}
 		setBoard();
-
-		switch (settings.getInt("type")) {
-		case Enums.ONLINE_GAME:
-			check_endgame();
-			break;
-		case Enums.ARCHIVE_GAME:
-			settings.putInt("yourcolor", ycol);
-			(new GameStatsDialog(context, settings)).show();
-			break;
-		}
+		check_endgame();
 	}
 
 	private void setBoard()
