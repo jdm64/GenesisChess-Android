@@ -80,6 +80,7 @@ class EndGameDialog extends Dialog implements OnClickListener
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 		final int to = (ycol == Piece.WHITE)? w_to : b_to;
 		diff = (ycol == Piece.WHITE)? (w_to - w_from) : (b_to - b_from);

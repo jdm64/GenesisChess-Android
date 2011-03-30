@@ -99,6 +99,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 						gamelist_adapter.update();
 				} catch (JSONException e) {
 					e.printStackTrace();
+					throw new RuntimeException();
 				}
 				break;
 			}

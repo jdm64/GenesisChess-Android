@@ -38,6 +38,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 					(new RegisterActivation(self, handle)).show();
 				} catch (JSONException e) {
 					e.printStackTrace();
+					throw new RuntimeException();
 				}
 				break;
 			case RegisterConfirm.MSG:

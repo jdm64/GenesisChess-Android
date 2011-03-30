@@ -53,6 +53,7 @@ class SocketClient
 		loginHash = null;
 		isLoggedin = false;
 	} catch (IOException e) {
+		e.printStackTrace();
 		throw new RuntimeException();
 	}
 	}

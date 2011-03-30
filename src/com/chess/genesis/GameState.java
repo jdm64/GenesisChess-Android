@@ -117,6 +117,7 @@ class GameState
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 		}
 	};
@@ -142,6 +143,7 @@ class GameState
 
 				(new EndGameDialog(context, json)).show();
 			} catch (JSONException e) {
+				e.printStackTrace();
 				throw new RuntimeException();
 			}
 			} else {

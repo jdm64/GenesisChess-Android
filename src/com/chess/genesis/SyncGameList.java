@@ -36,6 +36,7 @@ class SyncGameList implements Runnable
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 
 			switch (msg.what) {
@@ -86,6 +87,7 @@ class SyncGameList implements Runnable
 			Thread.sleep(16);
 	} catch (java.lang.InterruptedException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 	}
 
@@ -124,6 +126,7 @@ class SyncGameList implements Runnable
 				json.put("reason", "gamelist updated");
 			} catch (JSONException e) {
 				e.printStackTrace();
+				throw new RuntimeException();
 			}
 			callback.sendMessage(Message.obtain(callback, MSG, json));
 		}
@@ -174,6 +177,7 @@ class SyncGameList implements Runnable
 		lock++;
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 	}
 
@@ -194,6 +198,7 @@ class SyncGameList implements Runnable
 			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 
 		list_need.removeAll(list_have);
@@ -225,6 +230,7 @@ class SyncGameList implements Runnable
 			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 
 		list_need.removeAll(list_have);
@@ -270,6 +276,7 @@ class SyncGameList implements Runnable
 		db.close();
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 	}
 
@@ -287,6 +294,7 @@ class SyncGameList implements Runnable
 		db.close();
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 	}
 

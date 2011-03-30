@@ -17,6 +17,7 @@ class Crypto
 		digst = MessageDigest.getInstance("SHA-1");
 	} catch (java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 		digst.update(str.getBytes());
 
@@ -43,6 +44,7 @@ class Crypto
 		digst = MessageDigest.getInstance("SHA-1");
 	} catch (java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 		digst.update(HashPasswd(str).getBytes());
 		digst.update(SocketClient.getHash().getBytes());

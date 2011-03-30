@@ -85,6 +85,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+				throw new RuntimeException();
 			}
 		}
 	};

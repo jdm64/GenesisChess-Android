@@ -201,6 +201,7 @@ class GameDataDB
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (JSONException e) {
 		e.printStackTrace();
+		throw new RuntimeException();
 	}
 	}
 
