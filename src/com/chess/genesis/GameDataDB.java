@@ -219,6 +219,23 @@ class GameDataDB
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 
 		db.execSQL("INSERT OR REPLACE INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);
-		db.execSQL("DELETE FROM onlinegames WHERE gameid=?", data);
+		db.execSQL("DELETE FROM onlinegames WHERE gameid=?;", data);
+	}
+
+	public void copyGameToLocal(final String gameid, final int gametype)
+	{
+		final String[] data = {gameid};
+		final String type = (gametype == Enums.ONLINE_GAME)? "onlinegames" : "archivegames";
+
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data);
+		final Bundle row = rowToBundle(cursor, 0);
+
+		final long time = (new Date()).getTime();
+		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
+		final String dstring = "(?, ?, ?, ?, ?, ?, ?)";
+		final Object[] data2 = {row.get("white") + " vs. " + row.get("black"), time, time,
+			row.get("gametype"), Enums.HUMAN_OPPONENT, row.get("zfen"), row.get("history")};
+
+		db.execSQL("INSERT INTO localgames" + tnames + " VALUES " + dstring + ";", data2);
 	}
 }

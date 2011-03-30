@@ -353,6 +353,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		case R.id.rename_game:
 			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
 			break;
+		case R.id.local_copy:
+			(new CopyGameConfirm(this, bundle.getString("gameid"), type)).show();
+			break;
 		default:
 			return super.onContextItemSelected(item);
 		}

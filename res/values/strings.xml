@@ -26,4 +26,7 @@
 	<string name="resign_confirm">
 		Are you sure you want to resign from this game? You will lose PSR if this is a random game.
 	</string>
+	<string name="copygame_confirm">
+		Are you sure you want to make a local copy this game?
+	</string>
 </resources>
