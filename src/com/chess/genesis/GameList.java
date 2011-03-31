@@ -56,12 +56,23 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
+			case RematchConfirm.MSG:
+				data = (Bundle) msg.obj;
+
+				final String opponent = data.getString("opp_name");
+				String color = Enums.ColorType(data.getInt("color"));
+				username = data.getString("username");
+				gametype = Enums.GameType(data.getInt("gametype"));
+
+				net.new_game(username, opponent, gametype, color);
+				(new Thread(net)).start();
+				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
 
 				username = settings.getString("username");
 				gametype = Enums.GameType(data.getInt("gametype"));
-				final String color = Enums.ColorType(data.getInt("color"));
+				color = Enums.ColorType(data.getInt("color"));
 
 				net.new_game(username, data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
@@ -357,6 +368,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			break;
 		case R.id.local_copy:
 			(new CopyGameConfirm(this, bundle.getString("gameid"), type)).show();
+			break;
+		case R.id.rematch:
+			final String opponent = settings.getString("username").equals(bundle.getString("white"))?
+				bundle.getString("black") : bundle.getString("white");
+			(new RematchConfirm(this, handle, opponent)).show();
 			break;
 		default:
 			return super.onContextItemSelected(item);

@@ -314,6 +314,13 @@ class GameState
 		(new ResignConfirm(context, handle)).show();
 	}
 
+	public void rematch()
+	{
+		final String opp = settings.getString("username").equals(settings.getString("white"))?
+			settings.getString("black") : settings.getString("white");
+		(new RematchConfirm(context, handle, opp)).show();
+	}
+
 	public void resync()
 	{
 		Toast.makeText(context, "Checking for new move...", Toast.LENGTH_LONG).show();

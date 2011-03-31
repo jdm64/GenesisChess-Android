@@ -152,11 +152,17 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
-		if (type == Enums.ONLINE_GAME)
-			getMenuInflater().inflate(R.menu.game_options_online, menu);
-		else
+		switch (type) {
+		case Enums.LOCAL_GAME:
 			getMenuInflater().inflate(R.menu.game_options_local, menu);
-
+			break;
+		case Enums.ONLINE_GAME:
+			getMenuInflater().inflate(R.menu.game_options_online, menu);
+			break;
+		case Enums.ARCHIVE_GAME:
+			getMenuInflater().inflate(R.menu.game_options_archive, menu);
+			break;
+		}
 		return true;
 	}
 
@@ -172,6 +178,9 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 			break;
 		case R.id.resign:
 			gamestate.resign();
+			break;
+		case R.id.rematch:
+			gamestate.rematch();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
