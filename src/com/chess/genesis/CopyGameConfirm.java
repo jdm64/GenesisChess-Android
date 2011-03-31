@@ -9,8 +9,8 @@ import android.widget.Button;
 
 class CopyGameConfirm extends Dialog implements OnClickListener
 {
-	final String gameid;
-	final int type;
+	private final String gameid;
+	private final int type;
 
 	public CopyGameConfirm(final Context context, final String _gameid, final int _type)
 	{

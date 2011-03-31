@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class Piece
+final class Piece
 {
 	private Piece()
 	{

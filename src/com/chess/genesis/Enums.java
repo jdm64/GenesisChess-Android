@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class Enums
+final class Enums
 {
 	// Play Types
 	public final static int LOCAL_GAME = 1;

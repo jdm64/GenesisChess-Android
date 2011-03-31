@@ -2,7 +2,7 @@ package com.chess.genesis;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-class NetActive
+final class NetActive
 {
 	private static AtomicInteger active = new AtomicInteger(0);
 
