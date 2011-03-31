@@ -185,7 +185,8 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
 			NetActive.inc();
 
-			final SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			// Must not be final
+			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 		} else {
