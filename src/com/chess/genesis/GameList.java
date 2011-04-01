@@ -49,10 +49,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 					(new InviteOptionsDialog(self, handle, data)).show();
 					return;
 				}
-				String username = settings.getString("username");
 				String gametype = Enums.GameType(data.getInt("gametype"));
 
-				net.join_game(username, gametype);
+				net.join_game(gametype);
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
@@ -61,20 +60,18 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 				final String opponent = data.getString("opp_name");
 				String color = Enums.ColorType(data.getInt("color"));
-				username = data.getString("username");
 				gametype = Enums.GameType(data.getInt("gametype"));
 
-				net.new_game(username, opponent, gametype, color);
+				net.new_game(opponent, gametype, color);
 				(new Thread(net)).start();
 				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
 
-				username = settings.getString("username");
 				gametype = Enums.GameType(data.getInt("gametype"));
 				color = Enums.ColorType(data.getInt("color"));
 
-				net.new_game(username, data.getString("opp_name"), gametype, color);
+				net.new_game(data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
 				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
@@ -197,7 +194,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			NetActive.inc();
 
 			// Must not be final
-			SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 		} else {
@@ -394,7 +391,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (item.getItemId()) {
 		case R.id.resync:
-			final SyncGameList sync = new SyncGameList(this, handle, settings.getString("username"));
+			final SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
 			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 			break;

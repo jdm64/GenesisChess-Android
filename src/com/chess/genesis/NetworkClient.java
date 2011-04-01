@@ -307,7 +307,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void join_game(final String username, final String gametype)
+	public void join_game(final String gametype)
 	{
 		fid = JOIN_GAME;
 		loginRequired = true;
@@ -316,7 +316,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "joingame");
-			json.put("username", username);
 			json.put("gametype", gametype);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -324,7 +323,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void new_game(final String username, final String opponent, final String gametype, final String color)
+	public void new_game(final String opponent, final String gametype, final String color)
 	{
 		fid = NEW_GAME;
 		loginRequired = true;
@@ -333,7 +332,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "newgame");
-			json.put("username", username);
 			json.put("opponent", opponent);
 			json.put("gametype", gametype);
 			json.put("color", color);
@@ -344,7 +342,7 @@ class NetworkClient implements Runnable
 
 	}
 
-	public void submit_move(final String username, final String gameid, final String move)
+	public void submit_move(final String gameid, final String move)
 	{
 		fid = SUBMIT_MOVE;
 		loginRequired = true;
@@ -353,7 +351,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "sendmove");
-			json.put("username", username);
 			json.put("gameid", gameid);
 			json.put("move", move);
 		} catch (JSONException e) {
@@ -362,7 +359,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void resign_game(final String username, final String gameid)
+	public void resign_game(final String gameid)
 	{
 		fid = RESIGN_GAME;
 		loginRequired = true;
@@ -371,7 +368,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "resign");
-			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -379,7 +375,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void submit_msg(final String username, final String gameid, final String msg)
+	public void submit_msg(final String gameid, final String msg)
 	{
 		fid = SUBMIT_MSG;
 		loginRequired = true;
@@ -388,7 +384,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "sendmsg");
-			json.put("username", username);
 			json.put("gameid", gameid);
 			json.put("msg", msg);
 		} catch (JSONException e) {
@@ -397,7 +392,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_status(final String username, final String gameid)
+	public void game_status(final String gameid)
 	{
 		fid = GAME_STATUS;
 		loginRequired = true;
@@ -406,7 +401,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "gamestatus");
-			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -414,7 +408,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_info(final String username, final String gameid)
+	public void game_info(final String gameid)
 	{
 		fid = GAME_INFO;
 		loginRequired = true;
@@ -423,7 +417,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "gameinfo");
-			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -431,7 +424,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void game_data(final String username, final String gameid)
+	public void game_data(final String gameid)
 	{
 		fid = GAME_DATA;
 		loginRequired = true;
@@ -440,7 +433,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "gamedata");
-			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -448,7 +440,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void read_inbox(final String username)
+	public void read_inbox()
 	{
 		fid = READ_INBOX;
 		loginRequired = true;
@@ -457,14 +449,13 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "inbox");
-			json.put("username", username);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
 	}
 
-	public void clear_inbox(final String username, final long time)
+	public void clear_inbox(final long time)
 	{
 		fid = CLEAR_INBOX;
 		loginRequired = true;
@@ -473,7 +464,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "clearinbox");
-			json.put("username", username);
 			json.put("time", time);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -481,7 +471,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void sync_gameids(final String username, final String type)
+	public void sync_gameids(final String type)
 	{
 		fid = SYNC_GAMIDS;
 		loginRequired = true;
@@ -491,14 +481,13 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gameids");
 			json.put("type", type);
-			json.put("username", username);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
 	}
 
-	public void game_score(final String username, final String gameid)
+	public void game_score(final String gameid)
 	{
 		fid = GAME_SCORE;
 		loginRequired = true;
@@ -507,7 +496,6 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "gamescore");
-			json.put("username", username);
 			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();

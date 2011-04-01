@@ -41,12 +41,12 @@ class GameState
 					return;
 				}
 				Toast.makeText(context, json.getString("reason"), Toast.LENGTH_LONG).show();
-				net.game_status(settings.getString("username"), settings.getString("gameid"));
+				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
 			case ResignConfirm.MSG:
 				Toast.makeText(context, "Sending resignation", Toast.LENGTH_LONG).show();
-				net.resign_game(settings.getString("username"), settings.getString("gameid"));
+				net.resign_game(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
 			case NetworkClient.RESIGN_GAME:
@@ -56,7 +56,7 @@ class GameState
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				net.game_status(settings.getString("username"), settings.getString("gameid"));
+				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).run();
 				break;
 			case NetworkClient.GAME_STATUS:
@@ -93,7 +93,7 @@ class GameState
 						return;
 					}
 					settings.putString("status", String.valueOf(status));
-					net.game_score(settings.getString("username"), settings.getString("gameid"));
+					net.game_score(settings.getString("gameid"));
 					(new Thread(net)).start();
 				}
 				break;
@@ -147,7 +147,7 @@ class GameState
 				throw new RuntimeException();
 			}
 			} else {
-				net.game_score(settings.getString("username"), settings.getString("gameid"));
+				net.game_score(settings.getString("gameid"));
 				(new Thread(net)).run();
 			}
 			break;
@@ -324,7 +324,7 @@ class GameState
 	public void resync()
 	{
 		Toast.makeText(context, "Checking for new move...", Toast.LENGTH_LONG).show();
-		net.game_status(settings.getString("username"), settings.getString("gameid"));
+		net.game_status(settings.getString("gameid"));
 		(new Thread(net)).run();
 	}
 
@@ -400,11 +400,10 @@ class GameState
 
 	public void submitMove()
 	{
-		final String username = settings.getString("username");
 		final String gameid = settings.getString("gameid");
 		final String move = history.top().toString();
 
-		net.submit_move(username, gameid, move);
+		net.submit_move(gameid, move);
 		(new Thread(net)).run();
 	}
 

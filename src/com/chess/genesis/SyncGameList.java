@@ -15,7 +15,6 @@ class SyncGameList implements Runnable
 	private final Context context;
 	private final Handler callback;
 	private final NetworkClient net;
-	private final String username;
 
 	private int lock = 0;
 	private int sync_type = Enums.ONLINE_GAME;
@@ -70,11 +69,10 @@ class SyncGameList implements Runnable
 		}
 	};
 
-	public SyncGameList(final Context _context, final Handler handler, final String Username)
+	public SyncGameList(final Context _context, final Handler handler)
 	{
 		context = _context;
 		callback = handler;
-		username = Username;
 
 		net = new NetworkClient(context, handle);
 	}
@@ -98,20 +96,20 @@ class SyncGameList implements Runnable
 
 	public void run()
 	{
-		net.read_inbox(username);
+		net.read_inbox();
 		net.run();
 		trylock();
 
 		if (!error) {
 			if (fullsync) {
 				sync_type = Enums.ONLINE_GAME;
-				net.sync_gameids(username, "active");
+				net.sync_gameids("active");
 				net.run();
 
 				trylock();
 
 				sync_type = Enums.ARCHIVE_GAME;
-				net.sync_gameids(username, "archive");
+				net.sync_gameids("archive");
 				net.run();
 			} else {
 				update_gamestatus();
@@ -150,7 +148,7 @@ class SyncGameList implements Runnable
 
 			if (error)
 				return;
-			net.game_info(username, gameid);
+			net.game_info(gameid);
 			net.run();
 
 			lock++;
@@ -171,7 +169,7 @@ class SyncGameList implements Runnable
 		}
 		if (error)
 			return;
-		net.clear_inbox(username, mtime);
+		net.clear_inbox(mtime);
 		net.run();
 
 		lock++;
@@ -206,7 +204,7 @@ class SyncGameList implements Runnable
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
-			net.game_info(username, list_need.get(i));
+			net.game_info(list_need.get(i));
 			net.run();
 
 			lock++;
@@ -238,7 +236,7 @@ class SyncGameList implements Runnable
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
-			net.game_data(username, list_need.get(i));
+			net.game_data(list_need.get(i));
 			net.run();
 
 			lock++;
@@ -254,7 +252,7 @@ class SyncGameList implements Runnable
 		for (int i = 0; i < list.size(); i++) {
 			if (error)
 				return;
-			net.game_status(username, list.get(i));
+			net.game_status(list.get(i));
 			net.run();
 
 			lock++;
