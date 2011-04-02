@@ -107,6 +107,9 @@ class GameState
 					settings.putString("status", String.valueOf(status));
 					net.game_score(settings.getString("gameid"));
 					(new Thread(net)).start();
+				} else {
+					progress.setText("Status Synced");
+					progress.remove();
 				}
 				break;
 			case NetworkClient.GAME_SCORE:
