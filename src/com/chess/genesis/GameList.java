@@ -34,6 +34,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 	private Bundle settings;
 	private NetworkClient net;
+	private ProgressMsg progress;
 	private int type;
 	private boolean yourmove;
 
@@ -49,14 +50,15 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 					(new InviteOptionsDialog(self, handle, data)).show();
 					return;
 				}
+				progress.setText("Sending newgame request");
 				String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.join_game(gametype);
 				(new Thread(net)).start();
-				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
 			case RematchConfirm.MSG:
 				data = (Bundle) msg.obj;
+				progress.setText("Sending newgame request");
 
 				final String opponent = data.getString("opp_name");
 				String color = Enums.ColorType(data.getInt("color"));
@@ -67,13 +69,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
+				progress.setText("Sending newgame request");
 
 				gametype = Enums.GameType(data.getInt("gametype"));
 				color = Enums.ColorType(data.getInt("color"));
 
 				net.new_game(data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
-				Toast.makeText(getApplication(), "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
 			case NewLocalGameDialog.MSG:
 				final GameDataDB db = new GameDataDB(self);
@@ -98,10 +100,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				final JSONObject json = (JSONObject) msg.obj;
 				try {
 					if (json.getString("result").equals("error")) {
+						progress.remove();
 						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
-					Toast.makeText(getApplication(), json.getString("reason"), Toast.LENGTH_LONG).show();
+					progress.remove();
 
 					if (msg.what == SyncGameList.MSG)
 						gamelist_adapter.update();
@@ -132,6 +135,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		yourmove = true;
 
 		net = new NetworkClient(this, handle);
+		progress = new ProgressMsg(this);
 
 		// set content view
 		switch (type) {
@@ -192,11 +196,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
 			NetActive.inc();
+			progress.setText("Updating game list");
 
 			// Must not be final
 			SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
-			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 		} else {
 			gamelist_adapter.update();
 		}
@@ -391,9 +395,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (item.getItemId()) {
 		case R.id.resync:
-			final SyncGameList sync = new SyncGameList(this, handle);
+			progress.setText("Updating game list");
+
+			// Must not be final
+			SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
-			Toast.makeText(getApplication(), "Updating game list...", Toast.LENGTH_LONG).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

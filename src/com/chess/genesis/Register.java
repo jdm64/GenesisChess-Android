@@ -21,6 +21,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	private static Register self;
 
 	private NetworkClient net;
+	private ProgressMsg progress;
 
 	private final Handler handle = new Handler()
 	{
@@ -32,9 +33,11 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 
 				try {
 					if (json.getString("result").equals("error")) {
+						progress.remove();
 						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
+					progress.setText("Registration Successfull");
 					(new RegisterActivation(self, handle)).show();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -42,11 +45,11 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 				}
 				break;
 			case RegisterConfirm.MSG:
+				progress.setText("Sending Registration...");
 				final Bundle data = (Bundle) msg.obj;
 
 				net.register(data.getString("username"), data.getString("password"), data.getString("email"));
 				(new Thread(net)).start();
-				Toast.makeText(self, "Connecting to server...", Toast.LENGTH_LONG).show();
 				break;
 			case RegisterActivation.MSG:
 				finish();
@@ -66,6 +69,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 
 		// create network client instance
 		net = new NetworkClient(this, handle);
+		progress = new ProgressMsg(this);
 
 		// set content view
 		setContentView(R.layout.register);

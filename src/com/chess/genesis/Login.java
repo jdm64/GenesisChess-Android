@@ -27,6 +27,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	private static Login self;
 
 	private NetworkClient net;
+	private ProgressMsg progress;
 
 	private final Handler handle = new Handler()
 	{
@@ -36,12 +37,13 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 			try {
 				if (json.getString("result").equals("error")) {
+					progress.remove();
 					Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				switch (msg.what) {
 				case NetworkClient.LOGIN:
-					Toast.makeText(self, json.getString("reason"), Toast.LENGTH_LONG).show();
+					progress.setText("Syncing Data...");
 
 					SocketClient.isLoggedin = true;
 
@@ -57,14 +59,14 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					pref.putString("passhash", password);
 					pref.commit();
 
-					final SyncGameList sync = new SyncGameList(self, handle);
+					// Must not be final
+					SyncGameList sync = new SyncGameList(self, handle);
 					sync.setFullSync(true);
 					(new Thread(sync)).start();
-
-					Toast.makeText(self, "Syncing active games", Toast.LENGTH_LONG).show();
 					break;
 				case SyncGameList.MSG:
-					Toast.makeText(self, "Syncing complete", Toast.LENGTH_LONG).show();
+					progress.dismiss();
+
 					setResult(RESULT_OK);
 					finish();
 					break;
@@ -101,6 +103,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 		// create network client instance
 		net = new NetworkClient(this, handle);
+		progress = new ProgressMsg(this);
 
 		// set content view
 		setContentView(R.layout.login);
@@ -147,6 +150,8 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	{
 		switch (v.getId()) {
 		case R.id.login:
+			progress.setText("Requesting Login...");
+
 			EditText txt = (EditText) findViewById(R.id.username);
 			final String username = txt.getText().toString();
 
@@ -155,7 +160,6 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 			net.login_user(username, password);
 			(new Thread(net)).start();
-			Toast.makeText(this, "Connecting to server...", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.register:
 			startActivityForResult(new Intent(this, Register.class), 1);

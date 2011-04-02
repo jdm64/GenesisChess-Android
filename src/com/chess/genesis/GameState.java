@@ -19,6 +19,7 @@ class GameState
 	private final Context context;
 	private final Bundle settings;
 	private final NetworkClient net;
+	private final ProgressMsg progress;
 	private final ObjectArray<Move> history;
 	private final Board board;
 	private final IntArray callstack;
@@ -37,15 +38,18 @@ class GameState
 				JSONObject json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
+					progress.remove();
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				Toast.makeText(context, json.getString("reason"), Toast.LENGTH_LONG).show();
+				progress.setText(json.getString("reason"));
+
 				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
 			case ResignConfirm.MSG:
-				Toast.makeText(context, "Sending resignation", Toast.LENGTH_LONG).show();
+				progress.setText("Sending resignation");
+
 				net.resign_game(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
@@ -53,9 +57,12 @@ class GameState
 				json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
+					progress.remove();
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
+				progress.setText("Resignation sent");
+
 				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).run();
 				break;
@@ -63,6 +70,7 @@ class GameState
 				json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
+					progress.remove();
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
@@ -81,6 +89,8 @@ class GameState
 				applyRemoteMove(history);
 				if (status != Enums.ACTIVE) {
 					if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+						progress.remove();
+
 						json.put("yourcolor", ycol);
 						json.put("white_name", settings.getString("white"));
 						json.put("black_name", settings.getString("black"));
@@ -92,6 +102,8 @@ class GameState
 						(new EndGameDialog(context, json)).show();
 						return;
 					}
+					progress.setText("Retrieving score");
+
 					settings.putString("status", String.valueOf(status));
 					net.game_score(settings.getString("gameid"));
 					(new Thread(net)).start();
@@ -101,9 +113,13 @@ class GameState
 				json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
+					progress.remove();
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
+				progress.setText("Score loaded");
+				progress.remove();
+
 				json.put("yourcolor", ycol);
 				json.put("white_name", settings.getString("white"));
 				json.put("black_name", settings.getString("black"));
@@ -147,6 +163,7 @@ class GameState
 				throw new RuntimeException();
 			}
 			} else {
+				progress.setText("Retrieving score");
 				net.game_score(settings.getString("gameid"));
 				(new Thread(net)).run();
 			}
@@ -167,6 +184,7 @@ class GameState
 		callstack = new IntArray();
 		history = new ObjectArray<Move>();
 		board = new Board();
+		progress = new ProgressMsg(context);
 
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 		switch (type) {
@@ -323,7 +341,7 @@ class GameState
 
 	public void resync()
 	{
-		Toast.makeText(context, "Checking for new move...", Toast.LENGTH_LONG).show();
+		progress.setText("Updating game state");
 		net.game_status(settings.getString("gameid"));
 		(new Thread(net)).run();
 	}
@@ -400,6 +418,8 @@ class GameState
 
 	public void submitMove()
 	{
+		progress.setText("Sending move");
+
 		final String gameid = settings.getString("gameid");
 		final String move = history.top().toString();
 
