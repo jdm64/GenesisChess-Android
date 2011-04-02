@@ -80,9 +80,10 @@ class SyncGameList implements Runnable
 	private void trylock()
 	{
 	try {
-		lock = 1;
+		lock++;
 		while (lock > 0 && !error)
 			Thread.sleep(16);
+		lock = 0;
 	} catch (java.lang.InterruptedException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -257,6 +258,7 @@ class SyncGameList implements Runnable
 
 			lock++;
 		}
+		lock--;
 	}
 
 	private void game_info(final JSONObject json)
