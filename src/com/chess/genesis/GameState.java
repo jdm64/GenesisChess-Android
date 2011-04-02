@@ -138,8 +138,8 @@ class GameState
 				progress.setText("Sending newgame request");
 
 				final String opponent = data.getString("opp_name");
-				String color = Enums.ColorType(data.getInt("color"));
-				String gametype = Enums.GameType(data.getInt("gametype"));
+				final String color = Enums.ColorType(data.getInt("color"));
+				final String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.new_game(opponent, gametype, color);
 				(new Thread(net)).start();
@@ -223,11 +223,8 @@ class GameState
 			ycol = Piece.WHITE;
 			break;
 		case Enums.ONLINE_GAME:
-			net = new NetworkClient(context, handle);
-			ycol = settings.getString("username").equals(settings.getString("white"))? 1 : -1;
-			break;
 		case Enums.ARCHIVE_GAME:
-			net = null;
+			net = new NetworkClient(context, handle);
 			ycol = settings.getString("username").equals(settings.getString("white"))? 1 : -1;
 			break;
 		}
