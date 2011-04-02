@@ -130,6 +130,32 @@ class GameState
 
 				(new EndGameDialog(context, json)).show();
 				break;
+			case RematchConfirm.MSG:
+				Bundle data = (Bundle) msg.obj;
+				progress.setText("Sending newgame request");
+
+				final String opponent = data.getString("opp_name");
+				String color = Enums.ColorType(data.getInt("color"));
+				String gametype = Enums.GameType(data.getInt("gametype"));
+
+				net.new_game(opponent, gametype, color);
+				(new Thread(net)).start();
+				break;
+			case NetworkClient.NEW_GAME:
+				json = (JSONObject) msg.obj;
+				try {
+					if (json.getString("result").equals("error")) {
+						progress.remove();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					progress.setText(json.getString("reason"));
+					progress.remove();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				}
+				break;
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
