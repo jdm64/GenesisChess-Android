@@ -162,7 +162,8 @@ class NetworkClient implements Runnable
 			SocketClient.isLoggedin = true;
 			return true;
 		} catch (JSONException e) {
-			return false;
+			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 
@@ -173,9 +174,9 @@ class NetworkClient implements Runnable
 
 		if (error) {
 			error = false;
+			net.disconnect();
 			return;
-		}
-		if (loginRequired && !relogin(net)) {
+		} else if (loginRequired && !relogin(net)) {
 			net.disconnect();
 			return;
 		}
@@ -204,6 +205,7 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
+			net.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return;
