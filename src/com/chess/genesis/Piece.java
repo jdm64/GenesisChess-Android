@@ -12,6 +12,7 @@ final class Piece
 	public static final int NONE = -1;
 	public static final int PLACEABLE = -2;
 	public static final int DEAD = -4;
+	public static final int NULL_MOVE = -8;
 
 	public static final int PAWN = 1;
 	public static final int KNIGHT = 2;

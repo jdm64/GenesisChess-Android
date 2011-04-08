@@ -140,11 +140,132 @@ class MoveLookup
 		return list;
 	}
 
+	public int[] genCapture(final int from)
+	{
+		final int type = Math.abs(square[from]), mfrom = mailbox64[from];
+		final int[] offset = offsets[type], list = new int[28];
+		int next = 0, to;
+
+		switch (type) {
+		case Piece.PAWN:
+			// captures
+			for (int dir = 0; dir < 4; dir++) {
+				to = mailbox[mfrom + offset[dir]];
+				if (to == -1)
+					continue;
+				else if (CAPTURE_MOVE(square[from], square[to]))
+					list[next++] = to;
+			}
+			break;
+		case Piece.KNIGHT:
+		case Piece.KING:
+			for (int dir = 0; dir < 8; dir++) {
+				to = mailbox[mfrom + offset[dir]];
+				if (to == -1)
+					continue;
+				else if (CAPTURE_MOVE(square[from], square[to]))
+					list[next++] = to;
+			}
+			break;
+		case Piece.BISHOP:
+		case Piece.ROOK:
+			for (int dir = 0; dir < 4; dir++) {
+				for (int k = 1; k < 8; k++) {
+					to = mailbox[mfrom + k * offset[dir]];
+					if (to == -1)
+						break;
+					else if (EMPTY_MOVE(square[from], square[to]))
+						continue;
+					else if (CAPTURE_MOVE(square[from], square[to]))
+						list[next++] = to;
+					break;
+				}
+			}
+			break;
+		case Piece.QUEEN:
+			for (int dir = 0; dir < 8; dir++) {
+				for (int k = 1; k < 8; k++) {
+					to = mailbox[mfrom + k * offset[dir]];
+					if (to == -1)
+						break;
+					else if (EMPTY_MOVE(square[from], square[to]))
+						continue;
+					else if (CAPTURE_MOVE(square[from], square[to]))
+						list[next++] = to;
+					break;
+				}
+			}
+			break;
+		}
+		list[next] = -1;
+		return list;
+	}
+
+	public int[] genMove(final int from)
+	{
+		final int type = Math.abs(square[from]), mfrom = mailbox64[from];
+		final int[] offset = offsets[type], list = new int[28];
+		int next = 0, to;
+
+		switch (type) {
+		case Piece.PAWN:
+			// moves
+			for (int dir = 4; dir < 8; dir++) {
+				to = mailbox[mfrom + offset[dir]];
+				if (to == -1)
+					continue;
+				else if (EMPTY_MOVE(square[from], square[to]))
+					list[next++] = to;
+			}
+			break;
+		case Piece.KNIGHT:
+		case Piece.KING:
+			for (int dir = 0; dir < 8; dir++) {
+				to = mailbox[mfrom + offset[dir]];
+				if (to == -1)
+					continue;
+				else if (EMPTY_MOVE(square[from], square[to]))
+					list[next++] = to;
+			}
+			break;
+		case Piece.BISHOP:
+		case Piece.ROOK:
+			for (int dir = 0; dir < 4; dir++) {
+				for (int k = 1; k < 8; k++) {
+					to = mailbox[mfrom + k * offset[dir]];
+					if (to == -1) {
+						break;
+					} else if (EMPTY_MOVE(square[from], square[to])) {
+						list[next++] = to;
+						continue;
+					}
+					break;
+				}
+			}
+			break;
+		case Piece.QUEEN:
+			for (int dir = 0; dir < 8; dir++) {
+				for (int k = 1; k < 8; k++) {
+					to = mailbox[mfrom + k * offset[dir]];
+					if (to == -1) {
+						break;
+					} else if (EMPTY_MOVE(square[from], square[to])) {
+						list[next++] = to;
+						continue;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		list[next] = -1;
+		return list;
+	}
+
 	public boolean fromto(final int From, final int To)
 	{
 		final int type = Math.abs(square[From]), mfrom = mailbox64[From];
 		final int[] offset = offsets[type];
-
 		int to;
 
 		switch (type) {

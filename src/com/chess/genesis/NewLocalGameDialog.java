@@ -51,7 +51,8 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 		gametype_spin.setAdapter(adapter);
 
 		list = new AdapterItem[] {new AdapterItem("Human", Enums.HUMAN_OPPONENT),
-			 new AdapterItem("Computer", Enums.COMPUTER_OPPONENT) };
+			new AdapterItem("Computer As White", Enums.CPU_WHITE_OPPONENT),
+			new AdapterItem("Computer As Black", Enums.CPU_BLACK_OPPONENT) };
 
 		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);

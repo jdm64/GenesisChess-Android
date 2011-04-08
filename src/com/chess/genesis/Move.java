@@ -22,6 +22,24 @@ class Move
 		to = move.to;
 	}
 
+	public boolean isNull()
+	{
+		if (index == Piece.NULL_MOVE && xindex == Piece.NULL_MOVE &&
+				from == Piece.NULL_MOVE && to == Piece.NULL_MOVE)
+			return true;
+		return false;
+	}
+
+	public Move setNull()
+	{
+		index = Piece.NULL_MOVE;
+		xindex = Piece.NULL_MOVE;
+		from = Piece.NULL_MOVE;
+		to = Piece.NULL_MOVE;
+
+		return this;
+	}
+
 	private StringBuffer printLoc(final int loc)
 	{
 		StringBuffer str = new StringBuffer();

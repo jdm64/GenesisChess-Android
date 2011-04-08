@@ -23,6 +23,7 @@ class GameState
 	private final ObjectArray<Move> history;
 	private final Board board;
 	private final IntArray callstack;
+	private final ComputerEngine cpu;
 	private final int ycol;
 	private final int type;
 	private final int oppType;
@@ -35,6 +36,12 @@ class GameState
 		{
 		try {
 			switch (msg.what) {
+			case ComputerEngine.MSG:
+				final Move move = (Move) msg.obj;
+
+				forwardMove();
+				applyMove(move, true, true);
+				break;
 			case NetworkClient.SUBMIT_MOVE:
 				JSONObject json = (JSONObject) msg.obj;
 
@@ -172,6 +179,10 @@ class GameState
 	{
 		switch (type) {
 		case Enums.LOCAL_GAME:
+			if (oppType == Enums.CPU_WHITE_OPPONENT) {
+				cpu.setBoard(board);
+				(new Thread(cpu)).start();
+			}
 			return;
 		case Enums.ONLINE_GAME:
 			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
@@ -221,12 +232,14 @@ class GameState
 		case Enums.LOCAL_GAME:
 		default:
 			oppType = Integer.valueOf(settings.getString("opponent"));
+			cpu = new ComputerEngine(handle);
 			net = null;
 			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
 			break;
 		case Enums.ONLINE_GAME:
 		case Enums.ARCHIVE_GAME:
 			oppType = Enums.HUMAN_OPPONENT;
+			cpu = null;
 			net = new NetworkClient(context, handle);
 			ycol = settings.getString("username").equals(settings.getString("white"))? 1 : -1;
 			break;
@@ -297,6 +310,19 @@ class GameState
 		setStm();
 	}
 
+	private void runCPU()
+	{
+		// Start computer player
+		if (oppType == Enums.HUMAN_OPPONENT)
+			return;
+		if (hindex + 1 < history.size())
+			return;
+		if (board.getStm() == ycol)
+			return;
+		cpu.setBoard(board);
+		(new Thread(cpu)).start();
+	}
+
 	public final void setStm()
 	{
 		String check, wstr, bstr;
@@ -308,6 +334,7 @@ class GameState
 				check = " (check)";
 			else
 				check = "";
+			runCPU();
 			break;
 		case Board.CHECK_MATE:
 			check = " (checkmate)";

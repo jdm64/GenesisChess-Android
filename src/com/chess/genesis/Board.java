@@ -12,6 +12,75 @@ class Board
 		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
 		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
+	public static final int[] typeLookup = {
+		0, 0, 0, 0, 0, 0,  0,  0,
+		1, 1, 2, 2, 3, 3,  4,  5,
+		6, 6, 6, 6, 6, 6,  6,  6,
+		7, 7, 8, 8, 9, 9, 10, 11};
+
+	public static final int[] pieceValue = {
+		224, 224, 224, 224, 224, 224, 224, 224,
+		336, 336, 560, 560, 896, 896, 1456, 0};
+
+	public static final int[][] locValue = {
+	{	0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0},
+	{	-5, 0, 0, 0, 0, 0, 0, -5,
+/* Pawn */	 0, 5, 5, 5, 5, 5, 5,  0,
+		 0, 5, 5, 5, 5, 5, 5,  0,
+		 0, 5, 5, 5, 5, 5, 5,  0,
+		 0, 5, 5, 5, 5, 5, 5,  0,
+		 0, 5, 5, 5, 5, 5, 5,  0,
+		 0, 5, 5, 5, 5, 5, 5,  0,
+		-5, 0, 0, 0, 0, 0, 0, -5},
+	{	-10, -5,  0,  0,  0,  0, -5, -10,
+/* Knight */	 -5,  0, 10, 10, 10, 10,  0,  -5,
+		  0, 10, 20, 20, 20, 20, 10,   0,
+		  0, 10, 20, 20, 20, 20, 10,   0,
+		  0, 10, 20, 20, 20, 20, 10,   0,
+		  0, 10, 20, 20, 20, 20, 10,   0,
+		 -5,  0, 10, 10, 10, 10,  0,  -5,
+		-10, -5,  0,  0,  0,  0, -5, -10},
+	{	-10, -10, -10, -10, -10, -10, -10, -10,
+/* Bishop */	-10,   0,   0,   0,   0,   0,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,   0,   0,   0,   0,   0, -10,
+		-10, -10, -10, -10, -10, -10, -10, -10},
+	{	-10, -10, -10, -10, -10, -10, -10, -10,
+/* Rook */	-10,   0,   0,   0,   0,   0,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,   0,   0,   0,   0,   0, -10,
+		-10, -10, -10, -10, -10, -10, -10, -10},
+	{	-10, -10, -10, -10, -10, -10, -10, -10,
+/* Queen */	-10,   0,   0,   0,   0,   0,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  20,  20,  10,   0, -10,
+		-10,   0,  10,  10,  10,  10,   0, -10,
+		-10,   0,   0,   0,   0,   0,   0, -10,
+		-10, -10, -10, -10, -10, -10, -10, -10},
+	{	-10,  0,  0,  0,  0,  0,  0, -10,
+/* King */	  0, 15, 15, 15, 15, 15, 15,   0,
+		  0, 15, 15, 15, 15, 15, 15,   0,
+		  0, 15, 15, 15, 15, 15, 15,   0,
+		  0, 15, 15, 15, 15, 15, 15,   0,
+		  0, 15, 15, 15, 15, 15, 15,   0,
+		  0, 15, 15, 15, 15, 15, 15,   0,
+		-10,  0,  0,  0,  0,  0,  0, -10}
+	};
+
 	public static final int VALID_MOVE = 0;
 	public static final int INVALID_FORMAT = 1;
 	public static final int NOPIECE_ERROR = 2;
@@ -27,15 +96,38 @@ class Board
 	public static final int CHECK_MATE = 2;
 	public static final int STALE_MATE = 3;
 
+	public static final int MOVE_ALL = 0;
+	public static final int MOVE_CAPTURE = 1;
+	public static final int MOVE_MOVE = 2;
+	public static final int MOVE_PLACE = 3;
+
+	public static final int ZBOX_SIZE = 781;
+	public static final int WTM_HASH = 780;
+	public static final int HOLD_START = 768;
+
+	public static long[] hashBox = new long[ZBOX_SIZE];
+	public static long startHash;
+
 	private int[] square;
 	private int[] piece;
 
 	private int stm;
 	private int ply;
+	private long key;
 	
 	public Board()
 	{
 		reset();
+	}
+
+	public Board(final Board board)
+	{
+		square = IntArray.clone(board.square);
+		piece = IntArray.clone(board.piece);
+
+		stm = board.stm;
+		ply = board.ply;
+		key = board.key;
 	}
 
 	private int pieceIndex(final int loc)
@@ -71,11 +163,22 @@ class Board
 
 		ply = 0;
 		stm = Piece.WHITE;
+		key = startHash;
 	}
 
 	public int getStm()
 	{
 		return stm;
+	}
+
+	public int getPly()
+	{
+		return ply;
+	}
+
+	public long hash()
+	{
+		return key;
 	}
 
 	public int kingIndex(final int color)
@@ -121,6 +224,15 @@ class Board
 		if (move.xindex != Piece.NONE)
 			piece[move.xindex] = Piece.DEAD;
 
+		key += (stm == Piece.WHITE)? -hashBox[WTM_HASH] : hashBox[WTM_HASH];
+		key += hashBox[12 * move.to + typeLookup[move.index]];
+		if (move.from != Piece.PLACEABLE)
+			key -= hashBox[12 * move.from + typeLookup[move.index]];
+		else
+			key -= hashBox[HOLD_START + typeLookup[move.index]];
+		if (move.xindex != Piece.NONE)
+			key -= hashBox[12 * move.to + typeLookup[move.xindex]];
+
 		stm ^= -2;
 		ply++;
 	}
@@ -137,6 +249,15 @@ class Board
 		}
 		if (move.from != Piece.PLACEABLE)
 			square[move.from] = pieceType[move.index];
+
+		key += (stm == Piece.WHITE)? -hashBox[WTM_HASH] : hashBox[WTM_HASH];
+		key -= hashBox[12 * move.to + typeLookup[move.index]];
+		if (move.from != Piece.PLACEABLE)
+			key += hashBox[12 * move.from + typeLookup[move.index]];
+		else
+			key += hashBox[HOLD_START + typeLookup[move.index]];
+		if (move.xindex != Piece.NONE)
+			key += hashBox[12 * move.to + typeLookup[move.xindex]];
 
 		stm ^= -2;
 		ply--;
@@ -158,6 +279,41 @@ class Board
 			return CHECK_MATE;
 		else
 			return STALE_MATE;
+	}
+
+	public boolean validMove(final Move moveIn, final Move move)
+	{
+		move.set(moveIn);
+
+		if ((move.index = pieceIndex(move.from, pieceType[move.index])) == Piece.NONE)
+			return false;
+		if (pieceType[move.index] * stm <= 0)
+			return false;
+		if (move.xindex != Piece.NONE) {
+			if ((move.xindex = pieceIndex(move.to, pieceType[move.xindex])) == Piece.NONE)
+				return false;
+		} else if (square[move.to] != Piece.EMPTY) {
+			return false;
+		}
+
+		if (move.from != Piece.PLACEABLE) {
+			final MoveLookup ml = new MoveLookup(square);
+			if (!ml.fromto(move.from, move.to))
+				return false;
+		}
+		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
+			return false;
+
+		boolean ret = true;
+
+		make(move);
+		if (incheck(stm ^ -2))
+			ret = false;
+		if (move.from == Piece.PLACEABLE && incheck(stm))
+			ret = false;
+		unmake(move);
+
+		return ret;
 	}
 
 	public int validMove(final Move move)
@@ -270,5 +426,297 @@ class Board
 			}
 		}
 		return num;
+	}
+
+	public MoveList getMoveList(final int color)
+	{
+		final MoveList data = new MoveList();
+		final MoveLookup movelookup = new MoveLookup(square);
+
+		data.size = 0;
+		// we must place king first
+		if (ply < 2) {
+			final int idx = pieceIndex(Piece.PLACEABLE, Piece.KING * color);
+
+			for (int loc = 0; loc < 64; loc++) {
+				if (square[loc] != Piece.EMPTY)
+					continue;
+				final MoveNode item = new MoveNode();
+				item.move.to = loc;
+				item.move.index = idx;
+				item.move.xindex = Piece.NONE;
+				item.move.from = Piece.PLACEABLE;
+
+				make(item.move);
+				// place moves are only valid if neither side is inCheck
+				if (!incheck(color) && !incheck(color ^ -2)) {
+					// item.check initialized to false
+					item.score = eval();
+					data.list[data.size++] = item;
+				}
+				unmake(item.move);
+			}
+			return data;
+		}
+		// generate piece moves
+		final int start = (color == Piece.BLACK)? 15:31, end = (color == Piece.BLACK)? 0:16;
+		for (int idx = start; idx >= end; idx--) {
+			if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
+				continue;
+			final int[] loc = movelookup.genAll(piece[idx]);
+			int n = 0;
+			while (loc[n] != -1) {
+				final MoveNode item = new MoveNode();
+				item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
+				item.move.to = loc[n];
+				item.move.from = piece[idx];
+				item.move.index = idx;
+
+				make(item.move);
+				if (!incheck(color)) {
+					item.check = incheck(color ^ -2);
+					item.score = eval();
+					data.list[data.size++] = item;
+				}
+				unmake(item.move);
+				n++;
+			}
+		}
+		// generate piece place moves
+		for (int type = Piece.QUEEN; type >= Piece.PAWN; type--) {
+			final int idx = pieceIndex(Piece.PLACEABLE, type * color);
+			if (idx == Piece.NONE)
+				continue;
+			for (int loc = 0; loc < 64; loc++) {
+				if (square[loc] != Piece.EMPTY)
+					continue;
+				final MoveNode item = new MoveNode();
+				item.move.index = idx;
+				item.move.to = loc;
+				item.move.xindex = Piece.NONE;
+				item.move.from = Piece.PLACEABLE;
+
+				make(item.move);
+				// place moves are only valid if neither side is inCheck
+				if (!incheck(color) && !incheck(color ^ -2)) {
+					// item.check initialized to false
+					item.score = eval();
+					data.list[data.size++] = item;
+				}
+				unmake(item.move);
+			}
+		}
+		return data;
+	}
+
+	public MoveList getMoveList(final int color, final int movetype)
+	{
+		final MoveList data = new MoveList();
+		final MoveLookup movelookup = new MoveLookup(square);
+		int start, end;
+
+		data.size = 0;
+		switch (movetype) {
+		case MOVE_ALL:
+			if (ply < 2) {
+				final int idx = pieceIndex(Piece.PLACEABLE, Piece.KING * color);
+				for (int loc = 0; loc < 64; loc++) {
+					if (square[loc] != Piece.EMPTY)
+						continue;
+					final MoveNode item = new MoveNode();
+					item.move.to = loc;
+					item.move.index = idx;
+					item.move.xindex = Piece.NONE;
+					item.move.from = Piece.PLACEABLE;
+
+					make(item.move);
+					// place moves are only valid if neither side is inCheck
+					if (!incheck(color) && !incheck(color ^ -2)) {
+						// item.check initialized to false
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+				}
+				break;
+			}
+			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--) {
+				final int idx = pieceIndex(Piece.PLACEABLE, type * color);
+				if (idx == Piece.NONE)
+					continue;
+				for (int loc = 0; loc < 64; loc++) {
+					if (square[loc] != Piece.EMPTY)
+						continue;
+					final MoveNode item = new MoveNode();
+					item.move.index = idx;
+					item.move.to = loc;
+					item.move.xindex = Piece.NONE;
+					item.move.from = Piece.PLACEABLE;
+
+					make(item.move);
+					// place moves are only valid if neither side is inCheck
+					if (!incheck(color) && !incheck(color ^ -2)) {
+						// item.check initialized to false
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+				}
+			}
+			start = (color == Piece.BLACK)? 15:31;
+			end = (color == Piece.BLACK)? 0:16;
+			for (int idx = start; idx >= end; idx--) {
+				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
+					continue;
+				final int[] loc = movelookup.genAll(piece[idx]);
+				int n = 0;
+				while (loc[n] != -1) {
+					final MoveNode item = new MoveNode();
+					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
+					item.move.to = loc[n];
+					item.move.from = piece[idx];
+					item.move.index = idx;
+
+					make(item.move);
+					if (!incheck(color)) {
+						item.check = incheck(color ^ -2);
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+					n++;
+				}
+			}
+			break;
+		case MOVE_CAPTURE:
+			start = (color == Piece.BLACK)? 15:31;
+			end = (color == Piece.BLACK)? 0:16;
+			for (int idx = start; idx >= end; idx--) {
+				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
+					continue;
+				final int[] loc = movelookup.genCapture(piece[idx]);
+				int n = 0;
+				while (loc[n] != -1) {
+					final MoveNode item = new MoveNode();
+					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
+					item.move.to = loc[n];
+					item.move.from = piece[idx];
+					item.move.index = idx;
+
+					make(item.move);
+					if (!incheck(color)) {
+						item.check = incheck(color ^ -2);
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+					n++;
+				}
+			}
+			break;
+		case MOVE_MOVE:
+			start = (color == Piece.BLACK)? 15:31;
+			end = (color == Piece.BLACK)? 0:16;
+			for (int idx = start; idx >= end; idx--) {
+				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
+					continue;
+				final int[] loc = movelookup.genMove(piece[idx]);
+				int n = 0;
+				while (loc[n] != -1) {
+					final MoveNode item = new MoveNode();
+					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
+					item.move.to = loc[n];
+					item.move.from = piece[idx];
+					item.move.index = idx;
+
+					make(item.move);
+					if (!incheck(color)) {
+						item.check = incheck(color ^ -2);
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+					n++;
+				}
+			}
+			break;
+		case MOVE_PLACE:
+			if (ply < 2) {
+				final int idx = pieceIndex(Piece.PLACEABLE, Piece.KING * color);
+				for (int loc = 0; loc < 64; loc++) {
+					if (square[loc] != Piece.EMPTY)
+						continue;
+					final MoveNode item = new MoveNode();
+					item.move.to = loc;
+					item.move.index = idx;
+					item.move.xindex = Piece.NONE;
+					item.move.from = Piece.PLACEABLE;
+
+					make(item.move);
+					// place moves are only valid if neither side is inCheck
+					if (!incheck(color) && !incheck(color ^ -2)) {
+						// item.check initialized to false
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+				}
+				break;
+			}
+			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--) {
+				final int idx = pieceIndex(Piece.PLACEABLE, type * color);
+				if (idx == Piece.NONE)
+					continue;
+				for (int loc = 0; loc < 64; loc++) {
+					if (square[loc] != Piece.EMPTY)
+						continue;
+					final MoveNode item = new MoveNode();
+					item.move.index = idx;
+					item.move.to = loc;
+					item.move.xindex = Piece.NONE;
+					item.move.from = Piece.PLACEABLE;
+
+					make(item.move);
+					// place moves are only valid if neither side is inCheck
+					if (!incheck(color) && !incheck(color ^ -2)) {
+						// item.check initialized to false
+						item.score = eval();
+						data.list[data.size++] = item;
+					}
+					unmake(item.move);
+				}
+			}
+			break;
+		}
+		return data;
+	}
+
+	public int eval()
+	{
+		int white = 0, black = 0;
+		for (int b = 0, w = 16; b < 16; b++, w++) {
+			switch (piece[b]) {
+			default:
+				black += locValue[pieceType[w]][piece[b]];
+			case Piece.PLACEABLE:
+				black += pieceValue[b];
+				break;
+			case Piece.DEAD:
+				black -= pieceValue[b];
+				break;
+			}
+			switch (piece[w]) {
+			default:
+				white += locValue[pieceType[w]][piece[w]];
+			case Piece.PLACEABLE:
+				white += pieceValue[b];
+				break;
+			case Piece.DEAD:
+				white -= pieceValue[b];
+				break;
+			}
+		}
+		white -= black;
+		return (stm == Piece.WHITE)? -white : white;
 	}
 }
