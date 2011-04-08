@@ -14,6 +14,14 @@ class Move
 		index = xindex = from = to = -1;
 	}
 
+	public void set(final Move move)
+	{
+		index = move.index;
+		xindex = move.xindex;
+		from = move.from;
+		to = move.to;
+	}
+
 	private StringBuffer printLoc(final int loc)
 	{
 		StringBuffer str = new StringBuffer();

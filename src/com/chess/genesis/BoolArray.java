@@ -1,14 +1,14 @@
 package com.chess.genesis;
 
-class ObjectArray<Type>
+class BoolArray
 {
-	private Type[] list = (Type[]) new Object[0];
+	private boolean[] list = new boolean[0];
 
 	// !SICK!
 	// This only exists because Arrays.copyOf was added in API Level 9
-	private Type[] copyOf(final Type[] arr, final int size)
+	private boolean[] copyOf(final boolean[] arr, final int size)
 	{
-		Type[] temp = (Type[]) new Object[size];
+		boolean[] temp = new boolean[size];
 
 		for (int i = 0; i < Math.min(arr.length, size); i++)
 			temp[i] = arr[i];
@@ -17,7 +17,7 @@ class ObjectArray<Type>
 
 	public void clear()
 	{
-		list = (Type[]) new Object[0];
+		list = new boolean[0];
 	}
 
 	public int size()
@@ -30,34 +30,34 @@ class ObjectArray<Type>
 		list = copyOf(list, size);
 	}
 
-	public Type get(final int index)
+	public boolean get(final int index)
 	{
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
 		return list[index];
 	}
 
-	public void set(final int index, final Type value)
+	public void set(final int index, final boolean value)
 	{
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
 		list[index] = value;
 	}
 
-	public void push(final Type value)
+	public void push(final boolean value)
 	{
 		list = copyOf(list, list.length + 1);
 		list[list.length - 1] = value;
 	}
 
-	public Type pop()
+	public boolean pop()
 	{
-		final Type end = list[list.length - 1];
+		final boolean end = list[list.length - 1];
 		list = copyOf(list, list.length - 1);
 		return end;
 	}
 
-	public Type top()
+	public boolean top()
 	{
 		return list[list.length - 1];
 	}
@@ -68,7 +68,7 @@ class ObjectArray<Type>
 		final StringBuffer str = new StringBuffer();
 
 		for (int i = 0; i < list.length; i++)
-			str.append(list[i].toString() + " ");
+			str.append(String.valueOf(list[i]) + " ");
 		return str.toString();
 	}
 }
