@@ -13,7 +13,8 @@ final class Enums
 
 	// Opponent Types
 	public final static int HUMAN_OPPONENT = 1;
-	public final static int COMPUTER_OPPONENT = 2;
+	public final static int CPU_WHITE_OPPONENT = 2;
+	public final static int CPU_BLACK_OPPONENT = 3;
 
 	// Opponent Selection
 	public final static int RANDOM = 1;

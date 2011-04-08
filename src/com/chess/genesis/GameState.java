@@ -25,6 +25,7 @@ class GameState
 	private final IntArray callstack;
 	private final int ycol;
 	private final int type;
+	private final int oppType;
 
 	private int hindex = -1;
 
@@ -219,11 +220,13 @@ class GameState
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
+			oppType = Integer.valueOf(settings.getString("opponent"));
 			net = null;
-			ycol = Piece.WHITE;
+			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
 			break;
 		case Enums.ONLINE_GAME:
 		case Enums.ARCHIVE_GAME:
+			oppType = Enums.HUMAN_OPPONENT;
 			net = new NetworkClient(context, handle);
 			ycol = settings.getString("username").equals(settings.getString("white"))? 1 : -1;
 			break;
@@ -249,6 +252,21 @@ class GameState
 		}
 		setBoard();
 		check_endgame();
+	}
+
+	private int yourColor()
+	{
+		switch (type) {
+		case Enums.LOCAL_GAME:
+			if (oppType == Enums.HUMAN_OPPONENT)
+				return board.getStm();
+		case Enums.ONLINE_GAME:
+			return ycol;
+		case Enums.ARCHIVE_GAME:
+			return board.getStm();
+		default:
+			return 0;
+		}
 	}
 
 	private void setBoard()
@@ -575,7 +593,7 @@ class GameState
 	{
 		final BoardButton to = (BoardButton) v;
 		final int index = to.getIndex();
-		final int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
+		final int col = yourColor();
 
 		if (callstack.size() == 0) {
 		// No active clicks
@@ -620,7 +638,7 @@ class GameState
 	public void placeClick(final View v)
 	{
 		final PlaceButton from = (PlaceButton) v;
-		final int col = (type == Enums.ONLINE_GAME)? ycol : board.getStm();
+		final int col = yourColor();
 		final int ptype = from.getPiece();
 
 		// only select your own pieces where count > 0
