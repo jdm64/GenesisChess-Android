@@ -265,7 +265,7 @@ class Board
 				make(move);
 				// place moves are only valid if neither side is inCheck
 				if (!incheck(color) && !incheck(color ^ -2))
-				num++;
+					num++;
 				unmake(move);
 			}
 		}

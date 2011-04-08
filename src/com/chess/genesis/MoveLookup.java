@@ -70,10 +70,8 @@ class MoveLookup
 	public int[] genAll(final int from)
 	{
 		final int type = Math.abs(square[from]), mfrom = mailbox64[from];
-		final int[] offset = offsets[type];
-
+		final int[] offset = offsets[type], list = new int[28];
 		int next = 0, to;
-		int[] list = new int[28];
 
 		switch (type) {
 		case Piece.PAWN:

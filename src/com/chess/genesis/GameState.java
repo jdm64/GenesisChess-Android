@@ -134,7 +134,7 @@ class GameState
 				(new EndGameDialog(context, json)).show();
 				break;
 			case RematchConfirm.MSG:
-				Bundle data = (Bundle) msg.obj;
+				final Bundle data = (Bundle) msg.obj;
 				progress.setText("Sending newgame request");
 
 				final String opponent = data.getString("opp_name");

@@ -5,7 +5,7 @@ import android.content.Context;
 
 class ProgressMsg extends ProgressDialog implements Runnable
 {
-	public ProgressMsg(Context context)
+	public ProgressMsg(final Context context)
 	{
 		super(context);
 	}
@@ -19,7 +19,7 @@ class ProgressMsg extends ProgressDialog implements Runnable
 		(new Thread(this)).start();
 	}
 
-	public void setText(String msg)
+	public void setText(final String msg)
 	{
 		setMessage(msg);
 		if (!isShowing())
