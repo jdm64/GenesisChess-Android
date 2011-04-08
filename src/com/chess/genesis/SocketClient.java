@@ -76,7 +76,7 @@ class SocketClient
 	{
 		connect();
 
-		final byte[] buff = new byte[1440];
+		final byte[] buff = new byte[2856]; // 1428 * 2
 
 		input.read(buff);
 
