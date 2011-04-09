@@ -182,6 +182,9 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		case R.id.rematch:
 			gamestate.rematch();
 			break;
+		case R.id.cpu_time:
+			gamestate.setCpuTime();
+			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

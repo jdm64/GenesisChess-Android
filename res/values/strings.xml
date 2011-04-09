@@ -29,4 +29,7 @@
 	<string name="copygame_confirm">
 		Are you sure you want to make a local copy this game?
 	</string>
+	<string name="cputime_msg">
+		Set the time alloted for the computer to think. Longer times makes the computer stronger.
+	</string>
 </resources>

@@ -1,10 +1,13 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +39,12 @@ class GameState
 		{
 		try {
 			switch (msg.what) {
+			case CpuTimeDialog.MSG:
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+				pref.putInt("cputime", (Integer) msg.obj);
+				pref.commit();
+				cpu.setTime((Integer) msg.obj);
+				break;
 			case ComputerEngine.MSG:
 				final Bundle bundle = (Bundle) msg.obj;
 
@@ -234,8 +243,10 @@ class GameState
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
-			oppType = Integer.valueOf(settings.getString("opponent"));
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 			cpu = new ComputerEngine(handle);
+			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
+			oppType = Integer.valueOf(settings.getString("opponent"));
 			net = null;
 			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
 			break;
@@ -411,6 +422,11 @@ class GameState
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
+	}
+
+	public void setCpuTime()
+	{
+		(new CpuTimeDialog(context, handle, cpu.getTime())).show();
 	}
 
 	public void resign()
