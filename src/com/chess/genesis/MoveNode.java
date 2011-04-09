@@ -15,6 +15,6 @@ class MoveNode implements Comparable<MoveNode>
  
 	public int compareTo(final MoveNode a)
 	{
-		return score - a.score;
+		return a.score - score;
 	}
 }
