@@ -1,7 +1,9 @@
 package com.chess.genesis;
 
+import android.os.Bundle;
 import android.os.Handler;
 import java.util.Arrays;
+import java.util.Date;
 
 class ComputerEngine implements Runnable
 {
@@ -11,8 +13,6 @@ class ComputerEngine implements Runnable
 	public static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
 	public static final int CHECKMATE_SCORE = MIN_SCORE;
 	public static final int STALEMATE_SCORE = 0;
-
-	public static final int maxNg = 3;
 
 	private final ObjectArray<Move> pvMove;
 	private final ObjectArray<Move> captureKiller;
@@ -25,9 +25,14 @@ class ComputerEngine implements Runnable
 
 	private Board board;
 	private MoveList curr;
+	private int secT;
+	private long endT;
+	private boolean active;
 
 	public ComputerEngine(final Handler handler)
 	{
+		secT = 4;
+		active = false;
 		handle = handler;
 		tt = new TransTable(8);
 		pvMove = new ObjectArray<Move>();
@@ -152,7 +157,9 @@ class ComputerEngine implements Runnable
 
 	private int NegaScout(int alpha, final int beta, final int depth, int limit)
 	{
-		if (depth >= limit) {
+		if ((new Date()).getTime() > endT) {
+			return Quiescence(alpha, beta, depth);
+		} else if (depth >= limit) {
 			if (!tactical.get(depth))
 				return Quiescence(alpha, beta, depth);
 			else
@@ -242,17 +249,53 @@ class ComputerEngine implements Runnable
 		Arrays.sort(curr.list, 0, curr.size);
 	}
 
+	public void stop()
+	{
+		endT = 0;
+	}
+
+	public boolean isActive()
+	{
+		return active;
+	}
+
+	public void setTime(int time)
+	{
+		if (time > 30)
+			secT = 30;
+		else if (time < 1)
+			secT = 1;
+		else
+			secT = time;
+	}
+
+	public int getTime()
+	{
+		return secT;
+	}
+
 	public void run()
 	{
+		active = true;
 		curr = null;
-		for (int depth = 1; depth <= maxNg; depth++)
+		endT = (new Date()).getTime() + secT * 1000;
+
+		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
+			if ((new Date()).getTime() > endT)
+				break;
+		}
 
 		// Randomize opening
-		if (board.getPly() < 3)
+		if (board.getPly() < 7)
 			pickRandomMove();
 		curr = null;
 
-		handle.sendMessage(handle.obtainMessage(MSG, pvMove.get(0)));
+		final Bundle bundle = new Bundle();
+		bundle.putParcelable("move", pvMove.get(0));
+		bundle.putLong("time", endT);
+
+		handle.sendMessage(handle.obtainMessage(MSG, bundle));
+		active = false;
 	}
 }

@@ -37,7 +37,14 @@ class GameState
 		try {
 			switch (msg.what) {
 			case ComputerEngine.MSG:
-				final Move move = (Move) msg.obj;
+				final Bundle bundle = (Bundle) msg.obj;
+
+				if (bundle.getLong("time") == 0) {
+					cpu.setBoard(board);
+					(new Thread(cpu)).start();
+					return;
+				}
+				final Move move = bundle.getParcelable("move");
 
 				forwardMove();
 				applyMove(move, true, true);
@@ -179,10 +186,6 @@ class GameState
 	{
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			if (oppType == Enums.CPU_WHITE_OPPONENT) {
-				cpu.setBoard(board);
-				(new Thread(cpu)).start();
-			}
 			return;
 		case Enums.ONLINE_GAME:
 			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
@@ -310,17 +313,28 @@ class GameState
 		setStm();
 	}
 
-	private void runCPU()
+	private boolean runCPU()
 	{
 		// Start computer player
 		if (oppType == Enums.HUMAN_OPPONENT)
-			return;
-		if (hindex + 1 < history.size())
-			return;
-		if (board.getStm() == ycol)
-			return;
+			return false;
+		else if (hindex + 1 < history.size())
+			return false;
+		else if (board.getStm() == ycol)
+			return false;
+
+		// set cpu thinking text
+		final int cpuCol = (board.getStm() == Piece.WHITE)? R.id.white_name : R.id.black_name;
+		final TextView txt = (TextView) Game.self.findViewById(cpuCol);
+		txt.setText(txt.getText().toString() + " thinking");
+
+		if (cpu.isActive()) {
+			cpu.stop();
+			return true;
+		}
 		cpu.setBoard(board);
 		(new Thread(cpu)).start();
+		return true;
 	}
 
 	public final void setStm()
@@ -334,7 +348,8 @@ class GameState
 				check = " (check)";
 			else
 				check = "";
-			runCPU();
+			if (runCPU())
+				check = check + " thinking";
 			break;
 		case Board.CHECK_MATE:
 			check = " (checkmate)";

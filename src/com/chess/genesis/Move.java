@@ -1,6 +1,9 @@
 package com.chess.genesis;
 
-class Move
+import android.os.Parcel;
+import android.os.Parcelable;
+
+class Move implements Parcelable
 {
 	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 
@@ -13,6 +16,40 @@ class Move
 	{
 		index = xindex = from = to = -1;
 	}
+
+	public Move(final Parcel in)
+	{
+		index = in.readInt();
+		xindex = in.readInt();
+		from = in.readInt();
+		to = in.readInt();
+	}
+
+	public int describeContents()
+	{
+		return 0;
+	}
+
+	public void writeToParcel(final Parcel out, final int flags)
+	{
+		out.writeInt(index);
+		out.writeInt(xindex);
+		out.writeInt(from);
+		out.writeInt(to);
+	}
+
+	public static final Parcelable.Creator<Move> CREATOR = new Parcelable.Creator<Move>()
+	{
+		public Move createFromParcel(final Parcel in)
+		{
+			return new Move(in);
+		}
+
+		public Move[] newArray(final int size)
+		{
+			return new Move[size];
+		}
+	};
 
 	public void set(final Move move)
 	{
