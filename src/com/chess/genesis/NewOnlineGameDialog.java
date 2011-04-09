@@ -37,8 +37,8 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 
 		AdapterItem[] list = new AdapterItem[]
-			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
-			 new AdapterItem("Regular", Enums.REGULAR_CHESS) };
+			{new AdapterItem("Genesis", Enums.GENESIS_CHESS) };
+			// new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
