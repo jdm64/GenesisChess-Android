@@ -259,7 +259,7 @@ class ComputerEngine implements Runnable
 		return active;
 	}
 
-	public void setTime(int time)
+	public void setTime(final int time)
 	{
 		if (time > 30)
 			secT = 30;

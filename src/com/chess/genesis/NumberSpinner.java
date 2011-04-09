@@ -104,7 +104,7 @@ public class NumberSpinner extends LinearLayout
 		final java.util.Formatter mFmt = new java.util.Formatter(mBuilder, java.util.Locale.US);
 		final Object[] mArgs = new Object[1];
 
-		public String toString(int value)
+		public String toString(final int value)
 		{
 			mArgs[0] = value;
 			mBuilder.delete(0, mBuilder.length());
@@ -131,7 +131,7 @@ public class NumberSpinner extends LinearLayout
 	 * Create a new number picker
 	 * @param context the application environment
 	 */
-	public NumberSpinner(Context context)
+	public NumberSpinner(final Context context)
 	{
 		this(context, null);
 	}
@@ -141,18 +141,18 @@ public class NumberSpinner extends LinearLayout
 	 * @param context the application environment
 	 * @param attrs a collection of attributes
 	 */
-	public NumberSpinner(Context context, AttributeSet attrs)
+	public NumberSpinner(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 
 		setOrientation(VERTICAL);
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.number_spinner, this, true);
 		mHandler = new Handler();
 
-		OnClickListener clickListener = new OnClickListener()
+		final OnClickListener clickListener = new OnClickListener()
 		{
-			public void onClick(View v)
+			public void onClick(final View v)
 			{
 				validateInput(mText);
 				if (!mText.hasFocus())
@@ -167,9 +167,9 @@ public class NumberSpinner extends LinearLayout
 			}
 		};
 
-		OnFocusChangeListener focusListener = new OnFocusChangeListener()
+		final OnFocusChangeListener focusListener = new OnFocusChangeListener()
 		{
-			public void onFocusChange(View v, boolean hasFocus)
+			public void onFocusChange(final View v, final boolean hasFocus)
 			{
 
 				/* When focus is lost check that the text field
@@ -181,13 +181,13 @@ public class NumberSpinner extends LinearLayout
 			}
 		};
 
-		OnLongClickListener longClickListener = new OnLongClickListener()
+		final OnLongClickListener longClickListener = new OnLongClickListener()
 		{
 			/*
 			 * We start the long click here but rely on the {@link NumberSpinnerButton}
 			 * to inform us when the long click has ended.
 			 */
-			public boolean onLongClick(View v)
+			public boolean onLongClick(final View v)
 			{
 				/* The text view may still have focus so clear it's focus which will
 				 * trigger the on focus changed and any typed values to be pulled.
@@ -205,7 +205,7 @@ public class NumberSpinner extends LinearLayout
 			}
 		};
 
-		InputFilter inputFilter = new NumberSpinnerInputFilter();
+		final InputFilter inputFilter = new NumberSpinnerInputFilter();
 		mNumberInputFilter = new NumberRangeKeyListener();
 		mIncrementButton = (NumberSpinnerButton) findViewById(R.id.increment);
 		mIncrementButton.setOnClickListener(clickListener);
@@ -234,7 +234,7 @@ public class NumberSpinner extends LinearLayout
 	 * @param enabled True if this view is enabled, false otherwise.
 	 */
 	@Override
-	public void setEnabled(boolean enabled)
+	public void setEnabled(final boolean enabled)
 	{
 		super.setEnabled(enabled);
 
@@ -247,7 +247,7 @@ public class NumberSpinner extends LinearLayout
 	 * Set the callback that indicates the number has been adjusted by the user.
 	 * @param listener the callback, should not be null.
 	 */
-	public void setOnChangeListener(OnChangedListener listener)
+	public void setOnChangeListener(final OnChangedListener listener)
 	{
 		mListener = listener;
 	}
@@ -257,7 +257,7 @@ public class NumberSpinner extends LinearLayout
 	 * @param formatter the formatter object.  If formatter is null, String.valueOf()
 	 * will be used
 	 */
-	public void setFormatter(Formatter formatter)
+	public void setFormatter(final Formatter formatter)
 	{
 		mFormatter = formatter;
 	}
@@ -269,7 +269,7 @@ public class NumberSpinner extends LinearLayout
 	 * @param start the start of the range (inclusive)
 	 * @param end the end of the range (inclusive)
 	 */
-	public void setRange(int start, int end)
+	public void setRange(final int start, final int end)
 	{
 		setRange(start, end, null/*displayedValues*/);
 	}
@@ -283,7 +283,7 @@ public class NumberSpinner extends LinearLayout
 	* @param end the end of the range (inclusive)
 	* @param displayedValues the values displayed to the user.
 	*/
-	public void setRange(int start, int end, String[] displayedValues)
+	public void setRange(final int start, final int end, final String[] displayedValues)
 	{
 		mDisplayedValues = displayedValues;
 		mStart = start;
@@ -305,7 +305,7 @@ public class NumberSpinner extends LinearLayout
 	 * @throws IllegalArgumentException when current is not within the range
 	 *         of of the number picker
 	 */
-	public void setCurrent(int current)
+	public void setCurrent(final int current)
 	{
 		if (current < mStart || current > mEnd) {
 			throw new IllegalArgumentException("current should be >= start and <= end");
@@ -321,12 +321,12 @@ public class NumberSpinner extends LinearLayout
 	 * @param speed The speed (in milliseconds) at which the numbers will scroll
 	 * default 300ms
 	 */
-	public void setSpeed(long speed)
+	public void setSpeed(final long speed)
 	{
 		mSpeed = speed;
 	}
 
-	private String formatNumber(int value)
+	private String formatNumber(final int value)
 	{
 		return (mFormatter != null)? mFormatter.toString(value) : String.valueOf(value);
 	}
@@ -346,7 +346,7 @@ public class NumberSpinner extends LinearLayout
 		if (current > mEnd) {
 			current = mStart;
 		} else if (current < mStart) {
-		current = mEnd;
+			current = mEnd;
 		}
 		mPrevious = mCurrent;
 		mCurrent = current;
@@ -385,22 +385,20 @@ public class NumberSpinner extends LinearLayout
 		mText.setSelection(mText.getText().length());
 	}
 
-	private void validateCurrentView(CharSequence str)
+	private void validateCurrentView(final CharSequence str)
 	{
-		int val = getSelectedPos(str.toString());
-		if ((val >= mStart) && (val <= mEnd)) {
-			if (mCurrent != val) {
-				mPrevious = mCurrent;
-				mCurrent = val;
-				notifyChange();
-			}
+		final int val = getSelectedPos(str.toString());
+		if ((val >= mStart) && (val <= mEnd) && (mCurrent != val)) {
+			mPrevious = mCurrent;
+			mCurrent = val;
+			notifyChange();
 		}
 		updateView();
 	}
 
-	private void validateInput(View v)
+	private void validateInput(final View v)
 	{
-		String str = String.valueOf(((TextView) v).getText());
+		final String str = String.valueOf(((TextView) v).getText());
 		if ("".equals(str)) {
 			// Restore to the old value as we don't allow empty values
 			updateView();
@@ -436,17 +434,17 @@ public class NumberSpinner extends LinearLayout
 
 	private class NumberSpinnerInputFilter implements InputFilter
 	{
-		public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
+		public CharSequence filter(final CharSequence source, final int start, final int end, final Spanned dest, final int dstart, final int dend)
 		{
 			if (mDisplayedValues == null) {
 				return mNumberInputFilter.filter(source, start, end, dest, dstart, dend);
 			}
 
-			CharSequence filtered = String.valueOf(source.subSequence(start, end));
-			String result = String.valueOf(dest.subSequence(0, dstart))
+			final CharSequence filtered = String.valueOf(source.subSequence(start, end));
+			final String result = String.valueOf(dest.subSequence(0, dstart))
 				+ filtered
 				+ dest.subSequence(dend, dest.length());
-			String str = String.valueOf(result).toLowerCase();
+			final String str = String.valueOf(result).toLowerCase();
 			for (String val : mDisplayedValues) {
 				val = val.toLowerCase();
 				if (val.startsWith(str)) {
@@ -473,21 +471,21 @@ public class NumberSpinner extends LinearLayout
 		}
 
 		@Override
-		public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
+		public CharSequence filter(final CharSequence source, final int start, final int end, final Spanned dest, final int dstart, final int dend)
 		{
 			CharSequence filtered = super.filter(source, start, end, dest, dstart, dend);
 			if (filtered == null) {
 				filtered = source.subSequence(start, end);
 			}
 
-			String result = String.valueOf(dest.subSequence(0, dstart))
+			final String result = String.valueOf(dest.subSequence(0, dstart))
 				+ filtered
 				+ dest.subSequence(dend, dest.length());
 
 			if ("".equals(result)) {
 				return result;
 			}
-			int val = getSelectedPos(result);
+			final int val = getSelectedPos(result);
 
 			/* Ensure the user can't type in a value greater
 			 * than the max allowed. We have to allow less than min

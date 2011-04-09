@@ -11,7 +11,7 @@ class CPUInfo
 	{
 		int bogo = 500;
 		final String[] args = {"cat", "/proc/cpuinfo"};
-		final ProcessBuilder cmd = new ProcessBuilder(args);;
+		final ProcessBuilder cmd = new ProcessBuilder(args);
 
 	try {
 		final Process process = cmd.start();
@@ -22,7 +22,7 @@ class CPUInfo
 		while ((line = buff.readLine()) != null) {
 			if (!line.matches(".*(BogoMIPS|bogomips).*"))
 				continue;
-			String[] arr = line.trim().split("\\s");
+			final String[] arr = line.trim().split("\\s");
 			bogo = Math.round(Float.parseFloat(arr[arr.length - 1]) / 10);
 			break;
 		}

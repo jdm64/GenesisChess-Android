@@ -19,8 +19,6 @@
 package com.chess.genesis;
 
 import android.content.Context;
-import android.text.method.NumberKeyListener;
-import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -34,48 +32,48 @@ class NumberSpinnerButton extends ImageView
 {
 	private NumberSpinner mNumberSpinner;
 
-	public NumberSpinnerButton(Context context, AttributeSet attrs, int defStyle)
+	public NumberSpinnerButton(final Context context, final AttributeSet attrs, final int defStyle)
 	{
 		super(context, attrs, defStyle);
 		setAdjustViewBounds(true);
 		setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 
-	public NumberSpinnerButton(Context context, AttributeSet attrs)
+	public NumberSpinnerButton(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 		setAdjustViewBounds(true);
 		setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 
-	public NumberSpinnerButton(Context context)
+	public NumberSpinnerButton(final Context context)
 	{
 		super(context);
 		setAdjustViewBounds(true);
 		setScaleType(ImageView.ScaleType.CENTER_CROP);
 	}
 
-	public void setNumberSpinner(NumberSpinner picker)
+	public void setNumberSpinner(final NumberSpinner picker)
 	{
 		mNumberSpinner = picker;
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event)
+	public boolean onTouchEvent(final MotionEvent event)
 	{
 		cancelLongpressIfRequired(event);
 		return super.onTouchEvent(event);
 	}
 
 	@Override
-	public boolean onTrackballEvent(MotionEvent event)
+	public boolean onTrackballEvent(final MotionEvent event)
 	{
 		cancelLongpressIfRequired(event);
 		return super.onTrackballEvent(event);
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event)
+	public boolean onKeyUp(final int keyCode, final KeyEvent event)
 	{
 		if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER) || (keyCode == KeyEvent.KEYCODE_ENTER)) {
 			cancelLongpress();
@@ -83,7 +81,7 @@ class NumberSpinnerButton extends ImageView
 		return super.onKeyUp(keyCode, event);
 	}
 
-	private void cancelLongpressIfRequired(MotionEvent event) 
+	private void cancelLongpressIfRequired(final MotionEvent event) 
 	{
 		if ((event.getAction() == MotionEvent.ACTION_CANCEL) || (event.getAction() == MotionEvent.ACTION_UP)) {
 			cancelLongpress();
@@ -99,7 +97,7 @@ class NumberSpinnerButton extends ImageView
 		}
 	}
 
-	public void onWindowFocusChanged(boolean hasWindowFocus)
+	public void onWindowFocusChanged(final boolean hasWindowFocus)
 	{
 		super.onWindowFocusChanged(hasWindowFocus);
 		if (!hasWindowFocus) {
