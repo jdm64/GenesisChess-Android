@@ -8,7 +8,7 @@ class IntArray
 	// This only exists because Arrays.copyOf was added in API Level 9
 	private int[] copyOf(final int[] arr, final int size)
 	{
-		int[] temp = new int[size];
+		final int[] temp = new int[size];
 
 		for (int i = 0; i < Math.min(arr.length, size); i++)
 			temp[i] = arr[i];
@@ -17,7 +17,7 @@ class IntArray
 
 	public static int[] clone(final int[] arr)
 	{
-		int[] temp = new int[arr.length];
+		final int[] temp = new int[arr.length];
 
 		for (int i = 0; i < arr.length; i++)
 			temp[i] = arr[i];

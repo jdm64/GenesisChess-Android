@@ -12,17 +12,14 @@ final class Crypto
 
 	private static String Sha1Hash(final String str)
 	{
-		MessageDigest digst = null;
 	try {
-		digst = MessageDigest.getInstance("SHA-1");
-	} catch (java.security.NoSuchAlgorithmException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
+		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
+
 		digst.update(str.getBytes());
 
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();
+	
 		for (int i = 0; i < shabytes.length; i++) {
 			final String n = Integer.toHexString(shabytes[i] & 0xff);
 			if (n.length() < 2)
@@ -30,6 +27,10 @@ final class Crypto
 			buff.append(n);
 		}
 		return buff.toString();
+	} catch (java.security.NoSuchAlgorithmException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 
 	public static String HashPasswd(final String str)
@@ -39,18 +40,15 @@ final class Crypto
 
 	public static String LoginKey(final String str) throws SocketException, IOException
 	{
-		MessageDigest digst = null;
 	try {
-		digst = MessageDigest.getInstance("SHA-1");
-	} catch (java.security.NoSuchAlgorithmException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
+		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
+	
 		digst.update(HashPasswd(str).getBytes());
 		digst.update(SocketClient.getHash().getBytes());
 
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();
+	
 		for (int i = 0; i < shabytes.length; i++) {
 			final String n = Integer.toHexString(shabytes[i] & 0xff);
 			if (n.length() < 2)
@@ -58,5 +56,9 @@ final class Crypto
 			buff.append(n);
 		}
 		return buff.toString();
+	} catch (java.security.NoSuchAlgorithmException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 }

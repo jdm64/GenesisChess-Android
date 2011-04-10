@@ -9,16 +9,28 @@ class Position
 		Piece.WHITE_KING,	Piece.EMPTY,		Piece.BLACK_BISHOP,	Piece.WHITE_KNIGHT,
 		Piece.EMPTY,		Piece.WHITE_PAWN,	Piece.WHITE_QUEEN,	Piece.WHITE_ROOK};
 
-	public int[] square;
-	public int[] piece;
+	public final int[] square;
+	public final int[] piece;
+
 	public int ply;
+
+	public Position()
+	{
+		square = new int[64];
+		piece = new int[32];
+	}
+
+	public Position(final int[] _square, final int[] _piece, final int _ply)
+	{
+		square = IntArray.clone(_square);
+		piece = IntArray.clone(_piece);
+		ply = _ply;
+	}
 
 	private void reset()
 	{
-		square = new int[64];
 		for (int i = 0; i < 64; i++)
 			square[i] = Piece.EMPTY;
-		piece = new int[32];
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.DEAD;
 	}

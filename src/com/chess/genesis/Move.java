@@ -79,16 +79,16 @@ class Move implements Parcelable
 
 	private StringBuffer printLoc(final int loc)
 	{
-		StringBuffer str = new StringBuffer();
+		final StringBuffer str = new StringBuffer();
 
 		if (loc > Piece.PLACEABLE) {
 			str.append((char)((int)'a' + (loc % 8)));
 			str.append((char)((int)'8' - (loc / 8)));
 			return str;
 		} else if (loc == Piece.PLACEABLE) {
-			str = new StringBuffer("aval");
+			str.append("aval");
 		} else {
-			str = new StringBuffer("dead");
+			str.append("dead");
 		}
 		return str;
 	}
@@ -96,12 +96,12 @@ class Move implements Parcelable
 	@Override
 	public String toString()
 	{
-		StringBuffer out = new StringBuffer();
+		final StringBuffer out = new StringBuffer();
 
 		if (from == Piece.PLACEABLE)
 			out.append(pieceSymbol[Math.abs(Board.pieceType[index])]);
 		else
-			out = printLoc(from);
+			out.append(printLoc(from));
 		out.append(printLoc(to));
 		return out.toString();
 	}

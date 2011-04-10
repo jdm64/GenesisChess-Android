@@ -8,7 +8,7 @@ class ObjectArray<Type>
 	// This only exists because Arrays.copyOf was added in API Level 9
 	private Type[] copyOf(final Type[] arr, final int size)
 	{
-		Type[] temp = (Type[]) new Object[size];
+		final Type[] temp = (Type[]) new Object[size];
 
 		for (int i = 0; i < Math.min(arr.length, size); i++)
 			temp[i] = arr[i];

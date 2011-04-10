@@ -47,8 +47,8 @@ class EndGameDialog extends Dialog implements OnClickListener
 	private final String psr_type;
 	private final int diff;
 	
-	private String opponent;
-	private String psr_score;
+	private final String opponent;
+	private final String psr_score;
 
 	public EndGameDialog(final Context context, final JSONObject json)
 	{

@@ -45,15 +45,14 @@ class GameStatsDialog extends Dialog implements OnClickListener
 	private final String psr_type;
 	private final int diff;
 
-	private String opponent;
-	private String psr_score;
+	private final String opponent;
+	private final String psr_score;
 
 	public GameStatsDialog(final Context context, final Bundle bundle)
 	{
 		super(context);
 
-		int from, to;
-
+		final int from, to;
 		final int status = Integer.valueOf(bundle.getString("status"));
 		final int eventtype = Integer.valueOf(bundle.getString("eventtype"));
 		final int ycol = bundle.getInt("yourcolor");

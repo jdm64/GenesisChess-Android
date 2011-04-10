@@ -108,8 +108,8 @@ class Board
 	public static long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 
-	private int[] square;
-	private int[] piece;
+	private final int[] square;
+	private final int[] piece;
 
 	private int stm;
 	private int ply;
@@ -117,6 +117,9 @@ class Board
 	
 	public Board()
 	{
+		square = new int[64];
+		piece = new int[32];
+
 		reset();
 	}
 
@@ -153,11 +156,8 @@ class Board
 
 	public final void reset()
 	{
-		square = new int[64];
 		for (int i = 0; i < 64; i++)
 			square[i] = Piece.EMPTY;
-
-		piece = new int[32];
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.PLACEABLE;
 
@@ -188,18 +188,12 @@ class Board
 
 	public Position getPosition()
 	{
-		final Position pos = new Position();
-
-		pos.square = square;
-		pos.piece = piece;
-		pos.ply = ply;
-
-		return pos;
+		return new Position(square, piece, ply);
 	}
 
 	public int[] getPieceCounts()
 	{
-		int[] counts = new int[13];
+		final int[] counts = new int[13];
 
 		for (int i = 0; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
