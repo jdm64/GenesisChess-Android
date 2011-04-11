@@ -46,7 +46,7 @@ class RenameGameDialog extends Dialog implements OnClickListener
 		switch (v.getId()) {
 		case R.id.rename_ok:
 			final GameDataDB db = new GameDataDB(v.getContext());
-			db.renameLocalGame(gameid, txtinput.getText().toString());
+			db.renameLocalGame(gameid, txtinput.getText().toString().trim());
 			db.close();
 			GameList.self.gamelist_adapter.update();
 			break;

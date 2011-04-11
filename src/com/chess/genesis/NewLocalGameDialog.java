@@ -68,7 +68,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 			final Bundle data = new Bundle();
 			final EditText text = (EditText) findViewById(R.id.game_name);
 
-			data.putString("name", text.getText().toString());
+			data.putString("name", text.getText().toString().trim());
 			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);
 			data.putInt("opponent", ((AdapterItem) opponent_spin.getSelectedItem()).id);
 

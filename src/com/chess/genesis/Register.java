@@ -140,7 +140,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	private void register_validate()
 	{
 		EditText txt = (EditText) findViewById(R.id.username);
-		final String username = txt.getText().toString();
+		final String username = txt.getText().toString().trim();
 
 		txt = (EditText) findViewById(R.id.password);
 		final String password = txt.getText().toString();
@@ -149,7 +149,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		final String password2 = txt.getText().toString();
 
 		txt = (EditText) findViewById(R.id.email);
-		final String email = txt.getText().toString();
+		final String email = txt.getText().toString().trim();
 
 		if (!valid_username(username))
 			return;

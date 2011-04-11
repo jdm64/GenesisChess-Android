@@ -59,7 +59,7 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 			final EditText opp_name = (EditText) findViewById(R.id.opp_name);
 			final Spinner color = (Spinner) findViewById(R.id.invite_color);
 
-			settings.putString("opp_name", opp_name.getText().toString());
+			settings.putString("opp_name", opp_name.getText().toString().trim());
 			settings.putInt("color", ((AdapterItem) color.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, settings));
