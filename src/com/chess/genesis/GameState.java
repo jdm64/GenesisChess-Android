@@ -315,6 +315,10 @@ class GameState
 			final BoardButton button = (BoardButton) Game.self.findViewById(i);
 			button.setPiece(squares[i]);
 		}
+		// set last move highlight
+		final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
+		to.setLast(true);
+
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
@@ -565,11 +569,18 @@ class GameState
 
 	private void applyMove(final Move move, final boolean erase, final boolean localmove)
 	{
-		// legal move always ends with king not in check
-		if (hindex > 1) {
-			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
-			kingI.setCheck(false);
+		if (hindex > 0) {
+			// undo last move highlight
+			final int lastIndex = erase? history.get(hindex).to : history.get(hindex - 1).to;
+			final BoardButton to = (BoardButton) Game.self.findViewById(lastIndex);
+			to.setLast(false);
+
+			if (hindex > 1) {
+				// legal move always ends with king not in check
+				final int king = board.kingIndex(board.getStm());
+				final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+				kingI.setCheck(false);
+			}
 		}
 
 		if (move.from == Piece.PLACEABLE) {
@@ -579,11 +590,13 @@ class GameState
 			from.setHighlight(false);
 			from.minusPiece();
 			to.setPiece(from.getPiece());
+			to.setLast(true);
 		} else {
 			final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
 			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
+			to.setLast(true);
 			from.setPiece(0);
 			from.setHighlight(false);
 		}
@@ -622,6 +635,7 @@ class GameState
 			final PlaceButton from = (PlaceButton) Game.self.findViewById(Board.pieceType[move.index] + 100);
 			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
+			to.setLast(false);
 			to.setPiece(0);
 			from.plusPiece();
 		} else {
@@ -630,6 +644,7 @@ class GameState
 
 			from.setPiece(to.getPiece());
 
+			to.setLast(false);
 			if (move.xindex == Piece.NONE)
 				to.setPiece(0);
 			else
@@ -638,6 +653,11 @@ class GameState
 		hindex--;
 		board.unmake(move);
 
+		if (hindex >= 0) {
+			// redo last move highlight
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
+			to.setLast(true);
+		}
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());

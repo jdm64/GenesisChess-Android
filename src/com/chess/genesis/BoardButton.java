@@ -34,6 +34,21 @@ class BoardButton extends MyImageView
 		{R.drawable.white_queen_light_h,	R.drawable.white_queen_dark_h},
 		{R.drawable.white_king_light_h,		R.drawable.white_king_dark_h} };
 
+	private static final int[][] pieceImagesL = {
+		{R.drawable.black_king_light_l,		R.drawable.black_king_dark_l},
+		{R.drawable.black_queen_light_l,	R.drawable.black_queen_dark_l},
+		{R.drawable.black_rook_light_l,		R.drawable.black_rook_dark_l},
+		{R.drawable.black_bishop_light_l,	R.drawable.black_bishop_dark_l},
+		{R.drawable.black_knight_light_l,	R.drawable.black_knight_dark_l},
+		{R.drawable.black_pawn_light_l,		R.drawable.black_pawn_dark_l},
+		{R.drawable.light_square,		R.drawable.dark_square},
+		{R.drawable.white_pawn_light_l,		R.drawable.white_pawn_dark_l},
+		{R.drawable.white_knight_light_l,	R.drawable.white_knight_dark_l},
+		{R.drawable.white_bishop_light_l,	R.drawable.white_bishop_dark_l},
+		{R.drawable.white_rook_light_l,		R.drawable.white_rook_dark_l},
+		{R.drawable.white_queen_light_l,	R.drawable.white_queen_dark_l},
+		{R.drawable.white_king_light_l,		R.drawable.white_king_dark_l} };
+
 	private static final int[][] kingImages = {
 		{R.drawable.black_king_light_c,		R.drawable.black_king_dark_c},
 		{R.drawable.white_king_light_c,		R.drawable.white_king_dark_c} };
@@ -47,6 +62,7 @@ class BoardButton extends MyImageView
 	private int piece = 0;
 	private boolean isHighlighted = false;
 	private boolean isCheck = false;
+	private boolean isLast = false;
 
 	public BoardButton(final Context context, final int index)
 	{
@@ -65,9 +81,11 @@ class BoardButton extends MyImageView
 	{
 		final int image = isHighlighted?
 			pieceImagesH[piece + 6][squareColor] :
+			(isLast?
+				pieceImagesL[piece + 6][squareColor] :
 			(isCheck?
 				kingImages[(piece > 0)? 1:0][squareColor] :
-				pieceImages[piece + 6][squareColor]);
+				pieceImages[piece + 6][squareColor]));
 
 		setImageResource(image);
 	}
@@ -108,6 +126,13 @@ class BoardButton extends MyImageView
 	public void setCheck(final boolean mode)
 	{
 		isCheck = mode;
+
+		setSquareImage();
+	}
+
+	public void setLast(final boolean mode)
+	{
+		isLast = mode;
 
 		setSquareImage();
 	}
