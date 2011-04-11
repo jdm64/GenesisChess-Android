@@ -134,6 +134,19 @@ class GameDataDB
 		return list;
 	}
 
+	public long getNewestOnlineTime()
+	{
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT stime FROM onlinegames", null);
+
+		long time = 0;
+		cursor.moveToFirst();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			time = Math.max(time, cursor.getLong(0));
+			cursor.moveToNext();
+		}
+		return time;
+	}
+
 	public void insertMsg(final String gameid, final long time, final String username, final String msg)
 	{
 		final Object[] data = {gameid, time, username, msg};

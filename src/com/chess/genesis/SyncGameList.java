@@ -65,6 +65,10 @@ class SyncGameList implements Runnable
 					sync_archive(json);
 				lock--;
 				break;
+			case NetworkClient.SYNC_LIST:
+				sync_recent(json);
+				lock--;
+				break;
 			}
 		}
 	};
@@ -113,7 +117,12 @@ class SyncGameList implements Runnable
 				net.sync_gameids("archive");
 				net.run();
 			} else {
-				update_gamestatus();
+				final GameDataDB db = new GameDataDB(context);
+				final long time = db.getNewestOnlineTime();
+				db.close();
+
+				net.sync_list(time);
+				net.run();
 			}
 		}
 		trylock();
@@ -174,6 +183,25 @@ class SyncGameList implements Runnable
 		net.run();
 
 		lock++;
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
+	}
+
+	private void sync_recent(final JSONObject json)
+	{
+	try {
+		final JSONArray ids = json.getJSONArray("gameids");
+
+		for (int i = 0; i < ids.length(); i++) {
+			if (error)
+				return;
+			net.game_status(ids.getString(i));
+			net.run();
+
+			lock++;
+		}
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -242,23 +270,6 @@ class SyncGameList implements Runnable
 
 			lock++;
 		}
-	}
-
-	private void update_gamestatus()
-	{
-		final GameDataDB db = new GameDataDB(context);
-		final ObjectArray<String> list = db.getOnlineGameIds();
-		db.close();
-
-		for (int i = 0; i < list.size(); i++) {
-			if (error)
-				return;
-			net.game_status(list.get(i));
-			net.run();
-
-			lock++;
-		}
-		lock--;
 	}
 
 	private void game_info(final JSONObject json)

@@ -27,6 +27,7 @@ class NetworkClient implements Runnable
 	public final static int GAME_SCORE = 12;
 	public final static int GAME_DATA = 13;
 	public final static int RESIGN_GAME = 14;
+	public final static int SYNC_LIST = 15;
 
 	private final Context context;
 	private final Handler callback;
@@ -483,6 +484,22 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gameids");
 			json.put("type", type);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void sync_list(final long time)
+	{
+		fid = SYNC_LIST;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "synclist");
+			json.put("time", time);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
