@@ -116,6 +116,11 @@ class SyncGameList implements Runnable
 				sync_type = Enums.ARCHIVE_GAME;
 				net.sync_gameids("archive");
 				net.run();
+				trylock();
+
+				final GameDataDB db = new GameDataDB(context);
+				db.clearOnlineTime();
+				db.close();
 			} else {
 				final GameDataDB db = new GameDataDB(context);
 				final long time = db.getNewestOnlineTime();
@@ -123,9 +128,9 @@ class SyncGameList implements Runnable
 
 				net.sync_list(time);
 				net.run();
+				trylock();
 			}
 		}
-		trylock();
 
 		if (!error) {
 			final JSONObject json = new JSONObject();

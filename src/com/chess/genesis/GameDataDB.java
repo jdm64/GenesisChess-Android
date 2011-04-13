@@ -147,6 +147,15 @@ class GameDataDB
 		return time;
 	}
 
+	public void clearOnlineTime()
+	{
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final Object[] data = {0, username, username};
+
+		db.execSQL("UPDATE onlinegames SET stime=? WHERE white=? OR black=?;", data);
+	}
+
 	public void insertMsg(final String gameid, final long time, final String username, final String msg)
 	{
 		final Object[] data = {gameid, time, username, msg};
@@ -156,10 +165,11 @@ class GameDataDB
 	public void updateOnlineGame(final String gameid, final int status, final long stime, final String zfen, final String history)
 	{
 		final String[] data1 = {gameid};
-
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
-		final Bundle row = rowToBundle(cursor, 0);
+		if (cursor.getCount() < 1)
+			return;
 
+		final Bundle row = rowToBundle(cursor, 0);
 		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
@@ -206,7 +216,7 @@ class GameDataDB
 		final Object[] data = {gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,
 			ctime, stime, ply, white, black, zfen, history};
 
-		final String q1 = "INSERT INTO archivegames ";
+		final String q1 = "INSERT OR REPLACE INTO archivegames ";
 		final String q2 = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ";
 		final String q3 = "ctime, stime, ply, white, black, zfen, history) ";
 		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
