@@ -48,7 +48,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					SocketClient.isLoggedin = true;
 
 					EditText txt = (EditText) findViewById(R.id.username);
-					final String username = txt.getText().toString();
+					final String username = txt.getText().toString().trim();
 
 					txt = (EditText) findViewById(R.id.password);
 					final String password = txt.getText().toString();
