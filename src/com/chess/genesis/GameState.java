@@ -55,7 +55,7 @@ class GameState
 				}
 				final Move move = bundle.getParcelable("move");
 
-				forwardMove();
+				currentMove();
 				applyMove(move, true, true);
 				break;
 			case NetworkClient.SUBMIT_MOVE:
@@ -493,14 +493,14 @@ class GameState
 	{
 		if (hindex + 1 >= history.size())
 			return;
-		final Move move = history.get(++hindex);
+		final Move move = history.get(hindex + 1);
 		applyMove(move, false, true);
 	}
 
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
-			final Move move = history.get(++hindex);
+			final Move move = history.get(hindex + 1);
 			applyMove(move, false, true);
 		}
 	}
@@ -569,10 +569,9 @@ class GameState
 
 	private void applyMove(final Move move, final boolean erase, final boolean localmove)
 	{
-		if (hindex > 0) {
+		if (hindex >= 0) {
 			// undo last move highlight
-			final int lastIndex = erase? history.get(hindex).to : history.get(hindex - 1).to;
-			final BoardButton to = (BoardButton) Game.self.findViewById(lastIndex);
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
 			to.setLast(false);
 
 			if (hindex > 1) {
@@ -604,8 +603,8 @@ class GameState
 		// apply move to board
 		board.make(move);
 		// update hindex, history
+		hindex++;
 		if (erase) {
-			hindex++;
 			if (hindex < history.size())
 				history.resize(hindex);
 			history.push(move);
