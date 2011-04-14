@@ -41,7 +41,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/login"
 	style="@style/FillWidth"
 	android:layout_below="@id/likefacebook"
-	android:text="Login"/>
+	android:text="Login / Register"/>
 	<TextView
 	android:layout_above="@id/botbar"
 	android:layout_alignParentRight="true"
