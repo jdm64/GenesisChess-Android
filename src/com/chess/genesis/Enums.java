@@ -38,6 +38,19 @@ final class Enums
 	{
 	}
 
+	public static String OpponentType(final int opponent)
+	{
+		switch (opponent) {
+		case HUMAN_OPPONENT:
+		default:
+			return "human";
+		case CPU_WHITE_OPPONENT:
+			return "cpu-white";
+		case CPU_BLACK_OPPONENT:
+			return "cpu-black";
+		}
+	}
+
 	public static String ColorType(final int color)
 	{
 		switch (color) {
@@ -59,6 +72,17 @@ final class Enums
 			return INVITE;
 		else
 			throw new RuntimeException("unknown eventtype: " + eventtype);
+	}
+
+	public static String EventType(final int eventtype)
+	{
+		switch (eventtype) {
+		case RANDOM:
+			return "random";
+		case INVITE:
+			return "invite";
+		}
+		throw new RuntimeException("unknown eventtype: " + String.valueOf(eventtype));
 	}
 
 	public static int GameType(final String gametype)

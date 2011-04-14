@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -108,38 +109,75 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 
 	private void setupLocal(final View cell, final Bundle data)
 	{
+		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
+		img.setImageResource(R.drawable.white_pawn_dark);
+
 		TextView txt = (TextView) cell.findViewById(R.id.game_name);
 		txt.setText(data.getString("name"));
 
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String type = Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype")));
+		txt = (TextView) cell.findViewById(R.id.game_type);
+		txt.setText(type);
 
-		txt = (TextView) cell.findViewById(R.id.game_date);
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 	}
 
 	private void setupOnline(final View cell, final Bundle data)
 	{
-		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		final int icon = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
+			R.drawable.white_pawn_dark : R.drawable.black_pawn_light;
+		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
+		img.setImageResource(icon);
 
-		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
+		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		TextView txt = (TextView) cell.findViewById(R.id.game_with);
 		txt.setText(opponent);
 
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String type = Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype")));
+		txt = (TextView) cell.findViewById(R.id.game_type);
+		txt.setText(type);
 
-		txt = (TextView) cell.findViewById(R.id.game_date);
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 	}
 
 	private void setupArchive(final View cell, final Bundle data)
 	{
-		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		final int icon;
+		switch (Integer.valueOf(data.getString("status"))) {
+		case Enums.WHITEMATE:
+		case Enums.BLACKRESIGN:
+			icon = R.drawable.white_pawn_dark;
+			break;
+		case Enums.BLACKMATE:
+		case Enums.WHITERESIGN:
+			icon = R.drawable.black_pawn_light;
+			break;
+		case Enums.STALEMATE:
+		case Enums.IMPOSSIBLE:
+		default:
+			icon = R.drawable.dark_square;
+			break;
+		}
+		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
+		img.setImageResource(icon);
 
-		TextView txt = (TextView) cell.findViewById(R.id.game_opp);
+		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
+		TextView txt = (TextView) cell.findViewById(R.id.game_with);
 		txt.setText(opponent);
 
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String type = Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype")));
+		txt = (TextView) cell.findViewById(R.id.game_type);
+		txt.setText(type);
 
-		txt = (TextView) cell.findViewById(R.id.game_date);
+		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 	}
 }
