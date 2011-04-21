@@ -38,9 +38,6 @@ class TransTable {
 		final int index = (int) Math.abs(hash % size);
 		final TransItem item = table[index];
 
-		if (depth < item.depth)
-			return;
-
 		item.hash = hash;
 		item.score = score;
 		item.depth = depth;
