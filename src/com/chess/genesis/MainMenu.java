@@ -12,12 +12,15 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainMenu extends Activity implements OnClickListener
+public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
 	private static MainMenu self;
 
@@ -37,7 +40,7 @@ public class MainMenu extends Activity implements OnClickListener
 				final TextView text = (TextView) findViewById(R.id.welcome);
 				text.setText("");
 
-				final Button button = (Button) findViewById(R.id.login);
+				final ImageView button = (ImageView) findViewById(R.id.login);
 				button.setVisibility(View.VISIBLE);
 				break;
 			}
@@ -57,23 +60,29 @@ public class MainMenu extends Activity implements OnClickListener
 		setContentView(R.layout.mainmenu);
 
 		// setup click listeners
-		Button button = (Button) findViewById(R.id.local_game);
+		ImageView button = (ImageView) findViewById(R.id.local_game);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 
-		button = (Button) findViewById(R.id.online_game);
+		button = (ImageView) findViewById(R.id.online_game);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 
-		button = (Button) findViewById(R.id.archive_game);
+		button = (ImageView) findViewById(R.id.archive_game);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 
-		button = (Button) findViewById(R.id.howtoplay);
+		button = (ImageView) findViewById(R.id.howtoplay);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 
-		button = (Button) findViewById(R.id.likefacebook);
+		button = (ImageView) findViewById(R.id.likefacebook);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 
-		button = (Button) findViewById(R.id.login);
+		button = (ImageView) findViewById(R.id.login);
 		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 	}
 
 	@Override
@@ -92,7 +101,7 @@ public class MainMenu extends Activity implements OnClickListener
 		final TextView text = (TextView) findViewById(R.id.welcome);
 		text.setText(welcome);
 
-		final Button button = (Button) findViewById(R.id.login);
+		final MyImageView button = (MyImageView) findViewById(R.id.login);
 		button.setVisibility(visible);
 	}
 
@@ -134,6 +143,49 @@ public class MainMenu extends Activity implements OnClickListener
 
 			startActivity(intent);
 		}
+	}
+
+	public boolean onTouch(final View v, final MotionEvent event)
+	{
+		switch (v.getId()) {
+		case R.id.local_game:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.localplay_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.localplay);
+			break;
+		case R.id.online_game:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.onlinematches_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.onlinematches);
+			break;
+		case R.id.archive_game:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.recordedgames_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.recordedgames);
+			break;
+		case R.id.howtoplay:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.howtoplay_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.howtoplay);
+			break;
+		case R.id.login:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.mainlogin_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.mainlogin);
+			break;
+		case R.id.likefacebook:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.facebook_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.facebook);
+			break;
+		}
+		return false;
 	}
 
 	public void onClick(final View v)
