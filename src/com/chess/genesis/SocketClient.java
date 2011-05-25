@@ -76,9 +76,15 @@ class SocketClient
 	{
 		connect();
 
-		final byte[] buff = new byte[2856]; // 1428 * 2
+		int offset = 0, read;
+		final byte[] buff = new byte[4 * 1428];
 
-		input.read(buff);
+		// TODO: InputStream reads in 1024 chunks
+		// if server responce is exactly (X * 1024) then program will hang
+		do {
+			read = input.read(buff, offset, buff.length - offset);
+			offset += read;
+		} while (read == 1024);
 
 		return (JSONObject) (new JSONTokener(new String(buff))).nextValue();
 	}
