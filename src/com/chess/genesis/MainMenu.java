@@ -82,6 +82,10 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		button = (ImageView) findViewById(R.id.login);
 		button.setOnClickListener(this);
 		button.setOnTouchListener(this);
+
+		button = (ImageView) findViewById(R.id.settings);
+		button.setOnClickListener(this);
+		button.setOnTouchListener(this);
 	}
 
 	@Override
@@ -177,6 +181,12 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.mainlogin);
 			break;
+		case R.id.settings:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.settings_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.settings);
+			break;
 		case R.id.likefacebook:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				((ImageView) v).setImageResource(R.drawable.facebook_pressed);
@@ -233,6 +243,9 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		case R.id.likefacebook:
 			uri = Uri.parse("http://goo.gl/tQVOh");
 			startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			break;
+		case R.id.settings:
+			startActivity(new Intent(this, Settings.class));
 			break;
 		case R.id.login:
 			startActivity(new Intent(this, Login.class));

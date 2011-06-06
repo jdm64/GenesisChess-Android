@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -108,6 +109,12 @@ class GameState
 
 				final GameDataDB db = new GameDataDB(context);
 				db.updateOnlineGame(gameid, status, stime, zfen, history);
+
+				// clear notification if it's not your turn in any game
+				if (db.getOnlineGameList(1).getCount() == 0) {
+					final NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+					nm.cancelAll();
+				}
 				db.close();
 
 				applyRemoteMove(history);

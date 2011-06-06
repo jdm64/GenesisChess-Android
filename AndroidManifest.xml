@@ -17,11 +17,14 @@ android:versionName="@string/version">
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name="GameList"/>
+		<activity android:name="GameList" android:launchMode="singleTask"/>
 		<activity android:name="Game"/>
 		<activity android:name="Login"/>
 		<activity android:name="Register"/>
+		<activity android:name="Settings"/>
 		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
+		<service android:name="GenesisNotifier" android:enabled="true"/>
+		<receiver android:name="GenesisAlarm"></receiver>
 	</application>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

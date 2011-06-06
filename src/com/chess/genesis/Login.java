@@ -65,8 +65,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					(new Thread(sync)).start();
 					break;
 				case SyncGameList.MSG:
-					progress.dismiss();
+					// start background notifier
+					startService(new Intent(self, GenesisNotifier.class));
 
+					progress.dismiss();
 					setResult(RESULT_OK);
 					finish();
 					break;

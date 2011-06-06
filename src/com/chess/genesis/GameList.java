@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -106,8 +107,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 					}
 					progress.remove();
 
-					if (msg.what == SyncGameList.MSG)
+					if (msg.what == SyncGameList.MSG) {
 						gamelist_adapter.update();
+						if (yourmove && gamelist_adapter.getCount() == 0) {
+							final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+							nm.cancelAll();
+						}
+					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -195,6 +201,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		super.onResume();
 
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
+			// start background notifier
+			startService(new Intent(this, GenesisNotifier.class));
+
 			NetActive.inc();
 			progress.setText("Updating game list");
 
