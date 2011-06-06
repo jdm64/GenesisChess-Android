@@ -88,7 +88,7 @@ class GameState
 				progress.setText("Resignation sent");
 
 				net.game_status(settings.getString("gameid"));
-				(new Thread(net)).run();
+				(new Thread(net)).start();
 				break;
 			case NetworkClient.GAME_STATUS:
 				json = (JSONObject) msg.obj;
@@ -218,7 +218,7 @@ class GameState
 			} else {
 				progress.setText("Retrieving score");
 				net.game_score(settings.getString("gameid"));
-				(new Thread(net)).run();
+				(new Thread(net)).start();
 			}
 			break;
 		case Enums.ARCHIVE_GAME:
@@ -449,7 +449,7 @@ class GameState
 	{
 		progress.setText("Updating game state");
 		net.game_status(settings.getString("gameid"));
-		(new Thread(net)).run();
+		(new Thread(net)).start();
 	}
 
 	public void applyRemoteMove(final String hist)
@@ -530,7 +530,7 @@ class GameState
 		final String move = history.top().toString();
 
 		net.submit_move(gameid, move);
-		(new Thread(net)).run();
+		(new Thread(net)).start();
 	}
 
 	private void handleMove()
