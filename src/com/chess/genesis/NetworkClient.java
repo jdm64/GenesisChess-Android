@@ -45,7 +45,7 @@ class NetworkClient implements Runnable
 
 	private boolean relogin(final SocketClient net)
 	{
-		if (SocketClient.isLoggedin)
+		if (net.isLoggedin)
 			return true;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -160,7 +160,7 @@ class NetworkClient implements Runnable
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				return false;
 			}
-			SocketClient.isLoggedin = true;
+			net.isLoggedin = true;
 			return true;
 		} catch (JSONException e) {
 			e.printStackTrace();
