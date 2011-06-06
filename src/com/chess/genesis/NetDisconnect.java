@@ -5,7 +5,7 @@ class NetDisconnect implements Runnable
 	public void run()
 	{
 	try {
-		Thread.sleep(2040);
+		Thread.sleep(2048);
 		if (NetActive.get() < 1)
 			SocketClient.hard_disconnect();
 	} catch (InterruptedException e) {

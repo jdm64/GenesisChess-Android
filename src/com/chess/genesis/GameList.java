@@ -313,8 +313,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
-			finish();
-			return true;
 		case R.id.topbar_genesis:
 			finish();
 			return true;

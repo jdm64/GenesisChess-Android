@@ -7,6 +7,10 @@ import java.io.IOException;
 
 class CPUInfo
 {
+	private CPUInfo()
+	{
+	}
+
 	public static int getBogoMips()
 	{
 		int bogo = 500;

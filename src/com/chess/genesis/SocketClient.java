@@ -40,7 +40,7 @@ class SocketClient
 		input = sock.getInputStream();
 		output = sock.getOutputStream();
 
-		final byte[] buff = new byte[1440];
+		final byte[] buff = new byte[1428];
 		input.read(buff);
 		loginHash = (new String(buff)).trim();
 	}
