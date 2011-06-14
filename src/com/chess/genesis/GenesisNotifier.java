@@ -92,7 +92,7 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", 240));
+		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", 60));
 
 		final Intent intent = new Intent(this, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

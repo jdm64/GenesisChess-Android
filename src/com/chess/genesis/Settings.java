@@ -62,7 +62,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 			{new AdapterItem("5 Minutes", 5), new AdapterItem("6 Minutes", 6),
 			new AdapterItem("10 Minutes", 10), new AdapterItem("12 Minutes", 12),
 			new AdapterItem("15 Minutes", 15), new AdapterItem("20 Minutes", 20),
-			new AdapterItem("30 Minutes", 30), new AdapterItem("1 Hours", 180),
+			new AdapterItem("30 Minutes", 30), new AdapterItem("1 Hours", 60),
 			new AdapterItem("2 Hours", 120), new AdapterItem("3 Hours", 180),
 			new AdapterItem("4 Hours", 240), new AdapterItem("6 Hours", 360),
 			new AdapterItem("8 Hours", 480), new AdapterItem("12 Hours", 720) };
@@ -73,7 +73,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		final Spinner spinner = (Spinner) findViewById(R.id.poll_freq);
 		spinner.setOnItemSelectedListener(this);
 		spinner.setAdapter(adapter);
-		spinner.setSelection(FreqMap.get(pref.getInt("notifierPolling", 240)));
+		spinner.setSelection(FreqMap.get(pref.getInt("notifierPolling", 60)));
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		final Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		if (pref.getInt("notifierPolling", 240) == item.id)
+		if (pref.getInt("notifierPolling", 60) == item.id)
 			return;
 		editor.putInt("notifierPolling", item.id);
 		editor.commit();
