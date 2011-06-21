@@ -59,33 +59,15 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		setContentView(R.layout.mainmenu);
 
 		// setup click listeners
-		ImageView button = (ImageView) findViewById(R.id.local_game);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
+		int list[] = new int[]{R.id.local_game, R.id.online_game,
+			R.id.archive_game, R.id.howtoplay, R.id.likefacebook,
+			R.id.login, R.id.settings};
 
-		button = (ImageView) findViewById(R.id.online_game);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
-
-		button = (ImageView) findViewById(R.id.archive_game);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
-
-		button = (ImageView) findViewById(R.id.howtoplay);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
-
-		button = (ImageView) findViewById(R.id.likefacebook);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
-
-		button = (ImageView) findViewById(R.id.login);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
-
-		button = (ImageView) findViewById(R.id.settings);
-		button.setOnClickListener(this);
-		button.setOnTouchListener(this);
+		for (int i = 0; i < list.length; i++) {
+			final ImageView button = (ImageView) findViewById(list[i]);
+			button.setOnClickListener(this);
+			button.setOnTouchListener(this);
+		}
 	}
 
 	@Override

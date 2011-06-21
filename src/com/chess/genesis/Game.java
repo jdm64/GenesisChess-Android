@@ -38,21 +38,13 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
 
-		button = (ImageView) findViewById(R.id.place_piece);
-		button.setOnTouchListener(this);
-		button.setOnClickListener(this);
-
-		button = (ImageView) findViewById(R.id.backwards);
-		button.setOnTouchListener(this);
-		button.setOnClickListener(this);
-
-		button = (ImageView) findViewById(R.id.forwards);
-		button.setOnTouchListener(this);
-		button.setOnClickListener(this);
-
-		button = (ImageView) findViewById(R.id.current);
-		button.setOnTouchListener(this);
-		button.setOnClickListener(this);
+		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
+			R.id.forwards, R.id.current};
+		for (int i = 0; i < list.length; i++) {
+			button = (ImageView) findViewById(list[i]);
+			button.setOnTouchListener(this);
+			button.setOnClickListener(this);
+		}
 
 		// initialize variables
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);

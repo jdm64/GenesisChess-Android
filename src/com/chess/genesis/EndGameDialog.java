@@ -110,17 +110,17 @@ class EndGameDialog extends Dialog implements OnClickListener
 		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);
 
-		TextView msg = (TextView) findViewById(R.id.opponent);
-		msg.setText(opponent);
+		// Set TextViews
+		final int list[] = new int[]{R.id.opponent, R.id.result,
+			R.id.psr_type, R.id.psr_score};
+		final String data[] = new String[]{opponent, result,
+			psr_type, psr_score};
 
-		msg = (TextView) findViewById(R.id.result);
-		msg.setText(result);
-
-		msg = (TextView) findViewById(R.id.psr_type);
-		msg.setText(psr_type);
-
-		msg = (TextView) findViewById(R.id.psr_score);
-		msg.setText(psr_score);
+		TextView msg = null;
+		for (int i = 0; i < list.length; i++) {
+			msg = (TextView) findViewById(list[i]);
+			msg.setText(data[i]);
+		}
 
 		if (diff > 0)
 			msg.setTextColor(0xFF00FF00);
