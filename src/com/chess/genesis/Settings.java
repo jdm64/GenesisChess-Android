@@ -32,7 +32,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		map.put(5, 0);		map.put(6, 1);
 		map.put(10, 2);		map.put(12, 3);
 		map.put(15, 4);		map.put(20, 5);
-		map.put(30, 6);		map.put(180, 7);
+		map.put(30, 6);		map.put(60, 7);
 		map.put(120, 8);	map.put(180, 9);
 		map.put(240, 10);	map.put(360, 11);
 		map.put(480, 12);	map.put(720, 13);

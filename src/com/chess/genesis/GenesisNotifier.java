@@ -73,12 +73,18 @@ public class GenesisNotifier extends Service implements Runnable
 	}
 
 	@Override
-	public void onStart(final Intent intent, int startid)
+	public void onStart(final Intent intent, final int startid)
 	{
 		super.onStart(intent, startid);
-		final Bundle bundle = intent.getExtras();
+		Bundle bundle = null;
 
-		fromalarm = (bundle == null)? false : bundle.getBoolean("fromAlarm", false);
+		if (intent == null)
+			fromalarm = false;
+		else if ((bundle = intent.getExtras()) == null)
+			fromalarm = false;
+		else
+			fromalarm = bundle.getBoolean("fromAlarm", false);
+
 		(new Thread(this)).start();
 	}
 
