@@ -10,8 +10,15 @@ class ObjectArray<Type>
 	{
 		final Type[] temp = (Type[]) new Object[size];
 
-		for (int i = 0; i < Math.min(arr.length, size); i++)
-			temp[i] = arr[i];
+		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
+		return temp;
+	}
+
+	public Type[] copyOf(final Type[] arr)
+	{
+		final Type[] temp = (Type[]) new Object[arr.length];
+
+		System.arraycopy(arr, 0, temp, 0, arr.length);
 		return temp;
 	}
 
