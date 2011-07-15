@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class Position
+class GenPosition
 {
 	private static final int[] TYPE = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
@@ -14,13 +14,13 @@ class Position
 
 	public int ply;
 
-	public Position()
+	public GenPosition()
 	{
 		square = new int[64];
 		piece = new int[32];
 	}
 
-	public Position(final int[] _square, final int[] _piece, final int _ply)
+	public GenPosition(final int[] _square, final int[] _piece, final int _ply)
 	{
 		square = IntArray.clone(_square);
 		piece = IntArray.clone(_piece);
@@ -54,7 +54,7 @@ class Position
 
 	private boolean incheck(final int color)
 	{
-		final MoveLookup ml = new MoveLookup(square);
+		final GenMoveLookup ml = new GenMoveLookup(square);
 		final int king = (color == Piece.WHITE)? 31:15;
 
 		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
@@ -137,7 +137,6 @@ class Position
 
 	public String printZfen()
 	{
-		// StringBuffer buf = new StringBuffer();
 		final StringBuffer fen = new StringBuffer();
 
 		for (int i = 0, empty = 0; i < 64; i++) {
@@ -148,20 +147,20 @@ class Position
 			if (empty != 0)
 				fen.append(empty);
 			if (square[i] > Piece.EMPTY)
-				fen.append(Move.pieceSymbol[square[i]]);
+				fen.append(GenMove.pieceSymbol[square[i]]);
 			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[i]]).toLowerCase());
+				fen.append(String.valueOf(GenMove.pieceSymbol[-square[i]]).toLowerCase());
 			empty = 0;
 		}
 		fen.append(':');
 
 		for (int i = 0; i < 16; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(String.valueOf(Move.pieceSymbol[-Board.pieceType[i]]).toLowerCase());
+				fen.append(String.valueOf(GenMove.pieceSymbol[-GenBoard.pieceType[i]]).toLowerCase());
 		}
 		for (int i = 16; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(Move.pieceSymbol[Board.pieceType[i]]);
+				fen.append(GenMove.pieceSymbol[GenBoard.pieceType[i]]);
 		}
 		fen.append(':');
 		fen.append(ply);
@@ -169,7 +168,7 @@ class Position
 		return fen.toString();
 	}
 
-	public boolean equal(final Position pos)
+	public boolean equal(final GenPosition pos)
 	{
 		final String a = pos.printZfen(), b = printZfen();
 		

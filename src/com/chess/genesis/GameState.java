@@ -24,10 +24,10 @@ class GameState
 	private final Bundle settings;
 	private final NetworkClient net;
 	private final ProgressMsg progress;
-	private final ObjectArray<Move> history;
-	private final Board board;
+	private final ObjectArray<GenMove> history;
+	private final GenBoard board;
 	private final IntArray callstack;
-	private final ComputerEngine cpu;
+	private final GenEngine cpu;
 	private final int ycol;
 	private final int type;
 	private final int oppType;
@@ -46,7 +46,7 @@ class GameState
 				pref.commit();
 				cpu.setTime((Integer) msg.obj);
 				break;
-			case ComputerEngine.MSG:
+			case GenEngine.MSG:
 				final Bundle bundle = (Bundle) msg.obj;
 
 				if (bundle.getLong("time") == 0) {
@@ -54,7 +54,7 @@ class GameState
 					(new Thread(cpu)).start();
 					return;
 				}
-				final Move move = bundle.getParcelable("move");
+				final GenMove move = bundle.getParcelable("move");
 
 				currentMove();
 				applyMove(move, true, true);
@@ -242,8 +242,8 @@ class GameState
 		settings = _settings;
 
 		callstack = new IntArray();
-		history = new ObjectArray<Move>();
-		board = new Board();
+		history = new ObjectArray<GenMove>();
+		board = new GenBoard();
 		progress = new ProgressMsg(context);
 
 		type = settings.getInt("type", Enums.ONLINE_GAME);
@@ -251,7 +251,7 @@ class GameState
 		case Enums.LOCAL_GAME:
 		default:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-			cpu = new ComputerEngine(handle);
+			cpu = new GenEngine(handle);
 			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
 			oppType = Integer.valueOf(settings.getString("opponent"));
 			net = null;
@@ -275,10 +275,10 @@ class GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (int i = 0; i < movehistory.length; i++) {
-			final Move move = new Move();
+			final GenMove move = new GenMove();
 			move.parse(movehistory[i]);
 
-			if (board.validMove(move) != Board.VALID_MOVE)
+			if (board.validMove(move) != GenBoard.VALID_MOVE)
 				break;
 			board.make(move);
 			history.push(move);
@@ -364,7 +364,7 @@ class GameState
 		String check, wstr, bstr;
 
 		switch (board.isMate()) {
-		case Board.NOT_MATE:
+		case GenBoard.NOT_MATE:
 		default:
 			if (board.incheck(board.getStm()))
 				check = " (check)";
@@ -373,10 +373,10 @@ class GameState
 			if (runCPU())
 				check = check + " thinking";
 			break;
-		case Board.CHECK_MATE:
+		case GenBoard.CHECK_MATE:
 			check = " (checkmate)";
 			break;
-		case Board.STALE_MATE:
+		case GenBoard.STALE_MATE:
 			check = " (stalemate)";
 			break;
 		}
@@ -472,9 +472,9 @@ class GameState
 		currentMove();
 		Toast.makeText(context, "New move loaded...", Toast.LENGTH_LONG).show();
 
-		final Move move = new Move();
+		final GenMove move = new GenMove();
 		move.parse(movehistory[movehistory.length - 1]);
-		if (board.validMove(move) != Board.VALID_MOVE)
+		if (board.validMove(move) != GenBoard.VALID_MOVE)
 			return;
 		applyMove(move, true, false);
 	}
@@ -492,7 +492,7 @@ class GameState
 	{
 		if (hindex < 0)
 			return;
-		final Move move = history.get(hindex);
+		final GenMove move = history.get(hindex);
 		revertMove(move);
 	}
 
@@ -500,14 +500,14 @@ class GameState
 	{
 		if (hindex + 1 >= history.size())
 			return;
-		final Move move = history.get(hindex + 1);
+		final GenMove move = history.get(hindex + 1);
 		applyMove(move, false, true);
 	}
 
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
-			final Move move = history.get(hindex + 1);
+			final GenMove move = history.get(hindex + 1);
 			applyMove(move, false, true);
 		}
 	}
@@ -515,7 +515,7 @@ class GameState
 	public void firstMove()
 	{
 		while (hindex > 0) {
-			final Move move = history.get(hindex);
+			final GenMove move = history.get(hindex);
 			revertMove(move);
 		}
 	}
@@ -524,7 +524,7 @@ class GameState
 	{
 		if (hindex < 0)
 			return;
-		final Move move = history.get(hindex);
+		final GenMove move = history.get(hindex);
 		revertMove(move);
 		history.pop();
 	}
@@ -554,7 +554,7 @@ class GameState
 			return;
 		}
 
-		final Move move = new Move();
+		final GenMove move = new GenMove();
 
 		// create move
 		if (callstack.get(0) > 64) {
@@ -566,7 +566,7 @@ class GameState
 		move.to = callstack.get(1);
 
 		// return if move isn't valid
-		if (board.validMove(move) != Board.VALID_MOVE) {
+		if (board.validMove(move) != GenBoard.VALID_MOVE) {
 			callstack.pop();
 			return;
 		}
@@ -574,7 +574,7 @@ class GameState
 		applyMove(move, true, true);
 	}
 
-	private void applyMove(final Move move, final boolean erase, final boolean localmove)
+	private void applyMove(final GenMove move, final boolean erase, final boolean localmove)
 	{
 		if (hindex >= 0) {
 			// undo last move highlight
@@ -590,7 +590,7 @@ class GameState
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) Game.self.findViewById(Board.pieceType[move.index] + 100);
+			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
 			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			from.setHighlight(false);
@@ -628,7 +628,7 @@ class GameState
 		setStm();
 	}
 
-	private void revertMove(final Move move)
+	private void revertMove(final GenMove move)
 	{
 		// legal move always ends with king not in check
 		if (hindex > 1) {
@@ -638,7 +638,7 @@ class GameState
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) Game.self.findViewById(Board.pieceType[move.index] + 100);
+			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
 			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setLast(false);
@@ -654,7 +654,7 @@ class GameState
 			if (move.xindex == Piece.NONE)
 				to.setPiece(0);
 			else
-				to.setPiece(Board.pieceType[move.xindex]);
+				to.setPiece(GenBoard.pieceType[move.xindex]);
 		}
 		hindex--;
 		board.unmake(move);

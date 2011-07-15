@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class TransItem
+class GenTransItem
 {
 	public static final int NONE_NODE = 0;
 	public static final int ALL_NODE = 3;
@@ -10,23 +10,23 @@ class TransItem
 	public static final int HAS_SCORE = 2;
 	public static final int HAS_MOVE = 4;
 
-	public final Move move;
+	public final GenMove move;
 
 	public long hash;
 	public int score;
 	public int depth;
 	public int type;
 
-	public TransItem()
+	public GenTransItem()
 	{
 		hash = 0;
 		score = 0;
 		depth = 0;
 		type = NONE_NODE;
-		move = new Move();
+		move = new GenMove();
 	}
 
-	public void set(final TransItem item)
+	public void set(final GenTransItem item)
 	{
 		hash = item.hash;
 		score = item.score;
@@ -61,7 +61,7 @@ class TransItem
 		return false;
 	}
 
-	public boolean getMove(final Move inMove)
+	public boolean getMove(final GenMove inMove)
 	{
 		if ((type & HAS_MOVE) != 0) {
 			inMove.set(move);

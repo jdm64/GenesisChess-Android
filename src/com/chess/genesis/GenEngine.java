@@ -5,7 +5,7 @@ import android.os.Handler;
 import java.util.Arrays;
 import java.util.Date;
 
-class ComputerEngine implements Runnable
+class GenEngine implements Runnable
 {
 	public final static int MSG = 109;
 
@@ -14,38 +14,38 @@ class ComputerEngine implements Runnable
 	public static final int CHECKMATE_SCORE = MIN_SCORE;
 	public static final int STALEMATE_SCORE = 0;
 
-	private final ObjectArray<Move> pvMove;
-	private final ObjectArray<Move> captureKiller;
-	private final ObjectArray<Move> moveKiller;
-	private final ObjectArray<Move> placeKiller;
+	private final ObjectArray<GenMove> pvMove;
+	private final ObjectArray<GenMove> captureKiller;
+	private final ObjectArray<GenMove> moveKiller;
+	private final ObjectArray<GenMove> placeKiller;
 	private final BoolArray tactical;
 	private final BoolArray ismate;
-	private final TransTable tt;
+	private final GenTransTable tt;
 	private final Handler handle;
 
-	private Board board;
-	private MoveList curr;
+	private GenBoard board;
+	private GenMoveList curr;
 	private int secT;
 	private long endT;
 	private boolean active;
 
-	public ComputerEngine(final Handler handler)
+	public GenEngine(final Handler handler)
 	{
 		secT = 4;
 		active = false;
 		handle = handler;
-		tt = new TransTable(8);
-		pvMove = new ObjectArray<Move>();
-		captureKiller = new ObjectArray<Move>();
-		moveKiller = new ObjectArray<Move>();
-		placeKiller = new ObjectArray<Move>();
+		tt = new GenTransTable(8);
+		pvMove = new ObjectArray<GenMove>();
+		captureKiller = new ObjectArray<GenMove>();
+		moveKiller = new ObjectArray<GenMove>();
+		placeKiller = new ObjectArray<GenMove>();
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 	}
 
-	public void setBoard(final Board _board)
+	public void setBoard(final GenBoard _board)
 	{
-		board = new Board(_board);
+		board = new GenBoard(_board);
 	}
 
 	private void pickRandomMove()
@@ -64,7 +64,7 @@ class ComputerEngine implements Runnable
 
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
-		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Board.MOVE_ALL : Board.MOVE_CAPTURE);
+		final GenMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? GenBoard.MOVE_ALL : GenBoard.MOVE_CAPTURE);
 
 		if (ptr.size == 0)
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
@@ -94,14 +94,14 @@ class ComputerEngine implements Runnable
 	}
 
 	private boolean NegaMoveType(final Int alpha, final int beta, final Int best,
-		final int depth, final int limit, final ObjectArray<Move> killer, final int type)
+		final int depth, final int limit, final ObjectArray<GenMove> killer, final int type)
 	{
-		final Move move = new Move();
+		final GenMove move = new GenMove();
 
 		best.val = MIN_SCORE;
 
 		// Try Killer Move
-		final Move kmove = killer.get(depth);
+		final GenMove kmove = killer.get(depth);
 		if (kmove != null && board.validMove(kmove, move)) {
 			ismate.set(depth, false);
 
@@ -114,7 +114,7 @@ class ComputerEngine implements Runnable
 			board.unmake(move);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, move, limit - depth, TransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, move, limit - depth, GenTransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -122,7 +122,7 @@ class ComputerEngine implements Runnable
 			}
 		}
 		// Try all of moveType Moves
-		final MoveList ptr = board.getMoveList(board.getStm(), type);
+		final GenMoveList ptr = board.getMoveList(board.getStm(), type);
 
 		if (ptr.size == 0)
 			return false;
@@ -144,7 +144,7 @@ class ComputerEngine implements Runnable
 			best.val = Math.max(best.val, ptr.list[n].score);
 			if (best.val >= beta) {
 				killer.set(depth, ptr.list[n].move);
-				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, GenTransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -165,14 +165,14 @@ class ComputerEngine implements Runnable
 			else
 				limit++;
 		}
-		final TransItem tt_item = new TransItem();
+		final GenTransItem tt_item = new GenTransItem();
 		final Int score = new Int();
-		final Move move = new Move();
+		final GenMove move = new GenMove();
 
 		int best = MIN_SCORE;
 
 		ismate.set(depth, true);
-		pvMove.set(depth, (new Move()).setNull());
+		pvMove.set(depth, (new GenMove()).setNull());
 
 		do { // goto emulator
 
@@ -197,7 +197,7 @@ class ComputerEngine implements Runnable
 				board.unmake(move);
 
 				if (best >= beta) {
-					tt.setItem(board.hash(), best, move, limit - depth, TransItem.CUT_NODE);
+					tt.setItem(board.hash(), best, move, limit - depth, GenTransItem.CUT_NODE);
 					return best;
 				} else if (best > alpha) {
 					alpha = best;
@@ -208,19 +208,19 @@ class ComputerEngine implements Runnable
 		} while (false);
 
 		final Int Alpha = new Int(alpha);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, Board.MOVE_CAPTURE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, GenBoard.MOVE_CAPTURE))
 			return score.val;
 		best = Math.max(best, score.val);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, Board.MOVE_MOVE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, GenBoard.MOVE_MOVE))
 			return score.val;
 		best = Math.max(best, score.val);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, placeKiller, Board.MOVE_PLACE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, placeKiller, GenBoard.MOVE_PLACE))
 			return score.val;
 		best = Math.max(best, score.val);
 
 		if (ismate.get(depth))
 			best = tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : STALEMATE_SCORE;
-		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? TransItem.ALL_NODE : TransItem.PV_NODE);
+		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? GenTransItem.ALL_NODE : GenTransItem.PV_NODE);
 
 		return best;
 	}
@@ -242,7 +242,7 @@ class ComputerEngine implements Runnable
 			if (curr.list[n].score > alpha) {
 				alpha = curr.list[n].score;
 				pvMove.set(depth, curr.list[n].move);
-				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, TransItem.PV_NODE);
+				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, GenTransItem.PV_NODE);
 			}
 			b = alpha + 1;
 		}

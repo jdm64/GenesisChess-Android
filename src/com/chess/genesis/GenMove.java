@@ -3,7 +3,7 @@ package com.chess.genesis;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Move implements Parcelable
+class GenMove implements Parcelable
 {
 	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 
@@ -12,12 +12,12 @@ class Move implements Parcelable
 	public int from;
 	public int to;
 
-	public Move()
+	public GenMove()
 	{
 		index = xindex = from = to = -1;
 	}
 
-	public Move(final Parcel in)
+	public GenMove(final Parcel in)
 	{
 		index = in.readInt();
 		xindex = in.readInt();
@@ -38,20 +38,20 @@ class Move implements Parcelable
 		out.writeInt(to);
 	}
 
-	public static final Parcelable.Creator<Move> CREATOR = new Parcelable.Creator<Move>()
+	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<GenMove>()
 	{
-		public Move createFromParcel(final Parcel in)
+		public GenMove createFromParcel(final Parcel in)
 		{
-			return new Move(in);
+			return new GenMove(in);
 		}
 
-		public Move[] newArray(final int size)
+		public GenMove[] newArray(final int size)
 		{
-			return new Move[size];
+			return new GenMove[size];
 		}
 	};
 
-	public void set(final Move move)
+	public void set(final GenMove move)
 	{
 		index = move.index;
 		xindex = move.xindex;
@@ -67,7 +67,7 @@ class Move implements Parcelable
 		return false;
 	}
 
-	public Move setNull()
+	public GenMove setNull()
 	{
 		index = Piece.NULL_MOVE;
 		xindex = Piece.NULL_MOVE;
@@ -99,7 +99,7 @@ class Move implements Parcelable
 		final StringBuffer out = new StringBuffer();
 
 		if (from == Piece.PLACEABLE)
-			out.append(pieceSymbol[Math.abs(Board.pieceType[index])]);
+			out.append(pieceSymbol[Math.abs(GenBoard.pieceType[index])]);
 		else
 			out.append(printLoc(from));
 		out.append(printLoc(to));

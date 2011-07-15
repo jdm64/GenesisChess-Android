@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class Board
+class GenBoard
 {
 	public static final int[] pieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
@@ -115,7 +115,7 @@ class Board
 	private int ply;
 	private long key;
 	
-	public Board()
+	public GenBoard()
 	{
 		square = new int[64];
 		piece = new int[32];
@@ -123,7 +123,7 @@ class Board
 		reset();
 	}
 
-	public Board(final Board board)
+	public GenBoard(final GenBoard board)
 	{
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
@@ -186,9 +186,9 @@ class Board
 		return (Piece.WHITE == color)? piece[31] : piece[15];
 	}
 
-	public Position getPosition()
+	public GenPosition getPosition()
 	{
-		return new Position(square, piece, ply);
+		return new GenPosition(square, piece, ply);
 	}
 
 	public int[] getPieceCounts()
@@ -207,7 +207,7 @@ class Board
 		return square;
 	}
 
-	public void make(final Move move)
+	public void make(final GenMove move)
 	{
 		// update board information
 		square[move.to] = pieceType[move.index];
@@ -231,7 +231,7 @@ class Board
 		ply++;
 	}
 
-	public void unmake(final Move move)
+	public void unmake(final GenMove move)
 	{
 		// TODO could this function fail?
 		piece[move.index] = move.from;
@@ -259,7 +259,7 @@ class Board
 
 	public boolean incheck(final int color)
 	{
-		final MoveLookup ml = new MoveLookup(square);
+		final GenMoveLookup ml = new GenMoveLookup(square);
 		final int king = (color == Piece.WHITE)? 31:15;
 
 		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
@@ -275,7 +275,7 @@ class Board
 			return STALE_MATE;
 	}
 
-	public boolean validMove(final Move moveIn, final Move move)
+	public boolean validMove(final GenMove moveIn, final GenMove move)
 	{
 		move.set(moveIn);
 
@@ -291,7 +291,7 @@ class Board
 		}
 
 		if (move.from != Piece.PLACEABLE) {
-			final MoveLookup ml = new MoveLookup(square);
+			final GenMoveLookup ml = new GenMoveLookup(square);
 			if (!ml.fromto(move.from, move.to))
 				return false;
 		}
@@ -310,7 +310,7 @@ class Board
 		return ret;
 	}
 
-	public int validMove(final Move move)
+	public int validMove(final GenMove move)
 	{
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
@@ -335,7 +335,7 @@ class Board
 			return KING_FIRST;
 
 		if (move.from != Piece.PLACEABLE) {
-			final MoveLookup ml = new MoveLookup(square);
+			final GenMoveLookup ml = new GenMoveLookup(square);
 			if (!ml.fromto(move.from, move.to))
 				return INVALID_MOVEMENT;
 		}
@@ -354,8 +354,8 @@ class Board
 
 	public int getNumMoves(final int color)
 	{
-		final MoveLookup movelookup = new MoveLookup(square);
-		final Move move = new Move();
+		final GenMoveLookup movelookup = new GenMoveLookup(square);
+		final GenMove move = new GenMove();
 		int num = 0;
 
 		// we must place king first
@@ -422,10 +422,10 @@ class Board
 		return num;
 	}
 
-	public MoveList getMoveList(final int color)
+	public GenMoveList getMoveList(final int color)
 	{
-		final MoveList data = new MoveList();
-		final MoveLookup movelookup = new MoveLookup(square);
+		final GenMoveList data = new GenMoveList();
+		final GenMoveLookup movelookup = new GenMoveLookup(square);
 
 		data.size = 0;
 		// we must place king first
@@ -435,7 +435,7 @@ class Board
 			for (int loc = 0; loc < 64; loc++) {
 				if (square[loc] != Piece.EMPTY)
 					continue;
-				final MoveNode item = new MoveNode();
+				final GenMoveNode item = new GenMoveNode();
 				item.move.to = loc;
 				item.move.index = idx;
 				item.move.xindex = Piece.NONE;
@@ -460,7 +460,7 @@ class Board
 			final int[] loc = movelookup.genAll(piece[idx]);
 			int n = 0;
 			while (loc[n] != -1) {
-				final MoveNode item = new MoveNode();
+				final GenMoveNode item = new GenMoveNode();
 				item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 				item.move.to = loc[n];
 				item.move.from = piece[idx];
@@ -484,7 +484,7 @@ class Board
 			for (int loc = 0; loc < 64; loc++) {
 				if (square[loc] != Piece.EMPTY)
 					continue;
-				final MoveNode item = new MoveNode();
+				final GenMoveNode item = new GenMoveNode();
 				item.move.index = idx;
 				item.move.to = loc;
 				item.move.xindex = Piece.NONE;
@@ -503,10 +503,10 @@ class Board
 		return data;
 	}
 
-	public MoveList getMoveList(final int color, final int movetype)
+	public GenMoveList getMoveList(final int color, final int movetype)
 	{
-		final MoveList data = new MoveList();
-		final MoveLookup movelookup = new MoveLookup(square);
+		final GenMoveList data = new GenMoveList();
+		final GenMoveLookup movelookup = new GenMoveLookup(square);
 		int start, end;
 
 		data.size = 0;
@@ -517,7 +517,7 @@ class Board
 				for (int loc = 0; loc < 64; loc++) {
 					if (square[loc] != Piece.EMPTY)
 						continue;
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.to = loc;
 					item.move.index = idx;
 					item.move.xindex = Piece.NONE;
@@ -541,7 +541,7 @@ class Board
 				for (int loc = 0; loc < 64; loc++) {
 					if (square[loc] != Piece.EMPTY)
 						continue;
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.index = idx;
 					item.move.to = loc;
 					item.move.xindex = Piece.NONE;
@@ -565,7 +565,7 @@ class Board
 				final int[] loc = movelookup.genAll(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 					item.move.to = loc[n];
 					item.move.from = piece[idx];
@@ -591,7 +591,7 @@ class Board
 				final int[] loc = movelookup.genCapture(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 					item.move.to = loc[n];
 					item.move.from = piece[idx];
@@ -617,7 +617,7 @@ class Board
 				final int[] loc = movelookup.genMove(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 					item.move.to = loc[n];
 					item.move.from = piece[idx];
@@ -640,7 +640,7 @@ class Board
 				for (int loc = 0; loc < 64; loc++) {
 					if (square[loc] != Piece.EMPTY)
 						continue;
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.to = loc;
 					item.move.index = idx;
 					item.move.xindex = Piece.NONE;
@@ -664,7 +664,7 @@ class Board
 				for (int loc = 0; loc < 64; loc++) {
 					if (square[loc] != Piece.EMPTY)
 						continue;
-					final MoveNode item = new MoveNode();
+					final GenMoveNode item = new GenMoveNode();
 					item.move.index = idx;
 					item.move.to = loc;
 					item.move.xindex = Piece.NONE;
