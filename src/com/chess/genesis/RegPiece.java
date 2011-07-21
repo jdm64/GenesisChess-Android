@@ -15,4 +15,13 @@ class RegPiece
 	{
 		return new RegPiece(loc, type);
 	}
+
+	public static RegPiece[] arrayCopy(final RegPiece[] arr)
+	{
+		final RegPiece[] copy = new RegPiece[arr.length];
+
+		for (int i = 0; i < arr.length; i++)
+			copy[i] = arr[i].clone();
+		return copy;
+	}
 }

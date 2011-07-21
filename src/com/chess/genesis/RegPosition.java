@@ -35,8 +35,7 @@ class RegPosition extends RegMoveLookup
 	{
 		for (int i = 0; i < 64; i++) 
 			square[i] = Piece.EMPTY;
-		for (int i = 0; i < 32; i++)
-			piece[i] = InitRegParse[i];
+		piece = RegPiece.arrayCopy(InitRegParse);
 		flags.reset();
 	}
 

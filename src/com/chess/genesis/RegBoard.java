@@ -128,10 +128,8 @@ class RegBoard extends RegPosition
 
 	public RegBoard(final RegBoard board)
 	{
-		final ObjectArray<RegPiece> arr = new ObjectArray<RegPiece>();
-
 		square = IntArray.clone(board.square);
-		piece = arr.copyOf(board.piece);
+		piece = RegPiece.arrayCopy(board.piece);
 
 		flags = new MoveFlags(board.flags);
 		ply = board.ply;
@@ -139,12 +137,10 @@ class RegBoard extends RegPosition
 		key = board.key;
 	}
 
-	private void reset()
+	public void reset()
 	{
-		final ObjectArray<RegPiece> arr = new ObjectArray<RegPiece>();
-
 		square = IntArray.clone(InitRegBoard);
-		piece = arr.copyOf(InitRegPiece);
+		piece = RegPiece.arrayCopy(InitRegPiece);
 
 		key = startHash;
 		stm = Piece.WHITE;
@@ -190,11 +186,10 @@ class RegBoard extends RegPosition
 
 	private RegPosition getPosition()
 	{
-		final ObjectArray<RegPiece> arr = new ObjectArray<RegPiece>();
 		final RegPosition pos = new RegPosition();
 
 		pos.square = IntArray.clone(square);
-		pos.piece = arr.copyOf(piece);
+		pos.piece = RegPiece.arrayCopy(piece);
 
 		pos.flags = new MoveFlags(flags);
 		pos.ply = ply;
