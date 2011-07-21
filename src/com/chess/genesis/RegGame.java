@@ -13,12 +13,12 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class Game extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
+public class RegGame extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
 {
-	public static Game self;
+	public static RegGame self;
 	public static ViewFlip3D game_board;
 
-	private GameState gamestate;
+	private RegGameState gamestate;
 	private int type;
 
 	@Override
@@ -52,7 +52,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 		// create gamestate instance
 		final Bundle bundle = getIntent().getExtras();
 		type = bundle.getInt("type");
-		gamestate = new GameState(this, bundle);
+		gamestate = new RegGameState(this, bundle);
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class Game extends Activity implements OnClickListener, OnLongClickListen
 	{
 		for (int i = 0; i < 64; i++) {
 			final BoardButton square = (BoardButton) findViewById(i);
-			square.resetSquare();
+			square.setPiece(RegBoard.InitRegBoard[i]);
 		}
 		for (int i = 94; i < 100; i++) {
 			final PlaceButton piece = (PlaceButton) findViewById(i);

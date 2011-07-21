@@ -18,7 +18,8 @@ android:versionName="@string/version">
 			</intent-filter>
 		</activity>
 		<activity android:name="GameList" android:launchMode="singleTask"/>
-		<activity android:name="Game"/>
+		<activity android:name="RegGame"/>
+		<activity android:name="GenGame"/>
 		<activity android:name="Login"/>
 		<activity android:name="Register"/>
 		<activity android:name="Settings"/>

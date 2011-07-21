@@ -88,7 +88,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				if (gamename.length() < 1)
 					gamename = "untitled";
 
-				final Intent intent = new Intent(self, Game.class);
+				final Intent intent;
+				if (gametype2 == Enums.GENESIS_CHESS)
+					intent = new Intent(self, GenGame.class);
+				else
+					intent = new Intent(self, RegGame.class);
 				intent.putExtras(db.newLocalGame(gamename, gametype2, gameopp));
 				intent.putExtras(settings);
 				db.close();
@@ -333,7 +337,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)
 	{
 		final Bundle data = (Bundle) parent.getItemAtPosition(position);
-		final Intent intent = new Intent(this, Game.class);
+		final Intent intent;
+
+		if (Integer.valueOf(data.getString("gametype")) == Enums.GENESIS_CHESS)
+			intent = new Intent(this, GenGame.class);
+		else
+			intent = new Intent(this, RegGame.class);
 
 		intent.putExtras(data);
 		intent.putExtras(settings);
