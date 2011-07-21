@@ -137,8 +137,6 @@ class RegMove implements Parcelable
 			str.append((char)((int)'a' + (loc % 8)));
 			str.append((char)((int)'8' - (loc / 8)));
 			return str;
-		} else if (loc == Piece.PLACEABLE) {
-			str.append("aval");
 		} else {
 			str.append("dead");
 		}

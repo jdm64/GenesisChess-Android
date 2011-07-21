@@ -17,7 +17,6 @@ class RegEngine implements Runnable
 	private final ObjectArray<RegMove> pvMove;
 	private final ObjectArray<RegMove> captureKiller;
 	private final ObjectArray<RegMove> moveKiller;
-	private final ObjectArray<RegMove> placeKiller;
 	private final BoolArray tactical;
 	private final BoolArray ismate;
 	private final RegTransTable tt;
@@ -38,7 +37,6 @@ class RegEngine implements Runnable
 		pvMove = new ObjectArray<RegMove>();
 		captureKiller = new ObjectArray<RegMove>();
 		moveKiller = new ObjectArray<RegMove>();
-		placeKiller = new ObjectArray<RegMove>();
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 	}
