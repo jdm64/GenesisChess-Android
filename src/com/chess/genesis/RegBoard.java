@@ -457,13 +457,10 @@ class RegBoard extends RegPosition
 		return INVALID_MOVEMENT;
 	}
 
-	public int validMove(final String smove, final int color, RegMove move)
+	public int validMove(final RegMove move)
 	{
 		final MoveFlags undoFlags = new MoveFlags(flags);
-
-		// pre-setup move
-		if (!move.parse(smove))
-			return INVALID_FORMAT;
+		final int color = getStm();
 
 		// if castle flag is set, move must a castle to be valid
 		if (move.getCastle() != 0)
