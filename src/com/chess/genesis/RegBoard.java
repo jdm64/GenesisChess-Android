@@ -163,6 +163,11 @@ class RegBoard extends RegPosition
 		return key;
 	}
 
+	public int kingIndex(final int color)
+	{
+		return (Piece.WHITE == color)? piece[31].loc : piece[15].loc;
+	}
+
 	public MoveFlags getMoveFlags()
 	{
 		return new MoveFlags(flags);
@@ -196,6 +201,22 @@ class RegBoard extends RegPosition
 		pos.stm = stm;
 
 		return pos;
+	}
+
+	public int[] getPieceCounts()
+	{
+		final int[] counts = new int[13];
+
+		for (int i = 0; i < 32; i++) {
+			if (piece[i].loc != Piece.DEAD)
+				counts[piece[i].type + 6]++;
+		}
+		return counts;
+	}
+
+	public int[] getBoardArray()
+	{
+		return square;
 	}
 
 	private int pieceIndex(final int loc, final int type)
