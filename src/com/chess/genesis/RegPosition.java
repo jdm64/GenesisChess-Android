@@ -29,6 +29,7 @@ class RegPosition extends RegMoveLookup
 	{
 		square = new int[64];
 		piece = new RegPiece[32];
+		flags = new MoveFlags();
 	}
 
 	public void parseReset()

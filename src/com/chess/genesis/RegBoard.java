@@ -120,9 +120,6 @@ class RegBoard extends RegPosition
 
 	public RegBoard()
 	{
-		square = new int[64];
-		piece = new RegPiece[32];
-
 		reset();
 	}
 
