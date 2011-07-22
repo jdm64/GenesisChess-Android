@@ -355,7 +355,7 @@ class RegBoard extends RegPosition
 		if (anyMoves(stm))
 			return NOT_MATE;
 		else if (incheck(stm))
-			return (stm == Piece.WHITE)? Enums.BLACKMATE : Enums.WHITEMATE;
+			return CHECK_MATE;
 		else
 			return STALE_MATE;
 	}
