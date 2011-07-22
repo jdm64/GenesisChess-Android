@@ -681,7 +681,6 @@ class RegBoard extends RegPosition
 					make(item.move);
 					if (incheck(color)) {
 						unmake(item.move, undoFlags);
-						item.move.flags = 0;
 						continue;
 					}
 					unmake(item.move, undoFlags);
@@ -697,7 +696,6 @@ class RegBoard extends RegPosition
 
 						data.list[data.size++] = new RegMoveNode(item);
 					}
-					item.move.flags = 0;
 				} else {
 					make(item.move);
 					if (!incheck(color)) {
