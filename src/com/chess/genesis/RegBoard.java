@@ -405,7 +405,7 @@ class RegBoard extends RegPosition
 	public int validCastle(RegMove move, final int color)
 	{
 		// can we castle on that side
-		if (flags.canCastle(color) + move.getCastle() == 0)
+		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
 			return CANT_CASTLE;
 		// can't castle while in check
 		if (incheck(color))
