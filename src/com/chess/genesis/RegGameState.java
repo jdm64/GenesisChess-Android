@@ -702,6 +702,11 @@ class RegGameState extends GameState
 		setStm();
 	}
 
+	public void placeClick(final View v)
+	{
+		// Required because GameState calls this function
+	}
+
 	public void boardClick(final View v)
 	{
 		final BoardButton to = (BoardButton) v;
