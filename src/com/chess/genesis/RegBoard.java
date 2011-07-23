@@ -468,6 +468,9 @@ class RegBoard extends RegPosition
 
 		move.index = pieceIndex(move.from, square[move.from]);
 
+		if (move.index == Piece.NONE)
+			return INVALID_MOVEMENT;
+
 		switch (Math.abs(piece[move.index].type)) {
 		case Piece.PAWN:
 			// en passant
