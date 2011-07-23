@@ -600,6 +600,11 @@ class RegGameState extends GameState
 		from.setPiece(0);
 		from.setHighlight(false);
 
+		if (move.xindex != Piece.NONE) {
+			final PlaceButton piece = (PlaceButton) RegGame.self.findViewById(board.piece[move.xindex].type + 100);
+			piece.minusPiece();
+		}
+
 		if (move.getCastle() != 0) {
 			final boolean left = (move.getCastle() == 0x20);
 			final int castleTo = move.to + (left? 1 : -1),
@@ -658,8 +663,8 @@ class RegGameState extends GameState
 		final BoardButton to = (BoardButton) RegGame.self.findViewById(move.to);
 
 		from.setPiece(to.getPiece());
-
 		to.setLast(false);
+
 		if (move.xindex == Piece.NONE) {
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
@@ -669,6 +674,11 @@ class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else {
 			to.setPiece(board.piece[move.xindex].type);
+		}
+
+		if (move.xindex != Piece.NONE) {
+			final PlaceButton piece = (PlaceButton) RegGame.self.findViewById(board.piece[move.xindex].type + 100);
+			piece.plusPiece();
 		}
 
 		if (move.getCastle() != 0) {
