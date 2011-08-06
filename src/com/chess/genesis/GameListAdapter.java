@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TableLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 class GameListAdapter extends BaseAdapter implements ListAdapter
@@ -179,5 +180,25 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
+	}
+
+	public View getEmptyView(final Context context)
+	{
+		final RelativeLayout cell = new RelativeLayout(context);
+
+		cell.inflate(context, R.layout.gamelist_cell_empty, cell);
+
+		final TextView txt = (TextView) cell.findViewById(R.id.message);
+
+		switch (type) {
+		case Enums.LOCAL_GAME:
+		case Enums.ONLINE_GAME:
+			txt.setText("Click the plus button to create a game");
+			break;
+		case Enums.ARCHIVE_GAME:
+			txt.setText("Finished online games will appear here");
+			break;
+		}
+		return cell;
 	}
 }

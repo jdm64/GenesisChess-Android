@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
@@ -195,6 +196,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		final ListView gamelist_view = (ListView) findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);
 		gamelist_view.setOnItemClickListener(this);
+
+		// set empty view item
+		final View empty = gamelist_adapter.getEmptyView(this);
+		((ViewGroup) gamelist_view.getParent()).addView(empty);
+		gamelist_view.setEmptyView(empty);
 
 		registerForContextMenu(gamelist_view);
 	}
