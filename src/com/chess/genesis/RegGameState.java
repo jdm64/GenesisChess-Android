@@ -410,6 +410,12 @@ class RegGameState extends GameState
 		}
 	}
 
+	public Bundle getBundle()
+	{
+		settings.putString("history", history.toString());
+		return settings;
+	}
+
 	public void save(final Context context, final boolean exitgame)
 	{
 		switch (type) {

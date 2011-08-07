@@ -50,9 +50,16 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
-		final Bundle bundle = getIntent().getExtras();
+		final Bundle bundle = (savedInstanceState != null)?
+			savedInstanceState : getIntent().getExtras();
 		type = bundle.getInt("type");
 		gamestate = new RegGameState(this, bundle);
+	}
+
+	@Override
+	public void onSaveInstanceState(final Bundle savedInstanceState)
+	{
+		savedInstanceState.putAll(gamestate.getBundle());
 	}
 
 	@Override
