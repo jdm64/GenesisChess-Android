@@ -308,6 +308,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (SocketException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Can't contact server for sending data");
 				} catch (JSONException j) {
@@ -318,6 +319,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (IOException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Lost connection durring sending data");
 				} catch (JSONException j) {
@@ -337,6 +339,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (SocketException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Can't contact server for sending data");
 				} catch (JSONException j) {
@@ -347,6 +350,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (IOException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Lost connection durring sending data");
 				} catch (JSONException j) {
@@ -366,6 +370,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (SocketException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Can't contact server for recieving data");
 				} catch (JSONException j) {
@@ -375,6 +380,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (IOException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Lost connection durring recieving data");
 				} catch (JSONException j) {
@@ -428,6 +434,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (SocketException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Can't contact server for sending data");
 				} catch (JSONException j) {
@@ -438,6 +445,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (IOException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Lost connection durring sending data");
 				} catch (JSONException j) {
@@ -458,6 +466,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (SocketException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Can't contact server for recieving data");
 				} catch (JSONException j) {
@@ -467,6 +476,7 @@ public class GenesisNotifier extends Service implements Runnable
 			} catch (IOException e) {
 				json2 = new JSONObject();
 				try {
+					net.hard_disconnect();
 					json2.put("result", "error");
 					json2.put("reason", "Lost connection durring recieving data");
 				} catch (JSONException j) {
