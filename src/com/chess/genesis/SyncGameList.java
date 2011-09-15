@@ -149,17 +149,12 @@ class SyncGameList implements Runnable
 	{
 	try {
 		final JSONArray games = json.getJSONArray("games");
-		final JSONArray msgs = json.getJSONArray("msgs");
 
 		long mtime = 0;
-
 		for (int i = 0; i < games.length(); i++) {
 			final JSONObject data = games.getJSONObject(i);
-
-			final long time = data.getLong("time");
-			mtime = Math.max(time, mtime);
-
 			final String gameid = data.getString("gameid");
+			mtime = Math.max(mtime, data.getLong("time"));
 
 			if (error)
 				return;
@@ -167,20 +162,6 @@ class SyncGameList implements Runnable
 			net.run();
 
 			lock++;
-		}
-		for (int i = 0; i < msgs.length(); i++) {
-			final JSONObject data = msgs.getJSONObject(i);
-
-			final long time = data.getLong("time");
-			mtime = Math.max(time, mtime);
-
-			final String gameid = data.getString("gameid");
-			final String msg = data.getString("msg");
-			final String username = data.getString("username");
-
-			final GameDataDB db = new GameDataDB(context);
-			db.insertMsg(gameid, time, username, msg);
-			db.close();
 		}
 		if (error)
 			return;
