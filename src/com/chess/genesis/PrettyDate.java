@@ -125,9 +125,9 @@ class PrettyDate extends Date
 		if (diff >= 2629743830L) {
 			tmp = diff / 2629743830L;
 			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " months ");
+				buff.append(String.valueOf(tmp) + " mos. ");
 			else
-				buff.append(String.valueOf(tmp) + " month ");
+				buff.append(String.valueOf(tmp) + " mo. ");
 			diff %= 2629743830L;
 			count++;
 		}
@@ -135,9 +135,9 @@ class PrettyDate extends Date
 		if (diff >= 604800000) {
 			tmp = diff / 604800000;
 			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " weeks ");
+				buff.append(String.valueOf(tmp) + " wks. ");
 			else
-				buff.append(String.valueOf(tmp) + " week ");
+				buff.append(String.valueOf(tmp) + " wk. ");
 			diff %= 604800000;
 			count++;
 
@@ -161,9 +161,9 @@ class PrettyDate extends Date
 		if (diff >= 3600000) {
 			tmp = diff / 3600000;
 			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " hours ");
+				buff.append(String.valueOf(tmp) + " hrs. ");
 			else
-				buff.append(String.valueOf(tmp) + " hour ");
+				buff.append(String.valueOf(tmp) + " hr. ");
 			diff %= 3600000;
 			count++;
 
@@ -174,9 +174,9 @@ class PrettyDate extends Date
 		if (diff >= 60000) {
 			tmp = diff / 60000;
 			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " minutes ");
+				buff.append(String.valueOf(tmp) + " mins. ");
 			else
-				buff.append(String.valueOf(tmp) + " minute ");
+				buff.append(String.valueOf(tmp) + " min. ");
 			diff %= 60000;
 			count++;
 
@@ -186,9 +186,9 @@ class PrettyDate extends Date
 		// seconds
 		tmp = diff / 1000;
 		if (tmp > 1)
-			buff.append(String.valueOf(tmp) + " seconds ");
+			buff.append(String.valueOf(tmp) + " secs. ");
 		else
-			buff.append(String.valueOf(tmp) + " second ");
+			buff.append(String.valueOf(tmp) + " sec. ");
 		return buff.toString() + "ago";
 	}
 }
