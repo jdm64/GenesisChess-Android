@@ -19,6 +19,7 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 	public static ViewFlip3D game_board;
 
 	private RegGameState gamestate;
+	private Bundle settings;
 	private int type;
 
 	@Override
@@ -50,10 +51,11 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
 
 		// create gamestate instance
-		final Bundle bundle = (savedInstanceState != null)?
+		// create gamestate instance
+		settings = (savedInstanceState != null)?
 			savedInstanceState : getIntent().getExtras();
-		type = bundle.getInt("type");
-		gamestate = new RegGameState(this, bundle);
+		type = settings.getInt("type");
+		gamestate = new RegGameState(this, settings);
 	}
 
 	@Override
