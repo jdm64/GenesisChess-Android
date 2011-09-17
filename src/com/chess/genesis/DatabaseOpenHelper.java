@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class DatabaseOpenHelper extends SQLiteOpenHelper
 {
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "gamedata";
 
 	private static final String LOCAL_GAME_CREATE_TABLE =
@@ -55,11 +55,13 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 
 	private final static String MSG_CREATE_TABLE =
 		"CREATE TABLE msgtable (" +
-		"id INTEGER PRIMARY KEY ASC, " +
-		"gameid TEXT," +
-		"time INTEGER," +
-		"username TEXT," +
-		"msg TEXT);";
+		"time INTEGER, " +
+		"gameid TEXT, " +
+		"username TEXT, " +
+		"opponent TEXT, " +
+		"msg TEXT, " +
+		"unread INTEGER DEFAULT 1, " +
+		"PRIMARY KEY (time, gameid, username));";
 
 	public DatabaseOpenHelper(final Context context)
 	{
@@ -78,5 +80,9 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion)
 	{
+		if (oldVersion < 2) {
+			db.execSQL("DROP TABLE msgtable;");
+			db.execSQL(MSG_CREATE_TABLE);
+		}
 	}
 }
