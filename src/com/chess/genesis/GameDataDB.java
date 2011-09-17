@@ -121,15 +121,12 @@ class GameDataDB
 
 	public long getNewestOnlineTime()
 	{
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT stime FROM onlinegames", null);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT stime FROM onlinegames ORDER BY stime DESC LIMIT 1", null);
 
-		long time = 0;
+		if (cursor.getCount() == 0)
+			return 0;
 		cursor.moveToFirst();
-		for (int i = 0; i < cursor.getCount(); i++) {
-			time = Math.max(time, cursor.getLong(0));
-			cursor.moveToNext();
-		}
-		return time;
+		return cursor.getLong(0);
 	}
 
 	public void clearOnlineTime()
