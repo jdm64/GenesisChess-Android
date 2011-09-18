@@ -162,7 +162,9 @@ class GameDataDB
 
 		final String username = pref.getString("username", "!error!");
 		final String[] data = {username, username, String.valueOf(yourturn)};
-		final String query = "SELECT * FROM onlinegames WHERE (white=? OR black=?) AND yourturn=? ORDER BY stime DESC";
+		final String query =
+			"SELECT * FROM onlinegames LEFT JOIN (SELECT gameid, unread FROM msgtable WHERE unread=1) USING(gameid) " +
+			"WHERE (white=? OR black=?) AND yourturn=? GROUP BY gameid ORDER BY stime DESC";
 
 		return (SQLiteCursor) db.rawQuery(query, data);
 	}
@@ -270,9 +272,38 @@ class GameDataDB
 	 * Chat Queries
 	 */
 
-	public void insertMsg(final String gameid, final long time, final String username, final String msg)
+	public void insertMsg(final String gameid, final long time, final String username, final String msg, final String opponent)
 	{
-		final Object[] data = {gameid, time, username, msg};
-		db.execSQL("INSERT INTO msgtable (gameid, time, username, msg) VALUES (?, ?, ?, ?);", data);
+		final Object[] data = {gameid, time, username, msg, opponent};
+		db.execSQL("INSERT OR REPLACE INTO msgtable (gameid, time, username, msg, opponent) VALUES (?, ?, ?, ?, ?);", data);
+	}
+
+	public void setMsgsRead(final String gameid)
+	{
+		final Object[] data = {gameid};
+		db.execSQL("UPDATE msgtable SET unread=0 WHERE gameid=?", data);
+	}
+
+	public long getNewestMsg()
+	{
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {username, username};
+
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT time FROM msgtable WHERE username=? OR opponent=? ORDER BY time DESC LIMIT 1", data);
+
+		if (cursor.getCount() == 0)
+			return 0;
+		cursor.moveToFirst();
+		return cursor.getLong(0);
+	}
+
+	public SQLiteCursor getMsgList(final String gameid)
+	{
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final String username = pref.getString("username", "!error!");
+		final String[] data = {gameid, username, username};
+
+		return (SQLiteCursor) db.rawQuery("SELECT * FROM msgtable WHERE gameid=? AND (username=? OR opponent=?) ORDER BY time ASC", data);
 	}
 }
