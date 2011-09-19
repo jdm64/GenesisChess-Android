@@ -69,6 +69,10 @@ class SyncGameList implements Runnable
 				sync_recent(json);
 				lock--;
 				break;
+			case NetworkClient.SYNC_MSGS:
+				saveMsgs(json);
+				lock--;
+				break;
 			}
 		}
 	};
@@ -123,12 +127,18 @@ class SyncGameList implements Runnable
 				db.close();
 			} else {
 				final GameDataDB db = new GameDataDB(context);
-				final long time = db.getNewestOnlineTime();
-				db.close();
+				final long gtime = db.getNewestOnlineTime();
+				final long mtime = db.getNewestMsg();
 
-				net.sync_list(time);
+				net.sync_msgs(mtime);
 				net.run();
 				trylock();
+
+				net.sync_list(gtime);
+				net.run();
+				trylock();
+
+				db.close();
 			}
 		}
 
@@ -300,5 +310,31 @@ class SyncGameList implements Runnable
 		final GameDataDB db = new GameDataDB(context);
 		db.insertArchiveGame(json);
 		db.close();
+	}
+
+	private void saveMsgs(final JSONObject data)
+	{
+	try {
+		final JSONArray msgs = data.getJSONArray("msglist");
+		final GameDataDB db = new GameDataDB(context);
+
+		for (int i = 0; i < msgs.length(); i++) {
+			final JSONObject item = msgs.getJSONObject(i);
+
+			final JSONArray players = item.getJSONArray("players");
+
+			final String gameid = item.getString("gameid"),
+				username = item.getString("username"),
+				opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
+				txt = item.getString("txt");
+			final long time = item.getLong("time");
+
+			db.insertMsg(gameid, time, username, txt, opponent);
+		}
+		db.close();
+	}  catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 }
