@@ -23,6 +23,7 @@ android:versionName="@string/version">
 		<activity android:name="Login"/>
 		<activity android:name="Register"/>
 		<activity android:name="Settings"/>
+		<activity android:name="MsgBox"/>
 		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
 		<service android:name="GenesisNotifier" android:enabled="true"/>
 		<receiver android:name="GenesisAlarm"></receiver>

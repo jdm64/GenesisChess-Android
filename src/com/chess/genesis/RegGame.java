@@ -186,6 +186,10 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		case R.id.cpu_time:
 			gamestate.setCpuTime();
 			break;
+		case R.id.chat:
+			final Intent intent = new Intent(this, MsgBox.class);
+			intent.putExtra("gameid", settings.getString("gameid"));
+			startActivity(intent);
 		default:
 			return super.onOptionsItemSelected(item);
 		}

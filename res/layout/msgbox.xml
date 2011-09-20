@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<com.chess.genesis.MyImageView
+	android:id="@+id/topbar"
+	style="@style/FillWidth"
+	android:src="@drawable/topbar"/>
+	<ListView
+	android:id="@+id/msg_list"
+	android:layout_below="@id/topbar"
+	android:layout_above="@+id/input_box"/>
+	<TableRow
+	android:id="@+id/input_box"
+	android:layout_above="@+id/botbar">
+		<EditText
+		android:id="@+id/new_msg"
+		style="@style/FillWidth"
+		android:layout_weight="82"
+		android:maxLength="140"/>
+		<com.chess.genesis.MyImageView
+		android:id="@+id/submit_msg"
+		style="@style/FillWidth"
+		android:layout_weight="180"
+		android:layout_gravity="bottom"
+		android:src="@drawable/rsubmit"/>
+	</TableRow>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/botbar"
+	android:layout_alignParentBottom="true"
+	android:src="@drawable/botbar"/>
+</RelativeLayout>
