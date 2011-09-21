@@ -184,11 +184,13 @@ class PrettyDate extends Date
 				return buff.toString() + "ago";
 		}
 		// seconds
-		tmp = diff / 1000;
-		if (tmp > 1)
-			buff.append(String.valueOf(tmp) + " secs. ");
-		else
-			buff.append(String.valueOf(tmp) + " sec. ");
+		if (diff >= 1000) {
+			tmp = diff / 1000;
+			if (tmp > 1)
+				buff.append(String.valueOf(tmp) + " secs. ");
+			else
+				buff.append(String.valueOf(tmp) + " sec. ");
+		}
 		return buff.toString() + "ago";
 	}
 }
