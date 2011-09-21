@@ -284,6 +284,15 @@ class GameDataDB
 		db.execSQL("UPDATE msgtable SET unread=0 WHERE gameid=?", data);
 	}
 
+	public int getUnreadMsgCount(final String gameid)
+	{
+		final String[] data = {gameid};
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT COUNT(unread) FROM msgtable WHERE unread=1 AND gameid=?", data);
+
+		cursor.moveToFirst();
+		return cursor.getInt(0);
+	}
+
 	public long getNewestMsg()
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
