@@ -21,6 +21,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 	private GenGameState gamestate;
 	private Bundle settings;
 	private int type;
+	private boolean newMsgs = false;
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
@@ -31,13 +32,30 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+		// create gamestate instance
+		settings = (savedInstanceState != null)?
+			savedInstanceState : getIntent().getExtras();
+		type = settings.getInt("type");
+
 		// set content view
-		setContentView(R.layout.game);
+		if (type != Enums.LOCAL_GAME)
+			setContentView(R.layout.game);
+		else
+			setContentView(R.layout.game_local);
+
+		// must be called after setContentView
+		gamestate = new GenGameState(this, settings);
 
 		// set click listeners
-		ImageView button = (ImageView) findViewById(R.id.topbar);
+		ImageView button = (ImageView) findViewById((type != Enums.LOCAL_GAME)? R.id.topbar_genesis : R.id.topbar);
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
+
+		if (type != Enums.LOCAL_GAME) {
+			button = (ImageView) findViewById(R.id.chat);
+			button.setOnTouchListener(this);
+			button.setOnClickListener(this);
+		}
 
 		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
 			R.id.forwards, R.id.current};
@@ -47,14 +65,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 			button.setOnClickListener(this);
 		}
 
-		// initialize variables
 		game_board = (ViewFlip3D) findViewById(R.id.board_flip);
-
-		// create gamestate instance
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getIntent().getExtras();
-		type = settings.getInt("type");
-		gamestate = new GenGameState(this, settings);
 	}
 
 	@Override
@@ -70,6 +81,17 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 
 		if (type == Enums.ONLINE_GAME)
 			NetActive.inc();
+		if (type != Enums.LOCAL_GAME) {
+			final GameDataDB db = new GameDataDB(this);
+			final int count = db.getUnreadMsgCount(settings.getString("gameid"));
+			final int img = (count > 0)? R.drawable.newmsg : R.drawable.chat;
+
+			newMsgs = (count > 0);
+
+			final ImageView v = (ImageView) findViewById(R.id.chat);
+			((ImageView) v).setImageResource(img);
+			db.close();
+		}
 	}
 
 	@Override
@@ -88,6 +110,11 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 		case R.id.place_piece:
 			game_board.flip();
 			break;
+		case R.id.chat:
+			final Intent intent = new Intent(this, MsgBox.class);
+			intent.putExtra("gameid", settings.getString("gameid"));
+			startActivity(intent);
+			break;
 		case R.id.backwards:
 			gamestate.backMove();
 			break;
@@ -104,6 +131,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 	{
 		switch (v.getId()) {
 		case R.id.topbar:
+		case R.id.topbar_genesis:
 			gamestate.save(this, true);
 			finish();
 			return true;
@@ -126,6 +154,25 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
+		case R.id.topbar_genesis:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar_genesis);
+			break;
+		case R.id.chat:
+			if (newMsgs) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.newmsg_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.newmsg);
+			} else {
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+					((ImageView) v).setImageResource(R.drawable.chat_pressed);
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+					((ImageView) v).setImageResource(R.drawable.chat);
+			}
 			break;
 		case R.id.backwards:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
