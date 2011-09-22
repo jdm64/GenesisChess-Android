@@ -82,8 +82,6 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 
 		cell.inflate(context, R.layout.msglist_cell_empty, cell);
 
-		final TextView txt = (TextView) cell.findViewById(R.id.message);
-
 		return cell;
 	}
 }

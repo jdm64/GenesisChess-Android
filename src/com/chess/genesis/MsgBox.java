@@ -105,9 +105,9 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	@Override
 	public void onResume()
 	{
+		super.onResume();
 		NetActive.inc();
 		updateMsgList();
-		super.onResume();
 	}
 
 	@Override

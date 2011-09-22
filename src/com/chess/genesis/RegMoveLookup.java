@@ -327,9 +327,8 @@ class RegMoveLookup
 						if (to == To)
 							return true;
 						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						if (to == To)
-							return true;
+					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
+						return true;
 					}
 					break;
 				}
@@ -345,9 +344,8 @@ class RegMoveLookup
 						if (to == To)
 							return true;
 						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						if (to == To)
-							return true;
+					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
+						return true;
 					}
 					break;
 				}
