@@ -77,7 +77,7 @@ class SocketClient
 		connect();
 
 		int offset = 0, read;
-		final byte[] buff = new byte[4 * 1428];
+		final byte[] buff = new byte[10 * 1428];
 
 		// TODO: InputStream reads in 1024 chunks
 		// if server responce is exactly (X * 1024) then program will hang
