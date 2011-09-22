@@ -25,10 +25,10 @@ class MyImageView extends ImageView
 	}
 
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		int width = MeasureSpec.getSize(widthMeasureSpec);
-		int height = width * getDrawable().getIntrinsicHeight() / getDrawable().getIntrinsicWidth();
+		final int width = MeasureSpec.getSize(widthMeasureSpec);
+		final int height = width * getDrawable().getIntrinsicHeight() / getDrawable().getIntrinsicWidth();
 		setMeasuredDimension(width, height);
 	}
 }

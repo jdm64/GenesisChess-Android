@@ -402,7 +402,7 @@ class RegBoard extends RegPosition
 		return ret;
 	}
 
-	public int validCastle(RegMove move, final int color)
+	public int validCastle(final RegMove move, final int color)
 	{
 		// can we castle on that side
 		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
@@ -434,7 +434,7 @@ class RegBoard extends RegPosition
 		return CANT_CASTLE;
 	}
 
-	public int validEnPassant(RegMove move, final int color)
+	public int validEnPassant(final RegMove move, final int color)
 	{
 		final MoveFlags undoFlags = new MoveFlags(flags);
 		final int ep = flags.enPassantFile() + ((color == Piece.WHITE)? Piece.A5 : Piece.A4),
@@ -523,7 +523,7 @@ class RegBoard extends RegPosition
 		int white = 0, black = 0;
 		for (int b = 0, w = 16; b < 16; b++, w++) {
 			if (piece[b].loc != Piece.DEAD) {
-				int mod = (piece[b].type == Piece.BLACK_PAWN || piece[b].type == Piece.BLACK_KING)? -1:1;
+				final int mod = (piece[b].type == Piece.BLACK_PAWN || piece[b].type == Piece.BLACK_KING)? -1:1;
 				black += mod * regLocValue[-piece[b].type][piece[b].loc];
 				black += regPieceValue[-piece[b].type];
 			} else {
@@ -647,10 +647,10 @@ class RegBoard extends RegPosition
 		return false;
 	}
 
-	public void getMoveList(final RegMoveList data, final int color, int movetype)
+	public void getMoveList(final RegMoveList data, final int color, final int movetype)
 	{
-		int start = (color == Piece.WHITE)? 31:15, end = (color == Piece.WHITE)? 16:0;
-		MoveFlags undoFlags = new MoveFlags(flags);
+		final int start = (color == Piece.WHITE)? 31:15, end = (color == Piece.WHITE)? 16:0;
+		final MoveFlags undoFlags = new MoveFlags(flags);
 
 		for (int idx = start; idx >= end; idx--) {
 			if (piece[idx].loc == Piece.DEAD)

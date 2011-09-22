@@ -59,7 +59,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		setContentView(R.layout.mainmenu);
 
 		// setup click listeners
-		int list[] = new int[]{R.id.local_game, R.id.online_game,
+		final int list[] = new int[]{R.id.local_game, R.id.online_game,
 			R.id.archive_game, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings};
 

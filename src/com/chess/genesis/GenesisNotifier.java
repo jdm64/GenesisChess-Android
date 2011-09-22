@@ -166,7 +166,7 @@ public class GenesisNotifier extends Service implements Runnable
 		intent.putExtras(bundle);
 
 		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		Context context = getApplicationContext();
+		final Context context = getApplicationContext();
 
 		note.setLatestEventInfo(context, title, text, pintent);
 		nm.notify(1, note);

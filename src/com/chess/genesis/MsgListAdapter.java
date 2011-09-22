@@ -15,8 +15,7 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 {
 	private final GameDataDB db;
 	private final String gameid;
-
-	private SQLiteCursor list;
+	private final SQLiteCursor list;
 
 	public MsgListAdapter(final Context context, final String GameID)
 	{

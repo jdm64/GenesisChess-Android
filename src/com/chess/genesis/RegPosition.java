@@ -144,7 +144,7 @@ class RegPosition extends RegMoveLookup
 			num.append(st[n]);
 			n++;
 		}
-		int tply = Integer.valueOf(num.toString());
+		final int tply = Integer.valueOf(num.toString());
 		ply = (tply >= 0)? tply:0;
 
 		// check if color not on move is in check

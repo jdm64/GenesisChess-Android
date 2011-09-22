@@ -675,7 +675,7 @@ class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
 			final int loc = move.to + ((move.from - move.to > 0)? 8 : -8);
-			BoardButton pawn = (BoardButton) RegGame.self.findViewById(loc);
+			final BoardButton pawn = (BoardButton) RegGame.self.findViewById(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {

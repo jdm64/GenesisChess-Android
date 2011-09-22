@@ -77,7 +77,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> parent)
+	public void onNothingSelected(final AdapterView<?> parent)
 	{
 	}
 

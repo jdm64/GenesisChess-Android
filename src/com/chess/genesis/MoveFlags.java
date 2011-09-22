@@ -29,7 +29,7 @@ class MoveFlags
 		return bits & 0x7;
 	}
 
-	public void setEnPassant(int file)
+	public void setEnPassant(final int file)
 	{
 		bits = (bits & ~0xf) | (file | 0x8);
 	}
@@ -54,22 +54,22 @@ class MoveFlags
 		return bits & ((color == Piece.WHITE)? 0x20 : 0x80);
 	}
 
-	void clearCastle(int color)
+	public void clearCastle(final int color)
 	{
 		bits &= ((color == Piece.WHITE)? ~0x30 : ~0xc0);
 	}
 
-	void clearKingCastle(int color)
+	public void clearKingCastle(final int color)
 	{
 		bits &= ((color == Piece.WHITE)? ~0x10 : ~0x40);
 	}
 
-	void clearQueenCastle(int color)
+	public void clearQueenCastle(final int color)
 	{
 		bits &= ((color == Piece.WHITE)? ~0x20 : ~0x80);
 	}
 
-	void setCastle(int value)
+	public void setCastle(final int value)
 	{
 		bits &= (0xff & value);
 	}
