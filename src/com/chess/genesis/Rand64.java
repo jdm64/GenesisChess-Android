@@ -6,11 +6,11 @@ class Rand64
 {
 	private static final int BLOCK = 8192;
 
-	private static final long[] box = new long[BLOCK];;
-	private static final Random rand = new Random();
+	private final long[] box = new long[BLOCK];;
+	private final Random rand = new Random();
 
-	private static int size;
-	private static int last;
+	private int size;
+	private int last;
 
 	public Rand64()
 	{
@@ -21,7 +21,7 @@ class Rand64
 			box[i] = i;
 	}
 
-	private static long block()
+	private long block()
 	{
 		int rn;
 
@@ -40,7 +40,7 @@ class Rand64
 		return box[size + 1];
 	}
 
-	public static long next()
+	public long next()
 	{
 		long val = 0;
 

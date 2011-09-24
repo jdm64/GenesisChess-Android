@@ -25,6 +25,7 @@ class GenEngine implements Runnable
 
 	private GenBoard board;
 	private GenMoveList curr;
+	private Rand64 rand;
 	private int secT;
 	private long endT;
 	private boolean active;
@@ -41,6 +42,7 @@ class GenEngine implements Runnable
 		placeKiller = new ObjectArray<GenMove>();
 		tactical = new BoolArray();
 		ismate = new BoolArray();
+		rand = new Rand64();
 	}
 
 	public void setBoard(final GenBoard _board)
@@ -59,7 +61,7 @@ class GenEngine implements Runnable
 				break;
 			}
 		}
-		pvMove.set(0, curr.list[(int) Math.abs(Rand64.next() % end)].move);
+		pvMove.set(0, curr.list[(int) Math.abs(rand.next() % end)].move);
 	}
 
 	private int Quiescence(int alpha, final int beta, final int depth)
