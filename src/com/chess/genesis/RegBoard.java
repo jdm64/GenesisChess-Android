@@ -170,36 +170,6 @@ class RegBoard extends RegPosition
 		return new MoveFlags(flags);
 	}
 
-	private void rebuildHash()
-	{
-		key = startHash;
-		key ^= (stm == Piece.WHITE)? hashBox[WTM_HASH] : 0;
-
-		for (int i = 0; i < 32; i++) {
-			if (piece[i].loc != Piece.DEAD)
-				key ^= hashBox[12 * piece[i].loc + piece[i].type];
-		}
-		key ^= ((flags.bits & 0x08) != 0)? hashBox[ENPASSANT_HASH] : 0;
-		key ^= ((flags.bits & 0x10) != 0)? hashBox[CASTLE_HASH + Piece.WHITE] : 0;
-		key ^= ((flags.bits & 0x40) != 0)? hashBox[CASTLE_HASH + Piece.BLACK] : 0;
-		key ^= ((flags.bits & 0x20) != 0)? hashBox[CASTLE_HASH + 2 * Piece.WHITE] : 0;
-		key ^= ((flags.bits & 0x80) != 0)? hashBox[CASTLE_HASH + 2 * Piece.BLACK] : 0;
-	}
-
-	private RegPosition getPosition()
-	{
-		final RegPosition pos = new RegPosition();
-
-		pos.square = IntArray.clone(square);
-		pos.piece = RegPiece.arrayCopy(piece);
-
-		pos.flags = new MoveFlags(flags);
-		pos.ply = ply;
-		pos.stm = stm;
-
-		return pos;
-	}
-
 	public int[] getPieceCounts()
 	{
 		final int[] counts = new int[13];
