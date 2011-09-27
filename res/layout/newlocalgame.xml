@@ -41,7 +41,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow
 	style="@style/FillWidth"
 	android:layout_below="@id/table01"
-	android:paddingTop="6dp">
+	android:layout_marginTop="6dp">
 		<Button
 		style="@style/FillWidth"
 		android:layout_weight="50"
