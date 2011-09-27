@@ -48,8 +48,15 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:paddingLeft="3dp"
 	android:src="@drawable/facebook"/>
 	<TextView
+	android:id="@+id/beta"
 	android:layout_above="@id/botbar"
 	android:layout_alignParentRight="true"
+	android:paddingRight="3dp"
+	android:textSize="10dp"
+	android:text="Beta"/>
+	<TextView
+	android:layout_above="@id/botbar"
+	android:layout_toLeftOf="@id/beta"
 	android:paddingRight="3dp"
 	android:textSize="10dp"
 	android:text="@string/version"/>
