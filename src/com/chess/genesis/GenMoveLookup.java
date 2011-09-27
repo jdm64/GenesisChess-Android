@@ -2,11 +2,6 @@ package com.chess.genesis;
 
 class GenMoveLookup extends MoveLookup
 {
-	public GenMoveLookup(final int[] Square)
-	{
-		square = Square;
-	}
-
 	public int[] genAll(final int from)
 	{
 		final int type = Math.abs(square[from]), mfrom = mailbox64[from];

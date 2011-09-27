@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class GenBoard
+class GenBoard extends GenPosition
 {
 	public static final int[] pieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
@@ -108,11 +108,6 @@ class GenBoard
 	public static long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 
-	private final int[] square;
-	private final int[] piece;
-
-	private int stm;
-	private int ply;
 	private long key;
 	
 	public GenBoard()
@@ -186,11 +181,6 @@ class GenBoard
 		return (Piece.WHITE == color)? piece[31] : piece[15];
 	}
 
-	public GenPosition getPosition()
-	{
-		return new GenPosition(square, piece, ply);
-	}
-
 	public int[] getPieceCounts()
 	{
 		final int[] counts = new int[13];
@@ -257,14 +247,6 @@ class GenBoard
 		ply--;
 	}
 
-	public boolean incheck(final int color)
-	{
-		final GenMoveLookup ml = new GenMoveLookup(square);
-		final int king = (color == Piece.WHITE)? 31:15;
-
-		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
-	}
-
 	public int isMate()
 	{
 		if (getNumMoves(stm) != 0)
@@ -291,8 +273,7 @@ class GenBoard
 		}
 
 		if (move.from != Piece.PLACEABLE) {
-			final GenMoveLookup ml = new GenMoveLookup(square);
-			if (!ml.fromto(move.from, move.to))
+			if (!fromto(move.from, move.to))
 				return false;
 		}
 		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
@@ -335,8 +316,7 @@ class GenBoard
 			return KING_FIRST;
 
 		if (move.from != Piece.PLACEABLE) {
-			final GenMoveLookup ml = new GenMoveLookup(square);
-			if (!ml.fromto(move.from, move.to))
+			if (!fromto(move.from, move.to))
 				return INVALID_MOVEMENT;
 		}
 		int ret = VALID_MOVE;
@@ -354,7 +334,6 @@ class GenBoard
 
 	public int getNumMoves(final int color)
 	{
-		final GenMoveLookup movelookup = new GenMoveLookup(square);
 		final GenMove move = new GenMove();
 		int num = 0;
 
@@ -384,7 +363,7 @@ class GenBoard
 			if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 				continue;
 			int n = 0;
-			final int[] loc = movelookup.genAll(piece[idx]);
+			final int[] loc = genAll(piece[idx]);
 			while (loc[n] != -1) {
 				move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 				move.to = loc[n];
@@ -425,7 +404,6 @@ class GenBoard
 	public GenMoveList getMoveList(final int color)
 	{
 		final GenMoveList data = new GenMoveList();
-		final GenMoveLookup movelookup = new GenMoveLookup(square);
 
 		data.size = 0;
 		// we must place king first
@@ -457,7 +435,7 @@ class GenBoard
 		for (int idx = start; idx >= end; idx--) {
 			if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 				continue;
-			final int[] loc = movelookup.genAll(piece[idx]);
+			final int[] loc = genAll(piece[idx]);
 			int n = 0;
 			while (loc[n] != -1) {
 				final GenMoveNode item = new GenMoveNode();
@@ -506,7 +484,6 @@ class GenBoard
 	public GenMoveList getMoveList(final int color, final int movetype)
 	{
 		final GenMoveList data = new GenMoveList();
-		final GenMoveLookup movelookup = new GenMoveLookup(square);
 		int start, end;
 
 		data.size = 0;
@@ -562,7 +539,7 @@ class GenBoard
 			for (int idx = start; idx >= end; idx--) {
 				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 					continue;
-				final int[] loc = movelookup.genAll(piece[idx]);
+				final int[] loc = genAll(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
 					final GenMoveNode item = new GenMoveNode();
@@ -588,7 +565,7 @@ class GenBoard
 			for (int idx = start; idx >= end; idx--) {
 				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 					continue;
-				final int[] loc = movelookup.genCapture(piece[idx]);
+				final int[] loc = genCapture(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
 					final GenMoveNode item = new GenMoveNode();
@@ -614,7 +591,7 @@ class GenBoard
 			for (int idx = start; idx >= end; idx--) {
 				if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 					continue;
-				final int[] loc = movelookup.genMove(piece[idx]);
+				final int[] loc = genMove(piece[idx]);
 				int n = 0;
 				while (loc[n] != -1) {
 					final GenMoveNode item = new GenMoveNode();

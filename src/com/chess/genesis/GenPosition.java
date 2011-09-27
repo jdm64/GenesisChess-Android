@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class GenPosition
+class GenPosition extends GenMoveLookup
 {
 	private static final int[] TYPE = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
@@ -9,9 +9,8 @@ class GenPosition
 		Piece.WHITE_KING,	Piece.EMPTY,		Piece.BLACK_BISHOP,	Piece.WHITE_KNIGHT,
 		Piece.EMPTY,		Piece.WHITE_PAWN,	Piece.WHITE_QUEEN,	Piece.WHITE_ROOK};
 
-	public final int[] square;
-	public final int[] piece;
-
+	public int[] piece;
+	public int stm;
 	public int ply;
 
 	public GenPosition()
@@ -27,7 +26,7 @@ class GenPosition
 		ply = _ply;
 	}
 
-	private void reset()
+	private void parseReset()
 	{
 		for (int i = 0; i < 64; i++)
 			square[i] = Piece.EMPTY;
@@ -52,17 +51,16 @@ class GenPosition
 		return false;
 	}
 
-	private boolean incheck(final int color)
+	public boolean incheck(final int color)
 	{
-		final GenMoveLookup ml = new GenMoveLookup(square);
 		final int king = (color == Piece.WHITE)? 31:15;
 
-		return (piece[king] == Piece.PLACEABLE)? false : ml.isAttacked(piece[king]);
+		return (piece[king] == Piece.PLACEABLE)? false : isAttacked(piece[king]);
 	}
 
 	public boolean parseZfen(final String pos)
 	{
-		reset();
+		parseReset();
 		final char[] st = pos.toCharArray();
 
 		// index counter for pos
@@ -129,8 +127,8 @@ class GenPosition
 			return false;
 
 		// check if color not on move is in check
-		final int ctm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
-		if (incheck(ctm ^ -2))
+		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
+		if (incheck(stm ^ -2))
 			return false;
 		return true;
 	}
