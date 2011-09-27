@@ -17,7 +17,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<TextView
 	android:id="@+id/game_type"
 	android:layout_toRightOf="@id/cell_icon"
-	android:layout_alignParentBottom="true"
+	android:layout_below="@id/game_with"
 	android:layout_marginLeft="6dp"
 	android:textSize="14dp"/>
 	<TextView
