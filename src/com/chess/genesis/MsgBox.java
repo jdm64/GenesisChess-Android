@@ -117,12 +117,6 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 		super.onPause();
 	}
 
-	@Override
-	public void onDestroy()
-	{
-		super.onDestroy();
-	}
-
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
