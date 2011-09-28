@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,7 +17,7 @@ class SocketClient
 
 	private static String loginHash = null;
 	private static Socket sock = new Socket();
-	private static InputStream input;
+	private static DataInputStream input;
 	private static OutputStream output;
 
 	public SocketClient()
@@ -37,12 +38,10 @@ class SocketClient
 			return;
 		hard_disconnect();
 		sock.connect(new InetSocketAddress("genesischess.com", 8338));
-		input = sock.getInputStream();
+		input = new DataInputStream(sock.getInputStream());
 		output = sock.getOutputStream();
 
-		final byte[] buff = new byte[1428];
-		input.read(buff);
-		loginHash = (new String(buff)).trim();
+		loginHash = input.readLine().trim();
 	}
 
 	public static void hard_disconnect()
@@ -76,16 +75,6 @@ class SocketClient
 	{
 		connect();
 
-		int offset = 0, read;
-		final byte[] buff = new byte[10 * 1428];
-
-		// TODO: InputStream reads in 1024 chunks
-		// if server responce is exactly (X * 1024) then program will hang
-		do {
-			read = input.read(buff, offset, buff.length - offset);
-			offset += read;
-		} while (read == 1024);
-
-		return (JSONObject) (new JSONTokener(new String(buff))).nextValue();
+		return (JSONObject) (new JSONTokener(input.readLine())).nextValue();
 	}
 }

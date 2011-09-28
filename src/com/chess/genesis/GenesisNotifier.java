@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -180,7 +181,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 		private String loginHash = null;
 		private Socket sock = new Socket();
-		private InputStream input;
+		private DataInputStream input;
 		private OutputStream output;
 
 		public String getHash() throws SocketException, IOException
@@ -196,12 +197,10 @@ public class GenesisNotifier extends Service implements Runnable
 				return;
 			hard_disconnect();
 			sock.connect(new InetSocketAddress("genesischess.com", 8338));
-			input = sock.getInputStream();
+			input = new DataInputStream(sock.getInputStream());
 			output = sock.getOutputStream();
 
-			final byte[] buff = new byte[1428];
-			input.read(buff);
-			loginHash = (new String(buff)).trim();
+			loginHash = input.readLine().trim();
 		}
 
 		public void hard_disconnect()
@@ -235,17 +234,7 @@ public class GenesisNotifier extends Service implements Runnable
 		{
 			connect();
 
-			int offset = 0, read;
-			final byte[] buff = new byte[10 * 1428];
-
-			// TODO: InputStream reads in 1024 chunks
-			// if server responce is exactly (X * 1024) then program will hang
-			do {
-				read = input.read(buff, offset, buff.length - offset);
-				offset += read;
-			} while (read == 1024);
-
-			return (JSONObject) (new JSONTokener(new String(buff))).nextValue();
+			return (JSONObject) (new JSONTokener(input.readLine())).nextValue();
 		}
 	}
 
