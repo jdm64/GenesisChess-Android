@@ -38,6 +38,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:id="@+id/login"
 			android:src="@drawable/mainlogin"/>
 		</TableRow>
+		<TableRow>
+			<com.chess.genesis.MyImageView
+			android:id="@+id/feedback"
+			android:src="@drawable/feedback"/>
+		</TableRow>
 	</TableLayout>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/likefacebook"

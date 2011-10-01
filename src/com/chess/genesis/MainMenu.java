@@ -61,7 +61,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		// setup click listeners
 		final int list[] = new int[]{R.id.local_game, R.id.online_game,
 			R.id.archive_game, R.id.howtoplay, R.id.likefacebook,
-			R.id.login, R.id.settings};
+			R.id.login, R.id.settings, R.id.feedback};
 
 		for (int i = 0; i < list.length; i++) {
 			final ImageView button = (ImageView) findViewById(list[i]);
@@ -175,6 +175,12 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.facebook);
 			break;
+		case R.id.feedback:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.feedback_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.feedback);
+			break;
 		}
 		return false;
 	}
@@ -224,6 +230,10 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			break;
 		case R.id.likefacebook:
 			uri = Uri.parse("http://goo.gl/tQVOh");
+			startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			break;
+		case R.id.feedback:
+			uri = Uri.parse(getResources().getString(R.string.feedback_url));
 			startActivity(new Intent(Intent.ACTION_VIEW, uri));
 			break;
 		case R.id.settings:
