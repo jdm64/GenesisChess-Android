@@ -5,6 +5,7 @@ package="com.chess.genesis"
 android:versionCode="21"
 android:versionName="@string/version">
 	<uses-sdk android:minSdkVersion="7"/>
+	<supports-screens android:smallScreens="false"/>
 	<application
 	android:label="@string/app_name"
 	android:icon="@drawable/icon"
