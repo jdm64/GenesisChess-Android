@@ -29,6 +29,8 @@ class NetworkClient implements Runnable
 	public final static int RESIGN_GAME = 14;
 	public final static int SYNC_LIST = 15;
 	public final static int SYNC_MSGS = 16;
+	public final static int GET_OPTION = 17;
+	public final static int SET_OPTION = 18;
 
 	private final Context context;
 	private final Handler callback;
@@ -532,6 +534,39 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gamescore");
 			json.put("gameid", gameid);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public <Type> void set_option(final String option, final Type value)
+	{
+		fid = SET_OPTION;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "setoption");
+			json.put("option", option);
+			json.put("value", value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void get_option(final String option)
+	{
+		fid = GET_OPTION;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "getoption");
+			json.put("option", option);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
