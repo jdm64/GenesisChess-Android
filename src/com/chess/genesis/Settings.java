@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,8 +21,11 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Settings extends Activity implements OnCheckedChangeListener, OnItemSelectedListener, OnLongClickListener, OnTouchListener
 {
@@ -39,24 +44,66 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		return map;
 	}
 
+	private static Settings self;
+
+	private static NetworkClient net;
+	private static ProgressMsg progress;
+	private static SharedPreferences pref;
+
+	private final Handler handle = new Handler()
+	{
+		public void handleMessage(final Message msg)
+		{
+			final JSONObject json = (JSONObject) msg.obj;
+		try {
+			if (json.getString("result").equals("error")) {
+				progress.remove();
+				Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				return;
+			}
+			switch (msg.what) {
+			case NetworkClient.GET_OPTION:
+				// only emailnote supported
+				CheckBox check = (CheckBox) findViewById(R.id.email_note);
+				check.setChecked(json.getBoolean("value"));
+
+				progress.remove();
+				break;
+			case NetworkClient.SET_OPTION:
+				progress.remove();
+				break;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+		}
+	};
+
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		self = this;
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.settings);
 
+		net = new NetworkClient(this, handle);
+		progress = new ProgressMsg(this);
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+
 		final ImageView button = (ImageView) findViewById(R.id.topbar);
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		final CheckBox check = (CheckBox) findViewById(R.id.note_enable);
+		CheckBox check = (CheckBox) findViewById(R.id.note_enable);
 		check.setOnCheckedChangeListener(this);
 		check.setChecked(pref.getBoolean("noteEnabled", true));
+
+		check = (CheckBox) findViewById(R.id.email_note);
+		check.setOnCheckedChangeListener(this);
 
 		final AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("5 Minutes", 5), new AdapterItem("6 Minutes", 6),
@@ -77,6 +124,30 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 	}
 
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+
+		if (pref.getBoolean("isLoggedIn", false)) {
+			NetActive.inc();
+
+			progress.setText("Retrieving Settings");
+
+			net.get_option("emailnote");
+			(new Thread(net)).start();
+		}
+	}
+
+	@Override
+	public void onPause()
+	{
+		if (pref.getBoolean("isLoggedIn", false))
+			NetActive.dec();
+
+		super.onPause();
+	}
+
+	@Override
 	public void onNothingSelected(final AdapterView<?> parent)
 	{
 	}
@@ -85,8 +156,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 	public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id)
 	{
 		final AdapterItem item = (AdapterItem) parent.getSelectedItem();
-		final Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		final Editor editor = pref.edit();
 
 		if (pref.getInt("notifierPolling", 60) == item.id)
 			return;
@@ -99,11 +169,10 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 	@Override
 	public void onCheckedChanged(final CompoundButton v, final boolean isChecked)
 	{
+		final Editor editor = pref.edit();
+
 		switch (v.getId()) {
 		case R.id.note_enable:
-			final Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
 			if (pref.getBoolean("noteEnabled", true) == isChecked)
 				return;
 			editor.putBoolean("noteEnabled", v.isChecked());
@@ -111,6 +180,16 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 
 			if (isChecked)
 				startService(new Intent(this, GenesisNotifier.class));
+			break;
+		case R.id.email_note:
+			if (!pref.getBoolean("isLoggedIn", false)) {
+				v.setChecked(true);
+				break;
+			}
+			progress.setText("Setting Option");
+
+			net.set_option("emailnote", isChecked);
+			(new Thread(net)).start();
 			break;
 		}
 	}

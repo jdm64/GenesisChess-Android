@@ -39,6 +39,16 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:layout_gravity="right"
 			android:id="@+id/poll_freq"/>
 		</TableRow>
+		<TableRow>
+			<TextView
+			android:layout_gravity="center_vertical"
+			android:textSize="18dp"
+			android:text="Email Notifications"/>
+			<CheckBox
+			android:id="@+id/email_note"
+			android:layout_gravity="right"
+			android:checked="true"/>
+		</TableRow>
 	</TableLayout>
 	</ScrollView>
 
