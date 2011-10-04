@@ -44,9 +44,9 @@ class NetworkClient implements Runnable
 		context = _context;
 	}
 
-	private boolean relogin(final SocketClient net)
+	private boolean relogin()
 	{
-		if (net.isLoggedin)
+		if (SocketClient.isLoggedin)
 			return true;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -92,7 +92,7 @@ class NetworkClient implements Runnable
 		}
 
 		try {
-			net.write(json2);
+			SocketClient.write(json2);
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -121,7 +121,7 @@ class NetworkClient implements Runnable
 		}
 
 		try {
-			json2 = net.read();
+			json2 = SocketClient.read();
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -161,7 +161,7 @@ class NetworkClient implements Runnable
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				return false;
 			}
-			net.isLoggedin = true;
+			SocketClient.isLoggedin = true;
 			return true;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -171,20 +171,19 @@ class NetworkClient implements Runnable
 
 	public void run()
 	{
-		final SocketClient net = new SocketClient();
 		JSONObject json2 = null;
 
 		if (error) {
 			error = false;
-			net.disconnect();
+			SocketClient.disconnect();
 			return;
-		} else if (loginRequired && !relogin(net)) {
-			net.disconnect();
+		} else if (loginRequired && !relogin()) {
+			SocketClient.disconnect();
 			return;
 		}
 
 		try {
-			net.write(json);
+			SocketClient.write(json);
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -207,14 +206,14 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			net.disconnect();
+			SocketClient.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return;
 		}
 
 		try {
-			json2 = net.read();
+			json2 = SocketClient.read();
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -246,7 +245,7 @@ class NetworkClient implements Runnable
 		if (error)
 			error = false;
 		callback.sendMessage(Message.obtain(callback, fid, json2));
-		net.disconnect();
+		SocketClient.disconnect();
 	}
 
 	public void register(final String username, final String password, final String email)

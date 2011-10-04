@@ -13,15 +13,17 @@ import org.json.JSONTokener;
 
 class SocketClient
 {
-	public static boolean isLoggedin = false;
+	public static boolean isLoggedin;
 
-	private static String loginHash = null;
-	private static Socket sock = new Socket();
+	private static String loginHash;
+	private static Socket sock;
 	private static DataInputStream input;
 	private static OutputStream output;
 
+	// needs to be called once on program start
 	public SocketClient()
 	{
+		hard_disconnect();
 	}
 
 	public static String getHash() throws SocketException, IOException
@@ -35,18 +37,17 @@ class SocketClient
 	{
 		if (sock.isConnected())
 			return;
-		hard_disconnect();
 		sock.connect(new InetSocketAddress("genesischess.com", 8338));
 		input = new DataInputStream(sock.getInputStream());
 		output = sock.getOutputStream();
-
 		loginHash = input.readLine().trim();
 	}
 
 	public static void hard_disconnect()
 	{
 	try {
-		sock.close();
+		if (sock != null)
+			sock.close();
 		sock = new Socket();
 		loginHash = null;
 		isLoggedin = false;
