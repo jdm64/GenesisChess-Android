@@ -209,6 +209,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public void onResume()
 	{
 		super.onResume();
+		gamelist_adapter.update();
 
 		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
 			// start background notifier
@@ -220,8 +221,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			// Must not be final
 			SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
-		} else {
-			gamelist_adapter.update();
 		}
 	}
 
