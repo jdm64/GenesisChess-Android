@@ -22,7 +22,6 @@ class SocketClient
 
 	public SocketClient()
 	{
-		NetActive.inc();
 	}
 
 	public static String getHash() throws SocketException, IOException
@@ -59,7 +58,6 @@ class SocketClient
 
 	public static void disconnect()
 	{
-		NetActive.dec();
 	}
 
 	public static void write(final JSONObject data) throws SocketException, IOException
