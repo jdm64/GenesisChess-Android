@@ -35,13 +35,13 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:id="@+id/settings"
 			android:src="@drawable/settings"/>
 			<com.chess.genesis.MyImageView
-			android:id="@+id/login"
-			android:src="@drawable/mainlogin"/>
+			android:id="@+id/feedback"
+			android:src="@drawable/feedback"/>
 		</TableRow>
 		<TableRow>
 			<com.chess.genesis.MyImageView
-			android:id="@+id/feedback"
-			android:src="@drawable/feedback"/>
+			android:id="@+id/login"
+			android:src="@drawable/mainlogin"/>
 		</TableRow>
 	</TableLayout>
 	<com.chess.genesis.MyImageView
