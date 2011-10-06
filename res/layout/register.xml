@@ -12,7 +12,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentLeft="true"
 	android:layout_marginTop="6dp"
 	android:layout_marginLeft="12dp"
-	android:textSize="15sp"
+	android:textSize="15dp"
 	android:text="User Name"/>
 	<EditText
 	android:id="@+id/username"
@@ -28,7 +28,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/username"
 	android:layout_alignParentLeft="true"
 	android:layout_marginLeft="12dp"
-	android:textSize="15sp"
+	android:textSize="15dp"
 	android:text="Password"/>
 	<EditText
 	android:id="@+id/password"
@@ -45,7 +45,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/password"
 	android:layout_alignParentLeft="true"
 	android:layout_marginLeft="12dp"
-	android:textSize="15sp"
+	android:textSize="15dp"
 	android:text="Password"/>
 	<EditText
 	android:id="@+id/password2"
@@ -62,7 +62,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/password2"
 	android:layout_alignParentLeft="true"
 	android:layout_marginLeft="12dp"
-	android:textSize="15sp"
+	android:textSize="15dp"
 	android:text="Email"/>
 	<EditText
 	android:id="@+id/email"
