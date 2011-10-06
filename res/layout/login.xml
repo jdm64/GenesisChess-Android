@@ -11,7 +11,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/topbar"
 	android:layout_alignParentLeft="true"
 	android:layout_marginTop="6dp"
-	android:layout_marginLeft="12dp"
+	android:layout_marginLeft="14dp"
 	android:textSize="15dp"
 	android:text="User Name"/>
 	<EditText
@@ -27,7 +27,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/password_header"
 	android:layout_below="@id/username"
 	android:layout_alignParentLeft="true"
-	android:layout_marginLeft="12dp"
+	android:layout_marginLeft="14dp"
 	android:textSize="15dp"
 	android:text="Password"/>
 	<EditText
