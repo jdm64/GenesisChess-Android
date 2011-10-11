@@ -7,12 +7,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -67,7 +69,7 @@ public class GenesisNotifier extends Service implements Runnable
 		if (!pref.getBoolean("isLoggedIn", false) || !pref.getBoolean("noteEnabled", true)) {
 			stopSelf();
 			return;
-		} else if (fromalarm) {
+		} else if (internetIsActive() && fromalarm) {
 			CheckServer();
 		}
 		ScheduleWakeup();
@@ -106,6 +108,14 @@ public class GenesisNotifier extends Service implements Runnable
 
 		final AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
+	}
+
+	public boolean internetIsActive()
+	{
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+		return (netInfo != null && netInfo.isConnected());
 	}
 
 	private void CheckServer()

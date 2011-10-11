@@ -30,4 +30,5 @@ android:versionName="@string/version">
 		<receiver android:name="GenesisAlarm"></receiver>
 	</application>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 </manifest> 
