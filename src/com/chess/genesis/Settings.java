@@ -120,7 +120,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		final Spinner spinner = (Spinner) findViewById(R.id.poll_freq);
 		spinner.setOnItemSelectedListener(this);
 		spinner.setAdapter(adapter);
-		spinner.setSelection(FreqMap.get(pref.getInt("notifierPolling", 60)));
+		spinner.setSelection(FreqMap.get(pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ)));
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 		final AdapterItem item = (AdapterItem) parent.getSelectedItem();
 		final Editor editor = pref.edit();
 
-		if (pref.getInt("notifierPolling", 60) == item.id)
+		if (pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ) == item.id)
 			return;
 		editor.putInt("notifierPolling", item.id);
 		editor.commit();

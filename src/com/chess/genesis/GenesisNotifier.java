@@ -31,6 +31,8 @@ import org.json.JSONTokener;
 
 public class GenesisNotifier extends Service implements Runnable
 {
+	public final static int POLL_FREQ = 20;
+
 	private NetworkClient2 net2;
 	private boolean fromalarm;
 
@@ -101,7 +103,7 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", 60));
+		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ));
 
 		final Intent intent = new Intent(this, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
