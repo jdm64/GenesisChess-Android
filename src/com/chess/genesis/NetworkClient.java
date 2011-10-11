@@ -88,6 +88,7 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
+			SocketClient.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
@@ -117,6 +118,7 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
+			SocketClient.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
@@ -153,6 +155,7 @@ class NetworkClient implements Runnable
 			}
 		}
 		if (error) {
+			SocketClient.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
@@ -175,11 +178,8 @@ class NetworkClient implements Runnable
 	{
 		JSONObject json2 = null;
 
-		if (error) {
+		if (error || (loginRequired && !relogin())) {
 			error = false;
-			SocketClient.disconnect();
-			return;
-		} else if (loginRequired && !relogin()) {
 			SocketClient.disconnect();
 			return;
 		}
@@ -244,10 +244,11 @@ class NetworkClient implements Runnable
 				throw new RuntimeException();
 			}
 		}
-		if (error)
+		if (error) {
+			SocketClient.disconnect();
 			error = false;
+		}
 		callback.sendMessage(Message.obtain(callback, fid, json2));
-		SocketClient.disconnect();
 	}
 
 	public void register(final String username, final String password, final String email)
@@ -307,8 +308,8 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
+			SocketClient.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
-			error = true;
 		}
 	}
 

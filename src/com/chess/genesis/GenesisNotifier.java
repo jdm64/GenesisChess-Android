@@ -187,12 +187,17 @@ public class GenesisNotifier extends Service implements Runnable
 	// must have a separate connection
 	private class SocketClient2
 	{
-		public boolean isLoggedin = false;
+		public boolean isLoggedin;
 
-		private String loginHash = null;
-		private Socket sock = new Socket();
+		private String loginHash;
+		private Socket sock;
 		private DataInputStream input;
 		private OutputStream output;
+
+		public SocketClient2()
+		{
+			disconnect();
+		}
 
 		public String getHash() throws SocketException, IOException
 		{
@@ -205,7 +210,6 @@ public class GenesisNotifier extends Service implements Runnable
 		{
 			if (sock.isConnected())
 				return;
-			hard_disconnect();
 			sock.connect(new InetSocketAddress("genesischess.com", 8338));
 			input = new DataInputStream(sock.getInputStream());
 			output = sock.getOutputStream();
@@ -213,10 +217,11 @@ public class GenesisNotifier extends Service implements Runnable
 			loginHash = input.readLine().trim();
 		}
 
-		public void hard_disconnect()
+		public void disconnect()
 		{
 		try {
-			sock.close();
+			if (sock != null)
+				sock.close();
 			sock = new Socket();
 			loginHash = null;
 			isLoggedin = false;
@@ -224,11 +229,6 @@ public class GenesisNotifier extends Service implements Runnable
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
-		}
-
-		public void disconnect()
-		{
-			hard_disconnect();
 		}
 
 		public void write(final JSONObject data) throws SocketException, IOException
@@ -326,6 +326,7 @@ public class GenesisNotifier extends Service implements Runnable
 				error = true;
 			}
 			if (error) {
+				net.disconnect();
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				error = false;
 				return false;
@@ -355,6 +356,7 @@ public class GenesisNotifier extends Service implements Runnable
 				error = true;
 			}
 			if (error) {
+				net.disconnect();
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				error = false;
 				return false;
@@ -391,6 +393,7 @@ public class GenesisNotifier extends Service implements Runnable
 				}
 			}
 			if (error) {
+				net.disconnect();
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				error = false;
 				return false;
@@ -413,11 +416,8 @@ public class GenesisNotifier extends Service implements Runnable
 		{
 			JSONObject json2 = null;
 
-			if (error) {
+			if (error || (loginRequired && !relogin())) {
 				error = false;
-				net.disconnect();
-				return;
-			} else if (loginRequired && !relogin()) {
 				net.disconnect();
 				return;
 			}
@@ -482,8 +482,10 @@ public class GenesisNotifier extends Service implements Runnable
 					throw new RuntimeException();
 				}
 			}
-			if (error)
+			if (error) {
+				net.disconnect();
 				error = false;
+			}
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 		}
 

@@ -23,7 +23,7 @@ class SocketClient
 	// needs to be called once on program start
 	public SocketClient()
 	{
-		hard_disconnect();
+		disconnect();
 	}
 
 	public static String getHash() throws SocketException, IOException
@@ -43,7 +43,7 @@ class SocketClient
 		loginHash = input.readLine().trim();
 	}
 
-	public static void hard_disconnect()
+	public static void disconnect()
 	{
 	try {
 		if (sock != null)
@@ -55,10 +55,6 @@ class SocketClient
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
-	}
-
-	public static void disconnect()
-	{
 	}
 
 	public static void write(final JSONObject data) throws SocketException, IOException
