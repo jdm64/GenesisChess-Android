@@ -20,6 +20,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/username_header"
 	android:layout_marginLeft="6dp"
 	android:layout_marginRight="6dp"
+	android:inputType="textCapWords"
 	android:singleLine="true"
 	android:maxLength="16"/>
 
@@ -36,9 +37,9 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/password_header"
 	android:layout_marginLeft="6dp"
 	android:layout_marginRight="6dp"
+	android:inputType="textPassword"
 	android:singleLine="true"
-	android:maxLength="22"
-	android:password="true"/>
+	android:maxLength="22"/>
 
 	<com.chess.genesis.MyImageView
 	android:id="@+id/login"
