@@ -43,7 +43,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				}
 				switch (msg.what) {
 				case NetworkClient.LOGIN:
-					progress.setText("Syncing Data...");
+					progress.setText("Syncing Data");
 
 					SocketClient.isLoggedin = true;
 
@@ -152,7 +152,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	{
 		switch (v.getId()) {
 		case R.id.login:
-			progress.setText("Requesting Login...");
+			progress.setText("Requesting Login");
 
 			EditText txt = (EditText) findViewById(R.id.username);
 			final String username = txt.getText().toString().trim();

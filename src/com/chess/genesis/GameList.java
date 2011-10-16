@@ -52,7 +52,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 					(new InviteOptionsDialog(self, handle, data)).show();
 					return;
 				}
-				progress.setText("Sending newgame request");
+				progress.setText("Sending Newgame Request");
 				String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.join_game(gametype);
@@ -60,7 +60,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				break;
 			case RematchConfirm.MSG:
 				data = (Bundle) msg.obj;
-				progress.setText("Sending newgame request");
+				progress.setText("Sending Newgame Request");
 
 				final String opponent = data.getString("opp_name");
 				String color = Enums.ColorType(data.getInt("color"));
@@ -71,7 +71,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
-				progress.setText("Sending newgame request");
+				progress.setText("Sending Newgame Request");
 
 				gametype = Enums.GameType(data.getInt("gametype"));
 				color = Enums.ColorType(data.getInt("color"));
@@ -216,7 +216,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			startService(new Intent(this, GenesisNotifier.class));
 
 			NetActive.inc();
-			progress.setText("Updating game list");
+			progress.setText("Updating Game List");
 
 			// Must not be final
 			SyncGameList sync = new SyncGameList(this, handle);
@@ -416,7 +416,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (item.getItemId()) {
 		case R.id.resync:
-			progress.setText("Updating game list");
+			progress.setText("Updating Game List");
 
 			// Must not be final
 			SyncGameList sync = new SyncGameList(this, handle);

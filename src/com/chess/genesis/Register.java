@@ -45,7 +45,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 				}
 				break;
 			case RegisterConfirm.MSG:
-				progress.setText("Sending Registration...");
+				progress.setText("Sending Registration");
 				final Bundle data = (Bundle) msg.obj;
 
 				net.register(data.getString("username"), data.getString("password"), data.getString("email"));

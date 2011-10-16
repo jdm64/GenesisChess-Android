@@ -73,7 +73,7 @@ class GenGameState extends GameState
 				(new Thread(net)).start();
 				break;
 			case ResignConfirm.MSG:
-				progress.setText("Sending resignation");
+				progress.setText("Sending Resignation");
 
 				net.resign_game(settings.getString("gameid"));
 				(new Thread(net)).start();
@@ -86,7 +86,7 @@ class GenGameState extends GameState
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				progress.setText("Resignation sent");
+				progress.setText("Resignation Sent");
 
 				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).start();
@@ -133,7 +133,7 @@ class GenGameState extends GameState
 						(new EndGameDialog(context, json)).show();
 						return;
 					}
-					progress.setText("Retrieving score");
+					progress.setText("Retrieving Score");
 
 					settings.putString("status", String.valueOf(status));
 					net.game_score(settings.getString("gameid"));
@@ -151,7 +151,7 @@ class GenGameState extends GameState
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				progress.setText("Score loaded");
+				progress.setText("Score Loaded");
 				progress.remove();
 
 				json.put("yourcolor", ycol);
@@ -166,7 +166,7 @@ class GenGameState extends GameState
 				break;
 			case RematchConfirm.MSG:
 				final Bundle data = (Bundle) msg.obj;
-				progress.setText("Sending newgame request");
+				progress.setText("Sending Newgame Request");
 
 				final String opponent = data.getString("opp_name");
 				final String color = Enums.ColorType(data.getInt("color"));
@@ -223,7 +223,7 @@ class GenGameState extends GameState
 				throw new RuntimeException();
 			}
 			} else {
-				progress.setText("Retrieving score");
+				progress.setText("Retrieving Score");
 				net.game_score(settings.getString("gameid"));
 				(new Thread(net)).start();
 			}
@@ -461,7 +461,7 @@ class GenGameState extends GameState
 
 	public void resync()
 	{
-		progress.setText("Updating game state");
+		progress.setText("Updating Game State");
 		net.game_status(settings.getString("gameid"));
 		(new Thread(net)).start();
 	}
@@ -538,7 +538,7 @@ class GenGameState extends GameState
 
 	public void submitMove()
 	{
-		progress.setText("Sending move");
+		progress.setText("Sending Move");
 
 		final String gameid = settings.getString("gameid");
 		final String move = history.top().toString();

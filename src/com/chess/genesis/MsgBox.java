@@ -147,7 +147,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	{
 		switch (v.getId()) {
 		case R.id.submit_msg:
-			progress.setText("Sending Message...");
+			progress.setText("Sending Message");
 
 			final EditText txt = (EditText) findViewById(R.id.new_msg);
 			final String msg = txt.getText().toString().trim();
@@ -194,7 +194,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 
 	private void updateMsgList()
 	{
-		progress.setText("Updating Messages...");
+		progress.setText("Updating Messages");
 		final GameDataDB db = new GameDataDB(self);
 		net.sync_msgs(db.getNewestMsg());
 		(new Thread(net)).start();
