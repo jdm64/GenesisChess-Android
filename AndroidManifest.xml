@@ -19,7 +19,7 @@ android:versionName="@string/version">
 			</intent-filter>
 		</activity>
 		<activity android:name="GameList" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
-		<activity android:name="MsgBox" android:windowSoftInputMode="adjustPan"/>
+		<activity android:name="MsgBox"/>
 		<activity android:name="Login" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="Register" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
