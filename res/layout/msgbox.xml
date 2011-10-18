@@ -16,14 +16,15 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:id="@+id/new_msg"
 		style="@style/FillWidth"
 		android:layout_weight="82"
+		android:lines="2"
+		android:scrollbars="horizontal"
 		android:inputType="textCapSentences|textMultiLine"
 		android:maxLength="140"/>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/submit_msg"
 		style="@style/FillWidth"
 		android:layout_weight="180"
-		android:layout_gravity="bottom"
-		android:layout_marginBottom="5dp"
+		android:layout_gravity="center"
 		android:src="@drawable/rsubmit"/>
 	</TableRow>
 	<com.chess.genesis.MyImageView
