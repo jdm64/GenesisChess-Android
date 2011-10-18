@@ -190,7 +190,12 @@ class PrettyDate extends Date
 				buff.append(String.valueOf(tmp) + " secs. ");
 			else
 				buff.append(String.valueOf(tmp) + " sec. ");
+			count++;
 		}
-		return buff.toString() + "ago";
+
+		if (count >= 1)
+			return buff.toString() + "ago";
+		else
+			return "now";
 	}
 }
