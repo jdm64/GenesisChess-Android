@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import java.util.Date;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -103,14 +104,37 @@ class GameDataDB
 	 * Online Game Queries
 	 */
 
-	public void insertOnlineGame(final String gameid, final int gametype, final int eventtype, final long ctime, final String white, final String black)
+	public void insertOnlineGame(final JSONObject json)
 	{
+	try {
+		final String gameid = json.getString("gameid");
+		final String white = json.getString("white");
+		final String black = json.getString("black");
+		final String zfen = json.getString("zfen");
+		final String history = json.getString("history");
+		final long ctime = json.getLong("ctime");
+		final long stime = json.getLong("stime");
+		final int gametype = Enums.GameType(json.getString("gametype"));
+		final int eventtype = Enums.EventType(json.getString("eventtype"));
+		final int status = Enums.GameStatus(json.getString("status"));
+
 		final Object[] data = {gameid, gametype, eventtype, ctime, white, black};
 		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, eventtype, ctime, white, black) VALUES (?, ?, ?, ?, ?, ?);", data);
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 
-	public void updateOnlineGame(final String gameid, final int status, final long stime, final String zfen, final String history)
+	public void updateOnlineGame(final JSONObject json)
 	{
+	try {
+		final String gameid = json.getString("gameid");
+		final String zfen = json.getString("zfen");
+		final String history = json.getString("history");
+		final long stime = json.getLong("stime");
+		final int status = Enums.GameStatus(json.getString("status"));
+
 		final String[] data1 = {gameid};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
 		if (cursor.getCount() < 1)
@@ -123,6 +147,10 @@ class GameDataDB
 
 		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, gameid};
 		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 
 	public long getNewestOnlineTime()
@@ -273,10 +301,23 @@ class GameDataDB
 	 * Chat Queries
 	 */
 
-	public void insertMsg(final String gameid, final long time, final String username, final String msg, final String opponent)
+	public void insertMsg(final JSONObject json)
 	{
+	try {
+		final JSONArray players = json.getJSONArray("players");
+
+		final String gameid = json.getString("gameid"),
+			username = json.getString("username"),
+			opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
+			msg = json.getString("txt");
+		final long time = json.getLong("time");
+
 		final Object[] data = {gameid, time, username, msg, opponent};
 		db.execSQL("INSERT OR REPLACE INTO msgtable (gameid, time, username, msg, opponent) VALUES (?, ?, ?, ?, ?);", data);
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 
 	public void setMsgsRead(final String gameid)

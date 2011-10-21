@@ -99,16 +99,13 @@ class GenGameState extends GameState
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				final String gameid = json.getString("gameid");
-				final String zfen = json.getString("zfen");
 				final String history = json.getString("history");
 				final int status = Enums.GameStatus(json.getString("status"));
-				final long stime = json.getLong("stime");
 
 				settings.putString("status", String.valueOf(status));
 
 				final GameDataDB db = new GameDataDB(context);
-				db.updateOnlineGame(gameid, status, stime, zfen, history);
+				db.updateOnlineGame(json);
 
 				// clear notification if it's not your turn in any game
 				if (db.getOnlineGameList(1).getCount() == 0) {

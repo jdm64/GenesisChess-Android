@@ -209,16 +209,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 
 		for (int i = 0; i < msgs.length(); i++) {
 			final JSONObject item = msgs.getJSONObject(i);
-
-			final JSONArray players = item.getJSONArray("players");
-
-			final String gameid = item.getString("gameid"),
-				username = item.getString("username"),
-				opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
-				txt = item.getString("txt");
-			final long time = item.getLong("time");
-
-			db.insertMsg(gameid, time, username, txt, opponent);
+			db.insertMsg(item);
 		}
 		db.setMsgsRead(gameid);
 		db.close();

@@ -270,39 +270,16 @@ class SyncGameList implements Runnable
 
 	private void game_info(final JSONObject json)
 	{
-	try {
-		final String gameid = json.getString("gameid");
-		final String white = json.getString("white");
-		final String black = json.getString("black");
-		final long ctime = json.getLong("ctime");
-		final int gametype = Enums.GameType(json.getString("gametype"));
-		final int eventtype = Enums.EventType(json.getString("eventtype"));
-
 		final GameDataDB db = new GameDataDB(context);
-		db.insertOnlineGame(gameid, gametype, eventtype, ctime, white, black);
+		db.insertOnlineGame(json);
 		db.close();
-	} catch (JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
 	}
 
 	private void game_status(final JSONObject json)
 	{
-	try {
-		final String gameid = json.getString("gameid");
-		final String zfen = json.getString("zfen");
-		final String history = json.getString("history");
-		final long stime = json.getLong("stime");
-		final int status = Enums.GameStatus(json.getString("status"));
-
 		final GameDataDB db = new GameDataDB(context);
-		db.updateOnlineGame(gameid, status, stime, zfen, history);
+		db.updateOnlineGame(json);
 		db.close();
-	} catch (JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
 	}
 
 	private void game_data(final JSONObject json)
@@ -320,16 +297,7 @@ class SyncGameList implements Runnable
 
 		for (int i = 0; i < msgs.length(); i++) {
 			final JSONObject item = msgs.getJSONObject(i);
-
-			final JSONArray players = item.getJSONArray("players");
-
-			final String gameid = item.getString("gameid"),
-				username = item.getString("username"),
-				opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
-				txt = item.getString("txt");
-			final long time = item.getLong("time");
-
-			db.insertMsg(gameid, time, username, txt, opponent);
+			db.insertMsg(item);
 		}
 		db.close();
 	}  catch (JSONException e) {
