@@ -37,6 +37,12 @@ class GameDataDB
 		return bundle;
 	}
 
+	public String getUsername()
+	{
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getString("username", "!error!");
+	}
+
 	/*
 	 * Local Game Queries
 	 */
@@ -142,8 +148,7 @@ class GameDataDB
 	{
 		final ObjectArray<String> list = new ObjectArray<String>();
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {username, username};
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
@@ -158,9 +163,7 @@ class GameDataDB
 
 	public SQLiteCursor getOnlineGameList(final int yourturn)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {username, username, String.valueOf(yourturn)};
 		final String query =
 			"SELECT * FROM onlinegames LEFT JOIN (SELECT gameid, unread FROM msgtable WHERE unread=1) USING(gameid) " +
@@ -227,8 +230,7 @@ class GameDataDB
 	{
 		final ObjectArray<String> list = new ObjectArray<String>();
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {username, username};
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames WHERE white=? OR black=?", data);
@@ -243,8 +245,7 @@ class GameDataDB
 
 	public SQLiteCursor getArchiveGameList()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {username, username};
 
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM archivegames WHERE white=? OR black=? ORDER BY stime DESC", data);
@@ -295,8 +296,7 @@ class GameDataDB
 
 	public long getNewestMsg()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {username, username};
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT time FROM msgtable WHERE username=? OR opponent=? ORDER BY time DESC LIMIT 1", data);
@@ -309,8 +309,7 @@ class GameDataDB
 
 	public SQLiteCursor getMsgList(final String gameid)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
+		final String username = getUsername();
 		final String[] data = {gameid, username, username};
 
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM msgtable WHERE gameid=? AND (username=? OR opponent=?) ORDER BY time ASC", data);
