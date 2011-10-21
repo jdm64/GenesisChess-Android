@@ -155,7 +155,11 @@ class GameDataDB
 
 	public long getNewestOnlineTime()
 	{
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT stime FROM onlinegames ORDER BY stime DESC LIMIT 1", null);
+		final String username = getUsername();
+		final Object[] data = {username, username};
+
+		final String query = "SELECT stime FROM onlinegames WHERE white=? OR black=? ORDER BY stime DESC LIMIT 1";
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
 		if (cursor.getCount() == 0)
 			return 0;
