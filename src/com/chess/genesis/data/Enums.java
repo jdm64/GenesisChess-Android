@@ -34,6 +34,10 @@ final class Enums
 	public final static int WHITERESIGN = 6;
 	public final static int BLACKRESIGN = 7;
 
+	// Turn Types
+	public final static int THEIR_TURN = 0;
+	public final static int YOUR_TURN = 1;
+
 	private Enums()
 	{
 	}

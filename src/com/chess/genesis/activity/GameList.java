@@ -304,7 +304,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			if (yourmove)
 				return;
 			yourmove = true;
-			gamelist_adapter.setYourturn(1);
+			gamelist_adapter.setYourturn(Enums.YOUR_TURN);
 
 			ImageView button = (ImageView) findViewById(R.id.your_move);
 			button.setImageResource(R.drawable.yourmove_selected);
@@ -316,7 +316,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			if (!yourmove)
 				return;
 			yourmove = false;
-			gamelist_adapter.setYourturn(0);
+			gamelist_adapter.setYourturn(Enums.THEIR_TURN);
 
 			button = (ImageView) findViewById(R.id.your_move);
 			button.setImageResource(R.drawable.yourmove_notselected);
