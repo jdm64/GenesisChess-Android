@@ -48,20 +48,6 @@ class RegEngine implements Runnable
 		board = new RegBoard(_board);
 	}
 
-	private void pickRandomMove()
-	{
-		final int score = curr.list[0].score;
-		int end = 1;
-
-		for (int i = 1; i < curr.size; i++) {
-			if (curr.list[i].score != score) {
-				end = i + 1;
-				break;
-			}
-		}
-		pvMove.set(0, curr.list[(int) Math.abs(rand.next() % end)].move);
-	}
-
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
 		final RegMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? RegBoard.MOVE_ALL : RegBoard.MOVE_CAPTURE);
@@ -286,10 +272,6 @@ class RegEngine implements Runnable
 			if ((new Date()).getTime() > endT)
 				break;
 		}
-
-		// Randomize opening
-		if (board.getPly() < 7)
-			pickRandomMove();
 		curr = null;
 
 		final Bundle bundle = new Bundle();
