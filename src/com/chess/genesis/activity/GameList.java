@@ -191,7 +191,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		}
 
 		// set list adapters
-		gamelist_adapter = new GameListAdapter(this, settings);
+		gamelist_adapter = new GameListAdapter(this, type, Enums.YOUR_TURN);
 
 		final ListView gamelist_view = (ListView) findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);

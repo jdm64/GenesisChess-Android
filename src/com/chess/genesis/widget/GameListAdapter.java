@@ -1,8 +1,10 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,25 +17,31 @@ import android.widget.TextView;
 class GameListAdapter extends BaseAdapter implements ListAdapter
 {
 	private final GameDataDB db;
+	private final Bundle settings;
 	private final String username;
 	private final int type;
 
 	private SQLiteCursor list;
 
-	public GameListAdapter(final Context context, final Bundle settings)
+	public GameListAdapter(final Context context, final int Type, int yourturn)
 	{
 		super();
 
-		db = new GameDataDB(context);
-		username = settings.getString("username");
-		type = settings.getInt("type");
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		username = prefs.getString("username", "!error!");
+		type = Type;
 
+		settings = new Bundle();
+		settings.putString("username", username);
+		settings.putInt("type", type);
+
+		db = new GameDataDB(context);
 		switch (type) {
 		case Enums.LOCAL_GAME:
 			list = db.getLocalGameList();
 			break;
 		case Enums.ONLINE_GAME:
-			list = db.getOnlineGameList(1);
+			list = db.getOnlineGameList(yourturn);
 			break;
 		case Enums.ARCHIVE_GAME:
 			list = db.getArchiveGameList();
@@ -44,6 +52,11 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	public int getCount()
 	{
 		return list.getCount();
+	}
+
+	public Bundle getExtras()
+	{
+		return settings;
 	}
 
 	public void update()
@@ -72,7 +85,10 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 
 	public Object getItem(final int index)
 	{
-		return GameDataDB.rowToBundle(list, index);
+		final Bundle data = GameDataDB.rowToBundle(list, index);
+		data.putAll(settings);
+
+		return data;
 	}
 
 	public View getView(final int index, View cell, final ViewGroup parent)
