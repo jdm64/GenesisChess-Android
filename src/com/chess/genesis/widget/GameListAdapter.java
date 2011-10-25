@@ -16,25 +16,34 @@ import android.widget.TextView;
 
 class GameListAdapter extends BaseAdapter implements ListAdapter
 {
-	private final GameDataDB db;
+	private final Context context;
 	private final Bundle settings;
 	private final String username;
 	private final int type;
 
+	private GameDataDB db;
 	private SQLiteCursor list;
+	private int yourturn;
 
-	public GameListAdapter(final Context context, final int Type, int yourturn)
+	public GameListAdapter(final Context _context, final int Type, final int yourTurn)
 	{
 		super();
+		context = _context;
 
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		username = prefs.getString("username", "!error!");
 		type = Type;
+		yourturn = yourTurn;
 
 		settings = new Bundle();
 		settings.putString("username", username);
 		settings.putInt("type", type);
 
+		initCursor();
+	}
+
+	private void initCursor()
+	{
 		db = new GameDataDB(context);
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -62,19 +71,22 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	public void update()
 	{
 		if (list.isClosed())
-			return;
-		list.requery();
+			initCursor();
+		else
+			list.requery();
 		notifyDataSetChanged();
 	}
 
-	public void setYourturn(final int yourturn)
+	public void setYourturn(final int yourTurn)
 	{
+		yourturn = yourTurn;
 		list = db.getOnlineGameList(yourturn);
 		notifyDataSetChanged();
 	}
 
 	public void close()
 	{
+		list.close();
 		db.close();
 	}
 

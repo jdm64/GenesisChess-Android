@@ -13,17 +13,25 @@ import android.widget.TextView;
 
 class MsgListAdapter extends BaseAdapter implements ListAdapter
 {
-	private final GameDataDB db;
-	private final String gameid;
-	private final SQLiteCursor list;
+	private final Context context;
+	private final String gameID;
 
-	public MsgListAdapter(final Context context, final String GameID)
+	private GameDataDB db;
+	private SQLiteCursor list;
+
+	public MsgListAdapter(final Context _context, final String GameID)
 	{
 		super();
 
+		context = _context;
+		gameID = GameID;
+		initCursor();
+	}
+
+	private void initCursor()
+	{
 		db = new GameDataDB(context);
-		gameid = GameID;
-		list = db.getMsgList(gameid);
+		list = db.getMsgList(gameID);
 	}
 
 	public int getCount()
@@ -34,13 +42,15 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 	public void update()
 	{
 		if (list.isClosed())
-			return;
-		list.requery();
+			initCursor();
+		else
+			list.requery();
 		notifyDataSetChanged();
 	}
 
 	public void close()
 	{
+		list.close();
 		db.close();
 	}
 
