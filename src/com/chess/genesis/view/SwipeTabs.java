@@ -347,15 +347,10 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			final int count = mAdapter.getCount();
 			for (int i = 0; i < count; i++) {
 				final TextView tab = (TextView) getChildAt(i);
-				if (mCurrentPos == i) {
-					tab.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-					tab.setTypeface(null, Typeface.BOLD);
+				if (mCurrentPos == i)
 					tab.setTextColor(interpolateColor(mBottomBarColor, mTextColor, 1.0f - relativePos));
-				} else {
-					tab.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-					tab.setTypeface(null, Typeface.NORMAL);
+				else
 					tab.setTextColor(mTextColor);
-				}
 			}
 
 		}
