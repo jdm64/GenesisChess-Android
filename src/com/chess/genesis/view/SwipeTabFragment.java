@@ -31,7 +31,7 @@ public class SwipeTabFragment extends Fragment
 	{
 		super();
 
-		Bundle args = new Bundle();
+		final Bundle args = new Bundle();
 		args.putString("title", title);
 		setArguments(args);
 	}

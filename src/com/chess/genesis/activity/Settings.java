@@ -64,7 +64,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 			switch (msg.what) {
 			case NetworkClient.GET_OPTION:
 				// only emailnote supported
-				CheckBox check = (CheckBox) findViewById(R.id.email_note);
+				final CheckBox check = (CheckBox) findViewById(R.id.email_note);
 				check.setChecked(json.getBoolean("value"));
 
 				progress.remove();

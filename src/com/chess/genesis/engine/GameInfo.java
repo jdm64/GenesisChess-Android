@@ -25,8 +25,7 @@ class GameInfo
 	{
 		if (history == null || history.length() < 3)
 			return 0;
-		final String[] count = history.trim().split(" +");
-		return count.length;
+		return history.trim().split(" +").length;
 	}
 
 	public int getYourTurn()

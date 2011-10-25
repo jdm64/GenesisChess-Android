@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 {
-	protected final String TAG = "SwipeTabs";
+	protected final static String TAG = "SwipeTabs";
 
 	private SwipeTabs.Adapter mAdapter;
 
@@ -51,7 +51,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	private int mBottomBarColor = 0xff00b7eb;
 
 	// text color for all other tabs
-	private int mTextColor = 0xffffffff;//0xff949494;
+	private int mTextColor = 0xffffffff;
 
 	// holds the positions of the fronted tabs
 	private int[] mFrontedTabPos;
@@ -248,7 +248,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		final int count = mAdapter.getCount();
 
 		for (int i = 0; i < count; i++) {
-			TextView tab = (TextView) getChildAt(i);
+			final TextView tab = (TextView) getChildAt(i);
 
 			if (i < mCurrentPos) {
 				tab.setEllipsize(null);
@@ -266,7 +266,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	@Override
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
 		measureTabs(widthMeasureSpec, heightMeasureSpec);
 
@@ -296,13 +296,13 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		if (mAdapter == null)
 			return;
 
-		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		final int maxWidth = (int) (widthSize * 0.6);
 
 		final int count = mAdapter.getCount();
 
 		for (int i = 0; i < count; i++) {
-			LayoutParams layoutParams = (LayoutParams) getChildAt(i).getLayoutParams();
+			final LayoutParams layoutParams = (LayoutParams) getChildAt(i).getLayoutParams();
 			final int widthSpec = MeasureSpec.makeMeasureSpec(maxWidth, MeasureSpec.AT_MOST);
 			final int heightSpec = MeasureSpec.makeMeasureSpec(layoutParams.height, MeasureSpec.EXACTLY);
 			getChildAt(i).measure(widthSpec, heightSpec);
@@ -318,7 +318,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		final int count = mAdapter.getCount();
 
 		for (int i = 0; i < count; i++) {
-			View v = getChildAt(i);
+			final View v = getChildAt(i);
 			v.layout(mCurrentTabPos[i], this.getPaddingTop(), mCurrentTabPos[i] + v.getMeasuredWidth(), this.getPaddingTop() + v.getMeasuredHeight());
 		}
 	}

@@ -68,7 +68,7 @@ public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements Swipe
 		view.setText(TITLES[position]);
 		view.setOnClickListener(new OnClickListener()
 		{
-			public void onClick(View v)
+			public void onClick(final View v)
 			{
 				mViewPager.setCurrentItem(position);
 			}
