@@ -122,6 +122,12 @@ public class GenesisNotifier extends Service implements Runnable
 	private void CheckServer()
 	{
 		final GameDataDB db = new GameDataDB(this);
+
+		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
+			db.close();
+			SendNotification("It's Your turn", "It's your turn in a game you're in", 0);
+			return;
+		}
 		final long time = db.getNewestOnlineTime();
 		db.close();
 
