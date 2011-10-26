@@ -178,15 +178,6 @@ class GameDataDB
 		return cursor.getLong(0);
 	}
 
-	public void clearOnlineTime()
-	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
-		final Object[] data = {0, username, username};
-
-		db.execSQL("UPDATE onlinegames SET stime=? WHERE white=? OR black=?;", data);
-	}
-
 	public ObjectArray<String> getOnlineGameIds()
 	{
 		final ObjectArray<String> list = new ObjectArray<String>();

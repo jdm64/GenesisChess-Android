@@ -51,13 +51,6 @@ class SyncGameList implements Runnable
 				game_data(json);
 				lock--;
 				break;
-			case NetworkClient.READ_INBOX:
-				read_inbox(json);
-				lock--;
-				break;
-			case NetworkClient.CLEAR_INBOX:
-				lock--;
-				break;
 			case NetworkClient.SYNC_GAMIDS:
 				if (sync_type == Enums.ONLINE_GAME)
 					sync_active(json);
@@ -105,41 +98,30 @@ class SyncGameList implements Runnable
 
 	public void run()
 	{
-		net.read_inbox();
-		net.run();
-		trylock();
+		if (fullsync) {
+			sync_type = Enums.ONLINE_GAME;
+			net.sync_gameids("active");
+			net.run();
 
-		if (!error) {
-			if (fullsync) {
-				sync_type = Enums.ONLINE_GAME;
-				net.sync_gameids("active");
-				net.run();
+			trylock();
 
-				trylock();
+			sync_type = Enums.ARCHIVE_GAME;
+			net.sync_gameids("archive");
+			net.run();
+			trylock();
+		} else {
+			final GameDataDB db = new GameDataDB(context);
+			final long gtime = db.getNewestOnlineTime();
+			final long mtime = db.getNewestMsg();
+			db.close();
 
-				sync_type = Enums.ARCHIVE_GAME;
-				net.sync_gameids("archive");
-				net.run();
-				trylock();
+			net.sync_msgs(mtime);
+			net.run();
+			trylock();
 
-				final GameDataDB db = new GameDataDB(context);
-				db.clearOnlineTime();
-				db.close();
-			} else {
-				final GameDataDB db = new GameDataDB(context);
-				final long gtime = db.getNewestOnlineTime();
-				final long mtime = db.getNewestMsg();
-
-				net.sync_msgs(mtime);
-				net.run();
-				trylock();
-
-				net.sync_list(gtime);
-				net.run();
-				trylock();
-
-				db.close();
-			}
+			net.sync_list(gtime);
+			net.run();
+			trylock();
 		}
 
 		if (!error) {
@@ -153,36 +135,6 @@ class SyncGameList implements Runnable
 			}
 			callback.sendMessage(Message.obtain(callback, MSG, json));
 		}
-	}
-
-	private void read_inbox(final JSONObject json)
-	{
-	try {
-		final JSONArray games = json.getJSONArray("games");
-
-		long mtime = 0;
-		for (int i = 0; i < games.length(); i++) {
-			final JSONObject data = games.getJSONObject(i);
-			final String gameid = data.getString("gameid");
-			mtime = Math.max(mtime, data.getLong("time"));
-
-			if (error)
-				return;
-			net.game_info(gameid);
-			net.run();
-
-			lock++;
-		}
-		if (error)
-			return;
-		net.clear_inbox(mtime);
-		net.run();
-
-		lock++;
-	} catch (JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
 	}
 
 	private void sync_recent(final JSONObject json)

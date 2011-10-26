@@ -17,8 +17,6 @@ class NetworkClient implements Runnable
 	public final static int REGISTER = 2;
 	public final static int JOIN_GAME = 3;
 	public final static int NEW_GAME = 4;
-	public final static int READ_INBOX = 5;
-	public final static int CLEAR_INBOX = 6;
 	public final static int GAME_STATUS = 7;
 	public final static int GAME_INFO = 8;
 	public final static int SUBMIT_MOVE = 9;
@@ -456,37 +454,6 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gamedata");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-	}
-
-	public void read_inbox()
-	{
-		fid = READ_INBOX;
-		loginRequired = true;
-
-		json = new JSONObject();
-
-		try {
-			json.put("request", "inbox");
-		} catch (JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-	}
-
-	public void clear_inbox(final long time)
-	{
-		fid = CLEAR_INBOX;
-		loginRequired = true;
-
-		json = new JSONObject();
-
-		try {
-			json.put("request", "clearinbox");
-			json.put("time", time);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();

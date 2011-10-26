@@ -53,11 +53,11 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 			switch (msg.what) {
-			case NetworkClient.READ_INBOX:
-				NewMSG(json);
-				break;
-			case NetworkClient.SYNC_LIST:
+			case NetworkClient2.SYNC_LIST:
 				NewMove(json);
+				break;
+			case NetworkClient2.SYNC_MSGS:
+				NewMsgs(json);
 				break;
 			}
 		}
@@ -140,7 +140,11 @@ public class GenesisNotifier extends Service implements Runnable
 			net2.disconnect();
 			return;
 		}
-		net2.read_inbox();
+		final GameDataDB db = new GameDataDB(this);
+		final long time = db.getNewestMsg();
+		db.close();
+
+		net2.sync_msgs(time);
 		net2.run();
 	} catch (JSONException e) {
 		e.printStackTrace();
@@ -148,16 +152,13 @@ public class GenesisNotifier extends Service implements Runnable
 	}
 	}
 
-	private void NewMSG(final JSONObject json)
+	private void NewMsgs(final JSONObject json)
 	{
 	try {
-		final JSONArray games = json.getJSONArray("games");
-		final JSONArray msgs = json.getJSONArray("msgs");
+		final JSONArray msgs = json.getJSONArray("msglist");
 
-		if (games.length() > 0)
-			SendNotification("Added To New Game", "You've been added to a new game", 0);
-		else if (msgs.length() > 0)
-			SendNotification("New MSG", "You have a new message", 0);
+		if (msgs.length() > 0)
+			SendNotification("New Message", "A new message was posted to a game you're in", 1);
 		net2.disconnect();
 	} catch (JSONException e) {
 		e.printStackTrace();
@@ -256,8 +257,6 @@ public class GenesisNotifier extends Service implements Runnable
 		public final static int REGISTER = 2;
 		public final static int JOIN_GAME = 3;
 		public final static int NEW_GAME = 4;
-		public final static int READ_INBOX = 5;
-		public final static int CLEAR_INBOX = 6;
 		public final static int GAME_STATUS = 7;
 		public final static int GAME_INFO = 8;
 		public final static int SUBMIT_MOVE = 9;
@@ -267,6 +266,7 @@ public class GenesisNotifier extends Service implements Runnable
 		public final static int GAME_DATA = 13;
 		public final static int RESIGN_GAME = 14;
 		public final static int SYNC_LIST = 15;
+		public final static int SYNC_MSGS = 16;
 
 		private final Context context;
 		private final Handler callback;
@@ -490,21 +490,6 @@ public class GenesisNotifier extends Service implements Runnable
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 		}
 
-		public void read_inbox()
-		{
-			fid = READ_INBOX;
-			loginRequired = true;
-
-			json = new JSONObject();
-
-			try {
-				json.put("request", "inbox");
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-
 		public void sync_list(final long time)
 		{
 			fid = SYNC_LIST;
@@ -514,6 +499,22 @@ public class GenesisNotifier extends Service implements Runnable
 
 			try {
 				json.put("request", "synclist");
+				json.put("time", time);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
+		}
+
+		public void sync_msgs(final long time)
+		{
+			fid = SYNC_MSGS;
+			loginRequired = true;
+
+			json = new JSONObject();
+
+			try {
+				json.put("request", "syncmsgs");
 				json.put("time", time);
 			} catch (JSONException e) {
 				e.printStackTrace();
