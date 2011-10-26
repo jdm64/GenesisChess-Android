@@ -211,12 +211,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 				startActivityForResult(new Intent(this, Login.class), 1);
 				return;
 			}
-			bundle = new Bundle();
-			bundle.putInt("type", Enums.ONLINE_GAME);
-
-			intent = new Intent(this, GameList.class);
-			intent.putExtras(bundle);
-
+			intent = new Intent(this, OnlineGameList.class);
 			startActivity(intent);
 			break;
 		case R.id.archive_game:

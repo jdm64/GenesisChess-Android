@@ -181,7 +181,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final Bundle bundle = new Bundle();
 		bundle.putInt("type", Enums.ONLINE_GAME);
 
-		final Intent intent = new Intent(this, GameList.class);
+		final Intent intent = new Intent(this, OnlineGameList.class);
 		intent.putExtras(bundle);
 
 		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
