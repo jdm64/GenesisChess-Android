@@ -118,8 +118,19 @@ class GameDataDB
 		final int eventtype = Enums.EventType(json.getString("eventtype"));
 		final int status = Enums.GameStatus(json.getString("status"));
 
-		final Object[] data = {gameid, gametype, eventtype, ctime, white, black};
-		db.execSQL("INSERT OR REPLACE INTO onlinegames (gameid, gametype, eventtype, ctime, white, black) VALUES (?, ?, ?, ?, ?, ?);", data);
+		final GameInfo info = new GameInfo(context, status, history, white, black);
+
+		final int ply = info.getPly(), yourturn = info.getYourTurn();
+
+		final Object[] data = {gameid, gametype, eventtype, status, ctime,
+			stime, yourturn, ply, white, black, zfen, history};
+
+		final String q1 = "INSERT OR REPLACE INTO onlinegames ";
+		final String q2 = "(gameid, gametype, eventtype, status, ctime, ";
+		final String q3 = "stime, yourturn, ply, white, black, zfen, history) ";
+		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
