@@ -141,11 +141,6 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			view.setOnItemClickListener(self);
 			self.registerForContextMenu(view);
 
-			// set empty view item
-			final View empty = list.getEmptyView(self);
-			((ViewGroup) pager.getParent()).addView(empty);
-			view.setEmptyView(empty);
-
 			((ViewPager) collection).addView(view, 0);
 			return view;
 		}
