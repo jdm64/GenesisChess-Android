@@ -28,7 +28,7 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"status INTEGER," +
 		"ctime INTEGER," +
 		"stime INTEGER DEFAULT 0," +
-		"yourturn INTEGER DEFAULT 0," + // 1 = your turn, 0 = opponent's turn
+		"yourturn INTEGER DEFAULT 1," + // 1 = your turn, 0 = opponent's turn
 		"ply INTEGER DEFAULT 0," +
 		"white TEXT," +
 		"black TEXT," +
