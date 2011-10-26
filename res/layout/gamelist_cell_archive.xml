@@ -26,4 +26,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentBottom="true"
 	android:layout_marginRight="6dp"
 	android:textSize="14dp"/>
+	<TextView
+	android:id="@+id/new_msgs"
+	android:layout_alignParentRight="true"
+	android:layout_alignParentTop="true"
+	android:layout_marginRight="6dp"
+	android:textColor="#ff0000"
+	android:textSize="14dp"/>
 </RelativeLayout>

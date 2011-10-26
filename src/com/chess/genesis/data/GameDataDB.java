@@ -290,8 +290,11 @@ class GameDataDB
 	{
 		final String username = getUsername();
 		final String[] data = {username, username};
+		final String query = "SELECT * FROM archivegames LEFT JOIN " +
+			"(SELECT gameid, unread FROM msgtable WHERE unread=1) USING(gameid) " +
+			"WHERE white=? OR black=? GROUP BY gameid ORDER BY stime DESC";
 
-		return (SQLiteCursor) db.rawQuery("SELECT * FROM archivegames WHERE white=? OR black=? ORDER BY stime DESC", data);
+		return (SQLiteCursor) db.rawQuery(query, data);
 	}
 
 	public void archiveNetworkGame(final String gameid, final int w_from, final int w_to, final int b_from, final int b_to)

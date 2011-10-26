@@ -214,6 +214,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
+
+		txt = (TextView) cell.findViewById(R.id.new_msgs);
+		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
+			txt.setText("new msgs");
+		else
+			txt.setText("");
 	}
 
 	public View getEmptyView(final Context context)
