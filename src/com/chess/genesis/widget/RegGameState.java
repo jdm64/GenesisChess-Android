@@ -469,7 +469,7 @@ class RegGameState extends GameState
 		(new Thread(net)).start();
 	}
 
-	public void applyRemoteMove(final String hist)
+	private void applyRemoteMove(final String hist)
 	{
 		if (hist == null || hist.length() < 3)
 			return;

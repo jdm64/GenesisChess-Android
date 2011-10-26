@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class DeleteArchiveDialog extends Dialog implements OnClickListener
+class DeleteArchiveDialog extends Dialog implements OnClickListener
 {
 	private final String gameid;
 

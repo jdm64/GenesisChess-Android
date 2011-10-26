@@ -2,10 +2,6 @@ package com.chess.genesis;
 
 final class Piece
 {
-	private Piece()
-	{
-	}
-
 	public static final int WHITE = 1;
 	public static final int BLACK = -1;
 
@@ -59,7 +55,7 @@ final class Piece
 	public static final int F6 = 21;
 	public static final int G6 = 22;
 	public static final int H6 = 23;
-	public static final int	A5 = 24;
+	public static final int A5 = 24;
 	public static final int B5 = 25;
 	public static final int C5 = 26;
 	public static final int D5 = 27;
@@ -67,7 +63,7 @@ final class Piece
 	public static final int F5 = 29;
 	public static final int G5 = 30;
 	public static final int H5 = 31;
-	public static final int	A4 = 32;
+	public static final int A4 = 32;
 	public static final int B4 = 33;
 	public static final int C4 = 34;
 	public static final int D4 = 35;
@@ -91,7 +87,7 @@ final class Piece
 	public static final int F2 = 53;
 	public static final int G2 = 54;
 	public static final int H2 = 55;
-	public static final int	A1 = 56;
+	public static final int A1 = 56;
 	public static final int B1 = 57;
 	public static final int C1 = 58;
 	public static final int D1 = 59;

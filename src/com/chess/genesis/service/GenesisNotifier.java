@@ -98,7 +98,7 @@ public class GenesisNotifier extends Service implements Runnable
 		return null;
 	}
 
-	public void ScheduleWakeup()
+	private void ScheduleWakeup()
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		final Calendar cal = Calendar.getInstance();
@@ -111,7 +111,7 @@ public class GenesisNotifier extends Service implements Runnable
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
 	}
 
-	public boolean internetIsActive()
+	private boolean internetIsActive()
 	{
 		final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -225,7 +225,7 @@ public class GenesisNotifier extends Service implements Runnable
 			loginHash = input.readLine().trim();
 		}
 
-		public void disconnect()
+		public final void disconnect()
 		{
 		try {
 			if (sock != null)

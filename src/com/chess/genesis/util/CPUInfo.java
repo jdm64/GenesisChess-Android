@@ -5,12 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-class CPUInfo
+final class CPUInfo
 {
-	private CPUInfo()
-	{
-	}
-
 	public static int getBogoMips()
 	{
 		int bogo = 500;

@@ -14,7 +14,7 @@ class MoveFlags
 		bits = flags.bits;
 	}
 
-	public void reset()
+	public final void reset()
 	{
 		bits = 0xf0;
 	}

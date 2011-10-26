@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Adapter
+class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Adapter
 {
 	private final Context mContext;
 	private String[] TITLES;

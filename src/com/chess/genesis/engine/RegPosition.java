@@ -32,7 +32,7 @@ class RegPosition extends RegMoveLookup
 		flags = new MoveFlags();
 	}
 
-	public void parseReset()
+	private void parseReset()
 	{
 		for (int i = 0; i < 64; i++) 
 			square[i] = Piece.EMPTY;
@@ -40,7 +40,7 @@ class RegPosition extends RegMoveLookup
 		flags.reset();
 	}
 
-	public boolean setPiece(final int loc, final int type)
+	private boolean setPiece(final int loc, final int type)
 	{
 		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],

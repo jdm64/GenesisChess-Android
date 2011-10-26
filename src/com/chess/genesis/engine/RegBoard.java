@@ -23,7 +23,7 @@ class RegBoard extends RegPosition
 		new RegPiece(Piece.B1, Piece.WHITE_KNIGHT), new RegPiece(Piece.G1, Piece.WHITE_KNIGHT), new RegPiece(Piece.C1, Piece.WHITE_BISHOP), new RegPiece(Piece.F1, Piece.WHITE_BISHOP),
 		new RegPiece(Piece.A1, Piece.WHITE_ROOK), new RegPiece(Piece.H1, Piece.WHITE_ROOK), new RegPiece(Piece.D1, Piece.WHITE_QUEEN), new RegPiece(Piece.E1, Piece.WHITE_KING)	};
 
-	public static final int[][] regLocValue = {
+	private static final int[][] regLocValue = {
 		{0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
@@ -82,7 +82,7 @@ class RegBoard extends RegPosition
 		  0,  5,  10,  15,  20,  15,  10,  5}
 	};
 
-	public static final int[] regPieceValue =
+	private static final int[] regPieceValue =
 		{0, 224, 336, 560, 896, 1456, 0};
 
 	public static final int NOT_MATE = 1;
@@ -134,7 +134,7 @@ class RegBoard extends RegPosition
 		key = board.key;
 	}
 
-	public void reset()
+	public final void reset()
 	{
 		square = IntArray.clone(InitRegBoard);
 		piece = RegPiece.arrayCopy(InitRegPiece);

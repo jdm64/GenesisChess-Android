@@ -37,7 +37,7 @@ import android.widget.TextView;
  * For a dialog using this view, see {@link android.app.TimePickerDialog}.
  * @hide
  */
-public class NumberSpinner extends LinearLayout
+class NumberSpinner extends LinearLayout
 {
 	private final Handler mHandler;
 	private final EditText mText;
@@ -234,7 +234,7 @@ public class NumberSpinner extends LinearLayout
 	 * @param enabled True if this view is enabled, false otherwise.
 	 */
 	@Override
-	public void setEnabled(final boolean enabled)
+	public final void setEnabled(final boolean enabled)
 	{
 		super.setEnabled(enabled);
 

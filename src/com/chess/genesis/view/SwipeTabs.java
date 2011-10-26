@@ -23,17 +23,15 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class SwipeTabs extends ViewGroup implements OnPageChangeListener
+class SwipeTabs extends ViewGroup implements OnPageChangeListener
 {
 	protected final static String TAG = "SwipeTabs";
 

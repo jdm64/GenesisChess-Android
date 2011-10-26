@@ -12,17 +12,17 @@ class GenBoard extends GenPosition
 		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
 		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
-	public static final int[] typeLookup = {
+	private static final int[] typeLookup = {
 		0, 0, 0, 0, 0, 0,  0,  0,
 		1, 1, 2, 2, 3, 3,  4,  5,
 		6, 6, 6, 6, 6, 6,  6,  6,
 		7, 7, 8, 8, 9, 9, 10, 11};
 
-	public static final int[] pieceValue = {
+	private static final int[] pieceValue = {
 		224, 224, 224, 224, 224, 224, 224, 224,
 		336, 336, 560, 560, 896, 896, 1456, 0};
 
-	public static final int[][] locValue = {
+	private static final int[][] locValue = {
 	{	0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
@@ -272,10 +272,8 @@ class GenBoard extends GenPosition
 			return false;
 		}
 
-		if (move.from != Piece.PLACEABLE) {
-			if (!fromto(move.from, move.to))
+		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
 				return false;
-		}
 		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
 			return false;
 
@@ -315,10 +313,8 @@ class GenBoard extends GenPosition
 		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
 			return KING_FIRST;
 
-		if (move.from != Piece.PLACEABLE) {
-			if (!fromto(move.from, move.to))
+		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
 				return INVALID_MOVEMENT;
-		}
 		int ret = VALID_MOVE;
 
 		make(move);

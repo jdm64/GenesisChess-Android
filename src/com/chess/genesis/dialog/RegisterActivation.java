@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class RegisterActivation extends Dialog implements OnClickListener
+class RegisterActivation extends Dialog implements OnClickListener
 {
 	public final static int MSG = 103;
 

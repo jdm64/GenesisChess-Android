@@ -31,7 +31,6 @@ import org.json.JSONObject;
 public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
 	public static GameList self;
-
 	public GameListAdapter gamelist_adapter;
 
 	private Bundle settings;

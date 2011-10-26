@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class SwipeTabFragment extends Fragment
+class SwipeTabFragment extends Fragment
 {
 	public SwipeTabFragment(final String title)
 	{
