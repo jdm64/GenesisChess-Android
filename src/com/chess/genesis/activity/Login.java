@@ -78,6 +78,8 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					pref.putBoolean("isLoggedIn", false);
 					pref.putString("username", "!error!");
 					pref.putString("passhash", "!error!");
+					pref.putLong("lastgamesync", 0);
+					pref.putLong("lastmsgsync", 0);
 					pref.commit();
 
 					txt = (EditText) findViewById(R.id.username);

@@ -35,6 +35,8 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 				pref.putBoolean("isLoggedIn", false);
 				pref.putString("username", "!error!");
 				pref.putString("passhash", "!error!");
+				pref.putLong("lastgamesync", 0);
+				pref.putLong("lastmsgsync", 0);
 				pref.commit();
 
 				final TextView text = (TextView) findViewById(R.id.welcome);

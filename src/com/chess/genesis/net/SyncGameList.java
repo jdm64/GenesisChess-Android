@@ -1,8 +1,11 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,10 +113,9 @@ class SyncGameList implements Runnable
 			net.run();
 			trylock();
 		} else {
-			final GameDataDB db = new GameDataDB(context);
-			final long gtime = db.getNewestOnlineTime();
-			final long mtime = db.getNewestMsg();
-			db.close();
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+			final long mtime = pref.getLong("lastmsgsync", 0);
+			final long gtime = pref.getLong("lastgamesync", 0);
 
 			net.sync_msgs(mtime);
 			net.run();
@@ -141,6 +143,7 @@ class SyncGameList implements Runnable
 	{
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
+		final long time = json.getLong("time");
 
 		for (int i = 0; i < ids.length(); i++) {
 			if (error)
@@ -150,6 +153,10 @@ class SyncGameList implements Runnable
 
 			lock++;
 		}
+		// Save sync time
+		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		pref.putLong("lastgamesync", time);
+		pref.commit();
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -158,6 +165,7 @@ class SyncGameList implements Runnable
 
 	private void sync_active(final JSONObject json)
 	{
+		long time = 0;
 		final GameDataDB db = new GameDataDB(context);
 		final ObjectArray<String> list = db.getOnlineGameIds();
 		db.close();
@@ -169,6 +177,7 @@ class SyncGameList implements Runnable
 		final ArrayList<String> list_need = new ArrayList<String>();
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
+		time = json.getLong("time");
 		for (int i = 0; i < ids.length(); i++)
 			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
@@ -186,6 +195,10 @@ class SyncGameList implements Runnable
 
 			lock++;
 		}
+		// Save sync time
+		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		pref.putLong("lastgamesync", time);
+		pref.commit();
 	}
 
 	private void sync_archive(final JSONObject json)
@@ -245,6 +258,7 @@ class SyncGameList implements Runnable
 	{
 	try {
 		final JSONArray msgs = data.getJSONArray("msglist");
+		final long time = data.getLong("time");
 		final GameDataDB db = new GameDataDB(context);
 
 		for (int i = 0; i < msgs.length(); i++) {
@@ -252,6 +266,11 @@ class SyncGameList implements Runnable
 			db.insertMsg(item);
 		}
 		db.close();
+
+		// Save sync time
+		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		pref.putLong("lastmsgsync", time);
+		pref.commit();
 	}  catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
