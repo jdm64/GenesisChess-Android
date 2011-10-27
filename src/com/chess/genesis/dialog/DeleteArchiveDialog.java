@@ -3,18 +3,23 @@ package com.chess.genesis;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 class DeleteArchiveDialog extends Dialog implements OnClickListener
 {
+	public final static int MSG = 113;
+
+	private final Handler handle;
 	private final String gameid;
 
-	public DeleteArchiveDialog(final Context context, final String _gameid)
+	public DeleteArchiveDialog(final Context context, final Handler handler, final String _gameid)
 	{
 		super(context);
 
+		handle = handler;
 		gameid = _gameid;
 	}
 
@@ -39,7 +44,7 @@ class DeleteArchiveDialog extends Dialog implements OnClickListener
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteArchiveGame(gameid);
 			db.close();
-			GameList.self.gamelist_adapter.update();
+			handle.sendMessage(handle.obtainMessage(MSG, 1));
 			break;
 		}
 		dismiss();

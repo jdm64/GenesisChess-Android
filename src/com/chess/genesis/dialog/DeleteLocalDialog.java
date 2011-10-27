@@ -3,18 +3,23 @@ package com.chess.genesis;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 class DeleteLocalDialog extends Dialog implements OnClickListener
 {
+	public final static int MSG = 112;
+
+	private final Handler handle;
 	private final int gameid;
 
-	public DeleteLocalDialog(final Context context, final int _gameid)
+	public DeleteLocalDialog(final Context context, final Handler handler, final int _gameid)
 	{
 		super(context);
 
+		handle = handler;
 		gameid = _gameid;
 	}
 
@@ -39,7 +44,7 @@ class DeleteLocalDialog extends Dialog implements OnClickListener
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteLocalGame(gameid);
 			db.close();
-			GameList.self.gamelist_adapter.update();
+			handle.sendMessage(handle.obtainMessage(MSG, 1));
 			break;
 		}
 		dismiss();

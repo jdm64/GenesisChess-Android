@@ -47,6 +47,10 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
+			case DeleteArchiveDialog.MSG:
+			case RenameGameDialog.MSG:
+				updateGameListAdapters();
+				break;
 			case NewOnlineGameDialog.MSG:
 				Bundle data = (Bundle) msg.obj;
 
@@ -360,10 +364,10 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
-			(new DeleteArchiveDialog(this, bundle.getString("gameid"))).show();
+			(new DeleteArchiveDialog(this, handle, bundle.getString("gameid"))).show();
 			break;
 		case R.id.rename_game:
-			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
+			(new RenameGameDialog(this, handle, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
 			break;
 		case R.id.local_copy:
 			final int type = (pager.getCurrentItem() == ARCHIVE_PAGE)? Enums.ARCHIVE_GAME : Enums.ONLINE_GAME;

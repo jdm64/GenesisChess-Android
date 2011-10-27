@@ -44,6 +44,11 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
+			case DeleteLocalDialog.MSG:
+			case DeleteArchiveDialog.MSG:
+			case RenameGameDialog.MSG:
+				gamelist_adapter.update();
+				break;
 			case NewOnlineGameDialog.MSG:
 				Bundle data = (Bundle) msg.obj;
 
@@ -380,12 +385,12 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		switch (item.getItemId()) {
 		case R.id.delete_game:
 			if (type == Enums.LOCAL_GAME)
-				(new DeleteLocalDialog(this, Integer.valueOf(bundle.getString("id")))).show();
+				(new DeleteLocalDialog(this, handle, Integer.valueOf(bundle.getString("id")))).show();
 			else if (type == Enums.ARCHIVE_GAME)
-				(new DeleteArchiveDialog(this, bundle.getString("gameid"))).show();
+				(new DeleteArchiveDialog(this, handle, bundle.getString("gameid"))).show();
 			break;
 		case R.id.rename_game:
-			(new RenameGameDialog(this, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
+			(new RenameGameDialog(this, handle, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
 			break;
 		case R.id.local_copy:
 			(new CopyGameConfirm(this, bundle.getString("gameid"), type)).show();
