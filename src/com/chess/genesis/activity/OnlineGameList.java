@@ -23,6 +23,7 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -140,22 +141,26 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			final GameListAdapter list = new GameListAdapter(self, type, yourmove);
 			gamelistadapter_arr[position] = list;
 
-			final ListView view = (ListView) getLayoutInflater().inflate(R.layout.gamelist_listview, null);
-			view.setAdapter(list);
-			view.setOnItemClickListener(self);
-			self.registerForContextMenu(view);
+			final FrameLayout layout = (FrameLayout) getLayoutInflater().inflate(R.layout.gamelist_listview, null);
+			final ListView listview = (ListView) layout.getChildAt(0);
+			final View empty = list.getEmptyView(self);
 
-			((ViewPager) collection).addView(view, 0);
-			return view;
+			layout.addView(empty, 1);
+			listview.setEmptyView(empty);
+			listview.setAdapter(list);
+			listview.setOnItemClickListener(self);
+			self.registerForContextMenu(listview);
+
+			((ViewPager) collection).addView(layout, 0);
+
+			return layout;
 		}
 
 		@Override
 		public void destroyItem(final View collection, final int position, final Object view)
 		{
-			final GameListAdapter list = (GameListAdapter) ((ListView) view).getAdapter();
-			list.close();
-
-			((ViewPager) collection).removeView((ListView) view);
+			gamelistadapter_arr[position].close();
+			((ViewPager) collection).removeView((FrameLayout) view);
 		}
 
 		@Override
@@ -171,7 +176,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		@Override
 		public boolean isViewFromObject(final View view, final Object object)
 		{
-			return view == ((ListView) object);
+			return view == ((FrameLayout) object);
 		}
 
 		@Override
