@@ -29,7 +29,16 @@ android:versionName="@string/version">
 		<activity android:name="GenGame"/>
 
 		<service android:name="GenesisNotifier" android:enabled="true"/>
-		<receiver android:name="GenesisAlarm"></receiver>
+		<receiver android:name="GenesisAlarm">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED"/>
+				<category android:name="android.intent.category.HOME"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_REPLACED"/>
+				<data android:scheme="package" android:path="com.chess.genesis"/>
+			</intent-filter>
+		</receiver>
 	</application>
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
