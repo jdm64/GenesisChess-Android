@@ -29,6 +29,7 @@ class NetworkClient implements Runnable
 	public final static int SYNC_MSGS = 16;
 	public final static int GET_OPTION = 17;
 	public final static int SET_OPTION = 18;
+	public final static int POOL_INFO = 19;
 
 	private final Context context;
 	private final Handler callback;
@@ -535,6 +536,21 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "getoption");
 			json.put("option", option);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void pool_info()
+	{
+		fid = POOL_INFO;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "poolinfo");
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
