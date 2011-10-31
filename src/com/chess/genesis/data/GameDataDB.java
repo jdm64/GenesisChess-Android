@@ -141,15 +141,19 @@ class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
+
+		final String[] data1 = {gameid};
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
+
+		if (cursor.getCount() < 1) {
+			insertOnlineGame(json);
+			return;
+		}
+
 		final String zfen = json.getString("zfen");
 		final String history = json.getString("history");
 		final long stime = json.getLong("stime");
 		final int status = Enums.GameStatus(json.getString("status"));
-
-		final String[] data1 = {gameid};
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
-		if (cursor.getCount() < 1)
-			return;
 
 		final Bundle row = rowToBundle(cursor, 0);
 		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
