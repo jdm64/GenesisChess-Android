@@ -129,7 +129,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			final Bundle bundle = new Bundle();
 			bundle.putInt("type", Enums.ONLINE_GAME);
 
-			final Intent intent = new Intent(this, GameList.class);
+			final Intent intent = new Intent(this, OnlineGameList.class);
 			intent.putExtras(bundle);
 
 			startActivity(intent);
