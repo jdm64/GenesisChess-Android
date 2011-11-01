@@ -58,6 +58,9 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		// initialize static classes
 		sock = new SocketClient();
 
+		// run upgrade
+		UpgradeHandler.run(this);
+
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
