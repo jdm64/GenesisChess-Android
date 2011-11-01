@@ -14,29 +14,27 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_weight="408"
 		android:src="@drawable/topbar_plus"/>
 	</TableRow>
-	<TableRow
-	android:id="@+id/table_02"
+	<FrameLayout
+	android:id="@+id/frame_01"
 	style="@style/FillWidth"
 	android:layout_below="@id/table_01">
-		<com.chess.genesis.MyImageView
-		android:id="@+id/your_move"
+		<TextView
+		android:id="@+id/game_search"
 		style="@style/FillWidth"
-		android:layout_weight="50"
-		android:src="@drawable/yourmove_selected"/>
-		<com.chess.genesis.MyImageView
-		android:id="@+id/their_move"
-		style="@style/FillWidth"
-		android:layout_weight="50"
-		android:src="@drawable/theirmove_notselected"/>
-	</TableRow>
-	<com.chess.genesis.MyImageView
-	android:id="@+id/move_divider"
+		android:padding="4dp"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:textSize="16dp"
+		android:text="Searching For Opponents..."/>
+	</FrameLayout>
+	<com.chess.genesis.SwipeTabs
+	android:id="@+id/swipetabs"
+	android:layout_below="@id/frame_01"
 	style="@style/FillWidth"
-	android:layout_below="@id/table_02"
-	android:src="@drawable/move_divider"/>
-	<ListView
-	android:id="@+id/game_list"
-	android:layout_below="@id/move_divider"
+	android:background="#ff383838"/>
+	<android.support.v4.view.ViewPager
+	android:id="@+id/swipe_list"
+	android:layout_below="@id/swipetabs"
 	android:layout_above="@id/botbar"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"

@@ -234,7 +234,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		progress = new ProgressMsg(this);
 
 		// set content view
-		setContentView(R.layout.gamelist_swipe);
+		setContentView(R.layout.gamelist_online);
 
 	try {
 		// Set "waiting for opponent"
