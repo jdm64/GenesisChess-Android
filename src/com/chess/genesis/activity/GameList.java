@@ -37,7 +37,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private int type;
-	private boolean yourmove;
 
 	private final Handler handle = new Handler()
 	{
@@ -49,38 +48,15 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			case RenameGameDialog.MSG:
 				gamelist_adapter.update();
 				break;
-			case NewOnlineGameDialog.MSG:
-				Bundle data = (Bundle) msg.obj;
-
-				if (data.getInt("opponent") == Enums.INVITE) {
-					(new InviteOptionsDialog(self, handle, data)).show();
-					return;
-				}
-				progress.setText("Sending Newgame Request");
-				String gametype = Enums.GameType(data.getInt("gametype"));
-
-				net.join_game(gametype);
-				(new Thread(net)).start();
-				break;
 			case RematchConfirm.MSG:
-				data = (Bundle) msg.obj;
+				Bundle data = (Bundle) msg.obj;
 				progress.setText("Sending Newgame Request");
 
 				final String opponent = data.getString("opp_name");
 				String color = Enums.ColorType(data.getInt("color"));
-				gametype = Enums.GameType(data.getInt("gametype"));
+				String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.new_game(opponent, gametype, color);
-				(new Thread(net)).start();
-				break;
-			case InviteOptionsDialog.MSG:
-				data = (Bundle) msg.obj;
-				progress.setText("Sending Newgame Request");
-
-				gametype = Enums.GameType(data.getInt("gametype"));
-				color = Enums.ColorType(data.getInt("color"));
-
-				net.new_game(data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
 				break;
 			case NewLocalGameDialog.MSG:
@@ -104,8 +80,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 				startActivity(intent);
 				break;
-			case SyncGameList.MSG:
-			case NetworkClient.JOIN_GAME:
 			case NetworkClient.NEW_GAME:
 				final JSONObject json = (JSONObject) msg.obj;
 				try {
@@ -115,14 +89,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 						return;
 					}
 					progress.remove();
-
-					if (msg.what == SyncGameList.MSG) {
-						gamelist_adapter.update();
-						if (yourmove && gamelist_adapter.getCount() == 0) {
-							final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-							nm.cancelAll();
-						}
-					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -147,26 +113,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		settings = getIntent().getExtras();
 		settings.putString("username", prefs.getString("username", "!error!"));
 		type = settings.getInt("type", Enums.ONLINE_GAME);
-		yourmove = true;
 
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
 		// set content view
 		switch (type) {
-		case Enums.ONLINE_GAME:
-			setContentView(R.layout.gamelist_online);
-
-			ImageView button = (ImageView) findViewById(R.id.your_move);
-			button.setOnTouchListener(this);
-			button.setOnClickListener(this);
-
-			button = (ImageView) findViewById(R.id.their_move);
-			button.setOnTouchListener(this);
-			button.setOnClickListener(this);
-			break;
 		case Enums.LOCAL_GAME:
-		default:
 			setContentView(R.layout.gamelist_local);
 			break;
 		case Enums.ARCHIVE_GAME:
@@ -176,9 +129,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		// set click listeners
 		switch (type) {
-		case Enums.ONLINE_GAME:
 		case Enums.LOCAL_GAME:
-		default:
 			ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 			button.setOnTouchListener(this);
 			button.setOnLongClickListener(this);
@@ -213,27 +164,14 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public void onResume()
 	{
 		super.onResume();
+		NetActive.inc();
 		gamelist_adapter.update();
-
-		if (settings.getInt("type", Enums.ONLINE_GAME) == Enums.ONLINE_GAME) {
-			// start background notifier
-			startService(new Intent(this, GenesisNotifier.class));
-
-			NetActive.inc();
-			progress.setText("Updating Game List");
-
-			// Must not be final
-			SyncGameList sync = new SyncGameList(this, handle);
-			(new Thread(sync)).start();
-		}
 	}
 
 	@Override
 	public void onPause()
 	{
-		if (settings.getInt("type") == Enums.ONLINE_GAME)
-			NetActive.dec();
-
+		NetActive.dec();
 		super.onPause();
 	}
 
@@ -265,32 +203,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar_plus);
 			break;
-		case R.id.your_move:
-			if (yourmove) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.yourmove_selected_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.yourmove_selected);
-			} else {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.yourmove_notselected_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.yourmove_notselected);
-			}
-			break;
-		case R.id.their_move:
-			if (yourmove) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.theirmove_notselected_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.theirmove_notselected);
-			} else {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.theirmove_selected_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.theirmove_selected);
-			}
-			break;
 		}
 		return false;
 	}
@@ -299,34 +211,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		switch (v.getId()) {
 		case R.id.topbar_plus:
-			if (settings.getInt("type") == Enums.LOCAL_GAME)
-				(new NewLocalGameDialog(v.getContext(), handle)).show();
-			else
-				(new NewOnlineGameDialog(v.getContext(), handle)).show();
-			break;
-		case R.id.your_move:
-			if (yourmove)
-				return;
-			yourmove = true;
-			gamelist_adapter.setYourturn(Enums.YOUR_TURN);
-
-			ImageView button = (ImageView) findViewById(R.id.your_move);
-			button.setImageResource(R.drawable.yourmove_selected);
-
-			button = (ImageView) findViewById(R.id.their_move);
-			button.setImageResource(R.drawable.theirmove_notselected);
-			break;
-		case R.id.their_move:
-			if (!yourmove)
-				return;
-			yourmove = false;
-			gamelist_adapter.setYourturn(Enums.THEIR_TURN);
-
-			button = (ImageView) findViewById(R.id.your_move);
-			button.setImageResource(R.drawable.yourmove_notselected);
-
-			button = (ImageView) findViewById(R.id.their_move);
-			button.setImageResource(R.drawable.theirmove_selected);
+			(new NewLocalGameDialog(v.getContext(), handle)).show();
 			break;
 		}
 	}
@@ -367,9 +252,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		case Enums.LOCAL_GAME:
 			getMenuInflater().inflate(R.menu.gamelist_context_local, menu);
 			break;
-		case Enums.ONLINE_GAME:
-			getMenuInflater().inflate(R.menu.gamelist_context_online, menu);
-			break;
 		case Enums.ARCHIVE_GAME:
 			getMenuInflater().inflate(R.menu.gamelist_context_archive, menu);
 			break;
@@ -402,32 +284,6 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			break;
 		default:
 			return super.onContextItemSelected(item);
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu)
-	{
-		if (type == Enums.ONLINE_GAME)
-			getMenuInflater().inflate(R.menu.gamelist_options_online, menu);
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(final MenuItem item)
-	{
-		switch (item.getItemId()) {
-		case R.id.resync:
-			progress.setText("Updating Game List");
-
-			// Must not be final
-			SyncGameList sync = new SyncGameList(this, handle);
-			(new Thread(sync)).start();
-			break;
-		default:
-			return super.onOptionsItemSelected(item);
 		}
 		return true;
 	}
