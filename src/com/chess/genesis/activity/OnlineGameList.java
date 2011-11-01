@@ -338,6 +338,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.topbar_plus:
 			(new NewOnlineGameDialog(v.getContext(), handle)).show();
+			break;
 		case R.id.game_search:
 			(new GamePoolDialog(v.getContext())).show();
 			break;
