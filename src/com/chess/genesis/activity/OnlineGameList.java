@@ -3,10 +3,13 @@ package com.chess.genesis;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +30,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.TextView;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -89,22 +94,46 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			case SyncGameList.MSG:
 			case NetworkClient.JOIN_GAME:
 			case NetworkClient.NEW_GAME:
-				final JSONObject json = (JSONObject) msg.obj;
+				JSONObject json = (JSONObject) msg.obj;
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
 						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
-					progress.remove();
-
-					if (msg.what == SyncGameList.MSG) {
+					if (msg.what == SyncGameList.MSG || msg.what == NetworkClient.JOIN_GAME) {
+						progress.setText("Checking Game Pool");
 						self.updateGameListAdapters();
 						if (gamelistadapter_arr[YOUR_PAGE].getCount() == 0) {
 							final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 							nm.cancelAll();
 						}
+						net.pool_info();
+						(new Thread(net)).start();
+					} else {
+						progress.remove();
 					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				}
+				break;
+			case NetworkClient.POOL_INFO:
+				json = (JSONObject) msg.obj;
+				try {
+					if (json.getString("result").equals("error")) {
+						progress.remove();
+						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					final JSONArray games = json.getJSONArray("games");
+					final Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					pref.putString("poolinfo", games.toString());
+					pref.commit();
+
+					findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
+
+					progress.remove();
 				} catch (JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -207,6 +236,19 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		// set content view
 		setContentView(R.layout.gamelist_swipe);
 
+	try {
+		// Set "waiting for opponent"
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		final JSONArray pool = new JSONArray(pref.getString("poolinfo", "[]"));
+		final View tpool = findViewById(R.id.game_search);
+		tpool.setVisibility((pool.length() == 0)? View.GONE : View.VISIBLE);
+		tpool.setOnClickListener(this);
+		tpool.setOnTouchListener(this);
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
+
 		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
@@ -281,6 +323,12 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.topbar_plus);
 			break;
+		case R.id.game_search:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				v.setBackgroundColor(0xff00b7eb);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				v.setBackgroundColor(0xffffffff);
+			break;
 		}
 		return false;
 	}
@@ -290,6 +338,8 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		switch (v.getId()) {
 		case R.id.topbar_plus:
 			(new NewOnlineGameDialog(v.getContext(), handle)).show();
+		case R.id.game_search:
+			(new GamePoolDialog(v.getContext())).show();
 			break;
 		}
 	}
