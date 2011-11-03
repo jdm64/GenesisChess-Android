@@ -326,7 +326,7 @@ class GameDataDB
 		final long time = json.getLong("time");
 
 		final Object[] data = {gameid, time, username, msg, opponent};
-		db.execSQL("INSERT OR REPLACE INTO msgtable (gameid, time, username, msg, opponent) VALUES (?, ?, ?, ?, ?);", data);
+		db.execSQL("INSERT OR IGNORE INTO msgtable (gameid, time, username, msg, opponent) VALUES (?, ?, ?, ?, ?);", data);
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
