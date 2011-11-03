@@ -55,6 +55,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			switch (msg.what) {
 			case DeleteArchiveDialog.MSG:
 			case RenameGameDialog.MSG:
+			case ReadAllMsgsDialog.MSG:
 				updateGameListAdapters();
 				break;
 			case NewOnlineGameDialog.MSG:
@@ -374,6 +375,9 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			// Must not be final
 			SyncGameList sync = new SyncGameList(this, handle);
 			(new Thread(sync)).start();
+			break;
+		case R.id.readall_msgs:
+			(new ReadAllMsgsDialog(this, handle)).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

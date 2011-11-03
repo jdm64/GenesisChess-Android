@@ -38,4 +38,7 @@
 	<string name="gamepool_info">
 		You are waiting to be matched with an opponent in the following game types:
 	</string>
+	<string name="readallmsgs">
+		Are you sure you want to mark all messages as read?
+	</string>
 </resources>

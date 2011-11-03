@@ -339,6 +339,12 @@ class GameDataDB
 		db.execSQL("UPDATE msgtable SET unread=0 WHERE gameid=?", data);
 	}
 
+	public void setAllMsgsRead()
+	{
+		final Object[] data = {};
+		db.execSQL("UPDATE msgtable SET unread=0;", data);
+	}
+
 	public int getUnreadMsgCount(final String gameid)
 	{
 		final String[] data = {gameid};
