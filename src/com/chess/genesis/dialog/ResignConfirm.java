@@ -39,7 +39,7 @@ class ResignConfirm extends Dialog implements OnClickListener
 	{
 		switch (v.getId()) {
 		case R.id.ok:
-			handle.sendMessage(handle.obtainMessage(MSG, new Bundle()));
+			handle.sendMessage(handle.obtainMessage(MSG));
 			break;
 		}
 		dismiss();

@@ -44,7 +44,7 @@ class DeleteArchiveDialog extends Dialog implements OnClickListener
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteArchiveGame(gameid);
 			db.close();
-			handle.sendMessage(handle.obtainMessage(MSG, 1));
+			handle.sendMessage(handle.obtainMessage(MSG));
 			break;
 		}
 		dismiss();

@@ -44,7 +44,7 @@ class DeleteLocalDialog extends Dialog implements OnClickListener
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteLocalGame(gameid);
 			db.close();
-			handle.sendMessage(handle.obtainMessage(MSG, 1));
+			handle.sendMessage(handle.obtainMessage(MSG));
 			break;
 		}
 		dismiss();

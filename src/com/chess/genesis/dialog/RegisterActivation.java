@@ -34,7 +34,7 @@ class RegisterActivation extends Dialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		handle.sendMessage(handle.obtainMessage(MSG, new Bundle()));
+		handle.sendMessage(handle.obtainMessage(MSG));
 
 		dismiss();
 	}
