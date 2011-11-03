@@ -25,6 +25,7 @@ class GenEngine implements Runnable
 
 	private GenBoard board;
 	private GenMoveList curr;
+	private Rand64 rand;
 	private int secT;
 	private long endT;
 	private boolean active;
@@ -41,11 +42,44 @@ class GenEngine implements Runnable
 		placeKiller = new ObjectArray<GenMove>();
 		tactical = new BoolArray();
 		ismate = new BoolArray();
+		rand = new Rand64();
 	}
 
 	public void setBoard(final GenBoard _board)
 	{
 		board = new GenBoard(_board);
+	}
+
+	private void pickRandomMove()
+	{
+		final int score = curr.list[0].score;
+		int end = curr.size;
+
+		for (int i = 1; i < curr.size; i++) {
+			if (curr.list[i].score == score)
+				continue;
+			end = i;
+			break;
+		}
+		final int ind = (int) (Math.abs(rand.next()) % end);
+		pvMove.set(0, curr.list[ind].move);
+	}
+
+	private void pruneWeakMoves()
+	{
+		if (curr.list[0].score == curr.list[curr.size - 1].score)
+			return;
+
+		int cut = curr.size;
+		final int weak = curr.list[cut - 1].score;
+
+		for (int i = cut - 2; i > 0; i--) {
+			if (curr.list[i].score == weak)
+				continue;
+			cut = i + 1;
+			break;
+		}
+		curr.size = cut;
 	}
 
 	private int Quiescence(int alpha, final int beta, final int depth)
@@ -233,6 +267,7 @@ class GenEngine implements Runnable
 			b = alpha + 1;
 		}
 		Arrays.sort(curr.list, 0, curr.size);
+		pruneWeakMoves();
 	}
 
 	public void stop()
@@ -271,6 +306,10 @@ class GenEngine implements Runnable
 			if ((new Date()).getTime() > endT)
 				break;
 		}
+
+		// Randomize opening
+		if (board.getPly() < 7)
+			pickRandomMove();
 		curr = null;
 
 		final Bundle bundle = new Bundle();
