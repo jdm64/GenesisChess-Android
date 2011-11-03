@@ -64,6 +64,7 @@ class RegGameState extends GameState
 				JSONObject json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
+					undoMove();
 					progress.remove();
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
