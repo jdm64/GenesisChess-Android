@@ -33,8 +33,8 @@ class GameInfo
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		if (status != Enums.ACTIVE)
-			return 1;
+			return Enums.YOUR_TURN;
 		final String color = (getPly() % 2 == 0)? white : black;
-		return color.equals(pref.getString("username", "!error!"))? 1:0;
+		return color.equals(pref.getString("username", "!error!"))? Enums.YOUR_TURN : Enums.THEIR_TURN;
 	}
 }

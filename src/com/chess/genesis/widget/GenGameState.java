@@ -109,7 +109,7 @@ class GenGameState extends GameState
 				db.updateOnlineGame(json);
 
 				// clear notification if it's not your turn in any game
-				if (db.getOnlineGameList(1).getCount() == 0) {
+				if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() == 0) {
 					final NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 					nm.cancelAll();
 				}
