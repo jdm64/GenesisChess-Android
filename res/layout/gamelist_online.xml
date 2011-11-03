@@ -2,7 +2,7 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow
-	android:id="@+id/table_01">
+	android:id="@+id/layout01">
 		<com.chess.genesis.MyImageView
 		android:id="@+id/topbar_genesis"
 		style="@style/FillWidth"
@@ -15,9 +15,9 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:src="@drawable/topbar_plus"/>
 	</TableRow>
 	<FrameLayout
-	android:id="@+id/frame_01"
+	android:id="@+id/layout02"
 	style="@style/FillWidth"
-	android:layout_below="@id/table_01">
+	android:layout_below="@id/layout01">
 		<TextView
 		android:id="@+id/game_search"
 		style="@style/FillWidth"
@@ -29,7 +29,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	</FrameLayout>
 	<com.chess.genesis.SwipeTabs
 	android:id="@+id/swipetabs"
-	android:layout_below="@id/frame_01"
+	android:layout_below="@id/layout02"
 	style="@style/FillWidth"
 	android:background="#ff383838"/>
 	<android.support.v4.view.ViewPager

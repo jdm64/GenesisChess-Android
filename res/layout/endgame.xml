@@ -2,7 +2,7 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableLayout
-	android:id="@+id/table01"
+	android:id="@+id/layout01"
 	android:shrinkColumns="*"
 	android:paddingBottom="12dp"
 	android:paddingLeft="6dp"
@@ -38,7 +38,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	</TableLayout>
 	<Button
 	android:id="@+id/close"
-	android:layout_below="@id/table01"
+	android:layout_below="@id/layout01"
 	style="@style/FillWidth"
 	android:layout_marginTop="6dp"
 	android:text="Close"/>

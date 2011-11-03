@@ -36,10 +36,10 @@ class RematchConfirm extends Dialog implements OnClickListener
 		txt.setText("Are you sure you want to invite " + opponent +
 			" to a rematch game with the following settings?");
 
-		Button button = (Button) findViewById(R.id.rematch_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.rematch_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 
 		AdapterItem[] list = new AdapterItem[]
@@ -67,7 +67,7 @@ class RematchConfirm extends Dialog implements OnClickListener
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.rematch_ok:
+		case R.id.ok:
 			final Bundle data = new Bundle();
 
 			Spinner spinner = (Spinner) findViewById(R.id.game_type);

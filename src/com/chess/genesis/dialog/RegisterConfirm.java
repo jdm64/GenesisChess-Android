@@ -31,10 +31,10 @@ class RegisterConfirm extends Dialog implements OnClickListener
 
 		setContentView(R.layout.register_confirm);
 
-		Button button = (Button) findViewById(R.id.register_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.register_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 
 		TextView text = (TextView) findViewById(R.id.username);
@@ -47,7 +47,7 @@ class RegisterConfirm extends Dialog implements OnClickListener
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.register_ok:
+		case R.id.ok:
 			handle.sendMessage(handle.obtainMessage(MSG, data));
 			break;
 		}

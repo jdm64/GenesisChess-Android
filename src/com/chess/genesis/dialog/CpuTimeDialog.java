@@ -39,17 +39,17 @@ class CpuTimeDialog extends Dialog implements OnClickListener, NumberSpinner.OnC
 		final TextView text = (TextView) findViewById(R.id.strength_index);
 		text.setText("approximate strength = " + String.valueOf(CPUInfo.getBogoMips() * time));
 
-		Button button = (Button) findViewById(R.id.cputime_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.cputime_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.cputime_ok:
+		case R.id.ok:
 			final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
 			final Integer value = Integer.valueOf(number.getCurrent());
 			handle.sendMessage(handle.obtainMessage(MSG, value));

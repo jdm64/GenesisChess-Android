@@ -28,17 +28,17 @@ class ResignConfirm extends Dialog implements OnClickListener
 
 		setContentView(R.layout.resign_confirm);
 
-		Button button = (Button) findViewById(R.id.resign_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.resign_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.resign_ok:
+		case R.id.ok:
 			handle.sendMessage(handle.obtainMessage(MSG, new Bundle()));
 			break;
 		}

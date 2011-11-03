@@ -33,10 +33,10 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 
 		setContentView(R.layout.invite_options);
 
-		Button button = (Button) findViewById(R.id.newgame_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.newgame_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 
 		// ColorType dropdown
@@ -55,7 +55,7 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.newgame_ok:
+		case R.id.ok:
 			final EditText opp_name = (EditText) findViewById(R.id.opp_name);
 			final Spinner color = (Spinner) findViewById(R.id.invite_color);
 

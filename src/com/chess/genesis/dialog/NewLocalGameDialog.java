@@ -34,10 +34,10 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 
 		setContentView(R.layout.newlocalgame);
 
-		Button button = (Button) findViewById(R.id.newgame_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.newgame_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 
 		AdapterItem[] list = new AdapterItem[]
@@ -64,7 +64,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.newgame_ok:
+		case R.id.ok:
 			final Bundle data = new Bundle();
 			final EditText text = (EditText) findViewById(R.id.game_name);
 

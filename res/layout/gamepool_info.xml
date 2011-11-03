@@ -14,7 +14,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:textColor="#ff000000"
 		android:text="@string/gamepool_info"/>
 		<TableLayout
-		android:id="@+id/table01"
+		android:id="@+id/layout02"
 		style="@style/FillWidth"
 		android:layout_marginTop="6dp"
 		android:paddingLeft="32dp"

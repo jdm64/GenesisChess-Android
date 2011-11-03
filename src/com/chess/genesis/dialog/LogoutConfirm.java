@@ -28,17 +28,17 @@ class LogoutConfirm extends Dialog implements OnClickListener
 
 		setContentView(R.layout.logout_confirm);
 
-		Button button = (Button) findViewById(R.id.logout_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.logout_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.logout_ok:
+		case R.id.ok:
 			handle.sendMessage(handle.obtainMessage(MSG, new Bundle()));
 			break;
 		}

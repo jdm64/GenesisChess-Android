@@ -2,7 +2,7 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow
-	android:id="@+id/table_01">
+	android:id="@+id/layout01">
 		<com.chess.genesis.MyImageView
 		android:id="@+id/topbar_genesis"
 		style="@style/FillWidth"
@@ -17,7 +17,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<ListView
 	android:id="@+id/game_list"
 	style="@style/FillBoth"
-	android:layout_below="@id/table_01"
+	android:layout_below="@id/layout01"
 	android:layout_above="@id/botbar"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/botbar"

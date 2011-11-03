@@ -11,7 +11,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:paddingLeft="6dp"
 	android:paddingRight="6dp"/>
 	<TableLayout
-	android:id="@+id/table01"
+	android:id="@+id/layout01"
 	android:layout_below="@id/rematch_confirm"
 	android:background="#ffffff"
 	android:paddingTop="6dp"
@@ -41,15 +41,15 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	</TableLayout>
 	<TableRow
 	style="@style/FillWidth"
-	android:layout_below="@id/table01"
+	android:layout_below="@id/layout01"
 	android:layout_marginTop="6dp">
 		<Button
-		android:id="@+id/rematch_cancel"
+		android:id="@+id/cancel"
 		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Cancel"/>
 		<Button
-		android:id="@+id/rematch_ok"
+		android:id="@+id/ok"
 		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Rematch"/>

@@ -30,17 +30,17 @@ class DeleteLocalDialog extends Dialog implements OnClickListener
 
 		setContentView(R.layout.deletelocal);
 
-		Button button = (Button) findViewById(R.id.delete_cancel);
+		Button button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.delete_ok);
+		button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.delete_ok:
+		case R.id.ok:
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteLocalGame(gameid);
 			db.close();

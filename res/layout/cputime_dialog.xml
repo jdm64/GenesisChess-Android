@@ -37,12 +37,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/layout01"
 	android:layout_marginTop="6dp">
 		<Button
-		android:id="@+id/cputime_cancel"
+		android:id="@+id/cancel"
 		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Cancel"/>
 		<Button
-		android:id="@+id/cputime_ok"
+		android:id="@+id/ok"
 		style="@style/FillWidth"
 		android:layout_weight="50"
 		android:text="Set Time"/>

@@ -39,17 +39,17 @@ class RenameGameDialog extends Dialog implements OnClickListener
 		txtinput = (EditText) findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);
 
-		Button button = (Button) findViewById(R.id.rename_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.rename_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.rename_ok:
+		case R.id.ok:
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.renameLocalGame(gameid, txtinput.getText().toString().trim());
 			db.close();

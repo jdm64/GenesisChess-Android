@@ -63,7 +63,7 @@ class GamePoolDialog extends Dialog implements OnClickListener
 
 		setContentView(R.layout.gamepool_info);
 
-		final TableLayout table = (TableLayout) findViewById(R.id.table01);
+		final TableLayout table = (TableLayout) findViewById(R.id.layout02);
 		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
 
 		for (int i = 0; i < data.size(); i++) {

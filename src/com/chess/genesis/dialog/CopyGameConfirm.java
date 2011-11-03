@@ -27,17 +27,17 @@ class CopyGameConfirm extends Dialog implements OnClickListener
 
 		setContentView(R.layout.copygame_confirm);
 
-		Button button = (Button) findViewById(R.id.copy_ok);
+		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
 
-		button = (Button) findViewById(R.id.copy_cancel);
+		button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.copy_ok:
+		case R.id.ok:
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.copyGameToLocal(gameid, type);
 			db.close();
