@@ -269,7 +269,6 @@ class RegGameState extends GameState
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
-			setStm();
 			setBoard();
 			check_endgame();
 			return;
@@ -349,11 +348,6 @@ class RegGameState extends GameState
 			return false;
 		else if (board.getStm() == ycol)
 			return false;
-
-		// set cpu thinking text
-		final int cpuCol = (board.getStm() == Piece.WHITE)? R.id.white_name : R.id.black_name;
-		final TextView txt = (TextView) RegGame.self.findViewById(cpuCol);
-		txt.setText(txt.getText().toString() + " thinking");
 
 		if (cpu.isActive()) {
 			cpu.stop();

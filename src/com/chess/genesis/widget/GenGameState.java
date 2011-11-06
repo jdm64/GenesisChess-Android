@@ -344,11 +344,6 @@ class GenGameState extends GameState
 		else if (board.getStm() == ycol)
 			return false;
 
-		// set cpu thinking text
-		final int cpuCol = (board.getStm() == Piece.WHITE)? R.id.white_name : R.id.black_name;
-		final TextView txt = (TextView) GenGame.self.findViewById(cpuCol);
-		txt.setText(txt.getText().toString() + " thinking");
-
 		if (cpu.isActive()) {
 			cpu.stop();
 			return true;
