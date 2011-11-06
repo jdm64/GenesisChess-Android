@@ -176,7 +176,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 
 		txt = (TextView) cell.findViewById(R.id.new_msgs);
 		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
-			txt.setText("new msgs");
+			txt.setText("[new msg]");
 		else
 			txt.setText("");
 	}
@@ -217,7 +217,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 
 		txt = (TextView) cell.findViewById(R.id.new_msgs);
 		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
-			txt.setText("new msgs");
+			txt.setText("[new msg]");
 		else
 			txt.setText("");
 	}
