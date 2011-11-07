@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-class CpuTimeDialog extends Dialog implements OnClickListener, NumberSpinner.OnChangedListener
+class CpuTimeDialog extends Dialog implements OnClickListener
 {
 	public final static int MSG = 110;
 
@@ -32,12 +32,8 @@ class CpuTimeDialog extends Dialog implements OnClickListener, NumberSpinner.OnC
 		setContentView(R.layout.cputime_dialog);
 
 		final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
-		number.setOnChangeListener(this);
 		number.setRange(1, 30);
 		number.setCurrent(time);
-
-		final TextView text = (TextView) findViewById(R.id.strength_index);
-		text.setText("approximate strength = " + String.valueOf(CPUInfo.getBogoMips() * time));
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
@@ -56,12 +52,5 @@ class CpuTimeDialog extends Dialog implements OnClickListener, NumberSpinner.OnC
 			break;
 		}
 		dismiss();
-	}
-
-	public void onChanged(final NumberSpinner picker, final int oldVal, final int newVal)
-	{
-		final int strength = CPUInfo.getBogoMips() * newVal;
-		final TextView text = (TextView) findViewById(R.id.strength_index);
-		text.setText("approximate strength = " + String.valueOf(strength));
 	}
 }
