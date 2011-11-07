@@ -387,18 +387,19 @@ class RegGameState extends GameState
 			bstr = settings.getString("black");
 		}
 
-		final TextView white = (TextView) RegGame.self.findViewById(R.id.white_name);
-		final TextView black = (TextView) RegGame.self.findViewById(R.id.black_name);
+		final TabText white = (TabText) RegGame.self.findViewById(R.id.white_name);
+		final TabText black = (TabText) RegGame.self.findViewById(R.id.black_name);
+
 		if (board.getStm() == Piece.WHITE) {
+			white.setActive(true);
+			black.setActive(false);
 			white.setText(wstr + check);
 			black.setText(bstr);
-			white.setTypeface(Typeface.DEFAULT_BOLD);
-			black.setTypeface(Typeface.DEFAULT);
 		} else {
+			white.setActive(false);
+			black.setActive(true);
 			white.setText(wstr);
 			black.setText(bstr + check);
-			white.setTypeface(Typeface.DEFAULT);
-			black.setTypeface(Typeface.DEFAULT_BOLD);
 		}
 	}
 

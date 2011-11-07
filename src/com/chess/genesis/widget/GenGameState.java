@@ -382,18 +382,19 @@ class GenGameState extends GameState
 			bstr = settings.getString("black");
 		}
 
-		final TextView white = (TextView) GenGame.self.findViewById(R.id.white_name);
-		final TextView black = (TextView) GenGame.self.findViewById(R.id.black_name);
+		final TabText white = (TabText) GenGame.self.findViewById(R.id.white_name);
+		final TabText black = (TabText) GenGame.self.findViewById(R.id.black_name);
+
 		if (board.getStm() == Piece.WHITE) {
+			white.setActive(true);
+			black.setActive(false);
 			white.setText(wstr + check);
 			black.setText(bstr);
-			white.setTypeface(Typeface.DEFAULT_BOLD);
-			black.setTypeface(Typeface.DEFAULT);
 		} else {
+			white.setActive(false);
+			black.setActive(true);
 			white.setText(wstr);
 			black.setText(bstr + check);
-			white.setTypeface(Typeface.DEFAULT);
-			black.setTypeface(Typeface.DEFAULT_BOLD);
 		}
 	}
 
