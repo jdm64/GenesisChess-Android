@@ -29,7 +29,7 @@ class CpuTimeDialog extends Dialog implements OnClickListener
 	{
 		setTitle("Set CPU Time Limit");
 
-		setContentView(R.layout.cputime_dialog);
+		setContentView(R.layout.dialog_cputime);
 
 		final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
 		number.setRange(1, 30);

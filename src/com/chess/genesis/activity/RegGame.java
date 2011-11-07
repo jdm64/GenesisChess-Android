@@ -39,9 +39,9 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 
 		// set content view
 		if (type != Enums.LOCAL_GAME)
-			setContentView(R.layout.game);
+			setContentView(R.layout.activity_game_online);
 		else
-			setContentView(R.layout.game_local);
+			setContentView(R.layout.activity_game_local);
 
 		// must be called after setContentView
 		gamestate = new RegGameState(this, settings);

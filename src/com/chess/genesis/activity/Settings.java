@@ -88,7 +88,7 @@ public class Settings extends Activity implements OnCheckedChangeListener, OnIte
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setContentView(R.layout.settings);
+		setContentView(R.layout.activity_settings);
 
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);

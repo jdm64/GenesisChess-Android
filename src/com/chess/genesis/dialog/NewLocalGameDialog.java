@@ -32,7 +32,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 	{
 		setTitle("New Local Game");
 
-		setContentView(R.layout.newlocalgame);
+		setContentView(R.layout.dialog_newgame_local);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

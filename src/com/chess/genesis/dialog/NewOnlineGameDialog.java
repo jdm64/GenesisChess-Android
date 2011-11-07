@@ -28,7 +28,7 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 	{
 		setTitle("New Online Game");
 
-		setContentView(R.layout.newnetworkgame);
+		setContentView(R.layout.dialog_newgame_online);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

@@ -19,7 +19,7 @@ public class SubmitMove extends Activity implements OnClickListener, OnTouchList
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		setContentView(R.layout.submitmove);
+		setContentView(R.layout.activity_submitmove);
 		getWindow().setGravity(Gravity.BOTTOM);
 
 		ImageView image = (ImageView) findViewById(R.id.submit);

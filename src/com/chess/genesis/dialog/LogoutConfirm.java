@@ -26,7 +26,7 @@ class LogoutConfirm extends Dialog implements OnClickListener
 	{
 		setTitle("Logout Confirmation");
 
-		setContentView(R.layout.logout_confirm);
+		setContentView(R.layout.dialog_confirm_logout);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

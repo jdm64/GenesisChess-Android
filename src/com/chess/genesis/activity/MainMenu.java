@@ -65,7 +65,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// set content view
-		setContentView(R.layout.mainmenu);
+		setContentView(R.layout.activity_mainmenu);
 
 		// setup click listeners
 		final int list[] = new int[]{R.id.local_game, R.id.online_game,

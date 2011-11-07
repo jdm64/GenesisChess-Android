@@ -34,7 +34,7 @@ class RenameGameDialog extends Dialog implements OnClickListener
 	{
 		setTitle("Rename Game");
 
-		setContentView(R.layout.renamegame);
+		setContentView(R.layout.dialog_rename_game);
 
 		txtinput = (EditText) findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);

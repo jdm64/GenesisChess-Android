@@ -30,7 +30,7 @@ class RematchConfirm extends Dialog implements OnClickListener
 	{
 		setTitle("Rematch Confirmation");
 
-		setContentView(R.layout.rematch_confirm);
+		setContentView(R.layout.dialog_confirm_rematch);
 
 		final TextView txt = (TextView) findViewById(R.id.rematch_confirm);
 		txt.setText("Are you sure you want to invite " + opponent +

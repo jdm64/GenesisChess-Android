@@ -25,7 +25,7 @@ class CopyGameConfirm extends Dialog implements OnClickListener
 	{
 		setTitle("Copy Game To Local");
 
-		setContentView(R.layout.copygame_confirm);
+		setContentView(R.layout.dialog_confirm_copygame);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

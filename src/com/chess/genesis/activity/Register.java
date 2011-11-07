@@ -72,7 +72,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 		progress = new ProgressMsg(this);
 
 		// set content view
-		setContentView(R.layout.register);
+		setContentView(R.layout.activity_register);
 
 		// setup click listeners
 		ImageView image = (ImageView) findViewById(R.id.register);

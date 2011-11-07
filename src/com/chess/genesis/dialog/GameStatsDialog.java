@@ -89,7 +89,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 	{
 		setTitle(title);
 
-		setContentView(R.layout.endgame);
+		setContentView(R.layout.dialog_endgame);
 
 		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);

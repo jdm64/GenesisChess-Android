@@ -77,7 +77,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 		gameid = getIntent().getExtras().getString("gameid");
 
 		// set content view
-		setContentView(R.layout.msgbox);
+		setContentView(R.layout.activity_msgbox);
 
 		ImageView image = (ImageView) findViewById(R.id.submit_msg);
 		image.setOnTouchListener(this);

@@ -27,7 +27,7 @@ class ReadAllMsgsDialog extends Dialog implements OnClickListener
 	{
 		setTitle("Mark All Messages Read");
 
-		setContentView(R.layout.readallmsgs);
+		setContentView(R.layout.dialog_readall_msgs);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

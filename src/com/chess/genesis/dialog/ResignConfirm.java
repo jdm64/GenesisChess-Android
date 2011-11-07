@@ -26,7 +26,7 @@ class ResignConfirm extends Dialog implements OnClickListener
 	{
 		setTitle("Resign Confirmation");
 
-		setContentView(R.layout.resign_confirm);
+		setContentView(R.layout.dialog_confirm_resign);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

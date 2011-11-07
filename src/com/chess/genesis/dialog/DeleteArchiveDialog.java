@@ -28,7 +28,7 @@ class DeleteArchiveDialog extends Dialog implements OnClickListener
 	{
 		setTitle("Delete Game");
 
-		setContentView(R.layout.delete_archive);
+		setContentView(R.layout.dialog_delete_archive);
 
 		Button button = (Button) findViewById(R.id.cancel);
 		button.setOnClickListener(this);

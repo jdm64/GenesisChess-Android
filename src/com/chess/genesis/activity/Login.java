@@ -110,7 +110,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		progress = new ProgressMsg(this);
 
 		// set content view
-		setContentView(R.layout.login);
+		setContentView(R.layout.activity_login);
 
 		// setup click listeners
 		ImageView image = (ImageView) findViewById(R.id.login);

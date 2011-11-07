@@ -26,7 +26,7 @@ class RegisterActivation extends Dialog implements OnClickListener
 	{
 		setTitle("Activate Account");
 
-		setContentView(R.layout.register_activation);
+		setContentView(R.layout.dialog_confirm_activation);
 
 		final Button close = (Button) findViewById(R.id.close);
 		close.setOnClickListener(this);

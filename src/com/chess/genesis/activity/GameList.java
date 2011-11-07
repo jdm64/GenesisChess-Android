@@ -120,10 +120,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		// set content view
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			setContentView(R.layout.gamelist_local);
+			setContentView(R.layout.activity_gamelist_local);
 			break;
 		case Enums.ARCHIVE_GAME:
-			setContentView(R.layout.gamelist_archive);
+			setContentView(R.layout.activity_gamelist_archive);
 			break;
 		}
 

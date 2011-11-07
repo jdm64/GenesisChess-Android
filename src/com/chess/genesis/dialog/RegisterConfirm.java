@@ -29,7 +29,7 @@ class RegisterConfirm extends Dialog implements OnClickListener
 	{
 		setTitle("Register Confirmation");
 
-		setContentView(R.layout.register_confirm);
+		setContentView(R.layout.dialog_confirm_register);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);

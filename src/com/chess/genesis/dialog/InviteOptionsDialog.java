@@ -31,7 +31,7 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 	{
 		setTitle("Invite Game Options");
 
-		setContentView(R.layout.invite_options);
+		setContentView(R.layout.dialog_newgame_invite);
 
 		Button button = (Button) findViewById(R.id.ok);
 		button.setOnClickListener(this);
