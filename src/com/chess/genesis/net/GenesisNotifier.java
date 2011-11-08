@@ -30,7 +30,7 @@ import org.json.JSONTokener;
 
 public class GenesisNotifier extends Service implements Runnable
 {
-	public final static int POLL_FREQ = 20;
+	public final static int POLL_FREQ = 30;
 
 	private NetworkClient2 net2;
 	private boolean fromalarm;

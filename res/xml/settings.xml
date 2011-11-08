@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory
+	android:title="Device Notifications">
+		<CheckBoxPreference
+		android:key="noteEnabled"
+		android:defaultValue="true"
+		android:title="Background Syncing"
+		android:summary="In app notifications"/>
+		<com.chess.genesis.IntListPreference
+		android:key="notifierPolling"
+		android:defaultValue="30"
+		android:entries="@array/polling_freq_entries"
+		android:entryValues="@array/polling_freq_values"
+		android:dependency="noteEnabled"
+		android:title="Update Frequency"
+		android:summary="How often the server is checked"/>
+	</PreferenceCategory>
+	<PreferenceCategory
+	android:title="Server Notifications">
+		<CheckBoxPreference
+		android:key="emailNoteEnabled"
+		android:defaultValue="true"
+		android:persistent="false"
+		android:title="Your Turn Emails"
+		android:summary="Server email on your turn"/>
+	</PreferenceCategory>
+</PreferenceScreen>

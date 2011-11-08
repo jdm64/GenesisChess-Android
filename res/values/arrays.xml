@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="polling_freq_entries">
+		<item>5  Minutes</item>
+		<item>15 Minutes</item>
+		<item>30 Minutes</item>
+		<item>1  Hour</item>
+		<item>2  Hours</item>
+		<item>4  Hours</item>
+		<item>8  Hours</item>
+	</string-array>
+	<string-array name="polling_freq_values">
+		<item>5</item>
+		<item>15</item>
+		<item>30</item>
+		<item>60</item>
+		<item>120</item>
+		<item>240</item>
+		<item>480</item>
+	</string-array>
+</resources>
