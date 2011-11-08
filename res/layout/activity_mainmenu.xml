@@ -44,22 +44,30 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:src="@drawable/mainlogin"/>
 		</TableRow>
 	</TableLayout>
-	<com.chess.genesis.MyImageView
-	android:id="@+id/likefacebook"
-	android:layout_width="160dp"
-	android:layout_above="@id/botbar"
-	android:layout_alignParentLeft="true"
-	android:layout_margin="3dp"
-	android:src="@drawable/facebook"/>
+	<TableRow
+	android:id="@+id/layout01"
+	android:paddingBottom="3dp"
+	android:layout_above="@id/botbar">
+		<com.chess.genesis.MyImageView
+		android:id="@+id/likefacebook"
+		android:layout_weight="50"
+		android:padding="3dp"
+		android:src="@drawable/facebook"/>
+		<com.chess.genesis.MyImageView
+		android:id="@+id/googleplus"
+		android:layout_weight="50"
+		android:padding="3dp"
+		android:src="@drawable/googleplus"/>
+	</TableRow>
 	<TextView
 	android:id="@+id/beta"
-	android:layout_above="@id/botbar"
+	android:layout_above="@id/layout01"
 	android:layout_alignParentRight="true"
 	android:paddingRight="3dp"
 	android:textSize="10dp"
 	android:text="Beta"/>
 	<TextView
-	android:layout_above="@id/botbar"
+	android:layout_above="@id/layout01"
 	android:layout_toLeftOf="@id/beta"
 	android:paddingRight="3dp"
 	android:textSize="10dp"
