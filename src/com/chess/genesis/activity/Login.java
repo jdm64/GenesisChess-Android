@@ -61,7 +61,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 					// Must not be final
 					SyncGameList sync = new SyncGameList(self, handle);
-					sync.setFullSync(true);
+					sync.setSyncType(SyncGameList.FULL_SYNC);
 					(new Thread(sync)).start();
 					break;
 				case SyncGameList.MSG:

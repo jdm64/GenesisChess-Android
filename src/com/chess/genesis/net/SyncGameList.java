@@ -15,12 +15,19 @@ class SyncGameList implements Runnable
 {
 	public final static int MSG = 101;
 
+	public final static int FULL_SYNC = 0;
+	public final static int REGULAR_SYNC = 1;
+	public final static int ACTIVE_SYNC = 2;
+	public final static int ARCHIVE_SYNC = 3;
+	public final static int MSG_SYNC = 4;
+
 	private final Context context;
 	private final Handler callback;
 	private final NetworkClient net;
 
 	private int lock = 0;
-	private int sync_type = Enums.ONLINE_GAME;
+	private int syncType = REGULAR_SYNC;
+	private int gameType = Enums.ONLINE_GAME;
 	private boolean error = false;
 	private boolean fullsync = false;
 
@@ -44,32 +51,28 @@ class SyncGameList implements Runnable
 			switch (msg.what) {
 			case NetworkClient.GAME_STATUS:
 				game_status(json);
-				lock--;
 				break;
 			case NetworkClient.GAME_INFO:
 				game_info(json);
-				lock--;
 				break;
 			case NetworkClient.GAME_DATA:
 				game_data(json);
-				lock--;
 				break;
 			case NetworkClient.SYNC_GAMIDS:
-				if (sync_type == Enums.ONLINE_GAME)
+				if (gameType == Enums.ONLINE_GAME)
 					sync_active(json);
 				else
 					sync_archive(json);
-				lock--;
 				break;
 			case NetworkClient.SYNC_LIST:
 				sync_recent(json);
-				lock--;
 				break;
 			case NetworkClient.SYNC_MSGS:
 				saveMsgs(json);
-				lock--;
 				break;
 			}
+			// release lock
+			lock--;
 		}
 	};
 
@@ -78,6 +81,7 @@ class SyncGameList implements Runnable
 		context = _context;
 		callback = handler;
 
+		syncType = REGULAR_SYNC;
 		net = new NetworkClient(context, handle);
 	}
 
@@ -94,36 +98,59 @@ class SyncGameList implements Runnable
 	}
 	}
 
-	public void setFullSync(final boolean value)
+	public void setSyncType(final int Type)
 	{
-		fullsync = value;
+		syncType = Type;
 	}
 
 	public void run()
 	{
-		if (fullsync) {
-			sync_type = Enums.ONLINE_GAME;
+		switch (syncType) {
+		case FULL_SYNC:
+			gameType = Enums.ONLINE_GAME;
 			net.sync_gameids("active");
 			net.run();
-
 			trylock();
 
-			sync_type = Enums.ARCHIVE_GAME;
+			gameType = Enums.ARCHIVE_GAME;
 			net.sync_gameids("archive");
 			net.run();
 			trylock();
-		} else {
+
+			net.sync_msgs(0);
+			net.run();
+			trylock();
+			break;
+		case REGULAR_SYNC:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 			final long mtime = pref.getLong("lastmsgsync", 0);
 			final long gtime = pref.getLong("lastgamesync", 0);
 
-			net.sync_msgs(mtime);
-			net.run();
-			trylock();
-
 			net.sync_list(gtime);
 			net.run();
 			trylock();
+
+			net.sync_msgs(mtime);
+			net.run();
+			trylock();
+			break;
+		case ACTIVE_SYNC:
+			gameType = Enums.ONLINE_GAME;
+			net.sync_gameids("active");
+			net.run();
+			trylock();
+			break;
+		case ARCHIVE_SYNC:
+			gameType = Enums.ARCHIVE_GAME;
+			net.sync_gameids("archive");
+			net.run();
+			trylock();
+			break;
+		case MSG_SYNC:
+			net.sync_msgs(0);
+			net.run();
+			trylock();
+			break;
 		}
 
 		if (!error) {
@@ -195,6 +222,9 @@ class SyncGameList implements Runnable
 
 			lock++;
 		}
+		// don't save time if only syncing active
+		if (syncType == ACTIVE_SYNC)
+			return;
 		// Save sync time
 		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
