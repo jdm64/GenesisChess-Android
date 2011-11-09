@@ -78,6 +78,11 @@ class GameDataDB
 		db.execSQL("DELETE FROM localgames WHERE id=?;", data);
 	}
 
+	public void deleteAllLocalGames()
+	{
+		db.execSQL("DELETE FROM localgames;");
+	}
+
 	public SQLiteCursor getLocalGameList()
 	{
 		return (SQLiteCursor) db.rawQuery("SELECT * FROM localgames ORDER BY stime DESC", null);
@@ -208,6 +213,27 @@ class GameDataDB
 			"WHERE (white=? OR black=?) AND yourturn=? GROUP BY gameid ORDER BY stime DESC";
 
 		return (SQLiteCursor) db.rawQuery(query, data);
+	}
+
+	public void recalcYourTurn()
+	{
+		final String[] data = {};
+		final String query = "SELECT gameid, status, history, white, black FROM onlinegames;";
+
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
+
+		cursor.moveToFirst();
+		for (int i = 0; i < cursor.getCount(); i++) {
+			final String gameid = cursor.getString(0);
+			final int status = cursor.getInt(1);
+			final String history = cursor.getString(2);
+			final String white = cursor.getString(3);
+			final String black = cursor.getString(4);
+
+			final GameInfo info = new GameInfo(context, status, history, white, black);
+			final Object[] data2 = {info.getYourTurn(), gameid};
+			db.execSQL("UPDATE onlinegames SET yourturn=? WHERE gameid=?;", data);
+		}
 	}
 
 	/*
@@ -349,6 +375,17 @@ class GameDataDB
 	{
 		final String[] data = {gameid};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT COUNT(unread) FROM msgtable WHERE unread=1 AND gameid=?", data);
+
+		cursor.moveToFirst();
+		return cursor.getInt(0);
+	}
+
+	public int getUnreadMsgCount()
+	{
+		final String username = getUsername();
+		final String[] data = {username, username};
+		final String query = "SELECT COUNT(*) FROM msgtable WHERE unread=1 AND (username=? OR opponent=?)";
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
 		cursor.moveToFirst();
 		return cursor.getInt(0);
