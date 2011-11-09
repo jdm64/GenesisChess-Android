@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -37,7 +38,11 @@ public class GenesisNotifier extends Service implements Runnable
 	public final static int NEWMGS_NOTE = 2;
 
 	private NetworkClient2 net2;
+	private GameDataDB db;
+	private SharedPreferences pref;
+	private int lock;
 	private boolean fromalarm;
+	private boolean error;
 
 	private final Handler handle = new Handler()
 	{
@@ -47,6 +52,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 		try {
 			if (json.getString("result").equals("error")) {
+				error = true;
 				final String title = "Error in GenesisNotifier";
 				SendNotification(title, json.getString("reason"), ERROR_NOTE);
 				return;
@@ -63,13 +69,18 @@ public class GenesisNotifier extends Service implements Runnable
 			case NetworkClient2.SYNC_MSGS:
 				NewMsgs(json);
 				break;
+			case NetworkClient2.GAME_STATUS:
+				game_status(json);
+				break;
 			}
+			// release lock
+			lock--;
 		}
 	};
 
 	public void run()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (!pref.getBoolean("isLoggedIn", false) || !pref.getBoolean("noteEnabled", true)) {
 			stopSelf();
@@ -155,39 +166,76 @@ public class GenesisNotifier extends Service implements Runnable
 		nm.notify(id, note);
 	}
 
-	private void CheckServer()
+	/*
+	 * Sync Code
+	 */
+
+	private void trylock()
 	{
-		final GameDataDB db = new GameDataDB(this);
+	try {
+		lock++;
+		while (lock > 0 && !error)
+			Thread.sleep(16);
+		lock = 0;
+	} catch (java.lang.InterruptedException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
+	}
+
+	public void CheckServer()
+	{
+		error = false;
+		lock = 0;
+		net2 = new NetworkClient2(new SocketClient2(), this, handle);
+		db = new GameDataDB(this);
+
+		final long mtime = pref.getLong("lastmsgsync", 0);
+		final long gtime = pref.getLong("lastgamesync", 0);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
-			db.close();
 			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
-			return;
-		}
-		final long time = db.getNewestOnlineTime();
-		db.close();
+		} else {
+			net2.sync_list(gtime);
+			net2.run();
+			trylock();
 
-		net2 = new NetworkClient2(new SocketClient2(), this, handle);
-		net2.sync_list(time + 1);
-		net2.run();
+			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0)
+				SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
+		}
+
+		if (db.getUnreadMsgCount() > 0) {
+			SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
+		} else {
+			net2.sync_msgs(mtime);
+			net2.run();
+			trylock();
+
+			if (db.getUnreadMsgCount() > 0)
+				SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
+		}
+
+		db.close();
 	}
 
 	private void NewMove(final JSONObject json)
 	{
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
+		final long time = json.getLong("time");
 
-		if (ids.length() > 0) {
-			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
-			net2.disconnect();
-			return;
+		for (int i = 0; i < ids.length(); i++) {
+			if (error)
+				return;
+			net2.game_status(ids.getString(i));
+			net2.run();
+
+			lock++;
 		}
-		final GameDataDB db = new GameDataDB(this);
-		final long time = db.getNewestMsg();
-		db.close();
-
-		net2.sync_msgs(time);
-		net2.run();
+		// Save sync time
+		Editor editor = pref.edit();
+		editor.putLong("lastgamesync", time);
+		editor.commit();
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -198,14 +246,26 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 	try {
 		final JSONArray msgs = json.getJSONArray("msglist");
+		final long time = json.getLong("time");
 
-		if (msgs.length() > 0)
-			SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
-		net2.disconnect();
-	} catch (JSONException e) {
+		for (int i = 0; i < msgs.length(); i++) {
+			final JSONObject item = msgs.getJSONObject(i);
+			db.insertMsg(item);
+		}
+
+		// Save sync time
+		Editor editor = pref.edit();
+		editor.putLong("lastmsgsync", time);
+		editor.commit();
+	}  catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
+	}
+
+	private void game_status(final JSONObject json)
+	{
+		db.updateOnlineGame(json);
 	}
 
 	// Local copy of SocketClient since the GenesisNotifier
@@ -539,6 +599,22 @@ public class GenesisNotifier extends Service implements Runnable
 			try {
 				json.put("request", "syncmsgs");
 				json.put("time", time);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
+		}
+
+		public void game_status(final String gameid)
+		{
+			fid = GAME_STATUS;
+			loginRequired = true;
+
+			json = new JSONObject();
+
+			try {
+				json.put("request", "gamestatus");
+				json.put("gameid", gameid);
 			} catch (JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
