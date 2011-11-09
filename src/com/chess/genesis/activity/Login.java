@@ -68,6 +68,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					// start background notifier
 					startService(new Intent(self, GenesisNotifier.class));
 
+					final GameDataDB db = new GameDataDB(self);
+					db.recalcYourTurn();
+					db.close();
+
 					progress.dismiss();
 					setResult(RESULT_OK);
 					finish();
