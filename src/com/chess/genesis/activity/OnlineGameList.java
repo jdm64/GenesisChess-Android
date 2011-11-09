@@ -107,7 +107,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 						self.updateGameListAdapters();
 						if (gamelistadapter_arr[YOUR_PAGE].getCount() == 0) {
 							final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-							nm.cancelAll();
+							nm.cancel(GenesisNotifier.YOURTURN_NOTE);
 						}
 						net.pool_info();
 						(new Thread(net)).start();

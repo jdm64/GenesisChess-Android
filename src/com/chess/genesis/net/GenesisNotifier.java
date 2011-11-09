@@ -32,6 +32,10 @@ public class GenesisNotifier extends Service implements Runnable
 {
 	public final static int POLL_FREQ = 30;
 
+	public final static int ERROR_NOTE = 0;
+	public final static int YOURTURN_NOTE = 1;
+	public final static int NEWMGS_NOTE = 2;
+
 	private NetworkClient2 net2;
 	private boolean fromalarm;
 
@@ -44,7 +48,7 @@ public class GenesisNotifier extends Service implements Runnable
 		try {
 			if (json.getString("result").equals("error")) {
 				final String title = "Error in GenesisNotifier";
-				SendNotification(title, json.getString("reason"), Notification.FLAG_AUTO_CANCEL);
+				SendNotification(title, json.getString("reason"), ERROR_NOTE);
 				return;
 			}
 		} catch (JSONException e) {
@@ -119,13 +123,45 @@ public class GenesisNotifier extends Service implements Runnable
 		return (netInfo != null && netInfo.isConnected());
 	}
 
+	private void SendNotification(final String title, final String text, final int id)
+	{
+		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		final Notification note = new Notification(R.drawable.icon, title, System.currentTimeMillis());
+
+		switch (id) {
+		case NEWMGS_NOTE:
+			note.flags |= Notification.DEFAULT_SOUND;
+			note.flags |= Notification.DEFAULT_LIGHTS;
+		case ERROR_NOTE:
+			note.flags |= Notification.FLAG_AUTO_CANCEL;
+			break;
+		case YOURTURN_NOTE:
+			note.flags |= Notification.DEFAULT_SOUND;
+			note.flags |= Notification.DEFAULT_LIGHTS;
+			note.flags |= Notification.FLAG_NO_CLEAR;
+			break;
+		}
+
+		final Bundle bundle = new Bundle();
+		bundle.putInt("type", Enums.ONLINE_GAME);
+
+		final Intent intent = new Intent(this, OnlineGameList.class);
+		intent.putExtras(bundle);
+
+		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		final Context context = getApplicationContext();
+
+		note.setLatestEventInfo(context, title, text, pintent);
+		nm.notify(id, note);
+	}
+
 	private void CheckServer()
 	{
 		final GameDataDB db = new GameDataDB(this);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
 			db.close();
-			SendNotification("It's Your turn", "It's your turn in a game you're in", 0);
+			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
 			return;
 		}
 		final long time = db.getNewestOnlineTime();
@@ -142,7 +178,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final JSONArray ids = json.getJSONArray("gameids");
 
 		if (ids.length() > 0) {
-			SendNotification("It's Your turn", "It's your turn in a game you're in", 0);
+			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
 			net2.disconnect();
 			return;
 		}
@@ -164,31 +200,12 @@ public class GenesisNotifier extends Service implements Runnable
 		final JSONArray msgs = json.getJSONArray("msglist");
 
 		if (msgs.length() > 0)
-			SendNotification("New Message", "A new message was posted to a game you're in", 1);
+			SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
 		net2.disconnect();
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
-	}
-
-	private void SendNotification(final String title, final String text, final int flags)
-	{
-		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		final Notification note = new Notification(R.drawable.icon, title, System.currentTimeMillis());
-		note.flags = flags;
-
-		final Bundle bundle = new Bundle();
-		bundle.putInt("type", Enums.ONLINE_GAME);
-
-		final Intent intent = new Intent(this, OnlineGameList.class);
-		intent.putExtras(bundle);
-
-		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		final Context context = getApplicationContext();
-
-		note.setLatestEventInfo(context, title, text, pintent);
-		nm.notify(1, note);
 	}
 
 	// Local copy of SocketClient since the GenesisNotifier
