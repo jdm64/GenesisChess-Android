@@ -41,4 +41,16 @@
 	<string name="readallmsgs">
 		Are you sure you want to mark all messages as read?
 	</string>
+	<string name="deleteLocalTable">
+		Are you sure you want to delete all local games? This operation can not be undone!
+	</string>
+	<string name="resyncOnlineTable">
+		Are you sure you want to force a full resync of all active games?
+	</string>
+	<string name="resyncArchiveTable">
+		Are you sure you want to force a full resync of all archive games?
+	</string>
+	<string name="resyncMsgTable">
+		Are you sure you want to force a full resync of all game messages?
+	</string>
 </resources>

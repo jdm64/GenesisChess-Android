@@ -3,6 +3,7 @@ package com.chess.genesis;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnLongClickListener, OnTouchListener
+public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnLongClickListener, OnTouchListener, CallBackPreference.CallBack
 {
 	private static Settings self;
 
@@ -48,6 +49,12 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 				progress.remove();
 				break;
 			case NetworkClient.SET_OPTION:
+				progress.remove();
+				break;
+			case SyncGameList.MSG:
+				final GameDataDB db = new GameDataDB(self);
+				db.recalcYourTurn();
+				db.close();
 				progress.remove();
 				break;
 			}
@@ -79,12 +86,26 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
 
+		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);
+
 		CheckBoxPreference check = (CheckBoxPreference) findPreference("emailNoteEnabled");
 		check.setOnPreferenceChangeListener(this);
-		check.setEnabled(pref.getBoolean("isLoggedIn", false));
+		check.setEnabled(isLoggedin);
 
 		check = (CheckBoxPreference) findPreference("noteEnabled");
 		check.setOnPreferenceChangeListener(this);
+
+		CallBackPreference callbackPref = (CallBackPreference) findPreference("deleteLocalTable");
+		callbackPref.setCallBack(this);
+		callbackPref = (CallBackPreference) findPreference("resyncOnlineTable");
+		callbackPref.setCallBack(this);
+		callbackPref.setEnabled(isLoggedin);
+		callbackPref = (CallBackPreference) findPreference("resyncArchiveTable");
+		callbackPref.setCallBack(this);
+		callbackPref.setEnabled(isLoggedin);
+		callbackPref = (CallBackPreference) findPreference("resyncMsgTable");
+		callbackPref.setCallBack(this);
+		callbackPref.setEnabled(isLoggedin);
 	}
 
 	@Override
@@ -109,6 +130,36 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 			NetActive.dec();
 
 		super.onPause();
+	}
+
+	public void runCallBack(CallBackPreference preference, final boolean result)
+	{
+		if (!result)
+			return;
+
+		final String key = preference.getKey();
+		final GameDataDB db = new GameDataDB(this);
+		SyncGameList sync = new SyncGameList(this, handle);
+
+		if (key.equals("deleteLocalTable")) {
+			db.deleteAllLocalGames();
+		} else if (key.equals("resyncOnlineTable")) {
+			progress.setText("ReSyncing Active Games");
+
+			sync.setSyncType(SyncGameList.ACTIVE_SYNC);
+			(new Thread(sync)).start();
+		} else if (key.equals("resyncArchiveTable")) {
+			progress.setText("ReSyncing Archive Games");
+
+			sync.setSyncType(SyncGameList.ARCHIVE_SYNC);
+			(new Thread(sync)).start();
+		} else if (key.equals("resyncMsgTable")) {
+			progress.setText("ReSyncing Messages");
+
+			sync.setSyncType(SyncGameList.MSG_SYNC);
+			(new Thread(sync)).start();
+		}
+		db.close();
 	}
 
 	public boolean onPreferenceChange(Preference preference, Object newValue)

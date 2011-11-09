@@ -26,4 +26,31 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:title="Your Turn Emails"
 		android:summary="Server email on your turn"/>
 	</PreferenceCategory>
+	<PreferenceCategory
+	android:title="Database Functions">
+		<com.chess.genesis.CallBackPreference
+		android:key="deleteLocalTable"
+		android:persistent="false"
+		android:title="Delete Local Games"
+		android:dialogMessage="@string/deleteLocalTable"
+		android:summary="Remove all local games"/>
+		<com.chess.genesis.CallBackPreference
+		android:key="resyncOnlineTable"
+		android:persistent="false"
+		android:title="ReSync Active Games"
+		android:dialogMessage="@string/resyncOnlineTable"
+		android:summary="Force a full resync of all active games"/>
+		<com.chess.genesis.CallBackPreference
+		android:key="resyncArchiveTable"
+		android:persistent="false"
+		android:title="ReSync Archive Games"
+		android:dialogMessage="@string/resyncArchiveTable"
+		android:summary="Force a full resync of all archive games"/>
+		<com.chess.genesis.CallBackPreference
+		android:key="resyncMsgTable"
+		android:persistent="false"
+		android:title="ReSync Messages"
+		android:dialogMessage="@string/resyncMsgTable"
+		android:summary="Force a full resync of all messages"/>
+	</PreferenceCategory>
 </PreferenceScreen>
