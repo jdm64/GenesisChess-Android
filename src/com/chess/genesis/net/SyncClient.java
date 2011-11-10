@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class SyncGameList implements Runnable
+class SyncClient implements Runnable
 {
 	public final static int MSG = 101;
 
@@ -76,7 +76,7 @@ class SyncGameList implements Runnable
 		}
 	};
 
-	public SyncGameList(final Context _context, final Handler handler)
+	public SyncClient(final Context _context, final Handler handler)
 	{
 		context = _context;
 		callback = handler;

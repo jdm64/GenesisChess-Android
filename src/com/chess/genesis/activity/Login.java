@@ -60,11 +60,11 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					pref.commit();
 
 					// Must not be final
-					SyncGameList sync = new SyncGameList(self, handle);
-					sync.setSyncType(SyncGameList.FULL_SYNC);
+					SyncClient sync = new SyncClient(self, handle);
+					sync.setSyncType(SyncClient.FULL_SYNC);
 					(new Thread(sync)).start();
 					break;
-				case SyncGameList.MSG:
+				case SyncClient.MSG:
 					// start background notifier
 					startService(new Intent(self, GenesisNotifier.class));
 

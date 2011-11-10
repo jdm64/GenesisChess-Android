@@ -51,7 +51,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 			case NetworkClient.SET_OPTION:
 				progress.remove();
 				break;
-			case SyncGameList.MSG:
+			case SyncClient.MSG:
 				final GameDataDB db = new GameDataDB(self);
 				db.recalcYourTurn();
 				db.close();
@@ -139,24 +139,24 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 		final String key = preference.getKey();
 		final GameDataDB db = new GameDataDB(this);
-		SyncGameList sync = new SyncGameList(this, handle);
+		SyncClient sync = new SyncClient(this, handle);
 
 		if (key.equals("deleteLocalTable")) {
 			db.deleteAllLocalGames();
 		} else if (key.equals("resyncOnlineTable")) {
 			progress.setText("ReSyncing Active Games");
 
-			sync.setSyncType(SyncGameList.ACTIVE_SYNC);
+			sync.setSyncType(SyncClient.ACTIVE_SYNC);
 			(new Thread(sync)).start();
 		} else if (key.equals("resyncArchiveTable")) {
 			progress.setText("ReSyncing Archive Games");
 
-			sync.setSyncType(SyncGameList.ARCHIVE_SYNC);
+			sync.setSyncType(SyncClient.ARCHIVE_SYNC);
 			(new Thread(sync)).start();
 		} else if (key.equals("resyncMsgTable")) {
 			progress.setText("ReSyncing Messages");
 
-			sync.setSyncType(SyncGameList.MSG_SYNC);
+			sync.setSyncType(SyncClient.MSG_SYNC);
 			(new Thread(sync)).start();
 		}
 		db.close();

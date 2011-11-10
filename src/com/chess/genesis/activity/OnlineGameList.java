@@ -92,7 +92,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				net.new_game(data.getString("opp_name"), gametype, color);
 				(new Thread(net)).start();
 				break;
-			case SyncGameList.MSG:
+			case SyncClient.MSG:
 			case NetworkClient.JOIN_GAME:
 			case NetworkClient.NEW_GAME:
 				JSONObject json = (JSONObject) msg.obj;
@@ -102,7 +102,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
-					if (msg.what == SyncGameList.MSG || msg.what == NetworkClient.JOIN_GAME) {
+					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
 						progress.setText("Checking Game Pool");
 						self.updateGameListAdapters();
 						if (gamelistadapter_arr[YOUR_PAGE].getCount() == 0) {
@@ -284,7 +284,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		progress.setText("Updating Game List");
 
 		// Must not be final
-		SyncGameList sync = new SyncGameList(this, handle);
+		SyncClient sync = new SyncClient(this, handle);
 		(new Thread(sync)).start();
 	}
 
@@ -373,7 +373,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			progress.setText("Updating Game List");
 
 			// Must not be final
-			SyncGameList sync = new SyncGameList(this, handle);
+			SyncClient sync = new SyncClient(this, handle);
 			(new Thread(sync)).start();
 			break;
 		case R.id.readall_msgs:
