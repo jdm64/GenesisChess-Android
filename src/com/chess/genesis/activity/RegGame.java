@@ -201,13 +201,13 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 	{
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			getMenuInflater().inflate(R.menu.game_options_local, menu);
+			getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			getMenuInflater().inflate(R.menu.game_options_online, menu);
+			getMenuInflater().inflate(R.menu.options_game_online, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
-			getMenuInflater().inflate(R.menu.game_options_archive, menu);
+			getMenuInflater().inflate(R.menu.options_game_archive, menu);
 			break;
 		}
 		return true;

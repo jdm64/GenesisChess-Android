@@ -250,10 +250,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			getMenuInflater().inflate(R.menu.gamelist_context_local, menu);
+			getMenuInflater().inflate(R.menu.context_gamelist_local, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
-			getMenuInflater().inflate(R.menu.gamelist_context_archive, menu);
+			getMenuInflater().inflate(R.menu.context_gamelist_archive, menu);
 			break;
 		}
 	}

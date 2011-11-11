@@ -214,7 +214,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.login_options, menu);
+		getMenuInflater().inflate(R.menu.options_login, menu);
 		return true;
 	}
 

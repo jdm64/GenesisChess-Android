@@ -175,7 +175,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.msgbox_options, menu);
+		getMenuInflater().inflate(R.menu.options_msgbox, menu);
 		return true;
 	}
 

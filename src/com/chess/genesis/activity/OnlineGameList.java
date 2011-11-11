@@ -361,7 +361,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.gamelist_options_online, menu);
+		getMenuInflater().inflate(R.menu.options_gamelist_online, menu);
 		return true;
 	}
 
@@ -407,10 +407,10 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		switch (pager.getCurrentItem()) {
 		case THEIR_PAGE:
 		case YOUR_PAGE:
-			getMenuInflater().inflate(R.menu.gamelist_context_online, menu);
+			getMenuInflater().inflate(R.menu.context_gamelist_online, menu);
 			break;
 		case ARCHIVE_PAGE:
-			getMenuInflater().inflate(R.menu.gamelist_context_archive, menu);
+			getMenuInflater().inflate(R.menu.context_gamelist_archive, menu);
 			break;
 		}
 	}
