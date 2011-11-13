@@ -15,7 +15,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:key="noteEnabled"
 		android:defaultValue="true"
 		android:title="Background Syncing"
-		android:summary="In app notifications"/>
+		android:summary="Enable in app notifications"/>
 		<com.chess.genesis.IntListPreference
 		android:key="notifierPolling"
 		android:defaultValue="30"
@@ -32,7 +32,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="true"
 		android:persistent="false"
 		android:title="Your Turn Emails"
-		android:summary="Server email on your turn"/>
+		android:summary="Email notifications on your turn"/>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Database Functions">
@@ -45,19 +45,19 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		<com.chess.genesis.CallBackPreference
 		android:key="resyncOnlineTable"
 		android:persistent="false"
-		android:title="ReSync Active Games"
+		android:title="Sync Active Games"
 		android:dialogMessage="@string/resyncOnlineTable"
 		android:summary="Force a full resync of all active games"/>
 		<com.chess.genesis.CallBackPreference
 		android:key="resyncArchiveTable"
 		android:persistent="false"
-		android:title="ReSync Archive Games"
+		android:title="Sync Archive Games"
 		android:dialogMessage="@string/resyncArchiveTable"
 		android:summary="Force a full resync of all archive games"/>
 		<com.chess.genesis.CallBackPreference
 		android:key="resyncMsgTable"
 		android:persistent="false"
-		android:title="ReSync Messages"
+		android:title="Sync Messages"
 		android:dialogMessage="@string/resyncMsgTable"
 		android:summary="Force a full resync of all messages"/>
 	</PreferenceCategory>
