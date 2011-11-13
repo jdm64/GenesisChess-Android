@@ -2,6 +2,14 @@
 <PreferenceScreen
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory
+	android:title="Game Settings">
+		<CheckBoxPreference
+		android:key="screenAlwaysOn"
+		android:defaultValue="false"
+		android:title="Keep Screen Active"
+		android:summary="Force the screen on while in a game"/>
+	</PreferenceCategory>
+	<PreferenceCategory
 	android:title="Device Notifications">
 		<CheckBoxPreference
 		android:key="noteEnabled"

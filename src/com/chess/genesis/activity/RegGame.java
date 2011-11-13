@@ -1,9 +1,14 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -18,6 +23,7 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 	public static RegGame self;
 	public static ViewFlip3D game_board;
 
+	private WakeLock wakelock;
 	private RegGameState gamestate;
 	private Bundle settings;
 	private int type;
@@ -92,6 +98,13 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 			((ImageView) v).setImageResource(img);
 			db.close();
 		}
+
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (pref.getBoolean("screenAlwaysOn", true)) {
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "GenesisChess");
+			wakelock.acquire();
+		}
 	}
 
 	@Override
@@ -100,6 +113,9 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		gamestate.save(this, true);
 		if (type == Enums.ONLINE_GAME)
 			NetActive.dec();
+
+		if (wakelock != null)
+			wakelock.release();
 
 		super.onPause();
 	}
