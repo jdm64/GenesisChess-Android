@@ -88,6 +88,9 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);
 
+		final IntListPreference poll = (IntListPreference) findPreference("notifierPolling");
+		poll.setOnPreferenceChangeListener(this);
+
 		CheckBoxPreference check = (CheckBoxPreference) findPreference("emailNoteEnabled");
 		check.setOnPreferenceChangeListener(this);
 		check.setEnabled(isLoggedin);
@@ -170,7 +173,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 			net.set_option("emailnote", ((Boolean) newValue).booleanValue());
 			(new Thread(net)).start();
-		} else if (key.equals("noteEnabled")) {
+		} else if (key.equals("noteEnabled") || key.equals("notifierPolling")) {
 			startService(new Intent(this, GenesisNotifier.class));
 		}
 		return true;
