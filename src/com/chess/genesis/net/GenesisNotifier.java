@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -139,19 +140,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		final Notification note = new Notification(R.drawable.icon, title, System.currentTimeMillis());
 
-		switch (id) {
-		case NEWMGS_NOTE:
-			note.flags |= Notification.DEFAULT_SOUND;
-			note.flags |= Notification.DEFAULT_LIGHTS;
-		case ERROR_NOTE:
-			note.flags |= Notification.FLAG_AUTO_CANCEL;
-			break;
-		case YOURTURN_NOTE:
-			note.flags |= Notification.DEFAULT_SOUND;
-			note.flags |= Notification.DEFAULT_LIGHTS;
-			note.flags |= Notification.FLAG_NO_CLEAR;
-			break;
-		}
+		setupNotification(note, id);
 
 		final Bundle bundle = new Bundle();
 		bundle.putInt("type", Enums.ONLINE_GAME);
@@ -164,6 +153,33 @@ public class GenesisNotifier extends Service implements Runnable
 
 		note.setLatestEventInfo(context, title, text, pintent);
 		nm.notify(id, note);
+	}
+
+	private void setupNotification(final Notification note, final int id)
+	{
+		if (id == ERROR_NOTE) {
+			note.flags |= Notification.FLAG_AUTO_CANCEL;
+			return;
+		} else {
+			note.flags |= Notification.FLAG_NO_CLEAR;
+			note.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+		}
+
+		if (pref.getBoolean("noteRingtoneEnable", false))
+			note.sound = Uri.parse(pref.getString("noteRingtone", "content://settings/system/notification_sound"));
+		if (pref.getBoolean("noteVibrateEnable", true))
+			note.vibrate = parseVibrate();
+	}
+
+	private long[] parseVibrate()
+	{
+		final String str = pref.getString("noteVibrate", "0,150");
+		final String[] arr = str.trim().split(",");
+		final long[] vib = new long[arr.length];
+
+		for (int i = 0; i < arr.length; i++)
+			vib[i] = Long.valueOf(arr[i]);
+		return vib;
 	}
 
 	/*

@@ -24,6 +24,34 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:dependency="noteEnabled"
 		android:title="Update Frequency"
 		android:summary="How often the server is checked"/>
+		<CheckBoxPreference
+		android:key="noteRingtoneEnable"
+		android:defaultValue="false"
+		android:dependency="noteEnabled"
+		android:title="Enable Ringtone"
+		android:summary="Play sound for notifications"/>
+		<RingtonePreference
+		android:key="noteRingtone"
+		android:defaultValue="content://settings/system/notification_sound"
+		android:ringtoneType="notification"
+		android:showSilent="false"
+		android:dependency="noteRingtoneEnable"
+		android:title="Ringtone Sound"
+		android:summary="Select ringtone sound to play"/>
+		<CheckBoxPreference
+		android:key="noteVibrateEnable"
+		android:defaultValue="true"
+		android:dependency="noteEnabled"
+		android:title="Enable Vibrate"
+		android:summary="Vibrate when sending notifications"/>
+		<com.chess.genesis.VibratePreference
+		android:key="noteVibrate"
+		android:defaultValue="0,150"
+		android:entries="@array/vibrate_patt_entries"
+		android:entryValues="@array/vibrate_patt_values"
+		android:dependency="noteVibrateEnable"
+		android:title="Vibrate Pattern"
+		android:summary="Select vibrate pattern to run"/>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Server Notifications">
