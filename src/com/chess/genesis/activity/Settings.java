@@ -106,6 +106,11 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		callbackPref = (CallBackPreference) findPreference("resyncMsgTable");
 		callbackPref.setCallBack(this);
 		callbackPref.setEnabled(isLoggedin);
+
+		// Set email note value from server
+		progress.setText("Retrieving Settings");
+		net.get_option("emailnote");
+		(new Thread(net)).start();
 	}
 
 	@Override
@@ -113,14 +118,8 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	{
 		super.onResume();
 
-		if (pref.getBoolean("isLoggedIn", false)) {
+		if (pref.getBoolean("isLoggedIn", false))
 			NetActive.inc();
-
-			progress.setText("Retrieving Settings");
-
-			net.get_option("emailnote");
-			(new Thread(net)).start();
-		}
 	}
 
 	@Override
