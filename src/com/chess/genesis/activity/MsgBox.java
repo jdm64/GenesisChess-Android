@@ -53,6 +53,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 					saveMsgs(json);
 					msglist_adapter.update();
 					msglist_view.setSelection(msglist_view.getCount() - 1);
+					GenesisNotifier.clearNotification(self, GenesisNotifier.NEWMGS_NOTE);
 					progress.dismiss();
 					break;
 				}

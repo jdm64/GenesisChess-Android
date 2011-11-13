@@ -108,13 +108,8 @@ class RegGameState extends GameState
 
 				final GameDataDB db = new GameDataDB(context);
 				db.updateOnlineGame(json);
-
-				// clear notification if it's not your turn in any game
-				if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() == 0) {
-					final NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-					nm.cancelAll();
-				}
 				db.close();
+				GenesisNotifier.clearNotification(context, GenesisNotifier.YOURTURN_NOTE);
 
 				applyRemoteMove(history);
 				if (status != Enums.ACTIVE) {

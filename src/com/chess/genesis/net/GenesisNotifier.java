@@ -34,9 +34,9 @@ public class GenesisNotifier extends Service implements Runnable
 {
 	public final static int POLL_FREQ = 30;
 
-	public final static int ERROR_NOTE = 0;
-	public final static int YOURTURN_NOTE = 1;
-	public final static int NEWMGS_NOTE = 2;
+	public final static int ERROR_NOTE = 1;
+	public final static int YOURTURN_NOTE = 2;
+	public final static int NEWMGS_NOTE = 4;
 
 	private NetworkClient2 net2;
 	private GameDataDB db;
@@ -78,6 +78,21 @@ public class GenesisNotifier extends Service implements Runnable
 			lock--;
 		}
 	};
+
+	public static void clearNotification(final Context context, final int id)
+	{
+		final GameDataDB db = new GameDataDB(context);
+		final NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+		if ((id & YOURTURN_NOTE) != 0) {
+			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() == 0)
+				nm.cancel(YOURTURN_NOTE);
+		} else if ((id & NEWMGS_NOTE) != 0) {
+			if (db.getUnreadMsgCount() == 0)
+				nm.cancel(NEWMGS_NOTE);
+		}
+		db.close();
+	}
 
 	public void run()
 	{
