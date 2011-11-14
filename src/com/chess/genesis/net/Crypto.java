@@ -38,13 +38,13 @@ final class Crypto
 		return Sha1Hash(Sha1Hash(str));
 	}
 
-	public static String LoginKey(final String str) throws SocketException, IOException
+	public static String LoginKey(final SocketClient socket, final String str) throws SocketException, IOException
 	{
 	try {
 		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
 	
 		digst.update(HashPasswd(str).getBytes());
-		digst.update(SocketClient.getHash().getBytes());
+		digst.update(socket.getHash().getBytes());
 
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();

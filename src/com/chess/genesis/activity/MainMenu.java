@@ -22,7 +22,6 @@ import android.widget.TextView;
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
 	private static MainMenu self;
-	private SocketClient sock;
 
 	private final Handler handle = new Handler()
 	{
@@ -54,9 +53,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	{
 		super.onCreate(savedInstanceState);
 		self = this;
-
-		// initialize static classes
-		sock = new SocketClient();
 
 		// run upgrade
 		UpgradeHandler.run(this);

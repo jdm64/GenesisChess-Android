@@ -45,8 +45,6 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				case NetworkClient.LOGIN:
 					progress.setText("Syncing Data");
 
-					SocketClient.isLoggedin = true;
-
 					EditText txt = (EditText) findViewById(R.id.username);
 					final String username = txt.getText().toString().trim();
 
@@ -58,6 +56,8 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					pref.putString("username", username);
 					pref.putString("passhash", password);
 					pref.commit();
+
+					SocketClient.getInstance().setIsLoggedIn(true);
 
 					// Must not be final
 					SyncClient sync = new SyncClient(self, handle);

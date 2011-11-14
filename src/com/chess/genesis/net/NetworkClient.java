@@ -33,7 +33,8 @@ class NetworkClient implements Runnable
 
 	private final Context context;
 	private final Handler callback;
-	
+	private final SocketClient socket;
+
 	private JSONObject json;
 	private int fid = NONE;
 	private boolean loginRequired;
@@ -43,11 +44,19 @@ class NetworkClient implements Runnable
 	{
 		callback = handler;
 		context = _context;
+		socket = SocketClient.getInstance();
+	}
+
+	public NetworkClient(final SocketClient Socket, final Context _context, final Handler handler)
+	{
+		callback = handler;
+		context = _context;
+		socket = Socket;
 	}
 
 	private boolean relogin()
 	{
-		if (SocketClient.isLoggedin)
+		if (socket.getIsLoggedIn())
 			return true;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -60,7 +69,7 @@ class NetworkClient implements Runnable
 			try {
 				json2.put("request", "login");
 				json2.put("username", username);
-				json2.put("passhash", Crypto.LoginKey(password));
+				json2.put("passhash", Crypto.LoginKey(socket, password));
 			} catch (JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
@@ -87,14 +96,14 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
 		}
 
 		try {
-			SocketClient.write(json2);
+			socket.write(json2);
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -117,14 +126,14 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
 		}
 
 		try {
-			json2 = SocketClient.read();
+			json2 = socket.read();
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -154,7 +163,7 @@ class NetworkClient implements Runnable
 			}
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return false;
@@ -165,7 +174,7 @@ class NetworkClient implements Runnable
 				callback.sendMessage(Message.obtain(callback, fid, json2));
 				return false;
 			}
-			SocketClient.isLoggedin = true;
+			socket.setIsLoggedIn(true);
 			return true;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -179,12 +188,12 @@ class NetworkClient implements Runnable
 
 		if (error || (loginRequired && !relogin())) {
 			error = false;
-			SocketClient.disconnect();
+			socket.disconnect();
 			return;
 		}
 
 		try {
-			SocketClient.write(json);
+			socket.write(json);
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -207,14 +216,14 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
 			return;
 		}
 
 		try {
-			json2 = SocketClient.read();
+			json2 = socket.read();
 		} catch (SocketException e) {
 			json2 = new JSONObject();
 			try {
@@ -244,7 +253,7 @@ class NetworkClient implements Runnable
 			}
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			error = false;
 		}
 		callback.sendMessage(Message.obtain(callback, fid, json2));
@@ -280,7 +289,7 @@ class NetworkClient implements Runnable
 			try {
 				json.put("request", "login");
 				json.put("username", username);
-				json.put("passhash", Crypto.LoginKey(password));
+				json.put("passhash", Crypto.LoginKey(socket, password));
 			} catch (JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
@@ -307,7 +316,7 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			SocketClient.disconnect();
+			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
 		}
 	}

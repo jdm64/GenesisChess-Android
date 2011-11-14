@@ -38,7 +38,8 @@ public class GenesisNotifier extends Service implements Runnable
 	public final static int YOURTURN_NOTE = 2;
 	public final static int NEWMGS_NOTE = 4;
 
-	private NetworkClient2 net2;
+	private NetworkClient net;
+	private SocketClient socket;
 	private GameDataDB db;
 	private SharedPreferences pref;
 	private int lock;
@@ -54,6 +55,7 @@ public class GenesisNotifier extends Service implements Runnable
 		try {
 			if (json.getString("result").equals("error")) {
 				error = true;
+				socket.disconnect();
 				final String title = "Error in GenesisNotifier";
 				SendNotification(title, json.getString("reason"), ERROR_NOTE);
 				return;
@@ -64,13 +66,13 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 			switch (msg.what) {
-			case NetworkClient2.SYNC_LIST:
+			case NetworkClient.SYNC_LIST:
 				NewMove(json);
 				break;
-			case NetworkClient2.SYNC_MSGS:
+			case NetworkClient.SYNC_MSGS:
 				NewMsgs(json);
 				break;
-			case NetworkClient2.GAME_STATUS:
+			case NetworkClient.GAME_STATUS:
 				game_status(json);
 				break;
 			}
@@ -105,6 +107,7 @@ public class GenesisNotifier extends Service implements Runnable
 			CheckServer();
 		}
 		ScheduleWakeup();
+		stopSelf();
 	}
 
 	@Override
@@ -218,7 +221,8 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		error = false;
 		lock = 0;
-		net2 = new NetworkClient2(new SocketClient2(), this, handle);
+		socket = SocketClient.getInstance(0);
+		net = new NetworkClient(socket, this, handle);
 		db = new GameDataDB(this);
 
 		final long mtime = pref.getLong("lastmsgsync", 0);
@@ -227,8 +231,8 @@ public class GenesisNotifier extends Service implements Runnable
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
 			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
 		} else {
-			net2.sync_list(gtime);
-			net2.run();
+			net.sync_list(gtime);
+			net.run();
 			trylock();
 
 			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0)
@@ -238,14 +242,14 @@ public class GenesisNotifier extends Service implements Runnable
 		if (db.getUnreadMsgCount() > 0) {
 			SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
 		} else {
-			net2.sync_msgs(mtime);
-			net2.run();
+			net.sync_msgs(mtime);
+			net.run();
 			trylock();
 
 			if (db.getUnreadMsgCount() > 0)
 				SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
 		}
-
+		socket.disconnect();
 		db.close();
 	}
 
@@ -258,8 +262,8 @@ public class GenesisNotifier extends Service implements Runnable
 		for (int i = 0; i < ids.length(); i++) {
 			if (error)
 				return;
-			net2.game_status(ids.getString(i));
-			net2.run();
+			net.game_status(ids.getString(i));
+			net.run();
 
 			lock++;
 		}
@@ -297,424 +301,5 @@ public class GenesisNotifier extends Service implements Runnable
 	private void game_status(final JSONObject json)
 	{
 		db.updateOnlineGame(json);
-	}
-
-	// Local copy of SocketClient since the GenesisNotifier
-	// must have a separate connection
-	private class SocketClient2
-	{
-		public boolean isLoggedin;
-
-		private String loginHash;
-		private Socket sock;
-		private DataInputStream input;
-		private OutputStream output;
-
-		public SocketClient2()
-		{
-			disconnect();
-		}
-
-		public String getHash() throws SocketException, IOException
-		{
-			if (loginHash == null)
-				connect();
-			return loginHash;
-		}
-
-		private void connect() throws SocketException, IOException
-		{
-			if (sock.isConnected())
-				return;
-			sock.connect(new InetSocketAddress("genesischess.com", 8338));
-			input = new DataInputStream(sock.getInputStream());
-			output = sock.getOutputStream();
-
-			loginHash = input.readLine().trim();
-		}
-
-		public final void disconnect()
-		{
-		try {
-			if (sock != null)
-				sock.close();
-			sock = new Socket();
-			loginHash = null;
-			isLoggedin = false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		}
-
-		public void write(final JSONObject data) throws SocketException, IOException
-		{
-			connect();
-
-			final String str = data.toString() + "\n";
-
-			output.write(str.getBytes());
-		}
-
-		public JSONObject read() throws SocketException, IOException, JSONException
-		{
-			connect();
-
-			return (JSONObject) (new JSONTokener(input.readLine())).nextValue();
-		}
-	}
-
-	private final class NetworkClient2 implements Runnable
-	{
-		public final static int NONE = 0;
-		public final static int LOGIN = 1;
-		public final static int REGISTER = 2;
-		public final static int JOIN_GAME = 3;
-		public final static int NEW_GAME = 4;
-		public final static int GAME_STATUS = 7;
-		public final static int GAME_INFO = 8;
-		public final static int SUBMIT_MOVE = 9;
-		public final static int SUBMIT_MSG = 10;
-		public final static int SYNC_GAMIDS = 11;
-		public final static int GAME_SCORE = 12;
-		public final static int GAME_DATA = 13;
-		public final static int RESIGN_GAME = 14;
-		public final static int SYNC_LIST = 15;
-		public final static int SYNC_MSGS = 16;
-
-		private final Context context;
-		private final Handler callback;
-		private final SocketClient2 net;
-
-		private JSONObject json;
-		private int fid = NONE;
-		private boolean loginRequired;
-		private boolean error = false;
-
-		public NetworkClient2(final SocketClient2 Net, final Context _context, final Handler handler)
-		{
-			callback = handler;
-			context = _context;
-			net = Net;
-		}
-
-		private boolean relogin()
-		{
-			if (net.isLoggedin)
-				return true;
-
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-			final String username = pref.getString("username", "!error!");
-			final String password = pref.getString("passhash", "!error!");
-
-			JSONObject json2 = new JSONObject();
-
-			try {
-				try {
-					final Crypto2 crypt = new Crypto2();
-					json2.put("request", "login");
-					json2.put("username", username);
-					json2.put("passhash", crypt.LoginKey(net, password));
-				} catch (JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
-				}
-			} catch (SocketException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Can't contact server for sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			} catch (IOException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Lost connection durring sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			}
-			if (error) {
-				net.disconnect();
-				callback.sendMessage(Message.obtain(callback, fid, json2));
-				error = false;
-				return false;
-			}
-
-			try {
-				net.write(json2);
-			} catch (SocketException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Can't contact server for sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			} catch (IOException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Lost connection durring sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			}
-			if (error) {
-				net.disconnect();
-				callback.sendMessage(Message.obtain(callback, fid, json2));
-				error = false;
-				return false;
-			}
-
-			try {
-				json2 = net.read();
-			} catch (SocketException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Can't contact server for recieving data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			} catch (IOException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Lost connection durring recieving data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			} catch (JSONException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Server response illogical");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			}
-			if (error) {
-				net.disconnect();
-				callback.sendMessage(Message.obtain(callback, fid, json2));
-				error = false;
-				return false;
-			}
-
-			try {
-				if (!json2.getString("result").equals("ok")) {
-					callback.sendMessage(Message.obtain(callback, fid, json2));
-					return false;
-				}
-				net.isLoggedin = true;
-				return true;
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-
-		public void run()
-		{
-			JSONObject json2 = null;
-
-			if (error || (loginRequired && !relogin())) {
-				error = false;
-				net.disconnect();
-				return;
-			}
-
-			try {
-				net.write(json);
-			} catch (SocketException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Can't contact server for sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			} catch (IOException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Lost connection durring sending data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-				error = true;
-			}
-			if (error) {
-				net.disconnect();
-				callback.sendMessage(Message.obtain(callback, fid, json2));
-				error = false;
-				return;
-			}
-
-			try {
-				json2 = net.read();
-			} catch (SocketException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Can't contact server for recieving data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			} catch (IOException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Lost connection durring recieving data");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			} catch (JSONException e) {
-				json2 = new JSONObject();
-				try {
-					json2.put("result", "error");
-					json2.put("reason", "Server response illogical");
-				} catch (JSONException j) {
-					j.printStackTrace();
-					throw new RuntimeException();
-				}
-			}
-			if (error) {
-				net.disconnect();
-				error = false;
-			}
-			callback.sendMessage(Message.obtain(callback, fid, json2));
-		}
-
-		public void sync_list(final long time)
-		{
-			fid = SYNC_LIST;
-			loginRequired = true;
-
-			json = new JSONObject();
-
-			try {
-				json.put("request", "synclist");
-				json.put("time", time);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-
-		public void sync_msgs(final long time)
-		{
-			fid = SYNC_MSGS;
-			loginRequired = true;
-
-			json = new JSONObject();
-
-			try {
-				json.put("request", "syncmsgs");
-				json.put("time", time);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-
-		public void game_status(final String gameid)
-		{
-			fid = GAME_STATUS;
-			loginRequired = true;
-
-			json = new JSONObject();
-
-			try {
-				json.put("request", "gamestatus");
-				json.put("gameid", gameid);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		}
-
-		public void disconnect()
-		{
-			net.disconnect();
-			GenesisNotifier.this.stopSelf();
-		}
-	}
-
-	private final class Crypto2
-	{
-		private Crypto2()
-		{
-		}
-
-		private String Sha1Hash(final String str)
-		{
-		try {
-			final MessageDigest digst = MessageDigest.getInstance("SHA-1");
-
-			digst.update(str.getBytes());
-
-			final byte[] shabytes = digst.digest();
-			final StringBuffer buff = new StringBuffer();
-
-			for (int i = 0; i < shabytes.length; i++) {
-				final String n = Integer.toHexString(shabytes[i] & 0xff);
-				if (n.length() < 2)
-					buff.append('0');
-				buff.append(n);
-			}
-			return buff.toString();
-		} catch (java.security.NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		}
-
-		public String HashPasswd(final String str)
-		{
-			return Sha1Hash(Sha1Hash(str));
-		}
-
-		public String LoginKey(final SocketClient2 net, final String str) throws SocketException, IOException
-		{
-		try {
-			final MessageDigest digst = MessageDigest.getInstance("SHA-1");
-
-			digst.update(HashPasswd(str).getBytes());
-			digst.update(net.getHash().getBytes());
-
-			final byte[] shabytes = digst.digest();
-			final StringBuffer buff = new StringBuffer();
-
-			for (int i = 0; i < shabytes.length; i++) {
-				final String n = Integer.toHexString(shabytes[i] & 0xff);
-				if (n.length() < 2)
-					buff.append('0');
-				buff.append(n);
-			}
-			return buff.toString();
-		} catch (java.security.NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		}
 	}
 }

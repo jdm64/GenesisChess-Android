@@ -12,42 +12,64 @@ import org.json.JSONTokener;
 
 class SocketClient
 {
-	public static boolean isLoggedin;
+	private static SocketClient instance = null;
 
-	private static String loginHash;
-	private static Socket sock;
-	private static DataInputStream input;
-	private static OutputStream output;
+	private boolean isLoggedin;
+	private String loginHash;
+	private Socket socket;
+	private DataInputStream input;
+	private OutputStream output;
 
-	// needs to be called once on program start
-	public SocketClient()
+	private SocketClient()
 	{
 		disconnect();
 	}
 
-	public static String getHash() throws SocketException, IOException
+	public static synchronized SocketClient getInstance()
+	{
+		if (instance == null)
+			instance = new SocketClient();
+		return instance;
+	}
+
+	public static synchronized SocketClient getInstance(final int id)
+	{
+		return new SocketClient();
+	}
+
+	public synchronized boolean getIsLoggedIn()
+	{
+		return isLoggedin;
+	}
+
+	public synchronized void setIsLoggedIn(final boolean value)
+	{
+		isLoggedin = value;
+	}
+
+	public synchronized String getHash() throws SocketException, IOException
 	{
 		if (loginHash == null)
 			connect();
 		return loginHash;
 	}
 
-	private static void connect() throws SocketException, IOException
+	private synchronized void connect() throws SocketException, IOException
 	{
-		if (sock.isConnected())
+		if (socket.isConnected())
 			return;
-		sock.connect(new InetSocketAddress("genesischess.com", 8338));
-		input = new DataInputStream(sock.getInputStream());
-		output = sock.getOutputStream();
+		socket.connect(new InetSocketAddress("genesischess.com", 8338));
+		input = new DataInputStream(socket.getInputStream());
+		output = socket.getOutputStream();
 		loginHash = input.readLine().trim();
 	}
 
-	public static void disconnect()
+	public synchronized void disconnect()
 	{
 	try {
-		if (sock != null)
-			sock.close();
-		sock = new Socket();
+		if (socket != null)
+			socket.close();
+		socket = new Socket();
 		loginHash = null;
 		isLoggedin = false;
 	} catch (IOException e) {
@@ -56,7 +78,7 @@ class SocketClient
 	}
 	}
 
-	public static void write(final JSONObject data) throws SocketException, IOException
+	public synchronized void write(final JSONObject data) throws SocketException, IOException
 	{
 		connect();
 
@@ -65,7 +87,7 @@ class SocketClient
 		output.write(str.getBytes());
 	}
 
-	public static JSONObject read() throws SocketException, IOException, JSONException
+	public synchronized JSONObject read() throws SocketException, IOException, JSONException
 	{
 		connect();
 
