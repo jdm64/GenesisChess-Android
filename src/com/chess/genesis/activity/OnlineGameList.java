@@ -1,6 +1,5 @@
 package com.chess.genesis;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -19,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
@@ -30,7 +28,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -280,8 +277,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		NetActive.inc();
 		progress.setText("Updating Game List");
 
-		// Must not be final
-		SyncClient sync = new SyncClient(this, handle);
+		final SyncClient sync = new SyncClient(this, handle);
 		(new Thread(sync)).start();
 	}
 
@@ -369,8 +365,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 		case R.id.resync:
 			progress.setText("Updating Game List");
 
-			// Must not be final
-			SyncClient sync = new SyncClient(this, handle);
+			final SyncClient sync = new SyncClient(this, handle);
 			(new Thread(sync)).start();
 			break;
 		case R.id.readall_msgs:

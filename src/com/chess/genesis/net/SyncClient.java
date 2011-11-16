@@ -29,7 +29,6 @@ class SyncClient implements Runnable
 	private int syncType = REGULAR_SYNC;
 	private int gameType = Enums.ONLINE_GAME;
 	private boolean error = false;
-	private boolean fullsync = false;
 
 	private final Handler handle = new Handler()
 	{
@@ -181,7 +180,7 @@ class SyncClient implements Runnable
 			lock++;
 		}
 		// Save sync time
-		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
 		pref.commit();
 	} catch (JSONException e) {
@@ -226,7 +225,7 @@ class SyncClient implements Runnable
 		if (syncType == ACTIVE_SYNC)
 			return;
 		// Save sync time
-		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
 		pref.commit();
 	}
@@ -298,7 +297,7 @@ class SyncClient implements Runnable
 		db.close();
 
 		// Save sync time
-		Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastmsgsync", time);
 		pref.commit();
 	}  catch (JSONException e) {

@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,8 +51,8 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				progress.setText("Sending Newgame Request");
 
 				final String opponent = data.getString("opp_name");
-				String color = Enums.ColorType(data.getInt("color"));
-				String gametype = Enums.GameType(data.getInt("gametype"));
+				final String color = Enums.ColorType(data.getInt("color"));
+				final String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.new_game(opponent, gametype, color);
 				(new Thread(net)).start();

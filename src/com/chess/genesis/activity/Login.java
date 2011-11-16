@@ -59,8 +59,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 					SocketClient.getInstance().setIsLoggedIn(true);
 
-					// Must not be final
-					SyncClient sync = new SyncClient(self, handle);
+					final SyncClient sync = new SyncClient(self, handle);
 					sync.setSyncType(SyncClient.FULL_SYNC);
 					(new Thread(sync)).start();
 					break;

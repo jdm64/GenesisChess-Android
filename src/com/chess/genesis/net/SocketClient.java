@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-class SocketClient
+final class SocketClient
 {
 	private static SocketClient instance = null;
 

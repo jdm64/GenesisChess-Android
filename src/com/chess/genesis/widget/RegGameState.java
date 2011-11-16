@@ -1,16 +1,13 @@
 package com.chess.genesis;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Date;
 import org.json.JSONException;

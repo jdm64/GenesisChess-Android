@@ -14,7 +14,6 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 class GamePoolDialog extends Dialog implements OnClickListener
 {
@@ -26,7 +25,7 @@ class GamePoolDialog extends Dialog implements OnClickListener
 		public String gametype;
 		public String time;
 
-		public PoolDataItem(String GameType, long Time)
+		public PoolDataItem(final String GameType, final long Time)
 		{
 			gametype = GameType.substring(0,1).toUpperCase() + GameType.substring(1);
 			time = (new PrettyDate(Time)).agoFormat();
@@ -81,7 +80,7 @@ class GamePoolDialog extends Dialog implements OnClickListener
 			table.addView(row);
 		}
 
-		Button button = (Button) findViewById(R.id.close);
+		final Button button = (Button) findViewById(R.id.close);
 		button.setOnClickListener(this);
 	}
 

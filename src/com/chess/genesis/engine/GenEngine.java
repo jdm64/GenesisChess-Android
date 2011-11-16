@@ -22,10 +22,10 @@ class GenEngine implements Runnable
 	private final BoolArray ismate;
 	private final GenTransTable tt;
 	private final Handler handle;
+	private final Rand64 rand;
 
 	private GenBoard board;
 	private GenMoveList curr;
-	private Rand64 rand;
 	private int secT;
 	private long endT;
 	private boolean active;

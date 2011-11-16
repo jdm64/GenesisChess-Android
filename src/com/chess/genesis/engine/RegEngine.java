@@ -21,10 +21,10 @@ class RegEngine implements Runnable
 	private final BoolArray ismate;
 	private final RegTransTable tt;
 	private final Handler handle;
+	private final Rand64 rand;
 
 	private RegBoard board;
 	private RegMoveList curr;
-	private Rand64 rand;
 	private int secT;
 	private long endT;
 	private boolean active;

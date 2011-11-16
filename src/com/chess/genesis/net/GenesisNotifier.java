@@ -17,18 +17,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.security.MessageDigest;
 import java.util.Calendar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class GenesisNotifier extends Service implements Runnable
 {
@@ -268,7 +260,7 @@ public class GenesisNotifier extends Service implements Runnable
 			lock++;
 		}
 		// Save sync time
-		Editor editor = pref.edit();
+		final Editor editor = pref.edit();
 		editor.putLong("lastgamesync", time);
 		editor.commit();
 	} catch (JSONException e) {
@@ -289,7 +281,7 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 		// Save sync time
-		Editor editor = pref.edit();
+		final Editor editor = pref.edit();
 		editor.putLong("lastmsgsync", time);
 		editor.commit();
 	}  catch (JSONException e) {

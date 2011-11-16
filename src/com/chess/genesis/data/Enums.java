@@ -2,6 +2,10 @@ package com.chess.genesis;
 
 final class Enums
 {
+	private Enums()
+	{
+	}
+
 	// Play Types
 	public final static int LOCAL_GAME = 1;
 	public final static int ONLINE_GAME = 2;

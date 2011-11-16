@@ -12,13 +12,11 @@ class ReadAllMsgsDialog extends Dialog implements OnClickListener
 {
 	public final static int MSG  = 115;
 
-	private final Context context;
 	private final Handler handle;
 
-	public ReadAllMsgsDialog(final Context _context, final Handler handler)
+	public ReadAllMsgsDialog(final Context context, final Handler handler)
 	{
-		super(_context);
-		context = _context;
+		super(context);
 		handle = handler;
 	}
 

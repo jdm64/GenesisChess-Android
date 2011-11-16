@@ -1,12 +1,10 @@
 package com.chess.genesis;
 
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
-import android.view.View;
 
 class IntListPreference extends ListPreference
 {
@@ -23,7 +21,7 @@ class IntListPreference extends ListPreference
 	}
 
 	@Override
-	protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
+	protected void onSetInitialValue(final boolean restoreValue, final Object defaultValue)
 	{
 		final SharedPreferences pref = getSharedPreferences();
 		final int value = pref.getInt(getKey(), Integer.valueOf((String) defaultValue));

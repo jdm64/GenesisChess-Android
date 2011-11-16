@@ -3,7 +3,6 @@ package com.chess.genesis;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -136,14 +135,14 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		super.onPause();
 	}
 
-	public void runCallBack(CallBackPreference preference, final boolean result)
+	public void runCallBack(final CallBackPreference preference, final boolean result)
 	{
 		if (!result)
 			return;
 
 		final String key = preference.getKey();
 		final GameDataDB db = new GameDataDB(this);
-		SyncClient sync = new SyncClient(this, handle);
+		final SyncClient sync = new SyncClient(this, handle);
 
 		if (key.equals("deleteLocalTable")) {
 			db.deleteAllLocalGames();
@@ -166,7 +165,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		db.close();
 	}
 
-	public boolean onPreferenceChange(Preference preference, Object newValue)
+	public boolean onPreferenceChange(final Preference preference, final Object newValue)
 	{
 		final String key = preference.getKey();
 

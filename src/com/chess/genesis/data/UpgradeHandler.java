@@ -13,6 +13,10 @@ class UpgradeHandler
 	private static PackageInfo pinfo;
 	private static SharedPreferences pref;
 
+	private UpgradeHandler()
+	{
+	}
+
 	public static void run(final Context _context)
 	{
 	try {
