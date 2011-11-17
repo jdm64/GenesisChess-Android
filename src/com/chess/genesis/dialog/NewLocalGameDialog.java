@@ -1,17 +1,15 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-class NewLocalGameDialog extends Dialog implements OnClickListener
+class NewLocalGameDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 102;
 
@@ -30,15 +28,10 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("New Local Game");
-
-		setContentView(R.layout.dialog_newgame_local);
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_newgame_local);
+		setButtonTxt(R.id.ok, "Create Game");
 
 		AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
@@ -63,8 +56,7 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
 			final EditText text = (EditText) findViewById(R.id.game_name);
 
@@ -73,7 +65,6 @@ class NewLocalGameDialog extends Dialog implements OnClickListener
 			data.putInt("opponent", ((AdapterItem) opponent_spin.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
-			break;
 		}
 		dismiss();
 	}

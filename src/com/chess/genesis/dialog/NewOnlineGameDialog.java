@@ -1,16 +1,14 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
-class NewOnlineGameDialog extends Dialog implements OnClickListener
+class NewOnlineGameDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 100;
 
@@ -26,15 +24,10 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("New Online Game");
-
-		setContentView(R.layout.dialog_newgame_online);
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_newgame_online);
+		setButtonTxt(R.id.ok, "Submit");
 
 		AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
@@ -60,8 +53,7 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
 
 			final Spinner gametype = (Spinner) findViewById(R.id.game_type);
@@ -71,7 +63,6 @@ class NewOnlineGameDialog extends Dialog implements OnClickListener
 			data.putInt("opponent", ((AdapterItem) eventtype.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
-			break;
 		}
 		dismiss();
 	}

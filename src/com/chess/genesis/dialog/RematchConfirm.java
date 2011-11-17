@@ -1,17 +1,15 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-class RematchConfirm extends Dialog implements OnClickListener
+class RematchConfirm extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 108;
 
@@ -28,19 +26,14 @@ class RematchConfirm extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Rematch Confirmation");
-
-		setContentView(R.layout.dialog_confirm_rematch);
+		setBodyView(R.layout.dialog_confirm_rematch);
+		setButtonTxt(R.id.ok, "Rematch");
 
 		final TextView txt = (TextView) findViewById(R.id.rematch_confirm);
 		txt.setText("Are you sure you want to invite " + opponent +
 			" to a rematch game with the following settings?");
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
 
 		AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
@@ -66,8 +59,7 @@ class RematchConfirm extends Dialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
 
 			Spinner spinner = (Spinner) findViewById(R.id.game_type);
@@ -79,7 +71,6 @@ class RematchConfirm extends Dialog implements OnClickListener
 			data.putString("opp_name", opponent);
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
-			break;
 		}
 		dismiss();
 	}

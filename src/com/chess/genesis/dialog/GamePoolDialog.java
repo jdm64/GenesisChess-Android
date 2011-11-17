@@ -1,13 +1,11 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -15,7 +13,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-class GamePoolDialog extends Dialog implements OnClickListener
+class GamePoolDialog extends BaseDialog implements OnClickListener
 {
 	private final Context context;
 	private final ObjectArray<PoolDataItem> data;
@@ -34,7 +32,7 @@ class GamePoolDialog extends Dialog implements OnClickListener
 
 	public GamePoolDialog(final Context _context)
 	{
-		super(_context);
+		super(_context, BaseDialog.CANCEL);
 		context = _context;
 
 	try {
@@ -58,11 +56,12 @@ class GamePoolDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Game Pool Info");
+		setBodyView(R.layout.dialog_gamepool);
+		setButtonTxt(R.id.cancel, "Close");
 
-		setContentView(R.layout.dialog_gamepool);
-
-		final TableLayout table = (TableLayout) findViewById(R.id.layout02);
+		final TableLayout table = (TableLayout) findViewById(R.id.layout01);
 		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
 
 		for (int i = 0; i < data.size(); i++) {
@@ -79,9 +78,6 @@ class GamePoolDialog extends Dialog implements OnClickListener
 
 			table.addView(row);
 		}
-
-		final Button button = (Button) findViewById(R.id.close);
-		button.setOnClickListener(this);
 	}
 
 	public void onClick(final View v)

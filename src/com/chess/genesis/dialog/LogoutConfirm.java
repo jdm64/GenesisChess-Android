@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-class LogoutConfirm extends Dialog implements OnClickListener
+class LogoutConfirm extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 105;
 
@@ -24,24 +24,16 @@ class LogoutConfirm extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Logout Confirmation");
-
-		setContentView(R.layout.dialog_confirm_logout);
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_confirm_logout);
+		setButtonTxt(R.id.ok, "Logout");
 	}
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok)
 			handle.sendMessage(handle.obtainMessage(MSG));
-			break;
-		}
 		dismiss();
 	}
 }

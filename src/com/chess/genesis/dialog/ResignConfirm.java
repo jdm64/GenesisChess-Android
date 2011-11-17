@@ -1,14 +1,12 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
-class ResignConfirm extends Dialog implements OnClickListener
+class ResignConfirm extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 107;
 
@@ -24,24 +22,16 @@ class ResignConfirm extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Resign Confirmation");
-
-		setContentView(R.layout.dialog_confirm_resign);
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_confirm_resign);
+		setButtonTxt(R.id.ok, "Resign");
 	}
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok)
 			handle.sendMessage(handle.obtainMessage(MSG));
-			break;
-		}
 		dismiss();
 	}
 }

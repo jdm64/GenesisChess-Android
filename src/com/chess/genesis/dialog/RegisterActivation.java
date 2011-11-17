@@ -1,14 +1,12 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
-class RegisterActivation extends Dialog implements OnClickListener
+class RegisterActivation extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 103;
 
@@ -16,7 +14,7 @@ class RegisterActivation extends Dialog implements OnClickListener
 
 	public RegisterActivation(final Context context, final Handler handler)
 	{
-		super(context);
+		super(context, BaseDialog.CANCEL);
 
 		handle = handler;
 	}
@@ -24,12 +22,10 @@ class RegisterActivation extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Activate Account");
-
-		setContentView(R.layout.dialog_confirm_activation);
-
-		final Button close = (Button) findViewById(R.id.close);
-		close.setOnClickListener(this);
+		setBodyView(R.layout.dialog_confirm_activation);
+		setButtonTxt(R.id.cancel, "Close");
 	}
 
 	public void onClick(final View v)

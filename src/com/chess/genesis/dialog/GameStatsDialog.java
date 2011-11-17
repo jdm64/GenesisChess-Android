@@ -1,16 +1,14 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-class GameStatsDialog extends Dialog implements OnClickListener
+class GameStatsDialog extends BaseDialog implements OnClickListener
 {
 	private static final String[] WON_CHECK = {"You Won", "Checkmate"};
 	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
@@ -50,7 +48,7 @@ class GameStatsDialog extends Dialog implements OnClickListener
 
 	public GameStatsDialog(final Context context, final Bundle bundle)
 	{
-		super(context);
+		super(context, BaseDialog.CANCEL);
 
 		final int from, to;
 		final int status = Integer.valueOf(bundle.getString("status"));
@@ -87,12 +85,10 @@ class GameStatsDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle(title);
-
-		setContentView(R.layout.dialog_endgame);
-
-		final Button close = (Button) findViewById(R.id.close);
-		close.setOnClickListener(this);
+		setBodyView(R.layout.dialog_endgame);
+		setButtonTxt(R.id.cancel, "Close");
 
 		// Set TextViews
 		final int list[] = new int[]{R.id.opponent, R.id.result,

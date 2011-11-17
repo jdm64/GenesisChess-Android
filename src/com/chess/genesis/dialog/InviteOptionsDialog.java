@@ -1,17 +1,15 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-class InviteOptionsDialog extends Dialog implements OnClickListener
+class InviteOptionsDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 104;
 
@@ -29,15 +27,10 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Invite Game Options");
-
-		setContentView(R.layout.dialog_newgame_invite);
-
-		Button button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_newgame_invite);
+		setButtonTxt(R.id.ok, "Create Game");
 
 		// ColorType dropdown
 		final AdapterItem[] list = new AdapterItem[]
@@ -54,8 +47,7 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok) {
 			final EditText opp_name = (EditText) findViewById(R.id.opp_name);
 			final Spinner color = (Spinner) findViewById(R.id.invite_color);
 
@@ -63,7 +55,6 @@ class InviteOptionsDialog extends Dialog implements OnClickListener
 			settings.putInt("color", ((AdapterItem) color.getSelectedItem()).id);
 
 			handle.sendMessage(handle.obtainMessage(MSG, settings));
-			break;
 		}
 		dismiss();
 	}

@@ -1,14 +1,12 @@
 package com.chess.genesis;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
-class DeleteArchiveDialog extends Dialog implements OnClickListener
+class DeleteArchiveDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 113;
 
@@ -26,26 +24,19 @@ class DeleteArchiveDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
+		super.onCreate(savedInstanceState);
 		setTitle("Delete Game");
-
-		setContentView(R.layout.dialog_delete_archive);
-
-		Button button = (Button) findViewById(R.id.cancel);
-		button.setOnClickListener(this);
-
-		button = (Button) findViewById(R.id.ok);
-		button.setOnClickListener(this);
+		setBodyView(R.layout.dialog_delete_archive);
+		setButtonTxt(R.id.ok, "Delete Game");
 	}
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.ok:
+		if (v.getId() == R.id.ok) {
 			final GameDataDB db = new GameDataDB(v.getContext());
 			db.deleteArchiveGame(gameid);
 			db.close();
 			handle.sendMessage(handle.obtainMessage(MSG));
-			break;
 		}
 		dismiss();
 	}
