@@ -48,8 +48,8 @@ public class GenesisNotifier extends Service implements Runnable
 			if (json.getString("result").equals("error")) {
 				error = true;
 				socket.disconnect();
-				final String title = "Error in GenesisNotifier";
-				SendNotification(title, json.getString("reason"), ERROR_NOTE);
+			//	final String title = "Error in GenesisNotifier";
+			//	SendNotification(title, json.getString("reason"), ERROR_NOTE);
 				return;
 			}
 		} catch (JSONException e) {
