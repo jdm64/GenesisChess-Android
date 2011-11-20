@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/text01"
 	android:textColor="#ff000000"
 	android:text="@string/gamepool_info"/>
@@ -15,12 +15,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:shrinkColumns="*"
 	android:stretchColumns="*">
 		<TableRow>
-			<TextView
+			<com.chess.genesis.RobotoText
 			android:id="@+id/left"
 			android:textColor="#ff000000"
 			android:textStyle="bold"
 			android:text="Game Type"/>
-			<TextView
+			<com.chess.genesis.RobotoText
 			android:id="@+id/right"
 			android:textColor="#ff000000"
 			android:textStyle="bold"

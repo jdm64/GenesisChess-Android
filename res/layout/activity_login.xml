@@ -6,7 +6,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	style="@style/FillWidth"
 	android:src="@drawable/topbar"/>
 
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/username_header"
 	android:layout_below="@id/topbar"
 	android:layout_alignParentLeft="true"
@@ -14,7 +14,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginLeft="14dp"
 	android:textSize="15dp"
 	android:text="User Name"/>
-	<EditText
+	<com.chess.genesis.RobotoEditText
 	android:id="@+id/username"
 	style="@style/FillWidth"
 	android:layout_below="@id/username_header"
@@ -24,14 +24,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:singleLine="true"
 	android:maxLength="16"/>
 
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/password_header"
 	android:layout_below="@id/username"
 	android:layout_alignParentLeft="true"
 	android:layout_marginLeft="14dp"
 	android:textSize="15dp"
 	android:text="Password"/>
-	<EditText
+	<com.chess.genesis.RobotoEditText
 	android:id="@+id/password"
 	style="@style/FillWidth"
 	android:layout_below="@id/password_header"

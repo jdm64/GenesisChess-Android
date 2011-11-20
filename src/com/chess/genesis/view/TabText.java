@@ -7,9 +7,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 
-class TabText extends TextView implements OnTouchListener
+class TabText extends RobotoText implements OnTouchListener
 {
 	private final static int highlightColor = 0xff00b7eb;
 	private final static int touchColor = 0xff68c1be;

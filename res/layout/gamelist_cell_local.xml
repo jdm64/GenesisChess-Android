@@ -7,20 +7,20 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_centerVertical="true"
 	android:layout_height="40dp"
 	android:layout_width="40dp"/>
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/game_name"
 	android:layout_toRightOf="@id/cell_icon"
 	android:layout_alignParentTop="true"
 	android:layout_marginLeft="6dp"
 	android:textStyle="bold"
 	android:textSize="18dp"/>
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/game_type"
 	android:layout_toRightOf="@id/cell_icon"
 	android:layout_below="@id/game_name"
 	android:layout_marginLeft="6dp"
 	android:textSize="14dp"/>
-	<TextView
+	<com.chess.genesis.RobotoText
 	android:id="@+id/game_time"
 	android:layout_alignParentRight="true"
 	android:layout_alignParentBottom="true"

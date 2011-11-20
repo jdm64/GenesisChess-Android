@@ -21,7 +21,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent">
-	<TextView 
+	<com.chess.genesis.RobotoText
 	android:id="@+id/text"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"

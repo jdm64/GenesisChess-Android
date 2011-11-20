@@ -12,7 +12,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow
 	android:id="@+id/input_box"
 	android:layout_above="@+id/botbar">
-		<EditText
+		<com.chess.genesis.RobotoEditText
 		android:id="@+id/new_msg"
 		style="@style/FillWidth"
 		android:layout_weight="82"

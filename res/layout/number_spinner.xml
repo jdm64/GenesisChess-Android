@@ -30,7 +30,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		<com.chess.genesis.MyImageView
 		android:src="@drawable/timepicker_input_selected"/>
 		
-		<EditText
+		<com.chess.genesis.RobotoEditText
 		android:id="@+id/timespinner_input"
 		android:gravity="center"
 		android:layout_gravity="center"

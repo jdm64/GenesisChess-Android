@@ -4,16 +4,16 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:shrinkColumns="*"
 android:stretchColumns="1">
 	<TableRow>
-		<TextView
+		<com.chess.genesis.RobotoText
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
 		android:textColor="#000000"
 		android:text="Game Name:"/>
-		<EditText
+		<com.chess.genesis.RobotoEditText
 		android:id="@+id/game_name"/>
 	</TableRow>
 	<TableRow>
-		<TextView
+		<com.chess.genesis.RobotoText
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
 		android:textColor="#000000"
@@ -22,7 +22,7 @@ android:stretchColumns="1">
 		android:id="@+id/game_type"/>
 	</TableRow>
 	<TableRow>
-		<TextView
+		<com.chess.genesis.RobotoText
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
 		android:textColor="#000000"
