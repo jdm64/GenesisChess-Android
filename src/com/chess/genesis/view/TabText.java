@@ -11,7 +11,7 @@ import android.view.View.OnTouchListener;
 class TabText extends RobotoText implements OnTouchListener
 {
 	private final static int highlightColor = 0xff00b7eb;
-	private final static int touchColor = 0xff68c1be;
+	private final static int touchColor = 0x8000b7eb;
 
 	private final Paint paint;
 	private boolean active;
