@@ -30,6 +30,8 @@ class NetworkClient implements Runnable
 	public final static int GET_OPTION = 17;
 	public final static int SET_OPTION = 18;
 	public final static int POOL_INFO = 19;
+	public final static int NUDGE_GAME = 20;
+	public final static int IDLE_RESIGN = 21;
 
 	private final Context context;
 	private final Handler callback;
@@ -560,6 +562,38 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "poolinfo");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void nudge_game(final String gameid)
+	{
+		fid = NUDGE_GAME;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "nudge");
+			json.put("gameid", gameid);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void idle_resign(final String gameid)
+	{
+		fid = IDLE_RESIGN;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "idleresign");
+			json.put("gameid", gameid);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
