@@ -122,18 +122,19 @@ class GameDataDB
 		final int gametype = Enums.GameType(json.getString("gametype"));
 		final int eventtype = Enums.EventType(json.getString("eventtype"));
 		final int status = Enums.GameStatus(json.getString("status"));
+		final int idle = (json.has("idle")? 1:0) + (json.has("nudge")? 1:0) + (json.has("close")? 1:0);
 
 		final GameInfo info = new GameInfo(context, status, history, white, black);
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
 
 		final Object[] data = {gameid, gametype, eventtype, status, ctime,
-			stime, yourturn, ply, white, black, zfen, history};
+			stime, yourturn, ply, white, black, zfen, history, idle};
 
 		final String q1 = "INSERT OR REPLACE INTO onlinegames ";
-		final String q2 = "(gameid, gametype, eventtype, status, ctime, ";
-		final String q3 = "stime, yourturn, ply, white, black, zfen, history) ";
-		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		final String q2 = "(gameid, gametype, eventtype, status, ctime, stime, ";
+		final String q3 = "yourturn, ply, white, black, zfen, history, idle) ";
+		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (JSONException e) {
@@ -159,14 +160,15 @@ class GameDataDB
 		final String history = json.getString("history");
 		final long stime = json.getLong("stime");
 		final int status = Enums.GameStatus(json.getString("status"));
+		final int idle = (json.has("idle")? 1:0) + (json.has("nudge")? 1:0) + (json.has("close")? 1:0);
 
 		final Bundle row = rowToBundle(cursor, 0);
 		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
 
-		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, gameid};
-		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=? WHERE gameid=?;", data2);
+		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, idle, gameid};
+		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=?, idle=? WHERE gameid=?;", data2);
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
