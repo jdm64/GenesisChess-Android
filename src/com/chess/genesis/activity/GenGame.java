@@ -100,7 +100,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 		}
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		if (pref.getBoolean("screenAlwaysOn", true)) {
+		if (pref.getBoolean("screenAlwaysOn", false)) {
 			final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "GenesisChess");
 			wakelock.acquire();
