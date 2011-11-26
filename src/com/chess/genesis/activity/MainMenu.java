@@ -124,15 +124,8 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		if (resultCode == RESULT_OK) {
-			final Bundle bundle = new Bundle();
-			bundle.putInt("type", Enums.ONLINE_GAME);
-
-			final Intent intent = new Intent(this, OnlineGameList.class);
-			intent.putExtras(bundle);
-
-			startActivity(intent);
-		}
+		if (resultCode == RESULT_OK)
+			startActivity(new Intent(this, OnlineGameList.class));
 	}
 
 	public boolean onTouch(final View v, final MotionEvent event)
