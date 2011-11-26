@@ -14,6 +14,8 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
 	private static final String[] LOST_RESIGN = {"You Lost", "Resigned"};
 	private static final String[] WON_RESIGN = {"You Won", "Resigned"};
+	private static final String[] WON_IDLE = {"You Won", "Idle"};
+	private static final String[] LOST_IDLE = {"You Lost", "Idle"};
 	private static final String[] TIED_IMP = {"Game Tied", "Imposibility of Checkmate"};
 	private static final String[] TIED_STALE = {"Game Tied", "Stalemate"};
 
@@ -28,6 +30,8 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 		map.put(Piece.WHITE * Enums.BLACKRESIGN, WON_RESIGN);
 		map.put(Piece.WHITE * Enums.IMPOSSIBLE, TIED_IMP);
 		map.put(Piece.WHITE * Enums.STALEMATE, TIED_STALE);
+		map.put(Piece.WHITE * Enums.WHITEIDLE, LOST_IDLE);
+		map.put(Piece.WHITE * Enums.BLACKIDLE, WON_IDLE);
 
 		map.put(Piece.BLACK * Enums.WHITEMATE, LOST_CHECK);
 		map.put(Piece.BLACK * Enums.BLACKMATE, WON_CHECK);
@@ -35,6 +39,8 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 		map.put(Piece.BLACK * Enums.BLACKRESIGN, LOST_RESIGN);
 		map.put(Piece.BLACK * Enums.IMPOSSIBLE, TIED_IMP);
 		map.put(Piece.BLACK * Enums.STALEMATE, TIED_STALE);
+		map.put(Piece.BLACK * Enums.WHITEIDLE, WON_IDLE);
+		map.put(Piece.BLACK * Enums.BLACKIDLE, LOST_IDLE);
 		return map;
 	}
 

@@ -174,6 +174,25 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 
+		txt = (TextView) cell.findViewById(R.id.idle);
+		switch (Integer.valueOf(data.getString("idle"))) {
+		case Enums.NOTIDLE:
+			txt.setText("");
+			break;
+		case Enums.IDLE:
+			txt.setText("[idle]");
+			txt.setTextColor(0xff3465a4);
+			break;
+		case Enums.NUDGED:
+			txt.setText("[nudged]");
+			txt.setTextColor(0xfff57900);
+			break;
+		case Enums.CLOSE:
+			txt.setText("[close]");
+			txt.setTextColor(0xffcc0000);
+			break;
+		}
+
 		txt = (TextView) cell.findViewById(R.id.new_msgs);
 		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
 			txt.setText("[new msg]");
@@ -187,10 +206,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		switch (Integer.valueOf(data.getString("status"))) {
 		case Enums.WHITEMATE:
 		case Enums.BLACKRESIGN:
+		case Enums.BLACKIDLE:
 			icon = R.drawable.white_pawn_dark;
 			break;
 		case Enums.BLACKMATE:
 		case Enums.WHITERESIGN:
+		case Enums.WHITEIDLE:
 			icon = R.drawable.black_pawn_light;
 			break;
 		case Enums.STALEMATE:

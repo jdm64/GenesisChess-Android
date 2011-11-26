@@ -8,8 +8,8 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/resync"
 	android:title="Update"/>
 	<item
-	android:id="@+id/resign"
-	android:title="Resign"/>
+	android:id="@+id/nudge_resign"
+	android:title="Nudge/Resign"/>
 	<item
 	android:id="@+id/chat"
 	android:title="Chat"/>

@@ -33,4 +33,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginRight="6dp"
 	android:textColor="#4e9a06"
 	android:textSize="14dp"/>
+	<com.chess.genesis.RobotoText
+	android:id="@+id/idle"
+	android:layout_toLeftOf="@id/new_msgs"
+	android:layout_alignParentTop="true"
+	android:textColor="#3465a4"
+	android:textSize="14dp"/>
 </RelativeLayout>

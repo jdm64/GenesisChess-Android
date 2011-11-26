@@ -76,7 +76,20 @@ class GenGameState extends GameState
 				net.resign_game(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
+			case NudgeConfirm.MSG:
+				progress.setText("Sending Nudge");
+
+				net.nudge_game(settings.getString("gameid"));
+				(new Thread(net)).start();
+				break;
+			case IdleResignConfirm.MSG:
+				progress.setText("Sending Idle Resign");
+
+				net.idle_resign(settings.getString("gameid"));
+				(new Thread(net)).start();
+				break;
 			case NetworkClient.RESIGN_GAME:
+			case NetworkClient.IDLE_RESIGN:
 				json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error")) {
@@ -88,6 +101,9 @@ class GenGameState extends GameState
 
 				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).start();
+				break;
+			case NetworkClient.NUDGE_GAME:
+				progress.remove();
 				break;
 			case NetworkClient.GAME_STATUS:
 				json = (JSONObject) msg.obj;
@@ -433,9 +449,33 @@ class GenGameState extends GameState
 		(new CpuTimeDialog(context, handle, cpu.getTime())).show();
 	}
 
-	public void resign()
+	public void nudge_resign()
 	{
-		(new ResignConfirm(context, handle)).show();
+		final GameDataDB db = new GameDataDB(context);
+		final Bundle data = db.getOnlineGameData(settings.getString("gameid"));
+		db.close();
+
+		final int yturn = Integer.valueOf(data.getString("yourturn"));
+		if (yturn == Enums.YOUR_TURN) {
+			(new ResignConfirm(context, handle)).show();
+			return;
+		}
+
+		switch (Integer.valueOf(data.getString("idle"))) {
+		default:
+		case Enums.NOTIDLE:
+			Toast.makeText(context, "Game must be idle before nudging", Toast.LENGTH_LONG).show();
+			break;
+		case Enums.IDLE:
+			(new NudgeConfirm(context, handle)).show();
+			break;
+		case Enums.NUDGED:
+			Toast.makeText(context, "Game is already nudged", Toast.LENGTH_LONG).show();
+			break;
+		case Enums.CLOSE:
+			(new IdleResignConfirm(context, handle)).show();
+			break;
+		}
 	}
 
 	public void rematch()

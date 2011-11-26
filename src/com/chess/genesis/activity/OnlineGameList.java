@@ -78,6 +78,13 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				net.new_game(opponent, gametype, color);
 				(new Thread(net)).start();
 				break;
+			case NudgeConfirm.MSG:
+				progress.setText("Sending Nudge");
+
+				final String gameid = (String) msg.obj;
+				net.nudge_game(gameid);
+				(new Thread(net)).start();
+				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
 				progress.setText("Sending Newgame Request");
@@ -132,6 +139,10 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
+				break;
+			case NetworkClient.NUDGE_GAME:
+				updateGameListAdapters();
+				progress.remove();
 				break;
 			}
 		}
@@ -397,6 +408,14 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 
 		switch (pager.getCurrentItem()) {
 		case THEIR_PAGE:
+			final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+			final GameListAdapter listAdapter = gamelistadapter_arr[pager.getCurrentItem()];
+			final Bundle bundle = (Bundle) listAdapter.getItem((int) info.id);
+
+			if (bundle.getString("idle").equals("1")) {
+				getMenuInflater().inflate(R.menu.context_gamelist_online_nudge, menu);
+				break;
+			}
 		case YOUR_PAGE:
 			getMenuInflater().inflate(R.menu.context_gamelist_online, menu);
 			break;
@@ -426,6 +445,9 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			final String opponent = username.equals(bundle.getString("white"))?
 					bundle.getString("black") : bundle.getString("white");
 			(new RematchConfirm(this, handle, opponent)).show();
+			break;
+		case R.id.nudge:
+			(new NudgeConfirm(this, handle, bundle.getString("gameid"))).show();
 			break;
 		default:
 			return super.onContextItemSelected(item);

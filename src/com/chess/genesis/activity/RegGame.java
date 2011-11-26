@@ -239,8 +239,8 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		case R.id.resync:
 			gamestate.resync();
 			break;
-		case R.id.resign:
-			gamestate.resign();
+		case R.id.nudge_resign:
+			gamestate.nudge_resign();
 			break;
 		case R.id.rematch:
 			gamestate.rematch();
