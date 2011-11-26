@@ -16,10 +16,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:id="@+id/new_msg"
 		style="@style/FillWidth"
 		android:layout_weight="82"
-		android:lines="2"
+		android:maxLines="3"
 		android:scrollbars="horizontal"
 		android:inputType="textCapSentences|textMultiLine"
-		android:maxLength="160"/>
+		android:maxLength="320"/>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/submit_msg"
 		style="@style/FillWidth"
