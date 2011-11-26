@@ -37,10 +37,18 @@ final class Enums
 	public final static int IMPOSSIBLE = 5;
 	public final static int WHITERESIGN = 6;
 	public final static int BLACKRESIGN = 7;
+	public final static int WHITEIDLE = 8;
+	public final static int BLACKIDLE = 9;
 
 	// Turn Types
 	public final static int THEIR_TURN = 0;
 	public final static int YOUR_TURN = 1;
+
+	// Idle Game Status
+	public final static int NOTIDLE = 0;
+	public final static int IDLE = 1;
+	public final static int NUDGED = 2;
+	public final static int CLOSE = 3;
 
 	public static String OpponentType(final int opponent)
 	{
@@ -125,6 +133,10 @@ final class Enums
 			return WHITERESIGN;
 		if (gamestatus.equals("blackresign"))
 			return BLACKRESIGN;
+		if (gamestatus.equals("whiteidle"))
+			return WHITEIDLE;
+		if (gamestatus.equals("blackidle"))
+			return BLACKIDLE;
 		throw new RuntimeException("unknown gamestatus: " + gamestatus);
 	}
 }
