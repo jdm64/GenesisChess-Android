@@ -104,9 +104,9 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 
 		// psr_score must be last in list[]
 		if (diff > 0)
-			msg.setTextColor(0xFF00FF00);
+			msg.setTextColor(0xff4e9a06);
 		else if (diff < 0)
-			msg.setTextColor(0xFFFF0000);
+			msg.setTextColor(0xffcc0000);
 	}
 
 	public void onClick(final View v)

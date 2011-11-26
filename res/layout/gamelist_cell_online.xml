@@ -31,6 +31,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentRight="true"
 	android:layout_alignParentTop="true"
 	android:layout_marginRight="6dp"
-	android:textColor="#ff0000"
+	android:textColor="#4e9a06"
 	android:textSize="14dp"/>
 </RelativeLayout>
