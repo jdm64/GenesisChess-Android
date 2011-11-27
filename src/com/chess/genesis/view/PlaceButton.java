@@ -1,52 +1,25 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.FrameLayout;
 
-class PlaceButton extends MyImageView
+class PlaceButton extends FrameLayout
 {
-	private static final int[][] pieceImages = {
-		{R.drawable.black_king_0,	R.drawable.black_king_1},
-		{R.drawable.black_queen_0,	R.drawable.black_queen_1,	R.drawable.black_queen_2,
-		R.drawable.black_queen_3,	R.drawable.black_queen_4,	R.drawable.black_queen_5,
-		R.drawable.black_queen_6,	R.drawable.black_queen_7,	R.drawable.black_queen_8,
-		R.drawable.black_queen_9},
-		{R.drawable.black_rook_0,	R.drawable.black_rook_1,	R.drawable.black_rook_2},
-		{R.drawable.black_bishop_0,	R.drawable.black_bishop_1,	R.drawable.black_bishop_2},
-		{R.drawable.black_knight_0,	R.drawable.black_knight_1,	R.drawable.black_knight_2},
-		{R.drawable.black_pawn_0,	R.drawable.black_pawn_1,	R.drawable.black_pawn_2,
-		R.drawable.black_pawn_3,	R.drawable.black_pawn_4,	R.drawable.black_pawn_5,
-		R.drawable.black_pawn_6,	R.drawable.black_pawn_7,	R.drawable.black_pawn_8},
-		{0},
-		{R.drawable.white_pawn_0,	R.drawable.white_pawn_1,	R.drawable.white_pawn_2,
-		R.drawable.white_pawn_3,	R.drawable.white_pawn_4,	R.drawable.white_pawn_5,
-		R.drawable.white_pawn_6,	R.drawable.white_pawn_7,	R.drawable.white_pawn_8},
-		{R.drawable.white_knight_0,	R.drawable.white_knight_1,	R.drawable.white_knight_2},
-		{R.drawable.white_bishop_0,	R.drawable.white_bishop_1,	R.drawable.white_bishop_2},
-		{R.drawable.white_rook_0,	R.drawable.white_rook_1,	R.drawable.white_rook_2},
-		{R.drawable.white_queen_0,	R.drawable.white_queen_1,	R.drawable.white_queen_2,
-		R.drawable.white_queen_3,	R.drawable.white_queen_4,	R.drawable.white_queen_5,
-		R.drawable.white_queen_6,	R.drawable.white_queen_7,	R.drawable.white_queen_8,
-		R.drawable.white_queen_9},
-		{R.drawable.white_king_0,	R.drawable.white_king_1} };
+	private static final int[] pieceImages = {
+		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
+		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
+		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
+		R.drawable.square_none,
+		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
+		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
+		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
 
-	private static final int[][] pieceImagesH = {
-		{R.drawable.black_king_0h,	R.drawable.black_king_1h},
-		{R.drawable.black_queen_0h,	R.drawable.black_queen_1h},
-		{R.drawable.black_rook_0h,	R.drawable.black_rook_1h,	R.drawable.black_rook_2h},
-		{R.drawable.black_bishop_0h,	R.drawable.black_bishop_1h,	R.drawable.black_bishop_2h},
-		{R.drawable.black_knight_0h,	R.drawable.black_knight_1h,	R.drawable.black_knight_2h},
-		{R.drawable.black_pawn_0h,	R.drawable.black_pawn_1h,	R.drawable.black_pawn_2h,
-		R.drawable.black_pawn_3h,	R.drawable.black_pawn_4h,	R.drawable.black_pawn_5h,
-		R.drawable.black_pawn_6h,	R.drawable.black_pawn_7h,	R.drawable.black_pawn_8h},
-		{0},
-		{R.drawable.white_pawn_0h,	R.drawable.white_pawn_1h,	R.drawable.white_pawn_2h,
-		R.drawable.white_pawn_3h,	R.drawable.white_pawn_4h,	R.drawable.white_pawn_5h,
-		R.drawable.white_pawn_6h,	R.drawable.white_pawn_7h,	R.drawable.white_pawn_8h},
-		{R.drawable.white_knight_0h,	R.drawable.white_knight_1h,	R.drawable.white_knight_2h},
-		{R.drawable.white_bishop_0h,	R.drawable.white_bishop_1h,	R.drawable.white_bishop_2h},
-		{R.drawable.white_rook_0h,	R.drawable.white_rook_1h,	R.drawable.white_rook_2h},
-		{R.drawable.white_queen_0h,	R.drawable.white_queen_1h},
-		{R.drawable.white_king_0h,	R.drawable.white_king_1h} };
+	private static final int[] countImages = {
+		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
+		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
+		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
+		R.drawable.piece_9};
 
 	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
@@ -58,30 +31,58 @@ class PlaceButton extends MyImageView
 	public PlaceButton(final Context context, final int Type)
 	{
 		super(context);
+		View.inflate(context, R.layout.framelayout_placebutton, this);
+		setLayoutParams(PlaceLayout.LINEAR_PARAMS);
 
 		type = Type;
 		count = typeCounts[Math.abs(type)];
-
 		setId(type + 100);
-		setPieceImage();
-		setLayoutParams(PlaceLayout.LINEAR_PARAMS);
+
+		setBoardImage(type);
+		setPiece(type);
+		setCountImage();
 	}
 
-	private void setPieceImage()
+	private void setBoardImage(final int value)
 	{
-		final int image = (isHighlighted)?
-			pieceImagesH[type + 6][count] :
-			pieceImages[type + 6][count];
+		final int image = (value % 2 == 0)?
+			R.drawable.square_light : R.drawable.square_dark;
 
-		setImageResource(image);
+		final MyImageView img = (MyImageView) findViewById(R.id.board_layer);
+		img.setImageResource(image);
 	}
-	
+
+	private void setPiece(final int type)
+	{
+		final MyImageView img = (MyImageView) findViewById(R.id.piece_layer);
+		img.setImageResource(pieceImages[type + 6]);
+	}
+
+	private void setHighlightImage()
+	{
+		final int image = isHighlighted?
+			R.drawable.square_ih_green :
+			R.drawable.square_none;
+
+		final MyImageView img = (MyImageView) findViewById(R.id.highlight_layer);
+		img.setImageResource(image);
+	}
+
+	private void setCountImage()
+	{
+		final int image = countImages[count];
+
+		final MyImageView img = (MyImageView) findViewById(R.id.count_layer);
+		img.setImageResource(image);
+	}
+
 	public void reset()
 	{
 		isHighlighted = false;
 		count = typeCounts[Math.abs(type)];
 
-		setPieceImage();
+		setHighlightImage();
+		setCountImage();
 	}
 
 	public int getPiece()
@@ -97,28 +98,24 @@ class PlaceButton extends MyImageView
 	public void setCount(final int Count)
 	{
 		count = Count;
-
-		setPieceImage();
+		setCountImage();
 	}
 
 	public void minusPiece()
 	{
 		count--;
-
-		setPieceImage();
+		setCountImage();
 	}
 	
 	public void plusPiece()
 	{
 		count++;
-
-		setPieceImage();
+		setCountImage();
 	}
 
 	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
-
-		setPieceImage();
+		setHighlightImage();
 	}
 }

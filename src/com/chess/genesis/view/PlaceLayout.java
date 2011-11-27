@@ -30,7 +30,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 			row = new LinearLayout(context);
 
 			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.light_square96 : R.drawable.dark_square96);
+			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
@@ -40,7 +40,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 				row.addView(button);
 			}
 			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.light_square96 : R.drawable.dark_square96);
+			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 			addView(row);
@@ -58,7 +58,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 			row = new LinearLayout(context);
 
 			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.light_square96 : R.drawable.dark_square96);
+			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
@@ -68,7 +68,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 				row.addView(button);
 			}
 			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.light_square96 : R.drawable.dark_square96);
+			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 			addView(row);

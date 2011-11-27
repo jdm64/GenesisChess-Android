@@ -217,7 +217,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		case Enums.STALEMATE:
 		case Enums.IMPOSSIBLE:
 		default:
-			icon = R.drawable.dark_square;
+			icon = R.drawable.square_dark;
 			break;
 		}
 		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);

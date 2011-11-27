@@ -1,57 +1,19 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.FrameLayout;
 
-class BoardButton extends MyImageView
+class BoardButton extends FrameLayout
 {
-	private static final int[][] pieceImages = {
-		{R.drawable.black_king_light,	R.drawable.black_king_dark},
-		{R.drawable.black_queen_light,	R.drawable.black_queen_dark},
-		{R.drawable.black_rook_light,	R.drawable.black_rook_dark},
-		{R.drawable.black_bishop_light,	R.drawable.black_bishop_dark},
-		{R.drawable.black_knight_light,	R.drawable.black_knight_dark},
-		{R.drawable.black_pawn_light,	R.drawable.black_pawn_dark},
-		{R.drawable.light_square,	R.drawable.dark_square},
-		{R.drawable.white_pawn_light,	R.drawable.white_pawn_dark},
-		{R.drawable.white_knight_light,	R.drawable.white_knight_dark},
-		{R.drawable.white_bishop_light,	R.drawable.white_bishop_dark},
-		{R.drawable.white_rook_light,	R.drawable.white_rook_dark},
-		{R.drawable.white_queen_light,	R.drawable.white_queen_dark},
-		{R.drawable.white_king_light,	R.drawable.white_king_dark} };
-
-	private static final int[][] pieceImagesH = {
-		{R.drawable.black_king_light_h,		R.drawable.black_king_dark_h},
-		{R.drawable.black_queen_light_h,	R.drawable.black_queen_dark_h},
-		{R.drawable.black_rook_light_h,		R.drawable.black_rook_dark_h},
-		{R.drawable.black_bishop_light_h,	R.drawable.black_bishop_dark_h},
-		{R.drawable.black_knight_light_h,	R.drawable.black_knight_dark_h},
-		{R.drawable.black_pawn_light_h,		R.drawable.black_pawn_dark_h},
-		{R.drawable.light_square,		R.drawable.dark_square},
-		{R.drawable.white_pawn_light_h,		R.drawable.white_pawn_dark_h},
-		{R.drawable.white_knight_light_h,	R.drawable.white_knight_dark_h},
-		{R.drawable.white_bishop_light_h,	R.drawable.white_bishop_dark_h},
-		{R.drawable.white_rook_light_h,		R.drawable.white_rook_dark_h},
-		{R.drawable.white_queen_light_h,	R.drawable.white_queen_dark_h},
-		{R.drawable.white_king_light_h,		R.drawable.white_king_dark_h} };
-
-	private static final int[][] pieceImagesL = {
-		{R.drawable.black_king_light_l,		R.drawable.black_king_dark_l},
-		{R.drawable.black_queen_light_l,	R.drawable.black_queen_dark_l},
-		{R.drawable.black_rook_light_l,		R.drawable.black_rook_dark_l},
-		{R.drawable.black_bishop_light_l,	R.drawable.black_bishop_dark_l},
-		{R.drawable.black_knight_light_l,	R.drawable.black_knight_dark_l},
-		{R.drawable.black_pawn_light_l,		R.drawable.black_pawn_dark_l},
-		{R.drawable.light_square,		R.drawable.dark_square},
-		{R.drawable.white_pawn_light_l,		R.drawable.white_pawn_dark_l},
-		{R.drawable.white_knight_light_l,	R.drawable.white_knight_dark_l},
-		{R.drawable.white_bishop_light_l,	R.drawable.white_bishop_dark_l},
-		{R.drawable.white_rook_light_l,		R.drawable.white_rook_dark_l},
-		{R.drawable.white_queen_light_l,	R.drawable.white_queen_dark_l},
-		{R.drawable.white_king_light_l,		R.drawable.white_king_dark_l} };
-
-	private static final int[][] kingImages = {
-		{R.drawable.black_king_light_c,		R.drawable.black_king_dark_c},
-		{R.drawable.white_king_light_c,		R.drawable.white_king_dark_c} };
+	private static final int[] pieceImages = {
+		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
+		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
+		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
+		R.drawable.square_none,
+		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
+		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
+		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
@@ -67,43 +29,55 @@ class BoardButton extends MyImageView
 	public BoardButton(final Context context, final int index)
 	{
 		super(context);
+		View.inflate(context, R.layout.framelayout_boardbutton, this);
 
 		squareIndex = index;
 		squareColor = ((index / 8) % 2 == 1)? 
 				((index % 2 == 1)? WHITE : BLACK) :
 				((index % 2 == 1)? BLACK : WHITE);
-
 		setId(squareIndex);
+
 		setSquareImage();
 	}
 
 	private void setSquareImage()
 	{
-		final int image = isHighlighted?
-			pieceImagesH[piece + 6][squareColor] :
-			(isLast?
-				pieceImagesL[piece + 6][squareColor] :
-			(isCheck?
-				kingImages[(piece > 0)? 1:0][squareColor] :
-				pieceImages[piece + 6][squareColor]));
+		final int image = (squareColor == WHITE)?
+			R.drawable.square_light : R.drawable.square_dark;
 
-		setImageResource(image);
+		final MyImageView img = (MyImageView) findViewById(R.id.board_layer);
+		img.setImageResource(image);
+	}
+
+	private void setHighlightImage()
+	{
+		final int image = isHighlighted?
+				R.drawable.square_ih_green :
+			(isLast?
+				R.drawable.square_ih_purple :
+			(isCheck?
+				R.drawable.square_ih_red :
+				R.drawable.square_none));
+
+		final MyImageView img = (MyImageView) findViewById(R.id.highlight_layer);
+		img.setImageResource(image);
 	}
 
 	public void resetSquare()
 	{
-		piece = 0;
 		isHighlighted = false;
 		isCheck = false;
 
-		setSquareImage();
+		setHighlightImage();
+		setPiece(0);
 	}
 
-	public void setPiece(final int Piece)
+	public void setPiece(final int piece_type)
 	{
-		piece = Piece;
+		piece = piece_type;
 
-		setSquareImage();
+		final MyImageView img = (MyImageView) findViewById(R.id.piece_layer);
+		img.setImageResource(pieceImages[piece + 6]);
 	}
 
 	public int getPiece()
@@ -119,21 +93,18 @@ class BoardButton extends MyImageView
 	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
-
-		setSquareImage();
+		setHighlightImage();
 	}
 
 	public void setCheck(final boolean mode)
 	{
 		isCheck = mode;
-
-		setSquareImage();
+		setHighlightImage();
 	}
 
 	public void setLast(final boolean mode)
 	{
 		isLast = mode;
-
-		setSquareImage();
+		setHighlightImage();
 	}
 }
