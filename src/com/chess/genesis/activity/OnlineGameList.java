@@ -343,7 +343,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				v.setBackgroundColor(0xff00b7eb);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
-				v.setBackgroundColor(0xffffffff);
+				v.setBackgroundColor(0x00ffffff);
 			break;
 		}
 		return false;
