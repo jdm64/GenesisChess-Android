@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -38,11 +39,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 				pref.putLong("lastmsgsync", 0);
 				pref.commit();
 
-				final TextView text = (TextView) findViewById(R.id.welcome);
-				text.setText("");
-
-				final ImageView button = (ImageView) findViewById(R.id.login);
-				button.setVisibility(View.VISIBLE);
+				updateLoggedInView();
 				break;
 			}
 		}
@@ -73,6 +70,9 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			button.setOnClickListener(this);
 			button.setOnTouchListener(this);
 		}
+
+		resizeButtonText();
+		updateLoggedInView();
 	}
 
 	@Override
@@ -80,19 +80,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	{
 		super.onResume();
 
-		String welcome = "";
-		int visible = View.VISIBLE;
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		if (pref.getBoolean("isLoggedIn", false)) {
-			welcome = "Welcome " + pref.getString("username", "");
-			visible = View.GONE;
-		}
-		final TextView text = (TextView) findViewById(R.id.welcome);
-		text.setText(welcome);
-
-		final MyImageView button = (MyImageView) findViewById(R.id.login);
-		button.setVisibility(visible);
 	}
 
 	@Override
@@ -132,52 +120,22 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	{
 		switch (v.getId()) {
 		case R.id.local_game:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.localplay_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.localplay);
-			break;
 		case R.id.online_game:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.onlinematches_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.onlinematches);
-			break;
 		case R.id.archive_game:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.recordedgames_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.recordedgames);
-			break;
 		case R.id.howtoplay:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.howtoplay_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.howtoplay);
-			break;
 		case R.id.login:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.mainlogin_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.mainlogin);
-			break;
 		case R.id.settings:
+		case R.id.feedback:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.settings_pressed);
+				v.setBackgroundColor(0xff00b7eb);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.settings);
+				v.setBackgroundColor(0x00ffffff);
 			break;
 		case R.id.likefacebook:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				((ImageView) v).setImageResource(R.drawable.facebook_pressed);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				((ImageView) v).setImageResource(R.drawable.facebook);
-			break;
-		case R.id.feedback:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.feedback_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.feedback);
 			break;
 		case R.id.googleplus:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
@@ -246,5 +204,52 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			startActivity(new Intent(this, Login.class));
 			break;
 		}
+	}
+
+	private void resizeButtonText()
+	{
+		final int list[] = new int[]{R.id.local_game_txt, R.id.online_game_txt,
+			R.id.archive_game_txt, R.id.howtoplay_txt, R.id.login_txt,
+			R.id.settings_txt, R.id.feedback_txt};
+
+		String[] stList = new String[list.length];
+		TextView txt = null;
+		for (int i = 0; i < list.length; i++) {
+			txt = (TextView) findViewById(list[i]);
+			stList[i] = (String) txt.getText();
+		}
+
+		float width = getWindowManager().getDefaultDisplay().getWidth();
+		width = Math.min(getWindowManager().getDefaultDisplay().getHeight(), width);
+		width *= 0.9 / 3;
+
+		final float txtSize = RobotoText.maxTextWidth(stList, txt.getPaint(), width);
+		for (int i = 0; i < list.length; i++) {
+			txt = (TextView) findViewById(list[i]);
+			txt.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize);
+		}
+	}
+
+	private void updateLoggedInView()
+	{
+		String welcome = "";
+		int welcomeVis = View.GONE, loginVis = View.VISIBLE;
+
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (pref.getBoolean("isLoggedIn", false)) {
+			welcome = "Welcome " + pref.getString("username", "");
+			welcomeVis = View.VISIBLE;
+			loginVis = View.GONE;
+		}
+
+		TextView text = (TextView) findViewById(R.id.welcome);
+		text.setVisibility(welcomeVis);
+		text.setText(welcome);
+
+		text = (TextView) findViewById(R.id.login_txt);
+		text.setVisibility(loginVis);
+
+		final MyImageView button = (MyImageView) findViewById(R.id.login);
+		button.setVisibility(loginVis);
 	}
 }

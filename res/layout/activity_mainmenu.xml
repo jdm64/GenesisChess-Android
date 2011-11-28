@@ -17,31 +17,80 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:shrinkColumns="*"
 	android:stretchColumns="*">
 		<TableRow>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/local_game"
-			android:src="@drawable/localplay"/>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/online_game"
-			android:src="@drawable/onlinematches"/>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/archive_game"
-			android:src="@drawable/recordedgames"/>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/local_game"
+				android:padding="12dp"
+				android:src="@drawable/main_local"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/local_game_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Local Play"/>
+			</FrameLayout>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/online_game"
+				android:padding="12dp"
+				android:src="@drawable/main_online"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/online_game_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Online Matches"/>
+			</FrameLayout>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/archive_game"
+				android:padding="12dp"
+				android:src="@drawable/main_recorded"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/archive_game_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Recorded Games"/>
+			</FrameLayout>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/howtoplay"
-			android:src="@drawable/howtoplay"/>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/settings"
-			android:src="@drawable/settings"/>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/feedback"
-			android:src="@drawable/feedback"/>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/howtoplay"
+				android:padding="12dp"
+				android:src="@drawable/main_howto"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/howtoplay_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="How To Play"/>
+			</FrameLayout>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/settings"
+				android:padding="12dp"
+				android:src="@drawable/main_settings"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/settings_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Settings"/>
+			</FrameLayout>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/feedback"
+				android:padding="12dp"
+				android:src="@drawable/main_feedback"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/feedback_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Submit Feedback"/>
+			</FrameLayout>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.MyImageView
-			android:id="@+id/login"
-			android:src="@drawable/mainlogin"/>
+			<FrameLayout>
+				<com.chess.genesis.MyImageView
+				android:id="@+id/login"
+				android:padding="12dp"
+				android:src="@drawable/main_login"/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/login_txt"
+				android:layout_gravity="bottom|center_horizontal"
+				android:text="Login/Register"/>
+			</FrameLayout>
 		</TableRow>
 	</TableLayout>
 	<TableRow
