@@ -38,9 +38,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/board_flip"
 	android:layout_below="@id/layout02">
 		<com.chess.genesis.BoardLayout
-		android:id="@+id/board_layout"/>
+		android:id="@+id/board_layout"
+		android:layout_gravity="top|center_horizontal"/>
 		<com.chess.genesis.PlaceLayout
-		android:id="@+id/place_layout"/>
+		android:id="@+id/place_layout"
+		android:layout_gravity="top|center_horizontal"/>
 	</com.chess.genesis.ViewFlip3D>
 	<TableRow
 	android:layout_alignParentBottom="true">
