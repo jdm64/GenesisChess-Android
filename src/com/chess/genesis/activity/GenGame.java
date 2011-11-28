@@ -38,7 +38,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// create gamestate instance
+		// restore settings
 		settings = (savedInstanceState != null)?
 			savedInstanceState : getIntent().getExtras();
 		type = settings.getInt("type");
@@ -78,6 +78,7 @@ public class GenGame extends Activity implements OnClickListener, OnLongClickLis
 	public void onSaveInstanceState(final Bundle savedInstanceState)
 	{
 		savedInstanceState.putAll(gamestate.getBundle());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override

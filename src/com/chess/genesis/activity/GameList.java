@@ -108,7 +108,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		// store settings from main menu
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		settings = getIntent().getExtras();
+		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
 		settings.putString("username", prefs.getString("username", "!error!"));
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 
@@ -156,6 +156,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		gamelist_view.setEmptyView(empty);
 
 		registerForContextMenu(gamelist_view);
+	}
+
+	@Override
+	public void onSaveInstanceState(final Bundle savedInstanceState)
+	{
+		savedInstanceState.putAll(settings);
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override

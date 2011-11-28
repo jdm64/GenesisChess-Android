@@ -27,6 +27,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	private ListView msglist_view;
 	private NetworkClient net;
 	private ProgressMsg progress;
+	private Bundle settings;
 	private String gameid;
 	private MsgBox self;
 
@@ -75,7 +76,9 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
-		gameid = getIntent().getExtras().getString("gameid");
+
+		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
+		gameid = settings.getString("gameid");
 
 		// set content view
 		setContentView(R.layout.activity_msgbox);
@@ -101,6 +104,13 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 
 		// scroll to bottom
 		msglist_view.setSelection(msglist_view.getCount() - 1);
+	}
+
+	@Override
+	public void onSaveInstanceState(final Bundle savedInstanceState)
+	{
+		savedInstanceState.putAll(settings);
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override

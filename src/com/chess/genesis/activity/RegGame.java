@@ -78,6 +78,7 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 	public void onSaveInstanceState(final Bundle savedInstanceState)
 	{
 		savedInstanceState.putAll(gamestate.getBundle());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
