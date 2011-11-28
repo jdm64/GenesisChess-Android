@@ -97,7 +97,6 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				break;
 			case SyncClient.MSG:
 			case NetworkClient.JOIN_GAME:
-			case NetworkClient.NEW_GAME:
 				JSONObject json = (JSONObject) msg.obj;
 				try {
 					if (json.getString("result").equals("error")) {
@@ -140,9 +139,22 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 					throw new RuntimeException();
 				}
 				break;
+			case NetworkClient.NEW_GAME:
 			case NetworkClient.NUDGE_GAME:
-				updateGameListAdapters();
-				progress.remove();
+				json = (JSONObject) msg.obj;
+				try {
+					if (json.getString("result").equals("error")) {
+						progress.remove();
+						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						return;
+					}
+					progress.setText("Updating Game List");
+					final SyncClient sync = new SyncClient(self, handle);
+					(new Thread(sync)).start();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				}
 				break;
 			}
 		}
