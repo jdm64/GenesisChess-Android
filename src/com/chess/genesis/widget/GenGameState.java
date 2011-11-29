@@ -363,23 +363,18 @@ class GenGameState extends GameState
 
 	public final void setStm()
 	{
-		String check, wstr, bstr;
+		String think = "", wstr, bstr;
+		boolean mate = false;
 
 		switch (board.isMate()) {
 		case GenBoard.NOT_MATE:
 		default:
-			if (board.incheck(board.getStm()))
-				check = " (check)";
-			else
-				check = "";
 			if (runCPU())
-				check = check + " thinking";
+				think = " thinking";
 			break;
 		case GenBoard.CHECK_MATE:
-			check = " (checkmate)";
-			break;
 		case GenBoard.STALE_MATE:
-			check = " (stalemate)";
+			mate = true;
 			break;
 		}
 		if (type == Enums.LOCAL_GAME) {
@@ -394,15 +389,23 @@ class GenGameState extends GameState
 		final TabText black = (TabText) GenGame.self.findViewById(R.id.black_name);
 
 		if (board.getStm() == Piece.WHITE) {
+			white.setText(wstr + think);
 			white.setActive(true);
-			black.setActive(false);
-			white.setText(wstr + check);
+
 			black.setText(bstr);
+			black.setActive(false);
+
+			if (mate)
+				white.setTextColor(0xffff0000);
 		} else {
-			white.setActive(false);
-			black.setActive(true);
 			white.setText(wstr);
-			black.setText(bstr + check);
+			white.setActive(false);
+
+			black.setText(bstr + think);
+			black.setActive(true);
+
+			if (mate)
+				black.setTextColor(0xffff0000);
 		}
 	}
 
