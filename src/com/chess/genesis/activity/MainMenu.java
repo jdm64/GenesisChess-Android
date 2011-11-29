@@ -72,6 +72,12 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		}
 
 		resizeButtonText();
+	}
+
+	@Override
+	public void onResume()
+	{
+		super.onResume();
 		updateLoggedInView();
 	}
 
