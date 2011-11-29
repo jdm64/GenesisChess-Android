@@ -191,27 +191,8 @@ class SyncClient implements Runnable
 
 	private void sync_active(final JSONObject json)
 	{
-		long time = 0;
-		final GameDataDB db = new GameDataDB(context);
-		final ObjectArray<String> list = db.getOnlineGameIds();
-		db.close();
-
-		final ArrayList<String> list_have = new ArrayList<String>();
-		for (int i = 0; i < list.size(); i++)
-			list_have.add(list.get(i));
-
-		final ArrayList<String> list_need = new ArrayList<String>();
 	try {
-		final JSONArray ids = json.getJSONArray("gameids");
-		time = json.getLong("time");
-		for (int i = 0; i < ids.length(); i++)
-			list_need.add(ids.getString(i));
-	} catch (JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
-	}
-
-		list_need.removeAll(list_have);
+		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
@@ -225,32 +206,20 @@ class SyncClient implements Runnable
 		if (syncType == ACTIVE_SYNC)
 			return;
 		// Save sync time
+		final long time = json.getLong("time");
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
 		pref.commit();
-	}
-
-	private void sync_archive(final JSONObject json)
-	{
-		final GameDataDB db = new GameDataDB(context);
-		final ObjectArray<String> list = db.getArchiveGameIds();
-		db.close();
-
-		final ArrayList<String> list_have = new ArrayList<String>();
-		for (int i = 0; i < list.size(); i++)
-			list_have.add(list.get(i));
-
-		final ArrayList<String> list_need = new ArrayList<String>();
-	try {
-		final JSONArray ids = json.getJSONArray("gameids");
-		for (int i = 0; i < ids.length(); i++)
-			list_need.add(ids.getString(i));
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
+	}
 
-		list_need.removeAll(list_have);
+	private void sync_archive(final JSONObject json)
+	{
+	try {
+		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
@@ -260,6 +229,40 @@ class SyncClient implements Runnable
 
 			lock++;
 		}
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
+	}
+
+	private ArrayList<String> getNeedList(final JSONArray ids)
+	{
+	try {
+		final ArrayList<String> list_need = new ArrayList<String>();
+		for (int i = 0; i < ids.length(); i++)
+			list_need.add(ids.getString(i));
+
+		if (syncType == ACTIVE_SYNC || syncType == ARCHIVE_SYNC)
+			return list_need;
+
+		final GameDataDB db = new GameDataDB(context);
+		final ObjectArray<String> list;
+		if (gameType == Enums.ONLINE_GAME)
+			list = db.getOnlineGameIds();
+		else
+			list = db.getArchiveGameIds();
+		db.close();
+
+		final ArrayList<String> list_have = new ArrayList<String>();
+		for (int i = 0; i < list.size(); i++)
+			list_have.add(list.get(i));
+
+		list_need.removeAll(list_have);
+		return list_need;
+	} catch (JSONException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
 	}
 
 	private void game_info(final JSONObject json)
