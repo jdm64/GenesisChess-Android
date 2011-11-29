@@ -51,7 +51,7 @@ abstract class BaseDialog extends Dialog implements OnClickListener
 
 	public void setButtonTxt(final int buttonId, final String txt)
 	{
-		final Button button = (Button) findViewById(R.id.ok);
+		final Button button = (Button) findViewById(buttonId);
 
 		if (button == null)
 			return;
