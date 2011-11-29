@@ -76,14 +76,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	}
 
 	@Override
-	public void onResume()
-	{
-		super.onResume();
-
-
-	}
-
-	@Override
 	public void onBackPressed()
 	{
 		moveTaskToBack(true);

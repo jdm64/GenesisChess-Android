@@ -220,7 +220,7 @@ class GameDataDB
 	public Bundle getOnlineGameData(final String gameid)
 	{
 		final String[] data = {gameid};
-		SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * from onlinegames WHERE gameid=?", data);
+		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * from onlinegames WHERE gameid=?", data);
 
 		return rowToBundle(cursor, 0);
 	}

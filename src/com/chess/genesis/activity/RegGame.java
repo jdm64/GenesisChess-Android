@@ -261,14 +261,10 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
-		switch (result) {
-		case RESULT_OK:
+		if (result == RESULT_OK)
 			gamestate.submitMove();
-			break;
-		case RESULT_CANCELED:
+		else if (result == RESULT_CANCELED)
 			gamestate.undoMove();
-			break;
-		}
 	}
 
 	public void displaySubmitMove()

@@ -575,15 +575,13 @@ class GenGameState extends GameState
 
 	private void handleMove()
 	{
-		switch (type) {
-		case Enums.ONLINE_GAME:
+		if (type == Enums.ONLINE_GAME) {
 			// you can't edit the past in online games
 			if (hindex + 1 < history.size()) {
 				callstack.pop();
 				return;
 			}
-			break;
-		case Enums.ARCHIVE_GAME:
+		} else if (type == Enums.ARCHIVE_GAME) {
 			return;
 		}
 

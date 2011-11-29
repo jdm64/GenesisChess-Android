@@ -47,7 +47,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				gamelist_adapter.update();
 				break;
 			case RematchConfirm.MSG:
-				Bundle data = (Bundle) msg.obj;
+				final Bundle data = (Bundle) msg.obj;
 				progress.setText("Sending Newgame Request");
 
 				final String opponent = data.getString("opp_name");
@@ -116,18 +116,13 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 		progress = new ProgressMsg(this);
 
 		// set content view
-		switch (type) {
-		case Enums.LOCAL_GAME:
+		if (type == Enums.LOCAL_GAME)
 			setContentView(R.layout.activity_gamelist_local);
-			break;
-		case Enums.ARCHIVE_GAME:
+		else if (type == Enums.ARCHIVE_GAME)
 			setContentView(R.layout.activity_gamelist_archive);
-			break;
-		}
 
 		// set click listeners
-		switch (type) {
-		case Enums.LOCAL_GAME:
+		if (type == Enums.LOCAL_GAME) {
 			ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 			button.setOnTouchListener(this);
 			button.setOnLongClickListener(this);
@@ -135,12 +130,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 			button = (ImageView) findViewById(R.id.topbar_plus);
 			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
-			break;
-		case Enums.ARCHIVE_GAME:
-			button = (ImageView) findViewById(R.id.topbar);
+		} else if (type == Enums.ARCHIVE_GAME) {
+			final ImageView button = (ImageView) findViewById(R.id.topbar);
 			button.setOnTouchListener(this);
 			button.setOnLongClickListener(this);
-			break;
 		}
 
 		// set list adapters
@@ -253,14 +246,10 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		switch (type) {
-		case Enums.LOCAL_GAME:
+		if (type == Enums.LOCAL_GAME)
 			getMenuInflater().inflate(R.menu.context_gamelist_local, menu);
-			break;
-		case Enums.ARCHIVE_GAME:
+		else if (type == Enums.ARCHIVE_GAME)
 			getMenuInflater().inflate(R.menu.context_gamelist_archive, menu);
-			break;
-		}
 	}
 
 	@Override

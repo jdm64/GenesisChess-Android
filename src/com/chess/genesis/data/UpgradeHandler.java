@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-class UpgradeHandler
+final class UpgradeHandler
 {
 	private static Context context;
 	private static PackageInfo pinfo;
