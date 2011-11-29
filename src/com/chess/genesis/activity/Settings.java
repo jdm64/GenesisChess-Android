@@ -96,6 +96,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 		check = (CheckBoxPreference) findPreference("noteEnabled");
 		check.setOnPreferenceChangeListener(this);
+		check.setEnabled(isLoggedin);
 
 		CallBackPreference callbackPref = (CallBackPreference) findPreference("deleteLocalTable");
 		callbackPref.setCallBack(this);
