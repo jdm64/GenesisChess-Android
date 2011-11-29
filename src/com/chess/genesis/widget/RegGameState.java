@@ -401,7 +401,7 @@ class RegGameState extends GameState
 			black.setActive(false);
 
 			if (mate)
-				white.setTextColor(0xffff0000);
+				white.setTabTextColor(0xffff0000);
 		} else {
 			white.setText(wstr);
 			white.setActive(false);
@@ -410,7 +410,7 @@ class RegGameState extends GameState
 			black.setActive(true);
 
 			if (mate)
-				black.setTextColor(0xffff0000);
+				black.setTabTextColor(0xffff0000);
 		}
 	}
 

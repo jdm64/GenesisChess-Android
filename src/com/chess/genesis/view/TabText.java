@@ -57,7 +57,7 @@ class TabText extends RobotoText implements OnTouchListener
 		setTextColor(active? 0xffffffff : 0xff808080);
 	}
 
-	public void setTextColor(final int color)
+	public void setTabTextColor(final int color)
 	{
 		setTextColor(color);
 	}
