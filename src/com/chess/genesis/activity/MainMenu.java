@@ -76,12 +76,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	}
 
 	@Override
-	public void onBackPressed()
-	{
-		moveTaskToBack(true);
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		getMenuInflater().inflate(R.menu.options_mainmenu, menu);
