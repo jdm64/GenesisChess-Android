@@ -136,7 +136,7 @@ class GenGameState extends GameState
 						json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 						json.put("gameid", settings.getString("gameid"));
 
-						(new EndGameDialog(context, json)).show();
+						(new GameStatsDialog(context, json)).show();
 						return;
 					}
 					progress.setText("Retrieving Score");
@@ -168,7 +168,7 @@ class GenGameState extends GameState
 				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 				json.put("gameid", settings.getString("gameid"));
 
-				(new EndGameDialog(context, json)).show();
+				(new GameStatsDialog(context, json)).show();
 				break;
 			case RematchConfirm.MSG:
 				final Bundle data = (Bundle) msg.obj;
@@ -223,7 +223,7 @@ class GenGameState extends GameState
 				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 				json.put("gameid", settings.getString("gameid"));
 
-				(new EndGameDialog(context, json)).show();
+				(new GameStatsDialog(context, json)).show();
 			} catch (JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();

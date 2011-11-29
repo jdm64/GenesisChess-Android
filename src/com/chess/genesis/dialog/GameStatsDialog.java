@@ -7,6 +7,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 class GameStatsDialog extends BaseDialog implements OnClickListener
 {
@@ -86,6 +88,56 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 			psr_score = "None (Invite Game)";
 		else
 			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+	}
+
+	public GameStatsDialog(final Context context, final JSONObject json)
+	{
+		super(context, BaseDialog.CANCEL);
+
+		String[] statusArr = null;
+		String gametype = null, gameid = null, sign = null;
+		int eventtype = 0, ycol = 0, w_from = 0, w_to = 0, b_from = 0, b_to = 0;
+
+		try {
+			gameid = json.getString("gameid");
+			ycol = json.getInt("yourcolor");
+			statusArr = STATUS_MAP.get(json.getInt("status") * ycol);
+			gametype = json.getString("gametype");
+			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
+			eventtype = Integer.valueOf(json.getString("eventtype"));
+
+			if (ycol == Piece.WHITE)
+				opponent = json.getString("black_name");
+			else
+				opponent = json.getString("white_name");
+
+			if (eventtype != Enums.INVITE) {
+				w_from = json.getJSONObject("white").getInt("from");
+				w_to = json.getJSONObject("white").getInt("to");
+
+				b_from = json.getJSONObject("black").getInt("from");
+				b_to = json.getJSONObject("black").getInt("to");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+		final int to = (ycol == Piece.WHITE)? w_to : b_to;
+		diff = (ycol == Piece.WHITE)? (w_to - w_from) : (b_to - b_from);
+		sign = (diff >= 0)? "+" : "-";
+
+		title = statusArr[0];
+		result = statusArr[1];
+		psr_type = gametype + " PSR :";
+
+		if (eventtype == Enums.INVITE)
+			psr_score = "None (Invite Game)";
+		else
+			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+
+		final GameDataDB db = new GameDataDB(context);
+		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);
+		db.close();
 	}
 
 	@Override
