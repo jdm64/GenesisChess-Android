@@ -227,8 +227,9 @@ class GameDataDB
 
 	public void recalcYourTurn()
 	{
-		final String[] data = {};
-		final String query = "SELECT gameid, status, history, white, black FROM onlinegames;";
+		final String username = getUsername();
+		final String[] data = {username, username};
+		final String query = "SELECT gameid, status, history, white, black FROM onlinegames WHERE white=? or black=?;";
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
@@ -242,7 +243,9 @@ class GameDataDB
 
 			final GameInfo info = new GameInfo(context, status, history, white, black);
 			final Object[] data2 = {info.getYourTurn(), gameid};
-			db.execSQL("UPDATE onlinegames SET yourturn=? WHERE gameid=?;", data);
+
+			db.execSQL("UPDATE onlinegames SET yourturn=? WHERE gameid=?;", data2);
+			cursor.moveToNext();
 		}
 	}
 
