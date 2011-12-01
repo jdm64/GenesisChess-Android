@@ -4,6 +4,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory
 	android:title="Game Settings">
 		<CheckBoxPreference
+		android:key="viewAsBlack"
+		android:defaultValue="true"
+		android:title="View As Black"
+		android:summary="View as black when playing black"/>
+		<CheckBoxPreference
 		android:key="screenAlwaysOn"
 		android:defaultValue="false"
 		android:title="Keep Screen Active"

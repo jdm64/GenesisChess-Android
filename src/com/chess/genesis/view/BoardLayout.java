@@ -16,15 +16,28 @@ class BoardLayout extends TableLayout implements OnClickListener
 		setShrinkAllColumns(true);
 		setStretchAllColumns(true);
 
-		for (int i = 0; i < 8; i++) {
-			final TableRow row = new TableRow(context);
-						
-			for (int j = 0; j < 8; j++) {
-				final BoardButton button = new BoardButton(context, i * 8 + j);
-				button.setOnClickListener(this);
-				row.addView(button);
+		if (Game.self.viewAsBlack) {
+			for (int i = 7; i >= 0; i--) {
+				final TableRow row = new TableRow(context);
+
+				for (int j = 7; j >= 0; j--) {
+					final BoardButton button = new BoardButton(context, i * 8 + j);
+					button.setOnClickListener(this);
+					row.addView(button);
+				}
+				addView(row);
 			}
-			addView(row);
+		} else {
+			for (int i = 0; i < 8; i++) {
+				final TableRow row = new TableRow(context);
+
+				for (int j = 0; j < 8; j++) {
+					final BoardButton button = new BoardButton(context, i * 8 + j);
+					button.setOnClickListener(this);
+					row.addView(button);
+				}
+				addView(row);
+			}
 		}
 	}
 

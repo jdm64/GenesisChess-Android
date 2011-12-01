@@ -39,6 +39,9 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			savedInstanceState : getIntent().getExtras();
 		type = settings.getInt("type");
 
+		// set view as black
+		viewAsBlack = false;
+
 		// set content view
 		if (type != Enums.LOCAL_GAME)
 			setContentView(R.layout.activity_game_online);

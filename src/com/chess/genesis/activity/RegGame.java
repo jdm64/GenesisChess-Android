@@ -39,6 +39,20 @@ public class RegGame extends Game implements OnClickListener, OnLongClickListene
 			savedInstanceState : getIntent().getExtras();
 		type = settings.getInt("type");
 
+		// set playingBlack
+		boolean playingBlack = false;
+		if (type != Enums.LOCAL_GAME) {
+			playingBlack = settings.getString("username").equals(settings.getString("black"));
+		} else {
+			final int oppType = Integer.valueOf(settings.getString("opponent"));
+			playingBlack = (oppType == Enums.CPU_WHITE_OPPONENT)? true : false;
+		}
+
+		// set view as black
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean asBlack = pref.getBoolean("viewAsBlack", true)? playingBlack : false;
+		viewAsBlack = asBlack;
+
 		// set content view
 		if (type != Enums.LOCAL_GAME)
 			setContentView(R.layout.activity_game_online);
