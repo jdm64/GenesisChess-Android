@@ -396,7 +396,7 @@ class GenGameState extends GameState
 			black.setActive(false);
 
 			if (mate)
-				white.setTabTextColor(0xffff0000);
+				white.setTabTextColor(0xffeb0000);
 		} else {
 			white.setText(wstr);
 			white.setActive(false);
@@ -405,7 +405,7 @@ class GenGameState extends GameState
 			black.setActive(true);
 
 			if (mate)
-				black.setTabTextColor(0xffff0000);
+				black.setTabTextColor(0xffeb0000);
 		}
 	}
 
