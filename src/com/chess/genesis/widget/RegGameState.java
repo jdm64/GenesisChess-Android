@@ -318,30 +318,30 @@ class RegGameState extends GameState
 		// set piece counts
 		final int[] pieces = board.getPieceCounts();
 		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) RegGame.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) RegGame.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			final BoardButton button = (BoardButton) RegGame.self.findViewById(i);
+			final BoardButton button = (BoardButton) Game.self.findViewById(i);
 			button.setPiece(squares[i]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
-			final BoardButton to = (BoardButton) RegGame.self.findViewById(history.top().to);
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
 			to.setLast(true);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) RegGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -390,8 +390,8 @@ class RegGameState extends GameState
 			bstr = settings.getString("black");
 		}
 
-		final TabText white = (TabText) RegGame.self.findViewById(R.id.white_name);
-		final TabText black = (TabText) RegGame.self.findViewById(R.id.black_name);
+		final TabText white = (TabText) Game.self.findViewById(R.id.white_name);
+		final TabText black = (TabText) Game.self.findViewById(R.id.black_name);
 
 		if (board.getStm() == Piece.WHITE) {
 			white.setText(wstr + think);
@@ -446,7 +446,7 @@ class RegGameState extends GameState
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			RegGame.self.displaySubmitMove();
+			Game.self.displaySubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
@@ -527,7 +527,7 @@ class RegGameState extends GameState
 		history.clear();
 		flagsHistory.clear();
 		board.reset();
-		RegGame.self.reset();
+		Game.self.reset();
 	}
 
 	public void backMove()
@@ -615,19 +615,19 @@ class RegGameState extends GameState
 	{
 		if (hindex >= 0) {
 			// undo last move highlight
-			final BoardButton to = (BoardButton) RegGame.self.findViewById(history.get(hindex).to);
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
 			to.setLast(false);
 
 			if (hindex > 1) {
 				// legal move always ends with king not in check
 				final int king = board.kingIndex(board.getStm());
-				final BoardButton kingI = (BoardButton) RegGame.self.findViewById(king);
+				final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 				kingI.setCheck(false);
 			}
 		}
 
-		final BoardButton from = (BoardButton) RegGame.self.findViewById(move.from);
-		final BoardButton to = (BoardButton) RegGame.self.findViewById(move.to);
+		final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+		final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 		to.setPiece(from.getPiece());
 		to.setLast(true);
@@ -635,7 +635,7 @@ class RegGameState extends GameState
 		from.setHighlight(false);
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) RegGame.self.findViewById(board.piece[move.xindex].type + 100);
+			final PlaceButton piece = (PlaceButton) Game.self.findViewById(board.piece[move.xindex].type + 100);
 			piece.minusPiece();
 		}
 
@@ -644,16 +644,16 @@ class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
 			
-			BoardButton castle = (BoardButton) RegGame.self.findViewById(castleFrom);
+			BoardButton castle = (BoardButton) Game.self.findViewById(castleFrom);
 			castle.setPiece(Piece.EMPTY);
-			castle = (BoardButton) RegGame.self.findViewById(castleTo);
+			castle = (BoardButton) Game.self.findViewById(castleTo);
 			castle.setPiece(Piece.ROOK * board.getStm());
 
 		} else if (move.getPromote() != 0) {
-			final BoardButton pawn = (BoardButton) RegGame.self.findViewById(move.to);
+			final BoardButton pawn = (BoardButton) Game.self.findViewById(move.to);
 			pawn.setPiece(Piece.QUEEN * board.getStm());
 		} else if (move.getEnPassant()) {
-			final BoardButton pawn = (BoardButton) RegGame.self.findViewById(board.piece[move.xindex].loc);
+			final BoardButton pawn = (BoardButton) Game.self.findViewById(board.piece[move.xindex].loc);
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -672,13 +672,13 @@ class RegGameState extends GameState
 			history.push(move);
 			flagsHistory.push(flags);
 			if (localmove)
-				save(RegGame.self.game_board.getContext(), false);
+				save(Game.self.game_board.getContext(), false);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) RegGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -689,12 +689,12 @@ class RegGameState extends GameState
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) RegGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(false);
 		}
 
-		final BoardButton from = (BoardButton) RegGame.self.findViewById(move.from);
-		final BoardButton to = (BoardButton) RegGame.self.findViewById(move.to);
+		final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+		final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 		from.setPiece(to.getPiece());
 		to.setLast(false);
@@ -703,7 +703,7 @@ class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
 			final int loc = move.to + ((move.from - move.to > 0)? 8 : -8);
-			final BoardButton pawn = (BoardButton) RegGame.self.findViewById(loc);
+			final BoardButton pawn = (BoardButton) Game.self.findViewById(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
@@ -711,7 +711,7 @@ class RegGameState extends GameState
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) RegGame.self.findViewById(board.piece[move.xindex].type + 100);
+			final PlaceButton piece = (PlaceButton) Game.self.findViewById(board.piece[move.xindex].type + 100);
 			piece.plusPiece();
 		}
 
@@ -720,12 +720,12 @@ class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
 			
-			BoardButton castle = (BoardButton) RegGame.self.findViewById(castleFrom);
+			BoardButton castle = (BoardButton) Game.self.findViewById(castleFrom);
 			castle.setPiece(Piece.ROOK * -board.getStm());
-			castle = (BoardButton) RegGame.self.findViewById(castleTo);
+			castle = (BoardButton) Game.self.findViewById(castleTo);
 			castle.setPiece(Piece.EMPTY);
 		} else if (move.getPromote() != 0) {
-			final BoardButton pawn = (BoardButton) RegGame.self.findViewById(move.from);
+			final BoardButton pawn = (BoardButton) Game.self.findViewById(move.from);
 			pawn.setPiece(Piece.PAWN * -board.getStm());
 		}
 			
@@ -734,13 +734,13 @@ class RegGameState extends GameState
 
 		if (hindex >= 0) {
 			// redo last move highlight
-			final BoardButton hto = (BoardButton) RegGame.self.findViewById(history.get(hindex).to);
+			final BoardButton hto = (BoardButton) Game.self.findViewById(history.get(hindex).to);
 			hto.setLast(true);
 		}
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) RegGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -772,7 +772,7 @@ class RegGameState extends GameState
 			return;
 		} else {
 		// piece move action
-			final BoardButton from = (BoardButton) RegGame.self.findViewById(callstack.get(0));
+			final BoardButton from = (BoardButton) Game.self.findViewById(callstack.get(0));
 			// capturing your own piece (switch to piece)
 			if (from.getPiece() * to.getPiece() > 0) {
 				from.setHighlight(false);

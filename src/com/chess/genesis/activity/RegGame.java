@@ -1,6 +1,5 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,11 +17,8 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class RegGame extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
+public class RegGame extends Game implements OnClickListener, OnLongClickListener, OnTouchListener
 {
-	public static RegGame self;
-	public static ViewFlip3D game_board;
-
 	private WakeLock wakelock;
 	private RegGameState gamestate;
 	private Bundle settings;
@@ -38,7 +34,7 @@ public class RegGame extends Activity implements OnClickListener, OnLongClickLis
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// create gamestate instance
+		// restore settings
 		settings = (savedInstanceState != null)?
 			savedInstanceState : getIntent().getExtras();
 		type = settings.getInt("type");

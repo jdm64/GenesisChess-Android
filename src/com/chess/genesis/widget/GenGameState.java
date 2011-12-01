@@ -315,28 +315,28 @@ class GenGameState extends GameState
 		// set place piece counts
 		final int[] pieces = board.getPieceCounts();
 		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) GenGame.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) GenGame.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			final BoardButton button = (BoardButton) GenGame.self.findViewById(i);
+			final BoardButton button = (BoardButton) Game.self.findViewById(i);
 			button.setPiece(squares[i]);
 		}
 		// set last move highlight
-		final BoardButton to = (BoardButton) GenGame.self.findViewById(history.top().to);
+		final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
 		to.setLast(true);
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) GenGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -385,8 +385,8 @@ class GenGameState extends GameState
 			bstr = settings.getString("black");
 		}
 
-		final TabText white = (TabText) GenGame.self.findViewById(R.id.white_name);
-		final TabText black = (TabText) GenGame.self.findViewById(R.id.black_name);
+		final TabText white = (TabText) Game.self.findViewById(R.id.white_name);
+		final TabText black = (TabText) Game.self.findViewById(R.id.black_name);
 
 		if (board.getStm() == Piece.WHITE) {
 			white.setText(wstr + think);
@@ -441,7 +441,7 @@ class GenGameState extends GameState
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			GenGame.self.displaySubmitMove();
+			Game.self.displaySubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
@@ -521,7 +521,7 @@ class GenGameState extends GameState
 		callstack.clear();
 		history.clear();
 		board.reset();
-		GenGame.self.reset();
+		Game.self.reset();
 	}
 
 	public void backMove()
@@ -612,28 +612,28 @@ class GenGameState extends GameState
 	{
 		if (hindex >= 0) {
 			// undo last move highlight
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(history.get(hindex).to);
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
 			to.setLast(false);
 
 			if (hindex > 1) {
 				// legal move always ends with king not in check
 				final int king = board.kingIndex(board.getStm());
-				final BoardButton kingI = (BoardButton) GenGame.self.findViewById(king);
+				final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 				kingI.setCheck(false);
 			}
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) GenGame.self.findViewById(GenBoard.pieceType[move.index] + 100);
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(move.to);
+			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
+			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			from.setHighlight(false);
 			from.minusPiece();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 		} else {
-			final BoardButton from = (BoardButton) GenGame.self.findViewById(move.from);
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(move.to);
+			final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
 			to.setLast(true);
@@ -650,13 +650,13 @@ class GenGameState extends GameState
 				history.resize(hindex);
 			history.push(move);
 			if (localmove)
-				save(GenGame.self.game_board.getContext(), false);
+				save(Game.self.game_board.getContext(), false);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) GenGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -667,20 +667,20 @@ class GenGameState extends GameState
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) GenGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) GenGame.self.findViewById(GenBoard.pieceType[move.index] + 100);
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(move.to);
+			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
+			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			to.setLast(false);
 			to.setPiece(0);
 			from.plusPiece();
 		} else {
-			final BoardButton from = (BoardButton) GenGame.self.findViewById(move.from);
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(move.to);
+			final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
+			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
 
 			from.setPiece(to.getPiece());
 
@@ -695,13 +695,13 @@ class GenGameState extends GameState
 
 		if (hindex >= 0) {
 			// redo last move highlight
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(history.get(hindex).to);
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
 			to.setLast(true);
 		}
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) GenGame.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -732,7 +732,7 @@ class GenGameState extends GameState
 			if (to.getPiece() * col < 0) {
 				return;
 			} else if (to.getPiece() * col > 0) {
-				final PlaceButton from = (PlaceButton) GenGame.self.findViewById(callstack.get(0));
+				final PlaceButton from = (PlaceButton) Game.self.findViewById(callstack.get(0));
 				from.setHighlight(false);
 				to.setHighlight(true);
 				callstack.set(0, index);
@@ -740,7 +740,7 @@ class GenGameState extends GameState
 			}
 		} else {
 		// piece move action
-			final BoardButton from = (BoardButton) GenGame.self.findViewById(callstack.get(0));
+			final BoardButton from = (BoardButton) Game.self.findViewById(callstack.get(0));
 			// capturing your own piece (switch to piece)
 			if (from.getPiece() * to.getPiece() > 0) {
 				from.setHighlight(false);
@@ -768,7 +768,7 @@ class GenGameState extends GameState
 			from.setHighlight(true);
 		} else if (callstack.get(0) < 64) {
 		// switching from board to place piece
-			final BoardButton to = (BoardButton) GenGame.self.findViewById(callstack.get(0));
+			final BoardButton to = (BoardButton) Game.self.findViewById(callstack.get(0));
 			to.setHighlight(false);
 			callstack.set(0, ptype + 100);
 			from.setHighlight(true);
@@ -778,11 +778,11 @@ class GenGameState extends GameState
 			from.setHighlight(false);
 		} else {
 		// switching to another place piece
-			final PlaceButton fromold = (PlaceButton) GenGame.self.findViewById(callstack.get(0));
+			final PlaceButton fromold = (PlaceButton) Game.self.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
 			callstack.set(0, ptype + 100);
 			from.setHighlight(true);
 		}
-		GenGame.self.game_board.flip();
+		Game.self.game_board.flip();
 	}
 }

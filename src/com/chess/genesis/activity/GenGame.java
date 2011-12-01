@@ -1,6 +1,5 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -18,11 +17,8 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class GenGame extends Activity implements OnClickListener, OnLongClickListener, OnTouchListener
+public class GenGame extends Game implements OnClickListener, OnLongClickListener, OnTouchListener
 {
-	public static GenGame self;
-	public static ViewFlip3D game_board;
-
 	private WakeLock wakelock;
 	private GenGameState gamestate;
 	private Bundle settings;
