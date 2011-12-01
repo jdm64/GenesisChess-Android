@@ -356,6 +356,7 @@ class GameDataDB
 	public void insertMsg(final JSONObject json)
 	{
 	try {
+		final String user = getUsername();
 		final JSONArray players = json.getJSONArray("players");
 
 		final String gameid = json.getString("gameid"),
@@ -363,9 +364,10 @@ class GameDataDB
 			opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
 			msg = json.getString("txt");
 		final long time = json.getLong("time");
+		final int unread = (user.equals(username))? 0 : 1;
 
-		final Object[] data = {gameid, time, username, msg, opponent};
-		db.execSQL("INSERT OR IGNORE INTO msgtable (gameid, time, username, msg, opponent) VALUES (?, ?, ?, ?, ?);", data);
+		final Object[] data = {gameid, time, username, msg, opponent, unread};
+		db.execSQL("INSERT OR IGNORE INTO msgtable (gameid, time, username, msg, opponent, unread) VALUES (?, ?, ?, ?, ?, ?);", data);
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
