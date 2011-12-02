@@ -15,16 +15,14 @@ import org.json.JSONObject;
 
 class GenGameState extends GameState
 {
-	public static GenGameState self;
-
 	private final Context context;
 	private final Bundle settings;
 	private final NetworkClient net;
 	private final ProgressMsg progress;
 	private final ObjectArray<GenMove> history;
 	private final GenBoard board;
-	private final IntArray callstack;
 	private final GenEngine cpu;
+	private final IntArray callstack;
 	private final int ycol;
 	private final int type;
 	private final int oppType;
@@ -244,7 +242,6 @@ class GenGameState extends GameState
 	public GenGameState(final Context _context, final Bundle _settings)
 	{
 		self = this;
-		GameState.self = this;
 		context = _context;
 		settings = _settings;
 
@@ -287,8 +284,8 @@ class GenGameState extends GameState
 
 			if (board.validMove(move) != GenBoard.VALID_MOVE)
 				break;
-			board.make(move);
 			history.push(move);
+			board.make(move);
 			hindex++;
 		}
 		setBoard();
@@ -330,8 +327,10 @@ class GenGameState extends GameState
 			button.setPiece(squares[i]);
 		}
 		// set last move highlight
-		final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
-		to.setLast(true);
+		if (history.size() != 0) {
+			final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
+			to.setLast(true);
+		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
@@ -643,6 +642,7 @@ class GenGameState extends GameState
 
 		// apply move to board
 		board.make(move);
+
 		// update hindex, history
 		hindex++;
 		if (erase) {
@@ -690,13 +690,14 @@ class GenGameState extends GameState
 			else
 				to.setPiece(GenBoard.pieceType[move.xindex]);
 		}
-		hindex--;
+
 		board.unmake(move);
+		hindex--;
 
 		if (hindex >= 0) {
 			// redo last move highlight
-			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
-			to.setLast(true);
+			final BoardButton hto = (BoardButton) Game.self.findViewById(history.get(hindex).to);
+			hto.setLast(true);
 		}
 		// move caused check
 		if (board.incheck(board.getStm())) {

@@ -15,17 +15,15 @@ import org.json.JSONObject;
 
 class RegGameState extends GameState
 {
-	public static RegGameState self;
-
 	private final Context context;
 	private final Bundle settings;
 	private final NetworkClient net;
 	private final ProgressMsg progress;
-	private final ObjectArray<RegMove> history;
 	private final ObjectArray<MoveFlags> flagsHistory;
+	private final ObjectArray<RegMove> history;
 	private final RegBoard board;
-	private final IntArray callstack;
 	private final RegEngine cpu;
+	private final IntArray callstack;
 	private final int ycol;
 	private final int type;
 	private final int oppType;
@@ -245,13 +243,12 @@ class RegGameState extends GameState
 	public RegGameState(final Context _context, final Bundle _settings)
 	{
 		self = this;
-		GameState.self = this;
 		context = _context;
 		settings = _settings;
 
 		callstack = new IntArray();
-		history = new ObjectArray<RegMove>();
 		flagsHistory = new ObjectArray<MoveFlags>();
+		history = new ObjectArray<RegMove>();
 		board = new RegBoard();
 		progress = new ProgressMsg(context);
 
@@ -585,15 +582,13 @@ class RegGameState extends GameState
 
 	private void handleMove()
 	{
-		switch (type) {
-		case Enums.ONLINE_GAME:
+		if (type == Enums.ONLINE_GAME) {
 			// you can't edit the past in online games
 			if (hindex + 1 < history.size()) {
 				callstack.pop();
 				return;
 			}
-			break;
-		case Enums.ARCHIVE_GAME:
+		} else if (type == Enums.ARCHIVE_GAME) {
 			return;
 		}
 
@@ -745,11 +740,6 @@ class RegGameState extends GameState
 		setStm();
 	}
 
-	public void placeClick(final View v)
-	{
-		// Required because GameState calls this function
-	}
-
 	public void boardClick(final View v)
 	{
 		final BoardButton to = (BoardButton) v;
@@ -782,5 +772,10 @@ class RegGameState extends GameState
 		}
 		callstack.push(index);
 		handleMove();
+	}
+
+	public void placeClick(final View v)
+	{
+		// Required because GameState calls this function
 	}
 }
