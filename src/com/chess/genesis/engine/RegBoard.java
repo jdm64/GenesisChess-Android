@@ -170,12 +170,12 @@ class RegBoard extends RegPosition
 		return new MoveFlags(flags);
 	}
 
-	public int[] getPieceCounts()
+	public int[] getPieceCounts(final int Loc)
 	{
 		final int[] counts = new int[13];
 
 		for (int i = 0; i < 32; i++) {
-			if (piece[i].loc != Piece.DEAD)
+			if (piece[i].loc == Loc)
 				counts[piece[i].type + 6]++;
 		}
 		return counts;

@@ -313,7 +313,7 @@ class GenGameState extends GameState
 	private void setBoard()
 	{
 		// set place piece counts
-		final int[] pieces = board.getPieceCounts();
+		final int[] pieces = board.getPieceCounts(Piece.PLACEABLE);
 		for (int i = -6; i < 0; i++) {
 			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);

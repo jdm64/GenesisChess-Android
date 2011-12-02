@@ -315,8 +315,8 @@ class RegGameState extends GameState
 
 	private void setBoard()
 	{
-		// set piece counts
-		final int[] pieces = board.getPieceCounts();
+		// set place piece counts
+		final int[] pieces = board.getPieceCounts(Piece.DEAD);
 		for (int i = -6; i < 0; i++) {
 			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
@@ -636,19 +636,18 @@ class RegGameState extends GameState
 
 		if (move.xindex != Piece.NONE) {
 			final PlaceButton piece = (PlaceButton) Game.self.findViewById(board.piece[move.xindex].type + 100);
-			piece.minusPiece();
+			piece.plusPiece();
 		}
 
 		if (move.getCastle() != 0) {
 			final boolean left = (move.getCastle() == 0x20);
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
-			
+
 			BoardButton castle = (BoardButton) Game.self.findViewById(castleFrom);
 			castle.setPiece(Piece.EMPTY);
 			castle = (BoardButton) Game.self.findViewById(castleTo);
 			castle.setPiece(Piece.ROOK * board.getStm());
-
 		} else if (move.getPromote() != 0) {
 			final BoardButton pawn = (BoardButton) Game.self.findViewById(move.to);
 			pawn.setPiece(Piece.QUEEN * board.getStm());
@@ -712,7 +711,7 @@ class RegGameState extends GameState
 
 		if (move.xindex != Piece.NONE) {
 			final PlaceButton piece = (PlaceButton) Game.self.findViewById(board.piece[move.xindex].type + 100);
-			piece.plusPiece();
+			piece.minusPiece();
 		}
 
 		if (move.getCastle() != 0) {
@@ -728,7 +727,7 @@ class RegGameState extends GameState
 			final BoardButton pawn = (BoardButton) Game.self.findViewById(move.from);
 			pawn.setPiece(Piece.PAWN * -board.getStm());
 		}
-			
+
 		board.unmake(move, flagsHistory.get(hindex));
 		hindex--;
 

@@ -181,12 +181,12 @@ class GenBoard extends GenPosition
 		return (Piece.WHITE == color)? piece[31] : piece[15];
 	}
 
-	public int[] getPieceCounts()
+	public int[] getPieceCounts(final int Loc)
 	{
 		final int[] counts = new int[13];
 
 		for (int i = 0; i < 32; i++) {
-			if (piece[i] == Piece.PLACEABLE)
+			if (piece[i] == Loc)
 				counts[pieceType[i] + 6]++;
 		}
 		return counts;
