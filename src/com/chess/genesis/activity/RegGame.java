@@ -50,8 +50,7 @@ public class RegGame extends Game implements OnClickListener, OnLongClickListene
 
 		// set view as black
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean asBlack = pref.getBoolean("viewAsBlack", true)? playingBlack : false;
-		viewAsBlack = asBlack;
+		viewAsBlack = pref.getBoolean("viewAsBlack", true)? playingBlack : false;
 
 		// set content view
 		if (type != Enums.LOCAL_GAME)

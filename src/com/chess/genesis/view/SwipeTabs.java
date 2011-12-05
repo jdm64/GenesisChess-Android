@@ -49,7 +49,7 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	private int mBottomBarColor = 0xff00b7eb;
 
 	// text color for all other tabs
-	private int mTextColor = 0xffffffff;
+	private final int mTextColor = 0xffffffff;
 
 	// holds the positions of the fronted tabs
 	private int[] mFrontedTabPos;
