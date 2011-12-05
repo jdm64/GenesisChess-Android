@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<com.chess.genesis.RobotoText
+	android:id="@+id/text01"
+	android:textColor="#ff000000"
+	android:text="@string/benchmark"/>
+	<TableLayout
+	android:id="@+id/layout01"
+	style="@style/FillWidth"
+	android:layout_below="@id/text01"
+	android:layout_marginTop="6dp"
+	android:paddingLeft="32dp"
+	android:layout_gravity="center"
+	android:shrinkColumns="*"
+	android:stretchColumns="*">
+		<TableRow>
+			<com.chess.genesis.RobotoText
+			android:textColor="#ff000000"
+			android:textStyle="bold"
+			android:text="Genesis:"/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/gnps"
+			android:textColor="#ff000000"
+			android:text="----"/>
+		</TableRow>
+		<TableRow>
+			<com.chess.genesis.RobotoText
+			android:textColor="#ff000000"
+			android:textStyle="bold"
+			android:text="Regular:"/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/rnps"
+			android:textColor="#ff000000"
+			android:text="----"/>
+		</TableRow>
+	</TableLayout>
+</merge>

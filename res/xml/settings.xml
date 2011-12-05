@@ -3,6 +3,11 @@
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory
 	android:title="Game Settings">
+		<Preference
+		android:key="benchmark"
+		android:persistent="false"
+		android:title="CPU Benchmark"
+		android:summary="See how fast your device can search moves"/>
 		<CheckBoxPreference
 		android:key="viewAsBlack"
 		android:defaultValue="true"

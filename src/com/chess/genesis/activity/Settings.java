@@ -9,6 +9,7 @@ import android.os.Message;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnLongClickListener, OnTouchListener, CallBackPreference.CallBack
+public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener, OnTouchListener, CallBackPreference.CallBack
 {
 	private static Settings self;
 
@@ -86,6 +87,9 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		button.setOnLongClickListener(this);
 
 		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);
+
+		final Preference bench = findPreference("benchmark");
+		bench.setOnPreferenceClickListener(this);
 
 		final IntListPreference poll = (IntListPreference) findPreference("notifierPolling");
 		poll.setOnPreferenceChangeListener(this);
@@ -177,6 +181,16 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 			(new Thread(net)).start();
 		} else if (key.equals("noteEnabled") || key.equals("notifierPolling")) {
 			startService(new Intent(this, GenesisNotifier.class));
+		}
+		return true;
+	}
+
+	public boolean onPreferenceClick(final Preference preference)
+	{
+		final String key = preference.getKey();
+
+		if (key.equals("benchmark")) {
+			(new BenchmarkDialog(this)).show();
 		}
 		return true;
 	}

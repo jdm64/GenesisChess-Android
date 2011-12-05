@@ -59,4 +59,7 @@
 	<string name="resyncMsgTable">
 		Are you sure you want to force a full resync of all game messages?
 	</string>
+	<string name="benchmark">
+		Click \"Run\" to start the single threaded benchmark of your CPU. It will run for about 5 seconds per game type.
+	</string>
 </resources>
