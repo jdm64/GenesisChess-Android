@@ -139,7 +139,6 @@ class GenGameState extends GameState
 					}
 					progress.setText("Retrieving Score");
 
-					settings.putString("status", String.valueOf(status));
 					net.game_score(settings.getString("gameid"));
 					(new Thread(net)).start();
 				} else {
@@ -181,18 +180,14 @@ class GenGameState extends GameState
 				break;
 			case NetworkClient.NEW_GAME:
 				json = (JSONObject) msg.obj;
-				try {
-					if (json.getString("result").equals("error")) {
-						progress.remove();
-						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					progress.setText(json.getString("reason"));
+
+				if (json.getString("result").equals("error")) {
 					progress.remove();
-				} catch (JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
 				}
+				progress.setText(json.getString("reason"));
+				progress.remove();
 				break;
 			}
 		} catch (JSONException e) {
