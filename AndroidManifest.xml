@@ -23,7 +23,7 @@ android:versionName="@string/version">
 		<activity android:name="Login" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
 		<activity android:name="Register" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
 		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
-		<activity android:name="Settings"/>
+		<activity android:name="Settings" android:launchMode="singleTask"/>
 		<activity android:name="RegGame"/>
 		<activity android:name="GenGame"/>
 		<activity android:name="MsgBox"/>
