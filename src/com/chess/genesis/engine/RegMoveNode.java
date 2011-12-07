@@ -22,6 +22,6 @@ class RegMoveNode implements Comparable<RegMoveNode>
  
 	public int compareTo(final RegMoveNode a)
 	{
-		return a.score - score;
+		return (a.score > score)? 1 : ((a.score < score)? -1 : 0);
 	}
 }

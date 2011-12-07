@@ -15,6 +15,6 @@ class GenMoveNode implements Comparable<GenMoveNode>
  
 	public int compareTo(final GenMoveNode a)
 	{
-		return a.score - score;
+		return (a.score > score)? 1 : ((a.score < score)? -1 : 0);
 	}
 }
