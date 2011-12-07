@@ -5,49 +5,37 @@ import android.os.Handler;
 import java.util.Arrays;
 import java.util.Date;
 
-class GenEngine implements Runnable
+class GenEngine extends Engine implements Runnable
 {
 	public final static int MSG = 109;
-
-	public static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
-	public static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
-	public static final int CHECKMATE_SCORE = MIN_SCORE;
-	public static final int STALEMATE_SCORE = 0;
 
 	private final ObjectArray<GenMove> pvMove;
 	private final ObjectArray<GenMove> captureKiller;
 	private final ObjectArray<GenMove> moveKiller;
 	private final ObjectArray<GenMove> placeKiller;
-	private final BoolArray tactical;
-	private final BoolArray ismate;
-	private final GenTransTable tt;
-	private final Handler handle;
-	private final Rand64 rand;
 
 	private GenBoard board;
 	private GenMoveList curr;
-	private int secT;
-	private long endT;
-	private boolean active;
 
 	public GenEngine(final Handler handler)
 	{
-		secT = 4;
-		active = false;
-		handle = handler;
+		super(handler);
+
 		tt = new GenTransTable(8);
 		pvMove = new ObjectArray<GenMove>();
 		captureKiller = new ObjectArray<GenMove>();
 		moveKiller = new ObjectArray<GenMove>();
 		placeKiller = new ObjectArray<GenMove>();
-		tactical = new BoolArray();
-		ismate = new BoolArray();
-		rand = new Rand64();
 	}
 
 	public void setBoard(final GenBoard _board)
 	{
 		board = new GenBoard(_board);
+	}
+
+	public void setBoard(final RegBoard _board)
+	{
+		// NEVER CALL!
 	}
 
 	private void pickRandomMove()
@@ -134,7 +122,7 @@ class GenEngine implements Runnable
 			board.unmake(move);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, move, limit - depth, GenTransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, move, limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -164,7 +152,7 @@ class GenEngine implements Runnable
 			best.val = Math.max(best.val, ptr.list[n].score);
 			if (best.val >= beta) {
 				killer.set(depth, ptr.list[n].move);
-				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, GenTransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -217,7 +205,7 @@ class GenEngine implements Runnable
 				board.unmake(move);
 
 				if (best >= beta) {
-					tt.setItem(board.hash(), best, move, limit - depth, GenTransItem.CUT_NODE);
+					tt.setItem(board.hash(), best, move, limit - depth, TransItem.CUT_NODE);
 					return best;
 				} else if (best > alpha) {
 					alpha = best;
@@ -240,7 +228,7 @@ class GenEngine implements Runnable
 
 		if (ismate.get(depth))
 			best = tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : STALEMATE_SCORE;
-		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? GenTransItem.ALL_NODE : GenTransItem.PV_NODE);
+		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? TransItem.ALL_NODE : TransItem.PV_NODE);
 
 		return best;
 	}
@@ -262,37 +250,12 @@ class GenEngine implements Runnable
 			if (curr.list[n].score > alpha) {
 				alpha = curr.list[n].score;
 				pvMove.set(depth, curr.list[n].move);
-				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, GenTransItem.PV_NODE);
+				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, TransItem.PV_NODE);
 			}
 			b = alpha + 1;
 		}
 		Arrays.sort(curr.list, 0, curr.size);
 		pruneWeakMoves();
-	}
-
-	public void stop()
-	{
-		endT = 0;
-	}
-
-	public boolean isActive()
-	{
-		return active;
-	}
-
-	public void setTime(final int time)
-	{
-		if (time > 30)
-			secT = 30;
-		else if (time < 1)
-			secT = 1;
-		else
-			secT = time;
-	}
-
-	public int getTime()
-	{
-		return secT;
 	}
 
 	public void run()

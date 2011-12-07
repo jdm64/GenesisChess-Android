@@ -145,20 +145,20 @@ class GenPosition extends GenMoveLookup
 			if (empty != 0)
 				fen.append(empty);
 			if (square[i] > Piece.EMPTY)
-				fen.append(GenMove.pieceSymbol[square[i]]);
+				fen.append(Move.pieceSymbol[square[i]]);
 			else
-				fen.append(String.valueOf(GenMove.pieceSymbol[-square[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-square[i]]).toLowerCase());
 			empty = 0;
 		}
 		fen.append(':');
 
 		for (int i = 0; i < 16; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(String.valueOf(GenMove.pieceSymbol[-GenBoard.pieceType[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-GenBoard.pieceType[i]]).toLowerCase());
 		}
 		for (int i = 16; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(GenMove.pieceSymbol[GenBoard.pieceType[i]]);
+				fen.append(Move.pieceSymbol[GenBoard.pieceType[i]]);
 		}
 		fen.append(':');
 		fen.append(ply);

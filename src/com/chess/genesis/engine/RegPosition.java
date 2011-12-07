@@ -166,9 +166,9 @@ class RegPosition extends RegMoveLookup
 			if (empty != 0)
 				fen.append(empty);
 			if (square[i] > Piece.EMPTY)
-				fen.append(RegMove.pieceSymbol[square[i]]);
+				fen.append(Move.pieceSymbol[square[i]]);
 			else
-				fen.append(String.valueOf(RegMove.pieceSymbol[-square[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-square[i]]).toLowerCase());
 			empty = 0;
 		}
 		fen.append(':');

@@ -3,41 +3,8 @@ package com.chess.genesis;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class GenMove implements Parcelable
+class GenMove extends Move implements Parcelable
 {
-	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
-
-	public int index;
-	public int xindex;
-	public int from;
-	public int to;
-
-	public GenMove()
-	{
-		index = xindex = from = to = -1;
-	}
-
-	public GenMove(final Parcel in)
-	{
-		index = in.readInt();
-		xindex = in.readInt();
-		from = in.readInt();
-		to = in.readInt();
-	}
-
-	public int describeContents()
-	{
-		return 0;
-	}
-
-	public void writeToParcel(final Parcel out, final int flags)
-	{
-		out.writeInt(index);
-		out.writeInt(xindex);
-		out.writeInt(from);
-		out.writeInt(to);
-	}
-
 	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<GenMove>()
 	{
 		public GenMove createFromParcel(final Parcel in)
@@ -51,33 +18,28 @@ class GenMove implements Parcelable
 		}
 	};
 
-	public void set(final GenMove move)
+	public GenMove()
 	{
-		index = move.index;
-		xindex = move.xindex;
-		from = move.from;
-		to = move.to;
+		super();
 	}
 
-	public boolean isNull()
+	public GenMove(final GenMove move)
 	{
-		if (index == Piece.NULL_MOVE && xindex == Piece.NULL_MOVE &&
-				from == Piece.NULL_MOVE && to == Piece.NULL_MOVE)
-			return true;
-		return false;
+		super(move);
+	}
+
+	public GenMove(final Parcel in)
+	{
+		super(in);
 	}
 
 	public GenMove setNull()
 	{
-		index = Piece.NULL_MOVE;
-		xindex = Piece.NULL_MOVE;
-		from = Piece.NULL_MOVE;
-		to = Piece.NULL_MOVE;
-
+		super.setNull();
 		return this;
 	}
 
-	private StringBuffer printLoc(final int loc)
+	protected StringBuffer printLoc(final int loc)
 	{
 		final StringBuffer str = new StringBuffer();
 

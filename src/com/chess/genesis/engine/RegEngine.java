@@ -5,42 +5,30 @@ import android.os.Handler;
 import java.util.Arrays;
 import java.util.Date;
 
-class RegEngine implements Runnable
+class RegEngine extends Engine implements Runnable
 {
 	public final static int MSG = 111;
-
-	public static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
-	public static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
-	public static final int CHECKMATE_SCORE = MIN_SCORE;
-	public static final int STALEMATE_SCORE = 0;
 
 	private final ObjectArray<RegMove> pvMove;
 	private final ObjectArray<RegMove> captureKiller;
 	private final ObjectArray<RegMove> moveKiller;
-	private final BoolArray tactical;
-	private final BoolArray ismate;
-	private final RegTransTable tt;
-	private final Handler handle;
-	private final Rand64 rand;
 
 	private RegBoard board;
 	private RegMoveList curr;
-	private int secT;
-	private long endT;
-	private boolean active;
 
 	public RegEngine(final Handler handler)
 	{
-		secT = 4;
-		active = false;
-		handle = handler;
+		super(handler);
+
 		tt = new RegTransTable(8);
 		pvMove = new ObjectArray<RegMove>();
 		captureKiller = new ObjectArray<RegMove>();
 		moveKiller = new ObjectArray<RegMove>();
-		tactical = new BoolArray();
-		ismate = new BoolArray();
-		rand = new Rand64();
+	}
+
+	public void setBoard(final GenBoard _board)
+	{
+		// NEVER CALL!
 	}
 
 	public void setBoard(final RegBoard _board)
@@ -134,7 +122,7 @@ class RegEngine implements Runnable
 			board.unmake(move, undoflags);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, move, limit - depth, RegTransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, move, limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -164,7 +152,7 @@ class RegEngine implements Runnable
 			best.val = Math.max(best.val, ptr.list[n].score);
 			if (best.val >= beta) {
 				killer.set(depth, ptr.list[n].move);
-				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, RegTransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -218,7 +206,7 @@ class RegEngine implements Runnable
 				board.unmake(move, undoflags);
 
 				if (best >= beta) {
-					tt.setItem(board.hash(), best, move, limit - depth, RegTransItem.CUT_NODE);
+					tt.setItem(board.hash(), best, move, limit - depth, TransItem.CUT_NODE);
 					return best;
 				} else if (best > alpha) {
 					alpha = best;
@@ -238,7 +226,7 @@ class RegEngine implements Runnable
 
 		if (ismate.get(depth))
 			best = tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : STALEMATE_SCORE;
-		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? RegTransItem.ALL_NODE : RegTransItem.PV_NODE);
+		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? TransItem.ALL_NODE : TransItem.PV_NODE);
 
 		return best;
 	}
@@ -261,37 +249,12 @@ class RegEngine implements Runnable
 			if (curr.list[n].score > alpha) {
 				alpha = curr.list[n].score;
 				pvMove.set(depth, curr.list[n].move);
-				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, RegTransItem.PV_NODE);
+				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, TransItem.PV_NODE);
 			}
 			b = alpha + 1;
 		}
 		Arrays.sort(curr.list, 0, curr.size);
 		pruneWeakMoves();
-	}
-
-	public void stop()
-	{
-		endT = 0;
-	}
-
-	public boolean isActive()
-	{
-		return active;
-	}
-
-	public void setTime(final int time)
-	{
-		if (time > 30)
-			secT = 30;
-		else if (time < 1)
-			secT = 1;
-		else
-			secT = time;
-	}
-
-	public int getTime()
-	{
-		return secT;
 	}
 
 	public void run()

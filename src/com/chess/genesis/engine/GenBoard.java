@@ -109,7 +109,7 @@ class GenBoard extends GenPosition
 	public static long startHash;
 
 	private long key;
-	
+
 	public GenBoard()
 	{
 		square = new int[64];

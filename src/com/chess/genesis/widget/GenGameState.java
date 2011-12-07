@@ -15,21 +15,10 @@ import org.json.JSONObject;
 
 class GenGameState extends GameState
 {
-	private final Context context;
-	private final Bundle settings;
-	private final NetworkClient net;
-	private final ProgressMsg progress;
 	private final ObjectArray<GenMove> history;
 	private final GenBoard board;
-	private final GenEngine cpu;
-	private final IntArray callstack;
-	private final int ycol;
-	private final int type;
-	private final int oppType;
 
-	private int hindex = -1;
-
-	private final Handler handle = new Handler()
+	private final Handler xhandle = new Handler()
 	{
 		public void handleMessage(final Message msg)
 		{
@@ -197,48 +186,12 @@ class GenGameState extends GameState
 		}
 	};
 
-	private void check_endgame()
-	{
-		switch (type) {
-		case Enums.LOCAL_GAME:
-			return;
-		case Enums.ONLINE_GAME:
-			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
-				return;
-			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
-			try {
-				final JSONObject json = new JSONObject();
-				json.put("yourcolor", ycol);
-				json.put("white_name", settings.getString("white"));
-				json.put("black_name", settings.getString("black"));
-				json.put("eventtype", settings.getString("eventtype"));
-				json.put("status", settings.getString("status"));
-				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-				json.put("gameid", settings.getString("gameid"));
-
-				(new GameStatsDialog(context, json)).show();
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-			} else {
-				progress.setText("Retrieving Score");
-				net.game_score(settings.getString("gameid"));
-				(new Thread(net)).start();
-			}
-			break;
-		case Enums.ARCHIVE_GAME:
-			settings.putInt("yourcolor", ycol);
-			(new GameStatsDialog(context, settings)).show();
-			break;
-		}
-	}
-
 	public GenGameState(final Context _context, final Bundle _settings)
 	{
 		self = this;
 		context = _context;
 		settings = _settings;
+		handle = xhandle;
 
 		callstack = new IntArray();
 		history = new ObjectArray<GenMove>();
@@ -439,54 +392,6 @@ class GenGameState extends GameState
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
-	}
-
-	public void setCpuTime()
-	{
-		(new CpuTimeDialog(context, handle, cpu.getTime())).show();
-	}
-
-	public void nudge_resign()
-	{
-		final GameDataDB db = new GameDataDB(context);
-		final Bundle data = db.getOnlineGameData(settings.getString("gameid"));
-		db.close();
-
-		final int yturn = Integer.valueOf(data.getString("yourturn"));
-		if (yturn == Enums.YOUR_TURN) {
-			(new ResignConfirm(context, handle)).show();
-			return;
-		}
-
-		switch (Integer.valueOf(data.getString("idle"))) {
-		default:
-		case Enums.NOTIDLE:
-			Toast.makeText(context, "Game must be idle before nudging", Toast.LENGTH_LONG).show();
-			break;
-		case Enums.IDLE:
-			(new NudgeConfirm(context, handle)).show();
-			break;
-		case Enums.NUDGED:
-			Toast.makeText(context, "Game is already nudged", Toast.LENGTH_LONG).show();
-			break;
-		case Enums.CLOSE:
-			(new IdleResignConfirm(context, handle)).show();
-			break;
-		}
-	}
-
-	public void rematch()
-	{
-		final String opp = settings.getString("username").equals(settings.getString("white"))?
-			settings.getString("black") : settings.getString("white");
-		(new RematchConfirm(context, handle, opp)).show();
-	}
-
-	public void resync()
-	{
-		progress.setText("Updating Game State");
-		net.game_status(settings.getString("gameid"));
-		(new Thread(net)).start();
 	}
 
 	private void applyRemoteMove(final String hist)

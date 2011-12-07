@@ -3,53 +3,9 @@ package com.chess.genesis;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class RegMove implements Parcelable
+class RegMove extends Move implements Parcelable
 {
-	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
-
-	public int index;
-	public int to;
-	public int from;
-	public int xindex;
 	public int flags;
-
-	public RegMove()
-	{
-		index = xindex = from = to = -1;
-		flags = 0;
-	}
-
-	public RegMove(final RegMove move)
-	{
-		index = move.index;
-		xindex = move.xindex;
-		from = move.from;
-		to = move.to;
-		flags = move.flags;
-	}
-
-	public RegMove(final Parcel in)
-	{
-		index = in.readInt();
-		xindex = in.readInt();
-		from = in.readInt();
-		to = in.readInt();
-		flags = in.readInt();
-	}
-
-	public int describeContents()
-	{
-		return 0;
-	}
-
-	public void writeToParcel(final Parcel out, final int flags)
-	{
-		out.writeInt(index);
-		out.writeInt(xindex);
-		out.writeInt(from);
-		out.writeInt(to);
-		out.writeInt(flags);
-	}
 
 	public static final Parcelable.Creator<RegMove> CREATOR = new Parcelable.Creator<RegMove>()
 	{
@@ -64,31 +20,41 @@ class RegMove implements Parcelable
 		}
 	};
 
+	public RegMove()
+	{
+		super();
+		flags = 0;
+	}
+
+	public RegMove(final RegMove move)
+	{
+		super(move);
+		flags = move.flags;
+	}
+
+	public RegMove(final Parcel in)
+	{
+		super(in);
+		flags = in.readInt();
+	}
+
+	public void writeToParcel(final Parcel out, final int Flags)
+	{
+		super.writeToParcel(out, Flags);
+		out.writeInt(flags);
+	}
+
 	public void set(final RegMove move)
 	{
-		index = move.index;
-		xindex = move.xindex;
-		from = move.from;
-		to = move.to;
+		super.set(move);
 		flags = move.flags;
 	}
 
 	public RegMove setNull()
 	{
-		index = Piece.NULL_MOVE;
-		xindex = Piece.NULL_MOVE;
-		from = Piece.NULL_MOVE;
-		to = Piece.NULL_MOVE;
+		super.setNull();
 		flags = 0;
-
 		return this;
-	}
-
-	public boolean isNull()
-	{
-		if (index == Piece.NULL_MOVE && xindex == Piece.NULL_MOVE && from == Piece.NULL_MOVE && to == Piece.NULL_MOVE)
-			return true;
-		return false;
 	}
 
 	public int getCastle()
@@ -129,7 +95,7 @@ class RegMove implements Parcelable
 			return RegBoard.MOVE_MOVE;
 	}
 
-	private StringBuffer printLoc(final int loc)
+	protected StringBuffer printLoc(final int loc)
 	{
 		final StringBuffer str = new StringBuffer();
 
