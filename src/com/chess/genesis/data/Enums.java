@@ -12,6 +12,7 @@ final class Enums
 	public final static int ARCHIVE_GAME = 3;
 
 	// Game Types
+	public final static int ANY_CHESS = 0;
 	public final static int REGULAR_CHESS = 1;
 	public final static int GENESIS_CHESS = 2;
 
@@ -113,6 +114,8 @@ final class Enums
 			return "genesis";
 		case REGULAR_CHESS:
 			return "regular";
+		case ANY_CHESS:
+			return "any";
 		}
 		throw new RuntimeException("unknown gametype: " + String.valueOf(gametype));
 	}
