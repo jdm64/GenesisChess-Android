@@ -32,6 +32,7 @@ class NetworkClient implements Runnable
 	public final static int POOL_INFO = 19;
 	public final static int NUDGE_GAME = 20;
 	public final static int IDLE_RESIGN = 21;
+	public final static int USER_STATS = 22;
 
 	private final Context context;
 	private final Handler callback;
@@ -594,6 +595,22 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "idleresign");
 			json.put("gameid", gameid);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+
+	public void user_stats(final String username)
+	{
+		fid = USER_STATS;
+		loginRequired = true;
+
+		json = new JSONObject();
+
+		try {
+			json.put("request", "userstats");
+			json.put("username", username);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
