@@ -48,7 +48,7 @@ class TabText extends RobotoText implements OnTouchListener
 			setBackgroundColor(touchColor);
 		else if (event.getAction() == MotionEvent.ACTION_UP)
 			setBackgroundColor(0x00ffffff);
-		return true;
+		return false;
 	}
 
 	public void setActive(final boolean Active)
