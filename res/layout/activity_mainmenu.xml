@@ -39,13 +39,13 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			</FrameLayout>
 			<FrameLayout>
 				<com.chess.genesis.MyImageView
-				android:id="@+id/archive_game"
+				android:id="@+id/user_stats"
 				android:padding="12dp"
-				android:src="@drawable/main_recorded"/>
+				android:src="@drawable/main_stats"/>
 				<com.chess.genesis.RobotoText
 				android:id="@+id/archive_game_txt"
 				android:layout_gravity="bottom|center_horizontal"
-				android:text="Recorded Games"/>
+				android:text="User Stats"/>
 			</FrameLayout>
 		</TableRow>
 		<TableRow>

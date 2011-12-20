@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
@@ -62,7 +63,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 
 		// setup click listeners
 		final int list[] = new int[]{R.id.local_game, R.id.online_game,
-			R.id.archive_game, R.id.howtoplay, R.id.likefacebook,
+			R.id.user_stats, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings, R.id.feedback, R.id.googleplus};
 
 		for (int i = 0; i < list.length; i++) {
@@ -113,7 +114,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		switch (v.getId()) {
 		case R.id.local_game:
 		case R.id.online_game:
-		case R.id.archive_game:
+		case R.id.user_stats:
 		case R.id.howtoplay:
 		case R.id.login:
 		case R.id.settings:
@@ -144,6 +145,8 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		Bundle bundle;
 		Intent intent;
 
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
 		switch (v.getId()) {
 		case R.id.local_game:
 			bundle = new Bundle();
@@ -155,8 +158,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			startActivity(intent);
 			break;
 		case R.id.online_game:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
 			if (!pref.getBoolean("isLoggedIn", false)) {
 				startActivityForResult(new Intent(this, Login.class), 1);
 				return;
@@ -164,13 +165,13 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			intent = new Intent(this, OnlineGameList.class);
 			startActivity(intent);
 			break;
-		case R.id.archive_game:
-			bundle = new Bundle();
-			bundle.putInt("type", Enums.ARCHIVE_GAME);
-
-			intent = new Intent(this, GameList.class);
-			intent.putExtras(bundle);
-
+		case R.id.user_stats:
+			if (!pref.getBoolean("isLoggedIn", false)) {
+				Toast.makeText(this, "Must be logged in", Toast.LENGTH_LONG).show();
+				return;
+			}
+			intent = new Intent(this, UserStats.class);
+			intent.putExtra("username", pref.getString("username", "!error!"));
 			startActivity(intent);
 			break;
 		case R.id.howtoplay:

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<com.chess.genesis.MyImageView
+	android:id="@+id/topbar"
+	style="@style/FillWidth"
+	android:src="@drawable/topbar"/>
+	<ScrollView
+	style="@style/FillWidth"
+	android:layout_below="@id/topbar"
+	android:layout_above="@id/botbar">
+	<RelativeLayout
+	style="@style/FillWidth">
+		<com.chess.genesis.MyImageView
+		android:id="@+id/avatar"
+		android:src="@drawable/avatar"
+		android:layout_height="96dp"
+		android:layout_width="96dp"/>
+		<com.chess.genesis.RobotoText
+		android:id="@+id/username"
+		android:layout_toRightOf="@id/avatar"
+		style="@style/FillWidth"
+		android:gravity="center"
+		android:textStyle="bold"
+		android:textSize="20dp"/>
+		<com.chess.genesis.RobotoText
+		android:id="@+id/joined"
+		android:layout_toRightOf="@id/avatar"
+		android:layout_below="@id/username"
+		style="@style/FillWidth"
+		android:gravity="center"
+		android:textSize="15dp"
+		android:text="Joined:"/>
+		<com.chess.genesis.RobotoText
+		android:id="@+id/text01"
+		android:layout_toRightOf="@id/avatar"
+		android:layout_below="@id/joined"
+		style="@style/FillWidth"
+		android:gravity="center"
+		android:textSize="15dp"
+		android:text="Last Activity:"/>
+		<com.chess.genesis.RobotoText
+		android:id="@+id/last_activity"
+		android:layout_toRightOf="@id/avatar"
+		android:layout_below="@id/text01"
+		style="@style/FillWidth"
+		android:gravity="center"
+		android:textSize="15dp"/>
+		<View
+		android:id="@+id/layout01"
+		android:layout_below="@id/avatar"
+		android:layout_gravity="center"
+		android:background="#ff00b7eb"
+		android:layout_height="1dp"
+		style="@style/FillWidth"/>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/psr"
+		android:layout_below="@id/layout01"
+		android:orientation="vertical"
+		style="@style/FillWidth">
+			<com.chess.genesis.TabText
+			android:id="@+id/apsr"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Average PSR: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/gpsr"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/rpsr"
+			android:layout_gravity="center"
+			android:paddingBottom="6dp"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+		</com.chess.genesis.ExpandablePanel>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/games"
+		style="@style/FillWidth"
+		android:orientation="vertical"
+		android:layout_below="@id/psr">
+			<com.chess.genesis.TabText
+			android:id="@+id/total_games"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Games Played: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/genesis_games"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<FrameLayout
+			style="@style/FillWidth">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_random_games"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_invite_games"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+			<FrameLayout
+			android:layout_gravity="center">
+				<View
+				android:layout_height="1dp"
+				android:layout_width="256dp"
+				android:background="#ff00b7eb"/>
+			</FrameLayout>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/regular_games"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+			<FrameLayout
+			style="@style/FillWidth"
+			android:paddingBottom="6dp">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_random_games"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_invite_games"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+		</com.chess.genesis.ExpandablePanel>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/wins"
+		style="@style/FillWidth"
+		android:orientation="vertical"
+		android:layout_below="@id/games">
+			<com.chess.genesis.TabText
+			android:id="@+id/total_wins"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Wins: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/genesis_wins"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<FrameLayout
+			style="@style/FillWidth">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_random_wins"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_invite_wins"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+			<FrameLayout
+			android:layout_gravity="center">
+				<View
+				android:layout_height="1dp"
+				android:layout_width="256dp"
+				android:background="#ff00b7eb"/>
+			</FrameLayout>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/regular_wins"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+			<FrameLayout
+			style="@style/FillWidth"
+			android:paddingBottom="6dp">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_random_wins"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_invite_wins"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+		</com.chess.genesis.ExpandablePanel>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/losses"
+		style="@style/FillWidth"
+		android:orientation="vertical"
+		android:layout_below="@id/wins">
+			<com.chess.genesis.TabText
+			android:id="@+id/total_losses"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Losses: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/genesis_losses"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<FrameLayout
+			style="@style/FillWidth">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_random_losses"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_invite_losses"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+			<FrameLayout
+			android:layout_gravity="center">
+				<View
+				android:layout_height="1dp"
+				android:layout_width="256dp"
+				android:background="#ff00b7eb"/>
+			</FrameLayout>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/regular_losses"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+			<FrameLayout
+			style="@style/FillWidth"
+			android:paddingBottom="6dp">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_random_losses"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_invite_losses"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+		</com.chess.genesis.ExpandablePanel>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/resigns"
+		style="@style/FillWidth"
+		android:orientation="vertical"
+		android:layout_below="@id/losses">
+			<com.chess.genesis.TabText
+			android:id="@+id/total_resigns"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Resigns: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/genesis_resigns"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<FrameLayout
+			style="@style/FillWidth">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_random_resigns"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_invite_resigns"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+			<FrameLayout
+			android:layout_gravity="center">
+				<View
+				android:layout_height="1dp"
+				android:layout_width="256dp"
+				android:background="#ff00b7eb"/>
+			</FrameLayout>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/regular_resigns"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+			<FrameLayout
+			style="@style/FillWidth"
+			android:paddingBottom="6dp">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_random_resigns"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_invite_resigns"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+		</com.chess.genesis.ExpandablePanel>
+	</RelativeLayout>
+	</ScrollView>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/botbar"
+	style="@style/FillWidth"
+	android:layout_alignParentBottom="true"
+	android:src="@drawable/botbar"/>
+</RelativeLayout>

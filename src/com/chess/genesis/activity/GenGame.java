@@ -60,6 +60,11 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			button = (ImageView) findViewById(R.id.chat);
 			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
+
+			TabText txt = (TabText) findViewById(R.id.white_name);
+			txt.setOnClickListener(this);
+			txt = (TabText) findViewById(R.id.black_name);
+			txt.setOnClickListener(this);
 		}
 
 		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
@@ -122,12 +127,14 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 
 	public void onClick(final View v)
 	{
+		Intent intent;
+
 		switch (v.getId()) {
 		case R.id.place_piece:
 			game_board.flip();
 			break;
 		case R.id.chat:
-			final Intent intent = new Intent(this, MsgBox.class);
+			intent = new Intent(this, MsgBox.class);
 			intent.putExtra("gameid", settings.getString("gameid"));
 			startActivity(intent);
 			break;
@@ -139,6 +146,16 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			break;
 		case R.id.current:
 			gamestate.currentMove();
+			break;
+		case R.id.white_name:
+			intent = new Intent(this, UserStats.class);
+			intent.putExtra("username", settings.getString("white"));
+			startActivity(intent);
+			break;
+		case R.id.black_name:
+			intent = new Intent(this, UserStats.class);
+			intent.putExtra("username", settings.getString("black"));
+			startActivity(intent);
 			break;
 		}
 	}
