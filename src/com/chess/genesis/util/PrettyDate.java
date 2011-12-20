@@ -113,6 +113,19 @@ class PrettyDate extends Date
 		return week + ", " + month + " " + day + ", " + year + " @ " + hr + ":" + min + ":" + sec + " " + ampm;
 	}
 
+	public String dayFormat()
+	{
+		final Calendar cal = new GregorianCalendar();
+
+		cal.setTime(this);
+
+		final String year = String.valueOf(cal.get(Calendar.YEAR)),
+			month = monthToString(cal.get(Calendar.MONTH)),
+			day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+
+		return year + "-" + month + "-" + day;
+	}
+
 	public String agoFormat()
 	{
 		final StringBuffer buff = new StringBuffer(32);
