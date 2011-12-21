@@ -5,12 +5,17 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserStats extends Activity
+public class UserStats extends Activity implements OnLongClickListener, OnTouchListener
 {
 	private final static int GEN_RAN = 0;
 	private final static int GEN_INV = 1;
@@ -69,6 +74,10 @@ public class UserStats extends Activity
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
+		ImageView button = (ImageView) findViewById(R.id.topbar);
+		button.setOnTouchListener(this);
+		button.setOnLongClickListener(this);
+
 		final RobotoText txt = (RobotoText) findViewById(R.id.username);
 		txt.setText(settings.getString("username"));
 
@@ -103,6 +112,30 @@ public class UserStats extends Activity
 	{
 		NetActive.dec();
 		super.onPause();
+	}
+
+	public boolean onTouch(final View v, final MotionEvent event)
+	{
+		switch (v.getId()) {
+		case R.id.topbar:
+			if (event.getAction() == MotionEvent.ACTION_DOWN)
+				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
+			else if (event.getAction() == MotionEvent.ACTION_UP)
+				((ImageView) v).setImageResource(R.drawable.topbar);
+			break;
+		}
+		return false;
+	}
+
+	public boolean onLongClick(final View v)
+	{
+		switch (v.getId()) {
+		case R.id.topbar:
+			finish();
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	private void loadStats(final JSONObject data)
