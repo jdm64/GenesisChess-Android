@@ -2,15 +2,14 @@ package com.chess.genesis;
 
 import android.os.Bundle;
 import android.os.Handler;
-import java.util.Date;
 
 class Benchmark implements Runnable
 {
 	public final static int MSG = 118;
 
-	private Handler handle;
-	private RegBoard rboard;
-	private GenBoard gboard;
+	private final Handler handle;
+	private final RegBoard rboard;
+	private final GenBoard gboard;
 	private long start;
 	private long end;
 	private long tNodes;

@@ -1,9 +1,6 @@
 package com.chess.genesis;
 
-import android.os.Bundle;
 import android.os.Handler;
-import java.util.Arrays;
-import java.util.Date;
 
 abstract class Engine implements Runnable
 {

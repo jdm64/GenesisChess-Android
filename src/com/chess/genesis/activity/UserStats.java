@@ -1,23 +1,10 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
-import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
@@ -82,13 +69,13 @@ public class UserStats extends Activity
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
-		RobotoText txt = (RobotoText) findViewById(R.id.username);
+		final RobotoText txt = (RobotoText) findViewById(R.id.username);
 		txt.setText(settings.getString("username"));
 
 		final int[] list = new int[]{R.id.apsr, R.id.total_games, R.id.total_wins,
 			R.id.total_losses, R.id.total_resigns};
 		for (int id : list) {
-			TabText item = (TabText) findViewById(id);
+			final TabText item = (TabText) findViewById(id);
 			item.setOnTouchListener(null);
 		}
 

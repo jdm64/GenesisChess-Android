@@ -9,8 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
-import android.view.ViewGroup.LayoutParams;
-import android.util.Log;
 
 class ExpandablePanel extends LinearLayout implements OnClickListener
 {
@@ -20,12 +18,12 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 	private boolean isExpanded = false;
 	private Paint paint;
 
-	public ExpandablePanel(Context context)
+	public ExpandablePanel(final Context context)
 	{
 		this(context, null);
 	}
 
-	public ExpandablePanel(Context context, AttributeSet attrs)
+	public ExpandablePanel(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 
@@ -74,11 +72,11 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 	}
 
 	@Override
-	public void onClick(View v)
+	public void onClick(final View v)
 	{
 		if (isExpanded) {
 			for (int i = 1; i < getChildCount(); i++) {
-				View item = getChildAt(i);
+				final View item = getChildAt(i);
 
 				final ExpandAnimation a = new ExpandAnimation(item, item.getHeight(), 0);
 				a.setDuration(duration);
@@ -93,7 +91,7 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 			startAnimation(b);
 
 			for (int i = getChildCount() - 1; i > 0; i--) {
-				View item = getChildAt(i);
+				final View item = getChildAt(i);
 				item.measure(getWidth(), MeasureSpec.UNSPECIFIED);
 				final int height = item.getMeasuredHeight();
 
@@ -102,7 +100,7 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 				item.startAnimation(a);
 			}
 		}
-		isExpanded = !isExpanded;
+		isExpanded ^= true;
 	}
 
 	private class ExpandAnimation extends Animation
@@ -111,7 +109,7 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 		private final int start;
 		private final int delta;
 
-		public ExpandAnimation(View view, int startHeight, int endHeight)
+		public ExpandAnimation(final View view, final int startHeight, final int endHeight)
 		{
 			item = view;
 			item.setVisibility(View.VISIBLE);
@@ -121,9 +119,9 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 		}
 
 		@Override
-		protected void applyTransformation(float interpolatedTime, Transformation t)
+		protected void applyTransformation(final float interpolatedTime, final Transformation t)
 		{
-			android.view.ViewGroup.LayoutParams lp = item.getLayoutParams();
+			final android.view.ViewGroup.LayoutParams lp = item.getLayoutParams();
 			lp.height = (int) (start + delta * interpolatedTime);
 
 			item.setLayoutParams(lp);
