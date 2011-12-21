@@ -6,9 +6,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
-class TabText extends RobotoText implements OnTouchListener
+class TabText extends RobotoText implements OnClickListener, OnTouchListener
 {
 	private final static int highlightColor = 0xff00b7eb;
 	private final static int touchColor = 0x8000b7eb;
@@ -31,6 +32,7 @@ class TabText extends RobotoText implements OnTouchListener
 
 		setLines(1);
 		setOnTouchListener(this);
+		setOnClickListener(this);
 	}
 
 	@Override
@@ -49,6 +51,10 @@ class TabText extends RobotoText implements OnTouchListener
 		else if (event.getAction() == MotionEvent.ACTION_UP)
 			setBackgroundColor(0x00ffffff);
 		return false;
+	}
+
+	public void onClick(final View v)
+	{
 	}
 
 	public void setActive(final boolean Active)
