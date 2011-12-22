@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
-	public static GameList self;
+	public Context self;
 	public GameListAdapter gamelist_adapter;
 
 	private Bundle settings;

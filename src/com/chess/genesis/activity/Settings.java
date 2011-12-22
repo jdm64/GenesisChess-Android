@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -23,11 +24,10 @@ import org.json.JSONObject;
 
 public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener, OnTouchListener, CallBackPreference.CallBack
 {
-	private static Settings self;
-
-	private static NetworkClient net;
-	private static ProgressMsg progress;
-	private static SharedPreferences pref;
+	private Context self;
+	private NetworkClient net;
+	private ProgressMsg progress;
+	private SharedPreferences pref;
 
 	private final Handler handle = new Handler()
 	{

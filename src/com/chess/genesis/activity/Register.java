@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,8 +19,7 @@ import org.json.JSONObject;
 
 public class Register extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
 {
-	private static Register self;
-
+	private Context self;
 	private NetworkClient net;
 	private ProgressMsg progress;
 

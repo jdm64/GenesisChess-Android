@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +28,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 	private final static int TIE = 2;
 	private final static int RES = 3;
 
-	private static UserStats self;
-
+	private Context self;
 	private Bundle settings;
 	private NetworkClient net;
 	private ProgressMsg progress;

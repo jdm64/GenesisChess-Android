@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -24,8 +25,7 @@ import org.json.JSONObject;
 
 public class Login extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
 {
-	private static Login self;
-
+	private Context self;
 	private NetworkClient net;
 	private ProgressMsg progress;
 

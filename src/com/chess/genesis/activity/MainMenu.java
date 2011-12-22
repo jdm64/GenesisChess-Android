@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -23,7 +24,7 @@ import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
-	private static MainMenu self;
+	private Context self;
 
 	private final Handler handle = new Handler()
 	{

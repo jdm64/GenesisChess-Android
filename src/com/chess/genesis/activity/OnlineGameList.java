@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -34,12 +35,11 @@ import org.json.JSONObject;
 
 public class OnlineGameList extends FragmentActivity implements OnClickListener, OnLongClickListener, OnTouchListener, OnItemClickListener
 {
-	public static OnlineGameList self;
-
 	private final static int THEIR_PAGE = 0;
 	private final static int YOUR_PAGE = 1;
 	private final static int ARCHIVE_PAGE = 2;
 
+	private Context self;
 	private GameListAdapter[] gamelistadapter_arr;
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -106,7 +106,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 					}
 					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
 						progress.setText("Checking Game Pool");
-						self.updateGameListAdapters();
+						OnlineGameList.this.updateGameListAdapters();
 						GenesisNotifier.clearNotification(self, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
 						net.pool_info();
 						(new Thread(net)).start();
@@ -194,8 +194,8 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			layout.addView(empty, 1);
 			listview.setEmptyView(empty);
 			listview.setAdapter(list);
-			listview.setOnItemClickListener(self);
-			self.registerForContextMenu(listview);
+			listview.setOnItemClickListener(OnlineGameList.this);
+			OnlineGameList.this.registerForContextMenu(listview);
 
 			((ViewPager) collection).addView(layout, 0);
 

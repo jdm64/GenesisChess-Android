@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +30,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	private ProgressMsg progress;
 	private Bundle settings;
 	private String gameid;
-	private MsgBox self;
+	private Context self;
 
 	private final Handler handle = new Handler()
 	{
