@@ -57,6 +57,47 @@ class NetworkClient implements Runnable
 		socket = Socket;
 	}
 
+	// Crypto.LoginKey makes a network connection, but all
+	// network calls must be on a non-main thread. This finishes
+	// the json setup started in login_user.
+	private void login_setup()
+	{
+		JSONObject json2 = null;
+
+		try {
+			try {
+				json.put("passhash", Crypto.LoginKey(socket, json.getString("passhash")));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
+		} catch (SocketException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for sending data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			json2 = new JSONObject();
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring sending data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		}
+		if (error) {
+			socket.disconnect();
+			callback.sendMessage(Message.obtain(callback, fid, json2));
+		}
+	}
+
 	private boolean relogin()
 	{
 		if (socket.getIsLoggedIn())
@@ -189,6 +230,9 @@ class NetworkClient implements Runnable
 	{
 		JSONObject json2 = null;
 
+		if (fid == LOGIN)
+			login_setup();
+
 		if (error || (loginRequired && !relogin())) {
 			error = false;
 			socket.disconnect();
@@ -285,42 +329,19 @@ class NetworkClient implements Runnable
 		fid = LOGIN;
 		loginRequired = false;
 
-		JSONObject json2 = null;
 		json = new JSONObject();
 
 		try {
-			try {
-				json.put("request", "login");
-				json.put("username", username);
-				json.put("passhash", Crypto.LoginKey(socket, password));
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
-			}
-		} catch (SocketException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		}
-		if (error) {
-			socket.disconnect();
-			callback.sendMessage(Message.obtain(callback, fid, json2));
+			json.put("request", "login");
+			json.put("username", username);
+
+			// temporarily save password to passhash
+			// login_setup will finish the creation of
+			// the json in a new thread.
+			json.put("passhash", password);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 

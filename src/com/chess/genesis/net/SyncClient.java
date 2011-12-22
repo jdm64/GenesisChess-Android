@@ -174,8 +174,9 @@ class SyncClient implements Runnable
 		for (int i = 0; i < ids.length(); i++) {
 			if (error)
 				return;
-			net.game_status(ids.getString(i));
-			net.run();
+			NetworkClient nc = new NetworkClient(context, handle);
+			nc.game_status(ids.getString(i));
+			(new Thread(net)).start();
 
 			lock++;
 		}
@@ -197,8 +198,9 @@ class SyncClient implements Runnable
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
-			net.game_info(list_need.get(i));
-			net.run();
+			NetworkClient nc = new NetworkClient(context, handle);
+			nc.game_info(list_need.get(i));
+			(new Thread(nc)).start();
 
 			lock++;
 		}
@@ -224,8 +226,9 @@ class SyncClient implements Runnable
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
-			net.game_data(list_need.get(i));
-			net.run();
+			NetworkClient nc = new NetworkClient(context, handle);
+			nc.game_data(list_need.get(i));
+			(new Thread(nc)).start();
 
 			lock++;
 		}
