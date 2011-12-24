@@ -216,7 +216,7 @@ class RegGameState extends GameState
 			oppType = Enums.HUMAN_OPPONENT;
 			cpu = null;
 			net = new NetworkClient(context, handle);
-			ycol = settings.getString("username").equals(settings.getString("white"))? 1 : -1;
+			ycol = settings.getString("username").equals(settings.getString("white"))? Piece.WHITE : Piece.BLACK;
 			break;
 		}
 
