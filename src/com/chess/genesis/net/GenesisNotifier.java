@@ -58,7 +58,7 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 			switch (msg.what) {
-			case NetworkClient.SYNC_LIST:
+			case NetworkClient.SYNC_GAMES:
 				NewMove(json);
 				break;
 			case NetworkClient.SYNC_MSGS:
@@ -218,7 +218,7 @@ public class GenesisNotifier extends Service implements Runnable
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
 			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
 		} else {
-			net.sync_list(gtime);
+			net.sync_games(gtime);
 			net.run();
 			trylock();
 

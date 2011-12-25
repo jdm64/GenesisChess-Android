@@ -63,7 +63,7 @@ class SyncClient implements Runnable
 				else
 					sync_archive(json);
 				break;
-			case NetworkClient.SYNC_LIST:
+			case NetworkClient.SYNC_GAMES:
 				sync_recent(json);
 				break;
 			case NetworkClient.SYNC_MSGS:
@@ -125,7 +125,7 @@ class SyncClient implements Runnable
 			final long mtime = pref.getLong("lastmsgsync", 0);
 			final long gtime = pref.getLong("lastgamesync", 0);
 
-			net.sync_list(gtime);
+			net.sync_games(gtime);
 			net.run();
 			trylock();
 
