@@ -237,7 +237,10 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			getMenuInflater().inflate(R.menu.options_game_online, menu);
+			if (Integer.valueOf(settings.getString("ply")) > 58)
+				getMenuInflater().inflate(R.menu.options_game_online_draw, menu);
+			else
+				getMenuInflater().inflate(R.menu.options_game_online, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
 			getMenuInflater().inflate(R.menu.options_game_archive, menu);
@@ -261,6 +264,9 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			break;
 		case R.id.rematch:
 			gamestate.rematch();
+			break;
+		case R.id.draw:
+			gamestate.draw();
 			break;
 		case R.id.cpu_time:
 			gamestate.setCpuTime();

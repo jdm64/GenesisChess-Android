@@ -62,4 +62,13 @@
 	<string name="benchmark">
 		Click \"Run\" to start the single threaded benchmark of your CPU. It will run for about 5 seconds per game type.
 	</string>
+	<string name="draw_accept">
+		Your opponent has requested a draw. Do you want to accept or decline the draw?
+	</string>
+	<string name="draw_send">
+		Are you sure you want to send a request for a draw to your opponent?
+	</string>
+	<string name="draw_pending">
+		Your opponent has neither accepted or declined your offer of a draw.
+	</string>
 </resources>

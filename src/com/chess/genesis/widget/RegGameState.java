@@ -44,6 +44,7 @@ class RegGameState extends GameState
 				currentMove();
 				applyMove(move, true, true);
 				break;
+			case NetworkClient.GAME_DRAW:
 			case NetworkClient.SUBMIT_MOVE:
 				JSONObject json = (JSONObject) msg.obj;
 
@@ -53,7 +54,7 @@ class RegGameState extends GameState
 					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
-				progress.setText(json.getString("reason"));
+				progress.setText("Checking Game Status");
 
 				net.game_status(settings.getString("gameid"));
 				(new Thread(net)).start();
@@ -76,6 +77,14 @@ class RegGameState extends GameState
 				net.idle_resign(settings.getString("gameid"));
 				(new Thread(net)).start();
 				break;
+			case DrawDialog.MSG:
+			case AcceptDrawDialog.MSG:
+				String value = (String) msg.obj;
+				progress.setText("Sending Draw");
+
+				net.game_draw(settings.getString("gameid"), value);
+				(new Thread(net)).start();
+				break;
 			case NetworkClient.RESIGN_GAME:
 			case NetworkClient.IDLE_RESIGN:
 				json = (JSONObject) msg.obj;
@@ -91,6 +100,10 @@ class RegGameState extends GameState
 				(new Thread(net)).start();
 				break;
 			case NetworkClient.NUDGE_GAME:
+				json = (JSONObject) msg.obj;
+
+				if (json.getString("result").equals("error"))
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				progress.remove();
 				break;
 			case NetworkClient.GAME_STATUS:

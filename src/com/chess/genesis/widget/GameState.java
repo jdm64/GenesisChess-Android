@@ -33,6 +33,11 @@ abstract class GameState
 			return;
 		case Enums.ONLINE_GAME:
 			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
+				// check for draw offers and pending draws
+				if (Integer.valueOf(settings.getString("drawoffer")) * ycol < 0)
+					(new AcceptDrawDialog(context, handle)).show();
+				else if (Integer.valueOf(settings.getString("drawoffer")) * ycol > 0)
+					(new PendingDrawDialog(context)).show();
 				return;
 			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
 			try {
@@ -109,6 +114,11 @@ abstract class GameState
 		final String opp = settings.getString("username").equals(settings.getString("white"))?
 			settings.getString("black") : settings.getString("white");
 		(new RematchConfirm(context, handle, opp)).show();
+	}
+
+	public void draw()
+	{
+		(new DrawDialog(context, handle)).show();
 	}
 
 	public abstract void boardClick(final View v);
