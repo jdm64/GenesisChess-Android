@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class DatabaseOpenHelper extends SQLiteOpenHelper
 {
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String DATABASE_NAME = "gamedata";
 
 	private static final String LOCAL_GAME_CREATE_TABLE =
@@ -34,7 +34,8 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		"black TEXT," +
 		"zfen TEXT DEFAULT ' '," +
 		"history TEXT DEFAULT ' '," +
-		"idle INTEGER DEFAULT 0);";
+		"idle INTEGER DEFAULT 0," +
+		"drawoffer INTEGER DEFAULT 0);";
 
 	private static final String ARCHIVE_GAME_CREATE_TABLE =
 		"CREATE TABLE archivegames (" +
@@ -87,6 +88,9 @@ class DatabaseOpenHelper extends SQLiteOpenHelper
 		}
 		if (oldVersion < 3) {
 			db.execSQL("ALTER TABLE onlinegames ADD COLUMN idle INTEGER DEFAULT 0;");
+		}
+		if (oldVersion < 4) {
+			db.execSQL("ALTER TABLE onlinegames ADD COLUMN drawoffer INTEGER DEFAULT 0;");
 		}
 	}
 }
