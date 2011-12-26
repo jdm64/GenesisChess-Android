@@ -79,7 +79,7 @@ class RegGameState extends GameState
 				break;
 			case DrawDialog.MSG:
 			case AcceptDrawDialog.MSG:
-				String value = (String) msg.obj;
+				final String value = (String) msg.obj;
 				progress.setText("Sending Draw");
 
 				net.game_draw(settings.getString("gameid"), value);

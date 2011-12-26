@@ -74,7 +74,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
-		ImageView button = (ImageView) findViewById(R.id.topbar);
+		final ImageView button = (ImageView) findViewById(R.id.topbar);
 		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
 
