@@ -27,11 +27,11 @@ android:versionName="@string/version">
 		<activity android:name="Login" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
 		<activity android:name="Register" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
 		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
-		<activity android:name="Settings" android:launchMode="singleTask"/>
-		<activity android:name="UserStats"/>
-		<activity android:name="RegGame"/>
-		<activity android:name="GenGame"/>
-		<activity android:name="MsgBox"/>
+		<activity android:name="Settings" android:configChanges="orientation" android:launchMode="singleTask"/>
+		<activity android:name="UserStats" android:configChanges="orientation"/>
+		<activity android:name="RegGame" android:configChanges="orientation"/>
+		<activity android:name="GenGame" android:configChanges="orientation"/>
+		<activity android:name="MsgBox" android:configChanges="orientation"/>
 
 		<service android:name="GenesisNotifier" android:enabled="true"/>
 		<receiver android:name="GenesisAlarm">
