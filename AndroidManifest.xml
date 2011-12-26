@@ -22,16 +22,16 @@ android:versionName="@string/version">
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name="GameList" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
-		<activity android:name="OnlineGameList" android:configChanges="orientation" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
-		<activity android:name="Login" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
-		<activity android:name="Register" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask"/>
-		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
+		<activity android:name="OnlineGameList" android:configChanges="orientation" android:launchMode="singleTask"/>
 		<activity android:name="Settings" android:configChanges="orientation" android:launchMode="singleTask"/>
+		<activity android:name="GameList" android:launchMode="singleTask"/>
+		<activity android:name="Login" android:launchMode="singleTask"/>
+		<activity android:name="Register" android:launchMode="singleTask"/>
 		<activity android:name="UserStats" android:configChanges="orientation"/>
 		<activity android:name="RegGame" android:configChanges="orientation"/>
 		<activity android:name="GenGame" android:configChanges="orientation"/>
 		<activity android:name="MsgBox" android:configChanges="orientation"/>
+		<activity android:name="SubmitMove" android:theme="@style/NoDimDialog"/>
 
 		<service android:name="GenesisNotifier" android:enabled="true"/>
 		<receiver android:name="GenesisAlarm">
