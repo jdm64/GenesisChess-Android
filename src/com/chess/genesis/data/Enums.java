@@ -40,6 +40,7 @@ final class Enums
 	public final static int BLACKRESIGN = 7;
 	public final static int WHITEIDLE = 8;
 	public final static int BLACKIDLE = 9;
+	public final static int DRAW = 10;
 
 	// Turn Types
 	public final static int THEIR_TURN = 0;
@@ -140,6 +141,8 @@ final class Enums
 			return WHITEIDLE;
 		if (gamestatus.equals("blackidle"))
 			return BLACKIDLE;
+		if (gamestatus.equals("draw"))
+			return DRAW;
 		throw new RuntimeException("unknown gamestatus: " + gamestatus);
 	}
 }
