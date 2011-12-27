@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 final class NetActive
 {
-	private static AtomicInteger active = new AtomicInteger(0);
+	private final static AtomicInteger active = new AtomicInteger(0);
 
 	private NetActive()
 	{
