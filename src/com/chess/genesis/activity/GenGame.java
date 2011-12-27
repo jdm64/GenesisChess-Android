@@ -29,7 +29,6 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -50,6 +49,15 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 
 		// must be called after setContentView
 		gamestate = new GenGameState(this, settings);
+
+		// initialize the board & place piece layouts
+		final BoardLayout board = (BoardLayout) findViewById(R.id.board_layout);
+		board.init(this, gamestate);
+		final PlaceLayout place = (PlaceLayout) findViewById(R.id.place_layout);
+		place.init(gamestate);
+
+		// init board pieces
+		gamestate.setBoard();
 
 		// set click listeners
 		ImageView button = (ImageView) findViewById((type != Enums.LOCAL_GAME)? R.id.topbar_genesis : R.id.topbar);
@@ -291,7 +299,7 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 
 	public void displaySubmitMove()
 	{
-		startActivityForResult(new Intent(self, SubmitMove.class), 1);
+		startActivityForResult(new Intent(this, SubmitMove.class), 1);
 	}
 
 	public void reset()

@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener, OnTouchListener, CallBackPreference.CallBack
 {
-	private Context self;
+	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private SharedPreferences pref;
@@ -37,7 +37,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		try {
 			if (json.getString("result").equals("error")) {
 				progress.remove();
-				Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return;
 			}
 			switch (msg.what) {
@@ -52,7 +52,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 				progress.remove();
 				break;
 			case SyncClient.MSG:
-				final GameDataDB db = new GameDataDB(self);
+				final GameDataDB db = new GameDataDB(context);
 				db.recalcYourTurn();
 				db.close();
 				progress.remove();
@@ -69,7 +69,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

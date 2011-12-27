@@ -12,6 +12,8 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
+	private GameState gamestate;
+
 	public PlaceLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -75,8 +77,13 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 		}
 	}
 
+	public void init(final GameState _gamestate)
+	{
+		gamestate = _gamestate;
+	}
+
 	public void onClick(final View v)
 	{
-		GameState.self.placeClick(v);
+		gamestate.placeClick(v);
 	}
 }

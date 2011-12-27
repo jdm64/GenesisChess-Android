@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
-	private Context self;
+	private Context context;
 
 	private final Handler handle = new Handler()
 	{
@@ -32,7 +32,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		{
 			switch (msg.what) {
 			case LogoutConfirm.MSG:
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
 				pref.putBoolean("isLoggedIn", false);
 				pref.putString("username", "!error!");
@@ -51,7 +51,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// run upgrade
 		UpgradeHandler.run(this);

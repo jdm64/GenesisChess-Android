@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 public class Login extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
 {
-	private Context self;
+	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
 
@@ -38,7 +38,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 			try {
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				switch (msg.what) {
@@ -51,7 +51,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					txt = (EditText) findViewById(R.id.password);
 					final String password = txt.getText().toString();
 
-					Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 					pref.putBoolean("isLoggedIn", true);
 					pref.putString("username", username);
 					pref.putString("passhash", password);
@@ -59,15 +59,15 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 					SocketClient.getInstance().setIsLoggedIn(true);
 
-					final SyncClient sync = new SyncClient(self, handle);
+					final SyncClient sync = new SyncClient(context, handle);
 					sync.setSyncType(SyncClient.FULL_SYNC);
 					(new Thread(sync)).start();
 					break;
 				case SyncClient.MSG:
 					// start background notifier
-					startService(new Intent(self, GenesisNotifier.class));
+					startService(new Intent(context, GenesisNotifier.class));
 
-					final GameDataDB db = new GameDataDB(self);
+					final GameDataDB db = new GameDataDB(context);
 					db.recalcYourTurn();
 					db.close();
 
@@ -76,7 +76,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 					finish();
 					break;
 				case LogoutConfirm.MSG:
-					pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 
 					pref.putBoolean("isLoggedIn", false);
 					pref.putString("username", "!error!");
@@ -103,7 +103,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

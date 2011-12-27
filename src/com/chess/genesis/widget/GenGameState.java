@@ -25,7 +25,7 @@ class GenGameState extends GameState
 		try {
 			switch (msg.what) {
 			case CpuTimeDialog.MSG:
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(activity).edit();
 				pref.putInt("cputime", (Integer) msg.obj);
 				pref.commit();
 				cpu.setTime((Integer) msg.obj);
@@ -50,7 +50,7 @@ class GenGameState extends GameState
 				if (json.getString("result").equals("error")) {
 					undoMove();
 					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				progress.setText("Checking Game Status");
@@ -90,7 +90,7 @@ class GenGameState extends GameState
 
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				progress.setText("Resignation Sent");
@@ -102,7 +102,7 @@ class GenGameState extends GameState
 				json = (JSONObject) msg.obj;
 
 				if (json.getString("result").equals("error"))
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				progress.remove();
 				break;
 			case NetworkClient.GAME_STATUS:
@@ -110,7 +110,7 @@ class GenGameState extends GameState
 
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				final String history = json.getString("history");
@@ -118,10 +118,10 @@ class GenGameState extends GameState
 
 				settings.putString("status", String.valueOf(status));
 
-				final GameDataDB db = new GameDataDB(context);
+				final GameDataDB db = new GameDataDB(activity);
 				db.updateOnlineGame(json);
 				db.close();
-				GenesisNotifier.clearNotification(context, GenesisNotifier.YOURTURN_NOTE);
+				GenesisNotifier.clearNotification(activity, GenesisNotifier.YOURTURN_NOTE);
 
 				applyRemoteMove(history);
 				if (status != Enums.ACTIVE) {
@@ -136,7 +136,7 @@ class GenGameState extends GameState
 						json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 						json.put("gameid", settings.getString("gameid"));
 
-						(new GameStatsDialog(context, json)).show();
+						(new GameStatsDialog(activity, json)).show();
 						return;
 					}
 					progress.setText("Retrieving Score");
@@ -153,7 +153,7 @@ class GenGameState extends GameState
 
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				progress.setText("Score Loaded");
@@ -167,7 +167,7 @@ class GenGameState extends GameState
 				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
 				json.put("gameid", settings.getString("gameid"));
 
-				(new GameStatsDialog(context, json)).show();
+				(new GameStatsDialog(activity, json)).show();
 				break;
 			case RematchConfirm.MSG:
 				final Bundle data = (Bundle) msg.obj;
@@ -185,7 +185,7 @@ class GenGameState extends GameState
 
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				progress.setText(json.getString("reason"));
@@ -199,23 +199,22 @@ class GenGameState extends GameState
 		}
 	};
 
-	public GenGameState(final Context _context, final Bundle _settings)
+	public GenGameState(final Game _activity, final Bundle _settings)
 	{
-		self = this;
-		context = _context;
+		activity = _activity;
 		settings = _settings;
 		handle = xhandle;
 
 		callstack = new IntArray();
 		history = new ObjectArray<GenMove>();
 		board = new GenBoard();
-		progress = new ProgressMsg(context);
+		progress = new ProgressMsg(activity);
 
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 			cpu = new GenEngine(handle);
 			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
 			oppType = Integer.valueOf(settings.getString("opponent"));
@@ -226,14 +225,13 @@ class GenGameState extends GameState
 		case Enums.ARCHIVE_GAME:
 			oppType = Enums.HUMAN_OPPONENT;
 			cpu = null;
-			net = new NetworkClient(context, handle);
+			net = new NetworkClient(activity, handle);
 			ycol = settings.getString("username").equals(settings.getString("white"))? Piece.WHITE : Piece.BLACK;
 			break;
 		}
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
-			setStm();
 			check_endgame();
 			return;
 		}
@@ -249,7 +247,6 @@ class GenGameState extends GameState
 			board.make(move);
 			hindex++;
 		}
-		setBoard();
 		check_endgame();
 	}
 
@@ -268,35 +265,35 @@ class GenGameState extends GameState
 		}
 	}
 
-	private void setBoard()
+	public void setBoard()
 	{
 		// set place piece counts
 		final int[] pieces = board.getPieceCounts(Piece.PLACEABLE);
 		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) Game.self.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			final BoardButton button = (BoardButton) Game.self.findViewById(i);
+			final BoardButton button = (BoardButton) activity.findViewById(i);
 			button.setPiece(squares[i]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
-			final BoardButton to = (BoardButton) Game.self.findViewById(history.top().to);
+			final BoardButton to = (BoardButton) activity.findViewById(history.top().to);
 			to.setLast(true);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -345,8 +342,8 @@ class GenGameState extends GameState
 			bstr = settings.getString("black");
 		}
 
-		final TabText white = (TabText) Game.self.findViewById(R.id.white_name);
-		final TabText black = (TabText) Game.self.findViewById(R.id.black_name);
+		final TabText white = (TabText) activity.findViewById(R.id.white_name);
+		final TabText black = (TabText) activity.findViewById(R.id.black_name);
 
 		if (board.getStm() == Piece.WHITE) {
 			white.setText(wstr + think);
@@ -401,7 +398,7 @@ class GenGameState extends GameState
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			Game.self.displaySubmitMove();
+			activity.displaySubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
@@ -418,7 +415,7 @@ class GenGameState extends GameState
 
 		// must be on most current move to apply it
 		currentMove();
-		Toast.makeText(context, "New move loaded...", Toast.LENGTH_LONG).show();
+		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
 
 		final GenMove move = new GenMove();
 		move.parse(movehistory[movehistory.length - 1]);
@@ -433,7 +430,7 @@ class GenGameState extends GameState
 		callstack.clear();
 		history.clear();
 		board.reset();
-		Game.self.reset();
+		activity.reset();
 	}
 
 	public void backMove()
@@ -524,28 +521,28 @@ class GenGameState extends GameState
 	{
 		if (hindex >= 0) {
 			// undo last move highlight
-			final BoardButton to = (BoardButton) Game.self.findViewById(history.get(hindex).to);
+			final BoardButton to = (BoardButton) activity.findViewById(history.get(hindex).to);
 			to.setLast(false);
 
 			if (hindex > 1) {
 				// legal move always ends with king not in check
 				final int king = board.kingIndex(board.getStm());
-				final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+				final BoardButton kingI = (BoardButton) activity.findViewById(king);
 				kingI.setCheck(false);
 			}
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
-			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
+			final PlaceButton from = (PlaceButton) activity.findViewById(GenBoard.pieceType[move.index] + 100);
+			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			from.setHighlight(false);
 			from.minusPiece();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 		} else {
-			final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
-			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
+			final BoardButton from = (BoardButton) activity.findViewById(move.from);
+			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
 			to.setLast(true);
@@ -563,13 +560,13 @@ class GenGameState extends GameState
 				history.resize(hindex);
 			history.push(move);
 			if (localmove)
-				save(Game.self.game_board.getContext(), false);
+				save(activity, false);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -580,20 +577,20 @@ class GenGameState extends GameState
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
 			kingI.setCheck(false);
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) Game.self.findViewById(GenBoard.pieceType[move.index] + 100);
-			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
+			final PlaceButton from = (PlaceButton) activity.findViewById(GenBoard.pieceType[move.index] + 100);
+			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			to.setLast(false);
 			to.setPiece(0);
 			from.plusPiece();
 		} else {
-			final BoardButton from = (BoardButton) Game.self.findViewById(move.from);
-			final BoardButton to = (BoardButton) Game.self.findViewById(move.to);
+			final BoardButton from = (BoardButton) activity.findViewById(move.from);
+			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			from.setPiece(to.getPiece());
 
@@ -609,13 +606,13 @@ class GenGameState extends GameState
 
 		if (hindex >= 0) {
 			// redo last move highlight
-			final BoardButton hto = (BoardButton) Game.self.findViewById(history.get(hindex).to);
+			final BoardButton hto = (BoardButton) activity.findViewById(history.get(hindex).to);
 			hto.setLast(true);
 		}
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) Game.self.findViewById(king);
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
 			kingI.setCheck(true);
 		}
 		setStm();
@@ -646,7 +643,7 @@ class GenGameState extends GameState
 			if (to.getPiece() * col < 0) {
 				return;
 			} else if (to.getPiece() * col > 0) {
-				final PlaceButton from = (PlaceButton) Game.self.findViewById(callstack.get(0));
+				final PlaceButton from = (PlaceButton) activity.findViewById(callstack.get(0));
 				from.setHighlight(false);
 				to.setHighlight(true);
 				callstack.set(0, index);
@@ -654,7 +651,7 @@ class GenGameState extends GameState
 			}
 		} else {
 		// piece move action
-			final BoardButton from = (BoardButton) Game.self.findViewById(callstack.get(0));
+			final BoardButton from = (BoardButton) activity.findViewById(callstack.get(0));
 			// capturing your own piece (switch to piece)
 			if (from.getPiece() * to.getPiece() > 0) {
 				from.setHighlight(false);
@@ -682,7 +679,7 @@ class GenGameState extends GameState
 			from.setHighlight(true);
 		} else if (callstack.get(0) < 64) {
 		// switching from board to place piece
-			final BoardButton to = (BoardButton) Game.self.findViewById(callstack.get(0));
+			final BoardButton to = (BoardButton) activity.findViewById(callstack.get(0));
 			to.setHighlight(false);
 			callstack.set(0, ptype + 100);
 			from.setHighlight(true);
@@ -692,11 +689,11 @@ class GenGameState extends GameState
 			from.setHighlight(false);
 		} else {
 		// switching to another place piece
-			final PlaceButton fromold = (PlaceButton) Game.self.findViewById(callstack.get(0));
+			final PlaceButton fromold = (PlaceButton) activity.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
 			callstack.set(0, ptype + 100);
 			from.setHighlight(true);
 		}
-		Game.self.game_board.flip();
+		activity.game_board.flip();
 	}
 }

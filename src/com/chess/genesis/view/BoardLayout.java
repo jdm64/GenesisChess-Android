@@ -9,6 +9,9 @@ import android.widget.TableRow;
 
 class BoardLayout extends TableLayout implements OnClickListener
 {
+	private Game game;
+	private GameState gamestate;
+
 	public BoardLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
@@ -16,12 +19,19 @@ class BoardLayout extends TableLayout implements OnClickListener
 		setShrinkAllColumns(true);
 		setStretchAllColumns(true);
 
-		if (Game.self.viewAsBlack) {
+	}
+
+	public void init(final Game _game, final GameState _gamestate)
+	{
+		game = _game;
+		gamestate = _gamestate;
+
+		if (game.viewAsBlack) {
 			for (int i = 7; i >= 0; i--) {
-				final TableRow row = new TableRow(context);
+				final TableRow row = new TableRow(game);
 
 				for (int j = 7; j >= 0; j--) {
-					final BoardButton button = new BoardButton(context, i * 8 + j);
+					final BoardButton button = new BoardButton(game, i * 8 + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
@@ -29,10 +39,10 @@ class BoardLayout extends TableLayout implements OnClickListener
 			}
 		} else {
 			for (int i = 0; i < 8; i++) {
-				final TableRow row = new TableRow(context);
+				final TableRow row = new TableRow(game);
 
 				for (int j = 0; j < 8; j++) {
-					final BoardButton button = new BoardButton(context, i * 8 + j);
+					final BoardButton button = new BoardButton(game, i * 8 + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
@@ -43,6 +53,6 @@ class BoardLayout extends TableLayout implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		GameState.self.boardClick(v);
+		gamestate.boardClick(v);
 	}
 }

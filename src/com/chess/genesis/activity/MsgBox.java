@@ -30,7 +30,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	private ProgressMsg progress;
 	private Bundle settings;
 	private String gameid;
-	private Context self;
+	private Context context;
 
 	private final Handler handle = new Handler()
 	{
@@ -41,7 +41,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 			try {
 				if (json.getString("result").equals("error")) {
 					progress.remove();
-					Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return;
 				}
 				switch (msg.what) {
@@ -55,7 +55,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 					saveMsgs(json);
 					msglist_adapter.update();
 					msglist_view.setSelection(msglist_view.getCount() - 1);
-					GenesisNotifier.clearNotification(self, GenesisNotifier.NEWMGS_NOTE);
+					GenesisNotifier.clearNotification(context, GenesisNotifier.NEWMGS_NOTE);
 					progress.dismiss();
 					break;
 				}
@@ -70,7 +70,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -207,7 +207,7 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	private void updateMsgList()
 	{
 		progress.setText("Updating Messages");
-		final GameDataDB db = new GameDataDB(self);
+		final GameDataDB db = new GameDataDB(this);
 		net.sync_msgs(db.getNewestMsg());
 		(new Thread(net)).start();
 		db.close();

@@ -29,9 +29,8 @@ import org.json.JSONObject;
 
 public class GameList extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
-	public Context self;
-	public GameListAdapter gamelist_adapter;
-
+	private Context context;
+	private GameListAdapter gamelist_adapter;
 	private Bundle settings;
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -59,7 +58,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				(new Thread(net)).start();
 				break;
 			case NewLocalGameDialog.MSG:
-				final GameDataDB db = new GameDataDB(self);
+				final GameDataDB db = new GameDataDB(context);
 				final Bundle bundle = (Bundle) msg.obj;
 
 				final int gametype2 = bundle.getInt("gametype");
@@ -70,9 +69,9 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 
 				final Intent intent;
 				if (gametype2 == Enums.GENESIS_CHESS)
-					intent = new Intent(self, GenGame.class);
+					intent = new Intent(context, GenGame.class);
 				else
-					intent = new Intent(self, RegGame.class);
+					intent = new Intent(context, RegGame.class);
 				intent.putExtras(db.newLocalGame(gamename, gametype2, gameopp));
 				intent.putExtras(settings);
 				db.close();
@@ -84,7 +83,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
-						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
 					progress.remove();
@@ -101,7 +100,7 @@ public class GameList extends Activity implements OnClickListener, OnLongClickLi
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// Set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

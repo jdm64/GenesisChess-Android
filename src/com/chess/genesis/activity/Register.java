@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class Register extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
 {
-	private Context self;
+	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
 
@@ -34,11 +34,11 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
-						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
 					progress.setText("Registration Successfull");
-					(new RegisterActivation(self, handle)).show();
+					(new RegisterActivation(context, handle)).show();
 				} catch (JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -62,7 +62,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

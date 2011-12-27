@@ -39,7 +39,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 	private final static int YOUR_PAGE = 1;
 	private final static int ARCHIVE_PAGE = 2;
 
-	private Context self;
+	private Context context;
 	private GameListAdapter[] gamelistadapter_arr;
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -58,7 +58,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				Bundle data = (Bundle) msg.obj;
 
 				if (data.getInt("opponent") == Enums.INVITE) {
-					(new InviteOptionsDialog(self, handle, data)).show();
+					(new InviteOptionsDialog(context, handle, data)).show();
 					return;
 				}
 				progress.setText("Sending Newgame Request");
@@ -101,13 +101,13 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
-						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
 					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
 						progress.setText("Checking Game Pool");
 						OnlineGameList.this.updateGameListAdapters();
-						GenesisNotifier.clearNotification(self, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
+						GenesisNotifier.clearNotification(context, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
 						net.pool_info();
 						(new Thread(net)).start();
 					} else {
@@ -123,11 +123,11 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
-						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
 					final JSONArray games = json.getJSONArray("games");
-					final Editor pref = PreferenceManager.getDefaultSharedPreferences(self).edit();
+					final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 					pref.putString("poolinfo", games.toString());
 					pref.commit();
 
@@ -145,11 +145,11 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				try {
 					if (json.getString("result").equals("error")) {
 						progress.remove();
-						Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 						return;
 					}
 					progress.setText("Updating Game List");
-					final SyncClient sync = new SyncClient(self, handle);
+					final SyncClient sync = new SyncClient(context, handle);
 					(new Thread(sync)).start();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -184,12 +184,12 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 				type = Enums.ARCHIVE_GAME;
 				break;
 			}
-			final GameListAdapter list = new GameListAdapter(self, type, yourmove);
+			final GameListAdapter list = new GameListAdapter(context, type, yourmove);
 			gamelistadapter_arr[position] = list;
 
 			final FrameLayout layout = (FrameLayout) getLayoutInflater().inflate(R.layout.gamelist_listview, null);
 			final ListView listview = (ListView) layout.getChildAt(0);
-			final View empty = list.getEmptyView(self);
+			final View empty = list.getEmptyView(context);
 
 			layout.addView(empty, 1);
 			listview.setEmptyView(empty);
@@ -241,7 +241,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 		gamelistadapter_arr = new GameListAdapter[3];
 
 		// Set only portrait
