@@ -321,12 +321,6 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
-		case R.id.topbar:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar);
-			break;
 		case R.id.topbar_genesis:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);

@@ -150,13 +150,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 
 		switch (v.getId()) {
 		case R.id.local_game:
-			bundle = new Bundle();
-			bundle.putInt("type", Enums.LOCAL_GAME);
-
-			intent = new Intent(this, GameListLocal.class);
-			intent.putExtras(bundle);
-
-			startActivity(intent);
+			startActivity(new Intent(this, GameListLocal.class));
 			break;
 		case R.id.online_game:
 			if (!pref.getBoolean("isLoggedIn", false)) {
