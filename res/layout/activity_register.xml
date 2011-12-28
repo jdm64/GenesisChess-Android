@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<com.chess.genesis.MyImageView
-	android:id="@+id/topbar"
-	style="@style/FillWidth"
-	android:src="@drawable/topbar"/>
-
+	<include
+	layout="@layout/include_topbar"/>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/username_header"
 	android:layout_below="@id/topbar"
@@ -23,7 +20,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:inputType="textCapWords"
 	android:singleLine="true"
 	android:maxLength="16"/>
-
 	<com.chess.genesis.RobotoText
 	android:id="@+id/password_header"
 	android:layout_below="@id/username"
@@ -40,7 +36,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:inputType="textPassword"
 	android:singleLine="true"
 	android:maxLength="22"/>
-
 	<com.chess.genesis.RobotoText
 	android:id="@+id/password2_header"
 	android:layout_below="@id/password"
@@ -57,7 +52,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:inputType="textPassword"
 	android:singleLine="true"
 	android:maxLength="22"/>
-
 	<com.chess.genesis.RobotoText
 	android:id="@+id/email_header"
 	android:layout_below="@id/password2"
@@ -74,7 +68,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:singleLine="true"
 	android:maxLength="36"
 	android:inputType="textEmailAddress"/>
-
 	<com.chess.genesis.MyImageView
 	android:id="@+id/register"
 	android:layout_width="120dp"
@@ -83,7 +76,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_margin="3dp"
 	android:paddingRight="15dp"
 	android:src="@drawable/rsubmit"/>
-
 	<com.chess.genesis.RobotoText
 	android:layout_above="@id/botbar"
 	android:layout_alignParentLeft="true"
@@ -92,10 +84,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginBottom="3dp"
 	android:textColor="#f00"
 	android:text="@string/register_notice"/>
-
-	<com.chess.genesis.MyImageView
-	android:id="@+id/botbar"
-	style="@style/FillWidth"
-	android:layout_alignParentBottom="true"
-	android:src="@drawable/botbar"/>
+	<include
+	layout="@layout/include_botbar"
+	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

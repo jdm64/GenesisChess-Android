@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<com.chess.genesis.MyImageView
+	android:id="@+id/place_piece"
+	style="@style/FillWidth"
+	android:layout_weight="243"
+	android:src="@drawable/place_piece"/>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/backwards"
+	style="@style/FillWidth"
+	android:layout_weight="398"
+	android:src="@drawable/backwards"/>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/forwards"
+	style="@style/FillWidth"
+	android:layout_weight="398"
+	android:src="@drawable/forwards"/>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/current"
+	style="@style/FillWidth"
+	android:layout_weight="398"
+	android:src="@drawable/current"/>
+</TableRow>

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<com.chess.genesis.MyImageView
-	android:id="@+id/topbar"
-	style="@style/FillWidth"
-	android:src="@drawable/topbar"/>
+	<include
+	layout="@layout/include_topbar"/>
 	<ListView
 	android:id="@android:id/list"
 	style="@style/FillWidth"
 	android:layout_below="@id/topbar"
 	android:layout_above="@id/botbar"/>
-	<com.chess.genesis.MyImageView
-	android:id="@+id/botbar"
-	android:layout_alignParentBottom="true"
-	android:src="@drawable/botbar"/>
+	<include
+	layout="@layout/include_botbar"
+	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

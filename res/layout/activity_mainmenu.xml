@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<com.chess.genesis.MyImageView
-	android:id="@+id/topbar"
-	style="@style/FillWidth"
-	android:src="@drawable/topbar"/>
+	<include
+	layout="@layout/include_topbar"/>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/welcome"
 	android:layout_below="@id/topbar"
@@ -121,9 +119,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:paddingRight="3dp"
 	android:textSize="10dp"
 	android:text="@string/version"/>
-	<com.chess.genesis.MyImageView
-	android:id="@+id/botbar"
-	style="@style/FillWidth"
-	android:layout_alignParentBottom="true"
-	android:src="@drawable/botbar"/>
+	<include
+	layout="@layout/include_botbar"
+	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

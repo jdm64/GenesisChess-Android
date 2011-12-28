@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<TableRow
-	android:id="@+id/layout01">
-		<com.chess.genesis.MyImageView
-		android:id="@+id/topbar_genesis"
-		style="@style/FillWidth"
-		android:layout_weight="82"
-		android:src="@drawable/topbar_genesis"/>
-		<com.chess.genesis.MyImageView
-		android:id="@+id/topbar_plus"
-		style="@style/FillWidth"
-		android:layout_weight="408"
-		android:src="@drawable/topbar_plus"/>
-	</TableRow>
+	<include
+	layout="@layout/include_topbar_plus"/>
 	<FrameLayout
 	android:id="@+id/layout02"
 	style="@style/FillWidth"
-	android:layout_below="@id/layout01">
+	android:layout_below="@id/topbar_and_plus">
 		<com.chess.genesis.RobotoText
 		android:id="@+id/game_search"
 		style="@style/FillWidth"
@@ -36,8 +25,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/swipe_list"
 	android:layout_below="@id/swipetabs"
 	android:layout_above="@id/botbar"/>
-	<com.chess.genesis.MyImageView
-	android:id="@+id/botbar"
-	android:layout_alignParentBottom="true"
-	android:src="@drawable/botbar"/>
+	<include
+	layout="@layout/include_botbar"
+	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/topbar_and_plus">
+	<com.chess.genesis.MyImageView
+	android:id="@+id/topbar_genesis"
+	style="@style/FillWidth"
+	android:layout_weight="82"
+	android:src="@drawable/topbar_genesis"/>
+	<com.chess.genesis.MyImageView
+	android:id="@+id/topbar_plus"
+	style="@style/FillWidth"
+	android:layout_weight="408"
+	android:src="@drawable/topbar_plus"/>
+</TableRow>
