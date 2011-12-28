@@ -107,7 +107,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
 		if (resultCode == RESULT_OK)
-			startActivity(new Intent(this, OnlineGameList.class));
+			startActivity(new Intent(this, GameListOnline.class));
 	}
 
 	public boolean onTouch(final View v, final MotionEvent event)
@@ -153,7 +153,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			bundle = new Bundle();
 			bundle.putInt("type", Enums.LOCAL_GAME);
 
-			intent = new Intent(this, GameList.class);
+			intent = new Intent(this, GameListLocal.class);
 			intent.putExtras(bundle);
 
 			startActivity(intent);
@@ -163,7 +163,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 				startActivityForResult(new Intent(this, Login.class), 1);
 				return;
 			}
-			intent = new Intent(this, OnlineGameList.class);
+			intent = new Intent(this, GameListOnline.class);
 			startActivity(intent);
 			break;
 		case R.id.user_stats:

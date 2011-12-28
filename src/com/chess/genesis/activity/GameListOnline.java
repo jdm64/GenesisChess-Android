@@ -33,7 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class OnlineGameList extends FragmentActivity implements OnClickListener, OnLongClickListener, OnTouchListener, OnItemClickListener
+public class GameListOnline extends FragmentActivity implements OnClickListener, OnLongClickListener, OnTouchListener, OnItemClickListener
 {
 	private final static int THEIR_PAGE = 0;
 	private final static int YOUR_PAGE = 1;
@@ -106,7 +106,7 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 					}
 					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
 						progress.setText("Checking Game Pool");
-						OnlineGameList.this.updateGameListAdapters();
+						GameListOnline.this.updateGameListAdapters();
 						GenesisNotifier.clearNotification(context, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
 						net.pool_info();
 						(new Thread(net)).start();
@@ -194,8 +194,8 @@ public class OnlineGameList extends FragmentActivity implements OnClickListener,
 			layout.addView(empty, 1);
 			listview.setEmptyView(empty);
 			listview.setAdapter(list);
-			listview.setOnItemClickListener(OnlineGameList.this);
-			OnlineGameList.this.registerForContextMenu(listview);
+			listview.setOnItemClickListener(GameListOnline.this);
+			GameListOnline.this.registerForContextMenu(listview);
 
 			((ViewPager) collection).addView(layout, 0);
 

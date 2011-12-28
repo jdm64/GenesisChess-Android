@@ -152,7 +152,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 		setupNotification(note, id);
 
-		final Intent intent = new Intent(this, OnlineGameList.class);
+		final Intent intent = new Intent(this, GameListOnline.class);
 		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		final Context context = getApplicationContext();
 
