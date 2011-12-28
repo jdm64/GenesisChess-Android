@@ -125,7 +125,7 @@ class GameDataDB
 		final int idle = (json.has("idle")? 1:0) + (json.has("nudge")? 1:0) + (json.has("close")? 1:0);
 		final int drawoffer = json.has("drawoffer")? (json.getString("drawoffer").equals("white")? Piece.WHITE : Piece.BLACK) : 0;
 
-		final GameInfo info = new GameInfo(context, status, history, white, black);
+		final GameInfo info = new GameInfo(context, status, history, white, drawoffer);
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
 
@@ -165,7 +165,7 @@ class GameDataDB
 		final int drawoffer = json.has("drawoffer")? (json.getString("drawoffer").equals("white")? Piece.WHITE : Piece.BLACK) : 0;
 
 		final Bundle row = rowToBundle(cursor, 0);
-		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), row.getString("black"));
+		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), drawoffer);
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
 
@@ -231,7 +231,7 @@ class GameDataDB
 	{
 		final String username = getUsername();
 		final String[] data = {username, username};
-		final String query = "SELECT gameid, status, history, white, black FROM onlinegames WHERE white=? or black=?;";
+		final String query = "SELECT gameid, status, history, white, drawoffer FROM onlinegames WHERE white=? or black=?;";
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
@@ -241,9 +241,9 @@ class GameDataDB
 			final int status = cursor.getInt(1);
 			final String history = cursor.getString(2);
 			final String white = cursor.getString(3);
-			final String black = cursor.getString(4);
+			final int drawoffer = cursor.getInt(4);
 
-			final GameInfo info = new GameInfo(context, status, history, white, black);
+			final GameInfo info = new GameInfo(context, status, history, white, drawoffer);
 			final Object[] data2 = {info.getYourTurn(), gameid};
 
 			db.execSQL("UPDATE onlinegames SET yourturn=? WHERE gameid=?;", data2);

@@ -9,16 +9,16 @@ class GameInfo
 	private final Context context;
 	private final String history;
 	private final String white;
-	private final String black;
 	private final int status;
+	private final int draw;
 
-	public GameInfo(final Context _context, final int Status, final String History, final String White, final String Black)
+	public GameInfo(final Context _context, final int Status, final String History, final String White, final int Draw)
 	{
 		history = History;
 		white = White;
-		black = Black;
 		status = Status;
 		context = _context;
+		draw = Draw;
 	}
 
 	public int getPly()
@@ -34,7 +34,15 @@ class GameInfo
 
 		if (status != Enums.ACTIVE)
 			return Enums.YOUR_TURN;
-		final String color = (getPly() % 2 == 0)? white : black;
-		return color.equals(pref.getString("username", "!error!"))? Enums.YOUR_TURN : Enums.THEIR_TURN;
+
+		final int color = white.equals(pref.getString("username", "!error!"))? Piece.WHITE : Piece.BLACK;
+
+		if (draw != 0)
+			return (color * draw > 0)? Enums.THEIR_TURN : Enums.YOUR_TURN;
+		else if (status != Enums.ACTIVE)
+			return Enums.YOUR_TURN;
+
+		final int stm = (getPly() % 2 == 0)? Piece.WHITE : Piece.BLACK;
+		return (stm == color)? Enums.YOUR_TURN : Enums.THEIR_TURN;
 	}
 }
