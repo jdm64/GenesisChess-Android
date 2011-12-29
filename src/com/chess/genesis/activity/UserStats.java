@@ -82,10 +82,11 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 		txt.setText(settings.getString("username"));
 
 		final int[] list = new int[]{R.id.apsr, R.id.total_games, R.id.total_wins,
-			R.id.total_losses, R.id.total_resigns};
+			R.id.total_losses, R.id.total_resigns, R.id.total_ties};
 		for (int id : list) {
 			final TabText item = (TabText) findViewById(id);
 			item.setOnTouchListener(null);
+			item.setOnClickListener((View.OnClickListener) item.getParent());
 		}
 
 		progress.setText("Retrieving Stats");
