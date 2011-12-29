@@ -33,68 +33,81 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	{
 		public void handleMessage(final Message msg)
 		{
+			switch (msg.what) {
+			case NetworkClient.LOGIN:
+			case SyncClient.MSG:
+				handleNetwork(msg);
+				break;
+			case LogoutConfirm.MSG:
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+				pref.putBoolean("isLoggedIn", false);
+				pref.putString("username", "!error!");
+				pref.putString("passhash", "!error!");
+				pref.putLong("lastgamesync", 0);
+				pref.putLong("lastmsgsync", 0);
+				pref.commit();
+
+				EditText txt = (EditText) findViewById(R.id.username);
+				txt.setText("");
+
+				txt = (EditText) findViewById(R.id.password);
+				txt.setText("");
+				break;
+			case ProgressMsg.MSG:
+				finish();
+				break;
+			}
+		}
+
+		private void handleNetwork(final Message msg)
+		{
 			final JSONObject json = (JSONObject) msg.obj;
 
-			try {
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				switch (msg.what) {
-				case NetworkClient.LOGIN:
-					progress.setText("Syncing Data");
+		try {
+			if (json.getString("result").equals("error")) {
+				progress.remove();
+				Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				return;
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
 
-					EditText txt = (EditText) findViewById(R.id.username);
-					final String username = txt.getText().toString().trim();
+			switch (msg.what) {
+			case NetworkClient.LOGIN:
+				progress.setText("Syncing Data");
 
-					txt = (EditText) findViewById(R.id.password);
-					final String password = txt.getText().toString();
+				EditText txt = (EditText) findViewById(R.id.username);
+				final String username = txt.getText().toString().trim();
 
-					Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-					pref.putBoolean("isLoggedIn", true);
-					pref.putString("username", username);
-					pref.putString("passhash", password);
-					pref.commit();
+				txt = (EditText) findViewById(R.id.password);
+				final String password = txt.getText().toString();
 
-					SocketClient.getInstance().setIsLoggedIn(true);
+				Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+				pref.putBoolean("isLoggedIn", true);
+				pref.putString("username", username);
+				pref.putString("passhash", password);
+				pref.commit();
 
-					final SyncClient sync = new SyncClient(context, handle);
-					sync.setSyncType(SyncClient.FULL_SYNC);
-					(new Thread(sync)).start();
-					break;
-				case SyncClient.MSG:
-					// start background notifier
-					startService(new Intent(context, GenesisNotifier.class));
+				SocketClient.getInstance().setIsLoggedIn(true);
 
-					final GameDataDB db = new GameDataDB(context);
-					db.recalcYourTurn();
-					db.close();
+				final SyncClient sync = new SyncClient(context, handle);
+				sync.setSyncType(SyncClient.FULL_SYNC);
+				(new Thread(sync)).start();
+				break;
+			case SyncClient.MSG:
+				// start background notifier
+				startService(new Intent(context, GenesisNotifier.class));
 
-					progress.dismiss();
-					setResult(RESULT_OK);
-					finish();
-					break;
-				case LogoutConfirm.MSG:
-					pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+				final GameDataDB db = new GameDataDB(context);
+				db.recalcYourTurn();
+				db.close();
 
-					pref.putBoolean("isLoggedIn", false);
-					pref.putString("username", "!error!");
-					pref.putString("passhash", "!error!");
-					pref.putLong("lastgamesync", 0);
-					pref.putLong("lastmsgsync", 0);
-					pref.commit();
-
-					txt = (EditText) findViewById(R.id.username);
-					txt.setText("");
-
-					txt = (EditText) findViewById(R.id.password);
-					txt.setText("");
-					break;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				progress.dismiss();
+				setResult(RESULT_OK);
+				break;
 			}
 		}
 	};
@@ -110,7 +123,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 		// create network client instance
 		net = new NetworkClient(this, handle);
-		progress = new ProgressMsg(this);
+		progress = new ProgressMsg(this, handle);
 
 		// set content view
 		setContentView(R.layout.activity_login);
