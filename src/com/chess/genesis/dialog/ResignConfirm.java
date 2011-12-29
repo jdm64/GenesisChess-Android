@@ -24,8 +24,11 @@ class ResignConfirm extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Resign Confirmation");
-		setBodyView(R.layout.dialog_confirm_resign);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Resign");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.resign_confirm);
 	}
 
 	public void onClick(final View v)

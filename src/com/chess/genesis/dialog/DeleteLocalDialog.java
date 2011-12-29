@@ -26,8 +26,11 @@ class DeleteLocalDialog extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Delete Game");
-		setBodyView(R.layout.dialog_delete_local);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Delete Game");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.delete_local);
 	}
 
 	public void onClick(final View v)

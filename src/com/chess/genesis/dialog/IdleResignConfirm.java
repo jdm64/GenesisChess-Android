@@ -24,8 +24,11 @@ class IdleResignConfirm extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("End Idle Game");
-		setBodyView(R.layout.dialog_confirm_idleresign);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Force Close Game");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.idleresign_confirm);
 	}
 
 	public void onClick(final View v)

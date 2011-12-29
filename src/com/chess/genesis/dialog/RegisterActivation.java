@@ -24,8 +24,11 @@ class RegisterActivation extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Activate Account");
-		setBodyView(R.layout.dialog_confirm_activation);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.cancel, "Close");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.register_activation);
 	}
 
 	public void onClick(final View v)

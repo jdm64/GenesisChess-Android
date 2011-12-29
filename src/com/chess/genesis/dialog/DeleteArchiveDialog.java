@@ -26,8 +26,11 @@ class DeleteArchiveDialog extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Delete Game");
-		setBodyView(R.layout.dialog_delete_archive);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Delete Game");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.delete_archive);
 	}
 
 	public void onClick(final View v)

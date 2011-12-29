@@ -23,8 +23,11 @@ class ReadAllMsgsDialog extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Mark All Messages Read");
-		setBodyView(R.layout.dialog_readall_msgs);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Mark Read");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.readallmsgs);
 	}
 
 	public void onClick(final View v)

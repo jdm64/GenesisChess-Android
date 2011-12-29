@@ -24,8 +24,11 @@ class LogoutConfirm extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Logout Confirmation");
-		setBodyView(R.layout.dialog_confirm_logout);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Logout");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.logout_confirm);
 	}
 
 	public void onClick(final View v)

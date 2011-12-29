@@ -24,8 +24,11 @@ class DrawDialog extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Send Draw");
-		setBodyView(R.layout.dialog_draw_send);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Send");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.draw_send);
 	}
 
 	public void onClick(final View v)

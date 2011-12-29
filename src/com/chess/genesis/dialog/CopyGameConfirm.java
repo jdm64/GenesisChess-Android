@@ -23,8 +23,11 @@ class CopyGameConfirm extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Copy Game To Local");
-		setBodyView(R.layout.dialog_confirm_copygame);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Copy");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.copygame_confirm);
 	}
 
 	public void onClick(final View v)

@@ -17,8 +17,11 @@ class PendingDrawDialog extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Pending Draw");
-		setBodyView(R.layout.dialog_draw_pending);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.cancel, "Close");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.draw_pending);
 	}
 
 	public void onClick(final View v)

@@ -31,8 +31,11 @@ class NudgeConfirm extends BaseDialog implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setTitle("Nudge Confirmation");
-		setBodyView(R.layout.dialog_confirm_nudge);
+		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Nudge");
+
+		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		txt.setText(R.string.nudge_confirm);
 	}
 
 	public void onClick(final View v)
