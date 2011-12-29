@@ -106,7 +106,7 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 					}
 					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
 						progress.setText("Checking Game Pool");
-						GameListOnline.this.updateGameListAdapters();
+						updateGameListAdapters();
 						GenesisNotifier.clearNotification(context, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
 						net.pool_info();
 						(new Thread(net)).start();
@@ -195,7 +195,7 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 			listview.setEmptyView(empty);
 			listview.setAdapter(list);
 			listview.setOnItemClickListener(GameListOnline.this);
-			GameListOnline.this.registerForContextMenu(listview);
+			registerForContextMenu(listview);
 
 			((ViewPager) collection).addView(layout, 0);
 
