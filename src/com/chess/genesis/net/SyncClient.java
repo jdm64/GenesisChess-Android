@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -170,13 +172,14 @@ class SyncClient implements Runnable
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
 		final long time = json.getLong("time");
+		final ExecutorService pool = Executors.newCachedThreadPool();
 
 		for (int i = 0; i < ids.length(); i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
 			nc.game_status(ids.getString(i));
-			(new Thread(net)).start();
+			pool.submit(nc);
 
 			lock++;
 		}
@@ -194,13 +197,14 @@ class SyncClient implements Runnable
 	{
 	try {
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
+		final ExecutorService pool = Executors.newCachedThreadPool();
 
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
 			nc.game_info(list_need.get(i));
-			(new Thread(nc)).start();
+			pool.submit(nc);
 
 			lock++;
 		}
@@ -222,13 +226,14 @@ class SyncClient implements Runnable
 	{
 	try {
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
+		final ExecutorService pool = Executors.newCachedThreadPool();
 
 		for (int i = 0; i < list_need.size(); i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
 			nc.game_data(list_need.get(i));
-			(new Thread(nc)).start();
+			pool.submit(nc);
 
 			lock++;
 		}
