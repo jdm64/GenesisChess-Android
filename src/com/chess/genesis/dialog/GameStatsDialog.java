@@ -20,9 +20,10 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 	private static final String[] LOST_IDLE = {"You Lost", "Idle"};
 	private static final String[] TIED_IMP = {"Game Tied", "Imposibility of Checkmate"};
 	private static final String[] TIED_STALE = {"Game Tied", "Stalemate"};
+	private static final String[] DRAW_GAME = {"Game Tied", "Draw"};
 
 	private static final Map<Integer,String[]> STATUS_MAP = createMap();
-	
+
 	private static Map<Integer, String[]> createMap()
 	{
 		final Map<Integer, String[]> map = new HashMap<Integer, String[]>();
@@ -34,6 +35,7 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 		map.put(Piece.WHITE * Enums.STALEMATE, TIED_STALE);
 		map.put(Piece.WHITE * Enums.WHITEIDLE, LOST_IDLE);
 		map.put(Piece.WHITE * Enums.BLACKIDLE, WON_IDLE);
+		map.put(Piece.WHITE * Enums.DRAW, DRAW_GAME);
 
 		map.put(Piece.BLACK * Enums.WHITEMATE, LOST_CHECK);
 		map.put(Piece.BLACK * Enums.BLACKMATE, WON_CHECK);
@@ -43,6 +45,7 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 		map.put(Piece.BLACK * Enums.STALEMATE, TIED_STALE);
 		map.put(Piece.BLACK * Enums.WHITEIDLE, WON_IDLE);
 		map.put(Piece.BLACK * Enums.BLACKIDLE, LOST_IDLE);
+		map.put(Piece.BLACK * Enums.DRAW, DRAW_GAME);
 		return map;
 	}
 
