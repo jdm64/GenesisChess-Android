@@ -9,7 +9,6 @@ import android.widget.TableRow;
 
 class BoardLayout extends TableLayout implements OnClickListener
 {
-	private Game game;
 	private GameState gamestate;
 
 	public BoardLayout(final Context context, final AttributeSet attrs)
@@ -21,9 +20,8 @@ class BoardLayout extends TableLayout implements OnClickListener
 
 	}
 
-	public void init(final Game _game, final GameState _gamestate)
+	public void init(final Game game, final GameState _gamestate)
 	{
-		game = _game;
 		gamestate = _gamestate;
 
 		if (game.viewAsBlack) {

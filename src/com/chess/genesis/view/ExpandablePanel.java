@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 class ExpandablePanel extends LinearLayout implements OnClickListener
 {
 	private View top;
-	private int duration = 500;
+	private final int duration = 500;
 	private int totalHeight = 0;
 	private boolean isExpanded = false;
 	private Paint paint;

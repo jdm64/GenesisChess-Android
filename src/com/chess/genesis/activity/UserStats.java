@@ -28,7 +28,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 	private final static int TIE = 2;
 	private final static int RES = 3;
 
-	private Context self;
+	private Context context;
 	private Bundle settings;
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -41,7 +41,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 		try {
 			if (json.getString("result").equals("error")) {
 				progress.remove();
-				Toast.makeText(self, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return;
 			}
 			switch (msg.what) {
@@ -61,7 +61,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		self = this;
+		context = this;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

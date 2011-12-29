@@ -85,7 +85,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				txt = (EditText) findViewById(R.id.password);
 				final String password = txt.getText().toString();
 
-				Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 				pref.putBoolean("isLoggedIn", true);
 				pref.putString("username", username);
 				pref.putString("passhash", password);

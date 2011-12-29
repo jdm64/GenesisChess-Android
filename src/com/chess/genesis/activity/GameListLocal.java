@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
@@ -23,9 +21,6 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class GameListLocal extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
 {
@@ -108,12 +103,6 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	{
 		super.onResume();
 		gamelist_adapter.update();
-	}
-
-	@Override
-	public void onPause()
-	{
-		super.onPause();
 	}
 
 	@Override

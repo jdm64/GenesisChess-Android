@@ -143,10 +143,8 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 
 	public void onClick(final View v)
 	{
-		Bundle bundle;
-		Intent intent;
-
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		Intent intent;
 
 		switch (v.getId()) {
 		case R.id.local_game:
