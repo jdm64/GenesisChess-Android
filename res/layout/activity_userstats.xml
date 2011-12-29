@@ -319,6 +319,67 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 				android:text="Invite: "/>
 			</FrameLayout>
 		</com.chess.genesis.ExpandablePanel>
+		<com.chess.genesis.ExpandablePanel
+		android:id="@+id/ties"
+		style="@style/FillWidth"
+		android:orientation="vertical"
+		android:layout_below="@id/resigns">
+			<com.chess.genesis.TabText
+			android:id="@+id/total_ties"
+			android:layout_gravity="center"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:padding="8dp"
+			android:text="Draws: "/>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/genesis_ties"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Genesis: "/>
+			<FrameLayout
+			style="@style/FillWidth">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_random_ties"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/genesis_invite_ties"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+			<FrameLayout
+			android:layout_gravity="center">
+				<View
+				android:layout_height="1dp"
+				android:layout_width="256dp"
+				android:background="#ff00b7eb"/>
+			</FrameLayout>
+			<com.chess.genesis.RobotoText
+			android:id="@+id/regular_ties"
+			android:layout_gravity="center"
+			android:textSize="16dp"
+			android:text="Regular: "/>
+			<FrameLayout
+			style="@style/FillWidth"
+			android:paddingBottom="6dp">
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_random_ties"
+				android:layout_gravity="left"
+				android:paddingLeft="16dp"
+				android:textSize="16dp"
+				android:text="Random: "/>
+				<com.chess.genesis.RobotoText
+				android:id="@+id/regular_invite_ties"
+				android:layout_gravity="right"
+				android:paddingRight="16dp"
+				android:textSize="16dp"
+				android:text="Invite: "/>
+			</FrameLayout>
+		</com.chess.genesis.ExpandablePanel>
 	</RelativeLayout>
 	</ScrollView>
 	<include

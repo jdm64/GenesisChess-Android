@@ -275,6 +275,24 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 		txt = (TextView) findViewById(R.id.total_resigns);
 		txt.setText("Resigns: " + String.valueOf(valC + valD));
 
+		// Ties
+		valC = arr[GEN_RAN][TIE] + arr[GEN_INV][TIE];
+		valD = arr[REG_RAN][TIE] + arr[REG_INV][TIE];
+
+		txt = (TextView) findViewById(R.id.genesis_random_ties);
+		txt.setText("Random: " + String.valueOf(arr[GEN_RAN][TIE]));
+		txt = (TextView) findViewById(R.id.genesis_invite_ties);
+		txt.setText("Invite: " + String.valueOf(arr[GEN_INV][TIE]));
+		txt = (TextView) findViewById(R.id.genesis_ties);
+		txt.setText("Genesis: " + String.valueOf(valC));
+		txt = (TextView) findViewById(R.id.regular_random_ties);
+		txt.setText("Random: " + String.valueOf(arr[REG_RAN][TIE]));
+		txt = (TextView) findViewById(R.id.regular_invite_ties);
+		txt.setText("Invite: " + String.valueOf(arr[REG_INV][TIE]));
+		txt = (TextView) findViewById(R.id.regular_ties);
+		txt.setText("Regular: " + String.valueOf(valD));
+		txt = (TextView) findViewById(R.id.total_ties);
+		txt.setText("Draws: " + String.valueOf(valC + valD));
 	} catch (JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
