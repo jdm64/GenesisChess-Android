@@ -28,6 +28,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
+	private boolean exitActivity = false;
 
 	private final Handler handle = new Handler()
 	{
@@ -55,7 +56,8 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 				txt.setText("");
 				break;
 			case ProgressMsg.MSG:
-				finish();
+				if (exitActivity)
+					finish();
 				break;
 			}
 		}
@@ -66,6 +68,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 		try {
 			if (json.getString("result").equals("error")) {
+				exitActivity = false;
 				progress.remove();
 				Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return;
@@ -107,6 +110,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 				progress.dismiss();
 				setResult(RESULT_OK);
+				exitActivity = true;
 				break;
 			}
 		}
