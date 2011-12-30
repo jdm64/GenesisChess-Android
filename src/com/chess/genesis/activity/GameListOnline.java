@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -169,7 +170,7 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 		}
 
 		@Override
-		public Object instantiateItem(final View collection, final int position)
+		public Object instantiateItem(final ViewGroup collection, final int position)
 		{
 			int type = Enums.ONLINE_GAME, yourmove = Enums.YOUR_TURN;
 
@@ -203,19 +204,19 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 		}
 
 		@Override
-		public void destroyItem(final View collection, final int position, final Object view)
+		public void destroyItem(final ViewGroup collection, final int position, final Object view)
 		{
 			gamelistadapter_arr[position].close();
 			((ViewPager) collection).removeView((FrameLayout) view);
 		}
 
 		@Override
-		public void startUpdate(final View arg0)
+		public void startUpdate(final ViewGroup arg0)
 		{
 		}
 
 		@Override
-		public void finishUpdate(final View arg0)
+		public void finishUpdate(final ViewGroup arg0)
 		{
 		}
 
