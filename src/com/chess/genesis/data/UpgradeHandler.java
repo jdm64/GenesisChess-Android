@@ -9,29 +9,24 @@ import android.preference.PreferenceManager;
 
 final class UpgradeHandler
 {
-	private static Context context;
-	private static PackageInfo pinfo;
-	private static SharedPreferences pref;
-
 	private UpgradeHandler()
 	{
 	}
 
-	public static void run(final Context _context)
+	public static void run(final Context context)
 	{
 	try {
-		context = _context;
-		pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-		pref = PreferenceManager.getDefaultSharedPreferences(context);
+		final PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		upgrade(pref.getInt("appVersion", 0), pinfo.versionCode);
+		upgrade(pref, pref.getInt("appVersion", 0), pinfo.versionCode);
 	} catch (NameNotFoundException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
 	}
 
-	private static void upgrade(final int oldVer, final int newVer)
+	private static void upgrade(final SharedPreferences pref, final int oldVer, final int newVer)
 	{
 		if (oldVer == newVer)
 			return;
