@@ -57,7 +57,10 @@ class GameDataDB
 		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?, ?);", data);
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
 
-		return rowToBundle(cursor, 0);
+		final Bundle game = rowToBundle(cursor, 0);
+		game.putInt("type", Enums.LOCAL_GAME);
+
+		return game;
 	}
 
 	public void saveLocalGame(final int id, final long stime, final String zfen, final String history)
