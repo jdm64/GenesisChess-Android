@@ -129,6 +129,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 		if (pref.getBoolean("isLoggedIn", false))
 			NetActive.inc();
+		AdsHandler.run(this);
 	}
 
 	@Override

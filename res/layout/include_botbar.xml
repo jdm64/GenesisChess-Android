@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chess.genesis.MyImageView
+<FrameLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/botbar"
-style="@style/FillWidth"
-android:src="@drawable/botbar"/>
+xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+android:id="@+id/botbar">
+	<com.chess.genesis.MyImageView
+	style="@style/FillWidth"
+	android:src="@drawable/botbar"/>
+	<com.google.ads.AdView
+	android:id="@+id/adView"
+	style="@style/FillWidth"
+	ads:adUnitId="a14efd535f17368"
+	ads:adSize="BANNER"/>
+</FrameLayout>

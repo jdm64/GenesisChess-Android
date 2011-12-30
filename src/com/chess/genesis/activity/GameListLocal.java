@@ -101,6 +101,7 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	{
 		super.onResume();
 		gamelist_adapter.update();
+		AdsHandler.run(this);
 	}
 
 	@Override

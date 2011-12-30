@@ -161,6 +161,7 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 	{
 		super.onResume();
 		NetActive.inc();
+		AdsHandler.run(this);
 	}
 
 	@Override

@@ -81,6 +81,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	{
 		super.onResume();
 		updateLoggedInView();
+		AdsHandler.run(this);
 	}
 
 	@Override

@@ -89,6 +89,7 @@ public class Register extends Activity implements OnTouchListener, OnClickListen
 	{
 		super.onResume();
 		NetActive.inc();
+		AdsHandler.run(this);
 	}
 
 	@Override

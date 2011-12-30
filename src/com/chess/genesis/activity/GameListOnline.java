@@ -302,6 +302,8 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 
 		final SyncClient sync = new SyncClient(this, handle);
 		(new Thread(sync)).start();
+
+		AdsHandler.run(this);
 	}
 
 	@Override

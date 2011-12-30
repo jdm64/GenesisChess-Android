@@ -18,6 +18,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="false"
 		android:title="Keep Screen Active"
 		android:summary="Force the screen on while in a game"/>
+		<CheckBoxPreference
+		android:key="enableAds"
+		android:defaultValue="true"
+		android:title="Enable Ads"
+		android:summary="Enable the display of ads"/>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Device Notifications">

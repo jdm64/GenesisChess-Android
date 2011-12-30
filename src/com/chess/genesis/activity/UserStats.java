@@ -106,6 +106,7 @@ public class UserStats extends Activity implements OnLongClickListener, OnTouchL
 	{
 		super.onResume();
 		NetActive.inc();
+		AdsHandler.run(this);
 	}
 
 	@Override
