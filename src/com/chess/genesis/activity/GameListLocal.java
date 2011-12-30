@@ -26,7 +26,6 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 {
 	private Context context;
 	private GameListAdapter gamelist_adapter;
-	private Bundle settings;
 
 	private final Handler handle = new Handler()
 	{
@@ -53,7 +52,6 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 				else
 					intent = new Intent(context, RegGame.class);
 				intent.putExtras(db.newLocalGame(gamename, gametype2, gameopp));
-				intent.putExtras(settings);
 				db.close();
 
 				startActivity(intent);
