@@ -14,10 +14,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class GenGame extends Game implements OnClickListener, OnLongClickListener, OnTouchListener
+public class GenGame extends Game implements OnClickListener, OnLongClickListener
 {
 	private WakeLock wakelock;
 	private GenGameState gamestate;
@@ -61,12 +60,10 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 
 		// set click listeners
 		ImageView button = (ImageView) findViewById((type != Enums.LOCAL_GAME)? R.id.topbar_genesis : R.id.topbar);
-		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
 
 		if (type != Enums.LOCAL_GAME) {
 			button = (ImageView) findViewById(R.id.chat);
-			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
 
 			TabText txt = (TabText) findViewById(R.id.white_name);
@@ -79,7 +76,6 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 			R.id.forwards, R.id.current};
 		for (int i = 0; i < list.length; i++) {
 			button = (ImageView) findViewById(list[i]);
-			button.setOnTouchListener(this);
 			button.setOnClickListener(this);
 		}
 
@@ -103,7 +99,7 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 		if (type != Enums.LOCAL_GAME) {
 			final GameDataDB db = new GameDataDB(this);
 			final int count = db.getUnreadMsgCount(settings.getString("gameid"));
-			final int img = (count > 0)? R.drawable.newmsg : R.drawable.chat;
+			final int img = (count > 0)? R.drawable.btn_newmsg : R.drawable.btn_chat;
 
 			newMsgs = (count > 0);
 
@@ -179,62 +175,6 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 		default:
 			return false;
 		}
-	}
-
-	public boolean onTouch(final View v, final MotionEvent event)
-	{
-		switch (v.getId()) {
-		case R.id.place_piece:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.place_piece_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.place_piece);
-			break;
-		case R.id.topbar:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar);
-			break;
-		case R.id.topbar_genesis:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis);
-			break;
-		case R.id.chat:
-			if (newMsgs) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.newmsg_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.newmsg);
-			} else {
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-					((ImageView) v).setImageResource(R.drawable.chat_pressed);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-					((ImageView) v).setImageResource(R.drawable.chat);
-			}
-			break;
-		case R.id.backwards:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.backwards_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.backwards);
-			break;
-		case R.id.forwards:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.forwards_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.forwards);
-			break;
-		case R.id.current:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.current_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.current);
-			break;
-		}
-		return false;
 	}
 
 	@Override

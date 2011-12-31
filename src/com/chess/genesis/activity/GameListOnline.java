@@ -268,11 +268,8 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 	}
 
 		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
-		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
-
 		button = (ImageView) findViewById(R.id.topbar_plus);
-		button.setOnTouchListener(this);
 		button.setOnClickListener(this);
 
 		final SwipeTabsPagerAdapter tabAdapter = new SwipeTabsPagerAdapter(this, getSupportFragmentManager());
@@ -324,18 +321,6 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
-		case R.id.topbar_genesis:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis);
-			break;
-		case R.id.topbar_plus:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_plus_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar_plus);
-			break;
 		case R.id.game_search:
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				v.setBackgroundColor(0xff00b7eb);

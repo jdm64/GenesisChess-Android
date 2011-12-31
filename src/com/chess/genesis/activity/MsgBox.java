@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MsgBox extends Activity implements OnClickListener, OnTouchListener, OnLongClickListener
+public class MsgBox extends Activity implements OnClickListener, OnLongClickListener
 {
 	private MsgListAdapter msglist_adapter;
 	private ListView msglist_view;
@@ -85,11 +84,9 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 		setContentView(R.layout.activity_msgbox);
 
 		ImageView image = (ImageView) findViewById(R.id.submit_msg);
-		image.setOnTouchListener(this);
 		image.setOnClickListener(this);
 
 		image = (ImageView) findViewById(R.id.topbar);
-		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
 
 		// set list adapters
@@ -134,25 +131,6 @@ public class MsgBox extends Activity implements OnClickListener, OnTouchListener
 	{
 		msglist_adapter.close();
 		super.onDestroy();
-	}
-
-	public boolean onTouch(final View v, final MotionEvent event)
-	{
-		switch (v.getId()) {
-		case R.id.topbar:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar);
-			break;
-		case R.id.submit_msg:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.rsubmit_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.rsubmit);
-			break;
-		}
-		return false;
 	}
 
 	public void onClick(final View v)

@@ -5,20 +5,20 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/place_piece"
 	style="@style/FillWidth"
 	android:layout_weight="243"
-	android:src="@drawable/place_piece"/>
+	android:src="@drawable/btn_place_piece"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/backwards"
 	style="@style/FillWidth"
 	android:layout_weight="398"
-	android:src="@drawable/backwards"/>
+	android:src="@drawable/btn_backwards"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/forwards"
 	style="@style/FillWidth"
 	android:layout_weight="398"
-	android:src="@drawable/forwards"/>
+	android:src="@drawable/btn_forwards"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/current"
 	style="@style/FillWidth"
 	android:layout_weight="398"
-	android:src="@drawable/current"/>
+	android:src="@drawable/btn_current"/>
 </TableRow>

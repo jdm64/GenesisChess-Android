@@ -5,10 +5,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/cancel"
 	style="@style/FillWidth"
 	android:layout_weight="50"
-	android:src="@drawable/cancel"/>
+	android:src="@drawable/btn_cancel"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/submit"
 	style="@style/FillWidth"
 	android:layout_weight="50"
-	android:src="@drawable/submit"/>
+	android:src="@drawable/btn_submit"/>
 </LinearLayout>

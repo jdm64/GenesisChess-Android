@@ -43,7 +43,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentRight="true"
 	android:layout_margin="3dp"
 	android:paddingRight="15dp"
-	android:src="@drawable/login"/>
+	android:src="@drawable/btn_login"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/register"
 	android:layout_width="120dp"
@@ -51,7 +51,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentRight="true"
 	android:paddingRight="15dp"
 	android:layout_margin="8dp"
-	android:src="@drawable/register"/>
+	android:src="@drawable/btn_register"/>
 	<include
 	layout="@layout/include_botbar"
 	android:layout_alignParentBottom="true"/>

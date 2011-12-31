@@ -66,7 +66,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 		final int list[] = new int[]{R.id.local_game, R.id.online_game,
 			R.id.user_stats, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings, R.id.feedback, R.id.googleplus};
-
 		for (int i = 0; i < list.length; i++) {
 			final ImageView button = (ImageView) findViewById(list[i]);
 			button.setOnClickListener(this);
@@ -125,18 +124,6 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 				v.setBackgroundColor(0xff00b7eb);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				v.setBackgroundColor(0x00ffffff);
-			break;
-		case R.id.likefacebook:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.facebook_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.facebook);
-			break;
-		case R.id.googleplus:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.googleplus_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.googleplus);
 			break;
 		}
 		return false;

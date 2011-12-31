@@ -3,4 +3,4 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/topbar"
 style="@style/FillWidth"
-android:src="@drawable/topbar"/>
+android:src="@drawable/btn_topbar"/>

@@ -23,7 +23,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		style="@style/FillWidth"
 		android:layout_weight="180"
 		android:layout_gravity="center"
-		android:src="@drawable/rsubmit"/>
+		android:src="@drawable/btn_rsubmit"/>
 	</TableRow>
 	<include
 	layout="@layout/include_botbar"

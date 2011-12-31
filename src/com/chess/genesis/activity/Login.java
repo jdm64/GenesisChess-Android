@@ -16,14 +16,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Login extends Activity implements OnTouchListener, OnClickListener, OnLongClickListener
+public class Login extends Activity implements OnClickListener, OnLongClickListener
 {
 	private Context context;
 	private NetworkClient net;
@@ -134,15 +133,10 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 
 		// setup click listeners
 		ImageView image = (ImageView) findViewById(R.id.login);
-		image.setOnTouchListener(this);
 		image.setOnClickListener(this);
-
 		image = (ImageView) findViewById(R.id.register);
-		image.setOnTouchListener(this);
 		image.setOnClickListener(this);
-
 		image = (ImageView) findViewById(R.id.topbar);
-		image.setOnTouchListener(this);
 		image.setOnLongClickListener(this);
 
 		// Always show the currently logged in user
@@ -201,31 +195,6 @@ public class Login extends Activity implements OnTouchListener, OnClickListener,
 		default:
 			return false;
 		}
-	}
-
-	public boolean onTouch(final View v, final MotionEvent event)
-	{
-		switch (v.getId()) {
-		case R.id.topbar:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar);
-			break;
-		case R.id.login:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.login_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.login);
-			break;
-		case R.id.register:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.register_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.register);
-			break;
-		}
-		return false;
 	}
 
 	@Override

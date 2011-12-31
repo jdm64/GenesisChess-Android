@@ -6,10 +6,10 @@ android:id="@+id/topbar_and_plus">
 	android:id="@+id/topbar_genesis"
 	style="@style/FillWidth"
 	android:layout_weight="82"
-	android:src="@drawable/topbar_genesis"/>
+	android:src="@drawable/btn_topbar_genesis"/>
 	<com.chess.genesis.MyImageView
 	android:id="@+id/topbar_plus"
 	style="@style/FillWidth"
 	android:layout_weight="408"
-	android:src="@drawable/topbar_plus"/>
+	android:src="@drawable/btn_topbar_plus"/>
 </TableRow>

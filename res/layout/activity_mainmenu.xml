@@ -99,12 +99,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:id="@+id/likefacebook"
 		android:layout_weight="50"
 		android:padding="3dp"
-		android:src="@drawable/facebook"/>
+		android:src="@drawable/btn_facebook"/>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/googleplus"
 		android:layout_weight="50"
 		android:padding="3dp"
-		android:src="@drawable/googleplus"/>
+		android:src="@drawable/btn_googleplus"/>
 	</TableRow>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/beta"

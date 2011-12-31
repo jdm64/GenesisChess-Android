@@ -15,14 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class GameListLocal extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener, OnTouchListener
+public class GameListLocal extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener
 {
 	private Context context;
 	private GameListAdapter gamelist_adapter;
@@ -74,11 +73,8 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 
 		// set click listeners
 		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
-		button.setOnTouchListener(this);
 		button.setOnLongClickListener(this);
-
 		button = (ImageView) findViewById(R.id.topbar_plus);
-		button.setOnTouchListener(this);
 		button.setOnClickListener(this);
 
 		// set list adapters
@@ -109,25 +105,6 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	{
 		gamelist_adapter.close();
 		super.onDestroy();
-	}
-
-	public boolean onTouch(final View v, final MotionEvent event)
-	{
-		switch (v.getId()) {
-		case R.id.topbar_genesis:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar_genesis);
-			break;
-		case R.id.topbar_plus:
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				((ImageView) v).setImageResource(R.drawable.topbar_plus_pressed);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				((ImageView) v).setImageResource(R.drawable.topbar_plus);
-			break;
-		}
-		return false;
 	}
 
 	public void onClick(final View v)
