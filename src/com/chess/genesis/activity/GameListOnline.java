@@ -313,8 +313,10 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 	@Override
 	public void onDestroy()
 	{
-		for (int i = 0; i < 3; i++)
-			gamelistadapter_arr[i].close();
+		for (int i = 0; i < 3; i++) {
+			if (gamelistadapter_arr[i] != null)
+				gamelistadapter_arr[i].close();
+		}
 		super.onDestroy();
 	}
 
