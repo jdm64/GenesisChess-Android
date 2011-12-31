@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -22,6 +23,22 @@ abstract class GameState
 	protected int type;
 	protected int oppType;
 	protected int hindex = -1;
+
+	public abstract void firstMove();
+	public abstract void currentMove();
+	public abstract void forwardMove();
+	public abstract void undoMove();
+	public abstract void backMove();
+	public abstract void submitMove();
+
+	public abstract void setStm();
+	public abstract void setBoard();
+
+	public abstract void save(final Context context, final boolean exitgame);
+	public abstract Bundle getBundle();
+
+	public abstract void boardClick(final View v);
+	public abstract void placeClick(final View v);
 
 	protected void check_endgame()
 	{
@@ -117,8 +134,4 @@ abstract class GameState
 	{
 		(new DrawDialog(activity, handle)).show();
 	}
-
-	public abstract void boardClick(final View v);
-
-	public abstract void placeClick(final View v);
 }
