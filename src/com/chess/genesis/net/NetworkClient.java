@@ -188,6 +188,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		} catch (IOException e) {
 			json2 = new JSONObject();
 			try {
@@ -197,6 +198,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		} catch (JSONException e) {
 			json2 = new JSONObject();
 			try {
@@ -206,6 +208,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		}
 		if (error) {
 			socket.disconnect();
@@ -281,6 +284,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		} catch (IOException e) {
 			json2 = new JSONObject();
 			try {
@@ -290,6 +294,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		} catch (JSONException e) {
 			json2 = new JSONObject();
 			try {
@@ -299,6 +304,7 @@ class NetworkClient implements Runnable
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
+			error = true;
 		}
 		if (error) {
 			socket.disconnect();
