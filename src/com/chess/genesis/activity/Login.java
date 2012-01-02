@@ -107,9 +107,9 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 				db.recalcYourTurn();
 				db.close();
 
-				progress.dismiss();
-				setResult(RESULT_OK);
 				exitActivity = true;
+				setResult(RESULT_OK);
+				progress.dismiss();
 				break;
 			}
 		}

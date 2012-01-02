@@ -52,6 +52,10 @@ final class Enums
 	public final static int NUDGED = 2;
 	public final static int CLOSE = 3;
 
+	// Activity Types
+	public final static int ONLINE_LIST = 1;
+	public final static int USER_STATS = 2;
+
 	public static String OpponentType(final int opponent)
 	{
 		switch (opponent) {

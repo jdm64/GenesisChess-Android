@@ -106,8 +106,18 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		if (resultCode == RESULT_OK)
+		if (resultCode == RESULT_CANCELED)
+			return;
+
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		if (requestCode == Enums.ONLINE_LIST) {
 			startActivity(new Intent(this, GameListOnline.class));
+		} else if (requestCode == Enums.USER_STATS) {
+			final Intent intent = new Intent(this, UserStats.class);
+			intent.putExtra("username", pref.getString("username", "!error!"));
+			startActivity(intent);
+		}
 	}
 
 	public boolean onTouch(final View v, final MotionEvent event)
@@ -140,7 +150,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			break;
 		case R.id.online_game:
 			if (!pref.getBoolean("isLoggedIn", false)) {
-				startActivityForResult(new Intent(this, Login.class), 1);
+				startActivityForResult(new Intent(this, Login.class), Enums.ONLINE_LIST);
 				return;
 			}
 			intent = new Intent(this, GameListOnline.class);
@@ -148,7 +158,7 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 			break;
 		case R.id.user_stats:
 			if (!pref.getBoolean("isLoggedIn", false)) {
-				Toast.makeText(this, "Must be logged in", Toast.LENGTH_LONG).show();
+				startActivityForResult(new Intent(this, Login.class), Enums.USER_STATS);
 				return;
 			}
 			intent = new Intent(this, UserStats.class);

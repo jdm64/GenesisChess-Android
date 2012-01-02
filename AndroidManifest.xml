@@ -25,8 +25,8 @@ android:versionName="@string/version">
 		<activity android:name="GameListOnline" android:configChanges="orientation" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="Settings" android:configChanges="orientation" android:launchMode="singleTask"/>
 		<activity android:name="GameListLocal" android:launchMode="singleTask"/>
-		<activity android:name="Login" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="Register" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
+		<activity android:name="Login" android:windowSoftInputMode="adjustPan"/>
+		<activity android:name="Register" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="UserStats" android:configChanges="orientation"/>
 		<activity android:name="RegGame" android:configChanges="orientation"/>
 		<activity android:name="GenGame" android:configChanges="orientation"/>
