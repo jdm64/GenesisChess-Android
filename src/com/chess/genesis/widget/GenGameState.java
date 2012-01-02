@@ -22,14 +22,7 @@ class GenGameState extends GameState
 	{
 		public void handleMessage(final Message msg)
 		{
-		try {
 			switch (msg.what) {
-			case CpuTimeDialog.MSG:
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-				pref.putInt("cputime", (Integer) msg.obj);
-				pref.commit();
-				cpu.setTime((Integer) msg.obj);
-				break;
 			case GenEngine.MSG:
 				final Bundle bundle = (Bundle) msg.obj;
 
@@ -43,159 +36,10 @@ class GenGameState extends GameState
 				currentMove();
 				applyMove(move, true, true);
 				break;
-			case NetworkClient.GAME_DRAW:
-			case NetworkClient.SUBMIT_MOVE:
-				JSONObject json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error")) {
-					undoMove();
-					progress.remove();
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				progress.setText("Checking Game Status");
-
-				net.game_status(settings.getString("gameid"));
-				(new Thread(net)).start();
-				break;
-			case ResignConfirm.MSG:
-				progress.setText("Sending Resignation");
-
-				net.resign_game(settings.getString("gameid"));
-				(new Thread(net)).start();
-				break;
-			case NudgeConfirm.MSG:
-				progress.setText("Sending Nudge");
-
-				net.nudge_game(settings.getString("gameid"));
-				(new Thread(net)).start();
-				break;
-			case IdleResignConfirm.MSG:
-				progress.setText("Sending Idle Resign");
-
-				net.idle_resign(settings.getString("gameid"));
-				(new Thread(net)).start();
-				break;
-			case DrawDialog.MSG:
-			case AcceptDrawDialog.MSG:
-				final String value = (String) msg.obj;
-				progress.setText("Sending Draw");
-
-				net.game_draw(settings.getString("gameid"), value);
-				(new Thread(net)).start();
-				break;
-			case NetworkClient.RESIGN_GAME:
-			case NetworkClient.IDLE_RESIGN:
-				json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				progress.setText("Resignation Sent");
-
-				net.game_status(settings.getString("gameid"));
-				(new Thread(net)).start();
-				break;
-			case NetworkClient.NUDGE_GAME:
-				json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error"))
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				progress.remove();
-				break;
-			case NetworkClient.GAME_STATUS:
-				json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				final String history = json.getString("history");
-				final int status = Enums.GameStatus(json.getString("status"));
-
-				settings.putString("status", String.valueOf(status));
-
-				final GameDataDB db = new GameDataDB(activity);
-				db.updateOnlineGame(json);
-				db.close();
-				GenesisNotifier.clearNotification(activity, GenesisNotifier.YOURTURN_NOTE);
-
-				applyRemoteMove(history);
-				if (status != Enums.ACTIVE) {
-					if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
-						progress.remove();
-
-						json.put("yourcolor", ycol);
-						json.put("white_name", settings.getString("white"));
-						json.put("black_name", settings.getString("black"));
-						json.put("eventtype", settings.getString("eventtype"));
-						json.put("status", settings.getString("status"));
-						json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-						json.put("gameid", settings.getString("gameid"));
-
-						(new GameStatsDialog(activity, json)).show();
-						return;
-					}
-					progress.setText("Retrieving Score");
-
-					net.game_score(settings.getString("gameid"));
-					(new Thread(net)).start();
-				} else {
-					progress.setText("Status Synced");
-					progress.remove();
-				}
-				break;
-			case NetworkClient.GAME_SCORE:
-				json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				progress.setText("Score Loaded");
-				progress.remove();
-
-				json.put("yourcolor", ycol);
-				json.put("white_name", settings.getString("white"));
-				json.put("black_name", settings.getString("black"));
-				json.put("eventtype", settings.getString("eventtype"));
-				json.put("status", settings.getString("status"));
-				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-				json.put("gameid", settings.getString("gameid"));
-
-				(new GameStatsDialog(activity, json)).show();
-				break;
-			case RematchConfirm.MSG:
-				final Bundle data = (Bundle) msg.obj;
-				progress.setText("Sending Newgame Request");
-
-				final String opponent = data.getString("opp_name");
-				final String color = Enums.ColorType(data.getInt("color"));
-				final String gametype = Enums.GameType(data.getInt("gametype"));
-
-				net.new_game(opponent, gametype, color);
-				(new Thread(net)).start();
-				break;
-			case NetworkClient.NEW_GAME:
-				json = (JSONObject) msg.obj;
-
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				progress.setText(json.getString("reason"));
-				progress.remove();
+			default:
+				handleOther(msg);
 				break;
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
 		}
 	};
 
@@ -404,7 +248,7 @@ class GenGameState extends GameState
 		}
 	}
 
-	private void applyRemoteMove(final String hist)
+	protected void applyRemoteMove(final String hist)
 	{
 		if (hist == null || hist.length() < 3)
 			return;
@@ -426,11 +270,10 @@ class GenGameState extends GameState
 
 	public void reset()
 	{
-		hindex = -1;
-		callstack.clear();
+		super.reset();
+
 		history.clear();
 		board.reset();
-		activity.reset();
 	}
 
 	public void backMove()
