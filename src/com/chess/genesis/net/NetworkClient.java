@@ -63,7 +63,7 @@ class NetworkClient implements Runnable
 	// the json setup started in login_user.
 	private void login_setup()
 	{
-		JSONObject json2 = null;
+		final JSONObject json2 = new JSONObject();
 
 		try {
 			try {
@@ -73,7 +73,6 @@ class NetworkClient implements Runnable
 				throw new RuntimeException();
 			}
 		} catch (SocketException e) {
-			json2 = new JSONObject();
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for sending data");
@@ -83,7 +82,6 @@ class NetworkClient implements Runnable
 			}
 			error = true;
 		} catch (IOException e) {
-			json2 = new JSONObject();
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection durring sending data");
@@ -93,10 +91,69 @@ class NetworkClient implements Runnable
 			}
 			error = true;
 		}
-		if (error) {
-			socket.disconnect();
+		if (error)
 			callback.sendMessage(Message.obtain(callback, fid, json2));
+	}
+
+	private JSONObject send_request(final JSONObject data)
+	{
+		JSONObject json2 = new JSONObject();;
+
+		try {
+			socket.write(data);
+		} catch (SocketException e) {
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for sending data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring sending data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
 		}
+		if (error)
+			return json2;
+
+		try {
+			json2 = socket.read();
+		} catch (SocketException e) {
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Can't contact server for recieving data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (IOException e) {
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Lost connection durring recieving data");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		} catch (JSONException e) {
+			try {
+				json2.put("result", "error");
+				json2.put("reason", "Server response illogical");
+			} catch (JSONException j) {
+				j.printStackTrace();
+				throw new RuntimeException();
+			}
+			error = true;
+		}
+		return json2;
 	}
 
 	private boolean relogin()
@@ -120,7 +177,6 @@ class NetworkClient implements Runnable
 				throw new RuntimeException();
 			}
 		} catch (SocketException e) {
-			json2 = new JSONObject();
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for sending data");
@@ -130,7 +186,6 @@ class NetworkClient implements Runnable
 			}
 			error = true;
 		} catch (IOException e) {
-			json2 = new JSONObject();
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection durring sending data");
@@ -141,81 +196,12 @@ class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			socket.disconnect();
 			callback.sendMessage(Message.obtain(callback, fid, json2));
-			error = false;
 			return false;
 		}
 
-		try {
-			socket.write(json2);
-		} catch (SocketException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		}
-		if (error) {
-			socket.disconnect();
-			callback.sendMessage(Message.obtain(callback, fid, json2));
-			error = false;
-			return false;
-		}
-
-		try {
-			json2 = socket.read();
-		} catch (SocketException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for recieving data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring recieving data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (JSONException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Server response illogical");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		}
-		if (error) {
-			socket.disconnect();
-			callback.sendMessage(Message.obtain(callback, fid, json2));
-			error = false;
-			return false;
-		}
+		// Send login request
+		json2 = send_request(json2);
 
 		try {
 			if (!json2.getString("result").equals("ok")) {
@@ -232,8 +218,6 @@ class NetworkClient implements Runnable
 
 	public void run()
 	{
-		JSONObject json2 = null;
-
 		if (fid == LOGIN)
 			login_setup();
 
@@ -243,73 +227,12 @@ class NetworkClient implements Runnable
 			return;
 		}
 
-		try {
-			socket.write(json);
-		} catch (SocketException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		}
+		final JSONObject json2 = send_request(json);
 		if (error) {
-			socket.disconnect();
-			callback.sendMessage(Message.obtain(callback, fid, json2));
 			error = false;
-			return;
+			socket.disconnect();
 		}
 
-		try {
-			json2 = socket.read();
-		} catch (SocketException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for recieving data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (IOException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring recieving data");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		} catch (JSONException e) {
-			json2 = new JSONObject();
-			try {
-				json2.put("result", "error");
-				json2.put("reason", "Server response illogical");
-			} catch (JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
-			}
-			error = true;
-		}
-		if (error) {
-			socket.disconnect();
-			error = false;
-		}
 		callback.sendMessage(Message.obtain(callback, fid, json2));
 	}
 
