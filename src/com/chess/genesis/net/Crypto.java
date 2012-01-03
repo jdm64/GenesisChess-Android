@@ -10,13 +10,8 @@ final class Crypto
 	{
 	}
 
-	private static String Sha1Hash(final String str)
+	private static String calcHash(final MessageDigest digst)
 	{
-	try {
-		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
-
-		digst.update(str.getBytes());
-
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();
 	
@@ -27,6 +22,15 @@ final class Crypto
 			buff.append(n);
 		}
 		return buff.toString();
+	}
+
+	private static String Sha1Hash(final String str)
+	{
+	try {
+		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
+
+		digst.update(str.getBytes());
+		return calcHash(digst);
 	} catch (java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -46,16 +50,7 @@ final class Crypto
 		digst.update(HashPasswd(str).getBytes());
 		digst.update(socket.getHash().getBytes());
 
-		final byte[] shabytes = digst.digest();
-		final StringBuffer buff = new StringBuffer();
-	
-		for (int i = 0; i < shabytes.length; i++) {
-			final String n = Integer.toHexString(shabytes[i] & 0xff);
-			if (n.length() < 2)
-				buff.append('0');
-			buff.append(n);
-		}
-		return buff.toString();
+		return calcHash(digst);
 	} catch (java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
 		throw new RuntimeException();

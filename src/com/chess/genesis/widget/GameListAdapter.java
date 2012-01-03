@@ -154,13 +154,8 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt.setText(date);
 	}
 
-	private void setupOnline(final View cell, final Bundle data)
+	private void setupNetworkCommon(final View cell, final Bundle data)
 	{
-		final int icon = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
-			R.drawable.white_pawn_dark : R.drawable.black_pawn_light;
-		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
-		img.setImageResource(icon);
-
 		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
 		TextView txt = (TextView) cell.findViewById(R.id.game_with);
 		txt.setText(opponent);
@@ -174,7 +169,22 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 
-		txt = (TextView) cell.findViewById(R.id.idle);
+		txt = (TextView) cell.findViewById(R.id.new_msgs);
+		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
+			txt.setText("[new msg]");
+		else
+			txt.setText("");
+	}
+	private void setupOnline(final View cell, final Bundle data)
+	{
+		setupNetworkCommon(cell, data);
+
+		final int icon = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
+			R.drawable.white_pawn_dark : R.drawable.black_pawn_light;
+		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
+		img.setImageResource(icon);
+
+		final TextView txt = (TextView) cell.findViewById(R.id.idle);
 		switch (Integer.valueOf(data.getString("idle"))) {
 		case Enums.NOTIDLE:
 			txt.setText("");
@@ -192,16 +202,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			txt.setTextColor(0xffcc0000);
 			break;
 		}
-
-		txt = (TextView) cell.findViewById(R.id.new_msgs);
-		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
-			txt.setText("[new msg]");
-		else
-			txt.setText("");
 	}
 
 	private void setupArchive(final View cell, final Bundle data)
 	{
+		setupNetworkCommon(cell, data);
+
 		final int icon;
 		switch (Integer.valueOf(data.getString("status"))) {
 		case Enums.WHITEMATE:
@@ -222,25 +228,6 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		}
 		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
 		img.setImageResource(icon);
-
-		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
-		TextView txt = (TextView) cell.findViewById(R.id.game_with);
-		txt.setText(opponent);
-
-		final String type = Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype")));
-		txt = (TextView) cell.findViewById(R.id.game_type);
-		txt.setText(type);
-
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
-		txt = (TextView) cell.findViewById(R.id.game_time);
-		txt.setText(date);
-
-		txt = (TextView) cell.findViewById(R.id.new_msgs);
-		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
-			txt.setText("[new msg]");
-		else
-			txt.setText("");
 	}
 
 	public View getEmptyView(final Context context)
