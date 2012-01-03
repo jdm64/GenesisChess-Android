@@ -8,7 +8,7 @@ android:id="@+id/botbar">
 	android:src="@drawable/botbar"/>
 	<com.google.ads.AdView
 	android:id="@+id/adView"
-	style="@style/FillWidth"
+	android:layout_gravity="bottom|center_horizontal"
 	ads:adUnitId="a14efd535f17368"
 	ads:adSize="BANNER"/>
 </FrameLayout>
