@@ -10,5 +10,6 @@ android:id="@+id/botbar">
 	android:id="@+id/adView"
 	android:layout_gravity="bottom|center_horizontal"
 	ads:adUnitId="a14efd535f17368"
+	ads:refreshInterval="60"
 	ads:adSize="BANNER"/>
 </FrameLayout>
