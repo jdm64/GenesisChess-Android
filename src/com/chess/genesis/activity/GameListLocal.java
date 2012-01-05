@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +23,13 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONTokener;
 
 public class GameListLocal extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener
 {
@@ -127,6 +137,39 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 		}
 	}
 
+	@Override
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
+	{
+		if (resultCode == RESULT_CANCELED || data == null)
+			return;
+
+		recieveGame(data);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu)
+	{
+		getMenuInflater().inflate(R.menu.options_gamelist_local, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item)
+	{
+		switch (item.getItemId()) {
+		case R.id.import_game:
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent = intent.addCategory(Intent.CATEGORY_OPENABLE).setType("text/*");
+			intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+			startActivityForResult(intent, 1);
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		return true;
+	}
+
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)
 	{
 		final Bundle data = (Bundle) parent.getItemAtPosition(position);
@@ -161,9 +204,52 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 		case R.id.rename_game:
 			(new RenameGameDialog(this, handle, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
 			break;
+		case R.id.share_game:
+			sendGame(bundle);
+			break;
 		default:
 			return super.onContextItemSelected(item);
 		}
 		return true;
+	}
+
+	private void recieveGame(final Intent data)
+	{
+	try {
+		final String str = FileUtils.readFile(data.getData().getPath());
+		final JSONObject json = (JSONObject) (new JSONTokener(str)).nextValue();
+		final Bundle game = GameParser.parse(json);
+		final GameDataDB db = new GameDataDB(this);
+
+		db.addLocalGame(game);
+		db.close();
+		gamelist_adapter.update();
+	} catch (FileNotFoundException e) {
+		Toast.makeText(this, "File Not Found", Toast.LENGTH_LONG).show();
+	} catch (IOException e) {
+		Toast.makeText(this, "Error Reading File", Toast.LENGTH_LONG).show();
+	} catch (JSONException e) {
+		Toast.makeText(this, "File Not JSON Object", Toast.LENGTH_LONG).show();
+	}
+	}
+
+	private void sendGame(final Bundle gamedata)
+	{
+	try {
+		final String gamestr = GameParser.export(gamedata).toString();
+		final Intent intent = new Intent(Intent.ACTION_SEND);
+		final String filename = "genesischess-" + gamedata.getString("name") + ".txt";
+		final Uri uri = FileUtils.writeFile(filename, gamestr);
+
+		intent.putExtra(Intent.EXTRA_STREAM, uri);
+		intent.setType("application/json");
+		startActivity(intent);
+	} catch (JSONException e) {
+		Toast.makeText(this, "Corrupt Game Data", Toast.LENGTH_LONG).show();
+	} catch (FileNotFoundException e) {
+		Toast.makeText(this, "File Not Found", Toast.LENGTH_LONG).show();
+	} catch (IOException e) {
+		Toast.makeText(this, "Error Reading File", Toast.LENGTH_LONG).show();
+	}
 	}
 }
