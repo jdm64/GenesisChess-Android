@@ -69,6 +69,17 @@ final class Enums
 		}
 	}
 
+	public static int OpponentType(final String opponent)
+	{
+		if (opponent.equals("human"))
+			return HUMAN_OPPONENT;
+		if (opponent.equals("cpu-white"))
+			return CPU_WHITE_OPPONENT;
+		if (opponent.equals("cpu-black"))
+			return CPU_BLACK_OPPONENT;
+		throw new RuntimeException("unknown opponenttype: " + opponent);
+	}
+
 	public static String ColorType(final int color)
 	{
 		switch (color) {
@@ -88,8 +99,7 @@ final class Enums
 			return RANDOM;
 		else if (eventtype.equals("invite"))
 			return INVITE;
-		else
-			throw new RuntimeException("unknown eventtype: " + eventtype);
+		throw new RuntimeException("unknown eventtype: " + eventtype);
 	}
 
 	public static String EventType(final int eventtype)
@@ -147,6 +157,33 @@ final class Enums
 			return BLACKIDLE;
 		if (gamestatus.equals("draw"))
 			return DRAW;
+		throw new RuntimeException("unknown gamestatus: " + gamestatus);
+	}
+
+	public static String GameStatus(final int gamestatus)
+	{
+		switch (gamestatus) {
+		case ACTIVE:
+			return "active";
+		case WHITEMATE:
+			return "whitemate";
+		case BLACKMATE:
+			return "blackmate";
+		case STALEMATE:
+			return "stalemate";
+		case IMPOSSIBLE:
+			return "impossible";
+		case WHITERESIGN:
+			return "whiteresign";
+		case BLACKRESIGN:
+			return "blackresign";
+		case WHITEIDLE:
+			return "whiteidle";
+		case BLACKIDLE:
+			return "blackidle";
+		case DRAW:
+			return "draw";
+		}
 		throw new RuntimeException("unknown gamestatus: " + gamestatus);
 	}
 }
