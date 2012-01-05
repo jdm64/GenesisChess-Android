@@ -63,6 +63,15 @@ class GameDataDB
 		return game;
 	}
 
+	public void addLocalGame(final Bundle game)
+	{
+		final Object[] data = {game.getString("name"), game.getLong("ctime"),
+			game.getLong("stime"), game.getInt("gametype"), game.getInt("opponent"),
+			game.getString("history"), game.getString("zfen")};
+
+		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent, history, zfen) VALUES (?, ?, ?, ?, ?, ?, ?);", data);
+	}
+
 	public void saveLocalGame(final int id, final long stime, final String zfen, final String history)
 	{
 		final Object[] data = {stime, zfen, history, id};
