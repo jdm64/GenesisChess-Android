@@ -215,7 +215,6 @@ class RegGameState extends GameState
 
 	public Bundle getBundle()
 	{
-		settings.putString("history", history.toString());
 		return settings;
 	}
 
@@ -230,14 +229,18 @@ class RegGameState extends GameState
 				db.deleteLocalGame(id);
 				db.close();
 				return;
-			}
-			if (exitgame) {
+			} else if (exitgame) {
 				db.close();
 				return;
 			}
 			final long stime = (new Date()).getTime();
 			final String zfen = board.printZfen();
 			final String hist = history.toString();
+
+			// save update local game data bundle
+			settings.putString("history", hist);
+			settings.putString("stime", String.valueOf(stime));
+			settings.putString("zfen", zfen);
 
 			db.saveLocalGame(id, stime, zfen, hist);
 			db.close();
