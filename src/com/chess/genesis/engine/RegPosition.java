@@ -187,11 +187,11 @@ class RegPosition extends RegMoveLookup
 		fen.append(':');
 
 		if (flags.canEnPassant() != 0) {
-			fen.append('a');
-			fen.append(flags.enPassantFile());
+			fen.append((char) ('a' + flags.enPassantFile()));
 			fen.append((ply % 2 != 0)? '3':'6');
 		}
 		fen.append(':');
+		fen.append(ply);
 
 		return fen.toString();
 	}
