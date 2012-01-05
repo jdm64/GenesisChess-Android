@@ -208,6 +208,12 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 			final Intent intent = new Intent(this, MsgBox.class);
 			intent.putExtra("gameid", settings.getString("gameid"));
 			startActivity(intent);
+		case R.id.local_details:
+			(new LocalGameDetails(this, gamestate.getBundle())).show();
+			break;
+		case R.id.online_details:
+			(new OnlineGameDetails(this, gamestate.getBundle())).show();
+			break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

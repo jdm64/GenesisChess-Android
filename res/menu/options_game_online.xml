@@ -11,6 +11,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/nudge_resign"
 	android:title="Nudge/Resign"/>
 	<item
-	android:id="@+id/chat"
-	android:title="Chat"/>
+	android:id="@+id/online_details"
+	android:title="Game Details"/>
 </menu>
