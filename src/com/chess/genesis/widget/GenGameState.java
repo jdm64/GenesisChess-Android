@@ -31,10 +31,12 @@ class GenGameState extends GameState
 					(new Thread(cpu)).start();
 					return;
 				}
-				final GenMove move = bundle.getParcelable("move");
-
 				currentMove();
-				applyMove(move, true, true);
+
+				final GenMove tmove = bundle.getParcelable("move");
+				final GenMove move = new GenMove();
+				if (board.validMove(tmove, move))
+					applyMove(move, true, true);
 				break;
 			default:
 				handleOther(msg);

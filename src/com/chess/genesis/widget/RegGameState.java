@@ -32,10 +32,12 @@ class RegGameState extends GameState
 					(new Thread(cpu)).start();
 					return;
 				}
-				final RegMove move = bundle.getParcelable("move");
-
 				currentMove();
-				applyMove(move, true, true);
+
+				final RegMove tmove = bundle.getParcelable("move");
+				final RegMove move = new RegMove();
+				if (board.validMove(tmove, move))
+					applyMove(move, true, true);
 				break;
 			default:
 				handleOther(msg);
