@@ -2,17 +2,12 @@ package com.chess.genesis;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 class LocalGameDetails extends BaseDialog implements OnClickListener
 {

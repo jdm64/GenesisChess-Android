@@ -2,7 +2,6 @@ package com.chess.genesis;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,8 +9,6 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
 import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 class GenGameState extends GameState
 {

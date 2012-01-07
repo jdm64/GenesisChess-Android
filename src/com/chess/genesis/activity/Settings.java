@@ -13,7 +13,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
@@ -188,20 +187,17 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	{
 		final String key = preference.getKey();
 
-		if (key.equals("benchmark")) {
+		if (key.equals("benchmark"))
 			(new BenchmarkDialog(this)).show();
-		}
 		return true;
 	}
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar:
+		if (v.getId() == R.id.topbar) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 }

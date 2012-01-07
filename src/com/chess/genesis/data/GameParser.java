@@ -90,7 +90,7 @@ class GameParser
 		game.putLong("ctime", data.optLong("ctime", (new Date()).getTime()));
 		game.putLong("stime", data.optLong("stime", (new Date()).getTime()));
 
-		GamePosition pos = parsePosition(data.optString("history", " "), game.getInt("gametype"));
+		final GamePosition pos = parsePosition(data.optString("history", " "), game.getInt("gametype"));
 		game.putString("history", pos.history);
 		game.putString("zfen", pos.zfen);
 

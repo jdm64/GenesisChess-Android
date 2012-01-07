@@ -322,39 +322,30 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
-		switch (v.getId()) {
-		case R.id.game_search:
+		if (v.getId() == R.id.game_search) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
 				v.setBackgroundColor(0xff00b7eb);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
 				v.setBackgroundColor(0x00ffffff);
-			break;
 		}
 		return false;
 	}
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar_plus:
+		if (v.getId() == R.id.topbar_plus)
 			(new NewOnlineGameDialog(v.getContext(), handle)).show();
-			break;
-		case R.id.game_search:
+		else if (v.getId() == R.id.game_search)
 			(new GamePoolDialog(v.getContext())).show();
-			break;
-		}
 	}
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar:
-		case R.id.topbar_genesis:
+		if (v.getId() == R.id.topbar_genesis) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 
 	@Override

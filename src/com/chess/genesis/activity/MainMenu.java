@@ -20,7 +20,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
@@ -93,14 +92,11 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		switch (item.getItemId()) {
-		case R.id.logout:
+		if (item.getItemId() == R.id.logout) {
 			(new LogoutConfirm(this, handle)).show();
-			break;
-		default:
-			return super.onOptionsItemSelected(item);
+			return true;
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

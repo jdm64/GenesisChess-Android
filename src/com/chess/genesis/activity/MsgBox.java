@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -135,8 +134,7 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.submit_msg:
+		if (v.getId() == R.id.submit_msg) {
 			progress.setText("Sending Message");
 
 			final EditText txt = (EditText) findViewById(R.id.new_msg);
@@ -146,7 +144,6 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 				return;
 			net.submit_msg(gameid, msg);
 			(new Thread(net)).start();
-			break;
 		}
 	}
 
@@ -172,14 +169,11 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		switch (item.getItemId()) {
-		case R.id.resync:
+		if (item.getItemId() == R.id.resync) {
 			updateMsgList();
-			break;
-		default:
-			return super.onOptionsItemSelected(item);
+			return true;
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void updateMsgList()

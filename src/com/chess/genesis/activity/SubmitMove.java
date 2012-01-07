@@ -3,7 +3,6 @@ package com.chess.genesis;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -49,14 +48,10 @@ public class SubmitMove extends Activity implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.submit:
+		if (v.getId() == R.id.submit)
 			setResult(RESULT_OK);
-			break;
-		case R.id.cancel:
+		else if (v.getId() == R.id.cancel)
 			setResult(RESULT_CANCELED);
-			break;
-		}
 		finish();
 	}
 }

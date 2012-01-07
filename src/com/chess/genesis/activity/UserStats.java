@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
@@ -29,7 +28,6 @@ public class UserStats extends Activity implements OnLongClickListener
 
 	private Context context;
 	private Bundle settings;
-	private NetworkClient net;
 	private ProgressMsg progress;
 
 	private final Handler handle = new Handler()
@@ -70,7 +68,7 @@ public class UserStats extends Activity implements OnLongClickListener
 
 		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
 
-		net = new NetworkClient(this, handle);
+		final NetworkClient net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
 		final ImageView button = (ImageView) findViewById(R.id.topbar);
@@ -116,13 +114,11 @@ public class UserStats extends Activity implements OnLongClickListener
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar:
+		if (v.getId() == R.id.topbar) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 
 	private void loadStats(final JSONObject data)

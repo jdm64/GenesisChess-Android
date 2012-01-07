@@ -3,10 +3,15 @@ package com.chess.genesis;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.google.ads.*;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 
-class AdsHandler
+final class AdsHandler
 {
+	private AdsHandler()
+	{
+	}
+
 	public static void run(final Activity activity)
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);

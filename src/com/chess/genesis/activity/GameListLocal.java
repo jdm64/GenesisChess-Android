@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -24,7 +22,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.json.JSONObject;
@@ -119,22 +116,17 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar_plus:
+		if (v.getId() == R.id.topbar_plus)
 			(new NewLocalGameDialog(v.getContext(), handle)).show();
-			break;
-		}
 	}
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar_genesis:
+		if (v.getId() == R.id.topbar_genesis) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 
 	@Override
@@ -156,18 +148,15 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		switch (item.getItemId()) {
-		case R.id.import_game:
+		if (item.getItemId() == R.id.import_game) {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent = intent.addCategory(Intent.CATEGORY_OPENABLE).setType("text/*");
 			intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
 			startActivityForResult(intent, 1);
-			break;
-		default:
-			return super.onOptionsItemSelected(item);
+			return true;
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)

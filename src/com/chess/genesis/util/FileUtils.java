@@ -11,8 +11,12 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.MappedByteBuffer;
 
-class FileUtils
+final class FileUtils
 {
+	private FileUtils()
+	{
+	}
+
 	private static FileInputStream tryOpenFileStream(final String path) throws FileNotFoundException
 	{
 		FileInputStream file = null;

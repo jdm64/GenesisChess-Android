@@ -12,7 +12,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -167,8 +166,7 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.login:
+		if (v.getId() == R.id.login) {
 			progress.setText("Requesting Login");
 
 			EditText txt = (EditText) findViewById(R.id.username);
@@ -179,22 +177,18 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 
 			net.login_user(username, password);
 			(new Thread(net)).start();
-			break;
-		case R.id.register:
+		} else if (v.getId() == R.id.register) {
 			startActivityForResult(new Intent(this, Register.class), 1);
-			break;
 		}
 	}
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar:
+		if (v.getId() == R.id.topbar) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 
 	@Override
@@ -207,14 +201,11 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		switch (item.getItemId()) {
-		case R.id.logout:
+		if (item.getItemId() == R.id.logout) {
 			(new LogoutConfirm(this, handle)).show();
-			break;
-		default:
-			return super.onOptionsItemSelected(item);
+			return true;
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void onActivityResult(final int reques, final int result, final Intent data)

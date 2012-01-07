@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -98,22 +97,17 @@ public class Register extends Activity implements OnClickListener, OnLongClickLi
 
 	public void onClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.register:
+		if (v.getId() == R.id.register)
 			register_validate();
-			break;
-		}
 	}
 
 	public boolean onLongClick(final View v)
 	{
-		switch (v.getId()) {
-		case R.id.topbar:
+		if (v.getId() == R.id.topbar) {
 			finish();
 			return true;
-		default:
-			return false;
 		}
+		return false;
 	}
 
 	private void register_validate()

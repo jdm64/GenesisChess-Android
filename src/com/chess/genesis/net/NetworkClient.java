@@ -97,7 +97,7 @@ class NetworkClient implements Runnable
 
 	private JSONObject send_request(final JSONObject data)
 	{
-		JSONObject json2 = new JSONObject();;
+		JSONObject json2 = new JSONObject();
 
 		try {
 			socket.write(data);
