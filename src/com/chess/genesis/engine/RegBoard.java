@@ -332,7 +332,7 @@ class RegBoard extends RegPosition
 
 	public boolean validMove(final RegMove moveIn, final RegMove move)
 	{
-		if (move.from == move.to)
+		if (moveIn.from == moveIn.to)
 			return false;
 
 		final MoveFlags undoFlags = new MoveFlags(flags);
