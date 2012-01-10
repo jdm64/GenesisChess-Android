@@ -1,6 +1,7 @@
 package com.chess.genesis;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -152,8 +153,11 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent = intent.addCategory(Intent.CATEGORY_OPENABLE).setType("text/*");
 			intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
+		try {
 			startActivityForResult(intent, 1);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this, "No File Manager Installed", Toast.LENGTH_LONG).show();
+		}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
