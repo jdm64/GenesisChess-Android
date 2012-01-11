@@ -59,6 +59,7 @@ final class SocketClient
 		if (socket.isConnected())
 			return;
 		socket.connect(new InetSocketAddress("genesischess.com", 8338));
+		socket.setSoTimeout(5000);
 		input = new DataInputStream(socket.getInputStream());
 		output = socket.getOutputStream();
 		loginHash = input.readLine().trim();
