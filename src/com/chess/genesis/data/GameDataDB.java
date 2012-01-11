@@ -125,6 +125,13 @@ class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
+		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
+
+		if (delete) {
+			deleteOnlineGame(gameid);
+			return;
+		}
+
 		final String white = json.getString("white");
 		final String black = json.getString("black");
 		final String zfen = json.getString("zfen");
@@ -160,6 +167,12 @@ class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
+		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
+
+		if (delete) {
+			deleteOnlineGame(gameid);
+			return;
+		}
 
 		final String[] data1 = {gameid};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
@@ -187,6 +200,12 @@ class GameDataDB
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
+	}
+
+	public void deleteOnlineGame(final String gameid)
+	{
+		final Object[] data = {gameid};
+		db.execSQL("DELETE FROM archivegames WHERE gameid=?;", data);
 	}
 
 	public long getNewestOnlineTime()
@@ -271,6 +290,13 @@ class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
+		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
+
+		if (delete) {
+			deleteArchiveGame(gameid);
+			return;
+		}
+
 		final int gametype = Enums.GameType(json.getString("gametype"));
 		final int eventtype = Enums.EventType(json.getString("eventtype"));
 		final int status = Enums.GameStatus(json.getString("status"));
