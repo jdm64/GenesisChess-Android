@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener, OnTouchListener
 {
@@ -92,11 +93,19 @@ public class MainMenu extends Activity implements OnClickListener, OnTouchListen
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		if (item.getItemId() == R.id.logout) {
-			(new LogoutConfirm(this, handle)).show();
-			return true;
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		switch (item.getItemId()) {
+		case R.id.logout:
+			if (pref.getBoolean("isLoggedIn", false))
+				(new LogoutConfirm(this, handle)).show();
+			else
+				Toast.makeText(this, "Already Logged Out", Toast.LENGTH_LONG).show();
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 	@Override
