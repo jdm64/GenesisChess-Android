@@ -222,7 +222,9 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	} catch (IOException e) {
 		Toast.makeText(this, "Error Reading File", Toast.LENGTH_LONG).show();
 	} catch (JSONException e) {
-		Toast.makeText(this, "File Not JSON Object", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "Not A Game Data File", Toast.LENGTH_LONG).show();
+	} catch (ClassCastException e) {
+		Toast.makeText(this, "Not A Game Data File", Toast.LENGTH_LONG).show();
 	}
 	}
 
