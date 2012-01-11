@@ -2,6 +2,7 @@ package com.chess.genesis;
 
 import android.net.Uri;
 import android.os.Environment;
+import java.lang.StringBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.MappedByteBuffer;
+import java.util.Scanner;
 
 final class FileUtils
 {
@@ -45,14 +47,15 @@ final class FileUtils
 	public static String readFile(final String path) throws FileNotFoundException, IOException
 	{
 		final FileInputStream stream = tryOpenFileStream(path);
-
 	try {
-		final FileChannel fc = stream.getChannel();
-		final MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+		final StringBuilder data = new StringBuilder((int) stream.getChannel().size());
+		final Scanner scanner = new Scanner(stream);
 
-		/* Instead of using default, pass in a decoder. */
-		return Charset.defaultCharset().decode(bb).toString();
+		while (scanner.hasNextLine())
+			data.append(scanner.nextLine());
+		return data.toString();
 	} finally {
+		// close stream
 		stream.close();
 	}
 	}
