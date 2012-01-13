@@ -38,6 +38,7 @@ final class UpgradeHandler
 			edit.putString("username", "!error!");
 		}
 
+		edit.putBoolean("enableAds", true);
 		edit.putInt("appVersion", newVer);
 		edit.commit();
 	}
