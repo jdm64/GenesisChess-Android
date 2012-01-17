@@ -29,7 +29,7 @@
 		Are you sure you want to Nudge your opponent? This will email them and give them one week to move before you can close the game.
 	</string>
 	<string name="idleresign_confirm">
-		Your opponent has been idle. Are you sure you want to force close the game?
+		Your opponent has been idle. Are you sure you want to force end the game?
 	</string>
 	<string name="copygame_confirm">
 		Are you sure you want to make a local copy this game?
