@@ -493,8 +493,7 @@ class RegBoard extends RegPosition
 		int white = 0, black = 0;
 		for (int b = 0, w = 16; b < 16; b++, w++) {
 			if (piece[b].loc != Piece.DEAD) {
-				final int mod = (piece[b].type == Piece.BLACK_PAWN || piece[b].type == Piece.BLACK_KING)? -1:1;
-				black += mod * regLocValue[-piece[b].type][piece[b].loc];
+				black += regLocValue[-piece[b].type][piece[b].loc];
 				black += regPieceValue[-piece[b].type];
 			} else {
 				black -= regPieceValue[-piece[b].type];
