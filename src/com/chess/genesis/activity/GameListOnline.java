@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -436,6 +439,9 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 		case R.id.nudge:
 			(new NudgeConfirm(this, handle, bundle.getString("gameid"))).show();
 			break;
+		case R.id.share_game:
+			sendGame(bundle);
+			break;
 		default:
 			return super.onContextItemSelected(item);
 		}
@@ -448,5 +454,26 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 			if (gamelistadapter_arr[i] != null)
 				gamelistadapter_arr[i].update();
 		}
+	}
+
+	private void sendGame(final Bundle gamedata)
+	{
+	try {
+		final String gamename = gamedata.getString("white") + " Vs. " + gamedata.getString("black");
+		final String filename = "genesischess-" + gamename + ".txt";
+		final String gamestr = GameParser.export(gamedata).toString();
+		final Uri uri = FileUtils.writeFile(filename, gamestr);
+		final Intent intent = new Intent(Intent.ACTION_SEND);
+
+		intent.putExtra(Intent.EXTRA_STREAM, uri);
+		intent.setType("application/json");
+		startActivity(intent);
+	} catch (JSONException e) {
+		Toast.makeText(this, "Corrupt Game Data", Toast.LENGTH_LONG).show();
+	} catch (FileNotFoundException e) {
+		Toast.makeText(this, "File Not Found", Toast.LENGTH_LONG).show();
+	} catch (IOException e) {
+		Toast.makeText(this, "Error Reading File", Toast.LENGTH_LONG).show();
+	}
 	}
 }

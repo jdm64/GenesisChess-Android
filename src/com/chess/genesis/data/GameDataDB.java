@@ -111,7 +111,7 @@ class GameDataDB
 		final long time = (new Date()).getTime();
 		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
 		final String dstring = "(?, ?, ?, ?, ?, ?, ?)";
-		final Object[] data2 = {row.get("white") + " vs. " + row.get("black"), time, time,
+		final Object[] data2 = {row.get("white") + " Vs. " + row.get("black"), time, time,
 			row.get("gametype"), Enums.HUMAN_OPPONENT, row.get("zfen"), row.get("history")};
 
 		db.execSQL("INSERT INTO localgames" + tnames + " VALUES " + dstring + ";", data2);

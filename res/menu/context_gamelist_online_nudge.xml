@@ -7,4 +7,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
 	android:id="@+id/nudge"
 	android:title="Nudge" />
+	<item
+	android:id="@+id/share_game"
+	android:title="Share Game" />
 </menu>

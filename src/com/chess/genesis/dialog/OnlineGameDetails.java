@@ -4,6 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.json.JSONException;
 
 class OnlineGameDetails extends BaseDialog implements OnClickListener
 {
@@ -11,7 +15,7 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 
 	public OnlineGameDetails(final Context context, final Bundle data)
 	{
-		super(context, BaseDialog.CANCEL);
+		super(context);
 
 		gamedata = data;
 	}
@@ -22,6 +26,7 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setTitle("Online Game Details");
 		setBodyView(R.layout.dialog_gamedetails_online);
+		setButtonTxt(R.id.ok, "Save To File");
 		setButtonTxt(R.id.cancel, "Close");
 
 		RobotoText txt = (RobotoText) findViewById(R.id.white);
@@ -49,6 +54,28 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 
 	public void onClick(final View v)
 	{
-		dismiss();
+		if (v.getId() == R.id.ok)
+			saveToFile();
+		else
+			dismiss();
+	}
+
+	private void saveToFile()
+	{
+	try {
+		final String gamename = gamedata.getString("white") + " Vs. " + gamedata.getString("black");
+		final String filename = "genesischess-" + gamename + ".txt";
+		final String str = GameParser.parse(gamedata).toString();
+
+		FileUtils.writeFile(filename, str);
+
+		Toast.makeText(getContext(), "File Written To:\n" + filename, Toast.LENGTH_LONG).show();
+	} catch (JSONException e) {
+		Toast.makeText(getContext(), "Game Data Corrupt", Toast.LENGTH_LONG).show();
+	} catch (FileNotFoundException e) {
+		Toast.makeText(getContext(), "Can Not Open File", Toast.LENGTH_LONG).show();
+	} catch (IOException e) {
+		Toast.makeText(getContext(), "I/O Error", Toast.LENGTH_LONG).show();
+	}
 	}
 }

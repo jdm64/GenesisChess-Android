@@ -112,9 +112,18 @@ class GameParser
 	{
 		final JSONObject game = new JSONObject();
 
-		game.put("name", data.getString("name"));
+		// check if game is a local game
+		final String name;
+		if (data.getString("name") == null) {
+			name = data.getString("white") + " Vs. " + data.getString("black");
+			game.put("eventtype", Enums.EventType(Integer.valueOf(data.getString("gametype"))));
+		} else {
+			name = data.getString("name");
+			game.put("opponent", Enums.OpponentType(Integer.valueOf(data.getString("opponent"))));
+		}
+
+		game.put("name", name);
 		game.put("gametype", Enums.GameType(Integer.valueOf(data.getString("gametype"))));
-		game.put("opponent", Enums.OpponentType(Integer.valueOf(data.getString("opponent"))));
 		game.put("history", data.getString("history"));
 
 		return game;
