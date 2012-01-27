@@ -4,77 +4,34 @@ class RegMoveLookup extends MoveLookup
 {
 	public int[] genAll(final int From)
 	{
-		final int type = Math.abs(square[From]), mfrom = mailbox64[From];
-		final int[] offset = offsets[type], list = new int[28];
+		final int type = Math.abs(square[From]);
+		int[] list = new int[28];
 		int next = 0;
 
-		switch (type) {
-		case Piece.PAWN:
-			if (square[From] > 0) { // WHITE
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 9]))
-					list[next++] = From - 9;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 7]))
-					list[next++] = From - 7;
-				if (square[From - 8] == 0) {
-					list[next++] = From - 8;
-					if (From >= 48 && square[From - 16] == 0)
-						list[next++] = From - 16;
+		if (type == Piece.PAWN) {
+			if (square[From] == Piece.WHITE_PAWN) { // WHITE
+				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+					list[next++] = From + 15;
+				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
+					list[next++] = From + 17;
+				if (square[From + 16] == 0) {
+					list[next++] = From + 16;
+					if (From <= Piece.H2 && square[From + 32] == 0)
+						list[next++] = From + 32;
 				}
 			} else { // BLACK
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 7]))
-					list[next++] = From + 7;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 9]))
-					list[next++] = From + 9;
-				if (square[From + 8] == 0) {
-					list[next++] = From + 8;
-					if (From <= 15 && square[From + 16] == 0)
-						list[next++] = From + 16;
+				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
+					list[next++] = From - 17;
+				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
+					list[next++] = From - 15;
+				if (square[From - 16] == 0) {
+					list[next++] = From - 16;
+					if (From >= Piece.A7 && square[From - 32] == 0)
+						list[next++] = From - 32;
 				}
 			}
-			break;
-		case Piece.KNIGHT:
-		case Piece.KING:
-			for (int dir = 0; dir < 8; dir++) {
-				final int to = mailbox[mfrom + offset[dir]];
-				if (to == -1)
-					continue;
-				else if (ANY_MOVE(square[From], square[to]))
-					list[next++] = to;
-			}
-			break;
-		case Piece.BISHOP:
-		case Piece.ROOK:
-			for (int dir = 0; dir < 4; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						list[next++] = to;
-						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						list[next++] = to;
-					}
-					break;
-				}
-			}
-			break;
-		case Piece.QUEEN:
-			for (int dir = 0; dir < 8; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						list[next++] = to;
-						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						list[next++] = to;
-					}
-					break;
-				}
-			}
-			break;
+		} else {
+			next = genAll_xPawn(list, offsets[type], From, type);
 		}
 		list[next] = -1;
 		return list;
@@ -82,63 +39,24 @@ class RegMoveLookup extends MoveLookup
 
 	public int[] genCapture(final int From)
 	{
-		final int type = Math.abs(square[From]),  mfrom = mailbox64[From];
-		final int[] offset = offsets[type], list = new int[28];
+		final int type = Math.abs(square[From]); //  mfrom = mailbox64[From];
+		int[] list = new int[28];
 		int next = 0;
 
-		switch (type) {
-		case Piece.PAWN:
-			if (square[From] > 0) { // WHITE
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 9]))
-					list[next++] = From - 9;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 7]))
-					list[next++] = From - 7;
+		if (type == Piece.PAWN) {
+			if (square[From] == Piece.WHITE_PAWN) { // WHITE
+				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+					list[next++] = From + 15;
+				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
+					list[next++] = From + 17;
 			} else { // BLACK
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 7]))
-					list[next++] = From + 7;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 9]))
-					list[next++] = From + 9;
+				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
+					list[next++] = From - 17;
+				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
+					list[next++] = From - 15;
 			}
-			break;
-		case Piece.KNIGHT:
-		case Piece.KING:
-			for (int dir = 0; dir < 8; dir++) {
-				final int to = mailbox[mfrom + offset[dir]];
-				if (to == -1)
-					continue;
-				else if (CAPTURE_MOVE(square[From], square[to]))
-					list[next++] = to;
-			}
-			break;
-		case Piece.BISHOP:
-		case Piece.ROOK:
-			for (int dir = 0; dir < 4; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1)
-						break;
-					else if (square[to] == Piece.EMPTY)
-						continue;
-					else if (CAPTURE_MOVE(square[From], square[to]))
-						list[next++] = to;
-					break;
-				}
-			}
-			break;
-		case Piece.QUEEN:
-			for (int dir = 0; dir < 8; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1)
-						break;
-					else if (square[to] == Piece.EMPTY)
-						continue;
-					else if (CAPTURE_MOVE(square[From], square[to]))
-						list[next++] = to;
-					break;
-				}
-			}
-			break;
+		} else {
+			next = genCapture_xPawn(list, offsets[type], From, type);
 		}
 		list[next] = -1;
 		return list;
@@ -146,65 +64,26 @@ class RegMoveLookup extends MoveLookup
 
 	public int[] genMove(final int From)
 	{
-		final int type = Math.abs(square[From]), mfrom = mailbox64[From];
-		final int[] offset = offsets[type], list = new int[28];
+		final int type = Math.abs(square[From]);
+		int[] list = new int[28];
 		int next = 0;
 
-		switch (type) {
-		case Piece.PAWN:
-			if (square[From] > 0) { // WHITE
-				if (square[From - 8] == 0) {
-					list[next++] = From - 8;
-					if (From >= 48 && square[From - 16] == 0)
-						list[next++] = From - 16;
+		if (type == Piece.PAWN) {
+			if (square[From] == Piece.WHITE_PAWN) { // WHITE
+				if (square[From + 16] == 0) {
+					list[next++] = From + 16;
+					if (From <= Piece.H2 && square[From + 32] == 0)
+						list[next++] = From + 32;
 				}
 			} else { // BLACK
-				if (square[From + 8] == 0) {
-					list[next++] = From + 8;
-					if (From <= 15 && square[From + 16] == 0)
-						list[next++] = From + 16;
+				if (square[From - 16] == 0) {
+					list[next++] = From - 16;
+					if (From >= Piece.A7 && square[From - 32] == 0)
+						list[next++] = From - 32;
 				}
 			}
-			break;
-		case Piece.KNIGHT:
-		case Piece.KING:
-			for (int dir = 0; dir < 8; dir++) {
-				final int to = mailbox[mfrom + offset[dir]];
-				if (to == -1)
-					continue;
-				else if (square[to] == Piece.EMPTY)
-					list[next++] = to;
-			}
-			break;
-		case Piece.BISHOP:
-		case Piece.ROOK:
-			for (int dir = 0; dir < 4; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						list[next++] = to;
-						continue;
-					}
-					break;
-				}
-			}
-			break;
-		case Piece.QUEEN:
-			for (int dir = 0; dir < 8; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						list[next++] = to;
-						continue;
-					}
-					break;
-				}
-			}
-			break;
+		} else {
+			next = genMove_xPawn(list, offsets[type], From, type);
 		}
 		list[next] = -1;
 		return list;
@@ -212,118 +91,107 @@ class RegMoveLookup extends MoveLookup
 
 	public boolean fromto(final int From, final int To)
 	{
-		final int type = Math.abs(square[From]), mfrom = mailbox64[From];
-		final int[] offset = offsets[type];
+		final int type = Math.abs(square[From]);
 
-		switch (type) {
-		case Piece.PAWN:
-			if (square[From] > 0) { // WHITE
-				if (From - 9 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 9]))
+		if (type == Piece.PAWN) {
+			if (square[From] == Piece.WHITE_PAWN) { // WHITE
+				if (From + 15 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
 					return true;
-				if (From - 7 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 7]))
+				if (From + 17 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
 					return true;
-				if (square[From - 8] == 0) {
-					if (From - 8 == To)
+				if (square[From + 16] == 0) {
+					if (From + 16 == To)
 						return true;
-					if (From >= 48 && square[From - 16] == 0 && From - 16 == To)
+					if (From + 32 == To && From <= Piece.H2 && square[From + 32] == 0)
 						return true;
 				}
 			} else { // BLACK
-				if (From + 7 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 7]))
+				if (From - 17 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
 					return true;
-				if (From + 9 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 9]))
+				if (From - 15 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
 					return true;
-				if (square[From + 8] == 0) {
-					if (From + 8 == To)
+				if (square[From - 16] == 0) {
+					if (From - 16 == To)
 						return true;
-					if (From <= 15 && square[From + 16] == 0 && From + 16 == To)
+					else if (From - 32 == To && From >= Piece.A7 && square[From - 32] == 0)
 						return true;
 				}
 			}
-			break;
-		case Piece.KNIGHT:
-		case Piece.KING:
-			for (int dir = 0; dir < 8; dir++) {
-				final int to = mailbox[mfrom + offset[dir]];
-				if (to == -1)
-					continue;
-				else if (ANY_MOVE(square[From], square[to]) && to == To)
+		} else {
+			return fromto_xPawn(From, To, type, offsets[type]);
+		}
+		return false;
+	}
+
+	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
+	{
+		int offset = db.step * ((To > From)? 1:-1);
+		for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
+			if (square[to] == Piece.EMPTY) {
+				continue;
+			} else if (OWN_PIECE(square[From], square[to])) {
+				return false;
+			} else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN) {
+				return true;
+			} else if (k == 1) {
+				if (Math.abs(square[to]) == Piece.PAWN && square[From] * (to - From) > 0)
 					return true;
-			}
-			break;
-		case Piece.BISHOP:
-		case Piece.ROOK:
-			for (int dir = 0; dir < 4; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						if (to == To)
-							return true;
-						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
-						return true;
-					}
-					break;
-				}
-			}
-			break;
-		case Piece.QUEEN:
-			for (int dir = 0; dir < 8; dir++) {
-				for (int k = 1; k < 8; k++) {
-					final int to = mailbox[mfrom + k * offset[dir]];
-					if (to == -1) {
-						break;
-					} else if (square[to] == Piece.EMPTY) {
-						if (to == To)
-							return true;
-						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to]) && to == To) {
-						return true;
-					}
-					break;
-				}
+				else if (Math.abs(square[to]) == Piece.KING)
+					return true;
 			}
 			break;
 		}
 		return false;
 	}
 
-	public boolean isAttacked(final int From, final int Bycolor)
+	public boolean attackLine(final int From, final int To)
 	{
-		final int mfrom = mailbox64[From];
+		if ((From & 0x88) != 0)
+			return false;
 
-		for (int dir = 0; dir < 4; dir++) {
-			for (int k = 1; k < 8; k++) {
-				final int to = mailbox[mfrom + k * offsets[Piece.ROOK][dir]];
-				if (to == -1)
-					break;
-				else if (square[to] == Piece.EMPTY)
+		int diff = Math.abs(From - To);
+
+		if (DistDB.TABLE[diff].step == 0)
+			return false;
+
+		DistDB db = DistDB.TABLE[diff];
+		switch (db.type) {
+		case Piece.KNIGHT:
+			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
+		case Piece.BISHOP:
+			return attackLine_Bishop(db, From, To);
+		case Piece.ROOK:
+			int offset = db.step * ((To > From)? 1:-1);
+			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
+				if (square[to] == Piece.EMPTY)
 					continue;
-				else if (OWN_PIECE(square[to], Bycolor))
+				else if (OWN_PIECE(square[From], square[to]))
 					break;
-				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
-					return true;
 				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
 					return true;
-				break;
-			}
-		}
-
-		for (int dir = 0; dir < 4; dir++) {
-			for (int k = 1; k < 8; k++) {
-				final int to = mailbox[mfrom + k * offsets[Piece.BISHOP][dir]];
-				if (to == -1) {
+				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
+					return true;
+				else
 					break;
-				} else if (square[to] == Piece.EMPTY) {
+			}
+			break;
+		}
+		return false;
+	}
+
+	public boolean isAttacked(final int From, final int FromColor)
+	{
+		int[] offset = offsets[Piece.BISHOP];
+		for (int i = 0; offset[i] != 0; i++) {
+			for (int to = From + offset[i], k = 1; (to & 0x88) == 0; to += offset[i], k++) {
+				if (square[to] == Piece.EMPTY) {
 					continue;
-				} else if (OWN_PIECE(square[to], Bycolor)) {
+				} else if (OWN_PIECE(FromColor, square[to])) {
 					break;
 				} else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN) {
 					return true;
 				} else if (k == 1) {
-					if (Math.abs(square[to]) == Piece.PAWN && Bycolor * (From - to) > 0)
+					if (Math.abs(square[to]) == Piece.PAWN && FromColor * (to - From) > 0)
 						return true;
 					else if (Math.abs(square[to]) == Piece.KING)
 						return true;
@@ -331,16 +199,7 @@ class RegMoveLookup extends MoveLookup
 				break;
 			}
 		}
-
-		for (int dir = 0; dir < 8; dir++) {
-			final int to = mailbox[mfrom + offsets[Piece.KNIGHT][dir]];
-			if (to == -1)
-				continue;
-			else if (NOT_CAPTURE(square[to], Bycolor))
-				continue;
-			else if (Math.abs(square[to]) == Piece.KNIGHT)
-				return true;
-		}
-		return false;
+		return isAttacked_xBishop(From, FromColor);
 	}
+
 }

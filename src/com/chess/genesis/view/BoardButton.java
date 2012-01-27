@@ -32,7 +32,7 @@ class BoardButton extends FrameLayout
 		View.inflate(context, R.layout.framelayout_boardbutton, this);
 
 		squareIndex = index;
-		squareColor = ((index / 8) % 2 == 1)? 
+		squareColor = ((index / 16) % 2 == 1)?
 				((index % 2 == 1)? WHITE : BLACK) :
 				((index % 2 == 1)? BLACK : WHITE);
 		setId(squareIndex);

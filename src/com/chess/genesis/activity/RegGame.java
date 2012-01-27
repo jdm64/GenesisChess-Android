@@ -48,7 +48,12 @@ public class RegGame extends Game implements OnClickListener, OnLongClickListene
 
 		for (int i = 0; i < 64; i++) {
 			final BoardButton square = (BoardButton) findViewById(i);
-			square.setPiece(RegBoard.InitRegBoard[i]);
+			square.setPiece(Piece.EMPTY);
+		}
+		for (int i = 0; i < 32; i++) {
+			final int loc = MoveLookup.EE64(RegBoard.InitRegPiece[i]);
+			final BoardButton square = (BoardButton) findViewById(loc);
+			square.setPiece(Move.InitPieceType[i]);
 		}
 	}
 }

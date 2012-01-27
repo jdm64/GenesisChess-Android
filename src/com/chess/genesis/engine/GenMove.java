@@ -44,8 +44,8 @@ class GenMove extends Move implements Parcelable
 		final StringBuffer str = new StringBuffer();
 
 		if (loc > Piece.PLACEABLE) {
-			str.append((char)((int)'a' + (loc % 8)));
-			str.append((char)((int)'8' - (loc / 8)));
+			str.append((char) ('a' + (loc & 7)));
+			str.append((char) ('1' + (loc >> 4)));
 			return str;
 		} else if (loc == Piece.PLACEABLE) {
 			str.append("aval");
@@ -61,7 +61,7 @@ class GenMove extends Move implements Parcelable
 		final StringBuffer out = new StringBuffer();
 
 		if (from == Piece.PLACEABLE)
-			out.append(pieceSymbol[Math.abs(GenBoard.pieceType[index])]);
+			out.append(pieceSymbol[Math.abs(InitPieceType[index])]);
 		else
 			out.append(printLoc(from));
 		out.append(printLoc(to));
@@ -106,8 +106,7 @@ class GenMove extends Move implements Parcelable
 			// parse placement move
 			if (s[1] < 'a' || s[1] > 'h' || s[2] < '0' || s[2] > '9')
 				return false;
-			to = s[1] - 'a';
-			to += 8 * (8 - (s[2] - '0'));
+			to = 16 * (s[2] - '1') + (s[1] - 'a');
 			from = Piece.PLACEABLE;
 			index = piece;
 		} else {
@@ -115,10 +114,8 @@ class GenMove extends Move implements Parcelable
 			if (s[0] < 'a' || s[0] > 'h' || s[1] < '0' || s[1] > '9' ||
 					s[2] < 'a' || s[2] > 'h' || s[3] < '0' || s[3] > '9')
 				return false;
-			from = s[0] - 'a';
-			from += 8 * (8 - (s[1] - '0'));
-			to = s[2] - 'a';
-			to += 8 * (8 - (s[3] - '0'));
+			from = 16 * (s[1] - '1') + (s[0] - 'a');
+			to = 16 * (s[3] - '1') + (s[2] - 'a');
 		}
 		return true;
 	}

@@ -25,22 +25,22 @@ class BoardLayout extends TableLayout implements OnClickListener
 		gamestate = _gamestate;
 
 		if (game.viewAsBlack) {
-			for (int i = 7; i >= 0; i--) {
+			for (int i = 0; i < 8; i++) {
 				final TableRow row = new TableRow(game);
 
 				for (int j = 7; j >= 0; j--) {
-					final BoardButton button = new BoardButton(game, i * 8 + j);
+					final BoardButton button = new BoardButton(game, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
 				addView(row);
 			}
 		} else {
-			for (int i = 0; i < 8; i++) {
+			for (int i = 7; i >= 0; i--) {
 				final TableRow row = new TableRow(game);
 
 				for (int j = 0; j < 8; j++) {
-					final BoardButton button = new BoardButton(game, i * 8 + j);
+					final BoardButton button = new BoardButton(game, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}

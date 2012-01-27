@@ -36,7 +36,7 @@ class PlaceButton extends FrameLayout
 
 		type = Type;
 		count = typeCounts[Math.abs(type)];
-		setId(type + 100);
+		setId(type + 1000);
 
 		setBoardImage(type);
 		setPiece(type);

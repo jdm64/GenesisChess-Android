@@ -235,11 +235,11 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 
 	public void reset()
 	{
-		for (int i = 94; i < 100; i++) {
+		for (int i = 994; i < 1000; i++) {
 			final PlaceButton piece = (PlaceButton) findViewById(i);
 			piece.reset();
 		}
-		for (int i = 101; i < 107; i++) {
+		for (int i = 1001; i < 1007; i++) {
 			final PlaceButton piece = (PlaceButton) findViewById(i);
 			piece.reset();
 		}

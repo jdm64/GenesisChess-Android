@@ -2,17 +2,6 @@ package com.chess.genesis;
 
 class GenPosition extends GenMoveLookup
 {
-	private static final int[] TYPE = {
-		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
-		Piece.EMPTY,		Piece.BLACK_KNIGHT,	Piece.EMPTY,		Piece.BLACK_PAWN,
-		Piece.BLACK_QUEEN,	Piece.BLACK_ROOK,	Piece.EMPTY,		Piece.EMPTY,
-		Piece.WHITE_KING,	Piece.EMPTY,		Piece.BLACK_BISHOP,	Piece.WHITE_KNIGHT,
-		Piece.EMPTY,		Piece.WHITE_PAWN,	Piece.WHITE_QUEEN,	Piece.WHITE_ROOK};
-
-	public int[] piece;
-	public int stm;
-	public int ply;
-
 	public GenPosition()
 	{
 		square = new int[64];
@@ -28,10 +17,31 @@ class GenPosition extends GenMoveLookup
 
 	private void parseReset()
 	{
-		for (int i = 0; i < 64; i++)
+		for (int i = 0; i < 128; i++)
 			square[i] = Piece.EMPTY;
-		for (int i = 0; i < 32; i++)
+		for (int i = 0; i < 32; i++) {
 			piece[i] = Piece.DEAD;
+			piecetype[i] = Move.InitPieceType[i];
+		}
+	}
+
+	private void setMaxPly()
+	{
+		int tply = 0;
+		for (int i = 0; i < 32; i++) {
+			if (piece[i] == Piece.DEAD)
+				tply += 2;
+			else if (piece[i] != Piece.PLACEABLE)
+				tply++;
+		}
+		ply = Math.max(ply, tply);
+
+		if (stm == Piece.WHITE) {
+			if (ply % 2 != 0)
+				ply++;
+		} else if (ply % 2 == 0) {
+			ply++;
+		}
 	}
 
 	private boolean setPiece(final int loc, final int type)
@@ -58,7 +68,7 @@ class GenPosition extends GenMoveLookup
 		return (piece[king] == Piece.PLACEABLE)? false : isAttacked(piece[king]);
 	}
 
-	public boolean parseZfen(final String pos)
+	private int parseZfen_Board(final String pos)
 	{
 		parseReset();
 		final char[] st = pos.toCharArray();
@@ -79,86 +89,90 @@ class GenPosition extends GenMoveLookup
 					num = new StringBuffer();
 					act = false;
 				}
-				if (!setPiece(loc, TYPE[st[n] % 21]))
-					return false;
+				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
+					return -1;
 				loc++;
 			} else if (st[n] == ':') {
 				n++;
 				break;
 			} else {
-				return false;
+				return -1;
 			}
 		}
+		return n;
+	}
+
+	public boolean parseZfen(final String pos)
+	{
+		int n = parseZfen_Board(pos);
+
+		// check if board parsing failed
+		if (n <= 0)
+			return false;
 
 		// parse placeable pieces
+		final char[] st = pos.toCharArray();
 		for (;; n++) {
 			if (st[n] == ':') {
 				n++;
 				break;
 			} else if (!Character.isLetter(st[n])) {
 				return false;
-			} else if (!setPiece(Piece.PLACEABLE, TYPE[st[n] % 21])) {
+			} else if (!setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
 				return false;
 			}
 		}
 
 		// parse half-ply
-		num = new StringBuffer();
+		StringBuffer num = new StringBuffer();
 		while (Character.isDigit(st[n])) {
 			num.append(st[n]);
 			n++;
 		}
 		ply = Integer.valueOf(num.toString());
+		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
 
-		int mply = 0;
-		for (int i = 0; i < 32; i++) {
-			switch (piece[i]) {
-			case Piece.DEAD:
-				mply += 2;
-				break;
-			case Piece.PLACEABLE:
-				break;
-			default:
-				mply += 1;
-				break;
-			}
-		}
-		if (ply < mply)
-			return false;
+		setMaxPly();
 
 		// check if color not on move is in check
-		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
 		if (incheck(stm ^ -2))
 			return false;
 		return true;
 	}
 
-	public String printZfen()
+	private void printZfen_Board(final StringBuffer fen)
 	{
-		final StringBuffer fen = new StringBuffer();
-
 		for (int i = 0, empty = 0; i < 64; i++) {
-			if (square[i] == Piece.EMPTY) {
+			// convert cordinate system
+			int n = SFF88(i);
+			if (square[n] == Piece.EMPTY) {
 				empty++;
 				continue;
-			}
-			if (empty != 0)
+			} else if (empty != 0) {
 				fen.append(empty);
-			if (square[i] > Piece.EMPTY)
-				fen.append(Move.pieceSymbol[square[i]]);
+			}
+			if (square[n] > Piece.EMPTY)
+				fen.append(Move.pieceSymbol[square[n]]);
 			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase());
 			empty = 0;
 		}
 		fen.append(':');
+	}
+
+	public String printZfen()
+	{
+		StringBuffer fen = new StringBuffer();
+
+		printZfen_Board(fen);
 
 		for (int i = 0; i < 16; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(String.valueOf(Move.pieceSymbol[-GenBoard.pieceType[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase());
 		}
 		for (int i = 16; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(Move.pieceSymbol[GenBoard.pieceType[i]]);
+				fen.append(Move.pieceSymbol[Move.InitPieceType[i]]);
 		}
 		fen.append(':');
 		fen.append(ply);

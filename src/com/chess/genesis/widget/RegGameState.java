@@ -116,19 +116,20 @@ class RegGameState extends GameState
 		// set place piece counts
 		final int[] pieces = board.getPieceCounts(Piece.DEAD);
 		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			final BoardButton button = (BoardButton) activity.findViewById(i);
-			button.setPiece(squares[i]);
+			int loc = MoveLookup.SF88(i);
+			final BoardButton button = (BoardButton) activity.findViewById(loc);
+			button.setPiece(squares[loc]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
@@ -385,12 +386,12 @@ class RegGameState extends GameState
 		from.setHighlight(false);
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piece[move.xindex].type + 100);
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piecetype[move.xindex] + 1000);
 			piece.plusPiece();
 		}
 
 		if (move.getCastle() != 0) {
-			final boolean left = (move.getCastle() == 0x20);
+			final boolean left = (move.getCastle() == Move.CASTLE_QS);
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
 
@@ -402,7 +403,7 @@ class RegGameState extends GameState
 			final BoardButton pawn = (BoardButton) activity.findViewById(move.to);
 			pawn.setPiece(Piece.QUEEN * board.getStm());
 		} else if (move.getEnPassant()) {
-			final BoardButton pawn = (BoardButton) activity.findViewById(board.piece[move.xindex].loc);
+			final BoardButton pawn = (BoardButton) activity.findViewById(board.piece[move.xindex]);
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -451,21 +452,21 @@ class RegGameState extends GameState
 		if (move.xindex == Piece.NONE) {
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
-			final int loc = move.to + ((move.from - move.to > 0)? 8 : -8);
+			final int loc = move.to + ((move.to - move.from > 0)? -16 : 16);
 			final BoardButton pawn = (BoardButton) activity.findViewById(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
-			to.setPiece(board.piece[move.xindex].type);
+			to.setPiece(board.piecetype[move.xindex]);
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piece[move.xindex].type + 100);
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piecetype[move.xindex] + 1000);
 			piece.minusPiece();
 		}
 
 		if (move.getCastle() != 0) {
-			final boolean left = (move.getCastle() == 0x20);
+			final boolean left = (move.getCastle() == Move.CASTLE_QS);
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
 			

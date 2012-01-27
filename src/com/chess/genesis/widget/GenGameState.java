@@ -113,19 +113,20 @@ class GenGameState extends GameState
 		// set place piece counts
 		final int[] pieces = board.getPieceCounts(Piece.PLACEABLE);
 		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 100);
+			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			final BoardButton button = (BoardButton) activity.findViewById(i);
-			button.setPiece(squares[i]);
+			final int loc = MoveLookup.SF88(i);
+			final BoardButton button = (BoardButton) activity.findViewById(loc);
+			button.setPiece(squares[loc]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
@@ -345,8 +346,8 @@ class GenGameState extends GameState
 		final GenMove move = new GenMove();
 
 		// create move
-		if (callstack.get(0) > 64) {
-			move.index = Math.abs(callstack.get(0) - 100);
+		if (callstack.get(0) > 0x88) {
+			move.index = Math.abs(callstack.get(0) - 1000);
 			move.from = Piece.PLACEABLE;
 		} else {
 			move.from = callstack.get(0);
@@ -378,7 +379,7 @@ class GenGameState extends GameState
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(GenBoard.pieceType[move.index] + 100);
+			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
 			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			from.setHighlight(false);
@@ -427,7 +428,7 @@ class GenGameState extends GameState
 		}
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(GenBoard.pieceType[move.index] + 100);
+			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
 			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			to.setLast(false);
@@ -443,7 +444,7 @@ class GenGameState extends GameState
 			if (move.xindex == Piece.NONE)
 				to.setPiece(0);
 			else
-				to.setPiece(GenBoard.pieceType[move.xindex]);
+				to.setPiece(Move.InitPieceType[move.xindex]);
 		}
 
 		board.unmake(move);
@@ -482,7 +483,7 @@ class GenGameState extends GameState
 			callstack.clear();
 			to.setHighlight(false);
 			return;
-		} else if (callstack.get(0) > 64) {
+		} else if (callstack.get(0) > 0x88) {
 		// Place piece action
 			// can't place on another piece
 			if (to.getPiece() * col < 0) {
@@ -520,15 +521,15 @@ class GenGameState extends GameState
 			return;
 		if (callstack.size() == 0) {
 		// No active clicks
-			callstack.push(ptype + 100);
+			callstack.push(ptype + 1000);
 			from.setHighlight(true);
-		} else if (callstack.get(0) < 64) {
+		} else if (callstack.get(0) < 0x88) {
 		// switching from board to place piece
 			final BoardButton to = (BoardButton) activity.findViewById(callstack.get(0));
 			to.setHighlight(false);
-			callstack.set(0, ptype + 100);
+			callstack.set(0, ptype + 1000);
 			from.setHighlight(true);
-		} else if (callstack.get(0) == ptype + 100) {
+		} else if (callstack.get(0) == ptype + 1000) {
 		// clicking the same square
 			callstack.clear();
 			from.setHighlight(false);
@@ -536,7 +537,7 @@ class GenGameState extends GameState
 		// switching to another place piece
 			final PlaceButton fromold = (PlaceButton) activity.findViewById(callstack.get(0));
 			fromold.setHighlight(false);
-			callstack.set(0, ptype + 100);
+			callstack.set(0, ptype + 1000);
 			from.setHighlight(true);
 		}
 		activity.game_board.flip();

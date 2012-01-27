@@ -59,32 +59,32 @@ class RegMove extends Move implements Parcelable
 
 	public int getCastle()
 	{
-		return flags & 0x30;
+		return flags & (CASTLE_KS | CASTLE_QS);
 	}
 
 	public void setCastle(final int side)
 	{
-		flags = side & 0x30;
+		flags = side & (CASTLE_KS | CASTLE_QS);
 	}
 
 	public void setEnPassant()
 	{
-		flags = 0x8;
+		flags = CAN_EP;
 	}
 
 	public boolean getEnPassant()
 	{
-		return (flags & 0x8) != 0;
+		return (flags & CAN_EP) != 0;
 	}
 
 	public void setPromote(final int type)
 	{
-		flags = 0x7 & type;
+		flags = type & 0x07;
 	}
 
 	public int getPromote()
 	{
-		return flags & 0x7;
+		return flags & 0x07;
 	}
 
 	public int type()
@@ -100,8 +100,8 @@ class RegMove extends Move implements Parcelable
 		final StringBuffer str = new StringBuffer();
 
 		if (loc > Piece.PLACEABLE) {
-			str.append((char)((int)'a' + (loc % 8)));
-			str.append((char)((int)'8' - (loc / 8)));
+			str.append((char) ('a' + (loc & 7)));
+			str.append((char) ('1' + (loc >> 4)));
 			return str;
 		} else {
 			str.append("dead");
@@ -113,7 +113,7 @@ class RegMove extends Move implements Parcelable
 	public String toString()
 	{
 		if (getCastle() != 0) {
-			if (getCastle() == 0x10)
+			if (getCastle() == CASTLE_KS)
 				return "O-O";
 			else
 				return "O-O-O";
@@ -154,14 +154,14 @@ class RegMove extends Move implements Parcelable
 			if (s[2] != 'O' && s[2] != 'o' && s[2] != '0')
 				return false;
 			if (s.length == 3) {
-				setCastle(0x10);
+				setCastle(CASTLE_KS);
 				return true;
 			}
 			if (s[3] != '-')
 				return false;
 			if (s[4] != 'O' && s[4] != 'o' && s[4] != '0')
 				return false;
-			setCastle(0x20);
+			setCastle(CASTLE_QS);
 			return true;
 		}
 
@@ -169,10 +169,8 @@ class RegMove extends Move implements Parcelable
 				s[2] < 'a' || s[2] > 'h' || s[3] < '1' || s[3] > '8')
 			return false;
 
-		from = s[0] - 'a';
-		from += 8 * (8 - (s[1] - '0'));
-		to = s[2] - 'a';
-		to += 8 * (8 - (s[3] - '0'));
+		from = 16 * (s[1] - '1') + (s[0] - 'a');
+		to = 16 * (s[3] - '1') + (s[2] - 'a');
 
 		if (s.length == 5) {
 			switch (s[4]) {
