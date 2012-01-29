@@ -86,7 +86,7 @@ class RegGameState extends GameState
 			final RegMove move = new RegMove();
 			move.parse(movehistory[i]);
 
-			if (board.validMove(move) != RegBoard.VALID_MOVE)
+			if (board.validMove(move) != Move.VALID_MOVE)
 				break;
 			flagsHistory.push(board.getMoveFlags());
 			history.push(move);
@@ -171,13 +171,13 @@ class RegGameState extends GameState
 		boolean mate = false;
 
 		switch (board.isMate()) {
-		case RegBoard.NOT_MATE:
+		case Move.NOT_MATE:
 		default:
 			if (runCPU())
 				think = " thinking";
 			break;
-		case RegBoard.CHECK_MATE:
-		case RegBoard.STALE_MATE:
+		case Move.CHECK_MATE:
+		case Move.STALE_MATE:
 			mate = true;
 			break;
 		}
@@ -269,7 +269,7 @@ class RegGameState extends GameState
 
 		final RegMove move = new RegMove();
 		move.parse(movehistory[movehistory.length - 1]);
-		if (board.validMove(move) != RegBoard.VALID_MOVE)
+		if (board.validMove(move) != Move.VALID_MOVE)
 			return;
 		applyMove(move, true, false);
 	}
@@ -354,7 +354,7 @@ class RegGameState extends GameState
 		move.to = callstack.get(1);
 
 		// return if move isn't valid
-		if (board.validMove(move) != RegBoard.VALID_MOVE) {
+		if (board.validMove(move) != Move.VALID_MOVE) {
 			callstack.pop();
 			return;
 		}

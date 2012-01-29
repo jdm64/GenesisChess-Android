@@ -72,7 +72,7 @@ class GenEngine extends Engine implements Runnable
 
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
-		final GenMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? GenBoard.MOVE_ALL : GenBoard.MOVE_CAPTURE);
+		final GenMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
 		if (ptr.size == 0)
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
@@ -216,13 +216,13 @@ class GenEngine extends Engine implements Runnable
 		} while (false);
 
 		final Int Alpha = new Int(alpha);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, GenBoard.MOVE_CAPTURE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, Move.MOVE_CAPTURE))
 			return score.val;
 		best = Math.max(best, score.val);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, GenBoard.MOVE_MOVE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, Move.MOVE_MOVE))
 			return score.val;
 		best = Math.max(best, score.val);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, placeKiller, GenBoard.MOVE_PLACE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, placeKiller, Move.MOVE_PLACE))
 			return score.val;
 		best = Math.max(best, score.val);
 

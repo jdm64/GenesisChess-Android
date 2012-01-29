@@ -38,7 +38,7 @@ class GameParser
 				final GenMove move = new GenMove();
 				move.parse(movehistory[i]);
 
-				if (board.validMove(move) != GenBoard.VALID_MOVE)
+				if (board.validMove(move) != Move.VALID_MOVE)
 					break;
 				history.push(move);
 				board.make(move);
@@ -60,7 +60,7 @@ class GameParser
 				final RegMove move = new RegMove();
 				move.parse(movehistory[i]);
 
-				if (board.validMove(move) != RegBoard.VALID_MOVE)
+				if (board.validMove(move) != Move.VALID_MOVE)
 					break;
 				history.push(move);
 				board.make(move);

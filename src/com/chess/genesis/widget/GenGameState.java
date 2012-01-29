@@ -84,7 +84,7 @@ class GenGameState extends GameState
 			final GenMove move = new GenMove();
 			move.parse(movehistory[i]);
 
-			if (board.validMove(move) != GenBoard.VALID_MOVE)
+			if (board.validMove(move) != Move.VALID_MOVE)
 				break;
 			history.push(move);
 			board.make(move);
@@ -168,13 +168,13 @@ class GenGameState extends GameState
 		boolean mate = false;
 
 		switch (board.isMate()) {
-		case GenBoard.NOT_MATE:
+		case Move.NOT_MATE:
 		default:
 			if (runCPU())
 				think = " thinking";
 			break;
-		case GenBoard.CHECK_MATE:
-		case GenBoard.STALE_MATE:
+		case Move.CHECK_MATE:
+		case Move.STALE_MATE:
 			mate = true;
 			break;
 		}
@@ -266,7 +266,7 @@ class GenGameState extends GameState
 
 		final GenMove move = new GenMove();
 		move.parse(movehistory[movehistory.length - 1]);
-		if (board.validMove(move) != GenBoard.VALID_MOVE)
+		if (board.validMove(move) != Move.VALID_MOVE)
 			return;
 		applyMove(move, true, false);
 	}
@@ -355,7 +355,7 @@ class GenGameState extends GameState
 		move.to = callstack.get(1);
 
 		// return if move isn't valid
-		if (board.validMove(move) != GenBoard.VALID_MOVE) {
+		if (board.validMove(move) != Move.VALID_MOVE) {
 			callstack.pop();
 			return;
 		}

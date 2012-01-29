@@ -70,7 +70,7 @@ class RegEngine extends Engine implements Runnable
 
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
-		final RegMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? RegBoard.MOVE_ALL : RegBoard.MOVE_CAPTURE);
+		final RegMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
 		if (ptr.size == 0)
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
@@ -217,10 +217,10 @@ class RegEngine extends Engine implements Runnable
 		} while (false);
 
 		final Int Alpha = new Int(alpha);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, RegBoard.MOVE_CAPTURE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, captureKiller, Move.MOVE_CAPTURE))
 			return score.val;
 		best = Math.max(best, score.val);
-		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, RegBoard.MOVE_MOVE))
+		if (NegaMoveType(Alpha, beta, score, depth, limit, moveKiller, Move.MOVE_MOVE))
 			return score.val;
 		best = Math.max(best, score.val);
 
@@ -233,7 +233,7 @@ class RegEngine extends Engine implements Runnable
 
 	private void search(int alpha, final int beta, final int depth, final int limit)
 	{
-		curr = (curr != null)? curr : board.getMoveList(board.getStm(), RegBoard.MOVE_ALL);
+		curr = (curr != null)? curr : board.getMoveList(board.getStm(), Move.MOVE_ALL);
 		final MoveFlags undoflags = board.getMoveFlags();
 
 		int b = beta;

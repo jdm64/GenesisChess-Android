@@ -69,26 +69,6 @@ class GenBoard extends GenPosition
 		-10,  0,  0,  0,  0,  0,  0, -10}
 	};
 
-	public static final int VALID_MOVE = 0;
-	public static final int INVALID_FORMAT = 1;
-	public static final int NOPIECE_ERROR = 2;
-	public static final int DONT_OWN = 3;
-	public static final int KING_FIRST = 4;
-	public static final int NON_EMPTY_PLACE = 5;
-	public static final int CAPTURE_OWN = 6;
-	public static final int INVALID_MOVEMENT = 7;
-	public static final int IN_CHECK = 8;
-	public static final int IN_CHECK_PLACE = 9;
-
-	public static final int NOT_MATE = 1;
-	public static final int CHECK_MATE = 2;
-	public static final int STALE_MATE = 3;
-
-	public static final int MOVE_ALL = 0;
-	public static final int MOVE_CAPTURE = 1;
-	public static final int MOVE_MOVE = 2;
-	public static final int MOVE_PLACE = 3;
-
 	public static final int ZBOX_SIZE = 781;
 	public static final int WTM_HASH = 780;
 	public static final int HOLD_START = 768;
@@ -296,11 +276,11 @@ class GenBoard extends GenPosition
 	public int isMate()
 	{
 		if (getNumMoves(stm) != 0)
-			return NOT_MATE;
+			return Move.NOT_MATE;
 		if (incheck(stm))
-			return CHECK_MATE;
+			return Move.CHECK_MATE;
 		else
-			return STALE_MATE;
+			return Move.STALE_MATE;
 	}
 
 	public boolean validMove(final GenMove moveIn, final GenMove move)
@@ -341,34 +321,34 @@ class GenBoard extends GenPosition
 		if (move.from == Piece.PLACEABLE) {
 			move.index = pieceIndex(Piece.PLACEABLE, move.index * stm);
 			if (move.index == Piece.NONE)
-				return NOPIECE_ERROR;
+				return Move.NOPIECE_ERROR;
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE)
-				return NON_EMPTY_PLACE;
+				return Move.NON_EMPTY_PLACE;
 		} else {
 			move.index = pieceIndex(move.from);
 			if (move.index == Piece.NONE)
-				return NOPIECE_ERROR;
+				return Move.NOPIECE_ERROR;
 			else if (square[move.from] * stm < 0)
-				return DONT_OWN;
+				return Move.DONT_OWN;
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE && square[move.to] * stm > 0)
-				return CAPTURE_OWN;
+				return Move.CAPTURE_OWN;
 		}
 		// must place king first
 		if (ply < 2 && Math.abs(piecetype[move.index]) != Piece.KING)
-			return KING_FIRST;
+			return Move.KING_FIRST;
 
 		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
-				return INVALID_MOVEMENT;
-		int ret = VALID_MOVE;
+				return Move.INVALID_MOVEMENT;
+		int ret = Move.VALID_MOVE;
 
 		make(move);
 		// curr is opponent after make
 		if (incheck(stm ^ -2))
-			ret = IN_CHECK;
+			ret = Move.IN_CHECK;
 		else if (move.from == Piece.PLACEABLE && incheck(stm))
-			ret = IN_CHECK_PLACE;
+			ret = Move.IN_CHECK_PLACE;
 		unmake(move);
 
 		return ret;
@@ -381,7 +361,7 @@ class GenBoard extends GenPosition
 
 	public GenMoveList getMoveList(final int color)
 	{
-		return getMoveList(color, MOVE_ALL);
+		return getMoveList(color, Move.MOVE_ALL);
 	}
 
 	public GenMoveList getMoveList(final int color, final int movetype)
@@ -390,20 +370,20 @@ class GenBoard extends GenPosition
 		data.size = 0;
 
 		switch (movetype) {
-		case MOVE_ALL:
+		case Move.MOVE_ALL:
 			if (ply < 2) {
 				getPlaceMoveList(data, Piece.KING * color);
 				break;
 			}
-			getMoveList(data, color, MOVE_ALL);
+			getMoveList(data, color, Move.MOVE_ALL);
 			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
 				getPlaceMoveList(data, type * color);
 			break;
-		case MOVE_CAPTURE:
-		case MOVE_MOVE:
+		case Move.MOVE_CAPTURE:
+		case Move.MOVE_MOVE:
 			getMoveList(data, color, movetype);
 			break;
-		case MOVE_PLACE:
+		case Move.MOVE_PLACE:
 			if (ply < 2) {
 				getPlaceMoveList(data, Piece.KING * color);
 				break;
@@ -426,14 +406,14 @@ class GenBoard extends GenPosition
 
 			int[] loc;
 			switch (movetype) {
-			case MOVE_ALL:
+			case Move.MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
 				break;
-			case MOVE_CAPTURE:
+			case Move.MOVE_CAPTURE:
 				loc = genCapture(piece[idx]);
 				break;
-			case MOVE_MOVE:
+			case Move.MOVE_MOVE:
 				loc = genMove(piece[idx]);
 				break;
 			}

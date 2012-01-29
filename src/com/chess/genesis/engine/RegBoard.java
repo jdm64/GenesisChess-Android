@@ -64,33 +64,12 @@ class RegBoard extends RegPosition
 	private static final int[] regPieceValue =
 		{0, 224, 336, 560, 896, 1456, 0};
 
-	public static final int NOT_MATE = 1;
-	public static final int CHECK_MATE = 2;
-	public static final int STALE_MATE = 3;
-
-	public static final int MOVE_ALL = 0;
-	public static final int MOVE_CAPTURE = 1;
-	public static final int MOVE_MOVE = 2;
-	public static final int MOVE_PLACE = 3;
-
 	public static final int ZBOX_SIZE = 838;
 	public static final int WTM_HASH = 837;
 	public static final int HOLD_START = 768;
 	public static final int HOLD_END = 781;
 	public static final int ENPASSANT_HASH = 834;
 	public static final int CASTLE_HASH = 834;
-
-	public static final int VALID_MOVE = 0;
-	public static final int INVALID_FORMAT = 1;
-	public static final int NOPIECE_ERROR = 2;
-	public static final int DONT_OWN = 3;
-	public static final int KING_FIRST = 4;
-	public static final int NON_EMPTY_PLACE = 5;
-	public static final int CAPTURE_OWN = 6;
-	public static final int INVALID_MOVEMENT = 7;
-	public static final int IN_CHECK = 8;
-	public static final int IN_CHECK_PLACE = 9;
-	public static final int CANT_CASTLE = 10;
 
 	public static long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
@@ -327,11 +306,11 @@ class RegBoard extends RegPosition
 	public int isMate()
 	{
 		if (anyMoves(stm))
-			return NOT_MATE;
+			return Move.NOT_MATE;
 		else if (incheck(stm))
-			return CHECK_MATE;
+			return Move.CHECK_MATE;
 		else
-			return STALE_MATE;
+			return Move.STALE_MATE;
 	}
 
 	public boolean validMove(final RegMove moveIn, final RegMove move)
@@ -352,9 +331,9 @@ class RegBoard extends RegPosition
 			return false;
 
 		if (move.getCastle() != 0) {
-			return validCastle(move, stm) == VALID_MOVE;
+			return validCastle(move, stm) == Move.VALID_MOVE;
 		} else if (move.getEnPassant() && flags.canEnPassant() != 0) {
-			return validEnPassant(move, stm) == VALID_MOVE;
+			return validEnPassant(move, stm) == Move.VALID_MOVE;
 		} else if (isPromote(move, stm) && Math.abs(square[move.from]) == Piece.PAWN) {
 			if (move.getPromote() == 0)
 				move.setPromote(Piece.QUEEN);
@@ -380,10 +359,10 @@ class RegBoard extends RegPosition
 	{
 		// can we castle on that side
 		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
-			return CANT_CASTLE;
+			return Move.CANT_CASTLE;
 		// can't castle while in check
 		if (incheck(color))
-			return CANT_CASTLE;
+			return Move.CANT_CASTLE;
 
 		final int king = (color == Piece.WHITE)? Piece.E1 : Piece.E8;
 
@@ -395,7 +374,7 @@ class RegBoard extends RegPosition
 			move.xindex = Piece.NONE;
 			move.from = king;
 			move.to = king + 2;
-			return VALID_MOVE;
+			return Move.VALID_MOVE;
 		} else if (move.getCastle() == Move.CASTLE_QS && square[king - 1] == Piece.EMPTY && square[king - 2] == Piece.EMPTY &&
 		square[king - 3] == Piece.EMPTY && !isAttacked(king - 1, color) && !isAttacked(king - 2, color) &&
 		Math.abs(square[((color == Piece.WHITE)? Piece.A1:Piece.A8)]) == Piece.ROOK) {
@@ -403,9 +382,9 @@ class RegBoard extends RegPosition
 			move.xindex = Piece.NONE;
 			move.from = king;
 			move.to = king - 2;
-			return VALID_MOVE;
+			return Move.VALID_MOVE;
 		}
-		return CANT_CASTLE;
+		return Move.CANT_CASTLE;
 	}
 
 	private int validEnPassant(final RegMove move, final int color)
@@ -419,16 +398,16 @@ class RegBoard extends RegPosition
 			move.xindex = pieceIndex(ep, square[ep]);
 			move.setEnPassant();
 
-			int ret = VALID_MOVE;
+			int ret = Move.VALID_MOVE;
 
 			make(move);
 			// stm is opponent after make
 			if (incheck(stm ^ -2))
-				ret = IN_CHECK;
+				ret = Move.IN_CHECK;
 			unmake(move, undoFlags);
 			return ret;
 		}
-		return INVALID_MOVEMENT;
+		return Move.INVALID_MOVEMENT;
 	}
 
 	public int validMove(final RegMove move)
@@ -443,13 +422,13 @@ class RegBoard extends RegPosition
 		move.index = pieceIndex(move.from, square[move.from]);
 
 		if (move.index == Piece.NONE)
-			return INVALID_MOVEMENT;
+			return Move.INVALID_MOVEMENT;
 
 		switch (Math.abs(piecetype[move.index])) {
 		case Piece.PAWN:
 			// en passant
-			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == VALID_MOVE)
-				return VALID_MOVE;
+			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == Move.VALID_MOVE)
+				return Move.VALID_MOVE;
 
 			if (!isPromote(move, color)) {
 				move.flags = 0;
@@ -471,22 +450,22 @@ class RegBoard extends RegPosition
 		}
 
 		if (move.index == Piece.NONE)
-			return NOPIECE_ERROR;
+			return Move.NOPIECE_ERROR;
 		else if (square[move.from] * color < 0)
-			return DONT_OWN;
+			return Move.DONT_OWN;
 		move.xindex = pieceIndex(move.to, square[move.to]);
 		if (move.xindex != Piece.NONE && square[move.to] * color > 0)
-			return CAPTURE_OWN;
+			return Move.CAPTURE_OWN;
 
 		if (!fromto(move.from, move.to))
-			return INVALID_MOVEMENT;
+			return Move.INVALID_MOVEMENT;
 
-		int ret = VALID_MOVE;
+		int ret = Move.VALID_MOVE;
 
 		make(move);
 		// stm is opponent after make
 		if (incheck(stm ^ -2))
-			ret = IN_CHECK;
+			ret = Move.IN_CHECK;
 		unmake(move, undoFlags);
 
 		return ret;
@@ -499,7 +478,7 @@ class RegBoard extends RegPosition
 
 	public boolean anyMoves(final int color)
 	{
-		return (getMoveList(color, MOVE_ALL).size != 0);
+		return (getMoveList(color, Move.MOVE_ALL).size != 0);
 	}
 
 	private void getMoveList(final RegMoveList data, final int color, final int movetype)
@@ -514,14 +493,14 @@ class RegBoard extends RegPosition
 
 			final int[] loc;
 			switch (movetype) {
-			case MOVE_ALL:
+			case Move.MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
 				break;
-			case MOVE_CAPTURE:
+			case Move.MOVE_CAPTURE:
 				loc = genCapture(piece[idx]);
 				break;
-			case MOVE_MOVE:
+			case Move.MOVE_MOVE:
 				loc = genMove(piece[idx]);
 				break;
 			}
@@ -663,17 +642,17 @@ class RegBoard extends RegPosition
 		data.size = 0;
 
 		switch (movetype) {
-		case MOVE_ALL:
+		case Move.MOVE_ALL:
 		default:
 			getMoveList(data, color, movetype);
 			getCastleMoveList(data, color);
 			getEnPassantMoveList(data, color);
 			break;
-		case MOVE_CAPTURE:
+		case Move.MOVE_CAPTURE:
 			getMoveList(data, color, movetype);
 			getEnPassantMoveList(data, color);
 			break;
-		case MOVE_MOVE:
+		case Move.MOVE_MOVE:
 			getMoveList(data, color, movetype);
 			getCastleMoveList(data, color);
 			break;

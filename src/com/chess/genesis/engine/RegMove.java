@@ -90,9 +90,9 @@ class RegMove extends Move implements Parcelable
 	public int type()
 	{
 		if (xindex != Piece.NONE)
-			return RegBoard.MOVE_CAPTURE;
+			return Move.MOVE_CAPTURE;
 		else
-			return RegBoard.MOVE_MOVE;
+			return Move.MOVE_MOVE;
 	}
 
 	protected StringBuffer printLoc(final int loc)

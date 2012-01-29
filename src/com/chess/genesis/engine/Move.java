@@ -14,6 +14,27 @@ abstract class Move
 		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
 		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
+	public static final int VALID_MOVE = 0;
+	public static final int INVALID_FORMAT = 1;
+	public static final int NOPIECE_ERROR = 2;
+	public static final int DONT_OWN = 3;
+	public static final int KING_FIRST = 4;
+	public static final int NON_EMPTY_PLACE = 5;
+	public static final int CAPTURE_OWN = 6;
+	public static final int INVALID_MOVEMENT = 7;
+	public static final int IN_CHECK = 8;
+	public static final int IN_CHECK_PLACE = 9;
+	public static final int CANT_CASTLE = 10;
+
+	public static final int MOVE_ALL = 0;
+	public static final int MOVE_CAPTURE = 1;
+	public static final int MOVE_MOVE = 2;
+	public static final int MOVE_PLACE = 3;
+
+	public static final int NOT_MATE = 1;
+	public static final int CHECK_MATE = 2;
+	public static final int STALE_MATE = 3;
+
 	public final static int EP_FILE = 0x07;
 	public final static int CAN_EP = 0x08;
 	public final static int CASTLE_KS = 0x10;

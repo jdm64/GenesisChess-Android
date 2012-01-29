@@ -44,7 +44,7 @@ class Benchmark implements Runnable
 			return 1;
 
 		final MoveFlags flags = rboard.getMoveFlags();
-		final RegMoveList ptr = rboard.getMoveList(rboard.getStm(), RegBoard.MOVE_ALL);
+		final RegMoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
 		for (int i = 1; i < ptr.size; i++) {
