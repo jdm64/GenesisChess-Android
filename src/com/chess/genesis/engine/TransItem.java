@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-abstract class TransItem
+class TransItem
 {
 	public static final int NONE_NODE = 0;
 	public static final int ALL_NODE = 3;

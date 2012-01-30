@@ -5,7 +5,6 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 class GameParser
 {
 	private static class GamePosition

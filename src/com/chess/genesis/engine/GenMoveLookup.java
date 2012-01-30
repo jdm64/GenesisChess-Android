@@ -5,8 +5,7 @@ class GenMoveLookup extends MoveLookup
 	public int[] genAll(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		int[] offset = offsets[type];
-		int[] list = new int[28];
+		final int[] offset = offsets[type], list = new int[28];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -29,8 +28,7 @@ class GenMoveLookup extends MoveLookup
 	public int[] genCapture(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		int[] offset = offsets[type];
-		int[] list = new int[28];
+		final int[] offset = offsets[type], list = new int[28];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -52,8 +50,7 @@ class GenMoveLookup extends MoveLookup
 	public int[] genMove(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		int[] offset = offsets[type];
-		int[] list = new int[28];
+		final int[] offset = offsets[type], list = new int[28];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -78,7 +75,7 @@ class GenMoveLookup extends MoveLookup
 			return false;
 
 		final int type = Math.abs(square[From]);
-		int[] offset = offsets[type];
+		final int[] offset = offsets[type];
 
 		if (type == Piece.PAWN) {
 			final int diff = Math.abs(From - To);
@@ -94,7 +91,7 @@ class GenMoveLookup extends MoveLookup
 
 	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
 	{
-		int offset = db.step * ((To > From)? 1:-1);
+		final int offset = db.step * ((To > From)? 1:-1);
 		for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
 			if (square[to] == Piece.EMPTY)
 				continue;
@@ -114,19 +111,19 @@ class GenMoveLookup extends MoveLookup
 		if (((From | To) & 0x88) != 0)
 			return false;
 
-		int diff = Math.abs(From - To);
+		final int diff = Math.abs(From - To);
 
 		if (DistDB.TABLE[diff].step == 0)
 			return false;
 
-		DistDB db = DistDB.TABLE[diff];
+		final DistDB db = DistDB.TABLE[diff];
 		switch (db.type) {
 		case Piece.KNIGHT:
 			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
 		case Piece.BISHOP:
 			return attackLine_Bishop(db, From, To);
 		case Piece.ROOK:
-			int offset = db.step * ((To > From)? 1:-1);
+			final int offset = db.step * ((To > From)? 1:-1);
 			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
 				if (square[to] == Piece.EMPTY)
 					continue;
@@ -147,7 +144,7 @@ class GenMoveLookup extends MoveLookup
 	public boolean isAttacked(final int From)
 	{
 		// BISHOP
-		int[] offset = offsets[Piece.BISHOP];
+		final int[] offset = offsets[Piece.BISHOP];
 		for (int i = 0; offset[i] != 0; i++) {
 			for (int to = From + offset[i], k = 1; (to & 0x88) == 0; to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY)

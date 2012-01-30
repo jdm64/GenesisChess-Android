@@ -127,7 +127,7 @@ class RegGameState extends GameState
 		// set board pieces
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			int loc = MoveLookup.SF88(i);
+			final int loc = MoveLookup.SF88(i);
 			final BoardButton button = (BoardButton) activity.findViewById(loc);
 			button.setPiece(squares[loc]);
 		}

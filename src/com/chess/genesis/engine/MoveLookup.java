@@ -173,7 +173,8 @@ class MoveLookup
 
 	public boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
 	{
-		int diff = Math.abs(From - To), n = 2;
+		final int diff = Math.abs(From - To);
+		int n = 2;
 
 		switch (type) {
 		case Piece.KNIGHT:

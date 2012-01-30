@@ -124,7 +124,7 @@ class GenPosition extends GenMoveLookup
 		}
 
 		// parse half-ply
-		StringBuffer num = new StringBuffer();
+		final StringBuffer num = new StringBuffer();
 		while (Character.isDigit(st[n])) {
 			num.append(st[n]);
 			n++;
@@ -144,7 +144,7 @@ class GenPosition extends GenMoveLookup
 	{
 		for (int i = 0, empty = 0; i < 64; i++) {
 			// convert cordinate system
-			int n = SFF88(i);
+			final int n = SFF88(i);
 			if (square[n] == Piece.EMPTY) {
 				empty++;
 				continue;
@@ -162,7 +162,7 @@ class GenPosition extends GenMoveLookup
 
 	public String printZfen()
 	{
-		StringBuffer fen = new StringBuffer();
+		final StringBuffer fen = new StringBuffer();
 
 		printZfen_Board(fen);
 

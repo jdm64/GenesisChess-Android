@@ -135,8 +135,8 @@ class GenBoard extends GenPosition
 	{
 		int white = 0, black = 0;
 		for (int b = 0, w = 16; b < 16; b++, w++) {
-			int bloc = EE64F(piece[b]);
-			int wloc = EE64F(piece[w]);
+			final int bloc = EE64F(piece[b]);
+			final int wloc = EE64F(piece[w]);
 
 			switch (piece[b]) {
 			default:
@@ -215,8 +215,8 @@ class GenBoard extends GenPosition
 			piece[move.xindex] = Piece.DEAD;
 		}
 
-		int to = EE64(move.to);
-		int from = EE64(move.from);
+		final int to = EE64(move.to);
+		final int from = EE64(move.from);
 
 		key += (stm == Piece.WHITE)? -hashBox[WTM_HASH] : hashBox[WTM_HASH];
 		key += hashBox[12 * to + typeLookup[move.index]];
@@ -248,8 +248,8 @@ class GenBoard extends GenPosition
 			mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
 		}
 
-		int to = EE64(move.to);
-		int from = EE64(move.from);
+		final int to = EE64(move.to);
+		final int from = EE64(move.from);
 
 		key += (stm == Piece.WHITE)? -hashBox[WTM_HASH] : hashBox[WTM_HASH];
 		key -= hashBox[12 * to + typeLookup[move.index]];
@@ -444,7 +444,7 @@ class GenBoard extends GenPosition
 		if (idx == Piece.NONE)
 			return;
 
-		boolean stmCk = incheck(color);
+		final boolean stmCk = incheck(color);
 		for (int loc = 0x77; loc >= 0; loc--) {
 			if ((loc & 0x88) != 0) {
 				loc -= 7;
