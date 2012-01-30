@@ -40,7 +40,6 @@ abstract class GameState
 	public abstract void setBoard();
 
 	public abstract void save(final Context context, final boolean exitgame);
-	public abstract Bundle getBundle();
 
 	public abstract void boardClick(final View v);
 	public abstract void placeClick(final View v);
@@ -257,6 +256,11 @@ abstract class GameState
 			(new GameStatsDialog(activity, settings)).show();
 			break;
 		}
+	}
+
+	public Bundle getBundle()
+	{
+		return settings;
 	}
 
 	public void resync()

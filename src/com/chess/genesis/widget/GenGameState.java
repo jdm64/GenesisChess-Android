@@ -210,11 +210,6 @@ class GenGameState extends GameState
 		}
 	}
 
-	public Bundle getBundle()
-	{
-		return settings;
-	}
-
 	public void save(final Context context, final boolean exitgame)
 	{
 		switch (type) {
