@@ -178,7 +178,8 @@ class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data1);
 
 		if (cursor.getCount() < 1) {
-			insertOnlineGame(json);
+			if (!checkArchiveGame(gameid))
+				insertOnlineGame(json);
 			return;
 		}
 
@@ -335,6 +336,12 @@ class GameDataDB
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
+	}
+
+	private boolean checkArchiveGame(final String gameid)
+	{
+		final String[] data = {gameid};
+		return (db.rawQuery("SELECT gameid FROM archivegames WHERE gameid=?;", data).getCount() != 0);
 	}
 
 	public void deleteArchiveGame(final String gameid)
