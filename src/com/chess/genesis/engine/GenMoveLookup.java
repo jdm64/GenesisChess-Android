@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class GenMoveLookup extends MoveLookup
+abstract class GenMoveLookup extends BaseBoard
 {
 	public int[] genAll(final int From)
 	{
@@ -101,41 +101,6 @@ class GenMoveLookup extends MoveLookup
 				return true;
 			else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN)
 				return true;
-			break;
-		}
-		return false;
-	}
-
-	public boolean attackLine(final int From, final int To)
-	{
-		if (((From | To) & 0x88) != 0)
-			return false;
-
-		final int diff = Math.abs(From - To);
-
-		if (DistDB.TABLE[diff].step == 0)
-			return false;
-
-		final DistDB db = DistDB.TABLE[diff];
-		switch (db.type) {
-		case Piece.KNIGHT:
-			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
-		case Piece.BISHOP:
-			return attackLine_Bishop(db, From, To);
-		case Piece.ROOK:
-			final int offset = db.step * ((To > From)? 1:-1);
-			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
-				if (square[to] == Piece.EMPTY)
-					continue;
-				else if (OWN_PIECE(square[From], square[to]))
-					break;
-				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
-					return true;
-				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
-					return true;
-				else
-					break;
-			}
 			break;
 		}
 		return false;

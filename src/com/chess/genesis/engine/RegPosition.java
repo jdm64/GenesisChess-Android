@@ -18,7 +18,7 @@ class RegPosition extends RegMoveLookup
 		flags = new MoveFlags();
 	}
 
-	private void parseReset()
+	protected void parseReset()
 	{
 		for (int i = 0; i < 128; i++)
 			square[i] = Piece.EMPTY;
@@ -48,7 +48,7 @@ class RegPosition extends RegMoveLookup
 		}
 	}
 
-	private boolean setPiece(final int loc, final int type)
+	protected boolean setPiece(final int loc, final int type)
 	{
 		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
@@ -84,39 +84,6 @@ class RegPosition extends RegMoveLookup
 		final int king = (color == Piece.WHITE)? 31:15;
 
 		return isAttacked(piece[king], color);
-	}
-
-	private int parseZfen_Board(final String pos)
-	{
-		parseReset();
-		final char[] st = pos.toCharArray();
-
-		// index counter for st
-		int n = 0;
-
-		// parse board
-		StringBuffer num = new StringBuffer();
-		for (int loc = 0, act = 0; true; n++) {
-			if (Character.isDigit(st[n])) {
-				num.append(st[n]);
-				act = 1;
-			} else if (Character.isLetter(st[n])) {
-				if (act != 0) {
-					loc += Integer.parseInt(num.toString());
-					num = new StringBuffer();
-					act = 0;
-				}
-				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
-					return -1;
-				loc++;
-			} else if (st[n] == ':') {
-				n++;
-				break;
-			} else {
-				return -1;
-			}
-		}
-		return n;
 	}
 
 	public boolean parseZfen(final String pos)
@@ -174,27 +141,6 @@ class RegPosition extends RegMoveLookup
 			return false;
 		return true;
 	}
-
-	private void printZfen_Board(final StringBuffer fen)
-	{
-		for (int i = 0, empty = 0; i < 64; i++) {
-			// convert cordinate system
-			final int n = SFF88(i);
-			if (square[n] == Piece.EMPTY) {
-				empty++;
-				continue;
-			} else if (empty != 0) {
-				fen.append(empty);
-			}
-			if (square[n] > Piece.EMPTY)
-				fen.append(Move.pieceSymbol[square[n]]);
-			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase());
-			empty = 0;
-		}
-		fen.append(':');
-	}
-
 
 	public String printZfen()
 	{

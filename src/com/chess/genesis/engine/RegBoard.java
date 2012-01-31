@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class RegBoard extends RegPosition
+class RegBoard extends RegPosition implements Board
 {
 	private static final int[][] regLocValue = {
 		{0, 0, 0, 0, 0, 0, 0, 0,
@@ -106,6 +106,23 @@ class RegBoard extends RegPosition
 		ply = 0;
 		flags.reset();
 	}
+
+	public int Piece(final int index)
+	{
+		return piece[index];
+	}
+
+	public int PieceType(final int index)
+	{
+		return piecetype[index];
+	}
+
+	// Do Not call the following functions!
+	public void unmake(final GenMove move){}
+	public void make(final GenMove move){}
+	public int validMove(final GenMove move){ return Move.INVALID_MOVEMENT; }
+	public boolean validMove(final GenMove moveIn, final GenMove move) { return false; }
+	// ------
 
 	public int getStm()
 	{

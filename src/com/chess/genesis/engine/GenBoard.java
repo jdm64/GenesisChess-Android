@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class GenBoard extends GenPosition
+class GenBoard extends GenPosition implements Board
 {
 	private static final int[] typeLookup = {
 		0, 0, 0, 0, 0, 0,  0,  0,
@@ -161,6 +161,24 @@ class GenBoard extends GenPosition
 		}
 		mscore = white - black;
 	}
+
+	public int Piece(final int index)
+	{
+		return piece[index];
+	}
+
+	public int PieceType(final int index)
+	{
+		return piecetype[index];
+	}
+
+	// Do Not call the following functions!
+	public MoveFlags getMoveFlags(){ return null; }
+	public void make(final RegMove move){}
+	public void unmake(final RegMove move, final MoveFlags undoFlags){}
+	public boolean validMove(final RegMove moveIn, final RegMove move){ return false; }
+	public int validMove(final RegMove move){ return Move.INVALID_MOVEMENT; }
+	// ------
 
 	public int getStm()
 	{

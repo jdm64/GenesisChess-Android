@@ -8,13 +8,10 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
-import java.util.Date;
 
 class RegGameState extends GameState
 {
 	private final ObjectArray<MoveFlags> flagsHistory;
-	private final ObjectArray<RegMove> history;
-	private final RegBoard board;
 
 	private final Handler xhandle = new Handler()
 	{
@@ -25,7 +22,7 @@ class RegGameState extends GameState
 				final Bundle bundle = (Bundle) msg.obj;
 
 				if (bundle.getLong("time") == 0) {
-					cpu.setBoard(board);
+					cpu.setBoard((RegBoard) board);
 					(new Thread(cpu)).start();
 					return;
 				}
@@ -51,7 +48,7 @@ class RegGameState extends GameState
 
 		callstack = new IntArray();
 		flagsHistory = new ObjectArray<MoveFlags>();
-		history = new ObjectArray<RegMove>();
+		history = new ObjectArray<Move>();
 		board = new RegBoard();
 		progress = new ProgressMsg(activity);
 
@@ -96,57 +93,13 @@ class RegGameState extends GameState
 		check_endgame();
 	}
 
-	private int yourColor()
-	{
-		switch (type) {
-		case Enums.LOCAL_GAME:
-			if (oppType == Enums.HUMAN_OPPONENT)
-				return board.getStm();
-		case Enums.ONLINE_GAME:
-			return ycol;
-		case Enums.ARCHIVE_GAME:
-			return board.getStm();
-		default:
-			return 0;
-		}
-	}
-
 	public void setBoard()
 	{
-		// set place piece counts
-		final int[] pieces = board.getPieceCounts(Piece.DEAD);
-		for (int i = -6; i < 0; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
-			button.setCount(pieces[i + 6]);
-		}
-		for (int i = 1; i < 7; i++) {
-			final PlaceButton button = (PlaceButton) activity.findViewById(i + 1000);
-			button.setCount(pieces[i + 6]);
-		}
-
-		// set board pieces
-		final int[] squares = board.getBoardArray();
-		for (int i = 0; i < 64; i++) {
-			final int loc = MoveLookup.SF88(i);
-			final BoardButton button = (BoardButton) activity.findViewById(loc);
-			button.setPiece(squares[loc]);
-		}
-		// set last move highlight
-		if (history.size() != 0) {
-			final BoardButton to = (BoardButton) activity.findViewById(history.top().to);
-			to.setLast(true);
-		}
-
-		// move caused check
-		if (board.incheck(board.getStm())) {
-			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) activity.findViewById(king);
-			kingI.setCheck(true);
-		}
-		setStm();
+		// set dead piece counts
+		setBoard(board.getPieceCounts(Piece.DEAD));
 	}
 
-	private boolean runCPU()
+	protected boolean runCPU()
 	{
 		// Start computer player
 		if (oppType == Enums.HUMAN_OPPONENT)
@@ -160,93 +113,9 @@ class RegGameState extends GameState
 			cpu.stop();
 			return true;
 		}
-		cpu.setBoard(board);
+		cpu.setBoard((RegBoard) board);
 		(new Thread(cpu)).start();
 		return true;
-	}
-
-	public final void setStm()
-	{
-		String think = "", wstr, bstr;
-		boolean mate = false;
-
-		switch (board.isMate()) {
-		case Move.NOT_MATE:
-		default:
-			if (runCPU())
-				think = " thinking";
-			break;
-		case Move.CHECK_MATE:
-		case Move.STALE_MATE:
-			mate = true;
-			break;
-		}
-		if (type == Enums.LOCAL_GAME) {
-			wstr = "White";
-			bstr = "Black";
-		} else {
-			wstr = settings.getString("white");
-			bstr = settings.getString("black");
-		}
-
-		final TabText white = (TabText) activity.findViewById(R.id.white_name);
-		final TabText black = (TabText) activity.findViewById(R.id.black_name);
-
-		if (board.getStm() == Piece.WHITE) {
-			white.setText(wstr + think);
-			white.setActive(true);
-
-			black.setText(bstr);
-			black.setActive(false);
-
-			if (mate)
-				white.setTabTextColor(0xffeb0000);
-		} else {
-			white.setText(wstr);
-			white.setActive(false);
-
-			black.setText(bstr + think);
-			black.setActive(true);
-
-			if (mate)
-				black.setTabTextColor(0xffeb0000);
-		}
-	}
-
-	public void save(final Context context, final boolean exitgame)
-	{
-		switch (type) {
-		case Enums.LOCAL_GAME:
-			final GameDataDB db = new GameDataDB(context);
-			final int id = Integer.valueOf(settings.getString("id"));
-
-			if (history.size() < 1) {
-				db.deleteLocalGame(id);
-				db.close();
-				return;
-			} else if (exitgame) {
-				db.close();
-				return;
-			}
-			final long stime = (new Date()).getTime();
-			final String zfen = board.printZfen();
-			final String hist = history.toString();
-
-			// save update local game data bundle
-			settings.putString("history", hist);
-			settings.putString("stime", String.valueOf(stime));
-			settings.putString("zfen", zfen);
-
-			db.saveLocalGame(id, stime, zfen, hist);
-			db.close();
-			break;
-		case Enums.ONLINE_GAME:
-			if (exitgame)
-				return;
-			activity.displaySubmitMove();
-		case Enums.ARCHIVE_GAME:
-			break;
-		}
 	}
 
 	protected void applyRemoteMove(final String hist)
@@ -282,7 +151,7 @@ class RegGameState extends GameState
 	{
 		if (hindex < 0)
 			return;
-		final RegMove move = history.get(hindex);
+		final RegMove move = (RegMove) history.get(hindex);
 		revertMove(move);
 	}
 
@@ -290,14 +159,14 @@ class RegGameState extends GameState
 	{
 		if (hindex + 1 >= history.size())
 			return;
-		final RegMove move = history.get(hindex + 1);
+		final RegMove move = (RegMove) history.get(hindex + 1);
 		applyMove(move, false, true);
 	}
 
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
-			final RegMove move = history.get(hindex + 1);
+			final RegMove move = (RegMove) history.get(hindex + 1);
 			applyMove(move, false, true);
 		}
 	}
@@ -305,7 +174,7 @@ class RegGameState extends GameState
 	public void firstMove()
 	{
 		while (hindex > 0) {
-			final RegMove move = history.get(hindex);
+			final RegMove move = (RegMove) history.get(hindex);
 			revertMove(move);
 		}
 	}
@@ -314,21 +183,10 @@ class RegGameState extends GameState
 	{
 		if (hindex < 0)
 			return;
-		final RegMove move = history.get(hindex);
+		final RegMove move = (RegMove) history.get(hindex);
 		revertMove(move);
 		history.pop();
 		flagsHistory.pop();
-	}
-
-	public void submitMove()
-	{
-		progress.setText("Sending Move");
-
-		final String gameid = settings.getString("gameid");
-		final String move = history.top().toString();
-
-		net.submit_move(gameid, move);
-		(new Thread(net)).start();
 	}
 
 	private void handleMove()
@@ -381,7 +239,7 @@ class RegGameState extends GameState
 		from.setHighlight(false);
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piecetype[move.xindex] + 1000);
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
 			piece.plusPiece();
 		}
 
@@ -398,7 +256,7 @@ class RegGameState extends GameState
 			final BoardButton pawn = (BoardButton) activity.findViewById(move.to);
 			pawn.setPiece(Piece.QUEEN * board.getStm());
 		} else if (move.getEnPassant()) {
-			final BoardButton pawn = (BoardButton) activity.findViewById(board.piece[move.xindex]);
+			final BoardButton pawn = (BoardButton) activity.findViewById(board.Piece(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -452,11 +310,11 @@ class RegGameState extends GameState
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
-			to.setPiece(board.piecetype[move.xindex]);
+			to.setPiece(board.PieceType(move.xindex));
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.piecetype[move.xindex] + 1000);
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
 			piece.minusPiece();
 		}
 

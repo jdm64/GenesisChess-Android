@@ -1,8 +1,8 @@
 package com.chess.genesis;
 
-class MoveLookup
+abstract class BaseBoard
 {
-	public static final int[] stype = {
+	protected static final int[] stype = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
 		Piece.EMPTY,		Piece.BLACK_KNIGHT,	Piece.EMPTY,		Piece.BLACK_PAWN,
 		Piece.BLACK_QUEEN,	Piece.BLACK_ROOK,	Piece.EMPTY,		Piece.EMPTY,
@@ -23,6 +23,10 @@ class MoveLookup
 	public int[] piecetype;
 	public int ply;
 	public int stm;
+
+	protected abstract boolean attackLine_Bishop(final DistDB db, final int From, final int To);
+	protected abstract boolean setPiece(final int loc, final int type);
+	protected abstract void parseReset();
 
 	public static int COL(final int x)
 	{
@@ -74,7 +78,7 @@ class MoveLookup
 		return ((7 - (x >> 3)) << 4) + (x & 7);
 	}
 
-	public int genAll_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	protected int genAll_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -108,7 +112,7 @@ class MoveLookup
 		return next;
 	}
 
-	public int genCapture_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	protected int genCapture_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -140,7 +144,7 @@ class MoveLookup
 		return next;
 	}
 
-	public int genMove_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	protected int genMove_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -171,7 +175,7 @@ class MoveLookup
 		return next;
 	}
 
-	public boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
+	protected boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
 	{
 		final int diff = Math.abs(From - To);
 		int n = 2;
@@ -206,7 +210,7 @@ class MoveLookup
 		return false;
 	}
 
-	public boolean isAttacked_xBishop(final int From, final int FromColor)
+	protected boolean isAttacked_xBishop(final int From, final int FromColor)
 	{
 		// ROOK
 		int[] offset = offsets[Piece.ROOK];
@@ -236,5 +240,94 @@ class MoveLookup
 				return true;
 		}
 		return false;
+	}
+
+	public boolean attackLine(final int From, final int To)
+	{
+		if (((From | To) & 0x88) != 0)
+			return false;
+
+		final int diff = Math.abs(From - To);
+
+		if (DistDB.TABLE[diff].step == 0)
+			return false;
+
+		final DistDB db = DistDB.TABLE[diff];
+		switch (db.type) {
+		case Piece.KNIGHT:
+			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
+		case Piece.BISHOP:
+			return attackLine_Bishop(db, From, To);
+		case Piece.ROOK:
+			final int offset = db.step * ((To > From)? 1:-1);
+			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
+				if (square[to] == Piece.EMPTY)
+					continue;
+				else if (OWN_PIECE(square[From], square[to]))
+					break;
+				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
+					return true;
+				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
+					return true;
+				else
+					break;
+			}
+			break;
+		}
+		return false;
+	}
+
+	protected int parseZfen_Board(final String pos)
+	{
+		parseReset();
+		final char[] st = pos.toCharArray();
+
+		// index counter for st
+		int n = 0;
+
+		// parse board
+		StringBuffer num = new StringBuffer();
+		boolean act = false;
+		for (int loc = 0; true; n++) {
+			if (Character.isDigit(st[n])) {
+				num.append(st[n]);
+				act = true;
+			} else if (Character.isLetter(st[n])) {
+				if (act) {
+					loc += Integer.parseInt(num.toString());
+					num = new StringBuffer();
+					act = false;
+				}
+				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
+					return -1;
+				loc++;
+			} else if (st[n] == ':') {
+				n++;
+				break;
+			} else {
+				return -1;
+			}
+		}
+		return n;
+	}
+
+	protected void printZfen_Board(final StringBuffer fen)
+	{
+		for (int i = 0, empty = 0; i < 64; i++) {
+			// convert cordinate system
+			final int n = SFF88(i);
+			if (square[n] == Piece.EMPTY) {
+				empty++;
+				continue;
+			} else if (empty != 0) {
+				fen.append(empty);
+			}
+			if (square[n] > Piece.EMPTY)
+				fen.append(Move.pieceSymbol[square[n]]);
+			else
+				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase());
+			empty = 0;
+		}
+		fen.append(':');
 	}
 }

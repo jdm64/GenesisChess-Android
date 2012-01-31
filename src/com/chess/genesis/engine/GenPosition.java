@@ -4,18 +4,12 @@ class GenPosition extends GenMoveLookup
 {
 	public GenPosition()
 	{
-		square = new int[64];
+		square = new int[128];
 		piece = new int[32];
+		piecetype = new int[32];
 	}
 
-	public GenPosition(final int[] _square, final int[] _piece, final int _ply)
-	{
-		square = IntArray.clone(_square);
-		piece = IntArray.clone(_piece);
-		ply = _ply;
-	}
-
-	private void parseReset()
+	protected void parseReset()
 	{
 		for (int i = 0; i < 128; i++)
 			square[i] = Piece.EMPTY;
@@ -37,14 +31,14 @@ class GenPosition extends GenMoveLookup
 		ply = Math.max(ply, tply);
 
 		if (stm == Piece.WHITE) {
-			if (ply % 2 != 0)
+			if (ply % 2 == 1)
 				ply++;
 		} else if (ply % 2 == 0) {
 			ply++;
 		}
 	}
 
-	private boolean setPiece(final int loc, final int type)
+	protected boolean setPiece(final int loc, final int type)
 	{
 		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
@@ -66,40 +60,6 @@ class GenPosition extends GenMoveLookup
 		final int king = (color == Piece.WHITE)? 31:15;
 
 		return (piece[king] == Piece.PLACEABLE)? false : isAttacked(piece[king]);
-	}
-
-	private int parseZfen_Board(final String pos)
-	{
-		parseReset();
-		final char[] st = pos.toCharArray();
-
-		// index counter for pos
-		int n = 0;
-
-		// parse board
-		StringBuffer num = new StringBuffer();
-		boolean act = false;
-		for (int loc = 0; true; n++) {
-			if (Character.isDigit(st[n])) {
-				num.append(st[n]);
-				act = true;
-			} else if (Character.isLetter(st[n])) {
-				if (act) {
-					loc += Integer.parseInt(num.toString());
-					num = new StringBuffer();
-					act = false;
-				}
-				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
-					return -1;
-				loc++;
-			} else if (st[n] == ':') {
-				n++;
-				break;
-			} else {
-				return -1;
-			}
-		}
-		return n;
 	}
 
 	public boolean parseZfen(final String pos)
@@ -140,26 +100,6 @@ class GenPosition extends GenMoveLookup
 		return true;
 	}
 
-	private void printZfen_Board(final StringBuffer fen)
-	{
-		for (int i = 0, empty = 0; i < 64; i++) {
-			// convert cordinate system
-			final int n = SFF88(i);
-			if (square[n] == Piece.EMPTY) {
-				empty++;
-				continue;
-			} else if (empty != 0) {
-				fen.append(empty);
-			}
-			if (square[n] > Piece.EMPTY)
-				fen.append(Move.pieceSymbol[square[n]]);
-			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase());
-			empty = 0;
-		}
-		fen.append(':');
-	}
-
 	public String printZfen()
 	{
 		final StringBuffer fen = new StringBuffer();
@@ -178,12 +118,5 @@ class GenPosition extends GenMoveLookup
 		fen.append(ply);
 
 		return fen.toString();
-	}
-
-	public boolean equal(final GenPosition pos)
-	{
-		final String a = pos.printZfen(), b = printZfen();
-		
-		return a.equals(b);
 	}
 }

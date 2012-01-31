@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class RegMoveLookup extends MoveLookup
+abstract class RegMoveLookup extends BaseBoard
 {
 	public int[] genAll(final int From)
 	{
@@ -39,8 +39,8 @@ class RegMoveLookup extends MoveLookup
 
 	public int[] genCapture(final int From)
 	{
-		final int type = Math.abs(square[From]); //  mfrom = mailbox64[From];
-		int[] list = new int[28];
+		final int type = Math.abs(square[From]);
+		final int[] list = new int[28];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -65,7 +65,7 @@ class RegMoveLookup extends MoveLookup
 	public int[] genMove(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		int[] list = new int[28];
+		final int[] list = new int[28];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -144,41 +144,6 @@ class RegMoveLookup extends MoveLookup
 		return false;
 	}
 
-	public boolean attackLine(final int From, final int To)
-	{
-		if ((From & 0x88) != 0)
-			return false;
-
-		final int diff = Math.abs(From - To);
-
-		if (DistDB.TABLE[diff].step == 0)
-			return false;
-
-		final DistDB db = DistDB.TABLE[diff];
-		switch (db.type) {
-		case Piece.KNIGHT:
-			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
-		case Piece.BISHOP:
-			return attackLine_Bishop(db, From, To);
-		case Piece.ROOK:
-			final int offset = db.step * ((To > From)? 1:-1);
-			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
-				if (square[to] == Piece.EMPTY)
-					continue;
-				else if (OWN_PIECE(square[From], square[to]))
-					break;
-				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
-					return true;
-				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
-					return true;
-				else
-					break;
-			}
-			break;
-		}
-		return false;
-	}
-
 	public boolean isAttacked(final int From, final int FromColor)
 	{
 		final int[] offset = offsets[Piece.BISHOP];
@@ -201,5 +166,4 @@ class RegMoveLookup extends MoveLookup
 		}
 		return isAttacked_xBishop(From, FromColor);
 	}
-
 }
