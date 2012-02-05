@@ -36,7 +36,7 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 
 		// initialize the board & place piece layouts
 		final BoardLayout board = (BoardLayout) findViewById(R.id.board_layout);
-		board.init(this, gamestate);
+		board.init(this, gamestate, viewAsBlack);
 		final PlaceLayout place = (PlaceLayout) findViewById(R.id.place_layout);
 		place.init(gamestate);
 

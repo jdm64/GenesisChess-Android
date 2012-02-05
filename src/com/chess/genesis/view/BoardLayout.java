@@ -20,16 +20,16 @@ class BoardLayout extends TableLayout implements OnClickListener
 
 	}
 
-	public void init(final Game game, final GameState _gamestate)
+	public void init(final Context context, final GameState _gamestate, final boolean viewAsBlack)
 	{
 		gamestate = _gamestate;
 
-		if (game.viewAsBlack) {
+		if (viewAsBlack) {
 			for (int i = 0; i < 8; i++) {
-				final TableRow row = new TableRow(game);
+				final TableRow row = new TableRow(context);
 
 				for (int j = 7; j >= 0; j--) {
-					final BoardButton button = new BoardButton(game, 16 * i + j);
+					final BoardButton button = new BoardButton(context, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
@@ -37,10 +37,10 @@ class BoardLayout extends TableLayout implements OnClickListener
 			}
 		} else {
 			for (int i = 7; i >= 0; i--) {
-				final TableRow row = new TableRow(game);
+				final TableRow row = new TableRow(context);
 
 				for (int j = 0; j < 8; j++) {
-					final BoardButton button = new BoardButton(game, 16 * i + j);
+					final BoardButton button = new BoardButton(context, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
