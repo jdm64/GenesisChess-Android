@@ -24,7 +24,7 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 		viewAsBlack = false;
 
 		// create game state instance
-		gamestate = new GenGameState(this, settings);
+		gamestate = new GenGameState(this, this, settings);
 
 		// finalize initialization
 		init();

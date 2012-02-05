@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -15,7 +16,8 @@ import java.util.Date;
 abstract class GameState
 {
 	protected Handler handle;
-	protected Game activity;
+	protected Game game;
+	protected Activity activity;
 	protected Bundle settings;
 
 	protected NetworkClient net;
@@ -212,7 +214,7 @@ abstract class GameState
 	{
 		hindex = -1;
 		callstack.clear();
-		activity.reset();
+		game.reset();
 	}
 
 	protected int yourColor()
@@ -330,7 +332,7 @@ abstract class GameState
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			activity.displaySubmitMove();
+			game.displaySubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}

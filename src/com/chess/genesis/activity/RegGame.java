@@ -36,7 +36,7 @@ public class RegGame extends Game implements OnClickListener, OnLongClickListene
 		viewAsBlack = pref.getBoolean("viewAsBlack", true)? playingBlack : false;
 
 		// create game stat instance
-		gamestate = new RegGameState(this, settings);
+		gamestate = new RegGameState(this, this, settings);
 
 		// finalize initialization
 		init();

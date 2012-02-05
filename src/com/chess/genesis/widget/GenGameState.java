@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,9 +39,10 @@ class GenGameState extends GameState
 		}
 	};
 
-	public GenGameState(final Game _activity, final Bundle _settings)
+	public GenGameState(final Activity _activity, final Game _game, final Bundle _settings)
 	{
 		activity = _activity;
+		game = _game;
 		settings = _settings;
 		handle = xhandle;
 
@@ -392,6 +394,6 @@ class GenGameState extends GameState
 			callstack.set(0, ptype + 1000);
 			from.setHighlight(true);
 		}
-		activity.game_board.flip();
+		game.game_board.flip();
 	}
 }

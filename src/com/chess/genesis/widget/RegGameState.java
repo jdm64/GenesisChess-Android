@@ -1,5 +1,6 @@
 package com.chess.genesis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,9 +41,10 @@ class RegGameState extends GameState
 		}
 	};
 
-	public RegGameState(final Game _activity, final Bundle _settings)
+	public RegGameState(final Activity _activity, final Game _game, final Bundle _settings)
 	{
 		activity = _activity;
+		game = _game;
 		settings = _settings;
 		handle = xhandle;
 
