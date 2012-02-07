@@ -33,8 +33,8 @@ class BoardButton extends FrameLayout
 
 		squareIndex = index;
 		squareColor = ((index / 16) % 2 == 1)?
-				((index % 2 == 1)? WHITE : BLACK) :
-				((index % 2 == 1)? BLACK : WHITE);
+				((index % 2 == 1)? BLACK : WHITE) :
+				((index % 2 == 1)? WHITE : BLACK);
 		setId(squareIndex);
 
 		setSquareImage();
