@@ -1,20 +1,16 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.View.OnLongClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserStats extends Activity implements OnLongClickListener
+public class UserStats extends BasePhoneActivity
 {
 	private final static int GEN_RAN = 0;
 	private final static int GEN_INV = 1;
@@ -57,22 +53,13 @@ public class UserStats extends Activity implements OnLongClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_userstats);
 		context = this;
-
-		// set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		// set content view
-		setContentView(R.layout.activity_userstats);
 
 		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
 
 		final NetworkClient net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
-
-		final ImageView button = (ImageView) findViewById(R.id.topbar);
-		button.setOnLongClickListener(this);
 
 		final RobotoText txt = (RobotoText) findViewById(R.id.username);
 		txt.setText(settings.getString("username"));
@@ -110,15 +97,6 @@ public class UserStats extends Activity implements OnLongClickListener
 	{
 		NetActive.dec();
 		super.onPause();
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 
 	private void loadStats(final JSONObject data)

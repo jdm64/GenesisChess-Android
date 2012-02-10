@@ -5,7 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	layout="@layout/include_topbar"/>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/username_header"
-	android:layout_below="@id/topbar"
+	android:layout_below="@id/topbar_genesis"
 	android:layout_alignParentLeft="true"
 	android:layout_marginTop="6dp"
 	android:layout_marginLeft="14dp"

@@ -1,21 +1,18 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Register extends Activity implements OnClickListener, OnLongClickListener
+public class Register extends BasePhoneActivity implements OnClickListener
 {
 	private Context context;
 	private NetworkClient net;
@@ -59,25 +56,16 @@ public class Register extends Activity implements OnClickListener, OnLongClickLi
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_register);
 		context = this;
-
-		// set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// create network client instance
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
-		// set content view
-		setContentView(R.layout.activity_register);
-
 		// setup click listeners
 		ImageView image = (ImageView) findViewById(R.id.register);
 		image.setOnClickListener(this);
-
-		image = (ImageView) findViewById(R.id.topbar);
-		image.setOnLongClickListener(this);
 	}
 
 	@Override
@@ -99,15 +87,6 @@ public class Register extends Activity implements OnClickListener, OnLongClickLi
 	{
 		if (v.getId() == R.id.register)
 			register_validate();
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 
 	private void register_validate()

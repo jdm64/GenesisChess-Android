@@ -5,7 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	layout="@layout/include_topbar"/>
 	<ListView
 	android:id="@+id/msg_list"
-	android:layout_below="@id/topbar"
+	android:layout_below="@id/topbar_genesis"
 	android:layout_above="@+id/input_box"/>
 	<TableRow
 	android:id="@+id/input_box"

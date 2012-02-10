@@ -2,7 +2,6 @@ package com.chess.genesis;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.ContextMenu;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GameListOnline extends FragmentActivity implements OnClickListener, OnLongClickListener, OnTouchListener, OnItemClickListener
+public class GameListOnline extends BasePhoneActivity implements OnClickListener, OnTouchListener, OnItemClickListener
 {
 	private final static int THEIR_PAGE = 0;
 	private final static int YOUR_PAGE = 1;
@@ -244,18 +241,12 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_gamelist_online);
 		context = this;
 		gamelistadapter_arr = new GameListAdapter[3];
 
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
-
-		// set content view
-		setContentView(R.layout.activity_gamelist_online);
 
 	try {
 		// Set "waiting for opponent"
@@ -340,15 +331,6 @@ public class GameListOnline extends FragmentActivity implements OnClickListener,
 			(new NewOnlineGameDialog(v.getContext(), handle)).show();
 		else if (v.getId() == R.id.game_search)
 			(new GamePoolDialog(v.getContext())).show();
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar_genesis) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 		gamestate.setBoard();
 
 		// set click listeners
-		ImageView button = (ImageView) findViewById((type != Enums.LOCAL_GAME)? R.id.topbar_genesis : R.id.topbar);
+		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);
 
 		if (type != Enums.LOCAL_GAME) {
@@ -152,7 +152,6 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 	public boolean onLongClick(final View v)
 	{
 		switch (v.getId()) {
-		case R.id.topbar:
 		case R.id.topbar_genesis:
 			gamestate.save(this, true);
 			finish();

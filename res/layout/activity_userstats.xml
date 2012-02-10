@@ -5,7 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	layout="@layout/include_topbar"/>
 	<ScrollView
 	style="@style/FillWidth"
-	android:layout_below="@id/topbar"
+	android:layout_below="@id/topbar_genesis"
 	android:layout_above="@id/botbar">
 	<RelativeLayout
 	style="@style/FillWidth">

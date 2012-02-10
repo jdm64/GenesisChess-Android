@@ -1,8 +1,6 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,7 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MsgBox extends Activity implements OnClickListener, OnLongClickListener
+public class MsgBox extends BasePhoneActivity implements OnClickListener
 {
 	private MsgListAdapter msglist_adapter;
 	private ListView msglist_view;
@@ -67,11 +64,8 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_msgbox);
 		context = this;
-
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
@@ -79,14 +73,8 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
 		gameid = settings.getString("gameid");
 
-		// set content view
-		setContentView(R.layout.activity_msgbox);
-
 		ImageView image = (ImageView) findViewById(R.id.submit_msg);
 		image.setOnClickListener(this);
-
-		image = (ImageView) findViewById(R.id.topbar);
-		image.setOnLongClickListener(this);
 
 		// set list adapters
 		msglist_adapter = new MsgListAdapter(this, gameid);
@@ -144,18 +132,6 @@ public class MsgBox extends Activity implements OnClickListener, OnLongClickList
 				return;
 			net.submit_msg(gameid, msg);
 			(new Thread(net)).start();
-		}
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		switch (v.getId()) {
-		case R.id.topbar:
-		case R.id.topbar_genesis:
-			finish();
-			return true;
-		default:
-			return false;
 		}
 	}
 

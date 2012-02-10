@@ -1,10 +1,8 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -29,7 +26,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
-public class GameListLocal extends Activity implements OnClickListener, OnLongClickListener, OnItemClickListener
+public class GameListLocal extends BasePhoneActivity implements OnClickListener, OnItemClickListener
 {
 	private Context context;
 	private GameListAdapter gamelist_adapter;
@@ -70,19 +67,11 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_gamelist_local);
 		context = this;
 
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		// set content view
-		setContentView(R.layout.activity_gamelist_local);
-
 		// set click listeners
-		ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
-		button.setOnLongClickListener(this);
-		button = (ImageView) findViewById(R.id.topbar_plus);
+		ImageView button = (ImageView) findViewById(R.id.topbar_plus);
 		button.setOnClickListener(this);
 
 		// set list adapters
@@ -119,15 +108,6 @@ public class GameListLocal extends Activity implements OnClickListener, OnLongCl
 	{
 		if (v.getId() == R.id.topbar_plus)
 			(new NewLocalGameDialog(v.getContext(), handle)).show();
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar_genesis) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 
 	@Override

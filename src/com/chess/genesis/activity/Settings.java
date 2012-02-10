@@ -80,7 +80,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		progress = new ProgressMsg(this);
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		final ImageView button = (ImageView) findViewById(R.id.topbar);
+		final ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);
 
 		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);
@@ -194,7 +194,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 	public boolean onLongClick(final View v)
 	{
-		if (v.getId() == R.id.topbar) {
+		if (v.getId() == R.id.topbar_genesis) {
 			finish();
 			return true;
 		}

@@ -5,7 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	layout="@layout/include_topbar"/>
 	<include
 	layout="@layout/include_board_names"
-	android:layout_below="@+id/topbar"
+	android:layout_below="@+id/topbar_genesis"
 	style="@style/FillWidth"/>
 	<include
 	layout="@layout/include_board_layout"

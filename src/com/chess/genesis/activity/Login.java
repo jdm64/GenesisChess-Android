@@ -1,9 +1,7 @@
 package com.chess.genesis;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -14,14 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Login extends Activity implements OnClickListener, OnLongClickListener
+public class Login extends BasePhoneActivity implements OnClickListener
 {
 	private Context context;
 	private NetworkClient net;
@@ -117,26 +114,18 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, R.layout.activity_login);
 		context = this;
-
-		// set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// create network client instance
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this, handle);
-
-		// set content view
-		setContentView(R.layout.activity_login);
 
 		// setup click listeners
 		ImageView image = (ImageView) findViewById(R.id.login);
 		image.setOnClickListener(this);
 		image = (ImageView) findViewById(R.id.register);
 		image.setOnClickListener(this);
-		image = (ImageView) findViewById(R.id.topbar);
-		image.setOnLongClickListener(this);
 
 		// Always show the currently logged in user
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -180,15 +169,6 @@ public class Login extends Activity implements OnClickListener, OnLongClickListe
 		} else if (v.getId() == R.id.register) {
 			startActivityForResult(new Intent(this, Register.class), 1);
 		}
-	}
-
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 
 	@Override
