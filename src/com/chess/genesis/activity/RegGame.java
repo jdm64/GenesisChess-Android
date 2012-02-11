@@ -14,14 +14,6 @@ public class RegGame extends Game implements OnClickListener, OnLongClickListene
 	{
 		super.onCreate(savedInstanceState);
 
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		// restore settings
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getIntent().getExtras();
-		type = settings.getInt("type");
-
 		// set playingBlack
 		boolean playingBlack = false;
 		if (type != Enums.LOCAL_GAME) {

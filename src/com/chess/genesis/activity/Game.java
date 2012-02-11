@@ -3,6 +3,7 @@ package com.chess.genesis;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -25,6 +26,20 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 	protected Bundle settings;
 	protected int type;
 	protected boolean newMsgs = false;
+
+	@Override
+	public void onCreate(final Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+
+		// Set only portrait
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+		// restore settings
+		settings = (savedInstanceState != null)?
+			savedInstanceState : getIntent().getExtras();
+		type = settings.getInt("type");
+	}
 
 	protected void init()
 	{

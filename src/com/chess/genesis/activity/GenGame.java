@@ -12,14 +12,6 @@ public class GenGame extends Game implements OnClickListener, OnLongClickListene
 	{
 		super.onCreate(savedInstanceState);
 
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-		// restore settings
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getIntent().getExtras();
-		type = settings.getInt("type");
-
 		// set view as black
 		viewAsBlack = false;
 
