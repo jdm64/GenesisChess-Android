@@ -13,7 +13,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		<Button
 		android:id="@+id/cancel"
 		style="@style/FillWidth"
-		android:layout_weight="50"
 		android:text="Cancel"/>
 	</TableRow>
 </RelativeLayout>

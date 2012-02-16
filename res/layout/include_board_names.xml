@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow
+<com.chess.genesis.ManualPanel
 xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
 android:id="@+id/board_names"
+panel:sizes="1,1/2"
 android:background="#ff383838">
 	<com.chess.genesis.TabText
 	android:id="@+id/white_name"
-	style="@style/FillWidth"
 	android:gravity="center"
 	android:padding="6dp"
-	android:textSize="14dp"
-	android:layout_weight="50"/>
+	android:textSize="14dp"/>
 	<com.chess.genesis.TabText
 	android:id="@+id/black_name"
-	style="@style/FillWidth"
 	android:gravity="center"
 	android:padding="6dp"
-	android:textSize="14dp"
-	android:layout_weight="50"/>
-</TableRow>
+	android:textSize="14dp"/>
+</com.chess.genesis.ManualPanel>

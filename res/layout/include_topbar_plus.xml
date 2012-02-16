@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow
+<com.chess.genesis.ManualPanel
 xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
+panel:sizes="5,1/6"
 android:id="@+id/topbar_and_plus">
-	<com.chess.genesis.MyImageView
+	<ImageButton
 	android:id="@+id/topbar_genesis"
-	style="@style/FillWidth"
-	android:layout_weight="82"
-	android:src="@drawable/btn_topbar_genesis"/>
-	<com.chess.genesis.MyImageView
+	style="@style/TopBlueBar"
+	android:src="@drawable/genesischess"/>
+	<ImageButton
 	android:id="@+id/topbar_plus"
-	style="@style/FillWidth"
-	android:layout_weight="408"
-	android:src="@drawable/btn_topbar_plus"/>
-</TableRow>
+	style="@style/TopBlueBar"
+	android:src="@drawable/plus"/>
+</com.chess.genesis.ManualPanel>

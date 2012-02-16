@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	<include
-	layout="@layout/include_topbar"/>
+	layout="@layout/include_topbar"
+	style="@style/BlueBar"/>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/welcome"
 	android:layout_below="@id/topbar_genesis"
@@ -91,21 +93,20 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			</FrameLayout>
 		</TableRow>
 	</TableLayout>
-	<TableRow
+	<com.chess.genesis.ManualPanel
 	android:id="@+id/layout01"
+	panel:sizes="1,1/2"
 	android:paddingBottom="3dp"
 	android:layout_above="@id/botbar">
 		<com.chess.genesis.MyImageView
 		android:id="@+id/likefacebook"
-		android:layout_weight="50"
 		android:padding="3dp"
 		android:src="@drawable/btn_facebook"/>
 		<com.chess.genesis.MyImageView
 		android:id="@+id/googleplus"
-		android:layout_weight="50"
 		android:padding="3dp"
 		android:src="@drawable/btn_googleplus"/>
-	</TableRow>
+	</com.chess.genesis.ManualPanel>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/beta"
 	android:layout_above="@id/layout01"

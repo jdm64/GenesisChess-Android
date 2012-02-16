@@ -2,7 +2,8 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<include
-	layout="@layout/include_topbar"/>
+	layout="@layout/include_topbar"
+	style="@style/BlueBar"/>
 	<ScrollView
 	style="@style/FillWidth"
 	android:layout_below="@id/topbar_genesis"

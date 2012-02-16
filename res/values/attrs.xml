@@ -24,4 +24,7 @@
 		<attr name="bottomBarHeight" format="dimension" />
 		<attr name="tabIndicatorHeight" format="dimension" />
 	</declare-styleable>
+	<declare-styleable name="ManualPanel">
+		<attr name="sizes" format="string"/>
+	</declare-styleable>
 </resources>

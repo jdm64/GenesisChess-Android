@@ -2,7 +2,8 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<include
-	layout="@layout/include_topbar"/>
+	layout="@layout/include_topbar"
+	style="@style/BlueBar"/>
 	<include
 	layout="@layout/include_board_names"
 	android:layout_below="@+id/topbar_genesis"
@@ -12,5 +13,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@+id/board_names"/>
 	<include
 	layout="@layout/include_board_nav"
+	style="@style/BlueBar"
 	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	<RelativeLayout
 	android:id="@+id/body"
 	style="@style/FillWidth"
 	android:background="#ffffff"
 	android:padding="12dp"/>
-	<TableRow
+	<com.chess.genesis.ManualPanel
+	panel:sizes="1,1/2"
 	style="@style/FillWidth"
 	android:layout_below="@id/body"
 	android:layout_marginTop="6dp">
 		<Button
 		android:id="@+id/ok"
-		style="@style/FillWidth"
-		android:layout_weight="50"
 		android:text="Ok"/>
 		<Button
 		android:id="@+id/cancel"
-		style="@style/FillWidth"
-		android:layout_weight="50"
 		android:text="Cancel"/>
-	</TableRow>
+	</com.chess.genesis.ManualPanel>
 </RelativeLayout>

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android">
-	<TableRow
-	android:id="@+id/layout01">
-		<com.chess.genesis.MyImageView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
+	<com.chess.genesis.ManualPanel
+	android:id="@+id/layout01"
+	style="@style/BlueBar"
+	panel:sizes="5,1/6">
+		<ImageButton
 		android:id="@+id/topbar_genesis"
-		style="@style/FillWidth"
-		android:layout_weight="82"
-		android:src="@drawable/btn_topbar_genesis"/>
-		<com.chess.genesis.MyImageView
+		style="@style/TopBlueBar"
+		android:src="@drawable/genesischess"/>
+		<ImageButton
 		android:id="@+id/chat"
-		style="@style/FillWidth"
-		android:layout_weight="408"
-		android:src="@drawable/btn_chat"/>
-	</TableRow>
+		style="@style/TopBlueBar"
+		android:src="@drawable/chat"/>
+	</com.chess.genesis.ManualPanel>
 	<include
 	layout="@layout/include_board_names"
 	android:layout_below="@id/layout01"
@@ -23,5 +24,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@+id/board_names"/>
 	<include
 	layout="@layout/include_board_nav"
+	style="@style/BlueBar"
 	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

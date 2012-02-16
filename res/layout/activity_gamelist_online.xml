@@ -2,7 +2,8 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<include
-	layout="@layout/include_topbar_plus"/>
+	layout="@layout/include_topbar_plus"
+	style="@style/BlueBar"/>
 	<FrameLayout
 	android:id="@+id/layout02"
 	style="@style/FillWidth"

@@ -6,7 +6,7 @@ class IntArray
 
 	// !SICK!
 	// This only exists because Arrays.copyOf was added in API Level 9
-	private int[] copyOf(final int[] arr, final int size)
+	public static int[] copyOf(final int[] arr, final int size)
 	{
 		final int[] temp = new int[size];
 

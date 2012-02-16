@@ -99,7 +99,7 @@ public abstract class Game extends Activity implements OnClickListener, OnLongCl
 		if (type != Enums.LOCAL_GAME) {
 			final GameDataDB db = new GameDataDB(this);
 			final int count = db.getUnreadMsgCount(settings.getString("gameid"));
-			final int img = (count > 0)? R.drawable.btn_newmsg : R.drawable.btn_chat;
+			final int img = (count > 0)? R.drawable.newmsg : R.drawable.chat;
 
 			newMsgs = (count > 0);
 
