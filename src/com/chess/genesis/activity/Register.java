@@ -151,7 +151,8 @@ public class Register extends BasePhoneActivity implements OnClickListener
 
 	private boolean valid_email(final String email)
 	{
-		if (!email.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+")) {
+		// regex:  \w+[\w\._+-]*\w+@\w+[\w\.-]*\w+\.\w+[\w\.-]*\w+
+		if (!email.matches("\\w+[\\w\\._+-]*\\w+@\\w+[\\w\\.-]*\\w+\\.\\w+[\\w\\.-]*\\w+")) {
 			Toast.makeText(this, "Invalid email address", Toast.LENGTH_LONG).show();
 			return false;
 		}
