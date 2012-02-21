@@ -2,7 +2,6 @@ package com.chess.genesis;
 
 import android.net.Uri;
 import android.os.Environment;
-import java.lang.StringBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

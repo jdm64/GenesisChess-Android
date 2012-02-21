@@ -19,6 +19,8 @@ final class AdsHandler
 		if (!pref.getBoolean("enableAds", true))
 			return;
 		final AdView ad = (AdView) activity.findViewById(R.id.adView);
-		ad.loadAd(new AdRequest());
+
+		if (ad != null)
+			ad.loadAd(new AdRequest());
 	}
 }
