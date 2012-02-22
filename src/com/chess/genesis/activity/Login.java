@@ -122,10 +122,10 @@ public class Login extends BasePhoneActivity implements OnClickListener
 		progress = new ProgressMsg(this, handle);
 
 		// setup click listeners
-		ImageView image = (ImageView) findViewById(R.id.login);
-		image.setOnClickListener(this);
-		image = (ImageView) findViewById(R.id.register);
-		image.setOnClickListener(this);
+		View view = findViewById(R.id.login);
+		view.setOnClickListener(this);
+		view = findViewById(R.id.register);
+		view.setOnClickListener(this);
 
 		// Always show the currently logged in user
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);

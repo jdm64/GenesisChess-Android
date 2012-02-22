@@ -20,10 +20,14 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		android:scrollbars="horizontal"
 		android:inputType="textCapSentences|textMultiLine"
 		android:maxLength="320"/>
-		<com.chess.genesis.MyImageView
+		<Button
 		android:id="@+id/submit_msg"
+		android:text="Submit"
+		android:layout_height="40dp"
+		android:textSize="15dp"
+		android:textColor="#fff"
 		android:layout_gravity="center"
-		android:src="@drawable/btn_rsubmit"/>
+		android:background="@drawable/btn_green"/>
 	</com.chess.genesis.ManualPanel>
 	<include
 	layout="@layout/include_botbar"

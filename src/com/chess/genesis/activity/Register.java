@@ -64,8 +64,8 @@ public class Register extends BasePhoneActivity implements OnClickListener
 		progress = new ProgressMsg(this);
 
 		// setup click listeners
-		ImageView image = (ImageView) findViewById(R.id.register);
-		image.setOnClickListener(this);
+		View view = findViewById(R.id.register);
+		view.setOnClickListener(this);
 	}
 
 	@Override

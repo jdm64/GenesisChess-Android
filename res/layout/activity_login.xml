@@ -37,22 +37,30 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:inputType="textPassword"
 	android:singleLine="true"
 	android:maxLength="22"/>
-	<com.chess.genesis.MyImageView
+	<Button
 	android:id="@+id/login"
-	android:layout_width="120dp"
+	android:layout_width="110dp"
+	android:layout_height="40dp"
 	android:layout_below="@id/password"
-	android:layout_alignParentRight="true"
-	android:layout_margin="3dp"
-	android:paddingRight="15dp"
-	android:src="@drawable/btn_login"/>
-	<com.chess.genesis.MyImageView
+	android:layout_alignRight="@id/password"
+	android:layout_marginRight="2dp"
+	android:layout_marginTop="4dp"
+	android:text="Login"
+	android:textSize="15dp"
+	android:textColor="#fff"
+	android:background="@drawable/btn_blue"/>
+	<Button
 	android:id="@+id/register"
-	android:layout_width="120dp"
+	android:layout_width="110dp"
+	android:layout_height="40dp"
 	android:layout_above="@id/botbar"
-	android:layout_alignParentRight="true"
-	android:paddingRight="15dp"
-	android:layout_margin="8dp"
-	android:src="@drawable/btn_register"/>
+	android:layout_alignRight="@id/password"
+	android:layout_marginRight="2dp"
+	android:layout_marginBottom="8dp"
+	android:text="Sign Up"
+	android:textSize="15dp"
+	android:textColor="#fff"
+	android:background="@drawable/btn_green"/>
 	<include
 	layout="@layout/include_botbar"
 	android:layout_alignParentBottom="true"/>

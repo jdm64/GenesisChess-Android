@@ -73,8 +73,8 @@ public class MsgBox extends BasePhoneActivity implements OnClickListener
 		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
 		gameid = settings.getString("gameid");
 
-		ImageView image = (ImageView) findViewById(R.id.submit_msg);
-		image.setOnClickListener(this);
+		final View view = findViewById(R.id.submit_msg);
+		view.setOnClickListener(this);
 
 		// set list adapters
 		msglist_adapter = new MsgListAdapter(this, gameid);
