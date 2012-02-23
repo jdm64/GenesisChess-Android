@@ -2,18 +2,24 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
-	<include
-	layout="@layout/include_topbar"
-	style="@style/BlueBar"/>
+	<com.chess.genesis.TabText
+	android:id="@+id/tabtxt"
+	android:background="#ff383838"
+	style="@style/FillWidth"
+	android:gravity="center"
+	android:padding="6dp"
+	android:text="Chat"
+	android:textColor="#ffff"
+	android:textSize="14dp"/>
 	<ListView
 	android:id="@+id/msg_list"
-	android:layout_below="@id/topbar_genesis"
+	android:layout_below="@id/tabtxt"
 	android:layout_above="@+id/input_box"/>
 	<com.chess.genesis.ManualPanel
 	panel:sizes="9,4/13"
 	android:id="@+id/input_box"
 	android:layout_width="fill_parent"
-	android:layout_above="@+id/botbar">
+	android:layout_alignParentBottom="true">
 		<com.chess.genesis.RobotoEditText
 		android:id="@+id/new_msg"
 		android:maxLines="3"
@@ -29,7 +35,4 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		android:layout_gravity="center"
 		android:background="@drawable/btn_green"/>
 	</com.chess.genesis.ManualPanel>
-	<include
-	layout="@layout/include_botbar"
-	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

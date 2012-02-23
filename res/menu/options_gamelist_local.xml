@@ -2,6 +2,9 @@
 <menu
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
+	android:id="@+id/new_game"
+	android:title="New Game"/>
+	<item
 	android:id="@+id/import_game"
 	android:title="Import Game"/>
 </menu>

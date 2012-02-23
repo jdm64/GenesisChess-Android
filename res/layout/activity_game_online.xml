@@ -15,14 +15,12 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		style="@style/TopBlueBar"
 		android:src="@drawable/chat"/>
 	</com.chess.genesis.ManualPanel>
+	<FrameLayout
+	android:id="@+id/fragment01"
+	android:layout_below="@+id/layout01"
+	android:layout_above="@+id/board_nav"/>
 	<include
-	layout="@layout/include_board_names"
-	android:layout_below="@id/layout01"
-	style="@style/FillWidth"/>
-	<include
-	layout="@layout/include_board_layout"
-	android:layout_below="@+id/board_names"/>
-	<include
+	android:id="@+id/board_nav"
 	layout="@layout/include_board_nav"
 	style="@style/BlueBar"
 	android:layout_alignParentBottom="true"/>

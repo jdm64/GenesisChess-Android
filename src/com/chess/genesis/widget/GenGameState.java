@@ -1,7 +1,6 @@
 package com.chess.genesis;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +38,7 @@ class GenGameState extends GameState
 		}
 	};
 
-	public GenGameState(final Activity _activity, final Game _game, final Bundle _settings)
+	public GenGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
 	{
 		activity = _activity;
 		game = _game;

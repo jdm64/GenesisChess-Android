@@ -69,16 +69,20 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		super.onCreate(savedInstanceState);
 		context = this;
 
-		// Set only portrait
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// set layout mode
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+		final boolean isTablet = pref.getBoolean("tabletMode", false);
 
-		// Set layouts
+		if (isTablet)
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		else
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 		setContentView(R.layout.activity_settings);
 		addPreferencesFromResource(R.xml.settings);
 
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		final ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);

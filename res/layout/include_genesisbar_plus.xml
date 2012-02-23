@@ -2,14 +2,14 @@
 <com.chess.genesis.ManualPanel
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
-style="@style/BlueBar"
-panel:sizes="1,1/2">
+panel:sizes="5,1/6"
+android:id="@+id/topbar_and_plus">
 	<ImageButton
-	android:id="@+id/cancel"
-	style="@style/BotBlueBar"
-	android:src="@drawable/btn_cancel"/>
+	android:id="@+id/topbar_genesis"
+	style="@style/TopBlueBar"
+	android:src="@drawable/genesischess"/>
 	<ImageButton
-	android:id="@+id/submit"
-	style="@style/BotBlueBar"
-	android:src="@drawable/btn_submit"/>
+	android:id="@+id/topbar_plus"
+	style="@style/TopBlueBar"
+	android:src="@drawable/plus"/>
 </com.chess.genesis.ManualPanel>

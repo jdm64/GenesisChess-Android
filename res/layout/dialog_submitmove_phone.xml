@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chess.genesis.ManualPanel
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
+android:layout_gravity="bottom"
+style="@style/BlueBar"
+panel:sizes="1,1/2">
+	<ImageButton
+	android:id="@+id/cancel"
+	style="@style/BotBlueBar"
+	android:src="@drawable/btn_cancel"/>
+	<ImageButton
+	android:id="@+id/submit"
+	style="@style/BotBlueBar"
+	android:src="@drawable/btn_submit"/>
+</com.chess.genesis.ManualPanel>

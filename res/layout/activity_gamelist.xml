@@ -2,14 +2,14 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<include
-	layout="@layout/include_topbar_plus"
+	layout="@layout/include_genesisbar_plus"
 	style="@style/BlueBar"/>
-	<ListView
-	android:id="@+id/game_list"
-	style="@style/FillBoth"
+	<FrameLayout
+	android:id="@+id/fragment01"
 	android:layout_below="@+id/topbar_and_plus"
 	android:layout_above="@+id/botbar"/>
 	<include
 	layout="@layout/include_botbar"
+	style="@style/BlueBar"
 	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

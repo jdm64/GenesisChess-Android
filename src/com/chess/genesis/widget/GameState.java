@@ -16,7 +16,7 @@ import java.util.Date;
 abstract class GameState
 {
 	protected Handler handle;
-	protected Game game;
+	protected GameFrag game;
 	protected Activity activity;
 	protected Bundle settings;
 

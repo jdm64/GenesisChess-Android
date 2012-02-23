@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageButton
+<FrameLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/topbar_genesis"
-style="@style/TopBlueBar"
-android:src="@drawable/genesischess"/>
+xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+android:id="@+id/botbar">
+	<View
+	android:layout_height="50dp"
+	android:layout_width="fill_parent"
+	android:background="@drawable/bluebar_top"/>
+	<com.google.ads.AdView
+	android:id="@+id/adView"
+	android:layout_gravity="bottom|center_horizontal"
+	ads:adUnitId="a14efd535f17368"
+	ads:refreshInterval="60"
+	ads:adSize="BANNER"/>
+</FrameLayout>

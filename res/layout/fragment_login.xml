@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<include
-	layout="@layout/include_topbar"
-	style="@style/BlueBar"/>
 	<com.chess.genesis.RobotoText
 	android:id="@+id/username_header"
-	android:layout_below="@id/topbar_genesis"
 	android:layout_alignParentLeft="true"
 	android:layout_marginTop="6dp"
 	android:layout_marginLeft="14dp"
@@ -53,7 +49,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/register"
 	android:layout_width="110dp"
 	android:layout_height="40dp"
-	android:layout_above="@id/botbar"
+	android:layout_alignParentBottom="true"
 	android:layout_alignRight="@id/password"
 	android:layout_marginRight="2dp"
 	android:layout_marginBottom="8dp"
@@ -61,7 +57,4 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:textSize="15dp"
 	android:textColor="#fff"
 	android:background="@drawable/btn_green"/>
-	<include
-	layout="@layout/include_botbar"
-	android:layout_alignParentBottom="true"/>
 </RelativeLayout>

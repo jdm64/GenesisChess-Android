@@ -23,6 +23,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="true"
 		android:title="Enable Ads"
 		android:summary="Enable the display of ads"/>
+		<CheckBoxPreference
+		android:key="tabletMode"
+		android:defaultValue="false"
+		android:title="Enable Tablet Layout"
+		android:summary="Load the tablet layout (App restart required)"/>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Device Notifications">

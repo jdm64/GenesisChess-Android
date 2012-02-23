@@ -2,15 +2,18 @@ package com.chess.genesis;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 
-class BasePhoneActivity extends FragmentActivity implements OnLongClickListener
+abstract class BasePhoneActivity extends BaseActivity implements OnLongClickListener
 {
-	public void onCreate(final Bundle savedInstanceState, final int layoutId)
+	protected BaseContentFrag mainFrag;
+
+	public void onCreate(final Bundle savedInstanceState, final BaseContentFrag Frag, final String Tag, final int layoutId)
 	{
 		super.onCreate(savedInstanceState);
+		mainFrag = Frag;
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -20,6 +23,19 @@ class BasePhoneActivity extends FragmentActivity implements OnLongClickListener
 
 		final View image = findViewById(R.id.topbar_genesis);
 		image.setOnLongClickListener(this);
+
+		final Bundle settings = (savedInstanceState != null)?
+			savedInstanceState : getIntent().getExtras();
+
+		mainFrag.setArguments(settings);
+		getSupportFragmentManager().beginTransaction()
+		.replace(R.id.fragment01, mainFrag, Tag).commit();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item)
+	{
+		return mainFrag.onOptionsItemSelected(item);
 	}
 
 	public boolean onLongClick(final View v)

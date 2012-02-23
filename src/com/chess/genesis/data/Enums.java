@@ -52,9 +52,11 @@ final class Enums
 	public final static int NUDGED = 2;
 	public final static int CLOSE = 3;
 
-	// Activity Types
+	// Activity Result Types
+	public final static int NO_ACTIVITY = 0;
 	public final static int ONLINE_LIST = 1;
 	public final static int USER_STATS = 2;
+	public final static int IMPORT_GAME = 3;
 
 	public static String OpponentType(final int opponent)
 	{

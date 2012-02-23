@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.chess.genesis.ManualPanel
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
+panel:sizes="5,1/6">
+	<View
+	style="@style/TopBlueBar"/>
+	<ImageButton
+	android:id="@+id/menu"
+	style="@style/TopBlueBar"
+	android:src="@drawable/menu"/>
+</com.chess.genesis.ManualPanel>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<include
-	layout="@layout/include_topbar_plus"
-	style="@style/BlueBar"/>
 	<FrameLayout
 	android:id="@+id/layout02"
-	style="@style/FillWidth"
-	android:layout_below="@id/topbar_and_plus">
+	style="@style/FillWidth">
 		<com.chess.genesis.RobotoText
 		android:id="@+id/game_search"
 		style="@style/FillWidth"
@@ -25,8 +21,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<android.support.v4.view.ViewPager
 	android:id="@+id/swipe_list"
 	android:layout_below="@id/swipetabs"
-	android:layout_above="@id/botbar"/>
-	<include
-	layout="@layout/include_botbar"
 	android:layout_alignParentBottom="true"/>
 </RelativeLayout>
