@@ -15,7 +15,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +83,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		net = new NetworkClient(this, handle);
 		progress = new ProgressMsg(this);
 
-		final ImageView button = (ImageView) findViewById(R.id.topbar_genesis);
+		final View button = findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);
 
 		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);

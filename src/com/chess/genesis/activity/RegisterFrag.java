@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,7 +69,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 		progress = new ProgressMsg(act);
 
 		// setup click listeners
-		final ImageView image = (ImageView) view.findViewById(R.id.register);
+		final View image = view.findViewById(R.id.register);
 		image.setOnClickListener(this);
 
 		return view;

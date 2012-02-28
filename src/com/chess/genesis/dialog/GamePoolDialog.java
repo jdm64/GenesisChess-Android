@@ -26,7 +26,7 @@ class GamePoolDialog extends BaseDialog implements OnClickListener
 		public PoolDataItem(final String GameType, final long Time)
 		{
 			gametype = GameType.substring(0,1).toUpperCase() + GameType.substring(1);
-			time = (new PrettyDate(Time)).agoFormat();
+			time = new PrettyDate(Time).agoFormat();
 		}
 	}
 

@@ -12,6 +12,8 @@ abstract class SimpleFrag extends Fragment
 
 	public SimpleFrag(final int layoutId)
 	{
+		super();
+
 		layout = layoutId;
 	}
 

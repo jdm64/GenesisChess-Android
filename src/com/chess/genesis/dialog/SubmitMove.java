@@ -8,7 +8,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ImageView;
 
 public class SubmitMove extends Dialog implements OnClickListener
 {
@@ -38,9 +37,9 @@ public class SubmitMove extends Dialog implements OnClickListener
 			setContentView(R.layout.dialog_submitmove_phone);
 		getWindow().setGravity(Gravity.BOTTOM);
 
-		ImageView image = (ImageView) findViewById(R.id.submit);
+		View image = findViewById(R.id.submit);
 		image.setOnClickListener(this);
-		image = (ImageView) findViewById(R.id.cancel);
+		image = findViewById(R.id.cancel);
 		image.setOnClickListener(this);
 	}
 

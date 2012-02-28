@@ -3,6 +3,7 @@ package com.chess.genesis;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,17 +30,17 @@ abstract class BaseDialog extends Dialog implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		Button button;
+		View button;
 
 		if (buttonCount == OKCANCEL) {
 			setContentView(R.layout.dialog_base_okcancel);
 
-			button = (Button) findViewById(R.id.ok);
+			button = findViewById(R.id.ok);
 			button.setOnClickListener(this);
 		} else {
 			setContentView(R.layout.dialog_base_cancel);
 		}
-		button = (Button) findViewById(R.id.cancel);
+		button = findViewById(R.id.cancel);
 		button.setOnClickListener(this);
 	}
 

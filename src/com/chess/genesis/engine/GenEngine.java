@@ -180,7 +180,7 @@ class GenEngine extends Engine implements Runnable
 		int best = MIN_SCORE;
 
 		ismate.set(depth, true);
-		pvMove.set(depth, (new GenMove()).setNull());
+		pvMove.set(depth, new GenMove().setNull());
 
 		do { // goto emulator
 

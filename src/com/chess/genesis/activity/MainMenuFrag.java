@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +59,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 			R.id.user_stats, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings, R.id.feedback, R.id.googleplus};
 		for (int i = 0; i < list.length; i++) {
-			final ImageView button = (ImageView) view.findViewById(list[i]);
+			final View button = view.findViewById(list[i]);
 			button.setOnClickListener(this);
 			button.setOnTouchListener(this);
 		}

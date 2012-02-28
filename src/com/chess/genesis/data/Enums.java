@@ -57,6 +57,7 @@ final class Enums
 	public final static int ONLINE_LIST = 1;
 	public final static int USER_STATS = 2;
 	public final static int IMPORT_GAME = 3;
+	public final static int REGISTER = 4;
 
 	public static String OpponentType(final int opponent)
 	{

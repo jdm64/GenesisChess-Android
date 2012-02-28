@@ -181,7 +181,7 @@ class RegEngine extends Engine implements Runnable
 		int best = MIN_SCORE;
 
 		ismate.set(depth, true);
-		pvMove.set(depth, (new RegMove()).setNull());
+		pvMove.set(depth, new RegMove().setNull());
 
 		do { // goto emulator
 

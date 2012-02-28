@@ -317,7 +317,7 @@ abstract class GameState
 				db.close();
 				return;
 			}
-			final long stime = (new Date()).getTime();
+			final long stime = new Date().getTime();
 			final String zfen = board.printZfen();
 			final String hist = history.toString();
 

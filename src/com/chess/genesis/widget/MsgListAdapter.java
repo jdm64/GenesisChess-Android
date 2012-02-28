@@ -77,7 +77,7 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 		txt.setText(data.getString("username"));
 
 		txt = (TextView) cell.findViewById(R.id.time);
-		final String time = (new PrettyDate(data.getString("time"))).agoFormat();
+		final String time = new PrettyDate(data.getString("time")).agoFormat();
 		txt.setText(time);
 
 		txt = (TextView) cell.findViewById(R.id.msg);

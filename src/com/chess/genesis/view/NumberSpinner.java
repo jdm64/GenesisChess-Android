@@ -441,8 +441,8 @@ class NumberSpinner extends LinearLayout
 			}
 
 			final CharSequence filtered = String.valueOf(source.subSequence(start, end));
-			final String result = String.valueOf(dest.subSequence(0, dstart))
-				+ filtered
+			final String result = dest.subSequence(0, dstart)
+				+ filtered.toString()
 				+ dest.subSequence(dend, dest.length());
 			final String str = String.valueOf(result).toLowerCase();
 			for (String val : mDisplayedValues) {
@@ -478,8 +478,8 @@ class NumberSpinner extends LinearLayout
 				filtered = source.subSequence(start, end);
 			}
 
-			final String result = String.valueOf(dest.subSequence(0, dstart))
-				+ filtered
+			final String result = dest.subSequence(0, dstart)
+				+ filtered.toString()
 				+ dest.subSequence(dend, dest.length());
 
 			if ("".equals(result)) {

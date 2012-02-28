@@ -2,32 +2,32 @@ package com.chess.genesis;
 
 interface Board
 {
-	public void reset();
+	void reset();
 
-	public int Piece(int index);
-	public int PieceType(int index);
+	int Piece(int index);
+	int PieceType(int index);
 
-	public int getStm();
-	public MoveFlags getMoveFlags();
+	int getStm();
+	MoveFlags getMoveFlags();
 
-	public int[] getBoardArray();
-	public int[] getPieceCounts(final int Loc);
+	int[] getBoardArray();
+	int[] getPieceCounts(final int Loc);
 
-	public int kingIndex(final int color);
-	public boolean incheck(final int color);
-	public int isMate();
+	int kingIndex(final int color);
+	boolean incheck(final int color);
+	int isMate();
 
-	public String printZfen();
+	String printZfen();
 
-	public void make(final GenMove move);
-	public void make(final RegMove move);
+	void make(final GenMove move);
+	void make(final RegMove move);
 
-	public void unmake(final GenMove move);
-	public void unmake(final RegMove move, final MoveFlags undoFlags);
+	void unmake(final GenMove move);
+	void unmake(final RegMove move, final MoveFlags undoFlags);
 
-	public int validMove(final GenMove move);
-	public int validMove(final RegMove move);
+	int validMove(final GenMove move);
+	int validMove(final RegMove move);
 
-	public boolean validMove(final GenMove moveIn, final GenMove move);
-	public boolean validMove(final RegMove moveIn, final RegMove move);
+	boolean validMove(final GenMove moveIn, final GenMove move);
+	boolean validMove(final RegMove moveIn, final RegMove move);
 }

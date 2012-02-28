@@ -127,7 +127,7 @@ public class UserStatsFrag extends BaseContentFrag
 		time = Math.max(time, data.getJSONObject("lastmove").getLong("regular"));
 
 		txt = (TextView) act.findViewById(R.id.last_activity);
-		txt.setText((new PrettyDate(time)).agoFormat());
+		txt.setText(new PrettyDate(time).agoFormat());
 
 		// PSR
 		valA = data.getInt("gpsr");

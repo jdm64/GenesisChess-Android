@@ -211,7 +211,7 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			final View centerTab = getChildAt(position);
 			tabPositions[position] = width / 2 - centerTab.getMeasuredWidth() / 2;
 			for (int i = position - 1; i >= 0; i--) {
-				final TextView tab = (TextView) getChildAt(i);
+				final View tab = getChildAt(i);
 				if (i == position - 1)
 					tabPositions[i] = 0 - tab.getPaddingLeft();
 				else
@@ -220,13 +220,13 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 				tabPositions[i] = Math.min(tabPositions[i], tabPositions[i + 1] - tab.getMeasuredWidth());
 			}
 			for (int i = position + 1; i < count; i++) {
-				final TextView tab = (TextView) getChildAt(i);
+				final View tab = getChildAt(i);
 				if (i == position + 1)
 					tabPositions[i] = width - tab.getMeasuredWidth() + tab.getPaddingRight();
 				else
 					tabPositions[i] = width * 2;
 
-				final TextView prevTab = (TextView) getChildAt(i - 1);
+				final View prevTab = getChildAt(i - 1);
 				tabPositions[i] = Math.max(tabPositions[i], tabPositions[i - 1] + prevTab.getMeasuredWidth());
 			}
 		} else {

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 
 public class GameListOnline extends BasePhoneActivity implements OnClickListener
 {
@@ -14,7 +13,7 @@ public class GameListOnline extends BasePhoneActivity implements OnClickListener
 		super.onCreate(savedInstanceState, new GameListOnlineFrag(), GameListOnlineFrag.TAG, R.layout.activity_gamelist);
 
 		// set click listeners
-		final ImageView button = (ImageView) findViewById(R.id.topbar_plus);
+		final View button = findViewById(R.id.topbar_plus);
 		button.setOnClickListener(this);
 	}
 

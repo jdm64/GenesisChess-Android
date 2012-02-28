@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,9 +142,9 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 		progress = new ProgressMsg(act, handle);
 
 		// setup click listeners
-		ImageView image = (ImageView) view.findViewById(R.id.login);
+		View image = view.findViewById(R.id.login);
 		image.setOnClickListener(this);
-		image = (ImageView) view.findViewById(R.id.register);
+		image = view.findViewById(R.id.register);
 		image.setOnClickListener(this);
 
 		// Always show the currently logged in user
@@ -195,7 +194,7 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 				fintent.setFrag(R.id.panel02, new RegisterFrag(), RegisterFrag.TAG);
 				fintent.loadFrag(fragMan);
 			} else {
-				startActivityForResult(new Intent(act, Register.class), 1);
+				startActivityForResult(new Intent(act, Register.class), Enums.REGISTER);
 			}
 			break;
 		case R.id.menu:

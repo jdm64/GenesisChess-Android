@@ -1,6 +1,6 @@
 package com.chess.genesis;
 
-class TransTable
+abstract class TransTable
 {
 	protected TransItem[] table;
 	protected int size;

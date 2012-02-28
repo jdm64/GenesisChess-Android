@@ -38,9 +38,9 @@ class LocalGameDetails extends BaseDialog implements OnClickListener
 		txt.setText(Enums.OpponentType(Integer.valueOf(gamedata.getString("opponent"))));
 
 		txt = (RobotoText) findViewById(R.id.ctime);
-		txt.setText((new PrettyDate(gamedata.getString("ctime"))).agoFormat());
+		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
 		txt = (RobotoText) findViewById(R.id.stime);
-		txt.setText((new PrettyDate(gamedata.getString("stime"))).agoFormat());
+		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
 
 		txt = (RobotoText) findViewById(R.id.zfen);
 		txt.setText(gamedata.getString("zfen"));

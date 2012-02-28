@@ -42,9 +42,9 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 		txt.setText(Enums.GameStatus(Integer.valueOf(gamedata.getString("status"))));
 
 		txt = (RobotoText) findViewById(R.id.ctime);
-		txt.setText((new PrettyDate(gamedata.getString("ctime"))).agoFormat());
+		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
 		txt = (RobotoText) findViewById(R.id.stime);
-		txt.setText((new PrettyDate(gamedata.getString("stime"))).agoFormat());
+		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
 
 		txt = (RobotoText) findViewById(R.id.zfen);
 		txt.setText(gamedata.getString("zfen"));

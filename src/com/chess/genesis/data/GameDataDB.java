@@ -19,7 +19,7 @@ class GameDataDB
 	public GameDataDB(final Context _context)
 	{
 		context = _context;
-		db = (new DatabaseOpenHelper(context)).getWritableDatabase();
+		db = new DatabaseOpenHelper(context).getWritableDatabase();
 	}
 
 	public void close()
@@ -50,7 +50,7 @@ class GameDataDB
 
 	public Bundle newLocalGame(final String gamename, final int gametype, final int opponent)
 	{
-		final long time = (new Date()).getTime();
+		final long time = new Date().getTime();
 		final Object[] data = {gamename, time, time, gametype, opponent};
 		final String[] data2 = {String.valueOf(time)};
 
@@ -108,7 +108,7 @@ class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data);
 		final Bundle row = rowToBundle(cursor, 0);
 
-		final long time = (new Date()).getTime();
+		final long time = new Date().getTime();
 		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
 		final String dstring = "(?, ?, ?, ?, ?, ?, ?)";
 		final Object[] data2 = {row.get("white") + " Vs. " + row.get("black"), time, time,

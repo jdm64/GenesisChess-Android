@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 public abstract class GameFrag extends BaseContentFrag implements OnClickListener
 {
@@ -70,7 +69,7 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
 			R.id.forwards, R.id.current};
 		for (int i = 0; i < list.length; i++) {
-			final ImageView button = (ImageView) act.findViewById(list[i]);
+			final View button = act.findViewById(list[i]);
 			button.setOnClickListener(this);
 		}
 

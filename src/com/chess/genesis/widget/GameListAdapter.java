@@ -149,7 +149,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt = (TextView) cell.findViewById(R.id.game_type);
 		txt.setText(type);
 
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String date = new PrettyDate(data.getString("stime")).agoFormat();
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 	}
@@ -165,7 +165,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		txt = (TextView) cell.findViewById(R.id.game_type);
 		txt.setText(type);
 
-		final String date = (new PrettyDate(data.getString("stime"))).agoFormat();
+		final String date = new PrettyDate(data.getString("stime")).agoFormat();
 		txt = (TextView) cell.findViewById(R.id.game_time);
 		txt.setText(date);
 

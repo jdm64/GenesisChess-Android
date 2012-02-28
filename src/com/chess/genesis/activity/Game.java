@@ -51,7 +51,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 			db.close();
 
 			final ImageView v = (ImageView) findViewById(R.id.chat);
-			((ImageView) v).setImageResource(img);
+			v.setImageResource(img);
 		}
 	}
 
