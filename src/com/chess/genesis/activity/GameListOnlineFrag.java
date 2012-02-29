@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
@@ -323,13 +322,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 			(new GamePoolDialog(v.getContext())).show();
 		else if (v.getId() == R.id.menu)
 			openMenu(v);
-	}
-
-	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)
-	{
-		final Bundle data = (Bundle) parent.getItemAtPosition(position);
-
-		loadGame(data);
 	}
 
 	@Override

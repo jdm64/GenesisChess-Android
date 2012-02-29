@@ -12,60 +12,42 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
+	private final static int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
+
 	private GameState gamestate;
 
 	public PlaceLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 
-		final int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
-		int count = 0;
-
 		setOrientation(LinearLayout.VERTICAL);
 
-		LinearLayout row;
-		MyImageView padding;
-		PlaceButton button;
-
 		// White Pieces
-		for (int i = 0; i < 2; i++) {
-			row = new LinearLayout(context);
-
-			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
-			padding.setLayoutParams(LINEAR_PARAMS);
-			row.addView(padding);
-
-			for (int j = 0; j < 3; j++) {
-				button = new PlaceButton(context, piecelist[count++]);
-				button.setOnClickListener(this);
-				row.addView(button);
-			}
-			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
-			padding.setLayoutParams(LINEAR_PARAMS);
-			row.addView(padding);
-			addView(row);
-		}
+		AddPieces(context, 0);
 
 		// Center Divide
-		row = new LinearLayout(context);
-		padding = new MyImageView(context);
+		LinearLayout row = new LinearLayout(context);
+		MyImageView padding = new MyImageView(context);
 		padding.setImageResource(R.drawable.padding_480x96);
 		row.addView(padding);
 		addView(row);
 
 		// Black Pieces
-		for (int i = 0; i < 2; i++) {
-			row = new LinearLayout(context);
+		AddPieces(context, 6);
+	}
 
-			padding = new MyImageView(context);
+	private void AddPieces(final Context context, int index)
+	{
+		for (int i = 0; i < 2; i++) {
+			final LinearLayout row = new LinearLayout(context);
+
+			MyImageView padding = new MyImageView(context);
 			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
 			for (int j = 0; j < 3; j++) {
-				button = new PlaceButton(context, piecelist[count++]);
+				final PlaceButton button = new PlaceButton(context, piecelist[index++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}

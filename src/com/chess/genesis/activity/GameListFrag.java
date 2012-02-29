@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +15,13 @@ import org.json.JSONException;
 abstract class GameListFrag extends BaseContentFrag
 {
 	abstract public void updateGameList();
+
+	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id)
+	{
+		final Bundle data = (Bundle) parent.getItemAtPosition(position);
+
+		loadGame(data);
+	}
 
 	protected void loadGame(final Bundle gamedata)
 	{

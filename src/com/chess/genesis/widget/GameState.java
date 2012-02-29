@@ -171,15 +171,7 @@ abstract class GameState
 			progress.setText("Score Loaded");
 			progress.remove();
 
-			json.put("yourcolor", ycol);
-			json.put("white_name", settings.getString("white"));
-			json.put("black_name", settings.getString("black"));
-			json.put("eventtype", settings.getString("eventtype"));
-			json.put("status", settings.getString("status"));
-			json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-			json.put("gameid", settings.getString("gameid"));
-
-			(new GameStatsDialog(activity, json)).show();
+			ShowGameStats(json);
 			break;
 		case RematchConfirm.MSG:
 			final Bundle data = (Bundle) msg.obj;
@@ -247,16 +239,7 @@ abstract class GameState
 				return;
 			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
 			try {
-				final JSONObject json = new JSONObject();
-				json.put("yourcolor", ycol);
-				json.put("white_name", settings.getString("white"));
-				json.put("black_name", settings.getString("black"));
-				json.put("eventtype", settings.getString("eventtype"));
-				json.put("status", settings.getString("status"));
-				json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
-				json.put("gameid", settings.getString("gameid"));
-
-				(new GameStatsDialog(activity, json)).show();
+				ShowGameStats(new JSONObject());
 			} catch (JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
@@ -458,5 +441,18 @@ abstract class GameState
 	public void draw()
 	{
 		(new DrawDialog(activity, handle)).show();
+	}
+
+	private void ShowGameStats(final JSONObject json) throws JSONException
+	{
+		json.put("yourcolor", ycol);
+		json.put("white_name", settings.getString("white"));
+		json.put("black_name", settings.getString("black"));
+		json.put("eventtype", settings.getString("eventtype"));
+		json.put("status", settings.getString("status"));
+		json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+		json.put("gameid", settings.getString("gameid"));
+
+		(new GameStatsDialog(activity, json)).show();
 	}
 }
