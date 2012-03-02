@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
-import android.widget.TableLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 class MsgListAdapter extends BaseAdapter implements ListAdapter
@@ -18,6 +16,13 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 
 	private GameDataDB db;
 	private SQLiteCursor list;
+
+	static final class MsgHolder
+	{
+		public TextView username;
+		public TextView time;
+		public TextView msg;
+	}
 
 	public MsgListAdapter(final Context _context, final String GameID)
 	{
@@ -67,31 +72,40 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 	public View getView(final int index, View cell, final ViewGroup parent)
 	{
 		final Bundle data = (Bundle) getItem(index);
+		final MsgHolder holder;
 
 		if (cell == null) {
-			final TableLayout newcell = new TableLayout(parent.getContext());
-			newcell.inflate(parent.getContext(), R.layout.msglist_cell, newcell);
-			cell = newcell;
+			holder = new MsgHolder();
+			cell = setupMsg(parent, holder);
+		} else {
+			holder = (MsgHolder) cell.getTag();
 		}
-		TextView txt = (TextView) cell.findViewById(R.id.username);
-		txt.setText(data.getString("username"));
-
-		txt = (TextView) cell.findViewById(R.id.time);
-		final String time = new PrettyDate(data.getString("time")).agoFormat();
-		txt.setText(time);
-
-		txt = (TextView) cell.findViewById(R.id.msg);
-		txt.setText(data.getString("msg"));
+		reloadMsg(data, holder);
 
 		return cell;
 	}
 
-	public View getEmptyView(final Context context)
+	private View setupMsg(final ViewGroup parent, final MsgHolder holder)
 	{
-		final RelativeLayout cell = new RelativeLayout(context);
+		final View cell = View.inflate(parent.getContext(), R.layout.msglist_cell, null);
 
-		cell.inflate(context, R.layout.msglist_cell_empty, cell);
+		holder.username = (TextView) cell.findViewById(R.id.username);
+		holder.time = (TextView) cell.findViewById(R.id.time);
+		holder.msg = (TextView) cell.findViewById(R.id.msg);
+		cell.setTag(holder);
 
 		return cell;
+	}
+
+	private void reloadMsg(final Bundle data, final MsgHolder holder)
+	{
+		holder.username.setText(data.getString("username"));
+		holder.time.setText(new PrettyDate(data.getString("time")).agoFormat());
+		holder.msg.setText(data.getString("msg"));
+	}
+
+	public View getEmptyView(final Context context)
+	{
+		return View.inflate(context, R.layout.msglist_cell_empty, null);
 	}
 }

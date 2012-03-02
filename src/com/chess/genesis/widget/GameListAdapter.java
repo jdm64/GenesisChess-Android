@@ -8,10 +8,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.TableLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 class GameListAdapter extends BaseAdapter implements ListAdapter
@@ -24,6 +21,17 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	private GameDataDB db;
 	private SQLiteCursor list;
 	private int yourturn;
+
+	static class GameHolder
+	{
+		public MyImageView icon;
+		public TextView name;
+		public TextView type;
+		public TextView time;
+		public TextView msgs;
+		public TextView with;
+		public TextView idle;
+	}
 
 	public GameListAdapter(final Context _context, final int Type, final int yourTurn)
 	{
@@ -106,107 +114,131 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	public View getView(final int index, View cell, final ViewGroup parent)
 	{
 		final Bundle data = (Bundle) getItem(index);
+		final GameHolder holder;
 
 		if (cell == null) {
-			final TableLayout newcell = new TableLayout(parent.getContext());
+			holder = new GameHolder();
+
 			switch (type) {
 			case Enums.LOCAL_GAME:
-				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_local, newcell);
+				cell = setupLocal(parent, holder);
 				break;
 			case Enums.ONLINE_GAME:
-				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_online, newcell);
+				cell = setupOnline(parent, holder);
 				break;
 			case Enums.ARCHIVE_GAME:
-				newcell.inflate(parent.getContext(), R.layout.gamelist_cell_archive, newcell);
+				cell = setupArchive(parent, holder);
 				break;
 			}
-			cell = newcell;
+		} else {
+			holder = (GameHolder) cell.getTag();
 		}
+
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			setupLocal(cell, data);
+			reloadLocal(data, holder);
 			break;
 		case Enums.ONLINE_GAME:
-			setupOnline(cell, data);
+			reloadOnline(data, holder);
 			break;
 		case Enums.ARCHIVE_GAME:
-			setupArchive(cell, data);
+			reloadArchive(data, holder);
 			break;
 		}
 		return cell;
 	}
 
-	private void setupLocal(final View cell, final Bundle data)
+	private View setupLocal(final ViewGroup parent, final GameHolder holder)
 	{
-		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
-		img.setImageResource(R.drawable.white_pawn_dark);
+		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_local, null);
 
-		TextView txt = (TextView) cell.findViewById(R.id.game_name);
-		txt.setText(data.getString("name"));
+		holder.icon = (MyImageView) cell.findViewById(R.id.cell_icon);
+		holder.name = (TextView) cell.findViewById(R.id.game_name);
+		holder.type = (TextView) cell.findViewById(R.id.game_type);
+		holder.time = (TextView) cell.findViewById(R.id.game_time);
+		cell.setTag(holder);
 
-		final String type = Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype")));
-		txt = (TextView) cell.findViewById(R.id.game_type);
-		txt.setText(type);
-
-		final String date = new PrettyDate(data.getString("stime")).agoFormat();
-		txt = (TextView) cell.findViewById(R.id.game_time);
-		txt.setText(date);
+		return cell;
 	}
 
-	private void setupNetworkCommon(final View cell, final Bundle data)
+	private void reloadLocal(final Bundle data, final GameHolder holder)
 	{
-		final String opponent = (username.equals(data.getString("white")))? data.getString("black") : data.getString("white");
-		TextView txt = (TextView) cell.findViewById(R.id.game_with);
-		txt.setText(opponent);
-
-		final String type = Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype")));
-		txt = (TextView) cell.findViewById(R.id.game_type);
-		txt.setText(type);
-
-		final String date = new PrettyDate(data.getString("stime")).agoFormat();
-		txt = (TextView) cell.findViewById(R.id.game_time);
-		txt.setText(date);
-
-		txt = (TextView) cell.findViewById(R.id.new_msgs);
-		if ((data.getString("unread") == null)? false : data.getString("unread").equals("1"))
-			txt.setText("[new msg]");
-		else
-			txt.setText("");
+		holder.icon.setImageResource(R.drawable.white_pawn_dark);
+		holder.name.setText(data.getString("name"));
+		holder.time.setText(new PrettyDate(data.getString("stime")).agoFormat());
+		holder.type.setText(Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype"))));
 	}
-	private void setupOnline(final View cell, final Bundle data)
+	
+	private void setupNetworkCommon(final View cell, final GameHolder holder)
 	{
-		setupNetworkCommon(cell, data);
+		holder.with = (TextView) cell.findViewById(R.id.game_with);
+		holder.type = (TextView) cell.findViewById(R.id.game_type);
+		holder.time = (TextView) cell.findViewById(R.id.game_time);		
+		holder.msgs = (TextView) cell.findViewById(R.id.new_msgs);
+		holder.icon = (MyImageView) cell.findViewById(R.id.cell_icon);
+		cell.setTag(holder);
+	}
 
-		final int icon = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
-			R.drawable.white_pawn_dark : R.drawable.black_pawn_light;
-		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
-		img.setImageResource(icon);
+	private void reloadNetworkCommon(final Bundle data, final GameHolder holder)
+	{
+		holder.with.setText((username.equals(data.getString("white")))?
+			data.getString("black") : data.getString("white"));
+		holder.type.setText(Enums.EventType(Integer.valueOf(data.getString("eventtype")))
+			+ " " + Enums.GameType(Integer.valueOf(data.getString("gametype"))));
+		holder.time.setText(new PrettyDate(data.getString("stime")).agoFormat());
+		holder.msgs.setText((data.getString("unread") == null)?
+			"" : (data.getString("unread").equals("1")? "[new msg]" : ""));
+	}
+	
+	private View setupOnline(final ViewGroup parent, final GameHolder holder)
+	{
+		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_online, null);
 
-		final TextView txt = (TextView) cell.findViewById(R.id.idle);
+		setupNetworkCommon(cell, holder);
+		holder.idle = (TextView) cell.findViewById(R.id.idle);
+
+		return cell;
+	}
+
+	private void reloadOnline(final Bundle data, final GameHolder holder)
+	{
+		reloadNetworkCommon(data, holder);
+
+		holder.icon.setImageResource((Integer.valueOf(data.getString("ply")) % 2 == 0)?
+			R.drawable.white_pawn_dark : R.drawable.black_pawn_light);
+
 		switch (Integer.valueOf(data.getString("idle"))) {
 		case Enums.NOTIDLE:
-			txt.setText("");
+			holder.idle.setText("");
 			break;
 		case Enums.IDLE:
-			txt.setText("[idle]");
-			txt.setTextColor(0xff3465a4);
+			holder.idle.setText("[idle]");
+			holder.idle.setTextColor(0xff3465a4);
 			break;
 		case Enums.NUDGED:
-			txt.setText("[nudged]");
-			txt.setTextColor(0xfff57900);
+			holder.idle.setText("[nudged]");
+			holder.idle.setTextColor(0xfff57900);
 			break;
 		case Enums.CLOSE:
-			txt.setText("[close]");
-			txt.setTextColor(0xffcc0000);
+			holder.idle.setText("[close]");
+			holder.idle.setTextColor(0xffcc0000);
 			break;
 		}
 	}
 
-	private void setupArchive(final View cell, final Bundle data)
+	private View setupArchive(final ViewGroup parent, final GameHolder holder)
 	{
-		setupNetworkCommon(cell, data);
+		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_archive, null);
+
+		setupNetworkCommon(cell, holder);
+
+		return cell;
+	}
+
+	private void reloadArchive(final Bundle data, final GameHolder holder)
+	{
+		reloadNetworkCommon(data, holder);
 
 		final int icon;
 		switch (Integer.valueOf(data.getString("status"))) {
@@ -226,16 +258,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			icon = R.drawable.square_dark;
 			break;
 		}
-		final ImageView img = (ImageView) cell.findViewById(R.id.cell_icon);
-		img.setImageResource(icon);
+		holder.icon.setImageResource(icon);
 	}
 
 	public View getEmptyView(final Context context)
 	{
-		final RelativeLayout cell = new RelativeLayout(context);
-
-		cell.inflate(context, R.layout.gamelist_cell_empty, cell);
-
+		final View cell = View.inflate(context, R.layout.gamelist_cell_empty, null);
 		final TextView txt = (TextView) cell.findViewById(R.id.message);
 
 		switch (type) {
