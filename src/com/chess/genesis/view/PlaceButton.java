@@ -1,79 +1,77 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.View;
-import android.widget.FrameLayout;
 
-class PlaceButton extends FrameLayout
+class PlaceButton extends View
 {
-	private static final int[] pieceImages = {
-		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
-		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
-		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
-		R.drawable.square_none,
-		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
-		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
-		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
-
-	private static final int[] countImages = {
-		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
-		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
-		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
-		R.drawable.piece_9};
+	private final static int outerLight = 0xffd3d3d3;
+	private final static int outerDark = 0xff5a7397;
+	private final static int innerDark = 0xff6885b4;
+	private final static int innerLight = 0xffffffff;
+	private final static int innerSelect = 0xff36b54a;
 
 	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
+	private final Paint paint = new Paint();
+	private final Matrix matrix = new Matrix();
 	private final int type;
 
+	private RectF inSquare;
+	private int size;
 	private int count;
 	private boolean isHighlighted = false;
 
 	public PlaceButton(final Context context, final int Type)
 	{
 		super(context);
-		View.inflate(context, R.layout.framelayout_placebutton, this);
-		setLayoutParams(PlaceLayout.LINEAR_PARAMS);
 
 		type = Type;
 		count = typeCounts[Math.abs(type)];
 		setId(type + 1000);
-
-		setBoardImage(type);
-		setPiece(type);
-		setCountImage();
 	}
 
-	private void setBoardImage(final int value)
+	@Override
+	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		final int image = (value % 2 == 0)?
-			R.drawable.square_light : R.drawable.square_dark;
+		final int newSize = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
 
-		final MyImageView img = (MyImageView) findViewById(R.id.board_layer);
-		img.setImageResource(image);
+		if (newSize != size) {
+			size = newSize;
+			inSquare = new RectF((float)(size * 0.09), (float)(size * 0.09), (float)(size * 0.91), (float)(size * 0.91));
+		}
+		setMeasuredDimension(size, size);
 	}
 
-	private void setPiece(final int type)
+	@Override
+	protected void onDraw(final Canvas canvas)
 	{
-		final MyImageView img = (MyImageView) findViewById(R.id.piece_layer);
-		img.setImageResource(pieceImages[type + 6]);
-	}
+		// Draw outer square
+		if (type % 2 == 0)
+			canvas.drawColor(outerLight);
+		else
+			canvas.drawColor(outerDark);
 
-	private void setHighlightImage()
-	{
-		final int image = isHighlighted?
-			R.drawable.square_ih_green :
-			R.drawable.square_none;
+		// Draw inner square
+		final int innerColor =
+			isHighlighted?
+				innerSelect :
+			((type % 2 == 0)?
+				innerLight :
+				innerDark);
+		paint.setColor(innerColor);
+		canvas.drawRect(inSquare, paint);
 
-		final MyImageView img = (MyImageView) findViewById(R.id.highlight_layer);
-		img.setImageResource(image);
-	}
+		// Draw piece image
+		canvas.drawBitmap(PlaceButtonCache.getPieceImg(type + 6), matrix, null);
 
-	private void setCountImage()
-	{
-		final int image = countImages[count];
-
-		final MyImageView img = (MyImageView) findViewById(R.id.count_layer);
-		img.setImageResource(image);
+		// Draw token counter
+		canvas.drawBitmap(PlaceButtonCache.getTokenImg(), matrix, null);
+		canvas.drawBitmap(PlaceButtonCache.getCountImg(count), matrix, null);
 	}
 
 	public void reset()
@@ -81,8 +79,7 @@ class PlaceButton extends FrameLayout
 		isHighlighted = false;
 		count = typeCounts[Math.abs(type)];
 
-		setHighlightImage();
-		setCountImage();
+		invalidate();
 	}
 
 	public int getPiece()
@@ -98,24 +95,24 @@ class PlaceButton extends FrameLayout
 	public void setCount(final int Count)
 	{
 		count = Count;
-		setCountImage();
+		invalidate();
 	}
 
 	public void minusPiece()
 	{
 		count--;
-		setCountImage();
+		invalidate();
 	}
 	
 	public void plusPiece()
 	{
 		count++;
-		setCountImage();
+		invalidate();
 	}
 
 	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
-		setHighlightImage();
+		invalidate();
 	}
 }

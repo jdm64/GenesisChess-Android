@@ -26,20 +26,32 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 		AddPieces(context, 0);
 
 		// Center Divide
-		LinearLayout row = new LinearLayout(context);
-		MyImageView padding = new MyImageView(context);
+		final LinearLayout row = new LinearLayout(context);
+		final MyImageView padding = new MyImageView(context);
 		padding.setImageResource(R.drawable.padding_480x96);
 		row.addView(padding);
 		addView(row);
 
 		// Black Pieces
 		AddPieces(context, 6);
+
+		PlaceButtonCache.Init(context);
+	}
+
+	@Override
+	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	{
+		int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
+		size -= size % 5;
+
+		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 	}
 
 	private void AddPieces(final Context context, int index)
 	{
 		for (int i = 0; i < 2; i++) {
-			final LinearLayout row = new LinearLayout(context);
+			final ManualPanel row = new ManualPanel(context);
+			row.setSizes("1,1,1,1,1/5");
 
 			MyImageView padding = new MyImageView(context);
 			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);

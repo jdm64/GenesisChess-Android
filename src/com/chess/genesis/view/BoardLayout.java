@@ -4,10 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 
-class BoardLayout extends TableLayout implements OnClickListener
+class BoardLayout extends LinearLayout implements OnClickListener
 {
 	private GameState gamestate;
 
@@ -15,9 +14,22 @@ class BoardLayout extends TableLayout implements OnClickListener
 	{
 		super(context, attrs);
 
-		setShrinkAllColumns(true);
-		setStretchAllColumns(true);
+		setOrientation(LinearLayout.VERTICAL);
 
+		BoardButtonCache.Init(context);
+	}
+
+	@Override
+	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	{
+		int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
+		size -= size % 8;
+
+		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
+
+		// Update image caches
+		BoardButtonCache.resizeImages(getMeasuredWidth() / 8);
+		PlaceButtonCache.resizeImages(getMeasuredWidth() / 5);
 	}
 
 	public void init(final Context context, final GameState _gamestate, final boolean viewAsBlack)
@@ -26,7 +38,8 @@ class BoardLayout extends TableLayout implements OnClickListener
 
 		if (viewAsBlack) {
 			for (int i = 0; i < 8; i++) {
-				final TableRow row = new TableRow(context);
+				final ManualPanel row = new ManualPanel(context);
+				row.setSizes("1,1,1,1,1,1,1,1/8");
 
 				for (int j = 7; j >= 0; j--) {
 					final BoardButton button = new BoardButton(context, 16 * i + j);
@@ -37,7 +50,8 @@ class BoardLayout extends TableLayout implements OnClickListener
 			}
 		} else {
 			for (int i = 7; i >= 0; i--) {
-				final TableRow row = new TableRow(context);
+				final ManualPanel row = new ManualPanel(context);
+				row.setSizes("1,1,1,1,1,1,1,1/8");
 
 				for (int j = 0; j < 8; j++) {
 					final BoardButton button = new BoardButton(context, 16 * i + j);

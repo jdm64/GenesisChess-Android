@@ -1,27 +1,33 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.View;
-import android.widget.FrameLayout;
 
-class BoardButton extends FrameLayout
+class BoardButton extends View
 {
-	private static final int[] pieceImages = {
-		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
-		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
-		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
-		R.drawable.square_none,
-		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
-		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
-		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
+	private final static int outerLight = 0xffd3d3d3;
+	private final static int outerDark = 0xff5a7397;
+	private final static int innerDark = 0xff6885b4;
+	private final static int innerLight = 0xffffffff;
+	private final static int innerCheck = 0xffdf4c37;
+	private final static int innerSelect = 0xff36b54a;
+	private final static int innerLast = 0xffab9aca;
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;
 
+	private final Paint paint = new Paint();
+	private final Matrix matrix = new Matrix();
 	private final int squareColor;
 	private final int squareIndex;
 
+	private RectF inSquare;
 	private int piece = 0;
+	private int size;
 	private boolean isHighlighted = false;
 	private boolean isCheck = false;
 	private boolean isLast = false;
@@ -29,38 +35,51 @@ class BoardButton extends FrameLayout
 	public BoardButton(final Context context, final int index)
 	{
 		super(context);
-		View.inflate(context, R.layout.framelayout_boardbutton, this);
 
 		squareIndex = index;
 		squareColor = ((index / 16) % 2 == 1)?
 				((index % 2 == 1)? BLACK : WHITE) :
 				((index % 2 == 1)? WHITE : BLACK);
 		setId(squareIndex);
-
-		setSquareImage();
 	}
 
-	private void setSquareImage()
+	@Override
+	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		final int image = (squareColor == WHITE)?
-			R.drawable.square_light : R.drawable.square_dark;
+		final int newSize = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
 
-		final MyImageView img = (MyImageView) findViewById(R.id.board_layer);
-		img.setImageResource(image);
+		if (newSize != size) {
+			size = newSize;
+			inSquare = new RectF((float)(size * 0.09), (float)(size * 0.09), (float)(size * 0.91), (float)(size * 0.91));
+		}
+		setMeasuredDimension(size, size);
 	}
 
-	private void setHighlightImage()
+	@Override
+	protected void onDraw(final Canvas canvas)
 	{
-		final int image = isHighlighted?
-				R.drawable.square_ih_green :
+		// Draw outer square
+		if (squareColor == WHITE)
+			canvas.drawColor(outerLight);
+		else
+			canvas.drawColor(outerDark);
+
+		// Draw inner square
+		final int innerColor =
+			isHighlighted?
+				innerSelect :
 			(isLast?
-				R.drawable.square_ih_purple :
+				innerLast :
 			(isCheck?
-				R.drawable.square_ih_red :
-				R.drawable.square_none));
+				innerCheck :
+			((squareColor == WHITE)?
+				innerLight :
+				innerDark)));
+		paint.setColor(innerColor);
+		canvas.drawRect(inSquare, paint);
 
-		final MyImageView img = (MyImageView) findViewById(R.id.highlight_layer);
-		img.setImageResource(image);
+		// Draw piece image
+		canvas.drawBitmap(BoardButtonCache.getPieceImg(piece + 6), matrix, null);
 	}
 
 	public void resetSquare()
@@ -68,16 +87,13 @@ class BoardButton extends FrameLayout
 		isHighlighted = false;
 		isCheck = false;
 
-		setHighlightImage();
-		setPiece(0);
+		setPiece(Piece.EMPTY);
 	}
 
 	public void setPiece(final int piece_type)
 	{
 		piece = piece_type;
-
-		final MyImageView img = (MyImageView) findViewById(R.id.piece_layer);
-		img.setImageResource(pieceImages[piece + 6]);
+		invalidate();
 	}
 
 	public int getPiece()
@@ -93,18 +109,18 @@ class BoardButton extends FrameLayout
 	public void setHighlight(final boolean mode)
 	{
 		isHighlighted = mode;
-		setHighlightImage();
+		invalidate();
 	}
 
 	public void setCheck(final boolean mode)
 	{
 		isCheck = mode;
-		setHighlightImage();
+		invalidate();
 	}
 
 	public void setLast(final boolean mode)
 	{
 		isLast = mode;
-		setHighlightImage();
+		invalidate();
 	}
 }
