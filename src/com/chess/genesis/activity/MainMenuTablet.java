@@ -15,8 +15,10 @@ public class MainMenuTablet extends BaseActivity
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_tablet);
 
-		final BaseContentFrag frag = new MainMenuFrag();
+		final Bundle bundle = getIntent().getExtras();
 		final MenuBarFrag menubar = new MenuBarFrag(true);
+		final BaseContentFrag frag = (bundle != null && bundle.getInt("loadFrag") == Enums.ONLINE_LIST)?
+			new GameListOnlineFrag() : new MainMenuFrag();
 
 		frag.setMenuBarFrag(menubar);
 
