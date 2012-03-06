@@ -19,7 +19,7 @@ class RobotoEditText extends EditText
 
 	public void setTypeface(final Typeface tf, final int style)
 	{
-		Typeface font;
+		final Typeface font;
 
 		switch (style) {
 		default:

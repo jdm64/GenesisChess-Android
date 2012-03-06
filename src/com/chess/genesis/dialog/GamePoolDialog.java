@@ -18,7 +18,7 @@ class GamePoolDialog extends BaseDialog implements OnClickListener
 	private final Context context;
 	private final ObjectArray<PoolDataItem> data;
 
-	private class PoolDataItem
+	private static class PoolDataItem
 	{
 		public String gametype;
 		public String time;

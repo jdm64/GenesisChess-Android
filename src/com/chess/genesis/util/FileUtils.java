@@ -19,7 +19,7 @@ final class FileUtils
 	{
 		FileInputStream file = null;
 		boolean error = false;
-		String p = new String(path);
+		String p = path;
 
 		while (p.length() > 0) {
 			try {
@@ -29,7 +29,7 @@ final class FileUtils
 
 				final int i = p.indexOf('/', 1);
 				if (i == -1)
-					p = new String();
+					p = "";
 				else
 					p = p.substring(i);
 			}
@@ -66,10 +66,12 @@ final class FileUtils
 		final File dir = Environment.getExternalStorageDirectory();
 		final File file = new File(dir, filename);
 		final FileOutputStream buffer = new FileOutputStream(file);
-
+	try {
 		buffer.write(data.getBytes());
-		buffer.close();
 
 		return Uri.fromFile(file);
+	} finally {
+		buffer.close();
+	}
 	}
 }

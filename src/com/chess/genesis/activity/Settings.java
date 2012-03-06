@@ -178,7 +178,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		if (key.equals("emailNoteEnabled")) {
 			progress.setText("Setting Option");
 
-			net.set_option("emailnote", ((Boolean) newValue).booleanValue());
+			net.set_option("emailnote", (Boolean) newValue);
 			(new Thread(net)).start();
 		} else if (key.equals("noteEnabled") || key.equals("notifierPolling")) {
 			startService(new Intent(this, GenesisNotifier.class));

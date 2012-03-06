@@ -390,7 +390,6 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			return;
 
 		final int count = mAdapter.getCount();
-
 		float x = 0.0f;
 		int dir = 0;
 

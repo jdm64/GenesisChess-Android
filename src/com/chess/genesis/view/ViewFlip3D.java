@@ -40,7 +40,7 @@ class ViewFlip3D extends ViewSwitcher
 		view.startAnimation(animIn);
 	}
 
-	private class Flip3D extends Animation
+	private static class Flip3D extends Animation
 	{
 		private final float mFromDegrees;
 		private final float mToDegrees;
@@ -89,7 +89,7 @@ class ViewFlip3D extends ViewSwitcher
 		}
 	}
 
-	private final class ShowNextView implements Animation.AnimationListener
+	private final static class ShowNextView implements Animation.AnimationListener
 	{
 		private final Flip3D flipin;
 		private final ViewFlip3D container;
