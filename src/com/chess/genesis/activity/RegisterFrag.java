@@ -162,6 +162,12 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 			Toast.makeText(act, "Invalid email address", Toast.LENGTH_LONG).show();
 			return false;
 		}
+
+		final String[] part = email.split("@");
+		if (part[1].contains("hotmail") || part[1].contains("live")) {
+			Toast.makeText(act, "Live/Hotmail emails not supported", Toast.LENGTH_LONG).show();
+			return false;
+		}
 		return true;
 	}
 }
