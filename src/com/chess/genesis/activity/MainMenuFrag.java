@@ -19,10 +19,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainMenuFrag extends BaseContentFrag implements OnClickListener, OnTouchListener
+public class MainMenuFrag extends BaseContentFrag implements OnClickListener, OnTouchListener, OnGlobalLayoutListener
 {
 	public final static String TAG = "MAINMENU";
 
@@ -63,7 +65,24 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 			button.setOnClickListener(this);
 			button.setOnTouchListener(this);
 		}
+
+		// create layout listner for resizing the button text
+		final View v = view.findViewById(R.id.online_game);
+		final ViewTreeObserver vto = v.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(this);
+
 		return view;
+	}
+
+	@Override
+	public void onGlobalLayout()
+	{
+		resizeButtonText(getView());
+
+		// remove layout listener once text was resized
+		final View v = getView().findViewById(R.id.online_game);
+		final ViewTreeObserver vto = v.getViewTreeObserver();
+		vto.removeGlobalOnLayoutListener(this);
 	}
 
 	@Override
@@ -71,7 +90,6 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 	{
 		super.onResume();
 		updateLoggedInView();
-		resizeButtonText(getView());
 	}
 
 	public boolean onTouch(final View v, final MotionEvent event)
@@ -276,7 +294,6 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 		}
 
 		float width = view.getWidth();
-		width = Math.min(view.getHeight(), width);
 		width *= 0.9 / 3;
 
 		final float txtSize = RobotoText.maxTextWidth(stList, txt.getPaint(), width);
