@@ -3,7 +3,10 @@ package com.chess.genesis;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,22 +30,30 @@ public class UserStatsFrag extends BaseContentFrag
 
 	private Bundle settings;
 	private ProgressMsg progress;
+	private NetworkClient net;
 
 	private final Handler handle = new Handler()
 	{
 		public void handleMessage(final Message msg)
 		{
-			final JSONObject json = (JSONObject) msg.obj;
 		try {
-			if (json.getString("result").equals("error")) {
-				progress.remove();
-				Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
-			}
 			switch (msg.what) {
 			case NetworkClient.USER_STATS:
+				final JSONObject json = (JSONObject) msg.obj;
+				if (json.getString("result").equals("error")) {
+					progress.remove();
+					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return;
+				}
 				loadStats(json);
 				progress.remove();
+				break;
+			case StatsLookupDialog.MSG:
+				final String username = (String) msg.obj;
+
+				progress.setText("Retrieving Stats");
+				net.user_stats(username);
+				(new Thread(net)).start();
 				break;
 			}
 		} catch (JSONException e) {
@@ -61,7 +72,7 @@ public class UserStatsFrag extends BaseContentFrag
 
 		settings = (savedInstanceState != null)? savedInstanceState : getArguments();
 
-		final NetworkClient net = new NetworkClient(act, handle);
+		net = new NetworkClient(act, handle);
 		progress = new ProgressMsg(act);
 
 		final RobotoText txt = (RobotoText) view.findViewById(R.id.username);
@@ -106,7 +117,36 @@ public class UserStatsFrag extends BaseContentFrag
 	@Override
 	public void onClick(final View view)
 	{
-		// Needed because of BaseConfigFrag
+		if (view.getId() == R.id.menu)
+			openMenu(view);
+	}
+
+	@Override
+	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
+	{
+		super.onCreateContextMenu(menu, v, menuInfo);
+		act.lastContextMenu = TAG;
+
+		act.getMenuInflater().inflate(R.menu.options_userstats, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(final MenuItem item)
+	{
+		if (act.lastContextMenu == TAG)
+			return onOptionsItemSelected(item);
+		else
+			return super.onContextItemSelected(item);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(final MenuItem item)
+	{
+		if (item.getItemId() == R.id.userlookup) {
+			(new StatsLookupDialog(act, handle)).show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void loadStats(final JSONObject data)
@@ -115,6 +155,10 @@ public class UserStatsFrag extends BaseContentFrag
 		TextView txt;
 		long time;
 		int valA, valB, valC, valD;
+
+		// username
+		txt = (TextView) act.findViewById(R.id.username);
+		txt.setText(data.getString("username"));
 
 		// Joined
 		time = data.getLong("joined");

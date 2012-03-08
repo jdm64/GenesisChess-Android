@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+style="@style/FillWidth"
+android:orientation="vertical">
+	<com.chess.genesis.RobotoText
+	android:text="Enter Username:"
+	android:textColor="#f000"
+	android:textSize="16dp"/>
+	<com.chess.genesis.RobotoEditText
+	android:id="@+id/username"
+	style="@style/FillWidth"
+	android:singleLine="true"
+	android:inputType="textCapWords"
+	android:maxLength="16"/>
+</LinearLayout>
