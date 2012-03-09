@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -265,6 +266,10 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	{
 		final View cell = View.inflate(context, R.layout.gamelist_cell_empty, null);
 		final TextView txt = (TextView) cell.findViewById(R.id.message);
+
+		// Fix sizing issue
+		final LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		cell.setLayoutParams(lp);
 
 		switch (type) {
 		case Enums.LOCAL_GAME:

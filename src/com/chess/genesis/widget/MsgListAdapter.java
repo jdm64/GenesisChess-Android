@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -106,6 +107,12 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 
 	public View getEmptyView(final Context context)
 	{
-		return View.inflate(context, R.layout.msglist_cell_empty, null);
+		final View cell = View.inflate(context, R.layout.msglist_cell_empty, null);
+
+		// Fix sizing issue
+		final LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		cell.setLayoutParams(lp);
+
+		return cell;
 	}
 }
