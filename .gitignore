@@ -1,4 +1,6 @@
 bin/
 gen/
+libs/
 
 local.properties
+Configfile
