@@ -4,6 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
 panel:sizes="5,1/6">
 	<ImageButton
+	android:id="@+id/menu_title"
 	style="@style/TopBlueBar"
 	android:src="@drawable/genesischess"/>
 	<ImageButton

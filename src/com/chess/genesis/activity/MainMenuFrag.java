@@ -183,6 +183,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 			fragMan.popBackStack();
 
 		final FragmentIntent fintent = new FragmentIntent();
+		fintent.setActivity(act);
+
 		switch (viewId) {
 		case R.id.local_game:
 			fintent.setFrag(R.id.panel01, new GameListLocalFrag(), GameListLocalFrag.TAG);

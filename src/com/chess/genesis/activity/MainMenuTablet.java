@@ -16,7 +16,7 @@ public class MainMenuTablet extends BaseActivity
 		setContentView(R.layout.activity_tablet);
 
 		final Bundle bundle = getIntent().getExtras();
-		final MenuBarFrag menubar = new MenuBarFrag(true);
+		final MenuBarFrag menubar = new MenuBarFrag(this);
 		final BaseContentFrag frag = (bundle != null && bundle.getInt("loadFrag") == Enums.ONLINE_LIST)?
 			new GameListOnlineFrag() : new MainMenuFrag();
 

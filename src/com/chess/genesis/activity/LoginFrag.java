@@ -191,6 +191,7 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 		case R.id.register:
 			if (isTablet) {
 				final FragmentIntent fintent = new FragmentIntent();
+				fintent.setActivity(act);
 				fintent.setFrag(R.id.panel02, new RegisterFrag(), RegisterFrag.TAG);
 				fintent.loadFrag(fragMan);
 			} else {
