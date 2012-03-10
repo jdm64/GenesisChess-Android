@@ -6,8 +6,8 @@
 		NOTICE: A valid email address must be used to activate the account.
 	</string>
 	<string name="register_activation">
-		You must verify your email before logging in. A verification email has been sent.
-		Make sure that your spam filter didn\'t block:\n\tnotification@genesischess.com
+		You MUST click the activation link sent to your email before logging in.
+		Check your inbox and junk email folders for an email from:\n\tnotification@genesischess.com
 	</string>
 	<string name="delete_local">
 		Are you sure you want to delete this game? The game can not be recovered.
