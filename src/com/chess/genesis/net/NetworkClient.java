@@ -84,7 +84,7 @@ class NetworkClient implements Runnable
 		} catch (IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
+				json2.put("reason", "Lost connection during sending data");
 			} catch (JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -113,7 +113,7 @@ class NetworkClient implements Runnable
 		} catch (IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
+				json2.put("reason", "Lost connection during sending data");
 			} catch (JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -137,7 +137,7 @@ class NetworkClient implements Runnable
 		} catch (IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring recieving data");
+				json2.put("reason", "Lost connection during recieving data");
 			} catch (JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -188,7 +188,7 @@ class NetworkClient implements Runnable
 		} catch (IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection durring sending data");
+				json2.put("reason", "Lost connection during sending data");
 			} catch (JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
