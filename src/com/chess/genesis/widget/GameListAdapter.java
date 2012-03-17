@@ -3,8 +3,15 @@ package com.chess.genesis;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteCursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -23,17 +30,6 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	private SQLiteCursor list;
 	private int yourturn;
 
-	static class GameHolder
-	{
-		public MyImageView icon;
-		public TextView name;
-		public TextView type;
-		public TextView time;
-		public TextView msgs;
-		public TextView with;
-		public TextView idle;
-	}
-
 	public GameListAdapter(final Context _context, final int Type, final int yourTurn)
 	{
 		super();
@@ -49,6 +45,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		settings.putInt("type", type);
 
 		initCursor();
+		GameListItem.Cache.Init(context);
 	}
 
 	private void initCursor()
@@ -115,151 +112,12 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 	public View getView(final int index, View cell, final ViewGroup parent)
 	{
 		final Bundle data = (Bundle) getItem(index);
-		final GameHolder holder;
 
-		if (cell == null) {
-			holder = new GameHolder();
+		if (cell == null)
+			cell = new GameListItem(parent.getContext());
 
-			switch (type) {
-			case Enums.LOCAL_GAME:
-				cell = setupLocal(parent, holder);
-				break;
-			case Enums.ONLINE_GAME:
-				cell = setupOnline(parent, holder);
-				break;
-			case Enums.ARCHIVE_GAME:
-				cell = setupArchive(parent, holder);
-				break;
-			}
-		} else {
-			holder = (GameHolder) cell.getTag();
-		}
-
-		switch (type) {
-		case Enums.LOCAL_GAME:
-			reloadLocal(data, holder);
-			break;
-		case Enums.ONLINE_GAME:
-			reloadOnline(data, holder);
-			break;
-		case Enums.ARCHIVE_GAME:
-			reloadArchive(data, holder);
-			break;
-		}
+		((GameListItem) cell).setData(data, index);
 		return cell;
-	}
-
-	private View setupLocal(final ViewGroup parent, final GameHolder holder)
-	{
-		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_local, null);
-
-		holder.icon = (MyImageView) cell.findViewById(R.id.cell_icon);
-		holder.name = (TextView) cell.findViewById(R.id.game_name);
-		holder.type = (TextView) cell.findViewById(R.id.game_type);
-		holder.time = (TextView) cell.findViewById(R.id.game_time);
-		cell.setTag(holder);
-
-		return cell;
-	}
-
-	private void reloadLocal(final Bundle data, final GameHolder holder)
-	{
-		holder.icon.setImageResource(R.drawable.white_pawn_dark);
-		holder.name.setText(data.getString("name"));
-		holder.time.setText(new PrettyDate(data.getString("stime")).agoFormat());
-		holder.type.setText(Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype"))));
-	}
-	
-	private void setupNetworkCommon(final View cell, final GameHolder holder)
-	{
-		holder.with = (TextView) cell.findViewById(R.id.game_with);
-		holder.type = (TextView) cell.findViewById(R.id.game_type);
-		holder.time = (TextView) cell.findViewById(R.id.game_time);		
-		holder.msgs = (TextView) cell.findViewById(R.id.new_msgs);
-		holder.icon = (MyImageView) cell.findViewById(R.id.cell_icon);
-		cell.setTag(holder);
-	}
-
-	private void reloadNetworkCommon(final Bundle data, final GameHolder holder)
-	{
-		holder.with.setText((username.equals(data.getString("white")))?
-			data.getString("black") : data.getString("white"));
-		holder.type.setText(Enums.EventType(Integer.valueOf(data.getString("eventtype")))
-			+ " " + Enums.GameType(Integer.valueOf(data.getString("gametype"))));
-		holder.time.setText(new PrettyDate(data.getString("stime")).agoFormat());
-		holder.msgs.setText((data.getString("unread") == null)?
-			"" : (data.getString("unread").equals("1")? "[new msg]" : ""));
-	}
-	
-	private View setupOnline(final ViewGroup parent, final GameHolder holder)
-	{
-		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_online, null);
-
-		setupNetworkCommon(cell, holder);
-		holder.idle = (TextView) cell.findViewById(R.id.idle);
-
-		return cell;
-	}
-
-	private void reloadOnline(final Bundle data, final GameHolder holder)
-	{
-		reloadNetworkCommon(data, holder);
-
-		holder.icon.setImageResource((Integer.valueOf(data.getString("ply")) % 2 == 0)?
-			R.drawable.white_pawn_dark : R.drawable.black_pawn_light);
-
-		switch (Integer.valueOf(data.getString("idle"))) {
-		case Enums.NOTIDLE:
-			holder.idle.setText("");
-			break;
-		case Enums.IDLE:
-			holder.idle.setText("[idle]");
-			holder.idle.setTextColor(0xff3465a4);
-			break;
-		case Enums.NUDGED:
-			holder.idle.setText("[nudged]");
-			holder.idle.setTextColor(0xfff57900);
-			break;
-		case Enums.CLOSE:
-			holder.idle.setText("[close]");
-			holder.idle.setTextColor(0xffcc0000);
-			break;
-		}
-	}
-
-	private View setupArchive(final ViewGroup parent, final GameHolder holder)
-	{
-		final View cell = View.inflate(parent.getContext(), R.layout.gamelist_cell_archive, null);
-
-		setupNetworkCommon(cell, holder);
-
-		return cell;
-	}
-
-	private void reloadArchive(final Bundle data, final GameHolder holder)
-	{
-		reloadNetworkCommon(data, holder);
-
-		final int icon;
-		switch (Integer.valueOf(data.getString("status"))) {
-		case Enums.WHITEMATE:
-		case Enums.BLACKRESIGN:
-		case Enums.BLACKIDLE:
-			icon = R.drawable.white_pawn_dark;
-			break;
-		case Enums.BLACKMATE:
-		case Enums.WHITERESIGN:
-		case Enums.WHITEIDLE:
-			icon = R.drawable.black_pawn_light;
-			break;
-		case Enums.STALEMATE:
-		case Enums.IMPOSSIBLE:
-		default:
-			icon = R.drawable.square_dark;
-			break;
-		}
-		holder.icon.setImageResource(icon);
 	}
 
 	public View getEmptyView(final Context context)
@@ -281,5 +139,196 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 			break;
 		}
 		return cell;
+	}
+}
+
+class GameListItem extends View
+{
+	private final Paint paint = new Paint();
+	private Bundle data;
+	private String username;
+	private PrettyDate time;
+	private int gametype;
+	private int index;
+
+	final static class Cache
+	{
+		public static Bitmap whitePawn;
+		public static Bitmap blackPawn;
+		public static Typeface fontNormal;
+		public static Typeface fontItalic;
+		public static RectF rect;
+		public static int dpi;
+		public static int height;
+
+		private Cache()
+		{
+		}
+
+		public static void Init(final Context context)
+		{
+			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
+			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
+			rect = new RectF(0, 0, Cache.height, Cache.height);
+
+			final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			dpi = (int) ((1 + Math.max(metrics.ydpi, metrics.xdpi)) / 160);
+			height = 75 * dpi;
+
+			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_pawn_light);
+			blackPawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
+			bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.white_pawn_dark);
+			whitePawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
+		}
+	}
+
+	public GameListItem(final Context context)
+	{
+		super(context);
+
+		paint.setAntiAlias(true);
+		paint.setTypeface(Cache.fontNormal);
+	}
+
+	@Override
+	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	{
+		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Cache.height);
+	}
+
+	@Override
+	protected void onDraw(final Canvas canvas)
+	{
+		// background color
+		if (!isPressed() && index % 2 == 1)
+			canvas.drawColor(0xffe2f4fb);
+
+		// icon
+		setIcon(canvas);
+
+		// game name
+		final String gamename = (gametype == Enums.LOCAL_GAME)?
+			data.getString("name") :
+			(username.equals(data.getString("white"))?
+				data.getString("black") :
+				data.getString("white"));
+		paint.setTextSize(30 * Cache.dpi);
+		canvas.drawText(gamename, Cache.height + 8, Cache.height / 2, paint);
+
+		// set italic text
+		paint.setTypeface(Cache.fontItalic);
+
+		// game type
+		final String type = (gametype == Enums.LOCAL_GAME)?
+			Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype")))
+			:
+			Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
+			Enums.GameType(Integer.valueOf(data.getString("gametype")));
+		paint.setTextSize(20 * Cache.dpi);
+		canvas.drawText(type, Cache.height + 8, 7 * Cache.height / 8, paint);
+
+		// time
+		paint.setTextAlign(Paint.Align.RIGHT);
+		canvas.drawText(time.agoFormat(), getWidth() - 8, 7 * Cache.height / 8, paint);
+
+		if (gametype != Enums.LOCAL_GAME)
+			setOnlineTxt(canvas);
+
+		// reset paint
+		paint.setColor(0xff000000);
+		paint.setTextAlign(Paint.Align.LEFT);
+		paint.setTypeface(Cache.fontNormal);
+	}
+
+	private void setIcon(final Canvas canvas)
+	{
+		final Bitmap img;
+
+		switch (gametype) {
+		case Enums.LOCAL_GAME:
+			switch (Integer.valueOf(data.getString("opponent"))) {
+			case Enums.CPU_BLACK_OPPONENT:
+				img = Cache.whitePawn;
+				break;
+			case Enums.CPU_WHITE_OPPONENT:
+				img = Cache.blackPawn;
+				break;
+			case Enums.HUMAN_OPPONENT:
+			default:
+				img = (index % 2 == 0)?
+					Cache.blackPawn :
+					Cache.whitePawn;
+				break;
+			}
+			break;
+		case Enums.ONLINE_GAME:
+		default:
+			img = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
+				Cache.whitePawn :
+				Cache.blackPawn;
+			break;
+		case Enums.ARCHIVE_GAME:
+			switch (Integer.valueOf(data.getString("status"))) {
+			case Enums.WHITEMATE:
+			case Enums.BLACKRESIGN:
+			case Enums.BLACKIDLE:
+				img = Cache.whitePawn;
+				break;
+			case Enums.BLACKMATE:
+			case Enums.WHITERESIGN:
+			case Enums.WHITEIDLE:
+				img = Cache.blackPawn;
+				break;
+			case Enums.STALEMATE:
+			case Enums.IMPOSSIBLE:
+			default:
+				img = (index % 2 == 0)?
+					Cache.blackPawn :
+					Cache.whitePawn;
+				break;
+			}
+			break;
+		}
+		canvas.drawBitmap(img, null, Cache.rect, paint);
+	}
+
+	private void setOnlineTxt(final Canvas canvas)
+	{
+		int border = getWidth() - 8;
+
+		if (data.getString("unread") != null && data.getString("unread").equals("1")) {
+			final String txt = "[new msg]";
+			paint.setColor(0xff4e9a06);
+			canvas.drawText(txt, border, Cache.height / 2, paint);
+			border -= paint.measureText(txt);
+		}
+
+		if (gametype == Enums.ARCHIVE_GAME)
+			return;
+
+		switch (Integer.valueOf(data.getString("idle"))) {
+		case Enums.IDLE:
+			paint.setColor(0xff3465a4);
+			canvas.drawText("[idle]", border, Cache.height / 2, paint);
+			break;
+		case Enums.NUDGED:
+			paint.setColor(0xfff57900);
+			canvas.drawText("[nudged]", border, Cache.height / 2, paint);
+			break;
+		case Enums.CLOSE:
+			paint.setColor(0xffcc0000);
+			canvas.drawText("[close]", border, Cache.height / 2, paint);
+			break;
+		}
+	}
+
+	public void setData(final Bundle bundle, final int Index)
+	{
+		data = bundle;
+		index = Index;
+		gametype = data.getInt("type");
+		username = data.getString("username");
+		time = new PrettyDate(data.getString("stime"));
 	}
 }
