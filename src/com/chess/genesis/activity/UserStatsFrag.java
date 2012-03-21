@@ -86,6 +86,9 @@ public class UserStatsFrag extends BaseContentFrag
 			item.setOnClickListener((View.OnClickListener) item.getParent());
 		}
 
+		// disable touch on tabtext
+		view.findViewById(R.id.tabtxt).setOnTouchListener(null);
+
 		progress.setText("Retrieving Stats");
 		net.user_stats(settings.getString("username"));
 		(new Thread(net)).start();

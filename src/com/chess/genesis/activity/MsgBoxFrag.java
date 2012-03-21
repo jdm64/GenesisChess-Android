@@ -80,6 +80,9 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 		final View btn = view.findViewById(R.id.submit_msg);
 		btn.setOnClickListener(this);
 
+		// disable touch on tabtext
+		view.findViewById(R.id.tabtxt).setOnTouchListener(null);
+
 		// set list adapters
 		msglist_adapter = new MsgListAdapter(act, gameid);
 
