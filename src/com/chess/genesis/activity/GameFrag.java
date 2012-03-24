@@ -25,7 +25,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -257,12 +256,16 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 			// Pop all non-game frags
 			fragMan.popBackStack(GameFrag.TAG, 0);
 
-			final Fragment frag = new UserStatsFrag();
+			final UserStatsFrag frag = new UserStatsFrag();
+			final MenuBarFrag menubar = new MenuBarFrag();
 			final Bundle bundle = new Bundle();
+
 			bundle.putString("username", username);
 			frag.setArguments(bundle);
+			frag.setMenuBarFrag(menubar);
 
 			fragMan.beginTransaction()
+			.replace(R.id.topbar03, menubar, MenuBarFrag.TAG)
 			.replace(R.id.panel03, frag, UserStatsFrag.TAG)
 			.addToBackStack(UserStatsFrag.TAG).commit();
 		} else {
