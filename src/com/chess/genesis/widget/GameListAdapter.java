@@ -142,7 +142,7 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		final TextView txt = (TextView) cell.findViewById(R.id.message);
 
 		// Fix sizing issue
-		final LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		final LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		cell.setLayoutParams(lp);
 
 		switch (type) {

@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 class PlaceLayout extends LinearLayout implements OnClickListener
 {
 	public static final LinearLayout.LayoutParams LINEAR_PARAMS =
-		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
 	private final static int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};

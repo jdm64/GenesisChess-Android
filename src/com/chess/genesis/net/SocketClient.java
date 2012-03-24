@@ -16,7 +16,8 @@
 
 package com.chess.genesis;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -33,7 +34,7 @@ final class SocketClient
 	private boolean isLoggedin;
 	private String loginHash;
 	private Socket socket;
-	private DataInputStream input;
+	private BufferedReader input;
 	private OutputStream output;
 
 	private SocketClient()
@@ -76,7 +77,7 @@ final class SocketClient
 			return;
 		socket.connect(new InetSocketAddress("genesischess.com", 8338));
 		socket.setSoTimeout(5000);
-		input = new DataInputStream(socket.getInputStream());
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = socket.getOutputStream();
 		loginHash = input.readLine().trim();
 	}

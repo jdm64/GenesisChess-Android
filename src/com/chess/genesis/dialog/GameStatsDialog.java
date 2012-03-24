@@ -18,11 +18,10 @@ package com.chess.genesis;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,11 +37,11 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 	private static final String[] TIED_STALE = {"Game Tied", "Stalemate"};
 	private static final String[] DRAW_GAME = {"Game Tied", "Draw"};
 
-	private static final Map<Integer,String[]> STATUS_MAP = createMap();
+	private static final SparseArray<String[]> STATUS_MAP = createMap();
 
-	private static Map<Integer, String[]> createMap()
+	private static SparseArray<String[]> createMap()
 	{
-		final Map<Integer, String[]> map = new HashMap<Integer, String[]>();
+		final SparseArray<String[]> map = new SparseArray<String[]>();
 		map.put(Piece.WHITE * Enums.WHITEMATE, WON_CHECK);
 		map.put(Piece.WHITE * Enums.BLACKMATE, LOST_CHECK);
 		map.put(Piece.WHITE * Enums.WHITERESIGN, LOST_RESIGN);

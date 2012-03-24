@@ -5,7 +5,7 @@ xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
 android:id="@+id/botbar">
 	<View
 	android:layout_height="50dp"
-	android:layout_width="fill_parent"
+	android:layout_width="match_parent"
 	android:background="@drawable/bluebar_bot"/>
 	<com.google.ads.AdView
 	android:id="@+id/adView"
