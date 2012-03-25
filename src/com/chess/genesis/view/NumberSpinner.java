@@ -115,7 +115,7 @@ class NumberSpinner extends LinearLayout
 
 	private final Runnable mRunnable = new Runnable()
 	{
-		public void run()
+		public synchronized void run()
 		{
 			if (mIncrement) {
 				changeCurrent(mCurrent + 1);

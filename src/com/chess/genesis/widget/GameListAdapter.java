@@ -39,7 +39,6 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 {
 	private final Context context;
 	private final Bundle settings;
-	private final String username;
 	private final int type;
 
 	private GameDataDB db;
@@ -52,12 +51,11 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		context = _context;
 
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		username = prefs.getString("username", "!error!");
 		type = Type;
 		yourturn = yourTurn;
 
 		settings = new Bundle();
-		settings.putString("username", username);
+		settings.putString("username", prefs.getString("username", "!error!"));
 		settings.putInt("type", type);
 
 		initCursor();
@@ -136,9 +134,9 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 		return cell;
 	}
 
-	public View getEmptyView(final Context context)
+	public View getEmptyView(final Context _context)
 	{
-		final View cell = View.inflate(context, R.layout.gamelist_cell_empty, null);
+		final View cell = View.inflate(_context, R.layout.gamelist_cell_empty, null);
 		final TextView txt = (TextView) cell.findViewById(R.id.message);
 
 		// Fix sizing issue

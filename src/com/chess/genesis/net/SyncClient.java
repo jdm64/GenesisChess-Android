@@ -120,7 +120,7 @@ class SyncClient implements Runnable
 		syncType = Type;
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 		switch (syncType) {
 		case FULL_SYNC:

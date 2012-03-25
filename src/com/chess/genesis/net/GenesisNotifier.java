@@ -91,20 +91,20 @@ public class GenesisNotifier extends Service implements Runnable
 
 	public static void clearNotification(final Context context, final int id)
 	{
-		final GameDataDB db = new GameDataDB(context);
+		final GameDataDB db2 = new GameDataDB(context);
 		final NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
 		if ((id & YOURTURN_NOTE) != 0) {
-			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() == 0)
+			if (db2.getOnlineGameList(Enums.YOUR_TURN).getCount() == 0)
 				nm.cancel(YOURTURN_NOTE);
 		} else if ((id & NEWMGS_NOTE) != 0) {
-			if (db.getUnreadMsgCount() == 0)
+			if (db2.getUnreadMsgCount() == 0)
 				nm.cancel(NEWMGS_NOTE);
 		}
-		db.close();
+		db2.close();
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -142,7 +142,6 @@ public class GenesisNotifier extends Service implements Runnable
 
 	private void ScheduleWakeup()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ));
 
@@ -165,7 +164,6 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		final Notification note = new Notification(R.drawable.icon, title, System.currentTimeMillis());
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		setupNotification(note, id);
 

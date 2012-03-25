@@ -108,7 +108,7 @@ class Benchmark implements Runnable
 		return (1000 * tNodes) / (now - start);
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 		final long gnps = GenBench();
 		final long rnps = RegBench();

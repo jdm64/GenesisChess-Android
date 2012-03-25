@@ -170,7 +170,7 @@ class PrettyDate extends Date
 			diff %= 604800000;
 			count++;
 
-			if (count >= 2)
+			if (count == 2)
 				return buff.toString() + "ago";
 		}
 		// days
@@ -183,7 +183,7 @@ class PrettyDate extends Date
 			diff %= 86400000;
 			count++;
 
-			if (count >= 2)
+			if (count == 2)
 				return buff.toString() + "ago";
 		}
 		// hours
@@ -196,7 +196,7 @@ class PrettyDate extends Date
 			diff %= 3600000;
 			count++;
 
-			if (count >= 2)
+			if (count == 2)
 				return buff.toString() + "ago";
 		}
 		// minutes
@@ -209,7 +209,7 @@ class PrettyDate extends Date
 			diff %= 60000;
 			count++;
 
-			if (count >= 2)
+			if (count == 2)
 				return buff.toString() + "ago";
 		}
 		// seconds

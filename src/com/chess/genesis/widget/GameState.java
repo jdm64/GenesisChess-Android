@@ -141,7 +141,6 @@ abstract class GameState
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return;
 			}
-			final String history = json.getString("history");
 			final int status = Enums.GameStatus(json.getString("status"));
 
 			settings.putString("status", String.valueOf(status));
@@ -151,7 +150,7 @@ abstract class GameState
 			db.close();
 			GenesisNotifier.clearNotification(activity, GenesisNotifier.YOURTURN_NOTE);
 
-			applyRemoteMove(history);
+			applyRemoteMove(json.getString("history"));
 			if (status != Enums.ACTIVE) {
 				if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
 					progress.remove();

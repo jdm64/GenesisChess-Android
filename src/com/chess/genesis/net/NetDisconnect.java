@@ -18,7 +18,7 @@ package com.chess.genesis;
 
 class NetDisconnect implements Runnable
 {
-	public void run()
+	public synchronized void run()
 	{
 	try {
 		Thread.sleep(2048);

@@ -102,9 +102,9 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 		return cell;
 	}
 
-	public View getEmptyView(final Context context)
+	public View getEmptyView(final Context _context)
 	{
-		final View cell = View.inflate(context, R.layout.msglist_cell_empty, null);
+		final View cell = View.inflate(_context, R.layout.msglist_cell_empty, null);
 
 		// Fix sizing issue
 		final LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

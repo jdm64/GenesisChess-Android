@@ -232,7 +232,7 @@ class NetworkClient implements Runnable
 		}
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 		if (fid == LOGIN)
 			login_setup();

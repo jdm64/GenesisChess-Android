@@ -275,7 +275,7 @@ class GenEngine extends Engine implements Runnable
 		pruneWeakMoves();
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 		active = true;
 		curr = null;

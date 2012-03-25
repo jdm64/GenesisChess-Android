@@ -213,9 +213,9 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			for (int i = position - 1; i >= 0; i--) {
 				final View tab = getChildAt(i);
 				if (i == position - 1)
-					tabPositions[i] = 0 - tab.getPaddingLeft();
+					tabPositions[i] = -tab.getPaddingLeft();
 				else
-					tabPositions[i] = 0 - tab.getMeasuredWidth() - width;
+					tabPositions[i] = -tab.getMeasuredWidth() - width;
 
 				tabPositions[i] = Math.min(tabPositions[i], tabPositions[i + 1] - tab.getMeasuredWidth());
 			}

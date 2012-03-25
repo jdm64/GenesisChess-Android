@@ -62,7 +62,7 @@ class ProgressMsg extends ProgressDialog implements Runnable
 			show();
 	}
 
-	public void run()
+	public synchronized void run()
 	{
 	try {
 		Thread.sleep(256);
