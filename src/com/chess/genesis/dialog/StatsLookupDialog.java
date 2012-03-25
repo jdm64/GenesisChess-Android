@@ -29,8 +29,6 @@ class StatsLookupDialog extends BaseDialog implements OnClickListener
 
 	private final Handler handle;
 
-	private EditText txtinput;
-
 	public StatsLookupDialog(final Context context, final Handler handler)
 	{
 		super(context);
@@ -42,6 +40,7 @@ class StatsLookupDialog extends BaseDialog implements OnClickListener
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
 		setTitle("User Stats Lookup");
 		setBodyView(R.layout.dialog_statslookup);
 		setButtonTxt(R.id.ok, "Lookup");
