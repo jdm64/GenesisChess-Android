@@ -174,7 +174,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		if (act.lastContextMenu == TAG)
+		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
 		else
 			return super.onContextItemSelected(item);

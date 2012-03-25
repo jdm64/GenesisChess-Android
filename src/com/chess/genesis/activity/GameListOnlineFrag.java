@@ -373,7 +373,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		if (act.lastContextMenu != TAG)
+		if (!act.lastContextMenu.equals(TAG))
 			return super.onContextItemSelected(item);
 
 		switch (item.getItemId()) {
