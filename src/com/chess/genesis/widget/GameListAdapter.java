@@ -159,11 +159,21 @@ class GameListAdapter extends BaseAdapter implements ListAdapter
 class GameListItem extends View
 {
 	private final Paint paint = new Paint();
-	private Bundle data;
-	private String username;
-	private PrettyDate time;
-	private int gametype;
+	private DataItem data;
 	private int index;
+
+	final static class DataItem
+	{
+		public String name;
+		public String type;
+		public String time;
+		public int gametype;
+		public int opponent;
+		public int status;
+		public int idle;
+		public int ply;
+		public boolean hasMsg;
+	}
 
 	final static class Cache
 	{
@@ -221,32 +231,21 @@ class GameListItem extends View
 		setIcon(canvas);
 
 		// game name
-		final String gamename = (gametype == Enums.LOCAL_GAME)?
-			data.getString("name") :
-			(username.equals(data.getString("white"))?
-				data.getString("black") :
-				data.getString("white"));
 		paint.setTextSize(30 * Cache.dpi);
-		canvas.drawText(gamename, Cache.height + 8, Cache.height / 2, paint);
+		canvas.drawText(data.name, Cache.height + 8, Cache.height / 2, paint);
 
 		// set italic text
 		paint.setTypeface(Cache.fontItalic);
 
 		// game type
-		final String type = (gametype == Enums.LOCAL_GAME)?
-			Enums.OpponentType(Integer.valueOf(data.getString("opponent"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype")))
-			:
-			Enums.EventType(Integer.valueOf(data.getString("eventtype"))) + " " +
-			Enums.GameType(Integer.valueOf(data.getString("gametype")));
 		paint.setTextSize(20 * Cache.dpi);
-		canvas.drawText(type, Cache.height + 8, 7 * Cache.height / 8, paint);
+		canvas.drawText(data.type, Cache.height + 8, 7 * Cache.height / 8, paint);
 
 		// time
 		paint.setTextAlign(Paint.Align.RIGHT);
-		canvas.drawText(time.agoFormat(), getWidth() - 8, 7 * Cache.height / 8, paint);
+		canvas.drawText(data.time, getWidth() - 8, 7 * Cache.height / 8, paint);
 
-		if (gametype != Enums.LOCAL_GAME)
+		if (data.gametype != Enums.LOCAL_GAME)
 			setOnlineTxt(canvas);
 
 		// reset paint
@@ -259,9 +258,9 @@ class GameListItem extends View
 	{
 		final Bitmap img;
 
-		switch (gametype) {
+		switch (data.gametype) {
 		case Enums.LOCAL_GAME:
-			switch (Integer.valueOf(data.getString("opponent"))) {
+			switch (data.opponent) {
 			case Enums.CPU_BLACK_OPPONENT:
 				img = Cache.whitePawn;
 				break;
@@ -278,12 +277,12 @@ class GameListItem extends View
 			break;
 		case Enums.ONLINE_GAME:
 		default:
-			img = (Integer.valueOf(data.getString("ply")) % 2 == 0)?
+			img = (data.ply % 2 == 0)?
 				Cache.whitePawn :
 				Cache.blackPawn;
 			break;
 		case Enums.ARCHIVE_GAME:
-			switch (Integer.valueOf(data.getString("status"))) {
+			switch (data.status) {
 			case Enums.WHITEMATE:
 			case Enums.BLACKRESIGN:
 			case Enums.BLACKIDLE:
@@ -311,17 +310,17 @@ class GameListItem extends View
 	{
 		int border = getWidth() - 8;
 
-		if (data.getString("unread") != null && data.getString("unread").equals("1")) {
+		if (data.hasMsg) {
 			final String txt = "[new msg]";
 			paint.setColor(0xff4e9a06);
 			canvas.drawText(txt, border, Cache.height / 2, paint);
 			border -= paint.measureText(txt);
 		}
 
-		if (gametype == Enums.ARCHIVE_GAME)
+		if (data.gametype == Enums.ARCHIVE_GAME)
 			return;
 
-		switch (Integer.valueOf(data.getString("idle"))) {
+		switch (data.idle) {
 		case Enums.IDLE:
 			paint.setColor(0xff3465a4);
 			canvas.drawText("[idle]", border, Cache.height / 2, paint);
@@ -339,10 +338,35 @@ class GameListItem extends View
 
 	public void setData(final Bundle bundle, final int Index)
 	{
-		data = bundle;
+		final String username = bundle.getString("username");
+
 		index = Index;
-		gametype = data.getInt("type");
-		username = data.getString("username");
-		time = new PrettyDate(data.getString("stime"));
+		data = new DataItem();
+
+		data.time = new PrettyDate(bundle.getString("stime")).agoFormat();
+		data.gametype = bundle.getInt("type");
+		data.name = (data.gametype == Enums.LOCAL_GAME)?
+			bundle.getString("name") :
+			(username.equals(bundle.getString("white"))?
+				bundle.getString("black") :
+				bundle.getString("white"));
+		data.type = (data.gametype == Enums.LOCAL_GAME)?
+			Enums.OpponentType(Integer.valueOf(bundle.getString("opponent"))) + " " +
+			Enums.GameType(Integer.valueOf(bundle.getString("gametype")))
+			:
+			Enums.EventType(Integer.valueOf(bundle.getString("eventtype"))) + " " +
+			Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
+
+		if (data.gametype != Enums.LOCAL_GAME) {
+			data.ply = Integer.valueOf(bundle.getString("ply"));
+			data.status = Integer.valueOf(bundle.getString("status"));
+			data.hasMsg = (bundle.getString("unread") != null
+				&& bundle.getString("unread").equals("1"));
+
+			if (data.gametype == Enums.ONLINE_GAME)
+				data.idle = Integer.valueOf(bundle.getString("idle"));
+		} else {
+			data.opponent = Integer.valueOf(bundle.getString("opponent"));
+		}
 	}
 }

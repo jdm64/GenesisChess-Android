@@ -117,10 +117,17 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 class MsgListItem extends View
 {
 	private final TextPaint paint = new TextPaint();
-	private Bundle data;
 	private StaticLayout msgImg;
-	private PrettyDate time;
+	private DataItem data;
 	private int lastWidth;
+
+	final static class DataItem
+	{
+		public String username;
+		public String time;
+		public String msg;
+		public boolean isYourMsg;
+	}
 
 	final static class Cache
 	{
@@ -171,7 +178,7 @@ class MsgListItem extends View
 		final int width = MeasureSpec.getSize(widthMeasureSpec);
 
 		if (width != lastWidth) {
-			msgImg = new StaticLayout(data.getString("msg"), paint, width - 4 * Cache.padding, Alignment.ALIGN_NORMAL, 1, 0, true);
+			msgImg = new StaticLayout(data.msg, paint, width - 4 * Cache.padding, Alignment.ALIGN_NORMAL, 1, 0, true);
 			lastWidth = width;
 		}
 
@@ -190,7 +197,7 @@ class MsgListItem extends View
 		canvas.restore();
 
 		// draw msg header
-		if (data.getString("username").equals(Cache.username))
+		if (data.isYourMsg)
 			paint.setColor(0xffd2d0ff);
 		else
 			paint.setColor(0xffcce6ff);
@@ -199,12 +206,12 @@ class MsgListItem extends View
 		// draw username
 		paint.setColor(0xff000000);
 		paint.setTextSize(Cache.smallText);
-		canvas.drawText(data.getString("username"), Cache.padding, Cache.headerAlign, paint);
+		canvas.drawText(data.username, Cache.padding, Cache.headerAlign, paint);
 
 		// draw time
 		paint.setTextAlign(Paint.Align.RIGHT);
 		paint.setTypeface(Cache.fontItalic);
-		canvas.drawText(time.agoFormat(), width - Cache.padding, Cache.headerAlign, paint);
+		canvas.drawText(data.time, width - Cache.padding, Cache.headerAlign, paint);
 
 		// reset paint
 		paint.setTextAlign(Paint.Align.LEFT);
@@ -214,7 +221,11 @@ class MsgListItem extends View
 
 	public void setData(final Bundle bundle)
 	{
-		data = bundle;
-		time = new PrettyDate(data.getString("time"));
+		data = new DataItem();
+
+		data.username = bundle.getString("username");
+		data.time = new PrettyDate(bundle.getString("time")).agoFormat();
+		data.msg = bundle.getString("msg");
+		data.isYourMsg = data.username.equals(Cache.username);
 	}
 }
