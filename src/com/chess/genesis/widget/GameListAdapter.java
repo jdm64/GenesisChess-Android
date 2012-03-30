@@ -184,6 +184,7 @@ class GameListItem extends View
 		public static RectF rect;
 		public static int dpi;
 		public static int height;
+		private static boolean isActive = false;
 
 		private Cache()
 		{
@@ -191,6 +192,9 @@ class GameListItem extends View
 
 		public static void Init(final Context context)
 		{
+			if (isActive)
+				return;
+
 			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
 			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
 			rect = new RectF(0, 0, Cache.height, Cache.height);
@@ -203,6 +207,8 @@ class GameListItem extends View
 			blackPawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
 			bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.white_pawn_dark);
 			whitePawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
+
+			isActive = true;
 		}
 	}
 
