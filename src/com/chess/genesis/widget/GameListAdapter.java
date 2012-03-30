@@ -197,11 +197,11 @@ class GameListItem extends View
 
 			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
 			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
-			rect = new RectF(0, 0, Cache.height, Cache.height);
 
 			final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 			dpi = (int) ((1 + Math.max(metrics.ydpi, metrics.xdpi)) / 160);
 			height = 75 * dpi;
+			rect = new RectF(0, 0, height, height);
 
 			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_pawn_light);
 			blackPawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
