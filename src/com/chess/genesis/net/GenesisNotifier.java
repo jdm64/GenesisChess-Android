@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat.Builder;
 import java.util.Calendar;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,8 +65,7 @@ public class GenesisNotifier extends Service implements Runnable
 			if (json.getString("result").equals("error")) {
 				error = true;
 				socket.disconnect();
-			//	final String title = "Error in GenesisNotifier";
-			//	SendNotification(title, json.getString("reason"), ERROR_NOTE);
+			//	SendNotification(ERROR_NOTE, json.getString("reason"));
 				return;
 			}
 		} catch (JSONException e) {
@@ -160,13 +160,8 @@ public class GenesisNotifier extends Service implements Runnable
 		return (netInfo != null && netInfo.isConnected());
 	}
 
-	private void SendNotification(final String title, final String text, final int id)
+	private void SendNotification(final int id, final String text)
 	{
-		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		final Notification note = new Notification(R.drawable.icon, title, System.currentTimeMillis());
-
-		setupNotification(note, id);
-
 		final Intent intent;
 		if (pref.getBoolean("tabletMode", false)) {
 			intent = new Intent(this, MainMenuTablet.class);
@@ -179,26 +174,42 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		final Context context = getApplicationContext();
+		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		final Notification note = createNotification(id, text, pintent);
 
-		note.setLatestEventInfo(context, title, text, pintent);
 		nm.notify(id, note);
 	}
 
-	private void setupNotification(final Notification note, final int id)
+	private Notification createNotification(final int id, final String text, final PendingIntent pintent)
 	{
-		if (id == ERROR_NOTE) {
-			note.flags |= Notification.FLAG_AUTO_CANCEL;
-			return;
-		} else {
-			note.flags |= Notification.FLAG_NO_CLEAR;
-			note.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+		final Builder noteBuilder = new Builder(getApplicationContext());
+
+		noteBuilder.setContentText(text).setSmallIcon(R.drawable.icon);
+
+		switch (id) {
+		case ERROR_NOTE:
+			noteBuilder.setContentTitle("Error!");
+			break;
+		case YOURTURN_NOTE:
+			noteBuilder.setContentTitle("It's Your turn");
+			break;
+		case NEWMGS_NOTE:
+			noteBuilder.setContentTitle("New Message");
+			break;
 		}
 
+		if (id == ERROR_NOTE) {
+			noteBuilder.setAutoCancel(true);
+			return noteBuilder.getNotification();
+		}
+		noteBuilder.setOnlyAlertOnce(true).setContentIntent(pintent);
+
 		if (pref.getBoolean("noteRingtoneEnable", false))
-			note.sound = Uri.parse(pref.getString("noteRingtone", "content://settings/system/notification_sound"));
+			noteBuilder.setSound(Uri.parse(pref.getString("noteRingtone", "content://settings/system/notification_sound")));
 		if (pref.getBoolean("noteVibrateEnable", true))
-			note.vibrate = parseVibrate();
+			noteBuilder.setVibrate(parseVibrate());
+
+		return noteBuilder.getNotification();
 	}
 
 	private long[] parseVibrate()
@@ -241,25 +252,25 @@ public class GenesisNotifier extends Service implements Runnable
 		final long gtime = pref.getLong("lastgamesync", 0);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
-			SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
+			SendNotification(YOURTURN_NOTE, "It's your turn in a game you're in");
 		} else {
 			net.sync_games(gtime);
 			net.run();
 			trylock();
 
 			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0)
-				SendNotification("It's Your turn", "It's your turn in a game you're in", YOURTURN_NOTE);
+				SendNotification(YOURTURN_NOTE, "It's your turn in a game you're in");
 		}
 
 		if (db.getUnreadMsgCount() > 0) {
-			SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
+			SendNotification(NEWMGS_NOTE, "A new message was posted to a game you're in");
 		} else {
 			net.sync_msgs(mtime);
 			net.run();
 			trylock();
 
 			if (db.getUnreadMsgCount() > 0)
-				SendNotification("New Message", "A new message was posted to a game you're in", NEWMGS_NOTE);
+				SendNotification(NEWMGS_NOTE, "A new message was posted to a game you're in");
 		}
 		socket.disconnect();
 		db.close();
