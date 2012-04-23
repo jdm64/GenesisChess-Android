@@ -59,7 +59,7 @@ final class PlaceButtonCache extends PieceCache
 
 		size = newSize;
 		for (int i = 0; i < 13; i++)
-			scaledPieces[i] = Bitmap.createScaledBitmap(pieceBitmaps[i], size, size, true);
+			scaledPieces[i] = createImg(i, size);
 
 		final Bitmap[] countBitmaps = new Bitmap[10];
 		for (int i = 0; i < 10; i++) {

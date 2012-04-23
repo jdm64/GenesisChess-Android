@@ -32,11 +32,11 @@ abstract class PieceCache
 		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
 		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
 
-	protected static Bitmap[] pieceBitmaps;
+	private static Bitmap[] pieceBitmaps;
+	private static boolean isActive = false;
+
 	protected static Context cntx;
 
-	private static boolean isActive = false;
-	
 	public static void InitPieces(final Context context)
 	{
 		if (isActive)
@@ -52,5 +52,10 @@ abstract class PieceCache
 		throw new RuntimeException();
 	}
 		isActive = true;
+	}
+
+	public static Bitmap createImg(final int type, final int size)
+	{
+		return Bitmap.createScaledBitmap(pieceBitmaps[type], size, size, true);
 	}
 }

@@ -48,7 +48,7 @@ final class BoardButtonCache extends PieceCache
 
 		size = newSize;
 		for (int i = 0; i < 13; i++)
-			scaledPieces[i] = Bitmap.createScaledBitmap(pieceBitmaps[i], size, size, true);
+			scaledPieces[i] = createImg(i, size);
 	}
 
 	public static Bitmap getPieceImg(final int index)
