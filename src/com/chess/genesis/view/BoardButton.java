@@ -17,6 +17,7 @@
 package com.chess.genesis;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -41,6 +42,7 @@ class BoardButton extends View
 	private final int squareColor;
 	private final int squareIndex;
 
+	private Bitmap localImg;
 	private RectF inSquare;
 	private int piece = 0;
 	private int size;
@@ -95,7 +97,10 @@ class BoardButton extends View
 		canvas.drawRect(inSquare, paint);
 
 		// Draw piece image
-		canvas.drawBitmap(BoardButtonCache.getPieceImg(piece + 6), matrix, null);
+		final Bitmap bitmap = (localImg == null)?
+			BoardButtonCache.getPieceImg(piece + 6) :
+			localImg;
+		canvas.drawBitmap(bitmap, matrix, null);
 	}
 
 	public void resetSquare()
@@ -104,6 +109,11 @@ class BoardButton extends View
 		isCheck = false;
 
 		setPiece(Piece.EMPTY);
+	}
+
+	public void setImage(final Bitmap image)
+	{
+		localImg = image;
 	}
 
 	public void setPiece(final int piece_type)
