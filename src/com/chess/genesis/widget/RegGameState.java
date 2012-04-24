@@ -271,7 +271,7 @@ class RegGameState extends GameState
 			castle.setPiece(Piece.ROOK * board.getStm());
 		} else if (move.getPromote() != 0) {
 			final BoardButton pawn = (BoardButton) activity.findViewById(move.to);
-			pawn.setPiece(Piece.QUEEN * board.getStm());
+			pawn.setPiece(move.getPromote() * board.getStm());
 		} else if (move.getEnPassant()) {
 			final BoardButton pawn = (BoardButton) activity.findViewById(board.Piece(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
