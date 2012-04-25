@@ -41,6 +41,9 @@ class RegGameState extends GameState
 					cpu.setBoard((RegBoard) board);
 					(new Thread(cpu)).start();
 					return;
+				} else if (activity.isFinishing()) {
+					// activity is gone, so give up!
+					return;
 				}
 				currentMove();
 

@@ -39,6 +39,9 @@ class GenGameState extends GameState
 					cpu.setBoard((GenBoard) board);
 					(new Thread(cpu)).start();
 					return;
+				} else if (activity.isFinishing()) {
+					// activity is gone, so give up!
+					return;
 				}
 				currentMove();
 
