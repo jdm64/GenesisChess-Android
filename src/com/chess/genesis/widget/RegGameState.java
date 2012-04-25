@@ -49,6 +49,10 @@ class RegGameState extends GameState
 				if (board.validMove(tmove, move))
 					applyMove(move, true, true);
 				break;
+			case PawnPromoteDialog.MSG:
+				callstack.clear();
+				applyMove((RegMove) msg.obj, true, true);
+				break;
 			default:
 				handleOther(msg);
 				break;
@@ -225,6 +229,11 @@ class RegGameState extends GameState
 
 		// return if move isn't valid
 		if (board.validMove(move) != Move.VALID_MOVE) {
+			callstack.pop();
+			return;
+		} else if (move.getPromote() != 0) {
+			new PawnPromoteDialog(activity, handle, move, board.getStm()).show();
+
 			callstack.pop();
 			return;
 		}
