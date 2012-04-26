@@ -148,7 +148,10 @@ class RegGameState extends GameState
 			return;
 
 		final String[] movehistory = hist.trim().split(" +");
-		if (movehistory[movehistory.length - 1].equals(history.top().toString()))
+		final String sMove = movehistory[movehistory.length - 1];
+
+		// don't apply duplicate moves
+		if (history.size() != 0 && sMove.equals(history.top().toString()))
 			return;
 
 		// must be on most current move to apply it
@@ -156,7 +159,7 @@ class RegGameState extends GameState
 		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
 
 		final RegMove move = new RegMove();
-		move.parse(movehistory[movehistory.length - 1]);
+		move.parse(sMove);
 		if (board.validMove(move) != Move.VALID_MOVE)
 			return;
 		applyMove(move, true, false);
