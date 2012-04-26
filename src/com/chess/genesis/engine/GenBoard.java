@@ -86,6 +86,9 @@ class GenBoard extends GenPosition implements Board
 		-10,  0,  0,  0,  0,  0,  0, -10}
 	};
 
+	// for pieceIndex()
+	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
+
 	public static final int ZBOX_SIZE = 781;
 	public static final int WTM_HASH = 780;
 	public static final int HOLD_START = 768;
@@ -123,7 +126,6 @@ class GenBoard extends GenPosition implements Board
 
 	private int pieceIndex(final int loc, final int type)
 	{
-		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 

@@ -19,6 +19,9 @@ package com.chess.genesis;
 
 class RegPosition extends RegMoveLookup
 {
+	// for setPiece()
+	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
+
 	public static final int[] InitRegPiece = {
 		Piece.A7, Piece.B7, Piece.C7, Piece.D7, Piece.E7, Piece.F7, Piece.G7, Piece.H7,
 		Piece.B8, Piece.G8, Piece.C8, Piece.F8, Piece.A8, Piece.H8, Piece.D8, Piece.E8,
@@ -67,7 +70,6 @@ class RegPosition extends RegMoveLookup
 
 	protected boolean setPiece(final int loc, final int type)
 	{
-		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 

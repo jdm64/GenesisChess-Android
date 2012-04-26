@@ -19,6 +19,9 @@ package com.chess.genesis;
 
 class GenPosition extends GenMoveLookup
 {
+	// for setPiece()
+	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
+
 	public GenPosition()
 	{
 		square = new int[128];
@@ -57,7 +60,6 @@ class GenPosition extends GenMoveLookup
 
 	protected boolean setPiece(final int loc, final int type)
 	{
-		final int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 
