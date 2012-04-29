@@ -14,15 +14,15 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
+import android.app.*;
+import android.content.*;
+import android.preference.*;
+import com.chess.genesis.*;
+import com.google.ads.*;
 
-final class AdsHandler
+public final class AdsHandler
 {
 	private AdsHandler()
 	{
@@ -34,7 +34,7 @@ final class AdsHandler
 
 		if (!pref.getBoolean("enableAds", true))
 			return;
-		final AdView ad = (AdView) activity.findViewById(R.id.adView);
+		final AdView ad = (AdView) activity.findViewById(com.chess.genesis.R.id.adView);
 
 		if (ad != null)
 			ad.loadAd(new AdRequest());

@@ -14,16 +14,15 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
+import android.content.pm.*;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.*;
 
-final class UpgradeHandler
+public final class UpgradeHandler
 {
 	private UpgradeHandler()
 	{
@@ -36,7 +35,7 @@ final class UpgradeHandler
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		upgrade(pref, pref.getInt("appVersion", 0), pinfo.versionCode);
-	} catch (NameNotFoundException e) {
+	} catch (final NameNotFoundException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

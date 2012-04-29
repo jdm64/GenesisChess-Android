@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chess.genesis.RobotoText
+<com.chess.genesis.view.RobotoText
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/text"
 android:textColor="#000000"/>

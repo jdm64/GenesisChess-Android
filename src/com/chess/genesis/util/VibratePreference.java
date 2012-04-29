@@ -14,18 +14,17 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
 import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Vibrator;
-import android.preference.ListPreference;
-import android.util.AttributeSet;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import android.util.*;
 
 class VibratePreference extends ListPreference implements DialogInterface.OnClickListener
 {
-	private Context context;
+	private final Context context;
 	private int EntryIndex;
 
 	public VibratePreference(final Context _context)
@@ -48,6 +47,7 @@ class VibratePreference extends ListPreference implements DialogInterface.OnClic
 		builder.setPositiveButton("Ok", null);
 	}
 
+	@Override
 	public void onClick(final DialogInterface dialog, final int which)
 	{
 		EntryIndex = which;

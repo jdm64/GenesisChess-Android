@@ -14,16 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.Gravity;
-import android.view.View;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.Window;
+import com.chess.genesis.*;
 
 public class SubmitMove extends Dialog implements OnClickListener
 {
@@ -66,6 +64,7 @@ public class SubmitMove extends Dialog implements OnClickListener
 		dismiss();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		handle.sendMessage(handle.obtainMessage(MSG, v.getId() == R.id.submit));

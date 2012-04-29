@@ -16,20 +16,16 @@
  * limitations under the License.
  */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.os.Handler;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.method.NumberKeyListener;
-import android.text.Spanned;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.content.*;
+import android.os.*;
+import android.text.*;
+import android.text.method.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
 
 /**
  * A view for selecting a number
@@ -37,7 +33,7 @@ import android.widget.TextView;
  * For a dialog using this view, see {@link android.app.TimePickerDialog}.
  * @hide
  */
-class NumberSpinner extends LinearLayout
+public class NumberSpinner extends LinearLayout
 {
 	private final Handler mHandler;
 	private final EditText mText;
@@ -104,6 +100,7 @@ class NumberSpinner extends LinearLayout
 		final java.util.Formatter mFmt = new java.util.Formatter(mBuilder, java.util.Locale.US);
 		final Object[] mArgs = new Object[1];
 
+		@Override
 		public String toString(final int value)
 		{
 			mArgs[0] = value;
@@ -115,6 +112,7 @@ class NumberSpinner extends LinearLayout
 
 	private final Runnable mRunnable = new Runnable()
 	{
+		@Override
 		public synchronized void run()
 		{
 			if (mIncrement) {
@@ -152,6 +150,7 @@ class NumberSpinner extends LinearLayout
 
 		final OnClickListener clickListener = new OnClickListener()
 		{
+			@Override
 			public void onClick(final View v)
 			{
 				validateInput(mText);
@@ -169,6 +168,7 @@ class NumberSpinner extends LinearLayout
 
 		final OnFocusChangeListener focusListener = new OnFocusChangeListener()
 		{
+			@Override
 			public void onFocusChange(final View v, final boolean hasFocus)
 			{
 
@@ -187,6 +187,7 @@ class NumberSpinner extends LinearLayout
 			 * We start the long click here but rely on the {@link NumberSpinnerButton}
 			 * to inform us when the long click has ended.
 			 */
+			@Override
 			public boolean onLongClick(final View v)
 			{
 				/* The text view may still have focus so clear it's focus which will
@@ -434,6 +435,7 @@ class NumberSpinner extends LinearLayout
 
 	private class NumberSpinnerInputFilter implements InputFilter
 	{
+		@Override
 		public CharSequence filter(final CharSequence source, final int start, final int end, final Spanned dest, final int dstart, final int dend)
 		{
 			if (mDisplayedValues == null) {
@@ -459,6 +461,7 @@ class NumberSpinner extends LinearLayout
 	{
 		// XXX This doesn't allow for range limits when controlled by a
 		// soft input method!
+		@Override
 		public int getInputType()
 		{
 			return InputType.TYPE_CLASS_NUMBER;
@@ -505,7 +508,7 @@ class NumberSpinner extends LinearLayout
 		if (mDisplayedValues == null) {
 			try {
 				return Integer.parseInt(str);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				/* Ignore as if it's not a number we don't care */
 			}
 		} else {
@@ -522,7 +525,7 @@ class NumberSpinner extends LinearLayout
 			 */
 			try {
 				return Integer.parseInt(str);
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				/* Ignore as if it's not a number we don't care */
 			}
 		}

@@ -14,15 +14,17 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
+import android.content.*;
+import android.util.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.widget.*;
 
-class PlaceLayout extends LinearLayout implements OnClickListener
+public class PlaceLayout extends LinearLayout implements OnClickListener
 {
 	public static final LinearLayout.LayoutParams LINEAR_PARAMS =
 		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -92,6 +94,7 @@ class PlaceLayout extends LinearLayout implements OnClickListener
 		gamestate = _gamestate;
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		gamestate.placeClick(v);

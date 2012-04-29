@@ -14,29 +14,23 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.ContextMenu;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import org.json.JSONObject;
-import org.json.JSONException;
-import org.json.JSONTokener;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.widget.*;
+import java.io.*;
+import org.json.*;
 
 public class GameListLocalFrag extends GameListFrag implements OnClickListener, OnItemClickListener
 {
@@ -46,6 +40,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 
 	public final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -110,6 +105,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 		super.onDestroy();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)
@@ -174,7 +170,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 			intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 	try {
 			startActivityForResult(intent, Enums.IMPORT_GAME);
-	} catch (ActivityNotFoundException e) {
+	} catch (final ActivityNotFoundException e) {
 			Toast.makeText(act, "No File Manager Installed", Toast.LENGTH_LONG).show();
 	}
 			break;
@@ -184,6 +180,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 		return true;
 	}
 
+	@Override
 	public void updateGameList()
 	{
 		gamelist_adapter.update();
@@ -200,13 +197,13 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 		db.addLocalGame(game);
 		db.close();
 		gamelist_adapter.update();
-	} catch (FileNotFoundException e) {
+	} catch (final FileNotFoundException e) {
 		Toast.makeText(act, "File Not Found", Toast.LENGTH_LONG).show();
-	} catch (IOException e) {
+	} catch (final IOException e) {
 		Toast.makeText(act, "Error Reading File", Toast.LENGTH_LONG).show();
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		Toast.makeText(act, "Not A Game Data File", Toast.LENGTH_LONG).show();
-	} catch (ClassCastException e) {
+	} catch (final ClassCastException e) {
 		Toast.makeText(act, "Not A Game Data File", Toast.LENGTH_LONG).show();
 	}
 	}

@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import com.chess.genesis.data.*;
 
 public class StartActivity extends Activity
 {

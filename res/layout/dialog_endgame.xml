@@ -5,34 +5,34 @@ android:shrinkColumns="*"
 android:layout_centerHorizontal="true">
 	<TableRow
 	android:layout_margin="2dp">
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:layout_gravity="right"
 		android:layout_marginRight="12dp"
 		android:textColor="#000000"
 		android:text="Oppenent :"/>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:id="@+id/opponent"
 		android:textColor="#000000"/>
 	</TableRow>
 	<TableRow
 	android:layout_margin="2dp">
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:layout_gravity="right"
 		android:layout_marginRight="12dp"
 		android:textColor="#000000"
 		android:text="Result :"/>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:id="@+id/result"
 		android:textColor="#000000"/>
 	</TableRow>
 	<TableRow
 	android:layout_margin="2dp">
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:id="@+id/psr_type"
 		android:textColor="#000000"
 		android:layout_gravity="right"
 		android:layout_marginRight="12dp"/>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:id="@+id/psr_score"
 		android:textColor="#000000"/>
 	</TableRow>

@@ -14,15 +14,15 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.*;
+import com.chess.genesis.*;
 
 abstract class BaseDialog extends Dialog implements OnClickListener
 {

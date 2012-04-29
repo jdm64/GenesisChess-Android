@@ -14,27 +14,24 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.widget;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteCursor;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.content.*;
+import android.database.sqlite.*;
+import android.graphics.*;
+import android.os.*;
+import android.preference.*;
 import android.text.Layout.Alignment;
-import android.text.StaticLayout;
-import android.text.TextPaint;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.ViewGroup;
+import android.text.*;
+import android.util.*;
+import android.view.*;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.util.*;
 
-class MsgListAdapter extends BaseAdapter implements ListAdapter
+public class MsgListAdapter extends BaseAdapter implements ListAdapter
 {
 	private final Context context;
 	private final String gameID;
@@ -62,6 +59,7 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 		list = db.getMsgList(gameID);
 	}
 
+	@Override
 	public int getCount()
 	{
 		return list.getCount();
@@ -82,16 +80,19 @@ class MsgListAdapter extends BaseAdapter implements ListAdapter
 		db.close();
 	}
 
+	@Override
 	public long getItemId(final int index)
 	{
 		return index;
 	}
 
+	@Override
 	public Object getItem(final int index)
 	{
 		return GameDataDB.rowToBundle(list, index);
 	}
 
+	@Override
 	public View getView(final int index, View cell, final ViewGroup parent)
 	{
 		final Bundle data = (Bundle) getItem(index);

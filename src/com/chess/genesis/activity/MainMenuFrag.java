@@ -14,31 +14,26 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.util.TypedValue;
-import android.view.ContextMenu;
+import android.net.*;
+import android.os.*;
+import android.preference.*;
+import android.support.v4.app.*;
+import android.util.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 
 public class MainMenuFrag extends BaseContentFrag implements OnClickListener, OnTouchListener, OnGlobalLayoutListener
 {
@@ -46,6 +41,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 
 	public final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -108,6 +104,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 		updateLoggedInView();
 	}
 
+	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		switch (v.getId()) {
@@ -127,6 +124,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 		return false;
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
@@ -304,7 +302,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 			R.id.archive_game_txt, R.id.howtoplay_txt, R.id.login_txt,
 			R.id.settings_txt, R.id.feedback_txt};
 
-		String[] stList = new String[list.length];
+		final String[] stList = new String[list.length];
 		TextView txt = null;
 		for (int i = 0; i < list.length; i++) {
 			txt = (TextView) view.findViewById(list[i]);

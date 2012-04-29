@@ -15,20 +15,21 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.*;
 
-class GenMove extends Move implements Parcelable
+public class GenMove extends Move implements Parcelable
 {
 	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<GenMove>()
 	{
+		@Override
 		public GenMove createFromParcel(final Parcel in)
 		{
 			return new GenMove(in);
 		}
 
+		@Override
 		public GenMove[] newArray(final int size)
 		{
 			return new GenMove[size];
@@ -50,12 +51,14 @@ class GenMove extends Move implements Parcelable
 		super(in);
 	}
 
+	@Override
 	public GenMove setNull()
 	{
 		super.setNull();
 		return this;
 	}
 
+	@Override
 	protected StringBuffer printLoc(final int loc)
 	{
 		final StringBuffer str = new StringBuffer();
@@ -85,6 +88,7 @@ class GenMove extends Move implements Parcelable
 		return out.toString();
 	}
 
+	@Override
 	public boolean parse(final String str)
 	{
 		final char[] s = str.toCharArray();

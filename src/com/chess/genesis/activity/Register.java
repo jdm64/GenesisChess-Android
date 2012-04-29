@@ -14,9 +14,10 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
+import android.os.*;
+import com.chess.genesis.*;
 
 public class Register extends BasePhoneActivity
 {

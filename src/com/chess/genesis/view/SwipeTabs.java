@@ -16,22 +16,20 @@
  * limitations under the License.
  */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.*;
+import android.content.res.*;
+import android.graphics.*;
+import android.support.v4.view.*;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils.TruncateAt;
-import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
 
-class SwipeTabs extends ViewGroup implements OnPageChangeListener
+public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 {
 	protected final static String TAG = "SwipeTabs";
 
@@ -300,7 +298,7 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		final int count = mAdapter.getCount();
 
 		for (int i = 0; i < count; i++) {
-			final LayoutParams layoutParams = (LayoutParams) getChildAt(i).getLayoutParams();
+			final LayoutParams layoutParams = getChildAt(i).getLayoutParams();
 			final int widthSpec = MeasureSpec.makeMeasureSpec(maxWidth, MeasureSpec.AT_MOST);
 			final int heightSpec = MeasureSpec.makeMeasureSpec(layoutParams.height, MeasureSpec.EXACTLY);
 			getChildAt(i).measure(widthSpec, heightSpec);
@@ -380,10 +378,12 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		return 1.0f;
 	}
 
+	@Override
 	public void onPageScrollStateChanged(final int state)
 	{
 	}
 
+	@Override
 	public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels)
 	{
 		if (mAdapter == null)
@@ -423,6 +423,7 @@ class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		invalidate();
 	}
 
+	@Override
 	public void onPageSelected(final int position)
 	{
 		mCurrentPos = position;

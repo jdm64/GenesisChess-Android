@@ -7,7 +7,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	style="@style/FillWidth"
 	android:background="#ffffff"
 	android:padding="12dp"/>
-	<com.chess.genesis.ManualPanel
+	<com.chess.genesis.view.ManualPanel
 	panel:sizes="1,1/2"
 	style="@style/FillWidth"
 	android:layout_below="@id/body"
@@ -18,5 +18,5 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		<Button
 		android:id="@+id/cancel"
 		android:text="Cancel"/>
-	</com.chess.genesis.ManualPanel>
+	</com.chess.genesis.view.ManualPanel>
 </RelativeLayout>

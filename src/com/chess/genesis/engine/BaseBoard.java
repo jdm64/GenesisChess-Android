@@ -15,9 +15,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-abstract class BaseBoard
+public abstract class BaseBoard
 {
 	protected static final int[] stype = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,

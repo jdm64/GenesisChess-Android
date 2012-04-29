@@ -16,19 +16,18 @@
  * limitations under the License.
  */
 
-package com.chess.genesis;
+package com.chess.genesis.widget;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.content.*;
+import android.support.v4.app.*;
+import android.support.v4.view.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.view.*;
 
-class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Adapter
+public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Adapter
 {
 	private final Context mContext;
 	private String[] TITLES;
@@ -62,12 +61,14 @@ class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Ad
 		return TITLES.length;
 	}
 
+	@Override
 	public TextView getTab(final int position, final SwipeTabs root)
 	{
 		final TextView view = (TextView) LayoutInflater.from(mContext).inflate(R.layout.swipetab_indicator, root, false);
 		view.setText(TITLES[position]);
 		view.setOnClickListener(new OnClickListener()
 		{
+			@Override
 			public void onClick(final View v)
 			{
 				mViewPager.setCurrentItem(position);

@@ -14,17 +14,15 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.view.View;
+import android.content.*;
+import android.graphics.*;
+import android.util.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
-import android.widget.LinearLayout;
+import android.view.animation.*;
+import android.widget.*;
 
 class ExpandablePanel extends LinearLayout implements OnClickListener
 {
@@ -32,7 +30,7 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 	private final static int duration = 500;
 	private int totalHeight = 0;
 	private boolean isExpanded = false;
-	private Paint paint;
+	private final Paint paint;
 
 	public ExpandablePanel(final Context context)
 	{

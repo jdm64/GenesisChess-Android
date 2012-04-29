@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
 class GenMoveNode implements Comparable<GenMoveNode>
 {
@@ -30,6 +30,7 @@ class GenMoveNode implements Comparable<GenMoveNode>
 		move = new GenMove();
 	}
  
+	@Override
 	public int compareTo(final GenMoveNode a)
 	{
 		return (a.score > score)? 1 : ((a.score < score)? -1 : 0);

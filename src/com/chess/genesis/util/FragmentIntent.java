@@ -14,12 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.*;
+import com.chess.genesis.*;
+import com.chess.genesis.activity.*;
 
-class FragmentIntent
+public class FragmentIntent
 {
 	private FragmentActivity act;
 	private BaseContentFrag frag;

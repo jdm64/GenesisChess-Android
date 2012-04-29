@@ -14,14 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.view.*;
 
-class PendingDrawDialog extends BaseDialog implements OnClickListener
+public class PendingDrawDialog extends BaseDialog implements OnClickListener
 {
 	public PendingDrawDialog(final Context context)
 	{
@@ -40,6 +42,7 @@ class PendingDrawDialog extends BaseDialog implements OnClickListener
 		txt.setText(R.string.draw_pending);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		dismiss();

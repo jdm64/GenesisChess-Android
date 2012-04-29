@@ -14,24 +14,19 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.ContextMenu;
+import android.os.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.widget.*;
+import org.json.*;
 
 public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 {
@@ -46,6 +41,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			final JSONObject json = (JSONObject) msg.obj;
@@ -71,7 +67,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 					progress.dismiss();
 					break;
 				}
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -145,6 +141,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 		super.onDestroy();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.submit_msg) {
@@ -211,7 +208,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 		}
 		db.setMsgsRead(gameid);
 		db.close();
-	}  catch (JSONException e) {
+	}  catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

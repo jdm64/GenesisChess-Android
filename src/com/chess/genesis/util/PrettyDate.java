@@ -14,13 +14,11 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
-class PrettyDate extends Date
+public class PrettyDate extends Date
 {
 	public PrettyDate(final long milliseconds)
 	{

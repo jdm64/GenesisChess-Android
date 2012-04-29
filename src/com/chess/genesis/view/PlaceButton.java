@@ -14,18 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.view.View;
+import android.content.*;
+import android.graphics.*;
+import android.view.*;
+import com.chess.genesis.*;
 
-class PlaceButton extends View
+public class PlaceButton extends View
 {
 	private final static int outerLight = 0xffd3d3d3;
 	private final static int outerDark = 0xff5a7397;

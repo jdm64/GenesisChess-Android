@@ -14,15 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.preference.ListPreference;
-import android.util.AttributeSet;
+import android.preference.*;
+import android.util.*;
 
-class IntListPreference extends ListPreference
+public class IntListPreference extends ListPreference
 {
 	public IntListPreference(final Context context)
 	{

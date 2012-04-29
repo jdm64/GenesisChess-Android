@@ -14,11 +14,11 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.content.*;
+import android.preference.*;
+import com.chess.genesis.engine.*;
 
 class GameInfo
 {

@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.Handler;
+import android.app.*;
+import android.content.*;
+import android.os.*;
 
-class ProgressMsg extends ProgressDialog implements Runnable
+public class ProgressMsg extends ProgressDialog implements Runnable
 {
 	public final static int MSG = 121;
 
@@ -46,6 +46,7 @@ class ProgressMsg extends ProgressDialog implements Runnable
 			handle.sendMessage(handle.obtainMessage(MSG));
 	}
 
+	@Override
 	public void onBackPressed()
 	{
 	}
@@ -62,12 +63,13 @@ class ProgressMsg extends ProgressDialog implements Runnable
 			show();
 	}
 
+	@Override
 	public synchronized void run()
 	{
 	try {
 		Thread.sleep(256);
 		dismiss();
-	} catch (InterruptedException e) {
+	} catch (final InterruptedException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

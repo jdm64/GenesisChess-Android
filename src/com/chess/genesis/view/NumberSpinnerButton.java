@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.widget.ImageView;
+import android.content.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
 
 /**
  * This class exists purely to cancel long click events, that got
@@ -97,6 +97,7 @@ class NumberSpinnerButton extends ImageView
 		}
 	}
 
+	@Override
 	public void onWindowFocusChanged(final boolean hasWindowFocus)
 	{
 		super.onWindowFocusChanged(hasWindowFocus);

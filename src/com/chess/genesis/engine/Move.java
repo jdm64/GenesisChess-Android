@@ -15,11 +15,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Parcel;
+import android.os.*;
 
-abstract class Move
+public abstract class Move
 {
 	public static final int[] InitPieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,

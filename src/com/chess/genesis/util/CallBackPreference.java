@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-import android.content.Context;
-import android.preference.DialogPreference;
-import android.util.AttributeSet;
+import android.content.*;
+import android.preference.*;
+import android.util.*;
 
-class CallBackPreference extends DialogPreference
+public class CallBackPreference extends DialogPreference
 {
 	public interface CallBack
 	{

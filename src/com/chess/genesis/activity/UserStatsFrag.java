@@ -14,21 +14,18 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.ContextMenu;
+import android.os.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
+import org.json.*;
 
 public class UserStatsFrag extends BaseContentFrag
 {
@@ -50,6 +47,7 @@ public class UserStatsFrag extends BaseContentFrag
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 		try {
@@ -72,7 +70,7 @@ public class UserStatsFrag extends BaseContentFrag
 				(new Thread(net)).start();
 				break;
 			}
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -96,7 +94,7 @@ public class UserStatsFrag extends BaseContentFrag
 
 		final int[] list = new int[]{R.id.apsr, R.id.total_games, R.id.total_wins,
 			R.id.total_losses, R.id.total_resigns, R.id.total_ties};
-		for (int id : list) {
+		for (final int id : list) {
 			final TabText item = (TabText) view.findViewById(id);
 			item.setOnTouchListener(null);
 			item.setOnClickListener((View.OnClickListener) item.getParent());
@@ -327,7 +325,7 @@ public class UserStatsFrag extends BaseContentFrag
 		txt.setText("Regular: " + String.valueOf(valD));
 		txt = (TextView) act.findViewById(R.id.total_ties);
 		txt.setText("Draws: " + String.valueOf(valC + valD));
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

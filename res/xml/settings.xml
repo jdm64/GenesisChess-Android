@@ -36,7 +36,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="true"
 		android:title="Background Syncing"
 		android:summary="Enable in app notifications"/>
-		<com.chess.genesis.IntListPreference
+		<com.chess.genesis.util.IntListPreference
 		android:key="notifierPolling"
 		android:defaultValue="30"
 		android:entries="@array/polling_freq_entries"
@@ -64,7 +64,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:dependency="noteEnabled"
 		android:title="Enable Vibrate"
 		android:summary="Vibrate when sending notifications"/>
-		<com.chess.genesis.VibratePreference
+		<com.chess.genesis.util.VibratePreference
 		android:key="noteVibrate"
 		android:defaultValue="0,150"
 		android:entries="@array/vibrate_patt_entries"
@@ -84,25 +84,25 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Database Functions">
-		<com.chess.genesis.CallBackPreference
+		<com.chess.genesis.util.CallBackPreference
 		android:key="deleteLocalTable"
 		android:persistent="false"
 		android:title="Delete Local Games"
 		android:dialogMessage="@string/deleteLocalTable"
 		android:summary="Remove all local games"/>
-		<com.chess.genesis.CallBackPreference
+		<com.chess.genesis.util.CallBackPreference
 		android:key="resyncOnlineTable"
 		android:persistent="false"
 		android:title="Sync Active Games"
 		android:dialogMessage="@string/resyncOnlineTable"
 		android:summary="Force a full resync of all active games"/>
-		<com.chess.genesis.CallBackPreference
+		<com.chess.genesis.util.CallBackPreference
 		android:key="resyncArchiveTable"
 		android:persistent="false"
 		android:title="Sync Archive Games"
 		android:dialogMessage="@string/resyncArchiveTable"
 		android:summary="Force a full resync of all archive games"/>
-		<com.chess.genesis.CallBackPreference
+		<com.chess.genesis.util.CallBackPreference
 		android:key="resyncMsgTable"
 		android:persistent="false"
 		android:title="Sync Messages"

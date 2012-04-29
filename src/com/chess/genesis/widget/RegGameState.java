@@ -14,23 +14,29 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.widget;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.Toast;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.activity.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 
-class RegGameState extends GameState
+public class RegGameState extends GameState
 {
 	private final ObjectArray<MoveFlags> flagsHistory;
 
 	private final Handler xhandle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -117,12 +123,14 @@ class RegGameState extends GameState
 		check_endgame();
 	}
 
+	@Override
 	public void setBoard()
 	{
 		// set dead piece counts
 		setBoard(board.getPieceCounts(Piece.DEAD));
 	}
 
+	@Override
 	protected boolean runCPU()
 	{
 		// Start computer player
@@ -142,6 +150,7 @@ class RegGameState extends GameState
 		return true;
 	}
 
+	@Override
 	protected void applyRemoteMove(final String hist)
 	{
 		if (hist == null || hist.length() < 3)
@@ -165,6 +174,7 @@ class RegGameState extends GameState
 		applyMove(move, true, false);
 	}
 
+	@Override
 	public void reset()
 	{
 		super.reset();
@@ -174,6 +184,7 @@ class RegGameState extends GameState
 		board.reset();
 	}
 
+	@Override
 	public void backMove()
 	{
 		if (hindex < 0)
@@ -182,6 +193,7 @@ class RegGameState extends GameState
 		revertMove(move);
 	}
 
+	@Override
 	public void forwardMove()
 	{
 		if (hindex + 1 >= history.size())
@@ -190,6 +202,7 @@ class RegGameState extends GameState
 		applyMove(move, false, true);
 	}
 
+	@Override
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
@@ -198,6 +211,7 @@ class RegGameState extends GameState
 		}
 	}
 
+	@Override
 	public void firstMove()
 	{
 		while (hindex > 0) {
@@ -206,6 +220,7 @@ class RegGameState extends GameState
 		}
 	}
 
+	@Override
 	public void undoMove()
 	{
 		if (hindex < 0)
@@ -381,6 +396,7 @@ class RegGameState extends GameState
 		setStm();
 	}
 
+	@Override
 	public void boardClick(final View v)
 	{
 		final BoardButton to = (BoardButton) v;
@@ -415,6 +431,7 @@ class RegGameState extends GameState
 		handleMove();
 	}
 
+	@Override
 	public void placeClick(final View v)
 	{
 		// Required because GameState calls this function

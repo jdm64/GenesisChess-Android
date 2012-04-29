@@ -22,15 +22,15 @@
 <merge
 xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<com.chess.genesis.NumberSpinnerButton
+	<com.chess.genesis.view.NumberSpinnerButton
 	android:id="@+id/increment"
 	android:src="@drawable/timespinner_up_btn" />
 
 	<FrameLayout>
-		<com.chess.genesis.MyImageView
+		<com.chess.genesis.view.MyImageView
 		android:src="@drawable/timepicker_input_selected"/>
 		
-		<com.chess.genesis.RobotoEditText
+		<com.chess.genesis.view.RobotoEditText
 		android:id="@+id/timespinner_input"
 		android:gravity="center"
 		android:layout_gravity="center"
@@ -40,7 +40,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:background="#0000"/>
 	</FrameLayout>
 
-	<com.chess.genesis.NumberSpinnerButton
+	<com.chess.genesis.view.NumberSpinnerButton
 	android:id="@+id/decrement"
 	android:src="@drawable/timespinner_down_btn" />
 </merge>

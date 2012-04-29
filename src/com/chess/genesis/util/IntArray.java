@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-class IntArray
+public class IntArray
 {
 	private int[] list = new int[0];
 

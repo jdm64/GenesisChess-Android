@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.content.*;
+import android.util.*;
+import android.widget.*;
 
-class MyImageView extends ImageView
+public class MyImageView extends ImageView
 {
 	public MyImageView(final Context context)
 	{

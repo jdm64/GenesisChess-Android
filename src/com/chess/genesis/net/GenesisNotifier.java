@@ -14,30 +14,20 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.app.*;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.preference.PreferenceManager;
+import android.net.*;
+import android.os.*;
+import android.preference.*;
 import android.support.v4.app.NotificationCompat.Builder;
-import java.util.Calendar;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.chess.genesis.*;
+import com.chess.genesis.activity.*;
+import com.chess.genesis.data.*;
+import java.util.*;
+import org.json.*;
 
 public class GenesisNotifier extends Service implements Runnable
 {
@@ -57,6 +47,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			final JSONObject json = (JSONObject) msg.obj;
@@ -68,7 +59,7 @@ public class GenesisNotifier extends Service implements Runnable
 			//	SendNotification(ERROR_NOTE, json.getString("reason"));
 				return;
 			}
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -104,6 +95,7 @@ public class GenesisNotifier extends Service implements Runnable
 		db2.close();
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -234,7 +226,7 @@ public class GenesisNotifier extends Service implements Runnable
 		while (lock > 0 && !error)
 			Thread.sleep(16);
 		lock = 0;
-	} catch (java.lang.InterruptedException e) {
+	} catch (final java.lang.InterruptedException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -294,7 +286,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final Editor editor = pref.edit();
 		editor.putLong("lastgamesync", time);
 		editor.commit();
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -315,7 +307,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final Editor editor = pref.edit();
 		editor.putLong("lastmsgsync", time);
 		editor.commit();
-	}  catch (JSONException e) {
+	}  catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

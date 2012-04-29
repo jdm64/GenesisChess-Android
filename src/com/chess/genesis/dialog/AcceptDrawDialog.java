@@ -14,15 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.view.*;
 
-class AcceptDrawDialog extends BaseDialog implements OnClickListener
+public class AcceptDrawDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 119;
 
@@ -48,6 +49,7 @@ class AcceptDrawDialog extends BaseDialog implements OnClickListener
 		txt.setText(R.string.draw_accept);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		final String value = (v.getId() == R.id.ok)? "offer" : "decline";

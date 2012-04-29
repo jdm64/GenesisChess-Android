@@ -14,18 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
+import android.content.*;
+import android.graphics.*;
+import android.util.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
-class TabText extends RobotoText implements OnClickListener, OnTouchListener
+public class TabText extends RobotoText implements OnClickListener, OnTouchListener
 {
 	private final static int highlightColor = 0xff00b7eb;
 	private final static int touchColor = 0x8000b7eb;
@@ -60,6 +58,7 @@ class TabText extends RobotoText implements OnClickListener, OnTouchListener
 		canvas.drawRect(0, getHeight() - barSize, getWidth(), getHeight(), paint);
 	}
 
+	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
@@ -69,6 +68,7 @@ class TabText extends RobotoText implements OnClickListener, OnTouchListener
 		return false;
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 	}

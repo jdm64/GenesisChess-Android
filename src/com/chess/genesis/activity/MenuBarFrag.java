@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
+import android.os.*;
+import android.support.v4.app.*;
+import android.view.*;
 import android.view.View.OnLongClickListener;
+import com.chess.genesis.*;
 
 public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 {
@@ -53,6 +53,7 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 			getView().findViewById(R.id.menu_title).setOnLongClickListener(this);
 	}
 
+	@Override
 	public boolean onLongClick(final View v)
 	{
 		if (fragMan.getBackStackEntryCount() > 0)

@@ -7,68 +7,68 @@ android:orientation="vertical">
 	<TableLayout
 	android:paddingBottom="12dp">
 		<TableRow>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Game Name:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:id="@+id/name"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Game Type:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:id="@+id/gametype"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Opponent:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:id="@+id/opponent"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Create Time:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:id="@+id/ctime"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Save Time:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.RobotoText
+			<com.chess.genesis.view.RobotoText
 			android:id="@+id/stime"
 			android:textColor="#000000"/>
 		</TableRow>
 	</TableLayout>
-	<com.chess.genesis.RobotoText
+	<com.chess.genesis.view.RobotoText
 	android:textStyle="bold"
 	android:text="Zfen:"
 	android:textColor="#000000"/>
-	<com.chess.genesis.RobotoText
+	<com.chess.genesis.view.RobotoText
 	android:id="@+id/zfen"
 	android:textColor="#000000"/>
-	<com.chess.genesis.RobotoText
+	<com.chess.genesis.view.RobotoText
 	android:textStyle="bold"
 	android:text="Move History:"
 	android:textColor="#000000"/>
-	<com.chess.genesis.RobotoText
+	<com.chess.genesis.view.RobotoText
 	android:id="@+id/history"
 	android:textColor="#000000"/>
 </LinearLayout>

@@ -15,11 +15,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Handler;
+import android.os.*;
+import com.chess.genesis.util.*;
 
-abstract class Engine implements Runnable
+public abstract class Engine implements Runnable
 {
 	public static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
 	public static final int MAX_SCORE = (Integer.MAX_VALUE - 4);

@@ -15,22 +15,23 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.*;
 
-class RegMove extends Move implements Parcelable
+public class RegMove extends Move implements Parcelable
 {
 	public int flags;
 
 	public static final Parcelable.Creator<RegMove> CREATOR = new Parcelable.Creator<RegMove>()
 	{
+		@Override
 		public RegMove createFromParcel(final Parcel in)
 		{
 			return new RegMove(in);
 		}
 
+		@Override
 		public RegMove[] newArray(final int size)
 		{
 			return new RegMove[size];
@@ -55,6 +56,7 @@ class RegMove extends Move implements Parcelable
 		flags = in.readInt();
 	}
 
+	@Override
 	public void writeToParcel(final Parcel out, final int Flags)
 	{
 		super.writeToParcel(out, Flags);
@@ -67,6 +69,7 @@ class RegMove extends Move implements Parcelable
 		flags = move.flags;
 	}
 
+	@Override
 	public RegMove setNull()
 	{
 		super.setNull();
@@ -112,6 +115,7 @@ class RegMove extends Move implements Parcelable
 			return Move.MOVE_MOVE;
 	}
 
+	@Override
 	protected StringBuffer printLoc(final int loc)
 	{
 		final StringBuffer str = new StringBuffer();
@@ -157,6 +161,7 @@ class RegMove extends Move implements Parcelable
 		return out.toString();
 	}
 
+	@Override
 	public boolean parse(final String str)
 	{
 		final char[] s = str.toCharArray();

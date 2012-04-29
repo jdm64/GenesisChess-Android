@@ -14,18 +14,21 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import org.json.JSONException;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
+import java.io.*;
+import org.json.*;
 
-class OnlineGameDetails extends BaseDialog implements OnClickListener
+public class OnlineGameDetails extends BaseDialog implements OnClickListener
 {
 	private final Bundle gamedata;
 
@@ -68,6 +71,7 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 		txt.setText(gamedata.getString("history"));
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok)
@@ -86,11 +90,11 @@ class OnlineGameDetails extends BaseDialog implements OnClickListener
 		FileUtils.writeFile(filename, str);
 
 		Toast.makeText(getContext(), "File Written To:\n" + filename, Toast.LENGTH_LONG).show();
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		Toast.makeText(getContext(), "Game Data Corrupt", Toast.LENGTH_LONG).show();
-	} catch (FileNotFoundException e) {
+	} catch (final FileNotFoundException e) {
 		Toast.makeText(getContext(), "Can Not Open File", Toast.LENGTH_LONG).show();
-	} catch (IOException e) {
+	} catch (final IOException e) {
 		Toast.makeText(getContext(), "I/O Error", Toast.LENGTH_LONG).show();
 	}
 	}

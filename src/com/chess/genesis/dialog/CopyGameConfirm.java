@@ -14,14 +14,17 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.view.*;
 
-class CopyGameConfirm extends BaseDialog implements OnClickListener
+public class CopyGameConfirm extends BaseDialog implements OnClickListener
 {
 	private final String gameid;
 	private final int type;
@@ -46,6 +49,7 @@ class CopyGameConfirm extends BaseDialog implements OnClickListener
 		txt.setText(R.string.copygame_confirm);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {

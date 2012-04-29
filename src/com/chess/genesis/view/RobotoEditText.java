@@ -14,14 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.util.AttributeSet;
-import android.widget.EditText;
+import android.content.*;
+import android.graphics.*;
+import android.util.*;
+import android.widget.*;
 
-class RobotoEditText extends EditText
+public class RobotoEditText extends EditText
 {
 	public RobotoEditText(final Context context)
 	{
@@ -33,6 +33,7 @@ class RobotoEditText extends EditText
 		super(context, attrs);
 	}
 
+	@Override
 	public void setTypeface(final Typeface tf, final int style)
 	{
 		final Typeface font;
@@ -55,6 +56,7 @@ class RobotoEditText extends EditText
 		super.setTypeface(font);
 	}
 
+	@Override
 	public void setTypeface(final Typeface tf)
 	{
 		setTypeface(tf, tf.getStyle());

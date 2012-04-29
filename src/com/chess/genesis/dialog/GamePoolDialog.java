@@ -14,22 +14,20 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.*;
 import android.widget.TableRow.LayoutParams;
-import android.widget.TextView;
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.chess.genesis.*;
+import com.chess.genesis.util.*;
+import org.json.*;
 
-class GamePoolDialog extends BaseDialog implements OnClickListener
+public class GamePoolDialog extends BaseDialog implements OnClickListener
 {
 	private final Context context;
 	private final ObjectArray<PoolDataItem> data;
@@ -63,7 +61,7 @@ class GamePoolDialog extends BaseDialog implements OnClickListener
 
 			data.push(new PoolDataItem(type, time));
 		}
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -96,6 +94,7 @@ class GamePoolDialog extends BaseDialog implements OnClickListener
 		}
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		dismiss();

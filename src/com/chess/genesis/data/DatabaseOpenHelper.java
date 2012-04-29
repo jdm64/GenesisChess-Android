@@ -14,11 +14,10 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.content.*;
+import android.database.sqlite.*;
 
 class DatabaseOpenHelper extends SQLiteOpenHelper
 {

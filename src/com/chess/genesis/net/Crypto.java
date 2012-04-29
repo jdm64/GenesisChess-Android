@@ -14,11 +14,11 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import java.io.IOException;
-import java.net.SocketException;
-import java.security.MessageDigest;
+import java.io.*;
+import java.net.*;
+import java.security.*;
 
 final class Crypto
 {
@@ -47,7 +47,7 @@ final class Crypto
 
 		digst.update(str.getBytes());
 		return calcHash(digst);
-	} catch (java.security.NoSuchAlgorithmException e) {
+	} catch (final java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -67,7 +67,7 @@ final class Crypto
 		digst.update(socket.getHash().getBytes());
 
 		return calcHash(digst);
-	} catch (java.security.NoSuchAlgorithmException e) {
+	} catch (final java.security.NoSuchAlgorithmException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

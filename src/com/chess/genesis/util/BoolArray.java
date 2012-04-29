@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-class BoolArray
+public class BoolArray
 {
 	private boolean[] list = new boolean[0];
 
@@ -24,7 +24,7 @@ class BoolArray
 	// This only exists because Arrays.copyOf was added in API Level 9
 	private boolean[] copyOf(final boolean[] arr, final int size)
 	{
-		boolean[] temp = new boolean[size];
+		final boolean[] temp = new boolean[size];
 
 		for (int i = 0; i < Math.min(arr.length, size); i++)
 			temp[i] = arr[i];

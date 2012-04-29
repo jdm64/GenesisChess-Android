@@ -14,10 +14,11 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.view.Menu;
+import android.os.*;
+import android.view.*;
+import com.chess.genesis.*;
 
 public class MsgBox extends BasePhoneActivity
 {

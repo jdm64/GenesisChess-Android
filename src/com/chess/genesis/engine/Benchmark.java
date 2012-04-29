@@ -15,12 +15,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Bundle;
-import android.os.Handler;
+import android.os.*;
 
-class Benchmark implements Runnable
+public class Benchmark implements Runnable
 {
 	public final static int MSG = 118;
 
@@ -108,6 +107,7 @@ class Benchmark implements Runnable
 		return (1000 * tNodes) / (now - start);
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		final long gnps = GenBench();

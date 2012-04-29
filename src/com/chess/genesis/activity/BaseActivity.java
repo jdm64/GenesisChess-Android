@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.*;
 
 abstract class BaseActivity extends FragmentActivity
 {

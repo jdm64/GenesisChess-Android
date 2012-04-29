@@ -1,3 +1,4 @@
+
 /*	GenesisChess, an Android chess application
 	Copyright 2012, Justin Madru (justin.jdm64@gmail.com)
 
@@ -14,15 +15,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.view.*;
 
-class CpuTimeDialog extends BaseDialog implements OnClickListener
+public class CpuTimeDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 110;
 
@@ -50,6 +52,7 @@ class CpuTimeDialog extends BaseDialog implements OnClickListener
 		number.setCurrent(time);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {

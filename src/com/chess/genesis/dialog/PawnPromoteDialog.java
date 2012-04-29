@@ -14,19 +14,20 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.util.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.LinearLayout;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.view.*;
 
-class PawnPromoteDialog extends BaseDialog implements OnClickListener
+public class PawnPromoteDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 124;
 
@@ -54,6 +55,7 @@ class PawnPromoteDialog extends BaseDialog implements OnClickListener
 		setupPieces();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v instanceof BoardButton) {
@@ -72,7 +74,7 @@ class PawnPromoteDialog extends BaseDialog implements OnClickListener
 
 class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchListener
 {
-	private BoardButton[] square = new BoardButton[4];
+	private final BoardButton[] square = new BoardButton[4];
 	private PawnPromoteDialog dialog;
 	private int bSize = 0;
 	private int color;
@@ -124,11 +126,13 @@ class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchList
 		}
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		dialog.onClick(v);
 	}
 
+	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		((BoardButton) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);

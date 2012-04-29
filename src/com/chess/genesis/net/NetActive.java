@@ -14,11 +14,11 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.*;
 
-final class NetActive
+public final class NetActive
 {
 	private final static AtomicInteger active = new AtomicInteger(0);
 

@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-final class Enums
+public final class Enums
 {
 	private Enums()
 	{

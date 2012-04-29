@@ -14,15 +14,17 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import com.chess.genesis.data.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.view.*;
+import com.chess.genesis.widget.*;
 
 public class RegGameFrag extends GameFrag implements OnClickListener
 {
@@ -59,6 +61,7 @@ public class RegGameFrag extends GameFrag implements OnClickListener
 		return super.onCreateView(inflater, container, settings);
 	}
 
+	@Override
 	public void reset()
 	{
 		super.reset();

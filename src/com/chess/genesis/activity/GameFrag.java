@@ -14,24 +14,21 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
+import android.content.*;
+import android.os.*;
 import android.os.PowerManager.WakeLock;
-import android.preference.PreferenceManager;
-import android.view.ContextMenu;
+import android.preference.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.view.*;
+import com.chess.genesis.widget.*;
 
 public abstract class GameFrag extends BaseContentFrag implements OnClickListener
 {
@@ -48,6 +45,7 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 
 	public final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -142,6 +140,7 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 		super.onPause();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		Intent intent;

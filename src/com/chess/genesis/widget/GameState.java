@@ -14,22 +14,27 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.widget;
 
-import android.app.Activity;
-import android.content.Context;
+import android.app.*;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.util.Date;
+import android.os.*;
+import android.preference.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.activity.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
+import java.util.*;
+import org.json.*;
 
-abstract class GameState
+public abstract class GameState
 {
 	protected Handler handle;
 	protected GameFrag game;
@@ -211,7 +216,7 @@ abstract class GameState
 			progress.remove();
 			break;
 		}
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -255,7 +260,7 @@ abstract class GameState
 			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
 			try {
 				ShowGameStats(new JSONObject());
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}

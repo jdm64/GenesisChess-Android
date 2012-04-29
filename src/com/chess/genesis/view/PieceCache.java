@@ -14,14 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
+import android.content.*;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.*;
+import com.chess.genesis.*;
 
-abstract class PieceCache
+public abstract class PieceCache
 {
 	private static final int[] pieceImages = {
 		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
@@ -48,7 +48,7 @@ abstract class PieceCache
 		for (int i = 0; i < 13; i++)
 			pieceBitmaps[i] = BitmapFactory.decodeResource(cntx.getResources(), pieceImages[i]);
 
-	} catch (NameNotFoundException e) {
+	} catch (final NameNotFoundException e) {
 		throw new RuntimeException();
 	}
 		isActive = true;

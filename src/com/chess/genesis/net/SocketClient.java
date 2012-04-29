@@ -14,20 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import java.io.*;
+import java.net.*;
+import org.json.*;
 
-final class SocketClient
+public final class SocketClient
 {
 	private static SocketClient instance = null;
 
@@ -90,7 +83,7 @@ final class SocketClient
 		socket = new Socket();
 		loginHash = null;
 		isLoggedin = false;
-	} catch (IOException e) {
+	} catch (final IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -111,7 +104,7 @@ final class SocketClient
 
 	try {
 		return (JSONObject) (new JSONTokener(input.readLine())).nextValue();
-	} catch (NullPointerException e) {
+	} catch (final NullPointerException e) {
 		return new JSONObject("{\"result\":\"error\",\"reason\":\"connection lost\"}");
 	}
 	}

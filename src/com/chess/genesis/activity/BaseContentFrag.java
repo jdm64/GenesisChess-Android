@@ -14,15 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
+import android.os.*;
+import android.support.v4.app.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 
-abstract class BaseContentFrag extends Fragment implements OnClickListener
+public abstract class BaseContentFrag extends Fragment implements OnClickListener
 {
 	protected BaseActivity act;
 	protected FragmentManager fragMan;

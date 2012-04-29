@@ -14,17 +14,18 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.util.*;
 
-class NewOnlineGameDialog extends BaseDialog implements OnClickListener
+public class NewOnlineGameDialog extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 100;
 
@@ -68,6 +69,7 @@ class NewOnlineGameDialog extends BaseDialog implements OnClickListener
 		spinner.setAdapter(adapter);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {

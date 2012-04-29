@@ -14,13 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
+import android.content.pm.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnLongClickListener;
+import com.chess.genesis.*;
 
 abstract class BasePhoneActivity extends BaseActivity implements OnLongClickListener
 {
@@ -54,6 +54,7 @@ abstract class BasePhoneActivity extends BaseActivity implements OnLongClickList
 		return mainFrag.onOptionsItemSelected(item);
 	}
 
+	@Override
 	public boolean onLongClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_genesis) {

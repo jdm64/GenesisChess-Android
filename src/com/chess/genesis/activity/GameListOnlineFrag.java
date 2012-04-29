@@ -14,35 +14,27 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.ContextMenu;
+import android.os.*;
+import android.preference.*;
+import android.support.v4.view.*;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.Toast;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.view.*;
+import com.chess.genesis.widget.*;
+import org.json.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnClickListener, OnTouchListener, OnItemClickListener
 {
@@ -59,6 +51,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 
 	public final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -125,7 +118,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 					} else {
 						progress.remove();
 					}
-				} catch (JSONException e) {
+				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
@@ -146,7 +139,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 					act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
 
 					progress.remove();
-				} catch (JSONException e) {
+				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
@@ -163,7 +156,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 					progress.setText("Updating Game List");
 					final SyncClient sync = new SyncClient(act, handle);
 					(new Thread(sync)).start();
-				} catch (JSONException e) {
+				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
@@ -268,7 +261,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		tpool.setVisibility((pool.length() == 0)? View.GONE : View.VISIBLE);
 		tpool.setOnClickListener(this);
 		tpool.setOnTouchListener(this);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -321,6 +314,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		super.onDestroy();
 	}
 
+	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		if (v.getId() == R.id.game_search) {
@@ -332,6 +326,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		return false;
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.game_search)
@@ -440,6 +435,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		(new Thread(sync)).start();
 	}
 
+	@Override
 	public void updateGameList()
 	{
 		for (int i = 0; i < 3; i++) {

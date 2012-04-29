@@ -14,19 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import org.json.*;
 
 public class RegisterFrag extends BaseContentFrag implements OnClickListener
 {
@@ -37,6 +34,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
@@ -51,7 +49,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 					}
 					progress.setText("Registration Successfull");
 					(new RegisterActivation(act, handle)).show();
-				} catch (JSONException e) {
+				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
 				}
@@ -105,6 +103,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 		super.onPause();
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.register)

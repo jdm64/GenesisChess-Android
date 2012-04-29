@@ -15,14 +15,13 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-import android.os.Bundle;
-import android.os.Handler;
-import java.util.Arrays;
-import java.util.Date;
+import android.os.*;
+import com.chess.genesis.util.*;
+import java.util.*;
 
-class GenEngine extends Engine implements Runnable
+public class GenEngine extends Engine implements Runnable
 {
 	public final static int MSG = 109;
 
@@ -45,11 +44,13 @@ class GenEngine extends Engine implements Runnable
 		placeKiller = new ObjectArray<GenMove>();
 	}
 
+	@Override
 	public void setBoard(final GenBoard _board)
 	{
 		board = new GenBoard(_board);
 	}
 
+	@Override
 	public void setBoard(final RegBoard _board)
 	{
 		// NEVER CALL!
@@ -275,6 +276,7 @@ class GenEngine extends Engine implements Runnable
 		pruneWeakMoves();
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		active = true;

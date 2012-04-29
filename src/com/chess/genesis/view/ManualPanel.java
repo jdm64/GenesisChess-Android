@@ -14,16 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.content.*;
+import android.content.res.*;
+import android.util.*;
+import android.view.*;
+import com.chess.genesis.*;
+import com.chess.genesis.util.*;
 
-class ManualPanel extends ViewGroup
+public class ManualPanel extends ViewGroup
 {
 	private int totalDivs;
 	private int[] sizesArr;

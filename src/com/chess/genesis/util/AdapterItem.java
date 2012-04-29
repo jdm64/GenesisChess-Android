@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-class AdapterItem
+public class AdapterItem
 {
 	public String name;
 	public int id;
@@ -27,6 +27,7 @@ class AdapterItem
 		id = Id;
 	}
 
+	@Override
 	public String toString()
 	{
 		return name;

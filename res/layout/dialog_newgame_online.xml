@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:shrinkColumns="*"
 android:stretchColumns="1">
 	<TableRow>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
 		android:textColor="#000000"
@@ -13,7 +13,7 @@ android:stretchColumns="1">
 		android:id="@+id/game_type"/>
 	</TableRow>
 	<TableRow>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
 		android:textColor="#000000"

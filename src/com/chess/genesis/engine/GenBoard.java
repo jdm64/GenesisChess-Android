@@ -15,9 +15,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
-class GenBoard extends GenPosition implements Board
+import com.chess.genesis.util.*;
+
+public class GenBoard extends GenPosition implements Board
 {
 	private static final int[] typeLookup = {
 		0, 0, 0, 0, 0, 0,  0,  0,
@@ -136,6 +138,7 @@ class GenBoard extends GenPosition implements Board
 		return Piece.NONE;
 	}
 
+	@Override
 	public final void reset()
 	{
 		square = new int[128];
@@ -181,24 +184,32 @@ class GenBoard extends GenPosition implements Board
 		mscore = white - black;
 	}
 
+	@Override
 	public int Piece(final int index)
 	{
 		return piece[index];
 	}
 
+	@Override
 	public int PieceType(final int index)
 	{
 		return piecetype[index];
 	}
 
 	// Do Not call the following functions!
+	@Override
 	public MoveFlags getMoveFlags(){ return null; }
+	@Override
 	public void make(final RegMove move){}
+	@Override
 	public void unmake(final RegMove move, final MoveFlags undoFlags){}
+	@Override
 	public boolean validMove(final RegMove moveIn, final RegMove move){ return false; }
+	@Override
 	public int validMove(final RegMove move){ return Move.INVALID_MOVEMENT; }
 	// ------
 
+	@Override
 	public int getStm()
 	{
 		return stm;
@@ -214,11 +225,13 @@ class GenBoard extends GenPosition implements Board
 		return key;
 	}
 
+	@Override
 	public int kingIndex(final int color)
 	{
 		return (Piece.WHITE == color)? piece[31] : piece[15];
 	}
 
+	@Override
 	public int[] getPieceCounts(final int Loc)
 	{
 		final int[] counts = new int[13];
@@ -230,11 +243,13 @@ class GenBoard extends GenPosition implements Board
 		return counts;
 	}
 
+	@Override
 	public int[] getBoardArray()
 	{
 		return square;
 	}
 
+	@Override
 	public void make(final GenMove move)
 	{
 		// update board information
@@ -268,6 +283,7 @@ class GenBoard extends GenPosition implements Board
 		ply++;
 	}
 
+	@Override
 	public void unmake(final GenMove move)
 	{
 		piece[move.index] = move.from;
@@ -310,6 +326,7 @@ class GenBoard extends GenPosition implements Board
 			return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
 	}
 
+	@Override
 	public int isMate()
 	{
 		if (getNumMoves(stm) != 0)
@@ -320,6 +337,7 @@ class GenBoard extends GenPosition implements Board
 			return Move.STALE_MATE;
 	}
 
+	@Override
 	public boolean validMove(final GenMove moveIn, final GenMove move)
 	{
 		move.set(moveIn);
@@ -352,6 +370,7 @@ class GenBoard extends GenPosition implements Board
 		return ret;
 	}
 
+	@Override
 	public int validMove(final GenMove move)
 	{
 		// setup move.(x)index

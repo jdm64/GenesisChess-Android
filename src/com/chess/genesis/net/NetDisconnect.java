@@ -14,17 +14,18 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
 class NetDisconnect implements Runnable
 {
+	@Override
 	public synchronized void run()
 	{
 	try {
 		Thread.sleep(2048);
 		if (NetActive.get() < 1)
 			SocketClient.getInstance().disconnect();
-	} catch (InterruptedException e) {
+	} catch (final InterruptedException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

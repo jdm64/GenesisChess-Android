@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
 class RegPosition extends RegMoveLookup
 {
@@ -38,6 +38,7 @@ class RegPosition extends RegMoveLookup
 		flags = new MoveFlags();
 	}
 
+	@Override
 	protected void parseReset()
 	{
 		for (int i = 0; i < 128; i++)
@@ -68,6 +69,7 @@ class RegPosition extends RegMoveLookup
 		}
 	}
 
+	@Override
 	protected boolean setPiece(final int loc, final int type)
 	{
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],

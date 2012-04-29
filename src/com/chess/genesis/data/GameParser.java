@@ -14,14 +14,15 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.os.Bundle;
-import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
+import java.util.*;
+import org.json.*;
 
-class GameParser
+public class GameParser
 {
 	private static class GamePosition
 	{
@@ -92,12 +93,12 @@ class GameParser
 
 	try {
 		game.putInt("gametype", Enums.GameType(data.optString("gametype", "genesis")));
-	} catch (RuntimeException e) {
+	} catch (final RuntimeException e) {
 		game.putInt("gametype", Enums.GENESIS_CHESS);
 	}
 	try {
 		game.putInt("opponent", Enums.OpponentType(data.optString("opponent", "human")));
-	} catch (RuntimeException e) {
+	} catch (final RuntimeException e) {
 		game.putInt("opponent", Enums.HUMAN_OPPONENT);
 	}
 

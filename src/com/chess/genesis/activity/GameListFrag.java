@@ -14,19 +14,19 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Toast;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import org.json.JSONException;
+import android.content.*;
+import android.net.*;
+import android.os.*;
+import android.support.v4.app.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.util.*;
+import java.io.*;
+import org.json.*;
 
 abstract class GameListFrag extends BaseContentFrag
 {
@@ -90,11 +90,11 @@ abstract class GameListFrag extends BaseContentFrag
 		intent.putExtra(Intent.EXTRA_STREAM, uri);
 		intent.setType("application/json");
 		startActivity(intent);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		Toast.makeText(act, "Corrupt Game Data", Toast.LENGTH_LONG).show();
-	} catch (FileNotFoundException e) {
+	} catch (final FileNotFoundException e) {
 		Toast.makeText(act, "File Not Found", Toast.LENGTH_LONG).show();
-	} catch (IOException e) {
+	} catch (final IOException e) {
 		Toast.makeText(act, "Error Reading File", Toast.LENGTH_LONG).show();
 	}
 	}

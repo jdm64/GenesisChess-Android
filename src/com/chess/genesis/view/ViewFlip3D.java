@@ -14,21 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.view;
 
-import android.content.Context;
-import android.graphics.Camera;
-import android.graphics.Matrix;
-import android.util.AttributeSet;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Transformation;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ViewSwitcher;
+import android.content.*;
+import android.graphics.*;
+import android.util.*;
+import android.view.*;
+import android.view.animation.*;
+import android.widget.*;
 
-class ViewFlip3D extends ViewSwitcher
+public class ViewFlip3D extends ViewSwitcher
 {
 	public ViewFlip3D(final Context context, final AttributeSet attrs)
 	{
@@ -116,14 +111,17 @@ class ViewFlip3D extends ViewSwitcher
 			container = Container;
 		}
 
+		@Override
 		public void onAnimationRepeat(final Animation animation)
 		{
 		}
 
+		@Override
 		public void onAnimationStart(final Animation animation)
 		{
 		}
 
+		@Override
 		public void onAnimationEnd(final Animation animation)
 		{
 			ViewGroup view = (ViewGroup) container.getCurrentView();

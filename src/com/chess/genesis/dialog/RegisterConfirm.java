@@ -14,16 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
+import android.widget.*;
+import com.chess.genesis.*;
 
-class RegisterConfirm extends BaseDialog implements OnClickListener
+public class RegisterConfirm extends BaseDialog implements OnClickListener
 {
 	public final static int MSG = 106;
 
@@ -53,6 +53,7 @@ class RegisterConfirm extends BaseDialog implements OnClickListener
 		text.setText(data.getString("email"));
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok)

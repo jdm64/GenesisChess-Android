@@ -2,7 +2,7 @@
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
-	<com.chess.genesis.ManualPanel
+	<com.chess.genesis.view.ManualPanel
 	android:id="@+id/topbar00"
 	panel:sizes="2,3,2/7"
 	android:layout_height="50dp">
@@ -12,8 +12,8 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		android:id="@+id/topbar02"/>
 		<FrameLayout
 		android:id="@+id/topbar03"/>
-	</com.chess.genesis.ManualPanel>
-	<com.chess.genesis.ManualPanel
+	</com.chess.genesis.view.ManualPanel>
+	<com.chess.genesis.view.ManualPanel
 	panel:sizes="2,3,2/7"
 	android:layout_below="@+id/topbar00"
 	android:layout_above="@+id/botbar00">
@@ -23,8 +23,8 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		android:id="@+id/panel02"/>
 		<FrameLayout
 		android:id="@+id/panel03"/>
-	</com.chess.genesis.ManualPanel>
-	<com.chess.genesis.ManualPanel
+	</com.chess.genesis.view.ManualPanel>
+	<com.chess.genesis.view.ManualPanel
 	android:id="@+id/botbar00"
 	panel:sizes="2,3,2/7"
 	android:layout_height="50dp"
@@ -36,5 +36,5 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		style="@style/FillWidth"/>
 		<FrameLayout
 		android:id="@+id/botbar03"/>
-	</com.chess.genesis.ManualPanel>
+	</com.chess.genesis.view.ManualPanel>
 </RelativeLayout>

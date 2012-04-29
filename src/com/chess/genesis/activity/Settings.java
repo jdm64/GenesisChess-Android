@@ -14,26 +14,23 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
+import android.content.*;
+import android.content.pm.*;
+import android.os.*;
+import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnLongClickListener;
-import android.widget.Toast;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.util.*;
+import org.json.*;
 
 public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener, CallBackPreference.CallBack
 {
@@ -44,6 +41,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			final JSONObject json = (JSONObject) msg.obj;
@@ -71,7 +69,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 				progress.remove();
 				break;
 			}
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -157,6 +155,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		super.onPause();
 	}
 
+	@Override
 	public void runCallBack(final CallBackPreference preference, final boolean result)
 	{
 		if (!result)
@@ -187,6 +186,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		db.close();
 	}
 
+	@Override
 	public boolean onPreferenceChange(final Preference preference, final Object newValue)
 	{
 		final String key = preference.getKey();
@@ -202,6 +202,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		return true;
 	}
 
+	@Override
 	public boolean onPreferenceClick(final Preference preference)
 	{
 		final String key = preference.getKey();
@@ -211,6 +212,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		return true;
 	}
 
+	@Override
 	public boolean onLongClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_genesis) {

@@ -14,13 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.view.*;
 import android.view.View.OnClickListener;
+import com.chess.genesis.*;
+import com.chess.genesis.dialog.*;
 
 public class GameListLocal extends BasePhoneActivity implements OnClickListener
 {
@@ -34,6 +35,7 @@ public class GameListLocal extends BasePhoneActivity implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)

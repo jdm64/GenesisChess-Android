@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<com.chess.genesis.RobotoText
+	<com.chess.genesis.view.RobotoText
 	android:id="@+id/layout01"
 	android:textColor="#000000"
 	android:text="@string/cputime_msg"/>
@@ -10,10 +10,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/layout01"
 	android:layout_centerHorizontal="true"
 	android:shrinkColumns="*">
-		<com.chess.genesis.NumberSpinner
+		<com.chess.genesis.view.NumberSpinner
 		android:id="@+id/time"
 		android:layout_width="72dp"/>
-		<com.chess.genesis.RobotoText
+		<com.chess.genesis.view.RobotoText
 		android:textSize="18dp"
 		android:layout_marginLeft="6dp"
 		android:textColor="#000000"

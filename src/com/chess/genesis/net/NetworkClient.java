@@ -14,19 +14,16 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import java.io.IOException;
-import java.net.SocketException;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import java.io.*;
+import java.net.*;
+import org.json.*;
 
-class NetworkClient implements Runnable
+public class NetworkClient implements Runnable
 {
 	public final static int NONE = 0;
 	public final static int LOGIN = 1;
@@ -84,24 +81,24 @@ class NetworkClient implements Runnable
 		try {
 			try {
 				json.put("passhash", Crypto.LoginKey(socket, json.getString("passhash")));
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection during sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -117,20 +114,20 @@ class NetworkClient implements Runnable
 
 		try {
 			socket.write(data);
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection during sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -141,29 +138,29 @@ class NetworkClient implements Runnable
 
 		try {
 			json2 = socket.read();
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for recieving data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection during recieving data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Server response illogical");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -188,24 +185,24 @@ class NetworkClient implements Runnable
 				json2.put("request", "login");
 				json2.put("username", username);
 				json2.put("passhash", Crypto.LoginKey(socket, password));
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
-		} catch (SocketException e) {
+		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Can't contact server for sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
 				json2.put("reason", "Lost connection during sending data");
-			} catch (JSONException j) {
+			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -226,12 +223,13 @@ class NetworkClient implements Runnable
 			}
 			socket.setIsLoggedIn(true);
 			return true;
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		if (fid == LOGIN)
@@ -264,7 +262,7 @@ class NetworkClient implements Runnable
 			json.put("username", username);
 			json.put("passhash", Crypto.HashPasswd(password));
 			json.put("email", email);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -285,7 +283,7 @@ class NetworkClient implements Runnable
 			// login_setup will finish the creation of
 			// the json in a new thread.
 			json.put("passhash", password);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -301,7 +299,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "joingame");
 			json.put("gametype", gametype);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -319,7 +317,7 @@ class NetworkClient implements Runnable
 			json.put("opponent", opponent);
 			json.put("gametype", gametype);
 			json.put("color", color);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -337,7 +335,7 @@ class NetworkClient implements Runnable
 			json.put("request", "sendmove");
 			json.put("gameid", gameid);
 			json.put("move", move);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -353,7 +351,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "resign");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -370,7 +368,7 @@ class NetworkClient implements Runnable
 			json.put("request", "sendmsg");
 			json.put("gameid", gameid);
 			json.put("txt", msg);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -386,7 +384,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "syncmsgs");
 			json.put("time", time);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -402,7 +400,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gamestatus");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -418,7 +416,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gameinfo");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -434,7 +432,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gamedata");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -450,7 +448,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gameids");
 			json.put("type", type);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -466,7 +464,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "syncgames");
 			json.put("time", time);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -482,7 +480,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "gamescore");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -499,7 +497,7 @@ class NetworkClient implements Runnable
 			json.put("request", "setoption");
 			json.put("option", option);
 			json.put("value", value);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -515,7 +513,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "getoption");
 			json.put("option", option);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -530,7 +528,7 @@ class NetworkClient implements Runnable
 
 		try {
 			json.put("request", "poolinfo");
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -546,7 +544,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "nudge");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -562,7 +560,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "idleresign");
 			json.put("gameid", gameid);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -578,7 +576,7 @@ class NetworkClient implements Runnable
 		try {
 			json.put("request", "userstats");
 			json.put("username", username);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -595,7 +593,7 @@ class NetworkClient implements Runnable
 			json.put("request", "draw");
 			json.put("gameid", gameid);
 			json.put("action", action);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}

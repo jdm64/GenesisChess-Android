@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.engine;
 
 abstract class GenMoveLookup extends BaseBoard
 {
@@ -106,6 +106,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return false;
 	}
 
+	@Override
 	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
 	{
 		final int offset = db.step * ((To > From)? 1:-1);

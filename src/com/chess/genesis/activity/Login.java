@@ -14,14 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.widget.EditText;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import android.view.*;
+import android.widget.*;
+import com.chess.genesis.*;
 
 public class Login extends BasePhoneActivity
 {
@@ -38,6 +38,7 @@ public class Login extends BasePhoneActivity
 		return true;
 	}
 
+	@Override
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
 		String username = "";

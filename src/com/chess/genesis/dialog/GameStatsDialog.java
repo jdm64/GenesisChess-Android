@@ -14,18 +14,20 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.dialog;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.util.SparseArray;
-import android.view.View;
+import android.content.*;
+import android.os.*;
+import android.util.*;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.engine.*;
+import org.json.*;
 
-class GameStatsDialog extends BaseDialog implements OnClickListener
+public class GameStatsDialog extends BaseDialog implements OnClickListener
 {
 	private static final String[] WON_CHECK = {"You Won", "Checkmate"};
 	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
@@ -136,7 +138,7 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 				b_from = json.getJSONObject("black").getInt("from");
 				b_to = json.getJSONObject("black").getInt("to");
 			}
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -185,6 +187,7 @@ class GameStatsDialog extends BaseDialog implements OnClickListener
 			msg.setTextColor(0xffcc0000);
 	}
 
+	@Override
 	public void onClick(final View v)
 	{
 		dismiss();

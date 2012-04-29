@@ -14,20 +14,18 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteCursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import java.util.Date;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.*;
+import android.database.sqlite.*;
+import android.os.*;
+import android.preference.*;
+import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
+import java.util.*;
+import org.json.*;
 
-class GameDataDB
+public class GameDataDB
 {
 	private final SQLiteDatabase db;
 	private final Context context;
@@ -173,7 +171,7 @@ class GameDataDB
 		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -213,7 +211,7 @@ class GameDataDB
 
 		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, idle, drawoffer, gameid};
 		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=?, idle=?, drawoffer=? WHERE gameid=?;", data2);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -348,7 +346,7 @@ class GameDataDB
 		final String q4 = "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -431,7 +429,7 @@ class GameDataDB
 
 		final Object[] data = {gameid, time, username, msg, opponent, unread};
 		db.execSQL("INSERT OR IGNORE INTO msgtable (gameid, time, username, msg, opponent, unread) VALUES (?, ?, ?, ?, ?, ?);", data);
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}

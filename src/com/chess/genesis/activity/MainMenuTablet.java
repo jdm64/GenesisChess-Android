@@ -14,12 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.activity;
 
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.content.*;
+import android.content.pm.*;
+import android.os.*;
+import android.support.v4.app.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 
 public class MainMenuTablet extends BaseActivity
 {

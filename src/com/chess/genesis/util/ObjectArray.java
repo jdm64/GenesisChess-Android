@@ -14,9 +14,9 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-class ObjectArray<Type>
+public class ObjectArray<Type>
 {
 	private Type[] list = (Type[]) new Object[0];
 

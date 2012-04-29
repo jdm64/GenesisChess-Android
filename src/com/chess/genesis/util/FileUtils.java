@@ -14,18 +14,14 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.util;
 
-import android.net.Uri;
-import android.os.Environment;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Scanner;
+import android.net.*;
+import android.os.*;
+import java.io.*;
+import java.util.*;
 
-final class FileUtils
+public final class FileUtils
 {
 	private FileUtils()
 	{
@@ -40,7 +36,7 @@ final class FileUtils
 		while (p.length() > 0) {
 			try {
 				file = new FileInputStream(p);
-			} catch (FileNotFoundException e) {
+			} catch (final FileNotFoundException e) {
 				error = true;
 
 				final int i = p.indexOf('/', 1);

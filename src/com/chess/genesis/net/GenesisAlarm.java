@@ -14,17 +14,13 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import java.util.Calendar;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.preference.*;
+import java.util.*;
 
 public class GenesisAlarm extends BroadcastReceiver
 {
@@ -54,7 +50,7 @@ public class GenesisAlarm extends BroadcastReceiver
 		final Intent intent = new Intent(context, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		final AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+		final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
 	}
 }

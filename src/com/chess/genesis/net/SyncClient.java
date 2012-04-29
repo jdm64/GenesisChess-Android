@@ -14,22 +14,19 @@
 	limitations under the License.
 */
 
-package com.chess.genesis;
+package com.chess.genesis.net;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.SharedPreferences.Editor;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.PreferenceManager;
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.os.*;
+import android.preference.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.util.*;
+import java.util.*;
+import java.util.concurrent.*;
+import org.json.*;
 
-class SyncClient implements Runnable
+public class SyncClient implements Runnable
 {
 	public final static int MSG = 101;
 
@@ -50,6 +47,7 @@ class SyncClient implements Runnable
 
 	private final Handler handle = new Handler()
 	{
+		@Override
 		public void handleMessage(final Message msg)
 		{
 			final JSONObject json = (JSONObject) msg.obj;
@@ -60,7 +58,7 @@ class SyncClient implements Runnable
 				error = true;
 				return;
 			}
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
@@ -109,7 +107,7 @@ class SyncClient implements Runnable
 		while (lock > 0 && !error)
 			Thread.sleep(16);
 		lock = 0;
-	} catch (java.lang.InterruptedException e) {
+	} catch (final InterruptedException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -120,6 +118,7 @@ class SyncClient implements Runnable
 		syncType = Type;
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		switch (syncType) {
@@ -175,7 +174,7 @@ class SyncClient implements Runnable
 			try {
 				json.put("result", "ok");
 				json.put("reason", "gamelist updated");
-			} catch (JSONException e) {
+			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
@@ -203,7 +202,7 @@ class SyncClient implements Runnable
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
 		pref.commit();
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -232,7 +231,7 @@ class SyncClient implements Runnable
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastgamesync", time);
 		pref.commit();
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -253,7 +252,7 @@ class SyncClient implements Runnable
 
 			lock++;
 		}
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -283,7 +282,7 @@ class SyncClient implements Runnable
 
 		list_need.removeAll(list_have);
 		return list_need;
-	} catch (JSONException e) {
+	} catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
@@ -327,7 +326,7 @@ class SyncClient implements Runnable
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		pref.putLong("lastmsgsync", time);
 		pref.commit();
-	}  catch (JSONException e) {
+	}  catch (final JSONException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
 	}
