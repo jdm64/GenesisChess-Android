@@ -55,6 +55,13 @@ public class Game extends BasePhoneActivity implements OnClickListener
 	}
 
 	@Override
+	public void onSaveInstanceState(final Bundle savedInstanceState)
+	{
+		savedInstanceState.putAll(settings);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
 	public void onResume()
 	{
 		super.onResume();
