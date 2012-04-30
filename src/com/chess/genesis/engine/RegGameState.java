@@ -1,20 +1,21 @@
 /*	GenesisChess, an Android chess application
-	Copyright 2012, Justin Madru (justin.jdm64@gmail.com)
+	Copyright (C) 2012, Justin Madru (justin.jdm64@gmail.com)
 
-	Licensed under the Apache License, Version 2.0 (the "License");
-	you may not use this file except in compliance with the License.
-	You may obtain a copy of the License at
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-	http://apache.org/licenses/LICENSE-2.0
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.chess.genesis.widget;
+package com.chess.genesis.engine;
 
 import android.app.*;
 import android.content.*;
@@ -25,24 +26,25 @@ import android.widget.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class GenGameState extends GameState
+public class RegGameState extends GameState
 {
+	private final ObjectArray<MoveFlags> flagsHistory;
+
 	private final Handler xhandle = new Handler()
 	{
 		@Override
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
-			case GenEngine.MSG:
+			case RegEngine.MSG:
 				final Bundle bundle = (Bundle) msg.obj;
 
 				if (bundle.getLong("time") == 0) {
-					cpu.setBoard((GenBoard) board);
+					cpu.setBoard((RegBoard) board);
 					new Thread(cpu).start();
 					return;
 				} else if (activity.isFinishing()) {
@@ -51,10 +53,14 @@ public class GenGameState extends GameState
 				}
 				currentMove();
 
-				final GenMove tmove = bundle.getParcelable("move");
-				final GenMove move = new GenMove();
+				final RegMove tmove = bundle.getParcelable("move");
+				final RegMove move = new RegMove();
 				if (board.validMove(tmove, move))
 					applyMove(move, true, true);
+				break;
+			case PawnPromoteDialog.MSG:
+				callstack.clear();
+				applyMove((RegMove) msg.obj, true, true);
 				break;
 			default:
 				handleOther(msg);
@@ -63,7 +69,7 @@ public class GenGameState extends GameState
 		}
 	};
 
-	public GenGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
+	public RegGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
 	{
 		activity = _activity;
 		game = _game;
@@ -71,8 +77,9 @@ public class GenGameState extends GameState
 		handle = xhandle;
 
 		callstack = new IntArray();
+		flagsHistory = new ObjectArray<MoveFlags>();
 		history = new ObjectArray<Move>();
-		board = new GenBoard();
+		board = new RegBoard();
 		progress = new ProgressMsg(activity);
 
 		type = settings.getInt("type", Enums.ONLINE_GAME);
@@ -80,7 +87,7 @@ public class GenGameState extends GameState
 		case Enums.LOCAL_GAME:
 		default:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-			cpu = new GenEngine(handle);
+			cpu = new RegEngine(handle);
 			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
 			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;
@@ -103,11 +110,12 @@ public class GenGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (int i = 0; i < movehistory.length; i++) {
-			final GenMove move = new GenMove();
+			final RegMove move = new RegMove();
 			move.parse(movehistory[i]);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
 				break;
+			flagsHistory.push(board.getMoveFlags());
 			history.push(move);
 			board.make(move);
 			hindex++;
@@ -118,8 +126,8 @@ public class GenGameState extends GameState
 	@Override
 	public void setBoard()
 	{
-		// set place piece counts
-		setBoard(board.getPieceCounts(Piece.PLACEABLE));
+		// set dead piece counts
+		setBoard(board.getPieceCounts(Piece.DEAD));
 	}
 
 	@Override
@@ -137,7 +145,7 @@ public class GenGameState extends GameState
 			cpu.stop();
 			return true;
 		}
-		cpu.setBoard((GenBoard) board);
+		cpu.setBoard((RegBoard) board);
 		new Thread(cpu).start();
 		return true;
 	}
@@ -159,7 +167,7 @@ public class GenGameState extends GameState
 		currentMove();
 		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
 
-		final GenMove move = new GenMove();
+		final RegMove move = new RegMove();
 		move.parse(sMove);
 		if (board.validMove(move) != Move.VALID_MOVE)
 			return;
@@ -172,6 +180,7 @@ public class GenGameState extends GameState
 		super.reset();
 
 		history.clear();
+		flagsHistory.clear();
 		board.reset();
 	}
 
@@ -180,7 +189,7 @@ public class GenGameState extends GameState
 	{
 		if (hindex < 0)
 			return;
-		final GenMove move = (GenMove) history.get(hindex);
+		final RegMove move = (RegMove) history.get(hindex);
 		revertMove(move);
 	}
 
@@ -189,7 +198,7 @@ public class GenGameState extends GameState
 	{
 		if (hindex + 1 >= history.size())
 			return;
-		final GenMove move = (GenMove) history.get(hindex + 1);
+		final RegMove move = (RegMove) history.get(hindex + 1);
 		applyMove(move, false, true);
 	}
 
@@ -197,7 +206,7 @@ public class GenGameState extends GameState
 	public void currentMove()
 	{
 		while (hindex + 1 < history.size()) {
-			final GenMove move = (GenMove) history.get(hindex + 1);
+			final RegMove move = (RegMove) history.get(hindex + 1);
 			applyMove(move, false, true);
 		}
 	}
@@ -206,7 +215,7 @@ public class GenGameState extends GameState
 	public void firstMove()
 	{
 		while (hindex > 0) {
-			final GenMove move = (GenMove) history.get(hindex);
+			final RegMove move = (RegMove) history.get(hindex);
 			revertMove(move);
 		}
 	}
@@ -216,9 +225,10 @@ public class GenGameState extends GameState
 	{
 		if (hindex < 0)
 			return;
-		final GenMove move = (GenMove) history.get(hindex);
+		final RegMove move = (RegMove) history.get(hindex);
 		revertMove(move);
 		history.pop();
+		flagsHistory.pop();
 	}
 
 	private void handleMove()
@@ -233,19 +243,18 @@ public class GenGameState extends GameState
 			return;
 		}
 
-		final GenMove move = new GenMove();
+		final RegMove move = new RegMove();
 
-		// create move
-		if (callstack.get(0) > 0x88) {
-			move.index = Math.abs(callstack.get(0) - 1000);
-			move.from = Piece.PLACEABLE;
-		} else {
-			move.from = callstack.get(0);
-		}
+		move.from = callstack.get(0);
 		move.to = callstack.get(1);
 
 		// return if move isn't valid
 		if (board.validMove(move) != Move.VALID_MOVE) {
+			callstack.pop();
+			return;
+		} else if (move.getPromote() != 0) {
+			new PawnPromoteDialog(activity, handle, move, board.getStm()).show();
+
 			callstack.pop();
 			return;
 		}
@@ -253,7 +262,7 @@ public class GenGameState extends GameState
 		applyMove(move, true, true);
 	}
 
-	private void applyMove(final GenMove move, final boolean erase, final boolean localmove)
+	private void applyMove(final RegMove move, final boolean erase, final boolean localmove)
 	{
 		if (hindex >= 0) {
 			// undo last move highlight
@@ -268,23 +277,37 @@ public class GenGameState extends GameState
 			}
 		}
 
-		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+		final BoardButton from = (BoardButton) activity.findViewById(move.from);
+		final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
-			from.setHighlight(false);
-			from.minusPiece();
-			to.setPiece(from.getPiece());
-			to.setLast(true);
-		} else {
-			final BoardButton from = (BoardButton) activity.findViewById(move.from);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+		to.setPiece(from.getPiece());
+		to.setLast(true);
+		from.setPiece(0);
+		from.setHighlight(false);
 
-			to.setPiece(from.getPiece());
-			to.setLast(true);
-			from.setPiece(0);
-			from.setHighlight(false);
+		if (move.xindex != Piece.NONE) {
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			piece.plusPiece();
 		}
+
+		if (move.getCastle() != 0) {
+			final boolean left = (move.getCastle() == Move.CASTLE_QS);
+			final int castleTo = move.to + (left? 1 : -1),
+				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
+
+			BoardButton castle = (BoardButton) activity.findViewById(castleFrom);
+			castle.setPiece(Piece.EMPTY);
+			castle = (BoardButton) activity.findViewById(castleTo);
+			castle.setPiece(Piece.ROOK * board.getStm());
+		} else if (move.getPromote() != 0) {
+			final BoardButton pawn = (BoardButton) activity.findViewById(move.to);
+			pawn.setPiece(move.getPromote() * board.getStm());
+		} else if (move.getEnPassant()) {
+			final BoardButton pawn = (BoardButton) activity.findViewById(board.Piece(move.xindex));
+			pawn.setPiece(Piece.EMPTY);
+		}
+		// get copy of board flags
+		final MoveFlags flags = board.getMoveFlags();
 
 		// apply move to board
 		board.make(move);
@@ -292,9 +315,12 @@ public class GenGameState extends GameState
 		// update hindex, history
 		hindex++;
 		if (erase) {
-			if (hindex < history.size())
+			if (hindex < history.size()) {
 				history.resize(hindex);
+				flagsHistory.resize(hindex);
+			}
 			history.push(move);
+			flagsHistory.push(flags);
 			if (localmove)
 				save(activity, false);
 		}
@@ -308,7 +334,7 @@ public class GenGameState extends GameState
 		setStm();
 	}
 
-	private void revertMove(final GenMove move)
+	private void revertMove(final RegMove move)
 	{
 		// legal move always ends with king not in check
 		if (hindex > 1) {
@@ -317,27 +343,43 @@ public class GenGameState extends GameState
 			kingI.setCheck(false);
 		}
 
-		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+		final BoardButton from = (BoardButton) activity.findViewById(move.from);
+		final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
-			to.setLast(false);
-			to.setPiece(0);
-			from.plusPiece();
+		from.setPiece(to.getPiece());
+		to.setLast(false);
+
+		if (move.xindex == Piece.NONE) {
+			to.setPiece(Piece.EMPTY);
+		} else if (move.getEnPassant()) {
+			final int loc = move.to + ((move.to - move.from > 0)? -16 : 16);
+			final BoardButton pawn = (BoardButton) activity.findViewById(loc);
+			pawn.setPiece(Piece.PAWN * board.getStm());
+			to.setPiece(Piece.EMPTY);
 		} else {
-			final BoardButton from = (BoardButton) activity.findViewById(move.from);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
-
-			from.setPiece(to.getPiece());
-
-			to.setLast(false);
-			if (move.xindex == Piece.NONE)
-				to.setPiece(0);
-			else
-				to.setPiece(Move.InitPieceType[move.xindex]);
+			to.setPiece(board.PieceType(move.xindex));
 		}
 
-		board.unmake(move);
+		if (move.xindex != Piece.NONE) {
+			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			piece.minusPiece();
+		}
+
+		if (move.getCastle() != 0) {
+			final boolean left = (move.getCastle() == Move.CASTLE_QS);
+			final int castleTo = move.to + (left? 1 : -1),
+				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
+
+			BoardButton castle = (BoardButton) activity.findViewById(castleFrom);
+			castle.setPiece(Piece.ROOK * -board.getStm());
+			castle = (BoardButton) activity.findViewById(castleTo);
+			castle.setPiece(Piece.EMPTY);
+		} else if (move.getPromote() != 0) {
+			final BoardButton pawn = (BoardButton) activity.findViewById(move.from);
+			pawn.setPiece(Piece.PAWN * -board.getStm());
+		}
+
+		board.unmake(move, flagsHistory.get(hindex));
 		hindex--;
 
 		if (hindex >= 0) {
@@ -374,18 +416,6 @@ public class GenGameState extends GameState
 			callstack.clear();
 			to.setHighlight(false);
 			return;
-		} else if (callstack.get(0) > 0x88) {
-		// Place piece action
-			// can't place on another piece
-			if (to.getPiece() * col < 0) {
-				return;
-			} else if (to.getPiece() * col > 0) {
-				final PlaceButton from = (PlaceButton) activity.findViewById(callstack.get(0));
-				from.setHighlight(false);
-				to.setHighlight(true);
-				callstack.set(0, index);
-				return;
-			}
 		} else {
 		// piece move action
 			final BoardButton from = (BoardButton) activity.findViewById(callstack.get(0));
@@ -404,34 +434,6 @@ public class GenGameState extends GameState
 	@Override
 	public void placeClick(final View v)
 	{
-		final PlaceButton from = (PlaceButton) v;
-		final int col = yourColor();
-		final int ptype = from.getPiece();
-
-		// only select your own pieces where count > 0
-		if (board.getStm() != col || ptype * board.getStm() < 0 || from.getCount() <= 0)
-			return;
-		if (callstack.size() == 0) {
-		// No active clicks
-			callstack.push(ptype + 1000);
-			from.setHighlight(true);
-		} else if (callstack.get(0) < 0x88) {
-		// switching from board to place piece
-			final BoardButton to = (BoardButton) activity.findViewById(callstack.get(0));
-			to.setHighlight(false);
-			callstack.set(0, ptype + 1000);
-			from.setHighlight(true);
-		} else if (callstack.get(0) == ptype + 1000) {
-		// clicking the same square
-			callstack.clear();
-			from.setHighlight(false);
-		} else {
-		// switching to another place piece
-			final PlaceButton fromold = (PlaceButton) activity.findViewById(callstack.get(0));
-			fromold.setHighlight(false);
-			callstack.set(0, ptype + 1000);
-			from.setHighlight(true);
-		}
-		game.game_board.flip();
+		// Required because GameState calls this function
 	}
 }

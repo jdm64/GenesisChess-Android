@@ -14,7 +14,7 @@
 	limitations under the License.
 */
 
-package com.chess.genesis.widget;
+package com.chess.genesis.data;
 
 import android.content.*;
 import android.database.sqlite.*;
@@ -28,7 +28,6 @@ import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
-import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 
 public class MsgListAdapter extends BaseAdapter

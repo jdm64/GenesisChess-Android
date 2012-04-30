@@ -1,6 +1,6 @@
 /* source: http://code.google.com/p/android-playground/source/browse/trunk/SwipeyTabsSample/src/net/peterkuterna/android/apps/swipeytabs/SwipeyTabsSampleActivity.java
  * version: r3
- * 
+ *
  * Copyright 2011 Peter Kuterna
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +16,16 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.widget;
+package com.chess.genesis.view;
 
 import android.content.*;
+import android.os.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
-import com.chess.genesis.view.*;
 
 public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements SwipeTabs.Adapter
 {
@@ -75,5 +75,26 @@ public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements Swipe
 			}
 		});
 		return view;
+	}
+}
+
+class SwipeTabFragment extends Fragment
+{
+	public SwipeTabFragment(final String title)
+	{
+		super();
+
+		final Bundle args = new Bundle();
+		args.putString("title", title);
+		setArguments(args);
+	}
+
+	@Override
+	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	{
+		final ViewGroup root = (ViewGroup) inflater.inflate(R.layout.swipetab_fragment, null);
+		final String title = getArguments().getString("title");
+		((TextView) root.findViewById(R.id.text)).setText(title);
+		return root;
 	}
 }

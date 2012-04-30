@@ -25,9 +25,9 @@ import android.view.ContextMenu.ContextMenuInfo;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
+import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
-import com.chess.genesis.widget.*;
 
 public abstract class GameFrag extends BaseContentFrag
 {

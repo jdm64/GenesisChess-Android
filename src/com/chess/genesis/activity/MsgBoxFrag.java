@@ -16,8 +16,6 @@
 
 package com.chess.genesis.activity;
 
-import com.chess.genesis.widget.*;
-
 import android.os.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;

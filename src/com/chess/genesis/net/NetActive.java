@@ -42,3 +42,19 @@ public final class NetActive
 			new Thread(new NetDisconnect()).start();
 	}
 }
+
+class NetDisconnect implements Runnable
+{
+	@Override
+	public synchronized void run()
+	{
+	try {
+		Thread.sleep(2048);
+		if (NetActive.get() < 1)
+			SocketClient.getInstance().disconnect();
+	} catch (final InterruptedException e) {
+		e.printStackTrace();
+		throw new RuntimeException();
+	}
+	}
+}

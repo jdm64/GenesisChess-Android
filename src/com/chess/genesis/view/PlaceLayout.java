@@ -22,7 +22,7 @@ import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
-import com.chess.genesis.widget.*;
+import com.chess.genesis.engine.*;
 
 public class PlaceLayout extends LinearLayout implements OnClickListener
 {

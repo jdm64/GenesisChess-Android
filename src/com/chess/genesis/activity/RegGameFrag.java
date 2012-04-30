@@ -23,7 +23,6 @@ import android.view.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
-import com.chess.genesis.widget.*;
 
 public class RegGameFrag extends GameFrag
 {

@@ -27,7 +27,6 @@ import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.widget.*;
 import java.io.*;
 import org.json.*;
 

@@ -32,7 +32,6 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
-import com.chess.genesis.widget.*;
 import org.json.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener
