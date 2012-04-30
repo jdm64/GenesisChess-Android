@@ -49,11 +49,12 @@ public class ProgressMsg extends ProgressDialog implements Runnable
 	@Override
 	public void onBackPressed()
 	{
+		// do nothing
 	}
 
 	public void remove()
 	{
-		(new Thread(this)).start();
+		new Thread(this).start();
 	}
 
 	public void setText(final String msg)

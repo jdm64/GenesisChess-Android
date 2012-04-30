@@ -31,7 +31,7 @@ import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 
-public class MsgListAdapter extends BaseAdapter implements ListAdapter
+public class MsgListAdapter extends BaseAdapter
 {
 	private final Context context;
 	private final String gameID;
@@ -103,7 +103,7 @@ public class MsgListAdapter extends BaseAdapter implements ListAdapter
 		return cell;
 	}
 
-	public View getEmptyView(final Context _context)
+	public static View getEmptyView(final Context _context)
 	{
 		final View cell = View.inflate(_context, R.layout.msglist_cell_empty, null);
 

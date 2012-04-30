@@ -19,11 +19,10 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import com.chess.genesis.*;
 import com.chess.genesis.view.*;
 
-public class ResignConfirm extends BaseDialog implements OnClickListener
+public class ResignConfirm extends BaseDialog
 {
 	public final static int MSG = 107;
 

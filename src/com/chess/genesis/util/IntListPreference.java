@@ -39,7 +39,7 @@ public class IntListPreference extends ListPreference
 	protected void onSetInitialValue(final boolean restoreValue, final Object defaultValue)
 	{
 		final SharedPreferences pref = getSharedPreferences();
-		final int value = pref.getInt(getKey(), Integer.valueOf((String) defaultValue));
+		final int value = pref.getInt(getKey(), Integer.parseInt((String) defaultValue));
 
 		// if index fails set to default
 		if (findIndexOfValue(String.valueOf(value)) == -1)
@@ -57,7 +57,7 @@ public class IntListPreference extends ListPreference
 			return;
 
 		final Editor editor = getEditor();
-		editor.putInt(getKey(), Integer.valueOf(getValue()));
+		editor.putInt(getKey(), Integer.parseInt(getValue()));
 		editor.commit();
 	}
 }

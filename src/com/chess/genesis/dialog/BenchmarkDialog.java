@@ -19,12 +19,11 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
-public class BenchmarkDialog extends BaseDialog implements OnClickListener
+public class BenchmarkDialog extends BaseDialog
 {
 	private TextView rnps;
 	private TextView gnps;
@@ -72,7 +71,7 @@ public class BenchmarkDialog extends BaseDialog implements OnClickListener
 			rnps.setText("running...");
 			gnps.setText("running...");
 
-			(new Thread(new Benchmark(handle))).start();
+			new Thread(new Benchmark(handle)).start();
 		} else {
 			dismiss();
 		}

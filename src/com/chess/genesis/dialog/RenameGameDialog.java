@@ -19,13 +19,12 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.TextView.BufferType;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class RenameGameDialog extends BaseDialog implements OnClickListener
+public class RenameGameDialog extends BaseDialog
 {
 	public final static int MSG = 114;
 

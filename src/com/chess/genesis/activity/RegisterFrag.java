@@ -18,14 +18,13 @@ package com.chess.genesis.activity;
 
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import org.json.*;
 
-public class RegisterFrag extends BaseContentFrag implements OnClickListener
+public class RegisterFrag extends BaseContentFrag
 {
 	public final static String TAG = "REGISTER";
 
@@ -48,7 +47,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 						return;
 					}
 					progress.setText("Registration Successfull");
-					(new RegisterActivation(act, handle)).show();
+					new RegisterActivation(act, handle).show();
 				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -59,7 +58,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 				final Bundle data = (Bundle) msg.obj;
 
 				net.register(data.getString("username"), data.getString("password"), data.getString("email"));
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			case RegisterActivation.MSG:
 				if (isTablet)
@@ -136,7 +135,7 @@ public class RegisterFrag extends BaseContentFrag implements OnClickListener
 		bundle.putString("password", password);
 		bundle.putString("email", email);
 
-		(new RegisterConfirm(act, handle, bundle)).show();
+		new RegisterConfirm(act, handle, bundle).show();
 	}
 
 	private boolean valid_username(final String name)

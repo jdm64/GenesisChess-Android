@@ -22,7 +22,7 @@ public class BoolArray
 
 	// !SICK!
 	// This only exists because Arrays.copyOf was added in API Level 9
-	private boolean[] copyOf(final boolean[] arr, final int size)
+	private static boolean[] copyOf(final boolean[] arr, final int size)
 	{
 		final boolean[] temp = new boolean[size];
 

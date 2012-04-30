@@ -41,7 +41,7 @@ public class GenesisAlarm extends BroadcastReceiver
 		context.startService(nintent);
 	}
 
-	private void ScheduleWakeup(final Context context)
+	private static void ScheduleWakeup(final Context context)
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final Calendar cal = Calendar.getInstance();

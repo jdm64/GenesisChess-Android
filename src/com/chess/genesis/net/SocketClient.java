@@ -103,7 +103,7 @@ public final class SocketClient
 		connect();
 
 	try {
-		return (JSONObject) (new JSONTokener(input.readLine())).nextValue();
+		return (JSONObject) new JSONTokener(input.readLine()).nextValue();
 	} catch (final NullPointerException e) {
 		return new JSONObject("{\"result\":\"error\",\"reason\":\"connection lost\"}");
 	}

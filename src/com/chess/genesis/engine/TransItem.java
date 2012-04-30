@@ -81,8 +81,7 @@ abstract class TransItem
 		if ((type & HAS_MOVE) != 0) {
 			inMove.set(move);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 }

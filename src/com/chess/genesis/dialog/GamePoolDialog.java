@@ -20,14 +20,13 @@ import android.content.*;
 import android.os.*;
 import android.preference.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.TableRow.LayoutParams;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class GamePoolDialog extends BaseDialog implements OnClickListener
+public class GamePoolDialog extends BaseDialog
 {
 	private final Context context;
 	private final ObjectArray<PoolDataItem> data;

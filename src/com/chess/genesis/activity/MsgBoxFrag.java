@@ -16,19 +16,19 @@
 
 package com.chess.genesis.activity;
 
+import com.chess.genesis.widget.*;
+
 import android.os.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-import com.chess.genesis.widget.*;
 import org.json.*;
 
-public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
+public class MsgBoxFrag extends BaseContentFrag
 {
 	public final static String TAG = "MSGBOX";
 
@@ -102,7 +102,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 		msglist_view.setAdapter(msglist_adapter);
 
 		// set empty view item
-		final View empty = msglist_adapter.getEmptyView(act);
+		final View empty = MsgListAdapter.getEmptyView(act);
 		((ViewGroup) msglist_view.getParent()).addView(empty);
 		msglist_view.setEmptyView(empty);
 
@@ -153,7 +153,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 			if (msg.length() < 1)
 				return;
 			net.submit_msg(gameid, msg);
-			(new Thread(net)).start();
+			new Thread(net).start();
 		} else if (v.getId() == R.id.menu) {
 			openMenu(v);
 		}
@@ -173,8 +173,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 	{
 		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
-		else
-			return super.onContextItemSelected(item);
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -192,7 +191,7 @@ public class MsgBoxFrag extends BaseContentFrag implements OnClickListener
 		progress.setText("Updating Messages");
 		final GameDataDB db = new GameDataDB(act);
 		net.sync_msgs(db.getNewestMsg());
-		(new Thread(net)).start();
+		new Thread(net).start();
 		db.close();
 	}
 

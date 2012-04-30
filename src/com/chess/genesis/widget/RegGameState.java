@@ -45,7 +45,7 @@ public class RegGameState extends GameState
 
 				if (bundle.getLong("time") == 0) {
 					cpu.setBoard((RegBoard) board);
-					(new Thread(cpu)).start();
+					new Thread(cpu).start();
 					return;
 				} else if (activity.isFinishing()) {
 					// activity is gone, so give up!
@@ -89,7 +89,7 @@ public class RegGameState extends GameState
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 			cpu = new RegEngine(handle);
 			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
-			oppType = Integer.valueOf(settings.getString("opponent"));
+			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;
 			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
 			break;
@@ -146,7 +146,7 @@ public class RegGameState extends GameState
 			return true;
 		}
 		cpu.setBoard((RegBoard) board);
-		(new Thread(cpu)).start();
+		new Thread(cpu).start();
 		return true;
 	}
 

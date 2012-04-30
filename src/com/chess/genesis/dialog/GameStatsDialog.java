@@ -20,14 +20,13 @@ import android.content.*;
 import android.os.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import org.json.*;
 
-public class GameStatsDialog extends BaseDialog implements OnClickListener
+public class GameStatsDialog extends BaseDialog
 {
 	private static final String[] WON_CHECK = {"You Won", "Checkmate"};
 	private static final String[] LOST_CHECK = {"You Lost", "Checkmate"};
@@ -79,22 +78,22 @@ public class GameStatsDialog extends BaseDialog implements OnClickListener
 		super(context, BaseDialog.CANCEL);
 
 		final int from, to;
-		final int status = Integer.valueOf(bundle.getString("status"));
-		final int eventtype = Integer.valueOf(bundle.getString("eventtype"));
+		final int status = Integer.parseInt(bundle.getString("status"));
+		final int eventtype = Integer.parseInt(bundle.getString("eventtype"));
 		final int ycol = bundle.getInt("yourcolor");
 
 		final String[] statusArr = STATUS_MAP.get(status * ycol);
-		String gametype = Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
+		String gametype = Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
 		gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
 
 		if (ycol == Piece.WHITE) {
 			opponent = bundle.getString("black");
-			from = Integer.valueOf(bundle.getString("w_psrfrom"));
-			to = Integer.valueOf(bundle.getString("w_psrto"));
+			from = Integer.parseInt(bundle.getString("w_psrfrom"));
+			to = Integer.parseInt(bundle.getString("w_psrto"));
 		} else {
 			opponent = bundle.getString("white");
-			from = Integer.valueOf(bundle.getString("b_psrfrom"));
-			to = Integer.valueOf(bundle.getString("b_psrto"));
+			from = Integer.parseInt(bundle.getString("b_psrfrom"));
+			to = Integer.parseInt(bundle.getString("b_psrto"));
 		}
 
 		diff = to - from;
@@ -124,7 +123,7 @@ public class GameStatsDialog extends BaseDialog implements OnClickListener
 			statusArr = STATUS_MAP.get(json.getInt("status") * ycol);
 			gametype = json.getString("gametype");
 			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
-			eventtype = Integer.valueOf(json.getString("eventtype"));
+			eventtype = Integer.parseInt(json.getString("eventtype"));
 
 			if (ycol == Piece.WHITE)
 				opponent = json.getString("black_name");

@@ -39,6 +39,6 @@ public final class NetActive
 	public static void dec()
 	{
 		if (active.decrementAndGet() < 1)
-			(new Thread(new NetDisconnect())).start();
+			new Thread(new NetDisconnect()).start();
 	}
 }

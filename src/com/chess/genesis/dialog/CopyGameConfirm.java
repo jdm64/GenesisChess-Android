@@ -19,12 +19,11 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.view.*;
 
-public class CopyGameConfirm extends BaseDialog implements OnClickListener
+public class CopyGameConfirm extends BaseDialog
 {
 	private final String gameid;
 	private final int type;

@@ -111,8 +111,7 @@ public class RegMove extends Move implements Parcelable
 	{
 		if (xindex != Piece.NONE)
 			return Move.MOVE_CAPTURE;
-		else
-			return Move.MOVE_MOVE;
+		return Move.MOVE_MOVE;
 	}
 
 	@Override
@@ -123,7 +122,6 @@ public class RegMove extends Move implements Parcelable
 		if (loc > Piece.PLACEABLE) {
 			str.append((char) ('a' + (loc & 7)));
 			str.append((char) ('1' + (loc >> 4)));
-			return str;
 		} else {
 			str.append("dead");
 		}
@@ -136,8 +134,7 @@ public class RegMove extends Move implements Parcelable
 		if (getCastle() != 0) {
 			if (getCastle() == CASTLE_KS)
 				return "O-O";
-			else
-				return "O-O-O";
+			return "O-O-O";
 		}
 		final StringBuffer out = new StringBuffer();
 

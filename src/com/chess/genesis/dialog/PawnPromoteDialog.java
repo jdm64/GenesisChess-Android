@@ -27,7 +27,7 @@ import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
-public class PawnPromoteDialog extends BaseDialog implements OnClickListener
+public class PawnPromoteDialog extends BaseDialog
 {
 	public final static int MSG = 124;
 

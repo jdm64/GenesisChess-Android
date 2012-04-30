@@ -19,7 +19,6 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
@@ -28,7 +27,7 @@ import com.chess.genesis.view.*;
 import java.io.*;
 import org.json.*;
 
-public class OnlineGameDetails extends BaseDialog implements OnClickListener
+public class OnlineGameDetails extends BaseDialog
 {
 	private final Bundle gamedata;
 
@@ -54,11 +53,11 @@ public class OnlineGameDetails extends BaseDialog implements OnClickListener
 		txt.setText(gamedata.getString("black"));
 
 		txt = (RobotoText) findViewById(R.id.gametype);
-		txt.setText(Enums.GameType(Integer.valueOf(gamedata.getString("gametype"))));
+		txt.setText(Enums.GameType(Integer.parseInt(gamedata.getString("gametype"))));
 		txt = (RobotoText) findViewById(R.id.eventtype);
-		txt.setText(Enums.EventType(Integer.valueOf(gamedata.getString("eventtype"))));
+		txt.setText(Enums.EventType(Integer.parseInt(gamedata.getString("eventtype"))));
 		txt = (RobotoText) findViewById(R.id.status);
-		txt.setText(Enums.GameStatus(Integer.valueOf(gamedata.getString("status"))));
+		txt.setText(Enums.GameStatus(Integer.parseInt(gamedata.getString("status"))));
 
 		txt = (RobotoText) findViewById(R.id.ctime);
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());

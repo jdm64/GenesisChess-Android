@@ -381,6 +381,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	@Override
 	public void onPageScrollStateChanged(final int state)
 	{
+		// do nothing
 	}
 
 	@Override
@@ -430,7 +431,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		updateTabPositions(false);
 	}
 
-	private int interpolateColor(final int color1, final int color2, final float fraction)
+	private static int interpolateColor(final int color1, final int color2, final float fraction)
 	{
 		final float alpha1 = Color.alpha(color1) / 255.0f;
 		final float red1 = Color.red(color1) / 255.0f;

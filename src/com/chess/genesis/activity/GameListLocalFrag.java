@@ -20,7 +20,6 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.*;
@@ -32,7 +31,7 @@ import com.chess.genesis.widget.*;
 import java.io.*;
 import org.json.*;
 
-public class GameListLocalFrag extends GameListFrag implements OnClickListener, OnItemClickListener
+public class GameListLocalFrag extends GameListFrag implements OnItemClickListener
 {
 	public final static String TAG = "GAMELISTLOCAL";
 
@@ -109,7 +108,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)
-			(new NewLocalGameDialog(v.getContext(), handle)).show();
+			new NewLocalGameDialog(v.getContext(), handle).show();
 		else if (v.getId() == R.id.menu)
 			openMenu(v);
 	}
@@ -143,10 +142,10 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
-			(new DeleteLocalDialog(act, handle, Integer.valueOf(bundle.getString("id")))).show();
+			new DeleteLocalDialog(act, handle, Integer.parseInt(bundle.getString("id"))).show();
 			break;
 		case R.id.rename_game:
-			(new RenameGameDialog(act, handle, Integer.valueOf(bundle.getString("id")), bundle.getString("name"))).show();
+			new RenameGameDialog(act, handle, Integer.parseInt(bundle.getString("id")), bundle.getString("name")).show();
 			break;
 		case R.id.share_game:
 			sendGame(bundle);
@@ -162,7 +161,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 	{
 		switch (item.getItemId()) {
 		case R.id.new_game:
-			(new NewLocalGameDialog(act, handle)).show();
+			new NewLocalGameDialog(act, handle).show();
 			break;
 		case R.id.import_game:
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -190,7 +189,7 @@ public class GameListLocalFrag extends GameListFrag implements OnClickListener, 
 	{
 	try {
 		final String str = FileUtils.readFile(data.getData().getPath());
-		final JSONObject json = (JSONObject) (new JSONTokener(str)).nextValue();
+		final JSONObject json = (JSONObject) new JSONTokener(str).nextValue();
 		final Bundle game = GameParser.parse(json);
 		final GameDataDB db = new GameDataDB(act);
 

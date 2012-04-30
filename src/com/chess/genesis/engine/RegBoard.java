@@ -141,9 +141,9 @@ public class RegBoard extends RegPosition implements Board
 
 	// Do Not call the following functions!
 	@Override
-	public void unmake(final GenMove move){}
+	public void unmake(final GenMove move){ /* never call */ }
 	@Override
-	public void make(final GenMove move){}
+	public void make(final GenMove move){ /* never call */ }
 	@Override
 	public int validMove(final GenMove move){ return Move.INVALID_MOVEMENT; }
 	@Override
@@ -206,7 +206,7 @@ public class RegBoard extends RegPosition implements Board
 		return Piece.NONE;
 	}
 
-	private boolean isPromote(final RegMove move, final int color)
+	private static boolean isPromote(final RegMove move, final int color)
 	{
 		return (color == Piece.WHITE)? (move.to >= Piece.A8) : (move.to <= Piece.H1);
 	}
@@ -349,8 +349,7 @@ public class RegBoard extends RegPosition implements Board
 		final int king = (color == Piece.WHITE)? 31:15;
 		if (stmCk || move.index == king)
 			return incheck(color);
-		else
-			return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
+		return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
 	}
 
 	@Override

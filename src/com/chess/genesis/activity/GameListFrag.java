@@ -43,7 +43,7 @@ abstract class GameListFrag extends BaseContentFrag
 	{
 		if (isTablet) {
 			final boolean isOnline = gamedata.containsKey("gameid");
-			final int gametype = Integer.valueOf(gamedata.getString("gametype"));
+			final int gametype = Integer.parseInt(gamedata.getString("gametype"));
 			final MenuBarFrag gameMenu = new MenuBarFrag();
 			final GameFrag gameFrag = (gametype == Enums.GENESIS_CHESS)?
 				new GenGameFrag() : new RegGameFrag();

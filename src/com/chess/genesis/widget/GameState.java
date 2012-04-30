@@ -89,25 +89,25 @@ public abstract class GameState
 			progress.setText("Checking Game Status");
 
 			net.game_status(settings.getString("gameid"));
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case ResignConfirm.MSG:
 			progress.setText("Sending Resignation");
 
 			net.resign_game(settings.getString("gameid"));
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case NudgeConfirm.MSG:
 			progress.setText("Sending Nudge");
 
 			net.nudge_game(settings.getString("gameid"));
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case IdleResignConfirm.MSG:
 			progress.setText("Sending Idle Resign");
 
 			net.idle_resign(settings.getString("gameid"));
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case DrawDialog.MSG:
 		case AcceptDrawDialog.MSG:
@@ -115,7 +115,7 @@ public abstract class GameState
 			progress.setText("Sending Draw");
 
 			net.game_draw(settings.getString("gameid"), value);
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case NetworkClient.RESIGN_GAME:
 		case NetworkClient.IDLE_RESIGN:
@@ -129,7 +129,7 @@ public abstract class GameState
 			progress.setText("Resignation Sent");
 
 			net.game_status(settings.getString("gameid"));
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case NetworkClient.NUDGE_GAME:
 			json = (JSONObject) msg.obj;
@@ -157,7 +157,7 @@ public abstract class GameState
 
 			applyRemoteMove(json.getString("history"));
 			if (status != Enums.ACTIVE) {
-				if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+				if (Integer.parseInt(settings.getString("eventtype")) == Enums.INVITE) {
 					progress.remove();
 
 					json.put("yourcolor", ycol);
@@ -165,16 +165,16 @@ public abstract class GameState
 					json.put("black_name", settings.getString("black"));
 					json.put("eventtype", settings.getString("eventtype"));
 					json.put("status", settings.getString("status"));
-					json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+					json.put("gametype", Enums.GameType(Integer.parseInt(settings.getString("gametype"))));
 					json.put("gameid", settings.getString("gameid"));
 
-					(new GameStatsDialog(activity, json)).show();
+					new GameStatsDialog(activity, json).show();
 					return;
 				}
 				progress.setText("Retrieving Score");
 
 				net.game_score(settings.getString("gameid"));
-				(new Thread(net)).start();
+				new Thread(net).start();
 			} else {
 				progress.setText("Status Synced");
 				progress.remove();
@@ -202,7 +202,7 @@ public abstract class GameState
 			final String gametype = Enums.GameType(data.getInt("gametype"));
 
 			net.new_game(opponent, gametype, color);
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case NetworkClient.NEW_GAME:
 			json = (JSONObject) msg.obj;
@@ -250,14 +250,14 @@ public abstract class GameState
 		case Enums.LOCAL_GAME:
 			return;
 		case Enums.ONLINE_GAME:
-			if (Integer.valueOf(settings.getString("status")) == Enums.ACTIVE) {
+			if (Integer.parseInt(settings.getString("status")) == Enums.ACTIVE) {
 				// check for draw offers and pending draws
-				if (Integer.valueOf(settings.getString("drawoffer")) * ycol < 0)
-					(new AcceptDrawDialog(activity, handle)).show();
-				else if (Integer.valueOf(settings.getString("drawoffer")) * ycol > 0)
-					(new PendingDrawDialog(activity)).show();
+				if (Integer.parseInt(settings.getString("drawoffer")) * ycol < 0)
+					new AcceptDrawDialog(activity, handle).show();
+				else if (Integer.parseInt(settings.getString("drawoffer")) * ycol > 0)
+					new PendingDrawDialog(activity).show();
 				return;
-			} else if (Integer.valueOf(settings.getString("eventtype")) == Enums.INVITE) {
+			} else if (Integer.parseInt(settings.getString("eventtype")) == Enums.INVITE) {
 			try {
 				ShowGameStats(new JSONObject());
 			} catch (final JSONException e) {
@@ -267,12 +267,12 @@ public abstract class GameState
 			} else {
 				progress.setText("Retrieving Score");
 				net.game_score(settings.getString("gameid"));
-				(new Thread(net)).start();
+				new Thread(net).start();
 			}
 			break;
 		case Enums.ARCHIVE_GAME:
 			settings.putInt("yourcolor", ycol);
-			(new GameStatsDialog(activity, settings)).show();
+			new GameStatsDialog(activity, settings).show();
 			break;
 		}
 	}
@@ -286,12 +286,12 @@ public abstract class GameState
 	{
 		progress.setText("Updating Game State");
 		net.game_status(settings.getString("gameid"));
-		(new Thread(net)).start();
+		new Thread(net).start();
 	}
 
 	public void setCpuTime()
 	{
-		(new CpuTimeDialog(activity, handle, cpu.getTime())).show();
+		new CpuTimeDialog(activity, handle, cpu.getTime()).show();
 	}
 
 	public void submitMove()
@@ -302,7 +302,7 @@ public abstract class GameState
 		final String move = history.top().toString();
 
 		net.submit_move(gameid, move);
-		(new Thread(net)).start();
+		new Thread(net).start();
 	}
 
 	public void save(final Context context, final boolean exitgame)
@@ -310,7 +310,7 @@ public abstract class GameState
 		switch (type) {
 		case Enums.LOCAL_GAME:
 			final GameDataDB db = new GameDataDB(context);
-			final int id = Integer.valueOf(settings.getString("id"));
+			final int id = Integer.parseInt(settings.getString("id"));
 
 			if (history.size() < 1) {
 				db.deleteLocalGame(id);
@@ -428,25 +428,25 @@ public abstract class GameState
 		final Bundle data = db.getOnlineGameData(settings.getString("gameid"));
 		db.close();
 
-		final int yturn = Integer.valueOf(data.getString("yourturn"));
+		final int yturn = Integer.parseInt(data.getString("yourturn"));
 		if (yturn == Enums.YOUR_TURN) {
-			(new ResignConfirm(activity, handle)).show();
+			new ResignConfirm(activity, handle).show();
 			return;
 		}
 
-		switch (Integer.valueOf(data.getString("idle"))) {
+		switch (Integer.parseInt(data.getString("idle"))) {
 		default:
 		case Enums.NOTIDLE:
 			Toast.makeText(activity, "Game must be idle before nudging", Toast.LENGTH_LONG).show();
 			break;
 		case Enums.IDLE:
-			(new NudgeConfirm(activity, handle)).show();
+			new NudgeConfirm(activity, handle).show();
 			break;
 		case Enums.NUDGED:
 			Toast.makeText(activity, "Game is already nudged", Toast.LENGTH_LONG).show();
 			break;
 		case Enums.CLOSE:
-			(new IdleResignConfirm(activity, handle)).show();
+			new IdleResignConfirm(activity, handle).show();
 			break;
 		}
 	}
@@ -455,12 +455,12 @@ public abstract class GameState
 	{
 		final String opp = settings.getString("username").equals(settings.getString("white"))?
 			settings.getString("black") : settings.getString("white");
-		(new RematchConfirm(activity, handle, opp)).show();
+		new RematchConfirm(activity, handle, opp).show();
 	}
 
 	public void draw()
 	{
-		(new DrawDialog(activity, handle)).show();
+		new DrawDialog(activity, handle).show();
 	}
 
 	private void ShowGameStats(final JSONObject json) throws JSONException
@@ -470,9 +470,9 @@ public abstract class GameState
 		json.put("black_name", settings.getString("black"));
 		json.put("eventtype", settings.getString("eventtype"));
 		json.put("status", settings.getString("status"));
-		json.put("gametype", Enums.GameType(Integer.valueOf(settings.getString("gametype"))));
+		json.put("gametype", Enums.GameType(Integer.parseInt(settings.getString("gametype"))));
 		json.put("gameid", settings.getString("gameid"));
 
-		(new GameStatsDialog(activity, json)).show();
+		new GameStatsDialog(activity, json).show();
 	}
 }

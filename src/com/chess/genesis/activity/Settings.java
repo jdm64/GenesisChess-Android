@@ -132,7 +132,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		if (pref.getBoolean("isLoggedIn", false)) {
 			progress.setText("Retrieving Settings");
 			net.get_option("emailnote");
-			(new Thread(net)).start();
+			new Thread(net).start();
 		}
 	}
 
@@ -171,17 +171,17 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 			progress.setText("ReSyncing Active Games");
 
 			sync.setSyncType(SyncClient.ACTIVE_SYNC);
-			(new Thread(sync)).start();
+			new Thread(sync).start();
 		} else if (key.equals("resyncArchiveTable")) {
 			progress.setText("ReSyncing Archive Games");
 
 			sync.setSyncType(SyncClient.ARCHIVE_SYNC);
-			(new Thread(sync)).start();
+			new Thread(sync).start();
 		} else if (key.equals("resyncMsgTable")) {
 			progress.setText("ReSyncing Messages");
 
 			sync.setSyncType(SyncClient.MSG_SYNC);
-			(new Thread(sync)).start();
+			new Thread(sync).start();
 		}
 		db.close();
 	}
@@ -195,7 +195,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 			progress.setText("Setting Option");
 
 			net.set_option("emailnote", (Boolean) newValue);
-			(new Thread(net)).start();
+			new Thread(net).start();
 		} else if (key.equals("noteEnabled") || key.equals("notifierPolling")) {
 			startService(new Intent(this, GenesisNotifier.class));
 		}
@@ -208,7 +208,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		final String key = preference.getKey();
 
 		if (key.equals("benchmark"))
-			(new BenchmarkDialog(this)).show();
+			new BenchmarkDialog(this).show();
 		return true;
 	}
 

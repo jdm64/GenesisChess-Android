@@ -152,7 +152,7 @@ class RegPosition extends RegMoveLookup
 			num.append(st[n]);
 			n++;
 		}
-		ply = Integer.valueOf(num.toString());
+		ply = Integer.parseInt(num.toString());
 		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
 
 		setMaxPly();

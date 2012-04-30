@@ -122,7 +122,7 @@ public class GenesisNotifier extends Service implements Runnable
 		else
 			fromalarm = bundle.getBoolean("fromAlarm", false);
 
-		(new Thread(this)).start();
+		new Thread(this).start();
 		return START_STICKY;
 	}
 
@@ -211,7 +211,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final long[] vib = new long[arr.length];
 
 		for (int i = 0; i < arr.length; i++)
-			vib[i] = Long.valueOf(arr[i]);
+			vib[i] = Long.parseLong(arr[i]);
 		return vib;
 	}
 

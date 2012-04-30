@@ -22,7 +22,7 @@ import android.os.*;
 import android.preference.*;
 import android.util.*;
 
-class VibratePreference extends ListPreference implements DialogInterface.OnClickListener
+class VibratePreference extends ListPreference
 {
 	private final Context context;
 	private int EntryIndex;
@@ -71,13 +71,13 @@ class VibratePreference extends ListPreference implements DialogInterface.OnClic
 		setValue((String) getEntryValues()[EntryIndex]);
 	}
 
-	private long[] parseVibrate(final String pattern)
+	private static long[] parseVibrate(final String pattern)
 	{
 		final String[] arr = pattern.trim().split(",");
 		final long[] vib = new long[arr.length];
 
 		for (int i = 0; i < arr.length; i++)
-			vib[i] = Long.valueOf(arr[i]);
+			vib[i] = Long.parseLong(arr[i]);
 		return vib;
 	}
 }

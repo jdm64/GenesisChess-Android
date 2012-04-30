@@ -20,16 +20,13 @@ import android.content.*;
 import android.os.*;
 import android.preference.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 import com.chess.genesis.widget.*;
 
-public class RegGameFrag extends GameFrag implements OnClickListener
+public class RegGameFrag extends GameFrag
 {
-	public final static String TAG = "GAME";
-
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
@@ -46,7 +43,7 @@ public class RegGameFrag extends GameFrag implements OnClickListener
 		if (type != Enums.LOCAL_GAME) {
 			playingBlack = settings.getString("username").equals(settings.getString("black"));
 		} else {
-			final int oppType = Integer.valueOf(settings.getString("opponent"));
+			final int oppType = Integer.parseInt(settings.getString("opponent"));
 			playingBlack = (oppType == Enums.CPU_WHITE_OPPONENT)? true : false;
 		}
 

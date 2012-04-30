@@ -38,7 +38,7 @@ public class GameListOnline extends BasePhoneActivity implements OnClickListener
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)
-			(new NewOnlineGameDialog(v.getContext(), ((GameListOnlineFrag) mainFrag).handle)).show();
+			new NewOnlineGameDialog(v.getContext(), ((GameListOnlineFrag) mainFrag).handle).show();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 
-public class GameListAdapter extends BaseAdapter implements ListAdapter
+public class GameListAdapter extends BaseAdapter
 {
 	private final Context context;
 	private final Bundle settings;
@@ -355,22 +355,22 @@ class GameListItem extends View
 				bundle.getString("black") :
 				bundle.getString("white"));
 		data.type = (data.gametype == Enums.LOCAL_GAME)?
-			Enums.OpponentType(Integer.valueOf(bundle.getString("opponent"))) + " " +
-			Enums.GameType(Integer.valueOf(bundle.getString("gametype")))
+			Enums.OpponentType(Integer.parseInt(bundle.getString("opponent"))) + " " +
+			Enums.GameType(Integer.parseInt(bundle.getString("gametype")))
 			:
-			Enums.EventType(Integer.valueOf(bundle.getString("eventtype"))) + " " +
-			Enums.GameType(Integer.valueOf(bundle.getString("gametype")));
+			Enums.EventType(Integer.parseInt(bundle.getString("eventtype"))) + " " +
+			Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
 
 		if (data.gametype != Enums.LOCAL_GAME) {
-			data.ply = Integer.valueOf(bundle.getString("ply"));
-			data.status = Integer.valueOf(bundle.getString("status"));
+			data.ply = Integer.parseInt(bundle.getString("ply"));
+			data.status = Integer.parseInt(bundle.getString("status"));
 			data.hasMsg = (bundle.getString("unread") != null
 				&& bundle.getString("unread").equals("1"));
 
 			if (data.gametype == Enums.ONLINE_GAME)
-				data.idle = Integer.valueOf(bundle.getString("idle"));
+				data.idle = Integer.parseInt(bundle.getString("idle"));
 		} else {
-			data.opponent = Integer.valueOf(bundle.getString("opponent"));
+			data.opponent = Integer.parseInt(bundle.getString("opponent"));
 		}
 	}
 }

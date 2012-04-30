@@ -41,7 +41,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 		final int layoutId = (type != Enums.LOCAL_GAME)?
 			R.layout.activity_game_online : R.layout.activity_game_local;
 
-		final int gametype = Integer.valueOf(settings.getString("gametype"));
+		final int gametype = Integer.parseInt(settings.getString("gametype"));
 		final BaseContentFrag frag = (gametype == Enums.GENESIS_CHESS)?
 			new GenGameFrag() : new RegGameFrag();
 
@@ -97,7 +97,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 			getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			if (Integer.valueOf(((GameFrag) mainFrag).settings.getString("ply")) > 58)
+			if (Integer.parseInt(((GameFrag) mainFrag).settings.getString("ply")) > 58)
 				getMenuInflater().inflate(R.menu.options_game_online_draw, menu);
 			else
 				getMenuInflater().inflate(R.menu.options_game_online, menu);

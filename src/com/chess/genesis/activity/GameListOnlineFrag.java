@@ -23,7 +23,6 @@ import android.preference.*;
 import android.support.v4.view.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,7 +35,7 @@ import com.chess.genesis.view.*;
 import com.chess.genesis.widget.*;
 import org.json.*;
 
-public class GameListOnlineFrag extends GameListFrag implements OnClickListener, OnTouchListener, OnItemClickListener
+public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener
 {
 	public final static String TAG = "GAMELISTONLINE";
 
@@ -63,14 +62,14 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 				Bundle data = (Bundle) msg.obj;
 
 				if (data.getInt("opponent") == Enums.INVITE) {
-					(new InviteOptionsDialog(act, handle, data)).show();
+					new InviteOptionsDialog(act, handle, data).show();
 					return;
 				}
 				progress.setText("Sending Newgame Request");
 				String gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.join_game(gametype);
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			case RematchConfirm.MSG:
 				data = (Bundle) msg.obj;
@@ -81,14 +80,14 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 				gametype = Enums.GameType(data.getInt("gametype"));
 
 				net.new_game(opponent, gametype, color);
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			case NudgeConfirm.MSG:
 				progress.setText("Sending Nudge");
 
 				final String gameid = (String) msg.obj;
 				net.nudge_game(gameid);
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			case InviteOptionsDialog.MSG:
 				data = (Bundle) msg.obj;
@@ -98,7 +97,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 				color = Enums.ColorType(data.getInt("color"));
 
 				net.new_game(data.getString("opp_name"), gametype, color);
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			case SyncClient.MSG:
 			case NetworkClient.JOIN_GAME:
@@ -114,7 +113,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 						updateGameList();
 						GenesisNotifier.clearNotification(act, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
 						net.pool_info();
-						(new Thread(net)).start();
+						new Thread(net).start();
 					} else {
 						progress.remove();
 					}
@@ -155,7 +154,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 					}
 					progress.setText("Updating Game List");
 					final SyncClient sync = new SyncClient(act, handle);
-					(new Thread(sync)).start();
+					new Thread(sync).start();
 				} catch (final JSONException e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -217,11 +216,13 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		@Override
 		public void startUpdate(final ViewGroup arg0)
 		{
+			// do nothing
 		}
 
 		@Override
 		public void finishUpdate(final ViewGroup arg0)
 		{
+			// do nothing
 		}
 
 		@Override
@@ -233,6 +234,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		@Override
 		public void restoreState(final Parcelable arg0, final ClassLoader arg1)
 		{
+			// do nothing
 		}
 
 		@Override
@@ -294,7 +296,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		progress.setText("Updating Game List");
 
 		final SyncClient sync = new SyncClient(act, handle);
-		(new Thread(sync)).start();
+		new Thread(sync).start();
 	}
 
 	@Override
@@ -330,7 +332,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.game_search)
-			(new GamePoolDialog(v.getContext())).show();
+			new GamePoolDialog(v.getContext()).show();
 		else if (v.getId() == R.id.menu)
 			openMenu(v);
 	}
@@ -384,20 +386,20 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 
 		switch (item.getItemId()) {
 		case R.id.delete_game:
-			(new DeleteArchiveDialog(act, handle, bundle.getString("gameid"))).show();
+			new DeleteArchiveDialog(act, handle, bundle.getString("gameid")).show();
 			break;
 		case R.id.local_copy:
 			final int type = (pager.getCurrentItem() == ARCHIVE_PAGE)? Enums.ARCHIVE_GAME : Enums.ONLINE_GAME;
-			(new CopyGameConfirm(act, bundle.getString("gameid"), type)).show();
+			new CopyGameConfirm(act, bundle.getString("gameid"), type).show();
 			break;
 		case R.id.rematch:
 			final String username = listAdapter.getExtras().getString("username");
 			final String opponent = username.equals(bundle.getString("white"))?
 					bundle.getString("black") : bundle.getString("white");
-			(new RematchConfirm(act, handle, opponent)).show();
+			new RematchConfirm(act, handle, opponent).show();
 			break;
 		case R.id.nudge:
-			(new NudgeConfirm(act, handle, bundle.getString("gameid"))).show();
+			new NudgeConfirm(act, handle, bundle.getString("gameid")).show();
 			break;
 		case R.id.share_game:
 			sendGame(bundle);
@@ -413,13 +415,13 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 	{
 		switch (item.getItemId()) {
 		case R.id.new_game:
-			(new NewOnlineGameDialog(act, handle)).show();
+			new NewOnlineGameDialog(act, handle).show();
 			break;
 		case R.id.resync:
 			resyncList();
 			break;
 		case R.id.readall_msgs:
-			(new ReadAllMsgsDialog(act, handle)).show();
+			new ReadAllMsgsDialog(act, handle).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -432,7 +434,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnClickListener,
 		progress.setText("Updating Game List");
 
 		final SyncClient sync = new SyncClient(act, handle);
-		(new Thread(sync)).start();
+		new Thread(sync).start();
 	}
 
 	@Override

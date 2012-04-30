@@ -105,9 +105,9 @@ public class ManualPanel extends ViewGroup
 		int sum = 0;
 		sizesArr = new int[fracArr.length];
 		for (int i = 0; i < sizesArr.length; i++) {
-			sizesArr[i] = Integer.valueOf(fracArr[i]);
+			sizesArr[i] = Integer.parseInt(fracArr[i]);
 			sum += sizesArr[i];
 		}
-		totalDivs = Math.max(sum, Integer.valueOf(sizeStr[1]));
+		totalDivs = Math.max(sum, Integer.parseInt(sizeStr[1]));
 	}
 }

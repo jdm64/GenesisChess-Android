@@ -67,7 +67,7 @@ public class UserStatsFrag extends BaseContentFrag
 
 				progress.setText("Retrieving Stats");
 				net.user_stats(username);
-				(new Thread(net)).start();
+				new Thread(net).start();
 				break;
 			}
 		} catch (final JSONException e) {
@@ -105,7 +105,7 @@ public class UserStatsFrag extends BaseContentFrag
 
 		progress.setText("Retrieving Stats");
 		net.user_stats(settings.getString("username"));
-		(new Thread(net)).start();
+		new Thread(net).start();
 
 		return view;
 	}
@@ -152,15 +152,14 @@ public class UserStatsFrag extends BaseContentFrag
 	{
 		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
-		else
-			return super.onContextItemSelected(item);
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		if (item.getItemId() == R.id.userlookup) {
-			(new StatsLookupDialog(act, handle)).show();
+			new StatsLookupDialog(act, handle).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -181,7 +180,7 @@ public class UserStatsFrag extends BaseContentFrag
 		time = data.getLong("joined");
 
 		txt = (TextView) act.findViewById(R.id.joined);
-		txt.setText("Joined: " + (new PrettyDate(time)).dayFormat());
+		txt.setText("Joined: " + new PrettyDate(time).dayFormat());
 
 		// Last Activity
 		time = data.getJSONObject("lastmove").getLong("genesis");

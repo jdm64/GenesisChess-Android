@@ -25,7 +25,6 @@ import android.support.v4.app.*;
 import android.util.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
@@ -35,7 +34,7 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MainMenuFrag extends BaseContentFrag implements OnClickListener, OnTouchListener, OnGlobalLayoutListener
+public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, OnGlobalLayoutListener
 {
 	public final static String TAG = "MAINMENU";
 
@@ -247,8 +246,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 	{
 		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
-		else
-			return super.onContextItemSelected(item);
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -258,7 +256,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 		case R.id.logout:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 			if (pref.getBoolean("isLoggedIn", false))
-				(new LogoutConfirm(act, handle)).show();
+				new LogoutConfirm(act, handle).show();
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
 			break;
@@ -296,7 +294,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnClickListener, On
 		.addToBackStack(fragTag).commit();
 	}
 
-	private void resizeButtonText(final View view)
+	private static void resizeButtonText(final View view)
 	{
 		final int list[] = new int[]{R.id.local_game_txt, R.id.online_game_txt,
 			R.id.archive_game_txt, R.id.howtoplay_txt, R.id.login_txt,

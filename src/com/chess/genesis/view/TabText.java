@@ -71,6 +71,7 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 	@Override
 	public void onClick(final View v)
 	{
+		// do nothing
 	}
 
 	public void setActive(final boolean Active)

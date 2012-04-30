@@ -18,14 +18,11 @@ package com.chess.genesis.activity;
 
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import com.chess.genesis.view.*;
 import com.chess.genesis.widget.*;
 
-public class GenGameFrag extends GameFrag implements OnClickListener
+public class GenGameFrag extends GameFrag
 {
-	public final static String TAG = "GAME";
-
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{

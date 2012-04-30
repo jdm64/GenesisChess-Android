@@ -21,7 +21,7 @@ import android.os.*;
 import com.chess.genesis.util.*;
 import java.util.*;
 
-public class GenEngine extends Engine implements Runnable
+public class GenEngine extends Engine
 {
 	public final static int MSG = 109;
 
@@ -183,13 +183,12 @@ public class GenEngine extends Engine implements Runnable
 
 	private int NegaScout(int alpha, final int beta, final int depth, int limit)
 	{
-		if ((new Date()).getTime() > endT) {
+		if (new Date().getTime() > endT) {
 			return Quiescence(alpha, beta, depth);
 		} else if (depth >= limit) {
 			if (!tactical.get(depth))
 				return Quiescence(alpha, beta, depth);
-			else
-				limit++;
+			limit++;
 		}
 		final GenTransItem tt_item = new GenTransItem();
 		final Int score = new Int();
@@ -281,11 +280,11 @@ public class GenEngine extends Engine implements Runnable
 	{
 		active = true;
 		curr = null;
-		endT = (new Date()).getTime() + secT * 1000;
+		endT = new Date().getTime() + secT * 1000;
 
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
-			if ((new Date()).getTime() > endT)
+			if (new Date().getTime() > endT)
 				break;
 		}
 

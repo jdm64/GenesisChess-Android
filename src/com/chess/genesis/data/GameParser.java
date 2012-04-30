@@ -118,8 +118,8 @@ public class GameParser
 		final JSONObject game = export(data);
 
 		game.put("zfen", data.getString("zfen"));
-		game.put("ctime", Long.valueOf(data.getString("ctime")));
-		game.put("stime", Long.valueOf(data.getString("stime")));
+		game.put("ctime", Long.parseLong(data.getString("ctime")));
+		game.put("stime", Long.parseLong(data.getString("stime")));
 
 		return game;
 	}
@@ -132,14 +132,14 @@ public class GameParser
 		final String name;
 		if (data.getString("name") == null) {
 			name = data.getString("white") + " Vs. " + data.getString("black");
-			game.put("eventtype", Enums.EventType(Integer.valueOf(data.getString("gametype"))));
+			game.put("eventtype", Enums.EventType(Integer.parseInt(data.getString("gametype"))));
 		} else {
 			name = data.getString("name");
-			game.put("opponent", Enums.OpponentType(Integer.valueOf(data.getString("opponent"))));
+			game.put("opponent", Enums.OpponentType(Integer.parseInt(data.getString("opponent"))));
 		}
 
 		game.put("name", name);
-		game.put("gametype", Enums.GameType(Integer.valueOf(data.getString("gametype"))));
+		game.put("gametype", Enums.GameType(Integer.parseInt(data.getString("gametype"))));
 		game.put("history", data.getString("history"));
 
 		return game;

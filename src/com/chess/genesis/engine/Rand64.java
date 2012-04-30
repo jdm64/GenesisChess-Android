@@ -23,7 +23,7 @@ class Rand64
 {
 	private static final int BLOCK = 8192;
 
-	private final long[] box = new long[BLOCK];;
+	private final long[] box = new long[BLOCK];
 	private final Random rand = new Random();
 
 	private int size;
@@ -65,4 +65,4 @@ class Rand64
 			val |= block() << (13 * i);
 		return val;
 	}
-};
+}

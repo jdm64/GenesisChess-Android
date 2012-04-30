@@ -22,7 +22,6 @@ import android.os.PowerManager.WakeLock;
 import android.preference.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
@@ -30,7 +29,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 import com.chess.genesis.widget.*;
 
-public abstract class GameFrag extends BaseContentFrag implements OnClickListener
+public abstract class GameFrag extends BaseContentFrag
 {
 	public final static String TAG = "GAME";
 
@@ -195,7 +194,7 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 			act.getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			if (Integer.valueOf(settings.getString("ply")) > 58)
+			if (Integer.parseInt(settings.getString("ply")) > 58)
 				act.getMenuInflater().inflate(R.menu.options_game_online_draw, menu);
 			else
 				act.getMenuInflater().inflate(R.menu.options_game_online, menu);
@@ -211,8 +210,7 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 	{
 		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
-		else
-			return super.onContextItemSelected(item);
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -238,10 +236,10 @@ public abstract class GameFrag extends BaseContentFrag implements OnClickListene
 			gamestate.setCpuTime();
 			break;
 		case R.id.local_details:
-			(new LocalGameDetails(act, gamestate.getBundle())).show();
+			new LocalGameDetails(act, gamestate.getBundle()).show();
 			break;
 		case R.id.online_details:
-			(new OnlineGameDetails(act, gamestate.getBundle())).show();
+			new OnlineGameDetails(act, gamestate.getBundle()).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

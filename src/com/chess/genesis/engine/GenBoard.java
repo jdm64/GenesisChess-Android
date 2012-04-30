@@ -200,9 +200,9 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public MoveFlags getMoveFlags(){ return null; }
 	@Override
-	public void make(final RegMove move){}
+	public void make(final RegMove move){ /* never call */ }
 	@Override
-	public void unmake(final RegMove move, final MoveFlags undoFlags){}
+	public void unmake(final RegMove move, final MoveFlags undoFlags){ /* never call */ }
 	@Override
 	public boolean validMove(final RegMove moveIn, final RegMove move){ return false; }
 	@Override
@@ -322,8 +322,7 @@ public class GenBoard extends GenPosition implements Board
 		final int king = (color == Piece.WHITE)? 31:15;
 		if (stmCk || move.index == king)
 			return incheck(color);
-		else
-			return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
+		return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
 	}
 
 	@Override
@@ -333,8 +332,7 @@ public class GenBoard extends GenPosition implements Board
 			return Move.NOT_MATE;
 		if (incheck(stm))
 			return Move.CHECK_MATE;
-		else
-			return Move.STALE_MATE;
+		return Move.STALE_MATE;
 	}
 
 	@Override

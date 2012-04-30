@@ -27,8 +27,9 @@ import com.chess.genesis.widget.*;
 public class PlaceLayout extends LinearLayout implements OnClickListener
 {
 	public static final LinearLayout.LayoutParams LINEAR_PARAMS =
-		new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-		LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+		new LinearLayout.LayoutParams(
+			android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
 	private final static int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
 

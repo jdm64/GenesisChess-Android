@@ -19,11 +19,10 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
 import com.chess.genesis.*;
 import com.chess.genesis.view.*;
 
-public class PendingDrawDialog extends BaseDialog implements OnClickListener
+public class PendingDrawDialog extends BaseDialog
 {
 	public PendingDrawDialog(final Context context)
 	{

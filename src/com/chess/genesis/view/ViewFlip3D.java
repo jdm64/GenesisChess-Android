@@ -114,11 +114,13 @@ public class ViewFlip3D extends ViewSwitcher
 		@Override
 		public void onAnimationRepeat(final Animation animation)
 		{
+			// do nothing
 		}
 
 		@Override
 		public void onAnimationStart(final Animation animation)
 		{
+			// do nothing
 		}
 
 		@Override

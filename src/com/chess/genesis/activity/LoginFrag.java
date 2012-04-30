@@ -23,7 +23,6 @@ import android.os.*;
 import android.preference.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
@@ -32,7 +31,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class LoginFrag extends BaseContentFrag implements OnClickListener
+public class LoginFrag extends BaseContentFrag
 {
 	public final static String TAG = "LOGIN";
 
@@ -110,7 +109,7 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 
 				final SyncClient sync = new SyncClient(act, handle);
 				sync.setSyncType(SyncClient.FULL_SYNC);
-				(new Thread(sync)).start();
+				new Thread(sync).start();
 				break;
 			case SyncClient.MSG:
 				// start background notifier
@@ -200,7 +199,7 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 			final String password = txt.getText().toString();
 
 			net.login_user(username, password);
-			(new Thread(net)).start();
+			new Thread(net).start();
 			break;
 		case R.id.register:
 			if (isTablet) {
@@ -232,15 +231,14 @@ public class LoginFrag extends BaseContentFrag implements OnClickListener
 	{
 		if (act.lastContextMenu.equals(TAG))
 			return onOptionsItemSelected(item);
-		else
-			return super.onContextItemSelected(item);
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		if (item.getItemId() == R.id.logout) {
-			(new LogoutConfirm(act, handle)).show();
+			new LogoutConfirm(act, handle).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

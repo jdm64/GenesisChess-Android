@@ -33,7 +33,7 @@ public class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String dayOfWeekToString(final int day)
+	private static String dayOfWeekToString(final int day)
 	{
 		switch (day) {
 		case Calendar.SUNDAY:
@@ -58,7 +58,7 @@ public class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String monthToString(final int month)
+	private static String monthToString(final int month)
 	{
 		switch (month) {
 		case Calendar.JANUARY:
@@ -93,7 +93,7 @@ public class PrettyDate extends Date
 	// !SICK!
 	// This only exists because Calendar.getDisplayName was added
 	// in API Level 9
-	private String ampmToString(final int ampm)
+	private static String ampmToString(final int ampm)
 	{
 		switch (ampm) {
 		case Calendar.AM:
@@ -222,7 +222,6 @@ public class PrettyDate extends Date
 
 		if (count >= 1)
 			return buff.toString() + "ago";
-		else
-			return "now";
+		return "now";
 	}
 }

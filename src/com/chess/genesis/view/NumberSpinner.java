@@ -341,16 +341,16 @@ public class NumberSpinner extends LinearLayout
 	*
 	* @param current the new value of the NumberSpinner
 	*/
-	protected void changeCurrent(int current)
+	protected void changeCurrent(final int current)
 	{
+		mPrevious = mCurrent;
+
 		// Wrap around the values if we go past the start or end
 		if (current > mEnd) {
-			current = mStart;
+			mCurrent = mStart;
 		} else if (current < mStart) {
-			current = mEnd;
+			mCurrent = mEnd;
 		}
-		mPrevious = mCurrent;
-		mCurrent = current;
 		notifyChange();
 		updateView();
 	}
@@ -495,11 +495,9 @@ public class NumberSpinner extends LinearLayout
 			 * as the user might want to delete some numbers
 			 * and then type a new number.
 			 */
-			if (val > mEnd) {
+			if (val > mEnd)
 				return "";
-			} else {
-				return filtered;
-			}
+			return filtered;
 		}
 	}
 
