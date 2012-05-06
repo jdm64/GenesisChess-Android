@@ -46,3 +46,6 @@ clean :
 
 full-clean :
 	rm -rf bin/
+
+config :
+	./configure.sh
