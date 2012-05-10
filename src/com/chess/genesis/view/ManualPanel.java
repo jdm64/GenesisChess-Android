@@ -25,8 +25,14 @@ import com.chess.genesis.util.*;
 
 public class ManualPanel extends ViewGroup
 {
+	// child height policies
+	public final static int EXACT_CHILD = 0; // children are size they want to be
+	public final static int LARGEST_CHILD = 1; // all children set to size of largest child
+	public final static int MATCH_PARENT = 2; // child height matches parent
+
 	private int totalDivs;
 	private int[] sizesArr;
+	private int heightPolicy = EXACT_CHILD;
 
 	public ManualPanel(final Context context)
 	{
@@ -38,7 +44,14 @@ public class ManualPanel extends ViewGroup
 		super(context, attrs);
 
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ManualPanel);
+		final String hp = a.getString(R.styleable.ManualPanel_height_policy);
 
+		if (hp != null) {
+			if (hp.equals("match_parent"))
+				heightPolicy = MATCH_PARENT;
+			else if (hp.equals("largest_child"))
+				heightPolicy = LARGEST_CHILD;
+		}
 		setSizes(a.getString(R.styleable.ManualPanel_sizes));
 		a.recycle();
 	}
@@ -47,7 +60,7 @@ public class ManualPanel extends ViewGroup
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
 		final int children = getChildCount();
-		final int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
+		final int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
 		final int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
 		final int[] arr = IntArray.copyOf(sizesArr, children);
 		final int[] width = new int[children];
@@ -56,10 +69,10 @@ public class ManualPanel extends ViewGroup
 		totalDivs = Math.max(totalDivs, children);
 
 		for (int i = 0; i < children; i++) {
-			width[i] = (arr[i] * totalWidth) / totalDivs;
+			width[i] = (arr[i] * maxWidth) / totalDivs;
 			sum += width[i];
 		}
-		for (int i = 0, diff = totalWidth - sum; diff > 0; i = ++i % children) {
+		for (int i = 0, diff = maxWidth - sum; diff > 0; i = ++i % children) {
 			width[i]++;
 			diff--;
 		}
@@ -72,17 +85,20 @@ public class ManualPanel extends ViewGroup
 			view.measure(MeasureSpec.EXACTLY | lp.width, MeasureSpec.AT_MOST | maxHeight);
 			totalHeight = Math.max(totalHeight, view.getMeasuredHeight());
 		}
-		for (int i = 0; i < children; i++) {
-			final View view = getChildAt(i);
-			view.measure(MeasureSpec.EXACTLY | width[i], MeasureSpec.EXACTLY | totalHeight);
+		if (heightPolicy != EXACT_CHILD) {
+			final int setHeight = (heightPolicy == MATCH_PARENT)? maxHeight : totalHeight;
+			for (int i = 0; i < children; i++) {
+				final View view = getChildAt(i);
+				view.measure(MeasureSpec.EXACTLY | width[i], MeasureSpec.EXACTLY | setHeight);
+			}
 		}
-		setMeasuredDimension(totalWidth, totalHeight);
+		setMeasuredDimension(maxWidth, (heightPolicy == MATCH_PARENT)? maxHeight : totalHeight);
 	}
 
 	@Override
 	protected void onLayout(final boolean changed, final int l, final int t, final int r, final int b)
 	{
-		final int children = getChildCount(), pHeight = getMeasuredHeight();
+		final int children = getChildCount();
 
 		for (int i = 0, left = l; i < children; i++) {
 			final View view = getChildAt(i);
@@ -91,8 +107,9 @@ public class ManualPanel extends ViewGroup
 				continue;
 
 			final int cWidth = view.getMeasuredWidth();
+			final int cHeight = view.getMeasuredHeight();
 
-			view.layout(left, 0, left + cWidth, pHeight);
+			view.layout(left, 0, left + cWidth, cHeight);
 			left += cWidth;
 		}
 	}

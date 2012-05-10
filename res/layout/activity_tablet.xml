@@ -15,6 +15,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	</com.chess.genesis.view.ManualPanel>
 	<com.chess.genesis.view.ManualPanel
 	panel:sizes="2,3,2/7"
+	panel:height_policy="match_parent"
 	android:layout_below="@+id/topbar00"
 	android:layout_above="@+id/botbar00">
 		<FrameLayout

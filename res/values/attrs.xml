@@ -26,5 +26,6 @@
 	</declare-styleable>
 	<declare-styleable name="ManualPanel">
 		<attr name="sizes" format="string"/>
+		<attr name="height_policy" format="string"/>
 	</declare-styleable>
 </resources>
