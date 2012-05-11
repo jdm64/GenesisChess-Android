@@ -21,7 +21,6 @@ import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
 import android.preference.*;
-import android.util.*;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
@@ -52,7 +51,6 @@ public class GameListAdapter extends BaseAdapter
 		settings.putInt("type", type);
 
 		initCursor();
-		GameListItem.Cache.Init(context);
 	}
 
 	private void initCursor()
@@ -179,7 +177,6 @@ class GameListItem extends View
 		public static Typeface fontNormal;
 		public static Typeface fontItalic;
 		public static RectF rect;
-		public static int dpi;
 		public static int height;
 		private static boolean isActive = false;
 
@@ -187,7 +184,7 @@ class GameListItem extends View
 		{
 		}
 
-		public static void Init(final Context context)
+		public static void Init(final Context context, final int width)
 		{
 			if (isActive)
 				return;
@@ -195,15 +192,13 @@ class GameListItem extends View
 			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
 			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
 
-			final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-			dpi = (int) ((1 + Math.max(metrics.ydpi, metrics.xdpi)) / 160);
-			height = 75 * dpi;
+			height = (int) ((5.0 * width) / 32.0);
 			rect = new RectF(0, 0, height, height);
 
 			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_pawn_light);
-			blackPawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
+			blackPawn = Bitmap.createScaledBitmap(bm, height, height, true);
 			bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.white_pawn_dark);
-			whitePawn = Bitmap.createScaledBitmap(bm, 75 * dpi, 75 * dpi, true);
+			whitePawn = Bitmap.createScaledBitmap(bm, height, height, true);
 
 			isActive = true;
 		}
@@ -220,6 +215,7 @@ class GameListItem extends View
 	@Override
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
+		Cache.Init(getContext(), MeasureSpec.getSize(widthMeasureSpec));
 		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Cache.height);
 	}
 
@@ -234,14 +230,14 @@ class GameListItem extends View
 		setIcon(canvas);
 
 		// game name
-		paint.setTextSize(30 * Cache.dpi);
+		paint.setTextSize(Cache.height / 2 - 4);
 		canvas.drawText(data.name, Cache.height + 8, Cache.height / 2, paint);
 
 		// set italic text
 		paint.setTypeface(Cache.fontItalic);
 
 		// game type
-		paint.setTextSize(20 * Cache.dpi);
+		paint.setTextSize((int) (0.30 * Cache.height));
 		canvas.drawText(data.type, Cache.height + 8, 7 * Cache.height / 8, paint);
 
 		// time
