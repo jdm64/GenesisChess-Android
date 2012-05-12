@@ -50,9 +50,9 @@ public class GameParser
 			final String[] movehistory = _history.trim().split(" +");
 			final ObjectArray<GenMove> history = new ObjectArray<GenMove>();
 
-			for (int i = 0; i < movehistory.length; i++) {
+			for (final String element : movehistory) {
 				final GenMove move = new GenMove();
-				move.parse(movehistory[i]);
+				move.parse(element);
 
 				if (board.validMove(move) != Move.VALID_MOVE)
 					break;
@@ -72,9 +72,9 @@ public class GameParser
 			final String[] movehistory = _history.trim().split(" +");
 			final ObjectArray<RegMove> history = new ObjectArray<RegMove>();
 
-			for (int i = 0; i < movehistory.length; i++) {
+			for (final String element : movehistory) {
 				final RegMove move = new RegMove();
-				move.parse(movehistory[i]);
+				move.parse(element);
 
 				if (board.validMove(move) != Move.VALID_MOVE)
 					break;

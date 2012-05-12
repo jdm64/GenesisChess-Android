@@ -83,8 +83,8 @@ public class BoolArray
 	{
 		final StringBuffer str = new StringBuffer();
 
-		for (int i = 0; i < list.length; i++)
-			str.append(String.valueOf(list[i]) + " ");
+		for (final boolean element : list)
+			str.append(String.valueOf(element) + " ");
 		return str.toString();
 	}
 }

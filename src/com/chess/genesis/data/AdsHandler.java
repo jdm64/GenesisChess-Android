@@ -19,7 +19,6 @@ package com.chess.genesis.data;
 import android.app.*;
 import android.content.*;
 import android.preference.*;
-import com.chess.genesis.*;
 import com.google.ads.*;
 
 public final class AdsHandler

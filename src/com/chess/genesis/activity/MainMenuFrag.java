@@ -71,8 +71,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		final int list[] = new int[]{R.id.local_game, R.id.online_game,
 			R.id.user_stats, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings, R.id.feedback, R.id.googleplus};
-		for (int i = 0; i < list.length; i++) {
-			final View button = view.findViewById(list[i]);
+		for (final int element : list) {
+			final View button = view.findViewById(element);
 			button.setOnClickListener(this);
 			button.setOnTouchListener(this);
 		}
@@ -311,8 +311,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		width *= 0.9 / 3;
 
 		final float txtSize = RobotoText.maxTextWidth(stList, txt.getPaint(), width);
-		for (int i = 0; i < list.length; i++) {
-			txt = (TextView) view.findViewById(list[i]);
+		for (final int element : list) {
+			txt = (TextView) view.findViewById(element);
 			txt.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize);
 		}
 	}

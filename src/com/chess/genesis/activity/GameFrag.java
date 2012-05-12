@@ -80,8 +80,8 @@ public abstract class GameFrag extends BaseContentFrag
 		// set board nav click listeners
 		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
 			R.id.forwards, R.id.current};
-		for (int i = 0; i < list.length; i++) {
-			final View button = act.findViewById(list[i]);
+		for (final int element : list) {
+			final View button = act.findViewById(element);
 			button.setOnClickListener(this);
 		}
 

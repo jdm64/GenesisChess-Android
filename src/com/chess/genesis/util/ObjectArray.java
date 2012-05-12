@@ -88,8 +88,8 @@ public class ObjectArray<Type>
 	{
 		final StringBuffer str = new StringBuffer();
 
-		for (int i = 0; i < list.length; i++)
-			str.append(list[i].toString() + " ");
+		for (final Type element : list)
+			str.append(element.toString() + " ");
 		return str.toString();
 	}
 }

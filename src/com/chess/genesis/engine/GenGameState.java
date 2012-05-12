@@ -102,9 +102,9 @@ public class GenGameState extends GameState
 		}
 		final String[] movehistory = tmp.trim().split(" +");
 
-		for (int i = 0; i < movehistory.length; i++) {
+		for (final String element : movehistory) {
 			final GenMove move = new GenMove();
-			move.parse(movehistory[i]);
+			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
 				break;

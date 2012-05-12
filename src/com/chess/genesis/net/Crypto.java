@@ -31,8 +31,8 @@ final class Crypto
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();
 	
-		for (int i = 0; i < shabytes.length; i++) {
-			final String n = Integer.toHexString(shabytes[i] & 0xff);
+		for (final byte shabyte : shabytes) {
+			final String n = Integer.toHexString(shabyte & 0xff);
 			if (n.length() < 2)
 				buff.append('0');
 			buff.append(n);
