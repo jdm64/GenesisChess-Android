@@ -81,7 +81,7 @@ public class GenGameState extends GameState
 		default:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 			cpu = new GenEngine(handle);
-			cpu.setTime(pref.getInt("cputime", cpu.getTime()));
+			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
 			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;
 			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;

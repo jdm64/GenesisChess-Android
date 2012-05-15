@@ -47,7 +47,7 @@ public class GameListAdapter extends BaseAdapter
 		yourturn = yourTurn;
 
 		settings = new Bundle();
-		settings.putString("username", prefs.getString("username", "!error!"));
+		settings.putString("username", prefs.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 		settings.putInt("type", type);
 
 		initCursor();

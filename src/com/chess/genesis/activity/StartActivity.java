@@ -34,7 +34,7 @@ public class StartActivity extends Activity
 
 		// set layout mode
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean isTablet = pref.getBoolean("tabletMode", false);
+		final boolean isTablet = pref.getBoolean(PrefKey.TABLETMODE, false);
 
 		if (isTablet)
 			startActivity(new Intent(this, MainMenuTablet.class));

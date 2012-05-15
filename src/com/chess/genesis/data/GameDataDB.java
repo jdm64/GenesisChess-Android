@@ -55,7 +55,7 @@ public class GameDataDB
 	public String getUsername()
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		return pref.getString("username", "!error!");
+		return pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR);
 	}
 
 	/*

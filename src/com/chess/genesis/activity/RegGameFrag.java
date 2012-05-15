@@ -48,7 +48,7 @@ public class RegGameFrag extends GameFrag
 
 		// set view as black
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		viewAsBlack = pref.getBoolean("viewAsBlack", true)? playingBlack : false;
+		viewAsBlack = pref.getBoolean(PrefKey.VIEW_AS_BLACK, true)? playingBlack : false;
 
 		// create game stat instance
 		gamestate = new RegGameState(act, this, settings);

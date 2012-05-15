@@ -19,6 +19,7 @@ package com.chess.genesis.net;
 import android.content.*;
 import android.os.*;
 import android.preference.*;
+import com.chess.genesis.data.*;
 import java.io.*;
 import java.net.*;
 import org.json.*;
@@ -175,8 +176,8 @@ public class NetworkClient implements Runnable
 			return true;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "!error!");
-		final String password = pref.getString("passhash", "!error!");
+		final String username = pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR);
+		final String password = pref.getString(PrefKey.PASSHASH, PrefKey.KEYERROR);
 
 		JSONObject json2 = new JSONObject();
 

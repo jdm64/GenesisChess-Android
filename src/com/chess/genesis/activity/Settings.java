@@ -84,7 +84,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 
 		// set layout mode
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean isTablet = pref.getBoolean("tabletMode", false);
+		final boolean isTablet = pref.getBoolean(PrefKey.TABLETMODE, false);
 
 		if (isTablet)
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -100,19 +100,19 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		final View button = findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);
 
-		final boolean isLoggedin = pref.getBoolean("isLoggedIn", false);
+		final boolean isLoggedin = pref.getBoolean(PrefKey.ISLOGGEDIN, false);
 
 		final Preference bench = findPreference("benchmark");
 		bench.setOnPreferenceClickListener(this);
 
-		final IntListPreference poll = (IntListPreference) findPreference("notifierPolling");
+		final IntListPreference poll = (IntListPreference) findPreference(PrefKey.NOTE_POLLING);
 		poll.setOnPreferenceChangeListener(this);
 
-		CheckBoxPreference check = (CheckBoxPreference) findPreference("emailNoteEnabled");
+		CheckBoxPreference check = (CheckBoxPreference) findPreference(PrefKey.NOTE_EMAIL);
 		check.setOnPreferenceChangeListener(this);
 		check.setEnabled(isLoggedin);
 
-		check = (CheckBoxPreference) findPreference("noteEnabled");
+		check = (CheckBoxPreference) findPreference(PrefKey.NOTE_ENABLED);
 		check.setOnPreferenceChangeListener(this);
 		check.setEnabled(isLoggedin);
 
@@ -129,7 +129,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 		callbackPref.setEnabled(isLoggedin);
 
 		// Set email note value from server
-		if (pref.getBoolean("isLoggedIn", false)) {
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 			progress.setText("Retrieving Settings");
 			net.get_option("emailnote");
 			new Thread(net).start();
@@ -141,7 +141,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	{
 		super.onResume();
 
-		if (pref.getBoolean("isLoggedIn", false))
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
 			NetActive.inc();
 		AdsHandler.run(this);
 	}
@@ -149,7 +149,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	@Override
 	public void onPause()
 	{
-		if (pref.getBoolean("isLoggedIn", false))
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
 			NetActive.dec();
 
 		super.onPause();
@@ -191,12 +191,12 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 	{
 		final String key = preference.getKey();
 
-		if (key.equals("emailNoteEnabled")) {
+		if (key.equals(PrefKey.NOTE_EMAIL)) {
 			progress.setText("Setting Option");
 
 			net.set_option("emailnote", (Boolean) newValue);
 			new Thread(net).start();
-		} else if (key.equals("noteEnabled") || key.equals("notifierPolling")) {
+		} else if (key.equals(PrefKey.NOTE_ENABLED) || key.equals(PrefKey.NOTE_POLLING)) {
 			startService(new Intent(this, GenesisNotifier.class));
 		}
 		return true;

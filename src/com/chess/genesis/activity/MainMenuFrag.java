@@ -47,11 +47,11 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			case LogoutConfirm.MSG:
 				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
 
-				pref.putBoolean("isLoggedIn", false);
-				pref.putString("username", "!error!");
-				pref.putString("passhash", "!error!");
-				pref.putLong("lastgamesync", 0);
-				pref.putLong("lastmsgsync", 0);
+				pref.putBoolean(PrefKey.ISLOGGEDIN, false);
+				pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
+				pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
+				pref.putLong(PrefKey.LASTGAMESYNC, 0);
+				pref.putLong(PrefKey.LASTMSGSYNC, 0);
 				pref.commit();
 
 				updateLoggedInView();
@@ -168,19 +168,19 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			startActivity(new Intent(act, GameListLocal.class));
 			break;
 		case R.id.online_game:
-			if (!pref.getBoolean("isLoggedIn", false)) {
+			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				startActivityForResult(new Intent(act, Login.class), Enums.ONLINE_LIST);
 				return;
 			}
 			startActivity(new Intent(act, GameListOnline.class));
 			break;
 		case R.id.user_stats:
-			if (!pref.getBoolean("isLoggedIn", false)) {
+			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				startActivityForResult(new Intent(act, Login.class), Enums.USER_STATS);
 				return;
 			}
 			intent = new Intent(act, UserStats.class);
-			intent.putExtra("username", pref.getString("username", "!error!"));
+			intent.putExtra("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 			startActivity(intent);
 			break;
 		case R.id.login:
@@ -203,7 +203,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			fintent.setFrag(R.id.panel01, new GameListLocalFrag(), GameListLocalFrag.TAG);
 			break;
 		case R.id.online_game:
-			if (!pref.getBoolean("isLoggedIn", false)) {
+			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.ONLINE_LIST);
 				fintent.setFrag(R.id.panel02, frag, LoginFrag.TAG);
@@ -212,14 +212,14 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			}
 			break;
 		case R.id.user_stats:
-			if (!pref.getBoolean("isLoggedIn", false)) {
+			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.USER_STATS);
 				fintent.setFrag(R.id.panel02, frag, LoginFrag.TAG);
 			} else {
 				final BaseContentFrag frag = new UserStatsFrag();
 				final Bundle bundle = new Bundle();
-				bundle.putString("username", pref.getString("username", "!error!"));
+				bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 				frag.setArguments(bundle);
 
 				fintent.setFrag(R.id.panel02, frag, UserStatsFrag.TAG);
@@ -255,7 +255,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		switch (item.getItemId()) {
 		case R.id.logout:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-			if (pref.getBoolean("isLoggedIn", false))
+			if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
 				new LogoutConfirm(act, handle).show();
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
@@ -282,7 +282,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			fragTag = UserStatsFrag.TAG;
 			frag = new UserStatsFrag();
 			final Bundle bundle = new Bundle();
-			bundle.putString("username", pref.getString("username", "!error!"));
+			bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 			frag.setArguments(bundle);
 			break;
 		default:
@@ -323,8 +323,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		int welcomeVis = View.GONE, loginVis = View.VISIBLE;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean("isLoggedIn", false)) {
-			welcome = "Welcome " + pref.getString("username", "");
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+			welcome = "Welcome " + pref.getString(PrefKey.USERNAME, "");
 			welcomeVis = View.VISIBLE;
 			loginVis = View.GONE;
 		}

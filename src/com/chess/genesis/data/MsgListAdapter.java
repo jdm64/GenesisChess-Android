@@ -47,7 +47,7 @@ public class MsgListAdapter extends BaseAdapter
 		initCursor();
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString("username", "");
+		final String username = pref.getString(PrefKey.USERNAME, "");
 
 		MsgListItem.Cache.Init(context, username);
 	}

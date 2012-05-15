@@ -51,7 +51,7 @@ class GameInfo
 		if (status != Enums.ACTIVE)
 			return Enums.YOUR_TURN;
 
-		final int color = white.equals(pref.getString("username", "!error!"))? Piece.WHITE : Piece.BLACK;
+		final int color = white.equals(pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR))? Piece.WHITE : Piece.BLACK;
 
 		if (draw != 0)
 			return (color * draw > 0)? Enums.THEIR_TURN : Enums.YOUR_TURN;

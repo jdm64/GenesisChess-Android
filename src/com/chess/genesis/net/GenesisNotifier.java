@@ -100,7 +100,7 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		if (!pref.getBoolean("isLoggedIn", false) || !pref.getBoolean("noteEnabled", true)) {
+		if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false) || !pref.getBoolean(PrefKey.NOTE_ENABLED, true)) {
 			stopSelf();
 			return;
 		} else if (internetIsActive() && fromalarm) {
@@ -135,7 +135,7 @@ public class GenesisNotifier extends Service implements Runnable
 	private void ScheduleWakeup()
 	{
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ));
+		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, GenesisNotifier.POLL_FREQ));
 
 		final Intent intent = new Intent(this, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -155,7 +155,7 @@ public class GenesisNotifier extends Service implements Runnable
 	private void SendNotification(final int id, final String text)
 	{
 		final Intent intent;
-		if (pref.getBoolean("tabletMode", false)) {
+		if (pref.getBoolean(PrefKey.TABLETMODE, false)) {
 			intent = new Intent(this, MainMenuTablet.class);
 
 			final Bundle bundle = new Bundle();
@@ -196,9 +196,9 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 		noteBuilder.setOnlyAlertOnce(true).setContentIntent(pintent);
 
-		if (pref.getBoolean("noteRingtoneEnable", false))
-			noteBuilder.setSound(Uri.parse(pref.getString("noteRingtone", "content://settings/system/notification_sound")));
-		if (pref.getBoolean("noteVibrateEnable", true))
+		if (pref.getBoolean(PrefKey.NOTE_RINGTONE_ON, false))
+			noteBuilder.setSound(Uri.parse(pref.getString(PrefKey.NOTE_RINGTONE, PrefKey.DEFAULT_RINGTONE)));
+		if (pref.getBoolean(PrefKey.NOTE_VIBRATE_ON, true))
 			noteBuilder.setVibrate(parseVibrate());
 
 		return noteBuilder.getNotification();
@@ -206,7 +206,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 	private long[] parseVibrate()
 	{
-		final String str = pref.getString("noteVibrate", "0,150");
+		final String str = pref.getString(PrefKey.NOTE_VIBRATE, PrefKey.DEFAULT_VIBRATE);
 		final String[] arr = str.trim().split(",");
 		final long[] vib = new long[arr.length];
 
@@ -240,8 +240,8 @@ public class GenesisNotifier extends Service implements Runnable
 		net = new NetworkClient(socket, this, handle);
 		db = new GameDataDB(this);
 
-		final long mtime = pref.getLong("lastmsgsync", 0);
-		final long gtime = pref.getLong("lastgamesync", 0);
+		final long mtime = pref.getLong(PrefKey.LASTMSGSYNC, 0);
+		final long gtime = pref.getLong(PrefKey.LASTGAMESYNC, 0);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
 			SendNotification(YOURTURN_NOTE, "It's your turn in a game you're in");
@@ -284,7 +284,7 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 		// Save sync time
 		final Editor editor = pref.edit();
-		editor.putLong("lastgamesync", time);
+		editor.putLong(PrefKey.LASTGAMESYNC, time);
 		editor.commit();
 	} catch (final JSONException e) {
 		e.printStackTrace();
@@ -305,7 +305,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 		// Save sync time
 		final Editor editor = pref.edit();
-		editor.putLong("lastmsgsync", time);
+		editor.putLong(PrefKey.LASTMSGSYNC, time);
 		editor.commit();
 	}  catch (final JSONException e) {
 		e.printStackTrace();

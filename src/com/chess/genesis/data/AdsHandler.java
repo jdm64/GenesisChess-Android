@@ -31,7 +31,7 @@ public final class AdsHandler
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 
-		if (!pref.getBoolean("enableAds", true))
+		if (!pref.getBoolean(PrefKey.ADS_ON, true))
 			return;
 		final AdView ad = (AdView) activity.findViewById(com.chess.genesis.R.id.adView);
 

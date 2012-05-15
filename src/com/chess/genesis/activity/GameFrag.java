@@ -117,7 +117,7 @@ public abstract class GameFrag extends BaseContentFrag
 			NetActive.inc();
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean("screenAlwaysOn", false)) {
+		if (pref.getBoolean(PrefKey.SCREEN_ALWAYS_ON, false)) {
 			final PowerManager pm = (PowerManager) act.getSystemService(Context.POWER_SERVICE);
 			wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "GenesisChess");
 			wakelock.acquire();

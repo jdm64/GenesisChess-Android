@@ -72,7 +72,7 @@ public abstract class GameState
 		switch (msg.what) {
 		case CpuTimeDialog.MSG:
 			final Editor pref = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-			pref.putInt("cputime", (Integer) msg.obj);
+			pref.putInt(PrefKey.CPUTIME, (Integer) msg.obj);
 			pref.commit();
 			cpu.setTime((Integer) msg.obj);
 			break;

@@ -131,7 +131,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 					}
 					final JSONArray games = json.getJSONArray("games");
 					final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-					pref.putString("poolinfo", games.toString());
+					pref.putString(PrefKey.POOLINFO, games.toString());
 					pref.commit();
 
 					act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
@@ -257,8 +257,9 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	try {
 		// Set "waiting for opponent"
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		final JSONArray pool = new JSONArray(pref.getString("poolinfo", "[]"));
+		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
 		final View tpool = view.findViewById(R.id.game_search);
+
 		tpool.setVisibility((pool.length() == 0)? View.GONE : View.VISIBLE);
 		tpool.setOnClickListener(this);
 		tpool.setOnTouchListener(this);

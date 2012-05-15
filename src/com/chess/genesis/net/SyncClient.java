@@ -139,8 +139,8 @@ public class SyncClient implements Runnable
 			break;
 		case REGULAR_SYNC:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-			final long mtime = pref.getLong("lastmsgsync", 0);
-			final long gtime = pref.getLong("lastgamesync", 0);
+			final long mtime = pref.getLong(PrefKey.LASTMSGSYNC, 0);
+			final long gtime = pref.getLong(PrefKey.LASTGAMESYNC, 0);
 
 			net.sync_games(gtime);
 			net.run();
@@ -200,7 +200,7 @@ public class SyncClient implements Runnable
 		}
 		// Save sync time
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong("lastgamesync", time);
+		pref.putLong(PrefKey.LASTGAMESYNC, time);
 		pref.commit();
 	} catch (final JSONException e) {
 		e.printStackTrace();
@@ -229,7 +229,7 @@ public class SyncClient implements Runnable
 		// Save sync time
 		final long time = json.getLong("time");
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong("lastgamesync", time);
+		pref.putLong(PrefKey.LASTGAMESYNC, time);
 		pref.commit();
 	} catch (final JSONException e) {
 		e.printStackTrace();
@@ -324,7 +324,7 @@ public class SyncClient implements Runnable
 
 		// Save sync time
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong("lastmsgsync", time);
+		pref.putLong(PrefKey.LASTMSGSYNC, time);
 		pref.commit();
 	}  catch (final JSONException e) {
 		e.printStackTrace();

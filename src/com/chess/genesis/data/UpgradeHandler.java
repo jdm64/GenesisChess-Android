@@ -34,7 +34,7 @@ public final class UpgradeHandler
 		final PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		upgrade(pref, pref.getInt("appVersion", 0), pinfo.versionCode);
+		upgrade(pref, pref.getInt(PrefKey.APPVERSION, 0), pinfo.versionCode);
 	} catch (final NameNotFoundException e) {
 		e.printStackTrace();
 		throw new RuntimeException();
@@ -49,12 +49,12 @@ public final class UpgradeHandler
 		final Editor edit = pref.edit();
 
 		if (oldVer < 28) {
-			edit.putBoolean("isLoggedIn", false);
-			edit.putString("username", "!error!");
+			edit.putBoolean(PrefKey.ISLOGGEDIN, false);
+			edit.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
 		}
 
-		edit.putBoolean("enableAds", true);
-		edit.putInt("appVersion", newVer);
+		edit.putBoolean(PrefKey.ADS_ON, true);
+		edit.putInt(PrefKey.APPVERSION, newVer);
 		edit.commit();
 	}
 }

@@ -53,11 +53,11 @@ public class LoginFrag extends BaseContentFrag
 			case LogoutConfirm.MSG:
 				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
 
-				pref.putBoolean("isLoggedIn", false);
-				pref.putString("username", "!error!");
-				pref.putString("passhash", "!error!");
-				pref.putLong("lastgamesync", 0);
-				pref.putLong("lastmsgsync", 0);
+				pref.putBoolean(PrefKey.ISLOGGEDIN, false);
+				pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
+				pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
+				pref.putLong(PrefKey.LASTGAMESYNC, 0);
+				pref.putLong(PrefKey.LASTMSGSYNC, 0);
 				pref.commit();
 
 				EditText txt = (EditText) act.findViewById(R.id.username);
@@ -100,9 +100,9 @@ public class LoginFrag extends BaseContentFrag
 				final String password = txt.getText().toString();
 
 				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-				pref.putBoolean("isLoggedIn", true);
-				pref.putString("username", username);
-				pref.putString("passhash", password);
+				pref.putBoolean(PrefKey.ISLOGGEDIN, true);
+				pref.putString(PrefKey.USERNAME, username);
+				pref.putString(PrefKey.PASSHASH, password);
 				pref.commit();
 
 				SocketClient.getInstance().setIsLoggedIn(true);
@@ -161,9 +161,9 @@ public class LoginFrag extends BaseContentFrag
 
 		// Always show the currently logged in user
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean("isLoggedIn", false)) {
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 			EditText txt = (EditText) view.findViewById(R.id.username);
-			txt.setText(pref.getString("username", ""));
+			txt.setText(pref.getString(PrefKey.USERNAME, ""));
 
 			txt = (EditText) view.findViewById(R.id.password);
 			txt.setText("");
@@ -250,8 +250,8 @@ public class LoginFrag extends BaseContentFrag
 		String username = "";
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 
-		if (pref.getBoolean("isLoggedIn", false))
-			username = pref.getString("username", "");
+		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
+			username = pref.getString(PrefKey.USERNAME, "");
 
 		EditText txt = (EditText) act.findViewById(R.id.username);
 		txt.setText(username);

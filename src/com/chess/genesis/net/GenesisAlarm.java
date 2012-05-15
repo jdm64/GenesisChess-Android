@@ -20,6 +20,7 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.preference.*;
+import com.chess.genesis.data.*;
 import java.util.*;
 
 public class GenesisAlarm extends BroadcastReceiver
@@ -45,7 +46,7 @@ public class GenesisAlarm extends BroadcastReceiver
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt("notifierPolling", GenesisNotifier.POLL_FREQ));
+		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, GenesisNotifier.POLL_FREQ));
 
 		final Intent intent = new Intent(context, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

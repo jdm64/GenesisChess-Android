@@ -50,7 +50,7 @@ public class MainMenuPhone extends BasePhoneActivity
 			startActivity(new Intent(this, GameListOnline.class));
 		} else if (requestCode == Enums.USER_STATS) {
 			final Intent intent = new Intent(this, UserStats.class);
-			intent.putExtra("username", pref.getString("username", "!error!"));
+			intent.putExtra("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 			startActivity(intent);
 		}
 	}

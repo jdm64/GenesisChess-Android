@@ -23,6 +23,7 @@ import android.view.*;
 import android.widget.*;
 import android.widget.TableRow.LayoutParams;
 import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
@@ -51,7 +52,7 @@ public class GamePoolDialog extends BaseDialog
 	try {
 		// Load pool info json array
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final JSONArray pool = new JSONArray(pref.getString("poolinfo", "[]"));
+		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
 
 		data = new ObjectArray<PoolDataItem>();
 		for (int i = 0; i < pool.length(); i++) {
