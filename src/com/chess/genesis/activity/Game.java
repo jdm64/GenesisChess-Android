@@ -97,10 +97,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 			getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			if (Integer.parseInt(((GameFrag) mainFrag).settings.getString("ply")) > 58)
-				getMenuInflater().inflate(R.menu.options_game_online_draw, menu);
-			else
-				getMenuInflater().inflate(R.menu.options_game_online, menu);
+			getMenuInflater().inflate(R.menu.options_game_online, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
 			getMenuInflater().inflate(R.menu.options_game_archive, menu);

@@ -194,10 +194,7 @@ public abstract class GameFrag extends BaseContentFrag
 			act.getMenuInflater().inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			if (Integer.parseInt(settings.getString("ply")) > 58)
-				act.getMenuInflater().inflate(R.menu.options_game_online_draw, menu);
-			else
-				act.getMenuInflater().inflate(R.menu.options_game_online, menu);
+			act.getMenuInflater().inflate(R.menu.options_game_online, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
 			act.getMenuInflater().inflate(R.menu.options_game_archive, menu);
