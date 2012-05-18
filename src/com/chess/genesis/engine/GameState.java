@@ -229,6 +229,20 @@ public abstract class GameState
 		game.reset();
 	}
 
+	public void clearSelectHighlight()
+	{
+		if (callstack.size() > 0) {
+			final int indx = callstack.get(0);
+			final View last = activity.findViewById(indx);
+
+			if (indx < 0x88)
+				((BoardButton) last).setHighlight(false);
+			else
+				((PlaceButton) last).setHighlight(false);
+			callstack.clear();
+		}
+	}
+
 	protected int yourColor()
 	{
 		switch (type) {

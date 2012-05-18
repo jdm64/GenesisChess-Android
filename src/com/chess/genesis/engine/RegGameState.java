@@ -264,6 +264,8 @@ public class RegGameState extends GameState
 
 	private void applyMove(final RegMove move, final boolean erase, final boolean localmove)
 	{
+		clearSelectHighlight();
+
 		if (hindex >= 0) {
 			// undo last move highlight
 			final BoardButton to = (BoardButton) activity.findViewById(history.get(hindex).to);
@@ -336,6 +338,8 @@ public class RegGameState extends GameState
 
 	private void revertMove(final RegMove move)
 	{
+		clearSelectHighlight();
+
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
