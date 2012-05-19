@@ -26,6 +26,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 
 public class GameListAdapter extends BaseAdapter
 {
@@ -124,8 +125,8 @@ public class GameListAdapter extends BaseAdapter
 
 		if (cell == null)
 			cell = new GameListItem(parent.getContext());
-
 		((GameListItem) cell).setData(data, index);
+
 		return cell;
 	}
 
@@ -189,8 +190,8 @@ class GameListItem extends View
 			if (isActive)
 				return;
 
-			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
-			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
+			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
+			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
 
 			height = (int) ((5.0 * width) / 32.0);
 			rect = new RectF(0, 0, height, height);

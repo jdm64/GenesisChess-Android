@@ -29,6 +29,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 
 public class MsgListAdapter extends BaseAdapter
 {
@@ -96,7 +97,8 @@ public class MsgListAdapter extends BaseAdapter
 	{
 		final Bundle data = (Bundle) getItem(index);
 
-		cell = new MsgListItem(parent.getContext());
+		if (cell == null)
+			cell = new MsgListItem(parent.getContext());
 		((MsgListItem) cell).setData(data);
 
 		return cell;
@@ -148,8 +150,8 @@ class MsgListItem extends View
 
 		public static void Init(final Context context, final String Username)
 		{
-			fontNormal = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
-			fontItalic = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Italic.ttf");
+			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
+			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
 			username = Username;
 
 			final DisplayMetrics metrics = context.getResources().getDisplayMetrics();

@@ -36,24 +36,7 @@ public class RobotoEditText extends EditText
 	@Override
 	public void setTypeface(final Typeface tf, final int style)
 	{
-		final Typeface font;
-
-		switch (style) {
-		default:
-		case 0:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Regular.ttf");
-			break;
-		case 1:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");
-			break;
-		case 2:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Italic.ttf");
-			break;
-		case 3:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-BoldItalic.ttf");
-			break;
-		}
-		super.setTypeface(font);
+		super.setTypeface(RobotoText.getRobotoFont(getContext().getAssets(), style));
 	}
 
 	@Override

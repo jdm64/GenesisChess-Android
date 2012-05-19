@@ -49,6 +49,10 @@ public class NetworkClient implements Runnable
 	public final static int USER_STATS = 22;
 	public final static int GAME_DRAW = 23;
 
+	private final static String CANT_CONTACT_MSG = "Can't contact server for sending data";
+	private final static String LOST_CONNECTION_MSG = "Lost connection during sending data";
+	private final static String SERVER_ILLOGICAL_MSG = "Server response illogical";
+
 	private final Context context;
 	private final Handler callback;
 	private final SocketClient socket;
@@ -89,7 +93,7 @@ public class NetworkClient implements Runnable
 		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
+				json2.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -98,7 +102,7 @@ public class NetworkClient implements Runnable
 		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection during sending data");
+				json2.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -118,7 +122,7 @@ public class NetworkClient implements Runnable
 		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
+				json2.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -127,7 +131,7 @@ public class NetworkClient implements Runnable
 		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection during sending data");
+				json2.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -142,7 +146,7 @@ public class NetworkClient implements Runnable
 		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for recieving data");
+				json2.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -151,7 +155,7 @@ public class NetworkClient implements Runnable
 		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection during recieving data");
+				json2.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -160,7 +164,7 @@ public class NetworkClient implements Runnable
 		} catch (final JSONException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Server response illogical");
+				json2.put("reason", SERVER_ILLOGICAL_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -193,7 +197,7 @@ public class NetworkClient implements Runnable
 		} catch (final SocketException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Can't contact server for sending data");
+				json2.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -202,7 +206,7 @@ public class NetworkClient implements Runnable
 		} catch (final IOException e) {
 			try {
 				json2.put("result", "error");
-				json2.put("reason", "Lost connection during sending data");
+				json2.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();

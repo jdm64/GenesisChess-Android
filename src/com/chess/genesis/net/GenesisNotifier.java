@@ -37,6 +37,9 @@ public class GenesisNotifier extends Service implements Runnable
 	public final static int YOURTURN_NOTE = 2;
 	public final static int NEWMGS_NOTE = 4;
 
+	private final static String YOURTURN_MSG = "It's your turn in a game you're in";
+	private final static String NEWMSG_MSG = "A new message was posted to a game you're in";
+
 	private NetworkClient net;
 	private SocketClient socket;
 	private GameDataDB db;
@@ -244,25 +247,25 @@ public class GenesisNotifier extends Service implements Runnable
 		final long gtime = pref.getLong(PrefKey.LASTGAMESYNC, 0);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
-			SendNotification(YOURTURN_NOTE, "It's your turn in a game you're in");
+			SendNotification(YOURTURN_NOTE, YOURTURN_MSG);
 		} else {
 			net.sync_games(gtime);
 			net.run();
 			trylock();
 
 			if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0)
-				SendNotification(YOURTURN_NOTE, "It's your turn in a game you're in");
+				SendNotification(YOURTURN_NOTE, YOURTURN_MSG);
 		}
 
 		if (db.getUnreadMsgCount() > 0) {
-			SendNotification(NEWMGS_NOTE, "A new message was posted to a game you're in");
+			SendNotification(NEWMGS_NOTE, NEWMSG_MSG);
 		} else {
 			net.sync_msgs(mtime);
 			net.run();
 			trylock();
 
 			if (db.getUnreadMsgCount() > 0)
-				SendNotification(NEWMGS_NOTE, "A new message was posted to a game you're in");
+				SendNotification(NEWMGS_NOTE, NEWMSG_MSG);
 		}
 		socket.disconnect();
 		db.close();

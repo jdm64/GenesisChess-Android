@@ -17,6 +17,7 @@
 package com.chess.genesis.view;
 
 import android.content.*;
+import android.content.res.*;
 import android.graphics.*;
 import android.text.*;
 import android.util.*;
@@ -54,27 +55,25 @@ public class RobotoText extends TextView
 		return newSize;
 	}
 
+	public static Typeface getRobotoFont(final AssetManager mgr, final int style)
+	{
+		switch (style) {
+		default:
+		case Typeface.NORMAL:
+			return Typeface.createFromAsset(mgr, "fonts/Roboto-Regular.ttf");
+		case Typeface.BOLD:
+			return Typeface.createFromAsset(mgr, "fonts/Roboto-Bold.ttf");
+		case Typeface.ITALIC:
+			return Typeface.createFromAsset(mgr, "fonts/Roboto-Italic.ttf");
+		case Typeface.BOLD_ITALIC:
+			return Typeface.createFromAsset(mgr, "fonts/Roboto-BoldItalic.ttf");
+		}
+	}
+
 	@Override
 	public void setTypeface(final Typeface tf, final int style)
 	{
-		final Typeface font;
-
-		switch (style) {
-		default:
-		case 0:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Regular.ttf");
-			break;
-		case 1:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");
-			break;
-		case 2:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Italic.ttf");
-			break;
-		case 3:
-			font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-BoldItalic.ttf");
-			break;
-		}
-		super.setTypeface(font);
+		super.setTypeface(RobotoText.getRobotoFont(getContext().getAssets(), style));
 	}
 
 	@Override

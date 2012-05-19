@@ -510,9 +510,9 @@ public class NumberSpinner extends LinearLayout
 				/* Ignore as if it's not a number we don't care */
 			}
 		} else {
+			str = str.toLowerCase();
 			for (int i = 0; i < mDisplayedValues.length; i++) {
 				/* Don't force the user to type in jan when ja will do */
-				str = str.toLowerCase();
 				if (mDisplayedValues[i].toLowerCase().startsWith(str)) {
 					return mStart + i;
 				}
