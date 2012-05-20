@@ -28,6 +28,7 @@ public final class PrefKey
 	public final static String APPVERSION = "appVersion";
 	public final static String CPUTIME = "cputime";
 	public final static String SCREEN_ALWAYS_ON = "screenAlwaysOn";
+	public final static String SHOW_GENESIS_RULES = "showGenesisRules";
 	public final static String TABLETMODE = "tabletMode";
 	public final static String VIEW_AS_BLACK = "viewAsBlack";
 

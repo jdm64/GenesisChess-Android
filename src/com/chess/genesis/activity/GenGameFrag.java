@@ -16,8 +16,12 @@
 
 package com.chess.genesis.activity;
 
+import android.content.*;
 import android.os.*;
+import android.preference.*;
 import android.view.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.dialog.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
@@ -42,6 +46,16 @@ public class GenGameFrag extends GameFrag
 
 		// finalize initialization
 		return super.onCreateView(inflater, container, settings);
+	}
+
+	@Override
+	public void onActivityCreated(final Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
+
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
+		if (pref.getBoolean(PrefKey.SHOW_GENESIS_RULES, true))
+			new GenesisRulesDialog(act).show();
 	}
 
 	@Override
