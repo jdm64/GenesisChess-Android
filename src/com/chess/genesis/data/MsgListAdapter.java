@@ -200,13 +200,13 @@ class MsgListItem extends View
 
 		// draw msg header
 		if (data.isYourMsg)
-			paint.setColor(0xffd2d0ff);
+			paint.setColor(MColors.PURPLE_PASTEL);
 		else
-			paint.setColor(0xffcce6ff);
+			paint.setColor(MColors.BLUE_PASTEL);
 		canvas.drawRect(0, 0, getWidth(), Cache.headerHeight, paint);
 
 		// draw username
-		paint.setColor(0xff000000);
+		paint.setColor(MColors.BLACK);
 		paint.setTextSize(Cache.smallText);
 		canvas.drawText(data.username, Cache.padding, Cache.headerAlign, paint);
 

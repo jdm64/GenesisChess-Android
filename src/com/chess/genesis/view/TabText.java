@@ -22,11 +22,12 @@ import android.util.*;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import com.chess.genesis.data.*;
 
 public class TabText extends RobotoText implements OnClickListener, OnTouchListener
 {
-	private final static int highlightColor = 0xff00b7eb;
-	private final static int touchColor = 0x8000b7eb;
+	private final static int highlightColor = MColors.BLUE_NEON;
+	private final static int touchColor = MColors.BLUE_NEON_TR;
 
 	private final Paint paint;
 	private boolean active;
@@ -64,7 +65,7 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
 			setBackgroundColor(touchColor);
 		else if (event.getAction() == MotionEvent.ACTION_UP)
-			setBackgroundColor(0x00ffffff);
+			setBackgroundColor(MColors.CLEAR);
 		return false;
 	}
 
@@ -77,7 +78,7 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 	public void setActive(final boolean Active)
 	{
 		active = Active;
-		setTextColor(active? 0xffffffff : 0xff808080);
+		setTextColor(active? Color.WHITE : Color.GRAY);
 	}
 
 	public void setTabTextColor(final int color)

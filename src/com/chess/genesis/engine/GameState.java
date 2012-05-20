@@ -390,7 +390,7 @@ public abstract class GameState
 			black.setActive(false);
 
 			if (mate)
-				white.setTabTextColor(0xffeb0000);
+				white.setTabTextColor(MColors.RED);
 		} else {
 			white.setText(wstr);
 			white.setActive(false);
@@ -399,7 +399,7 @@ public abstract class GameState
 			black.setActive(true);
 
 			if (mate)
-				black.setTabTextColor(0xffeb0000);
+				black.setTabTextColor(MColors.RED);
 		}
 	}
 

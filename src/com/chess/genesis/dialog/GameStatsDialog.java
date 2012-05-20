@@ -181,9 +181,9 @@ public class GameStatsDialog extends BaseDialog
 
 		// psr_score must be last in list[]
 		if (diff > 0)
-			msg.setTextColor(0xff4e9a06);
+			msg.setTextColor(MColors.GREEN_DARK);
 		else if (diff < 0)
-			msg.setTextColor(0xffcc0000);
+			msg.setTextColor(MColors.RED_DARK);
 	}
 
 	@Override

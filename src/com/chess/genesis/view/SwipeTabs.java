@@ -28,6 +28,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 
 public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 {
@@ -44,10 +45,10 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	private int mTabIndicatorHeight = 3;
 
 	// color for the bottom bar, fronted tab
-	private int mBottomBarColor = 0xff00b7eb;
+	private int mBottomBarColor = MColors.BLUE_NEON;
 
 	// text color for all other tabs
-	private final static int mTextColor = 0xffffffff;
+	private final static int mTextColor = Color.WHITE;
 
 	// holds the positions of the fronted tabs
 	private int[] mFrontedTabPos;

@@ -23,6 +23,7 @@ import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.animation.*;
 import android.widget.*;
+import com.chess.genesis.data.*;
 
 class ExpandablePanel extends LinearLayout implements OnClickListener
 {
@@ -42,7 +43,7 @@ class ExpandablePanel extends LinearLayout implements OnClickListener
 		super(context, attrs);
 
 		paint = new Paint();
-		paint.setColor(0xff00b7eb);
+		paint.setColor(MColors.BLUE_NEON);
 	}
 
 	@Override

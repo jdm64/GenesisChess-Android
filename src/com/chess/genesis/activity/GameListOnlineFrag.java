@@ -321,9 +321,9 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	{
 		if (v.getId() == R.id.game_search) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				v.setBackgroundColor(0xff00b7eb);
+				v.setBackgroundColor(MColors.BLUE_NEON);
 			else if (event.getAction() == MotionEvent.ACTION_UP)
-				v.setBackgroundColor(0x00ffffff);
+				v.setBackgroundColor(MColors.CLEAR);
 		}
 		return false;
 	}

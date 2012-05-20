@@ -225,7 +225,7 @@ class GameListItem extends View
 	{
 		// background color
 		if (!isPressed() && index % 2 == 1)
-			canvas.drawColor(0xffe2f4fb);
+			canvas.drawColor(MColors.TEAL_PASTEL);
 
 		// icon
 		setIcon(canvas);
@@ -249,7 +249,7 @@ class GameListItem extends View
 			setOnlineTxt(canvas);
 
 		// reset paint
-		paint.setColor(0xff000000);
+		paint.setColor(MColors.BLACK);
 		paint.setTextAlign(Paint.Align.LEFT);
 		paint.setTypeface(Cache.fontNormal);
 	}
@@ -312,7 +312,7 @@ class GameListItem extends View
 
 		if (data.hasMsg) {
 			final String txt = "[new msg]";
-			paint.setColor(0xff4e9a06);
+			paint.setColor(MColors.GREEN_DARK);
 			canvas.drawText(txt, border, Cache.height / 2, paint);
 			border -= paint.measureText(txt);
 		}
@@ -322,15 +322,15 @@ class GameListItem extends View
 
 		switch (data.idle) {
 		case Enums.IDLE:
-			paint.setColor(0xff3465a4);
+			paint.setColor(MColors.BLUE_DARK);
 			canvas.drawText("[idle]", border, Cache.height / 2, paint);
 			break;
 		case Enums.NUDGED:
-			paint.setColor(0xfff57900);
+			paint.setColor(MColors.ORANGE);
 			canvas.drawText("[nudged]", border, Cache.height / 2, paint);
 			break;
 		case Enums.CLOSE:
-			paint.setColor(0xffcc0000);
+			paint.setColor(MColors.RED_DARK);
 			canvas.drawText("[close]", border, Cache.height / 2, paint);
 			break;
 		}

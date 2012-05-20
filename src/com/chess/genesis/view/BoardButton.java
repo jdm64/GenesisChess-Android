@@ -19,17 +19,18 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.graphics.*;
 import android.view.*;
+import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 
 public class BoardButton extends View
 {
-	private final static int outerLight = 0xffd3d3d3;
-	private final static int outerDark = 0xff5a7397;
-	private final static int innerDark = 0xff6885b4;
-	private final static int innerLight = 0xffffffff;
-	private final static int innerCheck = 0xffdf4c37;
-	private final static int innerSelect = 0xff36b54a;
-	private final static int innerLast = 0xffab9aca;
+	private final static int outerLight = MColors.GREY_LIGHT;
+	private final static int outerDark = MColors.BLUE_NAVY_DARK;
+	private final static int innerDark = MColors.BLUE_NAVY;
+	private final static int innerLight = Color.WHITE;
+	private final static int innerCheck = MColors.RED_LIGHT;
+	private final static int innerSelect = MColors.GREEN_TEAL;
+	private final static int innerLast = MColors.PURPLE_LIGHT;
 
 	private static final int WHITE = 0;
 	private static final int BLACK = 1;

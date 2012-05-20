@@ -20,14 +20,15 @@ import android.content.*;
 import android.graphics.*;
 import android.view.*;
 import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 
 public class PlaceButton extends View
 {
-	private final static int outerLight = 0xffd3d3d3;
-	private final static int outerDark = 0xff5a7397;
-	private final static int innerDark = 0xff6885b4;
-	private final static int innerLight = 0xffffffff;
-	private final static int innerSelect = 0xff36b54a;
+	private final static int outerLight = MColors.GREY_LIGHT;
+	private final static int outerDark = MColors.BLUE_NAVY_DARK;
+	private final static int innerDark = MColors.BLUE_NAVY;
+	private final static int innerLight = Color.WHITE;
+	private final static int innerSelect = MColors.GREEN_TEAL;
 
 	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
