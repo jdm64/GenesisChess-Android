@@ -57,7 +57,7 @@ public class NetworkClient implements Runnable
 	private final Handler callback;
 	private final SocketClient socket;
 
-	private JSONObject json;
+	private JSONObject request;
 	private int fid = NONE;
 	private boolean loginRequired;
 	private boolean error = false;
@@ -81,19 +81,19 @@ public class NetworkClient implements Runnable
 	// the json setup started in login_user.
 	private void login_setup()
 	{
-		final JSONObject json2 = new JSONObject();
+		final JSONObject json = new JSONObject();
 
 		try {
 			try {
-				json.put("passhash", Crypto.LoginKey(socket, json.getString("passhash")));
+				request.put("passhash", Crypto.LoginKey(socket, request.getString("passhash")));
 			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
 		} catch (final SocketException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", CANT_CONTACT_MSG);
+				json.put("result", "error");
+				json.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -101,8 +101,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", LOST_CONNECTION_MSG);
+				json.put("result", "error");
+				json.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -110,19 +110,19 @@ public class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error)
-			callback.sendMessage(Message.obtain(callback, fid, json2));
+			callback.sendMessage(Message.obtain(callback, fid, json));
 	}
 
 	private JSONObject send_request(final JSONObject data)
 	{
-		JSONObject json2 = new JSONObject();
+		JSONObject json = new JSONObject();
 
 		try {
 			socket.write(data);
 		} catch (final SocketException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", CANT_CONTACT_MSG);
+				json.put("result", "error");
+				json.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -130,8 +130,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", LOST_CONNECTION_MSG);
+				json.put("result", "error");
+				json.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -139,14 +139,14 @@ public class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error)
-			return json2;
+			return json;
 
 		try {
-			json2 = socket.read();
+			json = socket.read();
 		} catch (final SocketException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", CANT_CONTACT_MSG);
+				json.put("result", "error");
+				json.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -154,8 +154,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", LOST_CONNECTION_MSG);
+				json.put("result", "error");
+				json.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -163,15 +163,15 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final JSONException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", SERVER_ILLOGICAL_MSG);
+				json.put("result", "error");
+				json.put("reason", SERVER_ILLOGICAL_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
 			}
 			error = true;
 		}
-		return json2;
+		return json;
 	}
 
 	private boolean relogin()
@@ -183,21 +183,21 @@ public class NetworkClient implements Runnable
 		final String username = pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR);
 		final String password = pref.getString(PrefKey.PASSHASH, PrefKey.KEYERROR);
 
-		JSONObject json2 = new JSONObject();
+		JSONObject json = new JSONObject();
 
 		try {
 			try {
-				json2.put("request", "login");
-				json2.put("username", username);
-				json2.put("passhash", Crypto.LoginKey(socket, password));
+				json.put("request", "login");
+				json.put("username", username);
+				json.put("passhash", Crypto.LoginKey(socket, password));
 			} catch (final JSONException e) {
 				e.printStackTrace();
 				throw new RuntimeException();
 			}
 		} catch (final SocketException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", CANT_CONTACT_MSG);
+				json.put("result", "error");
+				json.put("reason", CANT_CONTACT_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -205,8 +205,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json2.put("result", "error");
-				json2.put("reason", LOST_CONNECTION_MSG);
+				json.put("result", "error");
+				json.put("reason", LOST_CONNECTION_MSG);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -214,16 +214,16 @@ public class NetworkClient implements Runnable
 			error = true;
 		}
 		if (error) {
-			callback.sendMessage(Message.obtain(callback, fid, json2));
+			callback.sendMessage(Message.obtain(callback, fid, json));
 			return false;
 		}
 
 		// Send login request
-		json2 = send_request(json2);
+		json = send_request(json);
 
 		try {
-			if (!json2.getString("result").equals("ok")) {
-				callback.sendMessage(Message.obtain(callback, fid, json2));
+			if (!json.getString("result").equals("ok")) {
+				callback.sendMessage(Message.obtain(callback, fid, json));
 				return false;
 			}
 			socket.setIsLoggedIn(true);
@@ -246,13 +246,13 @@ public class NetworkClient implements Runnable
 			return;
 		}
 
-		final JSONObject json2 = send_request(json);
+		final JSONObject json = send_request(request);
 		if (error) {
 			error = false;
 			socket.disconnect();
 		}
 
-		callback.sendMessage(Message.obtain(callback, fid, json2));
+		callback.sendMessage(Message.obtain(callback, fid, json));
 	}
 
 	public void register(final String username, final String password, final String email)
@@ -260,13 +260,13 @@ public class NetworkClient implements Runnable
 		fid = REGISTER;
 		loginRequired = false;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "register");
-			json.put("username", username);
-			json.put("passhash", Crypto.HashPasswd(password));
-			json.put("email", email);
+			request.put("request", "register");
+			request.put("username", username);
+			request.put("passhash", Crypto.HashPasswd(password));
+			request.put("email", email);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -278,16 +278,16 @@ public class NetworkClient implements Runnable
 		fid = LOGIN;
 		loginRequired = false;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "login");
-			json.put("username", username);
+			request.put("request", "login");
+			request.put("username", username);
 
 			// temporarily save password to passhash
 			// login_setup will finish the creation of
 			// the json in a new thread.
-			json.put("passhash", password);
+			request.put("passhash", password);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -299,11 +299,11 @@ public class NetworkClient implements Runnable
 		fid = JOIN_GAME;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "joingame");
-			json.put("gametype", gametype);
+			request.put("request", "joingame");
+			request.put("gametype", gametype);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -315,13 +315,13 @@ public class NetworkClient implements Runnable
 		fid = NEW_GAME;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "newgame");
-			json.put("opponent", opponent);
-			json.put("gametype", gametype);
-			json.put("color", color);
+			request.put("request", "newgame");
+			request.put("opponent", opponent);
+			request.put("gametype", gametype);
+			request.put("color", color);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -334,12 +334,12 @@ public class NetworkClient implements Runnable
 		fid = SUBMIT_MOVE;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "sendmove");
-			json.put("gameid", gameid);
-			json.put("move", move);
+			request.put("request", "sendmove");
+			request.put("gameid", gameid);
+			request.put("move", move);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -351,11 +351,11 @@ public class NetworkClient implements Runnable
 		fid = RESIGN_GAME;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "resign");
-			json.put("gameid", gameid);
+			request.put("request", "resign");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -367,12 +367,12 @@ public class NetworkClient implements Runnable
 		fid = SUBMIT_MSG;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "sendmsg");
-			json.put("gameid", gameid);
-			json.put("txt", msg);
+			request.put("request", "sendmsg");
+			request.put("gameid", gameid);
+			request.put("txt", msg);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -384,11 +384,11 @@ public class NetworkClient implements Runnable
 		fid = SYNC_MSGS;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "syncmsgs");
-			json.put("time", time);
+			request.put("request", "syncmsgs");
+			request.put("time", time);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -400,11 +400,11 @@ public class NetworkClient implements Runnable
 		fid = GAME_STATUS;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "gamestatus");
-			json.put("gameid", gameid);
+			request.put("request", "gamestatus");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -416,11 +416,11 @@ public class NetworkClient implements Runnable
 		fid = GAME_INFO;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "gameinfo");
-			json.put("gameid", gameid);
+			request.put("request", "gameinfo");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -432,11 +432,11 @@ public class NetworkClient implements Runnable
 		fid = GAME_DATA;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "gamedata");
-			json.put("gameid", gameid);
+			request.put("request", "gamedata");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -448,11 +448,11 @@ public class NetworkClient implements Runnable
 		fid = SYNC_GAMIDS;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "gameids");
-			json.put("type", type);
+			request.put("request", "gameids");
+			request.put("type", type);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -464,11 +464,11 @@ public class NetworkClient implements Runnable
 		fid = SYNC_GAMES;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "syncgames");
-			json.put("time", time);
+			request.put("request", "syncgames");
+			request.put("time", time);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -480,11 +480,11 @@ public class NetworkClient implements Runnable
 		fid = GAME_SCORE;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "gamescore");
-			json.put("gameid", gameid);
+			request.put("request", "gamescore");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -496,12 +496,12 @@ public class NetworkClient implements Runnable
 		fid = SET_OPTION;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "setoption");
-			json.put("option", option);
-			json.put("value", value);
+			request.put("request", "setoption");
+			request.put("option", option);
+			request.put("value", value);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -513,11 +513,11 @@ public class NetworkClient implements Runnable
 		fid = GET_OPTION;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "getoption");
-			json.put("option", option);
+			request.put("request", "getoption");
+			request.put("option", option);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -529,10 +529,10 @@ public class NetworkClient implements Runnable
 		fid = POOL_INFO;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "poolinfo");
+			request.put("request", "poolinfo");
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -544,11 +544,11 @@ public class NetworkClient implements Runnable
 		fid = NUDGE_GAME;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "nudge");
-			json.put("gameid", gameid);
+			request.put("request", "nudge");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -560,11 +560,11 @@ public class NetworkClient implements Runnable
 		fid = IDLE_RESIGN;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "idleresign");
-			json.put("gameid", gameid);
+			request.put("request", "idleresign");
+			request.put("gameid", gameid);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -576,11 +576,11 @@ public class NetworkClient implements Runnable
 		fid = USER_STATS;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "userstats");
-			json.put("username", username);
+			request.put("request", "userstats");
+			request.put("username", username);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -592,12 +592,12 @@ public class NetworkClient implements Runnable
 		fid = GAME_DRAW;
 		loginRequired = true;
 
-		json = new JSONObject();
+		request = new JSONObject();
 
 		try {
-			json.put("request", "draw");
-			json.put("gameid", gameid);
-			json.put("action", action);
+			request.put("request", "draw");
+			request.put("gameid", gameid);
+			request.put("action", action);
 		} catch (final JSONException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
