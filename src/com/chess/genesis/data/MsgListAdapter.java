@@ -97,8 +97,9 @@ public class MsgListAdapter extends BaseAdapter
 	{
 		final Bundle data = (Bundle) getItem(index);
 
-		if (cell == null)
-			cell = new MsgListItem(parent.getContext());
+		// BUG: must always create new instance
+		// or the message list gets corrupt
+		cell = new MsgListItem(parent.getContext());
 		((MsgListItem) cell).setData(data);
 
 		return cell;
