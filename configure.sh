@@ -35,10 +35,29 @@ sdk.dir=$SDK_DIR_ABS
 _EOF_
 }
 
+setupLibs()
+{
+	mkdir -p libs
+
+	# setup libs link files
+	ln -fs $SDK_DIR_ABS/extras/android/support/v4/android-support-v4.jar libs/
+	ln -fs $SDK_DIR_ABS/extras/google/admob_ads_sdk/GoogleAdMobAdsSdk* libs/
+
+	# download httpmime.jar
+	wget http://hc.apache.org/downloads.cgi
+	wget $(grep httpcomponents-client-4.2-bin.tar.gz downloads.cgi | head -n1 | cut -d'"' -f2)
+	tar -xf	httpcomponents-client-4.2-bin.tar.gz
+	cp httpcomponents-client-4.2/lib/httpmime-4.2.jar libs/
+
+	# remove all downloaded files
+	rm -rf downloads.cgi httpcomponents-client-4.2*
+}
+
 cat <<_EOF_
 GenesisChess for Android configuration setup
 
-The following external libraries are required:
+The following external libraries are required
+This script can download httpmime.jar:
 1) Android 2.1+ SDK (API 7)
 2) AdMob Ads SDK
 3) Android Support Package v4
@@ -65,6 +84,14 @@ til="~"
 home=$(cd ~; pwd)
 notil=${SDK_DIR/$til/$home}
 SDK_DIR_ABS=$(readlink -f $notil)
+
+echo
+read -ei "yes" -p "Do you want this script to try to setup the libs directory (yes/no)? " SETUP_LIBS
+
+if [[ $SETUP_LIBS == "yes" ]]; then
+	echo
+	setupLibs
+fi
 
 echo
 read -ei "yes" -p "Do you want to overwrite: Configfile and local.properties (yes/no)? " WRITE_CONFIG
