@@ -46,9 +46,9 @@ The following external libraries are required:
 _EOF_
 
 echo
-read -p "Do you meet the requirements ([yes]/no)? " -i "yes" DO_CONFIG
+read -ei "yes" -p "Do you meet the requirements (yes/no)? " DO_CONFIG
 
-if [[ $DO_CONFIG =~ [^Yy].* ]]; then
+if [[ $DO_CONFIG != "yes" ]]; then
 	echo "Exiting"
 	exit
 fi
@@ -67,9 +67,9 @@ notil=${SDK_DIR/$til/$home}
 SDK_DIR_ABS=$(readlink -f $notil)
 
 echo
-read -p "Do you want to overwrite: Configfile and local.properties ([yes]/no)? " -i "yes" WRITE_CONFIG
+read -ei "yes" -p "Do you want to overwrite: Configfile and local.properties (yes/no)? " WRITE_CONFIG
 
-if [[ $WRITE_CONFIG =~ [^Yy].* ]]; then
+if [[ $WRITE_CONFIG != "yes" ]]; then
 	echo "Not writing files"
 	exit
 fi
