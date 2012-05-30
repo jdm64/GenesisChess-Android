@@ -23,7 +23,6 @@ import android.os.*;
 import android.preference.*;
 import android.text.Layout.Alignment;
 import android.text.*;
-import android.util.*;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
@@ -46,11 +45,6 @@ public class MsgListAdapter extends BaseAdapter
 		context = _context;
 		gameID = GameID;
 		initCursor();
-
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString(PrefKey.USERNAME, "");
-
-		MsgListItem.Cache.Init(context, username);
 	}
 
 	private void initCursor()
@@ -122,7 +116,6 @@ class MsgListItem extends View
 	private final TextPaint paint = new TextPaint();
 	private StaticLayout msgImg;
 	private DataItem data;
-	private int lastWidth;
 
 	final static class DataItem
 	{
@@ -137,7 +130,6 @@ class MsgListItem extends View
 		public static Typeface fontNormal;
 		public static Typeface fontItalic;
 		public static String username;
-		public static int dpi;
 
 		public static int padding;
 		public static int smallText;
@@ -145,24 +137,30 @@ class MsgListItem extends View
 		public static int headerAlign;
 		public static int headerHeight;
 
+		private static boolean isActive = false;
+
 		private Cache()
 		{
 		}
 
-		public static void Init(final Context context, final String Username)
+		public static void Init(final Context context, final int width)
 		{
+			if (isActive)
+				return;
+
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
 			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
 			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
-			username = Username;
+			username = pref.getString(PrefKey.USERNAME, "");
 
-			final DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-			dpi = (int) ((1 + Math.max(metrics.ydpi, metrics.xdpi)) / 160);
+			largeText = (int) ((3.0 / 64.0) * width);
+			smallText = largeText - 2;
+			padding = smallText / 2;
+			headerAlign = largeText;
+			headerHeight = (int) (1.5 * smallText);
 
-			padding = 9 * dpi;
-			smallText = 20 * dpi;
-			largeText = 22 * dpi;
-			headerAlign = 22 * dpi;
-			headerHeight = 30 * dpi;
+			isActive = true;
 		}
 	}
 
@@ -179,11 +177,10 @@ class MsgListItem extends View
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
 		final int width = MeasureSpec.getSize(widthMeasureSpec);
+		Cache.Init(getContext(), width);
 
-		if (width != lastWidth) {
+		if (msgImg == null)
 			msgImg = new StaticLayout(data.msg, paint, width - 4 * Cache.padding, Alignment.ALIGN_NORMAL, 1, 0, true);
-			lastWidth = width;
-		}
 
 		setMeasuredDimension(width, msgImg.getHeight() + Cache.headerHeight + 2 * Cache.padding);
 	}
