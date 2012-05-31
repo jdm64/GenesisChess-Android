@@ -94,6 +94,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", CANT_CONTACT_MSG);
+				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -103,6 +104,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", LOST_CONNECTION_MSG);
+				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -123,6 +125,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", CANT_CONTACT_MSG);
+				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -132,6 +135,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", LOST_CONNECTION_MSG);
+				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -147,6 +151,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", CANT_CONTACT_MSG);
+				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -156,6 +161,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", LOST_CONNECTION_MSG);
+				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -165,6 +171,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", SERVER_ILLOGICAL_MSG);
+				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -198,6 +205,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", CANT_CONTACT_MSG);
+				socket.logError(context, e, json);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();
@@ -207,6 +215,7 @@ public class NetworkClient implements Runnable
 			try {
 				json.put("result", "error");
 				json.put("reason", LOST_CONNECTION_MSG);
+				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				j.printStackTrace();
 				throw new RuntimeException();

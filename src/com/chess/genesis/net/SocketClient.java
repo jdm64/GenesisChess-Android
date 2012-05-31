@@ -16,6 +16,9 @@
 
 package com.chess.genesis.net;
 
+import android.content.*;
+import android.net.*;
+import com.chess.genesis.data.*;
 import java.io.*;
 import java.net.*;
 import org.json.*;
@@ -107,5 +110,19 @@ public final class SocketClient
 	} catch (final NullPointerException e) {
 		return new JSONObject("{\"result\":\"error\",\"reason\":\"connection lost\"}");
 	}
+	}
+
+	public void logError(final Context context, final Exception trace, final JSONObject json)
+	{
+		final ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		final NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		final FileLogger logger = new FileLogger(trace);
+
+		logger.addItem("NetActive", (netInfo != null)? netInfo.isConnected() : null);
+		logger.addItem("isConnected", socket.isConnected());
+		logger.addItem("isLoggedIn", isLoggedin);
+		logger.addItem("loginHash", loginHash);
+		logger.addItem("request", json.toString());
+		logger.write();
 	}
 }

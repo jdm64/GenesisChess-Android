@@ -70,6 +70,11 @@ public final class FileUtils
 
 	public static Uri writeFile(final String filename, final String data) throws FileNotFoundException, IOException
 	{
+		return writeFile(filename, data, false);
+	}
+
+	public static Uri writeFile(final String filename, final String data, final boolean append) throws FileNotFoundException, IOException
+	{
 		final String state = Environment.getExternalStorageState();
 
 		if (!Environment.MEDIA_MOUNTED.equals(state))
@@ -77,7 +82,7 @@ public final class FileUtils
 
 		final File dir = Environment.getExternalStorageDirectory();
 		final File file = new File(dir, filename);
-		final FileOutputStream buffer = new FileOutputStream(file);
+		final FileOutputStream buffer = new FileOutputStream(file, append);
 	try {
 		buffer.write(data.getBytes());
 

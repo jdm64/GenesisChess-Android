@@ -92,4 +92,13 @@ public class ObjectArray<Type>
 			str.append(element.toString() + " ");
 		return str.toString();
 	}
+
+	public static String arrayToString(final Object[] array, final String delim)
+	{
+		final StringBuffer str = new StringBuffer();
+
+		for (final Object element : array)
+			str.append(element.toString() + delim);
+		return str.toString();
+	}
 }

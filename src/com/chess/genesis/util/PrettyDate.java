@@ -20,6 +20,11 @@ import java.util.*;
 
 public class PrettyDate extends Date
 {
+	public PrettyDate()
+	{
+		super();
+	}
+
 	public PrettyDate(final long milliseconds)
 	{
 		super(milliseconds);
