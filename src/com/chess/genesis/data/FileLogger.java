@@ -39,6 +39,7 @@ public class FileLogger
 	{
 		final String data = new PrettyDate().stdFormat() + "\n"
 			+ buffer.toString() + "\n"
+			+ trace.getMessage() + "\n"
 			+ ObjectArray.arrayToString(trace.getStackTrace(), "\n") + "\n";
 
 		try {
