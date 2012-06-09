@@ -19,7 +19,7 @@ package com.chess.genesis.engine;
 
 import com.chess.genesis.util.*;
 
-abstract class TransItem
+class TransItem
 {
 	public static final int NONE_NODE = 0;
 	public static final int ALL_NODE = 3;
@@ -29,16 +29,17 @@ abstract class TransItem
 	public static final int HAS_SCORE = 2;
 	public static final int HAS_MOVE = 4;
 
-	public Move move;
+	public final Move move;
 	public long hash;
 	public int score;
 	public int depth;
 	public int type;
 
-	public TransItem()
+	public TransItem(final Move _move)
 	{
 		hash = score = depth = 0;
 		type = NONE_NODE;
+		move = _move;
 	}
 
 	public void set(final TransItem item)

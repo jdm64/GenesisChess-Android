@@ -19,6 +19,12 @@ package com.chess.genesis.engine;
 
 public interface Board
 {
+	static final int ZBOX_SIZE = 838;
+	static final int WTM_HASH = 837;
+	static final int ENPASSANT_HASH = 834;
+	static final int CASTLE_HASH = 834;
+	static final int HOLD_START = 768;
+
 	void reset();
 
 	int Piece(int index);
@@ -30,21 +36,19 @@ public interface Board
 	int[] getBoardArray();
 	int[] getPieceCounts(final int Loc);
 
+	void setStartHash(final long StartHash);
+	long[] getHashBox();
+
 	int kingIndex(final int color);
 	boolean incheck(final int color);
 	int isMate();
 
 	String printZfen();
 
-	void make(final GenMove move);
-	void make(final RegMove move);
+	void make(final Move move);
+	void unmake(final Move move);
+	void unmake(final Move move, final MoveFlags undoFlags);
 
-	void unmake(final GenMove move);
-	void unmake(final RegMove move, final MoveFlags undoFlags);
-
-	int validMove(final GenMove move);
-	int validMove(final RegMove move);
-
-	boolean validMove(final GenMove moveIn, final GenMove move);
-	boolean validMove(final RegMove moveIn, final RegMove move);
+	int validMove(final Move move);
+	boolean validMove(final Move moveIn, final Move move);
 }

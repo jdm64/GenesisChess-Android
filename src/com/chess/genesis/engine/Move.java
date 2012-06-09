@@ -19,7 +19,7 @@ package com.chess.genesis.engine;
 
 import android.os.*;
 
-public abstract class Move
+public abstract class Move implements Parcelable
 {
 	public static final int[] InitPieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
@@ -72,17 +72,12 @@ public abstract class Move
 	public int from;
 	public int to;
 
+	// only for RegMove
+	public int flags;
+
 	public Move()
 	{
 		index = xindex = from = to = -1;
-	}
-
-	public Move(final Move move)
-	{
-		index = move.index;
-		xindex = move.xindex;
-		from = move.from;
-		to = move.to;
 	}
 
 	public Move(final Parcel in)
@@ -93,11 +88,13 @@ public abstract class Move
 		to = in.readInt();
 	}
 
+	@Override
 	public int describeContents()
 	{
 		return 0;
 	}
 
+	@Override
 	public void writeToParcel(final Parcel out, final int Flags)
 	{
 		out.writeInt(index);
@@ -126,6 +123,14 @@ public abstract class Move
 		index = xindex = from = to = Piece.NULL_MOVE;
 		return this;
 	}
+
+	public abstract Move newInstance();
+	public abstract int getCastle();
+	public abstract void setCastle(final int side);
+	public abstract void setEnPassant();
+	public abstract boolean getEnPassant();
+	public abstract void setPromote(final int type);
+	public abstract int getPromote();
 
 	protected abstract StringBuffer printLoc(final int loc);
 

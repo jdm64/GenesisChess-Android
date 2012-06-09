@@ -17,11 +17,30 @@
 
 package com.chess.genesis.engine;
 
-class RegTransItem extends TransItem
+class MoveNode implements Comparable<MoveNode>
 {
-	public RegTransItem()
+	public final Move move;
+	public int score;
+	public boolean check;
+
+	public MoveNode(final Move _move)
 	{
-		super();
-		move = new RegMove();
+		score = 0;
+		check = false;
+		move = _move.newInstance();
+	}
+
+	public MoveNode(final MoveNode node)
+	{
+		score = node.score;
+		check = node.check;
+		move = node.move.newInstance();
+		move.set(node.move);
+	}
+
+	@Override
+	public int compareTo(final MoveNode a)
+	{
+		return (a.score > score)? 1 : ((a.score < score)? -1 : 0);
 	}
 }

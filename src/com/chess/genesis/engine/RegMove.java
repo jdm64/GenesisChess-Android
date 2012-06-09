@@ -19,10 +19,8 @@ package com.chess.genesis.engine;
 
 import android.os.*;
 
-public class RegMove extends Move implements Parcelable
+public class RegMove extends Move
 {
-	public int flags;
-
 	public static final Parcelable.Creator<RegMove> CREATOR = new Parcelable.Creator<RegMove>()
 	{
 		@Override
@@ -44,16 +42,16 @@ public class RegMove extends Move implements Parcelable
 		flags = 0;
 	}
 
-	public RegMove(final RegMove move)
-	{
-		super(move);
-		flags = move.flags;
-	}
-
 	public RegMove(final Parcel in)
 	{
 		super(in);
 		flags = in.readInt();
+	}
+
+	@Override
+	public RegMove newInstance()
+	{
+		return new RegMove();
 	}
 
 	@Override
@@ -63,7 +61,8 @@ public class RegMove extends Move implements Parcelable
 		out.writeInt(flags);
 	}
 
-	public void set(final RegMove move)
+	@Override
+	public void set(final Move move)
 	{
 		super.set(move);
 		flags = move.flags;
@@ -77,31 +76,37 @@ public class RegMove extends Move implements Parcelable
 		return this;
 	}
 
+	@Override
 	public int getCastle()
 	{
 		return flags & (CASTLE_KS | CASTLE_QS);
 	}
 
+	@Override
 	public void setCastle(final int side)
 	{
 		flags = side & (CASTLE_KS | CASTLE_QS);
 	}
 
+	@Override
 	public void setEnPassant()
 	{
 		flags = CAN_EP;
 	}
 
+	@Override
 	public boolean getEnPassant()
 	{
 		return (flags & CAN_EP) != 0;
 	}
 
+	@Override
 	public void setPromote(final int type)
 	{
 		flags = type & 0x07;
 	}
 
+	@Override
 	public int getPromote()
 	{
 		return flags & 0x07;

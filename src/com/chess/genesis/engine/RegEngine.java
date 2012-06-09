@@ -25,21 +25,21 @@ public class RegEngine extends Engine
 {
 	public final static int MSG = 111;
 
-	private final ObjectArray<RegMove> pvMove;
-	private final ObjectArray<RegMove> captureKiller;
-	private final ObjectArray<RegMove> moveKiller;
+	private final ObjectArray<Move> pvMove;
+	private final ObjectArray<Move> captureKiller;
+	private final ObjectArray<Move> moveKiller;
 
 	private RegBoard board;
-	private RegMoveList curr;
+	private MoveList curr;
 
 	public RegEngine(final Handler handler)
 	{
 		super(handler);
 
-		tt = new RegTransTable(8);
-		pvMove = new ObjectArray<RegMove>();
-		captureKiller = new ObjectArray<RegMove>();
-		moveKiller = new ObjectArray<RegMove>();
+		tt = new TransTable(new RegBoard(), new RegMove(), 8);
+		pvMove = new ObjectArray<Move>();
+		captureKiller = new ObjectArray<Move>();
+		moveKiller = new ObjectArray<Move>();
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class RegEngine extends Engine
 
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
-		final RegMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
+		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
 		if (ptr.size == 0)
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
@@ -119,7 +119,7 @@ public class RegEngine extends Engine
 	}
 
 	private boolean NegaMoveType(final Int alpha, final int beta, final Int best,
-		final int depth, final int limit, final ObjectArray<RegMove> killer, final int type)
+		final int depth, final int limit, final ObjectArray<Move> killer, final int type)
 	{
 		final RegMove move = new RegMove();
 		final MoveFlags undoflags = board.getMoveFlags();
@@ -127,7 +127,7 @@ public class RegEngine extends Engine
 		best.val = MIN_SCORE;
 
 		// Try Killer Move
-		final RegMove kmove = killer.get(depth);
+		final Move kmove = killer.get(depth);
 		if (kmove != null && board.validMove(kmove, move)) {
 			ismate.set(depth, false);
 
@@ -148,7 +148,7 @@ public class RegEngine extends Engine
 			}
 		}
 		// Try all of moveType Moves
-		final RegMoveList ptr = board.getMoveList(board.getStm(), type);
+		final MoveList ptr = board.getMoveList(board.getStm(), type);
 
 		if (ptr.size == 0)
 			return false;
@@ -190,7 +190,7 @@ public class RegEngine extends Engine
 				return Quiescence(alpha, beta, depth);
 			limit++;
 		}
-		final RegTransItem tt_item = new RegTransItem();
+		final TransItem tt_item = new TransItem(new RegMove());
 		final Int score = new Int();
 		final RegMove move = new RegMove();
 		final MoveFlags undoflags = board.getMoveFlags();

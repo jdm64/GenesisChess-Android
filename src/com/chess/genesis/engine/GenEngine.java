@@ -25,23 +25,23 @@ public class GenEngine extends Engine
 {
 	public final static int MSG = 109;
 
-	private final ObjectArray<GenMove> pvMove;
-	private final ObjectArray<GenMove> captureKiller;
-	private final ObjectArray<GenMove> moveKiller;
-	private final ObjectArray<GenMove> placeKiller;
+	private final ObjectArray<Move> pvMove;
+	private final ObjectArray<Move> captureKiller;
+	private final ObjectArray<Move> moveKiller;
+	private final ObjectArray<Move> placeKiller;
 
 	private GenBoard board;
-	private GenMoveList curr;
+	private MoveList curr;
 
 	public GenEngine(final Handler handler)
 	{
 		super(handler);
 
-		tt = new GenTransTable(8);
-		pvMove = new ObjectArray<GenMove>();
-		captureKiller = new ObjectArray<GenMove>();
-		moveKiller = new ObjectArray<GenMove>();
-		placeKiller = new ObjectArray<GenMove>();
+		tt = new TransTable(new GenBoard(), new GenMove(), 8);
+		pvMove = new ObjectArray<Move>();
+		captureKiller = new ObjectArray<Move>();
+		moveKiller = new ObjectArray<Move>();
+		placeKiller = new ObjectArray<Move>();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class GenEngine extends Engine
 
 	private int Quiescence(int alpha, final int beta, final int depth)
 	{
-		final GenMoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
+		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
 		if (ptr.size == 0)
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
@@ -120,14 +120,14 @@ public class GenEngine extends Engine
 	}
 
 	private boolean NegaMoveType(final Int alpha, final int beta, final Int best,
-		final int depth, final int limit, final ObjectArray<GenMove> killer, final int type)
+		final int depth, final int limit, final ObjectArray<Move> killer, final int type)
 	{
 		final GenMove move = new GenMove();
 
 		best.val = MIN_SCORE;
 
 		// Try Killer Move
-		final GenMove kmove = killer.get(depth);
+		final Move kmove = killer.get(depth);
 		if (kmove != null && board.validMove(kmove, move)) {
 			ismate.set(depth, false);
 
@@ -148,7 +148,7 @@ public class GenEngine extends Engine
 			}
 		}
 		// Try all of moveType Moves
-		final GenMoveList ptr = board.getMoveList(board.getStm(), type);
+		final MoveList ptr = board.getMoveList(board.getStm(), type);
 
 		if (ptr.size == 0)
 			return false;
@@ -190,7 +190,7 @@ public class GenEngine extends Engine
 				return Quiescence(alpha, beta, depth);
 			limit++;
 		}
-		final GenTransItem tt_item = new GenTransItem();
+		final TransItem tt_item = new TransItem(new GenMove());
 		final Int score = new Int();
 		final GenMove move = new GenMove();
 

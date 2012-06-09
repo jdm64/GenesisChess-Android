@@ -43,7 +43,7 @@ public class Benchmark implements Runnable
 		if (depth == 0 || System.currentTimeMillis() > end)
 			return 1;
 
-		final GenMoveList ptr = gboard.getMoveList(gboard.getStm());
+		final MoveList ptr = gboard.getMoveList(gboard.getStm());
 
 		long nodes = 0;
 		for (int i = 0; i < ptr.size; i++) {
@@ -60,7 +60,7 @@ public class Benchmark implements Runnable
 			return 1;
 
 		final MoveFlags flags = rboard.getMoveFlags();
-		final RegMoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
+		final MoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
 		for (int i = 0; i < ptr.size; i++) {

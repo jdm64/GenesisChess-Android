@@ -17,11 +17,14 @@
 
 package com.chess.genesis.engine;
 
-class GenTransItem extends TransItem
+class MoveList
 {
-	public GenTransItem()
+	public final MoveNode[] list;
+	public int size;
+
+	public MoveList()
 	{
-		super();
-		move = new GenMove();
+		size = 0;
+		list = new MoveNode[320];
 	}
 }

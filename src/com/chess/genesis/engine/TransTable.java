@@ -17,10 +17,25 @@
 
 package com.chess.genesis.engine;
 
-abstract class TransTable
+class TransTable
 {
 	protected TransItem[] table;
 	protected int size;
+
+	public TransTable(final Board board, final Move move, final int num_MB)
+	{
+		final Rand64 rad = new Rand64();
+		final long[] hashBox = board.getHashBox();
+
+		for (int i = 0; i < hashBox.length; i++)
+			hashBox[i] = rad.next();
+		board.setStartHash(rad.next());
+
+		size = (num_MB * 1048576) / 288;
+		table = new TransItem[size];
+		for (int i = 0; i < size; i++)
+			table[i] = new TransItem(move.newInstance());
+	}
 
 	public void clear()
 	{
@@ -44,7 +59,5 @@ abstract class TransTable
 		item.depth = depth;
 		item.type = type;
 		item.move.set(move);
-
-		table[index] = item;
 	}
 }

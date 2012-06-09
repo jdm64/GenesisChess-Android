@@ -19,7 +19,7 @@ package com.chess.genesis.engine;
 
 import android.os.*;
 
-public class GenMove extends Move implements Parcelable
+public class GenMove extends Move
 {
 	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<GenMove>()
 	{
@@ -41,14 +41,15 @@ public class GenMove extends Move implements Parcelable
 		super();
 	}
 
-	public GenMove(final GenMove move)
-	{
-		super(move);
-	}
-
 	public GenMove(final Parcel in)
 	{
 		super(in);
+	}
+
+	@Override
+	public GenMove newInstance()
+	{
+		return new GenMove();
 	}
 
 	@Override
@@ -57,6 +58,39 @@ public class GenMove extends Move implements Parcelable
 		super.setNull();
 		return this;
 	}
+
+	// Do Not Call The Following Functions!
+	@Override
+	public int getCastle()
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	@Override
+	public void setCastle(final int side)
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	@Override
+	public void setEnPassant()
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	@Override
+	public boolean getEnPassant()
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	@Override
+	public void setPromote(final int type)
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	@Override
+	public int getPromote()
+	{
+		throw new RuntimeException("RegMove function called from GenMove class");
+	}
+	// ------
 
 	@Override
 	protected StringBuffer printLoc(final int loc)

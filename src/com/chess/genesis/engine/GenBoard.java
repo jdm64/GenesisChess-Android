@@ -91,11 +91,7 @@ public class GenBoard extends GenPosition implements Board
 	// for pieceIndex()
 	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 
-	public static final int ZBOX_SIZE = 781;
-	public static final int WTM_HASH = 780;
-	public static final int HOLD_START = 768;
-
-	public static long[] hashBox = new long[ZBOX_SIZE];
+	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 
 	private long key;
@@ -198,15 +194,15 @@ public class GenBoard extends GenPosition implements Board
 
 	// Do Not call the following functions!
 	@Override
-	public MoveFlags getMoveFlags(){ return null; }
+	public MoveFlags getMoveFlags()
+	{
+		throw new RuntimeException("RegBoard function called from GenBoard class");
+	}
 	@Override
-	public void make(final RegMove move){ /* never call */ }
-	@Override
-	public void unmake(final RegMove move, final MoveFlags undoFlags){ /* never call */ }
-	@Override
-	public boolean validMove(final RegMove moveIn, final RegMove move){ return false; }
-	@Override
-	public int validMove(final RegMove move){ return Move.INVALID_MOVEMENT; }
+	public void unmake(final Move move, final MoveFlags undoFlags)
+	{
+		throw new RuntimeException("RegBoard function called from GenBoard class");
+	}
 	// ------
 
 	@Override
@@ -223,6 +219,18 @@ public class GenBoard extends GenPosition implements Board
 	public long hash()
 	{
 		return key;
+	}
+
+	@Override
+	public long[] getHashBox()
+	{
+		return hashBox;
+	}
+
+	@Override
+	public void setStartHash(final long StartHash)
+	{
+		startHash = StartHash;
 	}
 
 	@Override
@@ -250,7 +258,7 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public void make(final GenMove move)
+	public void make(final Move move)
 	{
 		// update board information
 		square[move.to] = piecetype[move.index];
@@ -284,7 +292,7 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public void unmake(final GenMove move)
+	public void unmake(final Move move)
 	{
 		piece[move.index] = move.from;
 		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
@@ -317,7 +325,7 @@ public class GenBoard extends GenPosition implements Board
 		ply--;
 	}
 
-	private boolean incheckMove(final GenMove move, final int color, final boolean stmCk)
+	private boolean incheckMove(final Move move, final int color, final boolean stmCk)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
 		if (stmCk || move.index == king)
@@ -336,7 +344,7 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public boolean validMove(final GenMove moveIn, final GenMove move)
+	public boolean validMove(final Move moveIn, final Move move)
 	{
 		move.set(moveIn);
 
@@ -369,7 +377,7 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public int validMove(final GenMove move)
+	public int validMove(final Move move)
 	{
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
@@ -413,14 +421,14 @@ public class GenBoard extends GenPosition implements Board
 		return getMoveList(color).size;
 	}
 
-	public GenMoveList getMoveList(final int color)
+	public MoveList getMoveList(final int color)
 	{
 		return getMoveList(color, Move.MOVE_ALL);
 	}
 
-	public GenMoveList getMoveList(final int color, final int movetype)
+	public MoveList getMoveList(final int color, final int movetype)
 	{
-		final GenMoveList data = new GenMoveList();
+		final MoveList data = new MoveList();
 		data.size = 0;
 
 		switch (movetype) {
@@ -449,7 +457,7 @@ public class GenBoard extends GenPosition implements Board
 		return data;
 	}
 
-	private void getMoveList(final GenMoveList data, final int color, final int movetype)
+	private void getMoveList(final MoveList data, final int color, final int movetype)
 	{
 		final boolean stmCk = incheck(color);
 		final int start = (color == Piece.WHITE)? 31:15, end = (color == Piece.WHITE)? 16:0;
@@ -473,7 +481,7 @@ public class GenBoard extends GenPosition implements Board
 			}
 
 			for (int n = 0; loc[n] != -1; n++) {
-				final GenMoveNode item = new GenMoveNode();
+				final MoveNode item = new MoveNode(new GenMove());
 				item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 				item.move.to = loc[n];
 				item.move.from = piece[idx];
@@ -490,7 +498,7 @@ public class GenBoard extends GenPosition implements Board
 		}
 	}
 
-	private void getPlaceMoveList(final GenMoveList data, final int pieceType)
+	private void getPlaceMoveList(final MoveList data, final int pieceType)
 	{
 		final int idx = pieceIndex(Piece.PLACEABLE, pieceType);
 		final int color = pieceType / Math.abs(pieceType);
@@ -506,7 +514,7 @@ public class GenBoard extends GenPosition implements Board
 			} else if (square[loc] != Piece.EMPTY) {
 				continue;
 			}
-			final GenMoveNode item = new GenMoveNode();
+			final MoveNode item = new MoveNode(new GenMove());
 			item.move.index = idx;
 			item.move.to = loc;
 			item.move.xindex = Piece.NONE;
