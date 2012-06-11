@@ -31,11 +31,12 @@ public interface Board
 	int PieceType(int index);
 
 	int getStm();
-	MoveFlags getMoveFlags();
+	void getMoveFlags(final MoveFlags Flags);
 
 	int[] getBoardArray();
 	int[] getPieceCounts(final int Loc);
 
+	MoveListPool getMoveListPool();
 	void setStartHash(final long StartHash);
 	long[] getHashBox();
 
@@ -47,7 +48,7 @@ public interface Board
 
 	void make(final Move move);
 	void unmake(final Move move);
-	void unmake(final Move move, final MoveFlags undoFlags);
+	void unmake(final Move move, final MoveFlags UndoFlags);
 
 	int validMove(final Move move);
 	boolean validMove(final Move moveIn, final Move move);

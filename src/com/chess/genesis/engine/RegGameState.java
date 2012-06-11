@@ -115,7 +115,9 @@ public class RegGameState extends GameState
 
 			if (board.validMove(move) != Move.VALID_MOVE)
 				break;
-			flagsHistory.push(board.getMoveFlags());
+			final MoveFlags flags = new MoveFlags();
+			board.getMoveFlags(flags);
+			flagsHistory.push(flags);
 			history.push(move);
 			board.make(move);
 			hindex++;
@@ -309,7 +311,8 @@ public class RegGameState extends GameState
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
-		final MoveFlags flags = board.getMoveFlags();
+		final MoveFlags flags = new MoveFlags();
+		board.getMoveFlags(flags);
 
 		// apply move to board
 		board.make(move);

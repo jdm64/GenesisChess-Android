@@ -29,6 +29,8 @@ public class RegEngine extends Engine
 	private final ObjectArray<Move> captureKiller;
 	private final ObjectArray<Move> moveKiller;
 
+	private final MoveFlags undoflags = new MoveFlags();
+	private MoveListPool pool;
 	private RegBoard board;
 	private MoveList curr;
 
@@ -52,6 +54,7 @@ public class RegEngine extends Engine
 	public void setBoard(final RegBoard _board)
 	{
 		board = new RegBoard(_board);
+		pool = board.getMoveListPool();
 	}
 
 	private void pickRandomMove()
@@ -90,14 +93,18 @@ public class RegEngine extends Engine
 	{
 		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
-		if (ptr.size == 0)
+		if (ptr.size == 0) {
+			pool.put(ptr);
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
+		}
 
 		int best = MIN_SCORE, score = -board.eval();
-		final MoveFlags undoflags = board.getMoveFlags();
+		board.getMoveFlags(undoflags);
 
-		if (score >= beta)
+		if (score >= beta) {
+			pool.put(ptr);
 			return score;
+		}
 		alpha = Math.max(alpha, score);
 
 		Arrays.sort(ptr.list, 0, ptr.size);
@@ -110,11 +117,14 @@ public class RegEngine extends Engine
 			score = -Quiescence(-beta, -alpha, depth + 1);
 			board.unmake(ptr.list[n].move, undoflags);
 
-			if (score >= beta)
+			if (score >= beta) {
+				pool.put(ptr);
 				return score;
+			}
 			best = Math.max(best, score);
 			alpha = Math.max(alpha, score);
 		}
+		pool.put(ptr);
 		return best;
 	}
 
@@ -122,7 +132,7 @@ public class RegEngine extends Engine
 		final int depth, final int limit, final ObjectArray<Move> killer, final int type)
 	{
 		final RegMove move = new RegMove();
-		final MoveFlags undoflags = board.getMoveFlags();
+		board.getMoveFlags(undoflags);
 
 		best.val = MIN_SCORE;
 
@@ -150,8 +160,10 @@ public class RegEngine extends Engine
 		// Try all of moveType Moves
 		final MoveList ptr = board.getMoveList(board.getStm(), type);
 
-		if (ptr.size == 0)
+		if (ptr.size == 0) {
+			pool.put(ptr);
 			return false;
+		}
 		Arrays.sort(ptr.list, 0, ptr.size);
 
 		ismate.set(depth, false);
@@ -171,6 +183,7 @@ public class RegEngine extends Engine
 			if (best.val >= beta) {
 				killer.set(depth, ptr.list[n].move);
 				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
+				pool.put(ptr);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -178,6 +191,7 @@ public class RegEngine extends Engine
 			}
 			b = alpha.val + 1;
 		}
+		pool.put(ptr);
 		return false;
 	}
 
@@ -193,7 +207,7 @@ public class RegEngine extends Engine
 		final TransItem tt_item = new TransItem(new RegMove());
 		final Int score = new Int();
 		final RegMove move = new RegMove();
-		final MoveFlags undoflags = board.getMoveFlags();
+		board.getMoveFlags(undoflags);
 
 		int best = MIN_SCORE;
 
@@ -250,8 +264,7 @@ public class RegEngine extends Engine
 
 	private void search(int alpha, final int beta, final int depth, final int limit)
 	{
-		curr = (curr != null)? curr : board.getMoveList(board.getStm(), Move.MOVE_ALL);
-		final MoveFlags undoflags = board.getMoveFlags();
+		board.getMoveFlags(undoflags);
 
 		int b = beta;
 		for (int n = 0; n < curr.size; n++) {
@@ -278,8 +291,8 @@ public class RegEngine extends Engine
 	public synchronized void run()
 	{
 		active = true;
-		curr = null;
 		endT = new Date().getTime() + secT * 1000;
+		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
 
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
@@ -290,7 +303,7 @@ public class RegEngine extends Engine
 		// Randomize opening
 		if (board.getPly() < 7)
 			pickRandomMove();
-		curr = null;
+		pool.put(curr);
 
 		final Bundle bundle = new Bundle();
 		bundle.putParcelable("move", pvMove.get(0));

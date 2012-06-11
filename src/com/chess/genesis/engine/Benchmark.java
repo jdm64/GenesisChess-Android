@@ -26,6 +26,8 @@ public class Benchmark implements Runnable
 	private final Handler handle;
 	private final RegBoard rboard;
 	private final GenBoard gboard;
+	private final MoveFlags flags;
+	private MoveListPool pool;
 	private long start;
 	private long end;
 	private long tNodes;
@@ -36,6 +38,7 @@ public class Benchmark implements Runnable
 
 		rboard = new RegBoard();
 		gboard = new GenBoard();
+		flags = new MoveFlags();
 	}
 
 	private long GenPerft(final int depth)
@@ -51,6 +54,7 @@ public class Benchmark implements Runnable
 			nodes += GenPerft(depth - 1);
 			gboard.unmake(ptr.list[i].move);
 		}
+		pool.put(ptr);
 		return nodes;
 	}
 
@@ -59,7 +63,7 @@ public class Benchmark implements Runnable
 		if (depth == 0 || System.currentTimeMillis() > end)
 			return 1;
 
-		final MoveFlags flags = rboard.getMoveFlags();
+		rboard.getMoveFlags(flags);
 		final MoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
@@ -68,6 +72,7 @@ public class Benchmark implements Runnable
 			nodes += RegPerft(depth - 1);
 			rboard.unmake(ptr.list[i].move, flags);
 		}
+		pool.put(ptr);
 		return nodes;
 	}
 
@@ -78,6 +83,7 @@ public class Benchmark implements Runnable
 		tNodes = 0;
 		start = now;
 		end = start + 5000;
+		pool = gboard.getMoveListPool();
 
 		for (int i = 1; true; i++) {
 			tNodes += GenPerft(i);
@@ -96,6 +102,7 @@ public class Benchmark implements Runnable
 		tNodes = 0;
 		start = now;
 		end = start + 5000;
+		pool = rboard.getMoveListPool();
 
 		for (int i = 1; true; i++) {
 			tNodes += RegPerft(i);

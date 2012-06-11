@@ -38,6 +38,13 @@ class MoveNode implements Comparable<MoveNode>
 		move.set(node.move);
 	}
 
+	public void set(final MoveNode node)
+	{
+		score = node.score;
+		check = node.check;
+		move.set(node.move);
+	}
+
 	@Override
 	public int compareTo(final MoveNode a)
 	{

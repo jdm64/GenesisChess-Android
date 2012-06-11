@@ -30,6 +30,7 @@ public class GenEngine extends Engine
 	private final ObjectArray<Move> moveKiller;
 	private final ObjectArray<Move> placeKiller;
 
+	private MoveListPool pool;
 	private GenBoard board;
 	private MoveList curr;
 
@@ -48,6 +49,7 @@ public class GenEngine extends Engine
 	public void setBoard(final GenBoard _board)
 	{
 		board = new GenBoard(_board);
+		pool = board.getMoveListPool();
 	}
 
 	@Override
@@ -92,13 +94,17 @@ public class GenEngine extends Engine
 	{
 		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
-		if (ptr.size == 0)
+		if (ptr.size == 0) {
+			pool.put(ptr);
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
+		}
 
 		int best = MIN_SCORE, score = -board.eval();
 
-		if (score >= beta)
+		if (score >= beta) {
+			pool.put(ptr);
 			return score;
+		}
 		alpha = Math.max(alpha, score);
 
 		Arrays.sort(ptr.list, 0, ptr.size);
@@ -111,11 +117,14 @@ public class GenEngine extends Engine
 			score = -Quiescence(-beta, -alpha, depth + 1);
 			board.unmake(ptr.list[n].move);
 
-			if (score >= beta)
+			if (score >= beta) {
+				pool.put(ptr);
 				return score;
+			}
 			best = Math.max(best, score);
 			alpha = Math.max(alpha, score);
 		}
+		pool.put(ptr);
 		return best;
 	}
 
@@ -150,8 +159,10 @@ public class GenEngine extends Engine
 		// Try all of moveType Moves
 		final MoveList ptr = board.getMoveList(board.getStm(), type);
 
-		if (ptr.size == 0)
+		if (ptr.size == 0) {
+			pool.put(ptr);
 			return false;
+		}
 		Arrays.sort(ptr.list, 0, ptr.size);
 
 		ismate.set(depth, false);
@@ -171,6 +182,7 @@ public class GenEngine extends Engine
 			if (best.val >= beta) {
 				killer.set(depth, ptr.list[n].move);
 				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
+				pool.put(ptr);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
@@ -178,6 +190,7 @@ public class GenEngine extends Engine
 			}
 			b = alpha.val + 1;
 		}
+		pool.put(ptr);
 		return false;
 	}
 
@@ -252,8 +265,6 @@ public class GenEngine extends Engine
 
 	private void search(int alpha, final int beta, final int depth, final int limit)
 	{
-		curr = (curr != null)? curr : board.getMoveList(board.getStm());
-
 		int b = beta;
 		for (int n = 0; n < curr.size; n++) {
 			tactical.set(depth + 1, curr.list[n].check);
@@ -279,8 +290,8 @@ public class GenEngine extends Engine
 	public synchronized void run()
 	{
 		active = true;
-		curr = null;
 		endT = new Date().getTime() + secT * 1000;
+		curr = board.getMoveList(board.getStm());
 
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
@@ -291,7 +302,7 @@ public class GenEngine extends Engine
 		// Randomize opening
 		if (board.getPly() < 7)
 			pickRandomMove();
-		curr = null;
+		pool.put(curr);
 
 		final Bundle bundle = new Bundle();
 		bundle.putParcelable("move", pvMove.get(0));

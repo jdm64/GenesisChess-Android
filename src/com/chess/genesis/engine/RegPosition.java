@@ -28,7 +28,7 @@ class RegPosition extends RegMoveLookup
 		Piece.A2, Piece.B2, Piece.C2, Piece.D2, Piece.E2, Piece.F2, Piece.G2, Piece.H2,
 		Piece.B1, Piece.G1, Piece.C1, Piece.F1, Piece.A1, Piece.H1, Piece.D1, Piece.E1};
 
-	public MoveFlags flags;
+	public final MoveFlags flags;
 
 	public RegPosition()
 	{

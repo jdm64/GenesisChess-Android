@@ -94,12 +94,15 @@ public class GenBoard extends GenPosition implements Board
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 
+	private final MoveNode item = new MoveNode(new GenMove());
+	private final MoveListPool pool;
 	private long key;
 	private int mscore;
 
 	public GenBoard()
 	{
 		reset();
+		pool = new MoveListPool(new GenMove());
 	}
 
 	public GenBoard(final GenBoard board)
@@ -107,6 +110,7 @@ public class GenBoard extends GenPosition implements Board
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
 		piecetype = IntArray.clone(board.piecetype);
+		pool = board.getMoveListPool();
 
 		stm = board.stm;
 		ply = board.ply;
@@ -194,7 +198,7 @@ public class GenBoard extends GenPosition implements Board
 
 	// Do Not call the following functions!
 	@Override
-	public MoveFlags getMoveFlags()
+	public void getMoveFlags(final MoveFlags Flags)
 	{
 		throw new RuntimeException("RegBoard function called from GenBoard class");
 	}
@@ -231,6 +235,12 @@ public class GenBoard extends GenPosition implements Board
 	public void setStartHash(final long StartHash)
 	{
 		startHash = StartHash;
+	}
+
+	@Override
+	public MoveListPool getMoveListPool()
+	{
+		return pool;
 	}
 
 	@Override
@@ -428,7 +438,7 @@ public class GenBoard extends GenPosition implements Board
 
 	public MoveList getMoveList(final int color, final int movetype)
 	{
-		final MoveList data = new MoveList();
+		final MoveList data = pool.get();
 		data.size = 0;
 
 		switch (movetype) {
@@ -481,7 +491,6 @@ public class GenBoard extends GenPosition implements Board
 			}
 
 			for (int n = 0; loc[n] != -1; n++) {
-				final MoveNode item = new MoveNode(new GenMove());
 				item.move.xindex = (square[loc[n]] == Piece.EMPTY)? Piece.NONE : pieceIndex(loc[n], square[loc[n]]);
 				item.move.to = loc[n];
 				item.move.from = piece[idx];
@@ -491,7 +500,7 @@ public class GenBoard extends GenPosition implements Board
 				if (!incheckMove(item.move, color, stmCk)) {
 					item.check = incheckMove(item.move, color ^ -2, false);
 					item.score = eval();
-					data.list[data.size++] = item;
+					data.list[data.size++].set(item);
 				}
 				unmake(item.move);
 			}
@@ -514,7 +523,6 @@ public class GenBoard extends GenPosition implements Board
 			} else if (square[loc] != Piece.EMPTY) {
 				continue;
 			}
-			final MoveNode item = new MoveNode(new GenMove());
 			item.move.index = idx;
 			item.move.to = loc;
 			item.move.xindex = Piece.NONE;
@@ -525,7 +533,7 @@ public class GenBoard extends GenPosition implements Board
 			if (!incheckMove(item.move, color, stmCk) && !incheckMove(item.move, color ^ -2, false)) {
 				// item.check initialized to false
 				item.score = eval();
-				data.list[data.size++] = item;
+				data.list[data.size++].set(item);
 			}
 			unmake(item.move);
 		}

@@ -19,10 +19,12 @@ package com.chess.genesis.engine;
 
 abstract class GenMoveLookup extends BaseBoard
 {
+	private final int[] list = new int[28];
+
 	public int[] genAll(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type], list = new int[28];
+		final int[] offset = offsets[type];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -45,7 +47,7 @@ abstract class GenMoveLookup extends BaseBoard
 	public int[] genCapture(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type], list = new int[28];
+		final int[] offset = offsets[type];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
@@ -67,7 +69,7 @@ abstract class GenMoveLookup extends BaseBoard
 	public int[] genMove(final int From)
 	{
 		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type], list = new int[28];
+		final int[] offset = offsets[type];
 		int next = 0;
 
 		if (type == Piece.PAWN) {
