@@ -275,7 +275,6 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
-		final long time = json.getLong("time");
 
 		for (int i = 0; i < ids.length(); i++) {
 			if (error)
@@ -287,7 +286,7 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 		// Save sync time
 		final Editor editor = pref.edit();
-		editor.putLong(PrefKey.LASTGAMESYNC, time);
+		editor.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
 		editor.commit();
 	} catch (final JSONException e) {
 		e.printStackTrace();

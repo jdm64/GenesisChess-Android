@@ -501,7 +501,7 @@ public class NumberSpinner extends LinearLayout
 		}
 	}
 
-	private int getSelectedPos(String str)
+	private int getSelectedPos(final String str)
 	{
 		if (mDisplayedValues == null) {
 			try {
@@ -510,10 +510,10 @@ public class NumberSpinner extends LinearLayout
 				/* Ignore as if it's not a number we don't care */
 			}
 		} else {
-			str = str.toLowerCase();
+			final String dVal = str.toLowerCase();
 			for (int i = 0; i < mDisplayedValues.length; i++) {
 				/* Don't force the user to type in jan when ja will do */
-				if (mDisplayedValues[i].toLowerCase().startsWith(str)) {
+				if (mDisplayedValues[i].toLowerCase().startsWith(dVal)) {
 					return mStart + i;
 				}
 			}
@@ -522,7 +522,7 @@ public class NumberSpinner extends LinearLayout
 			 * 10 instead of OCT so support that too.
 			 */
 			try {
-				return Integer.parseInt(str);
+				return Integer.parseInt(dVal);
 			} catch (final NumberFormatException e) {
 				/* Ignore as if it's not a number we don't care */
 			}

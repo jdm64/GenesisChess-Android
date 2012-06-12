@@ -46,11 +46,10 @@ class GameInfo
 
 	public int getYourTurn()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-
 		if (status != Enums.ACTIVE)
 			return Enums.YOUR_TURN;
 
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final int color = white.equals(pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR))? Piece.WHITE : Piece.BLACK;
 
 		if (draw != 0)

@@ -167,23 +167,20 @@ public class GameStatsDialog extends BaseDialog
 		setBodyView(R.layout.dialog_endgame);
 		setButtonTxt(R.id.cancel, "Close");
 
-		// Set TextViews
-		final int list[] = new int[]{R.id.opponent, R.id.result,
-			R.id.psr_type, R.id.psr_score};
-		final String data[] = new String[]{opponent, result,
-			psr_type, psr_score};
-
-		TextView msg = null;
-		for (int i = 0; i < list.length; i++) {
-			msg = (TextView) findViewById(list[i]);
-			msg.setText(data[i]);
-		}
-
-		// psr_score must be last in list[]
+		final TextView score = (TextView) findViewById(R.id.psr_score);
+		score.setText(psr_score);
 		if (diff > 0)
-			msg.setTextColor(MColors.GREEN_DARK);
+			score.setTextColor(MColors.GREEN_DARK);
 		else if (diff < 0)
-			msg.setTextColor(MColors.RED_DARK);
+			score.setTextColor(MColors.RED_DARK);
+
+		// Set TextViews
+		final int list[] = new int[]{R.id.opponent, R.id.result, R.id.psr_type};
+		final String data[] = new String[]{opponent, result, psr_type};
+		for (int i = 0; i < list.length; i++) {
+			final TextView tv = (TextView) findViewById(list[i]);
+			tv.setText(data[i]);
+		}
 	}
 
 	@Override

@@ -20,6 +20,7 @@ public class ObjectArray<Type>
 {
 	private Type[] list = makeArray(0);
 
+	@SuppressWarnings({"unchecked", "static-method"})
 	private Type[] makeArray(final int size)
 	{
 		return (Type[]) new Object[size];

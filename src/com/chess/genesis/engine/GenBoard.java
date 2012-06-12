@@ -510,11 +510,11 @@ public class GenBoard extends GenPosition implements Board
 	private void getPlaceMoveList(final MoveList data, final int pieceType)
 	{
 		final int idx = pieceIndex(Piece.PLACEABLE, pieceType);
-		final int color = pieceType / Math.abs(pieceType);
 
 		if (idx == Piece.NONE)
 			return;
 
+		final int color = pieceType / Math.abs(pieceType);
 		final boolean stmCk = incheck(color);
 		for (int loc = 0x77; loc >= 0; loc--) {
 			if ((loc & 0x88) != 0) {

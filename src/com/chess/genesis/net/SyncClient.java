@@ -186,7 +186,6 @@ public class SyncClient implements Runnable
 	{
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
-		final long time = json.getLong("time");
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
 		for (int i = 0; i < ids.length(); i++) {
@@ -200,7 +199,7 @@ public class SyncClient implements Runnable
 		}
 		// Save sync time
 		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong(PrefKey.LASTGAMESYNC, time);
+		pref.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
 		pref.commit();
 	} catch (final JSONException e) {
 		e.printStackTrace();

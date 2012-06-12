@@ -18,6 +18,7 @@ package com.chess.genesis.util;
 
 import java.util.*;
 
+@SuppressWarnings("serial")
 public class PrettyDate extends Date
 {
 	public PrettyDate()

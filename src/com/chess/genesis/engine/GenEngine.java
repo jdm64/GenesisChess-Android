@@ -90,7 +90,7 @@ public class GenEngine extends Engine
 		curr.size = cut;
 	}
 
-	private int Quiescence(int alpha, final int beta, final int depth)
+	private int Quiescence(final int _alpha, final int beta, final int depth)
 	{
 		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);
 
@@ -99,14 +99,13 @@ public class GenEngine extends Engine
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
 		}
 
-		int best = MIN_SCORE, score = -board.eval();
-
+		int score = -board.eval();
 		if (score >= beta) {
 			pool.put(ptr);
 			return score;
 		}
-		alpha = Math.max(alpha, score);
-
+		int best = MIN_SCORE;
+		int alpha = Math.max(_alpha, score);
 		Arrays.sort(ptr.list, 0, ptr.size);
 
 		for (int n = 0; n < ptr.size; n++) {
@@ -263,9 +262,9 @@ public class GenEngine extends Engine
 		return best;
 	}
 
-	private void search(int alpha, final int beta, final int depth, final int limit)
+	protected void search(final int Alpha, final int beta, final int depth, final int limit)
 	{
-		int b = beta;
+		int alpha = Alpha, b = beta;
 		for (int n = 0; n < curr.size; n++) {
 			tactical.set(depth + 1, curr.list[n].check);
 

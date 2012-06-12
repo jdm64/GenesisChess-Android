@@ -113,20 +113,18 @@ public class RegisterFrag extends BaseContentFrag
 	{
 		EditText txt = (EditText) act.findViewById(R.id.username);
 		final String username = txt.getText().toString().trim();
+		if (!valid_username(username))
+			return;
 
 		txt = (EditText) act.findViewById(R.id.password);
 		final String password = txt.getText().toString();
-
 		txt = (EditText) act.findViewById(R.id.password2);
 		final String password2 = txt.getText().toString();
+		if (!valid_password(password, password2))
+			return;
 
 		txt = (EditText) act.findViewById(R.id.email);
 		final String email = txt.getText().toString().trim();
-
-		if (!valid_username(username))
-			return;
-		if (!valid_password(password, password2))
-			return;
 		if (!valid_email(email))
 			return;
 
