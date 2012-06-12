@@ -104,15 +104,9 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 		android:src="@drawable/btn_googleplus"/>
 	</com.chess.genesis.view.ManualPanel>
 	<com.chess.genesis.view.RobotoText
-	android:id="@+id/beta"
+	android:id="@+id/version"
 	android:layout_above="@id/layout01"
 	android:layout_alignParentRight="true"
-	android:paddingRight="3dp"
-	android:textSize="10dp"
-	android:text="Beta"/>
-	<com.chess.genesis.view.RobotoText
-	android:layout_above="@id/layout01"
-	android:layout_toLeftOf="@id/beta"
 	android:paddingRight="3dp"
 	android:textSize="10dp"
 	android:text="@string/version"/>
