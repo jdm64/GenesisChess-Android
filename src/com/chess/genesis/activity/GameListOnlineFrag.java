@@ -117,8 +117,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 						progress.remove();
 					}
 				} catch (final JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
+					throw new RuntimeException(e.getMessage(), e);
 				}
 				break;
 			case NetworkClient.POOL_INFO:
@@ -138,8 +137,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 
 					progress.remove();
 				} catch (final JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
+					throw new RuntimeException(e.getMessage(), e);
 				}
 				break;
 			case NetworkClient.NEW_GAME:
@@ -155,8 +153,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 					final SyncClient sync = new SyncClient(act, handle);
 					new Thread(sync).start();
 				} catch (final JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
+					throw new RuntimeException(e.getMessage(), e);
 				}
 				break;
 			}
@@ -264,8 +261,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		tpool.setOnClickListener(this);
 		tpool.setOnTouchListener(this);
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 
 		final SwipeTabsPagerAdapter tabAdapter = new SwipeTabsPagerAdapter(act, act.getSupportFragmentManager());

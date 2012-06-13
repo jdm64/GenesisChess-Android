@@ -88,8 +88,7 @@ public final class SocketClient
 		loginHash = null;
 		isLoggedin = false;
 	} catch (final IOException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 

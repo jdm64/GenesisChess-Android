@@ -87,8 +87,7 @@ public class NetworkClient implements Runnable
 			try {
 				request.put("passhash", Crypto.LoginKey(socket, request.getString("passhash")));
 			} catch (final JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		} catch (final SocketException e) {
 			try {
@@ -96,8 +95,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", CANT_CONTACT_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		} catch (final IOException e) {
@@ -106,8 +104,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", LOST_CONNECTION_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		}
@@ -127,8 +124,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", CANT_CONTACT_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		} catch (final IOException e) {
@@ -137,8 +133,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", LOST_CONNECTION_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		}
@@ -153,8 +148,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", CANT_CONTACT_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		} catch (final IOException e) {
@@ -163,8 +157,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", LOST_CONNECTION_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		} catch (final JSONException e) {
@@ -173,8 +166,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", SERVER_ILLOGICAL_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		}
@@ -198,8 +190,7 @@ public class NetworkClient implements Runnable
 				json.put("username", username);
 				json.put("passhash", Crypto.LoginKey(socket, password));
 			} catch (final JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		} catch (final SocketException e) {
 			try {
@@ -207,8 +198,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", CANT_CONTACT_MSG);
 				socket.logError(context, e, json);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		} catch (final IOException e) {
@@ -217,8 +207,7 @@ public class NetworkClient implements Runnable
 				json.put("reason", LOST_CONNECTION_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
-				j.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(j.getMessage(), j);
 			}
 			error = true;
 		}
@@ -238,8 +227,7 @@ public class NetworkClient implements Runnable
 			socket.setIsLoggedIn(true);
 			return true;
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -277,8 +265,7 @@ public class NetworkClient implements Runnable
 			request.put("passhash", Crypto.HashPasswd(password));
 			request.put("email", email);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -298,8 +285,7 @@ public class NetworkClient implements Runnable
 			// the json in a new thread.
 			request.put("passhash", password);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -314,8 +300,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "joingame");
 			request.put("gametype", gametype);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -332,8 +317,7 @@ public class NetworkClient implements Runnable
 			request.put("gametype", gametype);
 			request.put("color", color);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 
 	}
@@ -350,8 +334,7 @@ public class NetworkClient implements Runnable
 			request.put("gameid", gameid);
 			request.put("move", move);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -366,8 +349,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "resign");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -383,8 +365,7 @@ public class NetworkClient implements Runnable
 			request.put("gameid", gameid);
 			request.put("txt", msg);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -399,8 +380,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "syncmsgs");
 			request.put("time", time);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -415,8 +395,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "gamestatus");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -431,8 +410,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "gameinfo");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -447,8 +425,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "gamedata");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -463,8 +440,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "gameids");
 			request.put("type", type);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -479,8 +455,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "syncgames");
 			request.put("time", time);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -495,8 +470,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "gamescore");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -512,8 +486,7 @@ public class NetworkClient implements Runnable
 			request.put("option", option);
 			request.put("value", value);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -528,8 +501,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "getoption");
 			request.put("option", option);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -543,8 +515,7 @@ public class NetworkClient implements Runnable
 		try {
 			request.put("request", "poolinfo");
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -559,8 +530,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "nudge");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -575,8 +545,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "idleresign");
 			request.put("gameid", gameid);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -591,8 +560,7 @@ public class NetworkClient implements Runnable
 			request.put("request", "userstats");
 			request.put("username", username);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -608,8 +576,7 @@ public class NetworkClient implements Runnable
 			request.put("gameid", gameid);
 			request.put("action", action);
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 }

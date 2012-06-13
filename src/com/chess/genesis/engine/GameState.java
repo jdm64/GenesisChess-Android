@@ -217,8 +217,7 @@ public abstract class GameState
 			break;
 		}
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -275,8 +274,7 @@ public abstract class GameState
 			try {
 				ShowGameStats(new JSONObject());
 			} catch (final JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 			} else {
 				progress.setText("Retrieving Score");

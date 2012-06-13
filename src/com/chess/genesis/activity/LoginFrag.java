@@ -85,8 +85,7 @@ public class LoginFrag extends BaseContentFrag
 				return;
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 
 			switch (msg.what) {

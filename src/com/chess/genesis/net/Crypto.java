@@ -48,8 +48,7 @@ final class Crypto
 		digst.update(str.getBytes());
 		return calcHash(digst);
 	} catch (final java.security.NoSuchAlgorithmException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -68,8 +67,7 @@ final class Crypto
 
 		return calcHash(digst);
 	} catch (final java.security.NoSuchAlgorithmException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

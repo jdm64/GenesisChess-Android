@@ -59,8 +59,7 @@ public class SyncClient implements Runnable
 				return;
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 
 			switch (msg.what) {
@@ -108,8 +107,7 @@ public class SyncClient implements Runnable
 			Thread.sleep(16);
 		lock = 0;
 	} catch (final InterruptedException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -175,8 +173,7 @@ public class SyncClient implements Runnable
 				json.put("result", "ok");
 				json.put("reason", "gamelist updated");
 			} catch (final JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 			callback.sendMessage(Message.obtain(callback, MSG, json));
 		}
@@ -202,8 +199,7 @@ public class SyncClient implements Runnable
 		pref.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
 		pref.commit();
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -231,8 +227,7 @@ public class SyncClient implements Runnable
 		pref.putLong(PrefKey.LASTGAMESYNC, time);
 		pref.commit();
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -252,8 +247,7 @@ public class SyncClient implements Runnable
 			lock++;
 		}
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -282,8 +276,7 @@ public class SyncClient implements Runnable
 		list_need.removeAll(list_have);
 		return list_need;
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -326,8 +319,7 @@ public class SyncClient implements Runnable
 		pref.putLong(PrefKey.LASTMSGSYNC, time);
 		pref.commit();
 	}  catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

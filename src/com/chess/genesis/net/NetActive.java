@@ -53,8 +53,7 @@ class NetDisconnect implements Runnable
 		if (NetActive.get() < 1)
 			SocketClient.getInstance().disconnect();
 	} catch (final InterruptedException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

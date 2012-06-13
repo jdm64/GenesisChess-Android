@@ -71,8 +71,7 @@ public class ProgressMsg extends ProgressDialog implements Runnable
 		Thread.sleep(256);
 		dismiss();
 	} catch (final InterruptedException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

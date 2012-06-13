@@ -63,8 +63,7 @@ public class GenesisNotifier extends Service implements Runnable
 				return;
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 
 			switch (msg.what) {
@@ -230,8 +229,7 @@ public class GenesisNotifier extends Service implements Runnable
 			Thread.sleep(16);
 		lock = 0;
 	} catch (final java.lang.InterruptedException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -289,8 +287,7 @@ public class GenesisNotifier extends Service implements Runnable
 		editor.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
 		editor.commit();
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -310,8 +307,7 @@ public class GenesisNotifier extends Service implements Runnable
 		editor.putLong(PrefKey.LASTMSGSYNC, time);
 		editor.commit();
 	}  catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 

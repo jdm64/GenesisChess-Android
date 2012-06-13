@@ -49,7 +49,7 @@ public abstract class PieceCache
 			pieceBitmaps[i] = BitmapFactory.decodeResource(cntx.getResources(), pieceImages[i]);
 
 	} catch (final NameNotFoundException e) {
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 		isActive = true;
 	}

@@ -36,8 +36,7 @@ public final class UpgradeHandler
 
 		upgrade(pref, pref.getInt(PrefKey.APPVERSION, 0), pinfo.versionCode);
 	} catch (final NameNotFoundException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 

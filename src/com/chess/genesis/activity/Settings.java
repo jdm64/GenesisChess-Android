@@ -70,8 +70,7 @@ public class Settings extends PreferenceActivity implements OnPreferenceChangeLi
 				break;
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 		}
 	};

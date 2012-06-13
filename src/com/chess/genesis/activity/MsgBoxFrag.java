@@ -66,8 +66,7 @@ public class MsgBoxFrag extends BaseContentFrag
 					break;
 				}
 			} catch (final JSONException e) {
-				e.printStackTrace();
-				throw new RuntimeException();
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	};
@@ -206,8 +205,7 @@ public class MsgBoxFrag extends BaseContentFrag
 		db.setMsgsRead(gameid);
 		db.close();
 	}  catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

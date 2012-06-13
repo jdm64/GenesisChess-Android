@@ -62,8 +62,7 @@ public class GamePoolDialog extends BaseDialog
 			data.push(new PoolDataItem(type, time));
 		}
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 

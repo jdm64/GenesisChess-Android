@@ -138,8 +138,7 @@ public class GameStatsDialog extends BaseDialog
 				b_to = json.getJSONObject("black").getInt("to");
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 		final int to = (ycol == Piece.WHITE)? w_to : b_to;
 		diff = (ycol == Piece.WHITE)? (w_to - w_from) : (b_to - b_from);

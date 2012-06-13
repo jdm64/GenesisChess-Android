@@ -71,8 +71,7 @@ public class UserStatsFrag extends BaseContentFrag
 				break;
 			}
 		} catch (final JSONException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException(e.getMessage(), e);
 		}
 		}
 	};
@@ -325,8 +324,7 @@ public class UserStatsFrag extends BaseContentFrag
 		txt = (TextView) act.findViewById(R.id.total_ties);
 		txt.setText("Draws: " + String.valueOf(valC + valD));
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 }

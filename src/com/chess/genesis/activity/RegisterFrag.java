@@ -49,8 +49,7 @@ public class RegisterFrag extends BaseContentFrag
 					progress.setText("Registration Successfull");
 					new RegisterActivation(act, handle).show();
 				} catch (final JSONException e) {
-					e.printStackTrace();
-					throw new RuntimeException();
+					throw new RuntimeException(e.getMessage(), e);
 				}
 				break;
 			case RegisterConfirm.MSG:

@@ -172,8 +172,7 @@ public class GameDataDB
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -212,8 +211,7 @@ public class GameDataDB
 		final Object[] data2 = {stime, status, ply, yourturn, zfen, history, idle, drawoffer, gameid};
 		db.execSQL("UPDATE onlinegames SET stime=?, status=?, ply=?, yourturn=?, zfen=?, history=?, idle=?, drawoffer=? WHERE gameid=?;", data2);
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -347,8 +345,7 @@ public class GameDataDB
 
 		db.execSQL(q1 + q2 + q3 + q4, data);
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
@@ -430,8 +427,7 @@ public class GameDataDB
 		final Object[] data = {gameid, time, username, msg, opponent, unread};
 		db.execSQL("INSERT OR IGNORE INTO msgtable (gameid, time, username, msg, opponent, unread) VALUES (?, ?, ?, ?, ?, ?);", data);
 	} catch (final JSONException e) {
-		e.printStackTrace();
-		throw new RuntimeException();
+		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
