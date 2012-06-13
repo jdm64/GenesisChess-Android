@@ -25,29 +25,25 @@ public class RegEngine extends Engine
 {
 	public final static int MSG = 111;
 
-	private final ObjectArray<Move> pvMove;
-	private final ObjectArray<Move> captureKiller;
-	private final ObjectArray<Move> moveKiller;
-
 	private final MoveFlags undoflags = new MoveFlags();
-	private MoveListPool pool;
-	private RegBoard board;
-	private MoveList curr;
 
 	public RegEngine(final Handler handler)
 	{
 		super(handler);
 
 		tt = new TransTable(new RegBoard(), new RegMove(), 8);
-		pvMove = new ObjectArray<Move>();
-		captureKiller = new ObjectArray<Move>();
-		moveKiller = new ObjectArray<Move>();
+	}
+
+	@Override
+	protected int getMsgId()
+	{
+		return MSG;
 	}
 
 	@Override
 	public void setBoard(final GenBoard _board)
 	{
-		// NEVER CALL!
+		throw new RuntimeException("RegEngine.setBoard called with GenBoard object");
 	}
 
 	@Override
@@ -55,38 +51,6 @@ public class RegEngine extends Engine
 	{
 		board = new RegBoard(_board);
 		pool = board.getMoveListPool();
-	}
-
-	private void pickRandomMove()
-	{
-		final int score = curr.list[0].score;
-		int end = curr.size;
-
-		for (int i = 1; i < curr.size; i++) {
-			if (curr.list[i].score == score)
-				continue;
-			end = i;
-			break;
-		}
-		final int ind = (int) (Math.abs(rand.next()) % end);
-		pvMove.set(0, curr.list[ind].move);
-	}
-
-	private void pruneWeakMoves()
-	{
-		if (curr.list[0].score == curr.list[curr.size - 1].score)
-			return;
-
-		int cut = curr.size;
-		final int weak = curr.list[cut - 1].score;
-
-		for (int i = cut - 2; i > 0; i--) {
-			if (curr.list[i].score == weak)
-				continue;
-			cut = i + 1;
-			break;
-		}
-		curr.size = cut;
 	}
 
 	private int Quiescence(final int _alpha, final int beta, final int depth)
@@ -262,6 +226,7 @@ public class RegEngine extends Engine
 		return best;
 	}
 
+	@Override
 	protected void search(final int Alpha, final int beta, final int depth, final int limit)
 	{
 		board.getMoveFlags(undoflags);
@@ -285,31 +250,5 @@ public class RegEngine extends Engine
 		}
 		Arrays.sort(curr.list, 0, curr.size);
 		pruneWeakMoves();
-	}
-
-	@Override
-	public synchronized void run()
-	{
-		active = true;
-		endT = new Date().getTime() + secT * 1000;
-		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
-
-		for (int depth = 1; true; depth++) {
-			search(MIN_SCORE, MAX_SCORE, 0, depth);
-			if (new Date().getTime() > endT)
-				break;
-		}
-
-		// Randomize opening
-		if (board.getPly() < 7)
-			pickRandomMove();
-		pool.put(curr);
-
-		final Bundle bundle = new Bundle();
-		bundle.putParcelable("move", pvMove.get(0));
-		bundle.putLong("time", endT);
-
-		handle.sendMessage(handle.obtainMessage(MSG, bundle));
-		active = false;
 	}
 }

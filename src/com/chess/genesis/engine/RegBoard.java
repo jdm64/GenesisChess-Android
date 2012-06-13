@@ -151,11 +151,13 @@ public class RegBoard extends RegPosition implements Board
 		return stm;
 	}
 
+	@Override
 	public int getPly()
 	{
 		return ply;
 	}
 
+	@Override
 	public long hash()
 	{
 		return key;
@@ -536,6 +538,7 @@ public class RegBoard extends RegPosition implements Board
 		return ret;
 	}
 
+	@Override
 	public int eval()
 	{
 		return (stm == Piece.WHITE)? -mscore : mscore;
@@ -696,6 +699,7 @@ public class RegBoard extends RegPosition implements Board
 		}
 	}
 
+	@Override
 	public MoveList getMoveList(final int color, final int movetype)
 	{
 		final MoveList data = pool.get();

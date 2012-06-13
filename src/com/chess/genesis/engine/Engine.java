@@ -19,6 +19,7 @@ package com.chess.genesis.engine;
 
 import android.os.*;
 import com.chess.genesis.util.*;
+import java.util.*;
 
 public abstract class Engine implements Runnable
 {
@@ -27,11 +28,19 @@ public abstract class Engine implements Runnable
 	public static final int CHECKMATE_SCORE = MIN_SCORE;
 	public static final int STALEMATE_SCORE = 0;
 
-	protected Handler handle;
-	protected BoolArray tactical;
-	protected BoolArray ismate;
+	protected final Handler handle;
+	protected final BoolArray tactical;
+	protected final BoolArray ismate;
+	protected final Rand64 rand;
+
+	protected final ObjectArray<Move> pvMove;
+	protected final ObjectArray<Move> captureKiller;
+	protected final ObjectArray<Move> moveKiller;
+
 	protected TransTable tt;
-	protected Rand64 rand;
+	protected MoveListPool pool;
+	protected MoveList curr;
+	protected Board board;
 
 	protected int secT;
 	protected long endT;
@@ -45,10 +54,49 @@ public abstract class Engine implements Runnable
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
+
+		pvMove = new ObjectArray<Move>();
+		captureKiller = new ObjectArray<Move>();
+		moveKiller = new ObjectArray<Move>();
 	}
 
-	public abstract void setBoard(final RegBoard board);
-	public abstract void setBoard(final GenBoard board);
+	public abstract void setBoard(final RegBoard _board);
+	public abstract void setBoard(final GenBoard _board);
+
+	protected abstract int getMsgId();
+	protected abstract void search(int minScore, int maxScore, int i, int depth);
+
+	protected void pickRandomMove()
+	{
+		final int score = curr.list[0].score;
+		int end = curr.size;
+
+		for (int i = 1; i < curr.size; i++) {
+			if (curr.list[i].score == score)
+				continue;
+			end = i;
+			break;
+		}
+		final int ind = (int) (Math.abs(rand.next()) % end);
+		pvMove.set(0, curr.list[ind].move);
+	}
+
+	protected void pruneWeakMoves()
+	{
+		if (curr.list[0].score == curr.list[curr.size - 1].score)
+			return;
+
+		int cut = curr.size;
+		final int weak = curr.list[cut - 1].score;
+
+		for (int i = cut - 2; i > 0; i--) {
+			if (curr.list[i].score == weak)
+				continue;
+			cut = i + 1;
+			break;
+		}
+		curr.size = cut;
+	}
 
 	public void stop()
 	{
@@ -73,5 +121,31 @@ public abstract class Engine implements Runnable
 	public int getTime()
 	{
 		return secT;
+	}
+
+	@Override
+	public synchronized void run()
+	{
+		active = true;
+		endT = new Date().getTime() + secT * 1000;
+		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+
+		for (int depth = 1; true; depth++) {
+			search(MIN_SCORE, MAX_SCORE, 0, depth);
+			if (new Date().getTime() > endT)
+				break;
+		}
+
+		// Randomize opening
+		if (board.getPly() < 7)
+			pickRandomMove();
+		pool.put(curr);
+
+		final Bundle bundle = new Bundle();
+		bundle.putParcelable("move", pvMove.get(0));
+		bundle.putLong("time", endT);
+
+		handle.sendMessage(handle.obtainMessage(getMsgId(), bundle));
+		active = false;
 	}
 }

@@ -215,11 +215,13 @@ public class GenBoard extends GenPosition implements Board
 		return stm;
 	}
 
+	@Override
 	public int getPly()
 	{
 		return ply;
 	}
 
+	@Override
 	public long hash()
 	{
 		return key;
@@ -436,6 +438,7 @@ public class GenBoard extends GenPosition implements Board
 		return getMoveList(color, Move.MOVE_ALL);
 	}
 
+	@Override
 	public MoveList getMoveList(final int color, final int movetype)
 	{
 		final MoveList data = pool.get();
@@ -539,6 +542,7 @@ public class GenBoard extends GenPosition implements Board
 		}
 	}
 
+	@Override
 	public int eval()
 	{
 		return (stm == Piece.WHITE)? -mscore : mscore;

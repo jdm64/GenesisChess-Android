@@ -30,6 +30,8 @@ public interface Board
 	int Piece(int index);
 	int PieceType(int index);
 
+	long hash();
+	int getPly();
 	int getStm();
 	void getMoveFlags(final MoveFlags Flags);
 
@@ -52,4 +54,7 @@ public interface Board
 
 	int validMove(final Move move);
 	boolean validMove(final Move moveIn, final Move move);
+
+	int eval();
+	MoveList getMoveList(int stm, int type);
 }
