@@ -35,17 +35,18 @@ import org.json.*;
 
 public abstract class GameState
 {
-	protected Handler handle;
-	protected GameFrag game;
-	protected Activity activity;
-	protected Bundle settings;
+	protected final GameFrag game;
+	protected final Activity activity;
+	protected final Bundle settings;
+	protected final ProgressMsg progress;
+	protected final ObjectArray<Move> history;
+	protected final IntArray callstack;
 
+	protected Handler handle;
 	protected NetworkClient net;
-	protected ProgressMsg progress;
-	protected ObjectArray<Move> history;
 	protected Board board;
 	protected Engine cpu;
-	protected IntArray callstack;
+	protected Move moveType;
 
 	protected int ycol;
 	protected int type;
@@ -53,15 +54,11 @@ public abstract class GameState
 	protected int hindex = -1;
 
 	protected abstract boolean runCPU();
-	protected abstract void applyRemoteMove(final String hist);
+	protected abstract void revertMove(final Move move);
+	protected abstract void applyMove(final Move move, final boolean erase, final boolean localmove);
 
-	public abstract void firstMove();
-	public abstract void currentMove();
-	public abstract void forwardMove();
 	public abstract void undoMove();
-	public abstract void backMove();
 	public abstract void setBoard();
-
 	public abstract void boardClick(final View v);
 	public abstract void placeClick(final View v);
 
@@ -220,11 +217,51 @@ public abstract class GameState
 	}
 	}
 
+	public GameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
+	{
+		activity = _activity;
+		game = _game;
+		settings = _settings;
+
+		history = new ObjectArray<Move>();
+		callstack = new IntArray();
+		progress = new ProgressMsg(activity);
+		type = settings.getInt("type", Enums.ONLINE_GAME);
+	}
+
 	public void reset()
 	{
 		hindex = -1;
 		callstack.clear();
 		game.reset();
+		history.clear();
+		board.reset();
+	}
+
+	public void backMove()
+	{
+		if (hindex < 0)
+			return;
+		revertMove(history.get(hindex));
+	}
+
+	public void forwardMove()
+	{
+		if (hindex + 1 >= history.size())
+			return;
+		applyMove(history.get(hindex + 1), false, true);
+	}
+
+	public void currentMove()
+	{
+		while (hindex + 1 < history.size())
+			applyMove(history.get(hindex + 1), false, true);
+	}
+
+	public void firstMove()
+	{
+		while (hindex > 0)
+			revertMove(history.get(hindex));
 	}
 
 	public void clearSelectHighlight()
@@ -314,6 +351,29 @@ public abstract class GameState
 
 		net.submit_move(gameid, move);
 		new Thread(net).start();
+	}
+
+	protected void applyRemoteMove(final String hist)
+	{
+		if (hist == null || hist.length() < 3)
+			return;
+
+		final String[] movehistory = hist.trim().split(" +");
+		final String sMove = movehistory[movehistory.length - 1];
+
+		// don't apply duplicate moves
+		if (history.size() != 0 && sMove.equals(history.top().toString()))
+			return;
+
+		// must be on most current move to apply it
+		currentMove();
+		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
+
+		final Move move = moveType.newInstance();
+		move.parse(sMove);
+		if (board.validMove(move) != Move.VALID_MOVE)
+			return;
+		applyMove(move, true, false);
 	}
 
 	public void save(final Context context, final boolean exitgame)

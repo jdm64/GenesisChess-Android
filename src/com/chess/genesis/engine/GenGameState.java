@@ -22,12 +22,9 @@ import android.content.*;
 import android.os.*;
 import android.preference.*;
 import android.view.*;
-import android.widget.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
 public class GenGameState extends GameState
@@ -65,17 +62,11 @@ public class GenGameState extends GameState
 
 	public GenGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
 	{
-		activity = _activity;
-		game = _game;
-		settings = _settings;
+		super(_activity, _game, _settings);
 		handle = xhandle;
-
-		callstack = new IntArray();
-		history = new ObjectArray<Move>();
+		moveType = new GenMove();
 		board = new GenBoard();
-		progress = new ProgressMsg(activity);
 
-		type = settings.getInt("type", Enums.ONLINE_GAME);
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
@@ -143,81 +134,11 @@ public class GenGameState extends GameState
 	}
 
 	@Override
-	protected void applyRemoteMove(final String hist)
-	{
-		if (hist == null || hist.length() < 3)
-			return;
-
-		final String[] movehistory = hist.trim().split(" +");
-		final String sMove = movehistory[movehistory.length - 1];
-
-		// don't apply duplicate moves
-		if (history.size() != 0 && sMove.equals(history.top().toString()))
-			return;
-
-		// must be on most current move to apply it
-		currentMove();
-		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
-
-		final GenMove move = new GenMove();
-		move.parse(sMove);
-		if (board.validMove(move) != Move.VALID_MOVE)
-			return;
-		applyMove(move, true, false);
-	}
-
-	@Override
-	public void reset()
-	{
-		super.reset();
-
-		history.clear();
-		board.reset();
-	}
-
-	@Override
-	public void backMove()
-	{
-		if (hindex < 0)
-			return;
-		final GenMove move = (GenMove) history.get(hindex);
-		revertMove(move);
-	}
-
-	@Override
-	public void forwardMove()
-	{
-		if (hindex + 1 >= history.size())
-			return;
-		final GenMove move = (GenMove) history.get(hindex + 1);
-		applyMove(move, false, true);
-	}
-
-	@Override
-	public void currentMove()
-	{
-		while (hindex + 1 < history.size()) {
-			final GenMove move = (GenMove) history.get(hindex + 1);
-			applyMove(move, false, true);
-		}
-	}
-
-	@Override
-	public void firstMove()
-	{
-		while (hindex > 0) {
-			final GenMove move = (GenMove) history.get(hindex);
-			revertMove(move);
-		}
-	}
-
-	@Override
 	public void undoMove()
 	{
 		if (hindex < 0)
 			return;
-		final GenMove move = (GenMove) history.get(hindex);
-		revertMove(move);
+		revertMove(history.get(hindex));
 		history.pop();
 	}
 
@@ -253,7 +174,8 @@ public class GenGameState extends GameState
 		applyMove(move, true, true);
 	}
 
-	private void applyMove(final GenMove move, final boolean erase, final boolean localmove)
+	@Override
+	protected void applyMove(final Move move, final boolean erase, final boolean localmove)
 	{
 		clearSelectHighlight();
 
@@ -310,7 +232,8 @@ public class GenGameState extends GameState
 		setStm();
 	}
 
-	private void revertMove(final GenMove move)
+	@Override
+	protected void revertMove(final Move move)
 	{
 		clearSelectHighlight();
 
