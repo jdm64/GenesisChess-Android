@@ -36,53 +36,35 @@ public class GameParser
 	private static GamePosition parsePosition(final String _history, final int gametype)
 	{
 		final GamePosition pos = new GamePosition();
+		final Board board;
+		final Move moveType;
 
 		if (gametype == Enums.GENESIS_CHESS) {
-			final GenBoard board = new GenBoard();
-
-			if (_history.length() < 3) {
-				pos.history = " ";
-				pos.zfen = board.printZfen();
-				return pos;
-			}
-
-			final String[] movehistory = _history.trim().split(" +");
-			final ObjectArray<GenMove> history = new ObjectArray<GenMove>();
-
-			for (final String element : movehistory) {
-				final GenMove move = new GenMove();
-				move.parse(element);
-
-				if (board.validMove(move) != Move.VALID_MOVE)
-					break;
-				history.push(move);
-				board.make(move);
-			}
-			pos.history = history.toString();
-			pos.zfen = board.printZfen();
+			board = new GenBoard();
+			moveType = new GenMove();
 		} else {
-			final RegBoard board = new RegBoard();
-
-			if (_history.length() < 3) {
-				pos.history = " ";
-				pos.zfen = board.printZfen();
-				return pos;
-			}
-			final String[] movehistory = _history.trim().split(" +");
-			final ObjectArray<RegMove> history = new ObjectArray<RegMove>();
-
-			for (final String element : movehistory) {
-				final RegMove move = new RegMove();
-				move.parse(element);
-
-				if (board.validMove(move) != Move.VALID_MOVE)
-					break;
-				history.push(move);
-				board.make(move);
-			}
-			pos.history = history.toString();
-			pos.zfen = board.printZfen();
+			board = new RegBoard();
+			moveType = new RegMove();
 		}
+		if (_history.length() < 3) {
+			pos.history = " ";
+			pos.zfen = board.printZfen();
+			return pos;
+		}
+		final String[] movehistory = _history.trim().split(" +");
+		final ObjectArray<Move> history = new ObjectArray<Move>();
+
+		for (final String element : movehistory) {
+			final Move move = moveType.newInstance();
+			move.parse(element);
+
+			if (board.validMove(move) != Move.VALID_MOVE)
+				break;
+			history.push(move);
+			board.make(move);
+		}
+		pos.history = history.toString();
+		pos.zfen = board.printZfen();
 		return pos;
 	}
 
