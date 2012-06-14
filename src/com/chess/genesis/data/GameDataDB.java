@@ -22,7 +22,6 @@ import android.os.*;
 import android.preference.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
-import java.util.*;
 import org.json.*;
 
 public class GameDataDB
@@ -64,7 +63,7 @@ public class GameDataDB
 
 	public Bundle newLocalGame(final String gamename, final int gametype, final int opponent)
 	{
-		final long time = new Date().getTime();
+		final long time = System.currentTimeMillis();
 		final Object[] data = {gamename, time, time, gametype, opponent};
 		final String[] data2 = {String.valueOf(time)};
 
@@ -122,7 +121,7 @@ public class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data);
 		final Bundle row = rowToBundle(cursor, 0);
 
-		final long time = new Date().getTime();
+		final long time = System.currentTimeMillis();
 		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
 		final String dstring = "(?, ?, ?, ?, ?, ?, ?)";
 		final Object[] data2 = {row.get("white") + " Vs. " + row.get("black"), time, time,

@@ -31,7 +31,6 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
-import java.util.*;
 import org.json.*;
 
 public abstract class GameState
@@ -332,7 +331,7 @@ public abstract class GameState
 				db.close();
 				return;
 			}
-			final long stime = new Date().getTime();
+			final long stime = System.currentTimeMillis();
 			final String zfen = board.printZfen();
 			final String hist = history.toString();
 

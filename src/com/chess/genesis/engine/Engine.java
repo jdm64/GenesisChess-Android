@@ -19,7 +19,6 @@ package com.chess.genesis.engine;
 
 import android.os.*;
 import com.chess.genesis.util.*;
-import java.util.*;
 
 public abstract class Engine implements Runnable
 {
@@ -127,12 +126,12 @@ public abstract class Engine implements Runnable
 	public synchronized void run()
 	{
 		active = true;
-		endT = new Date().getTime() + secT * 1000;
+		endT = System.currentTimeMillis() + secT * 1000;
 		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
 
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
-			if (new Date().getTime() > endT)
+			if (System.currentTimeMillis() > endT)
 				break;
 		}
 

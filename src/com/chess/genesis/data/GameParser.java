@@ -19,7 +19,6 @@ package com.chess.genesis.data;
 import android.os.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
-import java.util.*;
 import org.json.*;
 
 public class GameParser
@@ -103,8 +102,8 @@ public class GameParser
 	}
 
 		game.putString("name", data.optString("name", "untitled"));
-		game.putLong("ctime", data.optLong("ctime", new Date().getTime()));
-		game.putLong("stime", data.optLong("stime", new Date().getTime()));
+		game.putLong("ctime", data.optLong("ctime", System.currentTimeMillis()));
+		game.putLong("stime", data.optLong("stime", System.currentTimeMillis()));
 
 		final GamePosition pos = parsePosition(data.optString("history", " "), game.getInt("gametype"));
 		game.putString("history", pos.history);
