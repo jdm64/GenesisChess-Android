@@ -108,6 +108,7 @@ public class RegBoard extends RegPosition implements Board
 		stm = board.stm;
 		ply = board.ply;
 		key = board.key;
+		mscore = board.mscore;
 		flags.set(board.flags);
 	}
 
@@ -130,6 +131,7 @@ public class RegBoard extends RegPosition implements Board
 		for (int i = 0; i < 32; i++)
 			square[piece[i]] = piecetype[i];
 
+		mscore = 0;
 		ply = 0;
 		stm = Piece.WHITE;
 		key = startHash;

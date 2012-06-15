@@ -116,7 +116,7 @@ public class GenBoard extends GenPosition implements Board
 		stm = board.stm;
 		ply = board.ply;
 		key = board.key;
-		rebuildScore();
+		mscore = board.mscore;
 	}
 
 	private int pieceIndex(final int loc, final int type)
@@ -148,41 +148,10 @@ public class GenBoard extends GenPosition implements Board
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.PLACEABLE;
 
+		mscore = 0;
 		ply = 0;
 		stm = Piece.WHITE;
 		key = startHash;
-		rebuildScore();
-	}
-
-	private void rebuildScore()
-	{
-		int white = 0, black = 0;
-		for (int b = 0, w = 16; b < 16; b++, w++) {
-			final int bloc = EE64F(piece[b]);
-			final int wloc = EE64F(piece[w]);
-
-			switch (piece[b]) {
-			default:
-				black += locValue[-piecetype[b]][bloc];
-			case Piece.PLACEABLE:
-				black += pieceValue[-piecetype[b]];
-				break;
-			case Piece.DEAD:
-				black -= pieceValue[-piecetype[b]];
-				break;
-			}
-			switch (piece[w]) {
-			default:
-				white += locValue[piecetype[w]][wloc];
-			case Piece.PLACEABLE:
-				white += pieceValue[piecetype[w]];
-				break;
-			case Piece.DEAD:
-				white -= pieceValue[piecetype[w]];
-				break;
-			}
-		}
-		mscore = white - black;
 	}
 
 	@Override
