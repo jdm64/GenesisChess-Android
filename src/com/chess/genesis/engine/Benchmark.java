@@ -46,7 +46,7 @@ public class Benchmark implements Runnable
 		if (depth == 0 || System.currentTimeMillis() > end)
 			return 1;
 
-		final MoveList ptr = gboard.getMoveList(gboard.getStm());
+		final MoveList ptr = gboard.getMoveList(gboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
 		for (int i = 0; i < ptr.size; i++) {

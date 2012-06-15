@@ -21,14 +21,6 @@ import com.chess.genesis.util.*;
 
 public class GenBoard extends GenPosition implements Board
 {
-	private static final int[] typeLookup = {
-		0, 0, 0, 0, 0, 0,  0,  0,
-		1, 1, 2, 2, 3, 3,  4,  5,
-		6, 6, 6, 6, 6, 6,  6,  6,
-		7, 7, 8, 8, 9, 9, 10, 11};
-
-	private static final int[] pieceValue = {0, 224, 336, 560, 896, 1456, 0};
-
 	private static final int[][] locValue = {
 	{	0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
@@ -88,6 +80,15 @@ public class GenBoard extends GenPosition implements Board
 		-10,  0,  0,  0,  0,  0,  0, -10}
 	};
 
+	private static final int[] typeLookup = {
+		0, 0, 0, 0, 0, 0,  0,  0,
+		1, 1, 2, 2, 3, 3,  4,  5,
+		6, 6, 6, 6, 6, 6,  6,  6,
+		7, 7, 8, 8, 9, 9, 10, 11};
+
+	private static final int[] pieceValue =
+		{0, 224, 336, 560, 896, 1456, 0};
+
 	// for pieceIndex()
 	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 
@@ -118,14 +119,6 @@ public class GenBoard extends GenPosition implements Board
 		rebuildScore();
 	}
 
-	private int pieceIndex(final int loc)
-	{
-		for (int i = 0; i < 32; i++)
-			if (piece[i] == loc)
-				return i;
-		return Piece.NONE;
-	}
-
 	private int pieceIndex(final int loc, final int type)
 	{
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
@@ -135,6 +128,14 @@ public class GenBoard extends GenPosition implements Board
 			if (piece[i] == loc)
 				return i;
 		}
+		return Piece.NONE;
+	}
+
+	private int pieceIndex(final int loc)
+	{
+		for (int i = 0; i < 32; i++)
+			if (piece[i] == loc)
+				return i;
 		return Piece.NONE;
 	}
 
@@ -348,9 +349,9 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public int isMate()
 	{
-		if (getNumMoves(stm) != 0)
+		if (getMoveList(stm, Move.MOVE_ALL).size != 0)
 			return Move.NOT_MATE;
-		if (incheck(stm))
+		else if (incheck(stm))
 			return Move.CHECK_MATE;
 		return Move.STALE_MATE;
 	}
@@ -428,46 +429,10 @@ public class GenBoard extends GenPosition implements Board
 		return ret;
 	}
 
-	public int getNumMoves(final int color)
-	{
-		return getMoveList(color).size;
-	}
-
-	public MoveList getMoveList(final int color)
-	{
-		return getMoveList(color, Move.MOVE_ALL);
-	}
-
 	@Override
-	public MoveList getMoveList(final int color, final int movetype)
+	public int eval()
 	{
-		final MoveList data = pool.get();
-		data.size = 0;
-
-		switch (movetype) {
-		case Move.MOVE_ALL:
-			if (ply < 2) {
-				getPlaceMoveList(data, Piece.KING * color);
-				break;
-			}
-			getMoveList(data, color, Move.MOVE_ALL);
-			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
-				getPlaceMoveList(data, type * color);
-			break;
-		case Move.MOVE_CAPTURE:
-		case Move.MOVE_MOVE:
-			getMoveList(data, color, movetype);
-			break;
-		case Move.MOVE_PLACE:
-			if (ply < 2) {
-				getPlaceMoveList(data, Piece.KING * color);
-				break;
-			}
-			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
-				getPlaceMoveList(data, type * color);
-			break;
-		}
-		return data;
+		return (stm == Piece.WHITE)? -mscore : mscore;
 	}
 
 	private void getMoveList(final MoveList data, final int color, final int movetype)
@@ -543,8 +508,34 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public int eval()
+	public MoveList getMoveList(final int color, final int movetype)
 	{
-		return (stm == Piece.WHITE)? -mscore : mscore;
+		final MoveList data = pool.get();
+		data.size = 0;
+
+		switch (movetype) {
+		case Move.MOVE_ALL:
+			if (ply < 2) {
+				getPlaceMoveList(data, Piece.KING * color);
+				break;
+			}
+			getMoveList(data, color, Move.MOVE_ALL);
+			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
+				getPlaceMoveList(data, type * color);
+			break;
+		case Move.MOVE_CAPTURE:
+		case Move.MOVE_MOVE:
+			getMoveList(data, color, movetype);
+			break;
+		case Move.MOVE_PLACE:
+			if (ply < 2) {
+				getPlaceMoveList(data, Piece.KING * color);
+				break;
+			}
+			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
+				getPlaceMoveList(data, type * color);
+			break;
+		}
+		return data;
 	}
 }

@@ -21,8 +21,8 @@ import com.chess.genesis.util.*;
 
 public class RegBoard extends RegPosition implements Board
 {
-	private static final int[][] regLocValue = {
-		{0, 0, 0, 0, 0, 0, 0, 0,
+	private static final int[][] locValue = {
+	{	0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0,
@@ -80,14 +80,14 @@ public class RegBoard extends RegPosition implements Board
 		-20, -10,  20,  10,  20,  10,  20, -20}
 	};
 
-	private static final int[] regPieceValue =
+	private static final int[] pieceValue =
 		{0, 224, 336, 560, 896, 1456, 0};
 
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 
-	private final MoveFlags undoFlags = new MoveFlags();
 	private final MoveNode item = new MoveNode(new RegMove());
+	private final MoveFlags undoFlags = new MoveFlags();
 	private final MoveListPool pool;
 	private long key;
 	private int mscore;
@@ -105,10 +105,21 @@ public class RegBoard extends RegPosition implements Board
 		piecetype = IntArray.clone(board.piecetype);
 		pool = board.getMoveListPool();
 
-		flags.set(board.flags);
-		ply = board.ply;
 		stm = board.stm;
+		ply = board.ply;
 		key = board.key;
+		flags.set(board.flags);
+	}
+
+	private int pieceIndex(final int loc, final int type)
+	{
+		final int start = (type > 0)? 16:0, end = (type > 0)? 32:16;
+
+		for (int i = start; i < end; i++) {
+			if (piece[i] == loc && piecetype[i] == type)
+				return i;
+		}
+		return Piece.NONE;
 	}
 
 	@Override
@@ -119,9 +130,9 @@ public class RegBoard extends RegPosition implements Board
 		for (int i = 0; i < 32; i++)
 			square[piece[i]] = piecetype[i];
 
-		key = startHash;
-		stm = Piece.WHITE;
 		ply = 0;
+		stm = Piece.WHITE;
+		key = startHash;
 		flags.reset();
 	}
 
@@ -211,16 +222,6 @@ public class RegBoard extends RegPosition implements Board
 		return square;
 	}
 
-	private int pieceIndex(final int loc, final int type)
-	{
-		final int start = (type > 0)? 16:0, end = (type > 0)? 32:16;
-
-		for (int i = start; i < end; i++)
-			if (piece[i] == loc && piecetype[i] == type)
-				return i;
-		return Piece.NONE;
-	}
-
 	private static boolean isPromote(final Move move, final int color)
 	{
 		return (color == Piece.WHITE)? (move.to >= Piece.A8) : (move.to <= Piece.H1);
@@ -249,8 +250,8 @@ public class RegBoard extends RegPosition implements Board
 			square[castleTo] = piecetype[castleI];
 			square[piece[castleI]] = Piece.EMPTY;
 			piece[castleI] = castleTo;
-			mscore += stm * regLocValue[Piece.ROOK][EE64(castleTo)];
-			mscore -= stm * regLocValue[Piece.ROOK][EE64(castleI)];
+			mscore += stm * locValue[Piece.ROOK][EE64(castleTo)];
+			mscore -= stm * locValue[Piece.ROOK][EE64(castleI)];
 			flags.clearCastle(color);
 		} else if (Math.abs(piecetype[move.index]) == Piece.ROOK) {
 			if (move.from == (isWhite? Piece.H1:Piece.H8) && flags.canKingCastle(color) != 0) {
@@ -279,15 +280,15 @@ public class RegBoard extends RegPosition implements Board
 
 		// update board information
 		square[move.to] = piecetype[move.index];
-		mscore += stm * regLocValue[Math.abs(square[move.to])][EE64F(move.to)];
-		mscore -= stm * regLocValue[Math.abs(square[move.from])][EE64F(move.from)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
+		mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
 		square[move.from] = Piece.EMPTY;
 		// update piece information
 		piece[move.index] = move.to;
 		if (move.xindex != Piece.NONE) {
 			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * regLocValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
-			mscore += stm * regPieceValue[Math.abs(piecetype[move.xindex])];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
+			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 
 			if (move.getEnPassant())
 				square[piece[move.xindex]] = Piece.EMPTY;
@@ -325,8 +326,8 @@ public class RegBoard extends RegPosition implements Board
 			square[piece[castleI]] = Piece.EMPTY;
 			square[castleFrom] = piecetype[castleI];
 			piece[castleI] = castleFrom;
-			mscore += stm * regLocValue[Piece.ROOK][EE64(castleFrom)];
-			mscore -= stm * regLocValue[Piece.ROOK][EE64(castleI)];
+			mscore += stm * locValue[Piece.ROOK][EE64(castleFrom)];
+			mscore -= stm * locValue[Piece.ROOK][EE64(castleI)];
 		} else if (move.getPromote() != 0) {
 			piecetype[move.index] = Piece.PAWN * color;
 		}
@@ -334,7 +335,7 @@ public class RegBoard extends RegPosition implements Board
 		key ^= hashBox[13 * EE64(move.from) + piecetype[move.index] + 6];
 
 		piece[move.index] = move.from;
-		mscore += stm * regLocValue[Math.abs(square[move.to])][EE64F(move.to)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
 		if (move.xindex == Piece.NONE) {
 			square[move.to] = Piece.EMPTY;
 		} else {
@@ -347,12 +348,12 @@ public class RegBoard extends RegPosition implements Board
 				square[move.to] = piecetype[move.xindex];
 			}
 			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * regLocValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
-			mscore += stm * regPieceValue[Math.abs(piecetype[move.xindex])];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
+			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 		}
 		square[move.from] = piecetype[move.index];
 
-		mscore -= stm * regLocValue[Math.abs(square[move.from])][EE64F(move.from)];
+		mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
 		key ^= hashBox[WTM_HASH];
 		flags.bits = UndoFlags.bits;
 		stm ^= -2;
@@ -370,12 +371,11 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public int isMate()
 	{
-		if (anyMoves(stm))
+		if (getMoveList(stm, Move.MOVE_ALL).size != 0)
 			return Move.NOT_MATE;
 		else if (incheck(stm))
 			return Move.CHECK_MATE;
-		else
-			return Move.STALE_MATE;
+		return Move.STALE_MATE;
 	}
 
 	@Override
@@ -542,11 +542,6 @@ public class RegBoard extends RegPosition implements Board
 	public int eval()
 	{
 		return (stm == Piece.WHITE)? -mscore : mscore;
-	}
-
-	public boolean anyMoves(final int color)
-	{
-		return (getMoveList(color, Move.MOVE_ALL).size != 0);
 	}
 
 	private void getMoveList(final MoveList data, final int color, final int movetype)
