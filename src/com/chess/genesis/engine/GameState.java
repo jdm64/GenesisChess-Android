@@ -53,11 +53,9 @@ public abstract class GameState
 	protected int oppType;
 	protected int hindex = -1;
 
-	protected abstract boolean runCPU();
 	protected abstract void revertMove(final Move move);
 	protected abstract void applyMove(final Move move, final boolean erase, final boolean localmove);
 
-	public abstract void undoMove();
 	public abstract void setBoard();
 	public abstract void boardClick(final View v);
 	public abstract void placeClick(final View v);
@@ -66,6 +64,25 @@ public abstract class GameState
 	{
 	try {
 		switch (msg.what) {
+		case GenEngine.MSG:
+		case RegEngine.MSG:
+			final Bundle bundle = (Bundle) msg.obj;
+
+			if (bundle.getLong("time") == 0) {
+				cpu.setBoard(board);
+				new Thread(cpu).start();
+				return;
+			} else if (activity.isFinishing()) {
+				// activity is gone, so give up!
+				return;
+			}
+			currentMove();
+
+			final Move tmove = bundle.getParcelable("move");
+			final Move move = tmove.newInstance();
+			if (board.validMove(tmove, move))
+				applyMove(move, true, true);
+			break;
 		case CpuTimeDialog.MSG:
 			final Editor pref = PreferenceManager.getDefaultSharedPreferences(activity).edit();
 			pref.putInt(PrefKey.CPUTIME, (Integer) msg.obj);
@@ -264,6 +281,14 @@ public abstract class GameState
 			revertMove(history.get(hindex));
 	}
 
+	public void undoMove()
+	{
+		if (hindex < 0)
+			return;
+		revertMove(history.get(hindex));
+		history.pop();
+	}
+
 	public void clearSelectHighlight()
 	{
 		if (callstack.size() > 0) {
@@ -340,6 +365,25 @@ public abstract class GameState
 	public void setCpuTime()
 	{
 		new CpuTimeDialog(activity, handle, cpu.getTime()).show();
+	}
+
+	protected boolean runCPU()
+	{
+		// Start computer player
+		if (oppType == Enums.HUMAN_OPPONENT)
+			return false;
+		else if (hindex + 1 < history.size())
+			return false;
+		else if (board.getStm() == ycol)
+			return false;
+
+		if (cpu.isActive()) {
+			cpu.stop();
+			return true;
+		}
+		cpu.setBoard(board);
+		new Thread(cpu).start();
+		return true;
 	}
 
 	public void submitMove()

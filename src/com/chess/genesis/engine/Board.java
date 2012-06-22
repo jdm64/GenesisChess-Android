@@ -25,6 +25,7 @@ public interface Board
 	int CASTLE_HASH = 834;
 	int HOLD_START = 768;
 
+	Board clone();
 	void reset();
 
 	int Piece(int index);

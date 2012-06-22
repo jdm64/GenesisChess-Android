@@ -39,24 +39,6 @@ public class RegGameState extends GameState
 		public void handleMessage(final Message msg)
 		{
 			switch (msg.what) {
-			case RegEngine.MSG:
-				final Bundle bundle = (Bundle) msg.obj;
-
-				if (bundle.getLong("time") == 0) {
-					cpu.setBoard((RegBoard) board);
-					new Thread(cpu).start();
-					return;
-				} else if (activity.isFinishing()) {
-					// activity is gone, so give up!
-					return;
-				}
-				currentMove();
-
-				final RegMove tmove = bundle.getParcelable("move");
-				final RegMove move = new RegMove();
-				if (board.validMove(tmove, move))
-					applyMove(move, true, true);
-				break;
 			case PawnPromoteDialog.MSG:
 				callstack.clear();
 				applyMove((RegMove) msg.obj, true, true);
@@ -126,26 +108,6 @@ public class RegGameState extends GameState
 	}
 
 	@Override
-	protected boolean runCPU()
-	{
-		// Start computer player
-		if (oppType == Enums.HUMAN_OPPONENT)
-			return false;
-		else if (hindex + 1 < history.size())
-			return false;
-		else if (board.getStm() == ycol)
-			return false;
-
-		if (cpu.isActive()) {
-			cpu.stop();
-			return true;
-		}
-		cpu.setBoard((RegBoard) board);
-		new Thread(cpu).start();
-		return true;
-	}
-
-	@Override
 	public void reset()
 	{
 		super.reset();
@@ -155,10 +117,7 @@ public class RegGameState extends GameState
 	@Override
 	public void undoMove()
 	{
-		if (hindex < 0)
-			return;
-		revertMove(history.get(hindex));
-		history.pop();
+		super.undoMove();
 		flagsHistory.pop();
 	}
 

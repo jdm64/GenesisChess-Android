@@ -41,19 +41,6 @@ public class GenEngine extends Engine
 		return MSG;
 	}
 
-	@Override
-	public void setBoard(final GenBoard _board)
-	{
-		board = new GenBoard(_board);
-		pool = board.getMoveListPool();
-	}
-
-	@Override
-	public void setBoard(final RegBoard _board)
-	{
-		throw new RuntimeException("GenEngine.setBoard called with RegBoard object");
-	}
-
 	private int Quiescence(final int _alpha, final int beta, final int depth)
 	{
 		final MoveList ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Move.MOVE_ALL : Move.MOVE_CAPTURE);

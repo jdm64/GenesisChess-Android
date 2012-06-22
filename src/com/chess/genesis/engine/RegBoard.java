@@ -112,6 +112,12 @@ public class RegBoard extends RegPosition implements Board
 		flags.set(board.flags);
 	}
 
+	@Override
+	public RegBoard clone()
+	{
+		return new RegBoard(this);
+	}
+
 	private int pieceIndex(final int loc, final int type)
 	{
 		final int start = (type > 0)? 16:0, end = (type > 0)? 32:16;

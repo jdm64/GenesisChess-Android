@@ -119,6 +119,12 @@ public class GenBoard extends GenPosition implements Board
 		mscore = board.mscore;
 	}
 
+	@Override
+	public GenBoard clone()
+	{
+		return new GenBoard(this);
+	}
+
 	private int pieceIndex(final int loc, final int type)
 	{
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],

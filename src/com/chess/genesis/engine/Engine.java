@@ -59,8 +59,11 @@ public abstract class Engine implements Runnable
 		moveKiller = new ObjectArray<Move>();
 	}
 
-	public abstract void setBoard(final RegBoard _board);
-	public abstract void setBoard(final GenBoard _board);
+	public void setBoard(final Board _board)
+	{
+		board = _board.clone();
+		pool = board.getMoveListPool();
+	}
 
 	protected abstract int getMsgId();
 	protected abstract void search(int minScore, int maxScore, int i, int depth);

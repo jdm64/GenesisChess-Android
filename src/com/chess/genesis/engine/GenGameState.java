@@ -34,29 +34,7 @@ public class GenGameState extends GameState
 		@Override
 		public void handleMessage(final Message msg)
 		{
-			switch (msg.what) {
-			case GenEngine.MSG:
-				final Bundle bundle = (Bundle) msg.obj;
-
-				if (bundle.getLong("time") == 0) {
-					cpu.setBoard((GenBoard) board);
-					new Thread(cpu).start();
-					return;
-				} else if (activity.isFinishing()) {
-					// activity is gone, so give up!
-					return;
-				}
-				currentMove();
-
-				final GenMove tmove = bundle.getParcelable("move");
-				final GenMove move = new GenMove();
-				if (board.validMove(tmove, move))
-					applyMove(move, true, true);
-				break;
-			default:
-				handleOther(msg);
-				break;
-			}
+			handleOther(msg);
 		}
 	};
 
@@ -111,35 +89,6 @@ public class GenGameState extends GameState
 	{
 		// set place piece counts
 		setBoard(board.getPieceCounts(Piece.PLACEABLE));
-	}
-
-	@Override
-	protected boolean runCPU()
-	{
-		// Start computer player
-		if (oppType == Enums.HUMAN_OPPONENT)
-			return false;
-		else if (hindex + 1 < history.size())
-			return false;
-		else if (board.getStm() == ycol)
-			return false;
-
-		if (cpu.isActive()) {
-			cpu.stop();
-			return true;
-		}
-		cpu.setBoard((GenBoard) board);
-		new Thread(cpu).start();
-		return true;
-	}
-
-	@Override
-	public void undoMove()
-	{
-		if (hindex < 0)
-			return;
-		revertMove(history.get(hindex));
-		history.pop();
 	}
 
 	private void handleMove()
