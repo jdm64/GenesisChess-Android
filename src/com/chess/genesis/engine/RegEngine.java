@@ -148,7 +148,6 @@ public class RegEngine extends Engine
 
 	private int NegaScout(int alpha, final int beta, final int depth, int limit)
 	{
-		
 		if (System.currentTimeMillis() > endT) {
 			return Quiescence(alpha, beta, depth);
 		} else if (depth >= limit) {

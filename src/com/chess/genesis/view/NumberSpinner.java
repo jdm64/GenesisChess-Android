@@ -1,6 +1,6 @@
 /* source: http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob;f=core/java/android/widget/NumberPicker.java;hb=HEAD
  * SICK! Added in API 11, renamed from NumberPicker to NumberSpinner
- * 
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

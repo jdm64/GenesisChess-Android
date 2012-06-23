@@ -30,7 +30,7 @@ final class Crypto
 	{
 		final byte[] shabytes = digst.digest();
 		final StringBuffer buff = new StringBuffer();
-	
+
 		for (final byte shabyte : shabytes) {
 			final String n = Integer.toHexString(shabyte & 0xff);
 			if (n.length() < 2)
@@ -61,7 +61,7 @@ final class Crypto
 	{
 	try {
 		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
-	
+
 		digst.update(HashPasswd(str).getBytes());
 		digst.update(socket.getHash().getBytes());
 

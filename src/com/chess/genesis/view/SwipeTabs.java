@@ -1,6 +1,6 @@
 /* source: http://code.google.com/p/android-playground/source/browse/trunk/SwipeyTabsSample/src/net/peterkuterna/android/apps/swipeytabs/SwipeyTabs.java
  * version: r6
- * 
+ *
  * Copyright 2011 Peter Kuterna
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,14 +71,14 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		/**
 		* Return the number swipe tabs. Needs to be aligned with the number of
 		* items in your {@link PagerAdapter}.
-		* 
+		*
 		* @return
 		*/
 		int getCount();
 
 		/**
 		* Build {@link TextView} to diplay as a swipe tab.
-		* 
+		*
 		* @param position the position of the tab
 		* @param root the root view
 		* @return
@@ -127,7 +127,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 
 	/**
 	 * Set the adapter.
-	 * 
+	 *
 	 * @param adapter
 	 */
 	public void setAdapter(final SwipeTabs.Adapter adapter)
@@ -167,7 +167,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 
 	/**
 	 * Calculate the fronted, left and right positions
-	 * 
+	 *
 	 * @param forceLayout
 	 * 	force the current positions to the values of the calculated fronted positions
 	 */
@@ -191,7 +191,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 
 	/**
 	 * Calculate the position of the tabs.
-	 * 
+	 *
 	 * @param position
 	 *            the position of the fronted tab
 	 * @param tabPositions
@@ -284,7 +284,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 
 	/**
 	 * Measure our tab text views
-	 * 
+	 *
 	 * @param widthMeasureSpec
 	 * @param heightMeasureSpec
 	 */
@@ -328,12 +328,12 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			// alpha channel of the tab indicator
 			final int tabSelectedTop = getHeight() - getPaddingBottom() - mBottomBarHeight - mTabIndicatorHeight;
 			final View currentTab = getChildAt(mCurrentPos);
-			final int centerOfTab = (mCurrentTabPos[mCurrentPos] + 
-			currentTab.getMeasuredWidth()) - (currentTab.getMeasuredWidth() / 2);
+			final int centerOfTab = (mCurrentTabPos[mCurrentPos] +
+				currentTab.getMeasuredWidth()) - (currentTab.getMeasuredWidth() / 2);
 			final int center = getWidth() / 2;
 			final int centerDiv3 = center / 3;
 			final float relativePos = 1.0f - Math.min(Math.abs((float) (centerOfTab - center) / (float) (centerDiv3)), 1.0f);
-			
+
 			mCachedTabPaint.setAlpha((int) (255 * relativePos));
 			canvas.drawRect(mCurrentTabPos[mCurrentPos],
 					tabSelectedTop,
@@ -403,7 +403,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 			dir = 1;
 			x = 1.0f - positionOffset;
 		}
-		
+
 		// update the current positions
 		for (int i = 0; i < count; i++) {
 			final float curX = mFrontedTabPos[i];

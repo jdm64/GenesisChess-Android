@@ -28,7 +28,7 @@ public class CallBackPreference extends DialogPreference
 	}
 
 	private CallBack action;
- 
+
 	public CallBackPreference(final Context context)
 	{
 		this(context, null);

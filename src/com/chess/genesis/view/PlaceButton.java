@@ -118,7 +118,7 @@ public class PlaceButton extends View
 		count--;
 		invalidate();
 	}
-	
+
 	public void plusPiece()
 	{
 		count++;

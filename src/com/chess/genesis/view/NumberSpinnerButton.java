@@ -81,7 +81,7 @@ class NumberSpinnerButton extends ImageView
 		return super.onKeyUp(keyCode, event);
 	}
 
-	private void cancelLongpressIfRequired(final MotionEvent event) 
+	private void cancelLongpressIfRequired(final MotionEvent event)
 	{
 		if ((event.getAction() == MotionEvent.ACTION_CANCEL) || (event.getAction() == MotionEvent.ACTION_UP)) {
 			cancelLongpress();
