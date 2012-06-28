@@ -75,4 +75,9 @@
 		1) The board starts out blank.\n\t\t(hint: place a king first)\n
 		2) Pawns are awsome!\n\t\t(hint: they can move backwards)
 	</string>
+	<string name="phandroid">
+		Want to help us out? We\'re trying to win a contest and we need your vote!
+		Click the button below to go to the contest comment that we need you to up vote.
+		If we win, we\'ll be hosting a tournament and giving the winner one of the devices as a prize!
+	</string>
 </resources>
