@@ -101,14 +101,6 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	{
 		super.onResume();
 		updateLoggedInView();
-		showPhandroid();
-	}
-
-	private void showPhandroid()
-	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean("show_phandroid", true))
-			new PhandroidDialog(act).show();
 	}
 
 	@Override
