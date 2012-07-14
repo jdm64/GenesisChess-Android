@@ -65,7 +65,7 @@ public abstract class GameFrag extends BaseContentFrag
 
 		// initialize the board & place piece layouts
 		final BoardLayout board = (BoardLayout) view.findViewById(R.id.board_layout);
-		board.init(act, gamestate, viewAsBlack);
+		board.init(gamestate, viewAsBlack);
 		final PlaceLayout place = (PlaceLayout) view.findViewById(R.id.place_layout);
 		place.init(gamestate);
 

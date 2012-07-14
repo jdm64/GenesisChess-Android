@@ -34,27 +34,13 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	private final static int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
 
 	private GameState gamestate;
+	private final PieceImgCache cache;
 
 	public PlaceLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
-
 		setOrientation(LinearLayout.VERTICAL);
-
-		// White Pieces
-		AddPieces(context, 0);
-
-		// Center Divide
-		final LinearLayout row = new LinearLayout(context);
-		final MyImageView padding = new MyImageView(context);
-		padding.setImageResource(R.drawable.padding_480x96);
-		row.addView(padding);
-		addView(row);
-
-		// Black Pieces
-		AddPieces(context, 6);
-
-		PlaceButtonCache.Init(context);
+		cache = new PieceImgCache(context, PieceImgCache.PIECE_COUNT);
 	}
 
 	@Override
@@ -64,6 +50,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 		size -= size % 5;
 
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
+		cache.resize(getMeasuredHeight() / 5);
 	}
 
 	private void AddPieces(final Context context, int index)
@@ -78,7 +65,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			row.addView(padding);
 
 			for (int j = 0; j < 3; j++) {
-				final PlaceButton button = new PlaceButton(context, piecelist[index++]);
+				final PlaceButton button = new PlaceButton(context, cache, piecelist[index++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
@@ -93,6 +80,20 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	public void init(final GameState _gamestate)
 	{
 		gamestate = _gamestate;
+		final Context context = getContext();
+
+		// White Pieces
+		AddPieces(context, 0);
+
+		// Center Divide
+		final LinearLayout row = new LinearLayout(context);
+		final MyImageView padding = new MyImageView(context);
+		padding.setImageResource(R.drawable.padding_480x96);
+		row.addView(padding);
+		addView(row);
+
+		// Black Pieces
+		AddPieces(context, 6);
 	}
 
 	@Override

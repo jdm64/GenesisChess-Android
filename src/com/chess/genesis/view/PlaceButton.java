@@ -18,33 +18,26 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
-import android.view.*;
-import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class PlaceButton extends View
+public class PlaceButton extends PieceImg
 {
-	private final static int outerLight = MColors.GREY_LIGHT;
-	private final static int outerDark = MColors.BLUE_NAVY_DARK;
-	private final static int innerDark = MColors.BLUE_NAVY;
-	private final static int innerLight = Color.WHITE;
-	private final static int innerSelect = MColors.GREEN_TEAL;
+	protected final static int outerLight = MColors.GREY_LIGHT;
+	protected final static int outerDark = MColors.BLUE_NAVY_DARK;
+	protected final static int innerDark = MColors.BLUE_NAVY;
+	protected final static int innerLight = Color.WHITE;
+	protected final static int innerSelect = MColors.GREEN_TEAL;
 
-	private static final int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
+	protected final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
-	private final Paint paint = new Paint();
-	private final Matrix matrix = new Matrix();
-	private final int type;
+	protected final Paint paint = new Paint();
+	protected final RectF inSquare = new RectF();
 
-	private RectF inSquare;
-	private int size;
-	private int count;
-	private boolean isHighlighted = false;
+	protected boolean isHighlighted = false;
 
-	public PlaceButton(final Context context, final int Type)
+	public PlaceButton(final Context context, final PieceImgCache _cache, final int Type)
 	{
-		super(context);
-
+		super(context, _cache);
 		type = Type;
 		count = typeCounts[Math.abs(type)];
 		setId(type + 1000);
@@ -53,17 +46,19 @@ public class PlaceButton extends View
 	@Override
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		final int newSize = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-
-		if (newSize != size) {
-			size = newSize;
-			inSquare = new RectF((float)(size * 0.09), (float)(size * 0.09), (float)(size * 0.91), (float)(size * 0.91));
-		}
-		setMeasuredDimension(size, size);
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		final int size = getMeasuredHeight();
+		inSquare.set((float)(size * 0.09), (float)(size * 0.09), (float)(size * 0.91), (float)(size * 0.91));
 	}
 
 	@Override
 	protected void onDraw(final Canvas canvas)
+	{
+		drawBackground(canvas);
+		super.onDraw(canvas);
+	}
+
+	protected void drawBackground(final Canvas canvas)
 	{
 		// Draw outer square
 		if (type % 2 == 0)
@@ -80,48 +75,12 @@ public class PlaceButton extends View
 				innerDark);
 		paint.setColor(innerColor);
 		canvas.drawRect(inSquare, paint);
-
-		// Draw piece image
-		canvas.drawBitmap(PlaceButtonCache.getPieceImg(type + 6), matrix, null);
-
-		// Draw token counter
-		canvas.drawBitmap(PlaceButtonCache.getTokenImg(), matrix, null);
-		canvas.drawBitmap(PlaceButtonCache.getCountImg(count), matrix, null);
 	}
 
 	public void reset()
 	{
 		isHighlighted = false;
 		count = typeCounts[Math.abs(type)];
-
-		invalidate();
-	}
-
-	public int getPiece()
-	{
-		return type;
-	}
-
-	public int getCount()
-	{
-		return count;
-	}
-
-	public void setCount(final int Count)
-	{
-		count = Count;
-		invalidate();
-	}
-
-	public void minusPiece()
-	{
-		count--;
-		invalidate();
-	}
-
-	public void plusPiece()
-	{
-		count++;
 		invalidate();
 	}
 
@@ -129,71 +88,5 @@ public class PlaceButton extends View
 	{
 		isHighlighted = mode;
 		invalidate();
-	}
-}
-
-final class PlaceButtonCache extends PieceCache
-{
-	private static final int[] countImages = {
-		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
-		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
-		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
-		R.drawable.piece_9};
-
-	private static Bitmap[] scaledCounts;
-	private static Bitmap[] scaledPieces;
-	private static Bitmap scaledToken;
-
-	private static int size;
-	private static boolean hasInit = false;
-
-	private PlaceButtonCache()
-	{
-	}
-
-	public static void Init(final Context context)
-	{
-		InitPieces(context);
-
-		if (hasInit)
-			return;
-
-		size = 0;
-		hasInit = true;
-		scaledPieces = new Bitmap[13];
-		scaledCounts = new Bitmap[10];
-	}
-
-	public static void resizeImages(final int newSize)
-	{
-		if (newSize == size || newSize < 1)
-			return;
-
-		size = newSize;
-		for (int i = 0; i < 13; i++)
-			scaledPieces[i] = createImg(i, size);
-
-		final Bitmap[] countBitmaps = new Bitmap[10];
-		for (int i = 0; i < 10; i++) {
-			countBitmaps[i] = BitmapFactory.decodeResource(cntx.getResources(), countImages[i]);
-			scaledCounts[i] = Bitmap.createScaledBitmap(countBitmaps[i], size, size, true);
-		}
-		final Bitmap tokenBitmap = BitmapFactory.decodeResource(cntx.getResources(), R.drawable.piece_token);
-		scaledToken = Bitmap.createScaledBitmap(tokenBitmap, size, size, true);
-	}
-
-	public static Bitmap getPieceImg(final int index)
-	{
-		return scaledPieces[index];
-	}
-
-	public static Bitmap getCountImg(final int count)
-	{
-		return scaledCounts[count];
-	}
-
-	public static Bitmap getTokenImg()
-	{
-		return scaledToken;
 	}
 }

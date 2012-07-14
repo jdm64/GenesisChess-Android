@@ -180,7 +180,7 @@ public class RegGameState extends GameState
 
 		if (move.xindex != Piece.NONE) {
 			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
-			piece.plusPiece();
+			piece.plusCount();
 		}
 
 		if (move.getCastle() != 0) {
@@ -259,7 +259,7 @@ public class RegGameState extends GameState
 
 		if (move.xindex != Piece.NONE) {
 			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
-			piece.minusPiece();
+			piece.minusCount();
 		}
 
 		if (move.getCastle() != 0) {

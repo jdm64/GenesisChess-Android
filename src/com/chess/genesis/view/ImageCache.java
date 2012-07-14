@@ -21,9 +21,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.*;
 import com.chess.genesis.*;
 
-public abstract class PieceCache
+public abstract class ImageCache
 {
-	private static final int[] pieceImages = {
+	private static final int[] pieceRes = {
 		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
 		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
 		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
@@ -31,31 +31,47 @@ public abstract class PieceCache
 		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
 		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
 		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
+	private static Bitmap[] pieceBitmaps = new Bitmap[pieceRes.length];
 
-	private static Bitmap[] pieceBitmaps;
-	private static boolean isActive = false;
+	private static final int[] countRes = {
+		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
+		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
+		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
+		R.drawable.piece_9};
+	private static Bitmap[] countBitmaps = new Bitmap[countRes.length];
 
-	protected static Context cntx;
+	private static final int tokenRes = R.drawable.piece_token;
+	private static Bitmap tokenBitmap;
 
-	public static void InitPieces(final Context context)
+	private static Context cntx;
+
+	protected static void setContext(final Context context)
 	{
-		if (isActive)
-			return;
 	try {
-		pieceBitmaps = new Bitmap[13];
-
 		cntx = context.createPackageContext(context.getPackageName(), Context.CONTEXT_INCLUDE_CODE);
-		for (int i = 0; i < 13; i++)
-			pieceBitmaps[i] = BitmapFactory.decodeResource(cntx.getResources(), pieceImages[i]);
-
 	} catch (final NameNotFoundException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
-		isActive = true;
 	}
 
-	public static Bitmap createImg(final int type, final int size)
+	protected static Bitmap createPieceImg(final int type, final int size)
 	{
+		if (pieceBitmaps[type] == null)
+			pieceBitmaps[type] = BitmapFactory.decodeResource(cntx.getResources(), pieceRes[type]);
 		return Bitmap.createScaledBitmap(pieceBitmaps[type], size, size, true);
+	}
+
+	protected static Bitmap createCountImg(final int count, final int size)
+	{
+		if (countBitmaps[count] == null)
+			countBitmaps[count] = BitmapFactory.decodeResource(cntx.getResources(), countRes[count]);
+		return Bitmap.createScaledBitmap(countBitmaps[count], size, size, true);
+	}
+
+	protected static Bitmap createTokenImg(final int size)
+	{
+		if (tokenBitmap == null)
+			tokenBitmap = BitmapFactory.decodeResource(cntx.getResources(), tokenRes);
+		return Bitmap.createScaledBitmap(tokenBitmap, size, size, true);
 	}
 }

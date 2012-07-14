@@ -65,7 +65,7 @@ public class GenGameFrag extends GameFrag
 
 		for (int i = 0; i < 64; i++) {
 			final BoardButton square = (BoardButton) act.findViewById(i);
-			square.resetSquare();
+			square.reset();
 		}
 	}
 }

@@ -146,7 +146,7 @@ public class GenGameState extends GameState
 			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
 			from.setHighlight(false);
-			from.minusPiece();
+			from.minusCount();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 		} else {
@@ -199,7 +199,7 @@ public class GenGameState extends GameState
 
 			to.setLast(false);
 			to.setPiece(0);
-			from.plusPiece();
+			from.plusCount();
 		} else {
 			final BoardButton from = (BoardButton) activity.findViewById(move.from);
 			final BoardButton to = (BoardButton) activity.findViewById(move.to);

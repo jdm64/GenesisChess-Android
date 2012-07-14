@@ -75,35 +75,23 @@ public class PawnPromoteDialog extends BaseDialog
 class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchListener
 {
 	private final BoardButton[] square = new BoardButton[4];
+	private final PieceImgCache cache;
 	private PawnPromoteDialog dialog;
-	private int bSize = 0;
 	private int color;
 
 	public PromoteLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 		setOrientation(LinearLayout.VERTICAL);
+		cache = new PieceImgCache(context, PieceImgCache.PIECE_ONLY);
 	}
 
 	@Override
 	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
 		final int size = Math.min(320, Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)));
-
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-
-		// Update image caches
-		resizeImages(getMeasuredWidth() / 2);
-	}
-
-	private void resizeImages(final int size)
-	{
-		if (bSize == size)
-			return;
-		bSize = size;
-
-		for (int i = 0, type = Piece.QUEEN; i < 4; i++, type--)
-			square[i].setImage(PieceCache.createImg(color * type + 6, bSize));
+		cache.resize(getMeasuredWidth() / 2);
 	}
 
 	public void init(final Context context, final PawnPromoteDialog _dialog, final int _color)
@@ -116,7 +104,7 @@ class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchList
 			row.setSizes("1,1/2");
 
 			for (int j = 0; j < 2; piece--, j++, i++) {
-				square[i] = new BoardButton(context, (i < 2)? j : j + 1);
+				square[i] = new BoardButton(context, cache, (i < 2)? j : j + 1);
 				square[i].setOnClickListener(this);
 				square[i].setOnTouchListener(this);
 				square[i].setPiece(piece * color);

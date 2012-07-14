@@ -26,14 +26,13 @@ import com.chess.genesis.engine.*;
 public class BoardLayout extends LinearLayout implements OnClickListener
 {
 	private GameState gamestate;
+	private final PieceImgCache cache;
 
 	public BoardLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
-
 		setOrientation(LinearLayout.VERTICAL);
-
-		BoardButtonCache.Init(context);
+		cache = new PieceImgCache(context, PieceImgCache.PIECE_ONLY);
 	}
 
 	@Override
@@ -43,15 +42,13 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 		size -= size % 8;
 
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-
-		// Update image caches
-		BoardButtonCache.resizeImages(getMeasuredWidth() / 8);
-		PlaceButtonCache.resizeImages(getMeasuredWidth() / 5);
+		cache.resize(getMeasuredHeight() / 8);
 	}
 
-	public void init(final Context context, final GameState _gamestate, final boolean viewAsBlack)
+	public void init(final GameState _gamestate, final boolean viewAsBlack)
 	{
 		gamestate = _gamestate;
+		final Context context = getContext();
 
 		if (viewAsBlack) {
 			for (int i = 0; i < 8; i++) {
@@ -59,7 +56,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 				row.setSizes("1,1,1,1,1,1,1,1/8");
 
 				for (int j = 7; j >= 0; j--) {
-					final BoardButton button = new BoardButton(context, 16 * i + j);
+					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
@@ -71,7 +68,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 				row.setSizes("1,1,1,1,1,1,1,1/8");
 
 				for (int j = 0; j < 8; j++) {
-					final BoardButton button = new BoardButton(context, 16 * i + j);
+					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
 					button.setOnClickListener(this);
 					row.addView(button);
 				}
