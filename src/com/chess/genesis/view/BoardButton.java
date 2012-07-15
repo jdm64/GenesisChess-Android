@@ -57,9 +57,10 @@ public class BoardButton extends PlaceButton
 	{
 		// Draw outer square
 		if (squareColor == WHITE)
-			canvas.drawColor(outerLight);
+			paint.setColor(outerLight);
 		else
-			canvas.drawColor(outerDark);
+			paint.setColor(outerDark);
+		canvas.drawRect(outSquare, paint);
 
 		// Draw inner square
 		final int innerColor =

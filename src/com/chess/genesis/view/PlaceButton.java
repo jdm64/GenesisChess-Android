@@ -32,6 +32,7 @@ public class PlaceButton extends PieceImg
 
 	protected final Paint paint = new Paint();
 	protected final RectF inSquare = new RectF();
+	protected final RectF outSquare = new RectF();
 
 	protected boolean isHighlighted = false;
 
@@ -49,6 +50,7 @@ public class PlaceButton extends PieceImg
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		final int size = getMeasuredHeight();
 		inSquare.set((float)(size * 0.09), (float)(size * 0.09), (float)(size * 0.91), (float)(size * 0.91));
+		outSquare.set(0, 0, size, size);
 	}
 
 	@Override
@@ -62,9 +64,10 @@ public class PlaceButton extends PieceImg
 	{
 		// Draw outer square
 		if (type % 2 == 0)
-			canvas.drawColor(outerLight);
+			paint.setColor(outerLight);
 		else
-			canvas.drawColor(outerDark);
+			paint.setColor(outerDark);
+		canvas.drawRect(outSquare, paint);
 
 		// Draw inner square
 		final int innerColor =
