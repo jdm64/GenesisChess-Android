@@ -22,6 +22,7 @@ import android.os.PowerManager.WakeLock;
 import android.preference.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
@@ -33,7 +34,7 @@ public abstract class GameFrag extends BaseContentFrag
 {
 	public final static String TAG = "GAME";
 
-	public ViewFlip3D game_board;
+	public ViewAnimator game_board;
 	public GameState gamestate;
 	public Bundle settings;
 	public int type;
@@ -85,7 +86,7 @@ public abstract class GameFrag extends BaseContentFrag
 			button.setOnClickListener(this);
 		}
 
-		game_board = (ViewFlip3D) view.findViewById(R.id.board_flip);
+		game_board = (ViewAnimator) view.findViewById(R.id.board_flip);
 
 		return view;
 	}
@@ -146,7 +147,7 @@ public abstract class GameFrag extends BaseContentFrag
 
 		switch (v.getId()) {
 		case R.id.place_piece:
-			game_board.flip();
+			AnimationFactory.flipTransition(game_board);
 			break;
 		case R.id.chat:
 			if (isTablet) {

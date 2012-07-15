@@ -308,6 +308,6 @@ public class GenGameState extends GameState
 			callstack.set(0, ptype + 1000);
 			from.setHighlight(true);
 		}
-		game.game_board.flip();
+		AnimationFactory.flipTransition(game.game_board);
 	}
 }

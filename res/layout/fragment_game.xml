@@ -18,7 +18,7 @@ android:orientation="vertical">
 		android:padding="6dp"
 		android:textSize="14dp"/>
 	</com.chess.genesis.view.ManualPanel>
-	<com.chess.genesis.view.ViewFlip3D
+	<ViewFlipper
 	style="@style/FillWidth"
 	android:id="@+id/board_flip">
 		<com.chess.genesis.view.BoardLayout
@@ -27,5 +27,5 @@ android:orientation="vertical">
 		<com.chess.genesis.view.PlaceLayout
 		android:layout_gravity="top|center_horizontal"
 		android:id="@+id/place_layout"/>
-	</com.chess.genesis.view.ViewFlip3D>
+	</ViewFlipper>
 </LinearLayout>
