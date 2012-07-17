@@ -62,6 +62,11 @@ public class ManualPanel extends ViewGroup
 		final int children = getChildCount();
 		final int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
 		final int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+		if (children == 0) {
+			setMeasuredDimension(maxWidth, maxHeight);
+			return;
+		}
 		final int[] arr = IntArray.copyOf(sizesArr, children);
 		final int[] width = new int[children];
 		int sum = 0, totalHeight = 0;
