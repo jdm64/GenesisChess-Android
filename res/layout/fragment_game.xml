@@ -28,4 +28,8 @@ android:orientation="vertical">
 		android:layout_gravity="top|center_horizontal"
 		android:id="@+id/place_layout"/>
 	</ViewFlipper>
+	<com.chess.genesis.view.CapturedLayout
+	android:id="@+id/captured_count"
+	panel:height_policy="exact_child"
+	panel:sizes="1/11"/>
 </LinearLayout>

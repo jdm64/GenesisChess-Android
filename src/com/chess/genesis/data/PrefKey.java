@@ -31,6 +31,7 @@ public final class PrefKey
 	public final static String SHOW_GENESIS_RULES = "showGenesisRules";
 	public final static String TABLETMODE = "tabletMode";
 	public final static String VIEW_AS_BLACK = "viewAsBlack";
+	public final static String SHOW_CAPTURED = "showCaptured";
 
 	// User account settings
 	public final static String ISLOGGEDIN = "isLoggedIn";

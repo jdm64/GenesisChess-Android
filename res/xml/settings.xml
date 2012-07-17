@@ -28,6 +28,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="false"
 		android:title="Enable Tablet Layout"
 		android:summary="Load the tablet layout (App restart required)"/>
+		<CheckBoxPreference
+		android:key="showCaptured"
+		android:defaultValue="true"
+		android:title="Show Captured Pieces"
+		android:summary="Display captured pieces below the board"/>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="Device Notifications">

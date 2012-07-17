@@ -534,6 +534,9 @@ public abstract class GameState
 			final BoardButton kingI = (BoardButton) activity.findViewById(king);
 			kingI.setCheck(true);
 		}
+		// set captured pieces
+		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
+
 		setStm();
 	}
 

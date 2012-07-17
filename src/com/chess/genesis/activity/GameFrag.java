@@ -35,6 +35,7 @@ public abstract class GameFrag extends BaseContentFrag
 	public final static String TAG = "GAME";
 
 	public ViewAnimator game_board;
+	public CapturedLayout captured_count;
 	public GameState gamestate;
 	public Bundle settings;
 	public int type;
@@ -87,6 +88,7 @@ public abstract class GameFrag extends BaseContentFrag
 		}
 
 		game_board = (ViewAnimator) view.findViewById(R.id.board_flip);
+		captured_count = (CapturedLayout) view.findViewById(R.id.captured_count);
 
 		return view;
 	}
