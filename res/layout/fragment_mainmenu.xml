@@ -91,7 +91,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	</TableLayout>
 	<com.chess.genesis.view.ManualPanel
 	android:id="@+id/layout01"
-	panel:sizes="1,1/2"
+	panel:sizes="1/2"
 	android:layout_marginBottom="3dp"
 	android:layout_alignParentBottom="true">
 		<com.chess.genesis.view.MyImageView

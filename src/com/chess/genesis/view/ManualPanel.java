@@ -69,7 +69,7 @@ public class ManualPanel extends ViewGroup
 		totalDivs = Math.max(totalDivs, children);
 
 		for (int i = 0; i < children; i++) {
-			width[i] = (arr[i] * maxWidth) / totalDivs;
+			width[i] = (((arr[i] != 0)? arr[i] : 1) * maxWidth) / totalDivs;
 			sum += width[i];
 		}
 		for (int i = 0, diff = maxWidth - sum; diff > 0; i = ++i % children) {

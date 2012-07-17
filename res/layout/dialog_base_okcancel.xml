@@ -8,7 +8,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	android:background="#ffffff"
 	android:padding="12dp"/>
 	<com.chess.genesis.view.ManualPanel
-	panel:sizes="1,1/2"
+	panel:sizes="1/2"
 	style="@style/FillWidth"
 	android:layout_below="@id/body"
 	android:layout_marginTop="6dp">

@@ -5,7 +5,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
 android:orientation="vertical">
 	<com.chess.genesis.view.ManualPanel
 	android:id="@+id/board_names"
-	panel:sizes="1,1/2"
+	panel:sizes="1/2"
 	android:background="#ff383838">
 		<com.chess.genesis.view.TabText
 		android:id="@+id/white_name"

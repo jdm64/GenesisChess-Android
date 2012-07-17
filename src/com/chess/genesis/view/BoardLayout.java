@@ -53,7 +53,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 		if (viewAsBlack) {
 			for (int i = 0; i < 8; i++) {
 				final ManualPanel row = new ManualPanel(context);
-				row.setSizes("1,1,1,1,1,1,1,1/8");
+				row.setSizes("1/8");
 
 				for (int j = 7; j >= 0; j--) {
 					final BoardButton button = new BoardButton(context, cache, 16 * i + j);

@@ -101,7 +101,7 @@ class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchList
 
 		for (int i = 0, piece = Piece.QUEEN; i < 4;) {
 			final ManualPanel row = new ManualPanel(context);
-			row.setSizes("1,1/2");
+			row.setSizes("1/2");
 
 			for (int j = 0; j < 2; piece--, j++, i++) {
 				square[i] = new BoardButton(context, cache, (i < 2)? j : j + 1);

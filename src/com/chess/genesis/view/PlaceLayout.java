@@ -57,7 +57,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	{
 		for (int i = 0; i < 2; i++) {
 			final ManualPanel row = new ManualPanel(context);
-			row.setSizes("1,1,1,1,1/5");
+			row.setSizes("1/5");
 
 			MyImageView padding = new MyImageView(context);
 			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);

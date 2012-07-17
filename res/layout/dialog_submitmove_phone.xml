@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis"
 android:layout_gravity="bottom"
 style="@style/BlueBar"
-panel:sizes="1,1/2">
+panel:sizes="1/2">
 	<ImageButton
 	android:id="@+id/cancel"
 	style="@style/BotBlueBar"
