@@ -45,12 +45,12 @@ setupLibs()
 
 	# download httpmime.jar
 	wget http://hc.apache.org/downloads.cgi
-	wget $(grep httpcomponents-client-4.2-bin.tar.gz downloads.cgi | head -n1 | cut -d'"' -f2)
-	tar -xf	httpcomponents-client-4.2-bin.tar.gz
-	cp httpcomponents-client-4.2/lib/httpmime-4.2.jar libs/
+	wget $(grep binary/httpcomponents-client downloads.cgi | head -n1 | cut -d'"' -f2)
+	tar -xf	httpcomponents-client*bin.tar.gz
+	cp httpcomponents-client*/lib/httpmime*.jar libs/
 
 	# remove all downloaded files
-	rm -rf downloads.cgi httpcomponents-client-4.2*
+	rm -rf downloads.cgi httpcomponents-client*
 }
 
 cat <<_EOF_
