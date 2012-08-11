@@ -236,10 +236,10 @@ public abstract class GameFrag extends BaseContentFrag
 			gamestate.setCpuTime();
 			break;
 		case R.id.local_details:
-			new LocalGameDetails(act, gamestate.getBundle()).show();
+			new GameDetailsDialog(act, gamestate.getBundle(), false).show();
 			break;
 		case R.id.online_details:
-			new OnlineGameDetails(act, gamestate.getBundle()).show();
+			new GameDetailsDialog(act, gamestate.getBundle(), true).show();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);

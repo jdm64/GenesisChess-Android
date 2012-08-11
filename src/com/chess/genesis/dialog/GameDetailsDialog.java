@@ -27,43 +27,49 @@ import com.chess.genesis.view.*;
 import java.io.*;
 import org.json.*;
 
-public class LocalGameDetails extends BaseDialog
+public class GameDetailsDialog extends BaseDialog
 {
 	private final Bundle gamedata;
+	private final boolean isOnline;
 
-	public LocalGameDetails(final Context context, final Bundle data)
+	public GameDetailsDialog(final Context context, final Bundle data, final boolean _isOnline)
 	{
 		super(context);
-
 		gamedata = data;
+		isOnline = _isOnline;
 	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setTitle("Local Game Details");
-		setBodyView(R.layout.dialog_gamedetails_local);
+		setTitle(isOnline? "Online Game Details" : "Local Game Details");
+		setBodyView(isOnline? R.layout.dialog_gamedetails_online : R.layout.dialog_gamedetails_local);
 		setButtonTxt(R.id.ok, "Save To File");
 		setButtonTxt(R.id.cancel, "Close");
 
-		RobotoText txt = (RobotoText) findViewById(R.id.name);
-		txt.setText(gamedata.getString("name"));
-
+		RobotoText txt;
+		if (isOnline) {
+			txt = (RobotoText) findViewById(R.id.white);
+			txt.setText(gamedata.getString("white"));
+			txt = (RobotoText) findViewById(R.id.black);
+			txt.setText(gamedata.getString("black"));
+			txt = (RobotoText) findViewById(R.id.eventtype);
+			txt.setText(Enums.EventType(Integer.parseInt(gamedata.getString("eventtype"))));
+			txt = (RobotoText) findViewById(R.id.status);
+			txt.setText(Enums.GameStatus(Integer.parseInt(gamedata.getString("status"))));
+		} else {
+			txt = (RobotoText) findViewById(R.id.name);
+			txt.setText(gamedata.getString("name"));
+			txt = (RobotoText) findViewById(R.id.opponent);
+			txt.setText(Enums.OpponentType(Integer.parseInt(gamedata.getString("opponent"))));
+		}
 		txt = (RobotoText) findViewById(R.id.gametype);
 		txt.setText(Enums.GameType(Integer.parseInt(gamedata.getString("gametype"))));
-		txt = (RobotoText) findViewById(R.id.opponent);
-		txt.setText(Enums.OpponentType(Integer.parseInt(gamedata.getString("opponent"))));
-
 		txt = (RobotoText) findViewById(R.id.ctime);
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
 		txt = (RobotoText) findViewById(R.id.stime);
 		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
-
-		txt = (RobotoText) findViewById(R.id.zfen);
-		txt.setText(gamedata.getString("zfen"));
-		txt = (RobotoText) findViewById(R.id.history);
-		txt.setText(gamedata.getString("history"));
 	}
 
 	@Override
@@ -78,7 +84,10 @@ public class LocalGameDetails extends BaseDialog
 	private void saveToFile()
 	{
 	try {
-		final String filename = "genesischess-" + gamedata.getString("name") + ".txt";
+		final String gamename = isOnline?
+			gamedata.getString("white") + " Vs. " + gamedata.getString("black") :
+			gamedata.getString("name");
+		final String filename = "genesischess-" + gamename + ".txt";
 		final String str = GameParser.parse(gamedata).toString();
 
 		FileUtils.writeFile(filename, str);
