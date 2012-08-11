@@ -155,20 +155,7 @@ public class RegGameState extends GameState
 	@Override
 	protected void applyMove(final Move move, final boolean erase, final boolean localmove)
 	{
-		clearSelectHighlight();
-
-		if (hindex >= 0) {
-			// undo last move highlight
-			final BoardButton to = (BoardButton) activity.findViewById(history.get(hindex).to);
-			to.setLast(false);
-
-			if (hindex > 1) {
-				// legal move always ends with king not in check
-				final int king = board.kingIndex(board.getStm());
-				final BoardButton kingI = (BoardButton) activity.findViewById(king);
-				kingI.setCheck(false);
-			}
-		}
+		preApplyMove();
 
 		final BoardButton from = (BoardButton) activity.findViewById(move.from);
 		final BoardButton to = (BoardButton) activity.findViewById(move.to);
@@ -218,30 +205,13 @@ public class RegGameState extends GameState
 			if (localmove)
 				save(activity, false);
 		}
-
-		// move caused check
-		if (board.incheck(board.getStm())) {
-			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) activity.findViewById(king);
-			kingI.setCheck(true);
-		}
-		// set captured pieces
-		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
-
-		setStm();
+		postApplyMove();
 	}
 
 	@Override
 	protected void revertMove(final Move move)
 	{
-		clearSelectHighlight();
-
-		// legal move always ends with king not in check
-		if (hindex > 1) {
-			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) activity.findViewById(king);
-			kingI.setCheck(false);
-		}
+		preRevertMove();
 
 		final BoardButton from = (BoardButton) activity.findViewById(move.from);
 		final BoardButton to = (BoardButton) activity.findViewById(move.to);
@@ -282,21 +252,7 @@ public class RegGameState extends GameState
 		board.unmake(move, flagsHistory.get(hindex));
 		hindex--;
 
-		if (hindex >= 0) {
-			// redo last move highlight
-			final BoardButton hto = (BoardButton) activity.findViewById(history.get(hindex).to);
-			hto.setLast(true);
-		}
-		// move caused check
-		if (board.incheck(board.getStm())) {
-			final int king = board.kingIndex(board.getStm());
-			final BoardButton kingI = (BoardButton) activity.findViewById(king);
-			kingI.setCheck(true);
-		}
-		// set captured pieces
-		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
-
-		setStm();
+		postRevertMove();
 	}
 
 	@Override

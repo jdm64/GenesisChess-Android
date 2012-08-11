@@ -397,6 +397,64 @@ public abstract class GameState
 		new Thread(net).start();
 	}
 
+	private void preCommonMove()
+	{
+		// legal move always ends with king not in check
+		if (hindex > 1) {
+			final int king = board.kingIndex(board.getStm());
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
+			kingI.setCheck(false);
+		}
+	}
+
+	protected void preApplyMove()
+	{
+		clearSelectHighlight();
+
+		if (hindex >= 0) {
+			// undo last move highlight
+			final BoardButton to = (BoardButton) activity.findViewById(history.get(hindex).to);
+			to.setLast(false);
+
+			preCommonMove();
+		}
+	}
+
+	protected void preRevertMove()
+	{
+		clearSelectHighlight();
+		preCommonMove();
+	}
+
+	private void postCommonMove()
+	{
+		// move caused check
+		if (board.incheck(board.getStm())) {
+			final int king = board.kingIndex(board.getStm());
+			final BoardButton kingI = (BoardButton) activity.findViewById(king);
+			kingI.setCheck(true);
+		}
+		// set captured pieces
+		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
+
+		setStm();
+	}
+
+	protected void postApplyMove()
+	{
+		postCommonMove();
+	}
+
+	protected void postRevertMove()
+	{
+		// redo last move highlight
+		if (hindex >= 0) {
+			final BoardButton hto = (BoardButton) activity.findViewById(history.get(hindex).to);
+			hto.setLast(true);
+		}
+		postCommonMove();
+	}
+
 	protected void applyRemoteMove(final String hist)
 	{
 		if (hist == null || hist.length() < 3)
