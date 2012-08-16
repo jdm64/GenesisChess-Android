@@ -1,5 +1,5 @@
 
-include Configfile
+-include Configfile
 
 #
 # The Configfile stores the variables used in building
