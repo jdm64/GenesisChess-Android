@@ -83,7 +83,7 @@ public class MsgListAdapter extends BaseAdapter
 	@Override
 	public Object getItem(final int index)
 	{
-		return GameDataDB.rowToBundle(list, index);
+		return GameDataDB.rowToBundle(list, index, false);
 	}
 
 	@Override

@@ -38,9 +38,9 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 {
 	public final static String TAG = "GAMELISTONLINE";
 
-	private final static int THEIR_PAGE = 0;
-	private final static int YOUR_PAGE = 1;
-	private final static int ARCHIVE_PAGE = 2;
+	public static final int THEIR_PAGE = 0;
+	public static final int YOUR_PAGE = 1;
+	public static final int ARCHIVE_PAGE = 2;
 
 	private GameListAdapter[] gamelistadapter_arr;
 	private NetworkClient net;
@@ -160,7 +160,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		}
 	};
 
-	private class GameListPager extends PagerAdapter
+	class GameListPager extends PagerAdapter
 	{
 		@Override
 		public int getCount()

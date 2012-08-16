@@ -198,7 +198,7 @@ public class MsgBoxFrag extends BaseContentFrag
 		final JSONArray msgs = data.getJSONArray("msglist");
 		final GameDataDB db = new GameDataDB(act);
 
-		for (int i = 0; i < msgs.length(); i++) {
+		for (int i = 0, len = msgs.length(); i < len; i++) {
 			final JSONObject item = msgs.getJSONObject(i);
 			db.insertMsg(item);
 		}

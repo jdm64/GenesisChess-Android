@@ -32,7 +32,7 @@ public class ObjectArray<Type>
 	{
 		final Type[] temp = makeArray(size);
 
-		for (int i = 0; i < Math.min(arr.length, size); i++)
+		for (int i = 0, len = Math.min(arr.length,size); i < len; i++)
 			temp[i] = arr[i];
 		return temp;
 	}
@@ -87,7 +87,7 @@ public class ObjectArray<Type>
 	@Override
 	public String toString()
 	{
-		final StringBuffer str = new StringBuffer();
+		final StringBuilder str = new StringBuilder();
 
 		for (final Type element : list)
 			str.append(element.toString() + " ");
@@ -96,7 +96,7 @@ public class ObjectArray<Type>
 
 	public static String arrayToString(final Object[] array, final String delim)
 	{
-		final StringBuffer str = new StringBuffer();
+		final StringBuilder str = new StringBuilder();
 
 		for (final Object element : array)
 			str.append(element.toString() + delim);

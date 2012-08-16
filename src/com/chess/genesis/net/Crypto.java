@@ -29,7 +29,7 @@ final class Crypto
 	private static String calcHash(final MessageDigest digst)
 	{
 		final byte[] shabytes = digst.digest();
-		final StringBuffer buff = new StringBuffer();
+		final StringBuilder buff = new StringBuilder();
 
 		for (final byte shabyte : shabytes) {
 			final String n = Integer.toHexString(shabyte & 0xff);

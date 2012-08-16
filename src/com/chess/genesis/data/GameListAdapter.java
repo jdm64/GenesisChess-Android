@@ -112,7 +112,7 @@ public class GameListAdapter extends BaseAdapter
 	@Override
 	public Object getItem(final int index)
 	{
-		final Bundle data = GameDataDB.rowToBundle(list, index);
+		final Bundle data = GameDataDB.rowToBundle(list, index, false);
 		data.putAll(settings);
 
 		return data;

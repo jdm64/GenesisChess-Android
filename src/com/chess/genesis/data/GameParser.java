@@ -23,7 +23,7 @@ import org.json.*;
 
 public class GameParser
 {
-	private static class GamePosition
+	static class GamePosition
 	{
 		public String history;
 		public String zfen;

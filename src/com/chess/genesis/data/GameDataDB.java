@@ -40,14 +40,16 @@ public class GameDataDB
 		db.close();
 	}
 
-	public static Bundle rowToBundle(final SQLiteCursor cursor, final int index)
+	public static Bundle rowToBundle(final SQLiteCursor cursor, final int index, final boolean closeCursor)
 	{
 		final Bundle bundle = new Bundle();
 		final String[] column = cursor.getColumnNames();
 
 		cursor.moveToPosition(index);
-		for (int i = 0; i < cursor.getColumnCount(); i++)
+		for (int i = 0, len = cursor.getColumnCount(); i < len; i++)
 			bundle.putString(column[i], cursor.getString(i));
+		if (closeCursor)
+			cursor.close();
 		return bundle;
 	}
 
@@ -70,7 +72,7 @@ public class GameDataDB
 		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?, ?);", data);
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
 
-		final Bundle game = rowToBundle(cursor, 0);
+		final Bundle game = rowToBundle(cursor, 0, true);
 		game.putInt("type", Enums.LOCAL_GAME);
 
 		return game;
@@ -119,7 +121,7 @@ public class GameDataDB
 		final String type = (gametype == Enums.ONLINE_GAME)? "onlinegames" : "archivegames";
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data);
-		final Bundle row = rowToBundle(cursor, 0);
+		final Bundle row = rowToBundle(cursor, 0, true);
 
 		final long time = System.currentTimeMillis();
 		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
@@ -192,6 +194,7 @@ public class GameDataDB
 		if (cursor.getCount() < 1) {
 			if (!checkArchiveGame(gameid))
 				insertOnlineGame(json);
+			cursor.close();
 			return;
 		}
 
@@ -202,7 +205,7 @@ public class GameDataDB
 		final int idle = (json.has("idle")? 1:0) + (json.has("nudge")? 1:0) + (json.has("close")? 1:0);
 		final int drawoffer = json.has("drawoffer")? (json.getString("drawoffer").equals("white")? Piece.WHITE : Piece.BLACK) : 0;
 
-		final Bundle row = rowToBundle(cursor, 0);
+		final Bundle row = rowToBundle(cursor, 0, true);
 		final GameInfo info = new GameInfo(context, status, history, row.getString("white"), drawoffer);
 
 		final int ply = info.getPly(), yourturn = info.getYourTurn();
@@ -228,10 +231,14 @@ public class GameDataDB
 		final String query = "SELECT stime FROM onlinegames WHERE white=? OR black=? ORDER BY stime DESC LIMIT 1";
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
+	try {
 		if (cursor.getCount() == 0)
 			return 0;
 		cursor.moveToFirst();
 		return cursor.getLong(0);
+	} finally {
+		cursor.close();
+	}
 	}
 
 	public ObjectArray<String> getOnlineGameIds()
@@ -244,10 +251,11 @@ public class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
 
 		cursor.moveToFirst();
-		for (int i = 0; i < cursor.getCount(); i++) {
+		for (int i = 0, len = cursor.getCount(); i < len; i++) {
 			list.push(cursor.getString(0));
 			cursor.moveToNext();
 		}
+		cursor.close();
 		return list;
 	}
 
@@ -267,7 +275,7 @@ public class GameDataDB
 		final String[] data = {gameid};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * from onlinegames WHERE gameid=?", data);
 
-		return rowToBundle(cursor, 0);
+		return rowToBundle(cursor, 0, true);
 	}
 
 	public void recalcYourTurn()
@@ -279,7 +287,7 @@ public class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
 		cursor.moveToFirst();
-		for (int i = 0; i < cursor.getCount(); i++) {
+		for (int i = 0, len = cursor.getCount(); i < len; i++) {
 			final String gameid = cursor.getString(0);
 			final int status = cursor.getInt(1);
 			final String history = cursor.getString(2);
@@ -292,6 +300,7 @@ public class GameDataDB
 			db.execSQL("UPDATE onlinegames SET yourturn=? WHERE gameid=?;", data2);
 			cursor.moveToNext();
 		}
+		cursor.close();
 	}
 
 	/*
@@ -370,10 +379,11 @@ public class GameDataDB
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames WHERE white=? OR black=?", data);
 
 		cursor.moveToFirst();
-		for (int i = 0; i < cursor.getCount(); i++) {
+		for (int i = 0, len = cursor.getCount(); i < len; i++) {
 			list.push(cursor.getString(0));
 			cursor.moveToNext();
 		}
+		cursor.close();
 		return list;
 	}
 
@@ -393,7 +403,7 @@ public class GameDataDB
 		final String[] data = {gameid};
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
-		final Bundle row = rowToBundle(cursor, 0);
+		final Bundle row = rowToBundle(cursor, 0, true);
 
 		final String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
 		final String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -446,9 +456,12 @@ public class GameDataDB
 	{
 		final String[] data = {gameid};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT COUNT(unread) FROM msgtable WHERE unread=1 AND gameid=?", data);
-
+	try {
 		cursor.moveToFirst();
 		return cursor.getInt(0);
+	} finally {
+		cursor.close();
+	}
 	}
 
 	public int getUnreadMsgCount()
@@ -457,9 +470,12 @@ public class GameDataDB
 		final String[] data = {username, username};
 		final String query = "SELECT COUNT(*) FROM msgtable WHERE unread=1 AND (username=? OR opponent=?)";
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
-
+	try {
 		cursor.moveToFirst();
 		return cursor.getInt(0);
+	} finally {
+		cursor.close();
+	}
 	}
 
 	public long getNewestMsg()
@@ -468,11 +484,14 @@ public class GameDataDB
 		final String[] data = {username, username};
 
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT time FROM msgtable WHERE username=? OR opponent=? ORDER BY time DESC LIMIT 1", data);
-
+	try {
 		if (cursor.getCount() == 0)
 			return 0;
 		cursor.moveToFirst();
 		return cursor.getLong(0);
+	} finally {
+		cursor.close();
+	}
 	}
 
 	public SQLiteCursor getMsgList(final String gameid)

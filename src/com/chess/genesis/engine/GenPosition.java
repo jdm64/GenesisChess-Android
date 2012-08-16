@@ -105,7 +105,7 @@ class GenPosition extends GenMoveLookup
 		}
 
 		// parse half-ply
-		final StringBuffer num = new StringBuffer();
+		final StringBuilder num = new StringBuilder();
 		while (Character.isDigit(st[n])) {
 			num.append(st[n]);
 			n++;
@@ -123,7 +123,7 @@ class GenPosition extends GenMoveLookup
 
 	public String printZfen()
 	{
-		final StringBuffer fen = new StringBuffer();
+		final StringBuilder fen = new StringBuilder();
 
 		printZfen_Board(fen);
 

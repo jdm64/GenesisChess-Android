@@ -303,7 +303,7 @@ public abstract class BaseBoard
 		int n = 0;
 
 		// parse board
-		StringBuffer num = new StringBuffer();
+		StringBuilder num = new StringBuilder();
 		boolean act = false;
 		for (int loc = 0; true; n++) {
 			if (Character.isDigit(st[n])) {
@@ -312,7 +312,7 @@ public abstract class BaseBoard
 			} else if (Character.isLetter(st[n])) {
 				if (act) {
 					loc += Integer.parseInt(num.toString());
-					num = new StringBuffer();
+					num = new StringBuilder();
 					act = false;
 				}
 				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
@@ -328,7 +328,7 @@ public abstract class BaseBoard
 		return n;
 	}
 
-	protected void printZfen_Board(final StringBuffer fen)
+	protected void printZfen_Board(final StringBuilder fen)
 	{
 		for (int i = 0, empty = 0; i < 64; i++) {
 			// convert cordinate system

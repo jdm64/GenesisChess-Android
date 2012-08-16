@@ -274,7 +274,7 @@ public class GenesisNotifier extends Service implements Runnable
 	try {
 		final JSONArray ids = json.getJSONArray("gameids");
 
-		for (int i = 0; i < ids.length(); i++) {
+		for (int i = 0, len = ids.length(); i < len; i++) {
 			if (error)
 				return;
 			net.game_status(ids.getString(i));
@@ -297,7 +297,7 @@ public class GenesisNotifier extends Service implements Runnable
 		final JSONArray msgs = json.getJSONArray("msglist");
 		final long time = json.getLong("time");
 
-		for (int i = 0; i < msgs.length(); i++) {
+		for (int i = 0, len = msgs.length(); i < len; i++) {
 			final JSONObject item = msgs.getJSONObject(i);
 			db.insertMsg(item);
 		}

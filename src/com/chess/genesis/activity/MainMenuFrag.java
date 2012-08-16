@@ -192,7 +192,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	private void onClickTablet(final int viewId, final SharedPreferences pref)
 	{
 		// pop everything from stack
-		for (int i = 0; i < fragMan.getBackStackEntryCount(); i++)
+		for (int i = 0, len = fragMan.getBackStackEntryCount(); i < len; i++)
 			fragMan.popBackStack();
 
 		final FragmentIntent fintent = new FragmentIntent();

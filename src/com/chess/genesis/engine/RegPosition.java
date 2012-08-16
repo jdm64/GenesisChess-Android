@@ -147,7 +147,7 @@ class RegPosition extends RegMoveLookup
 		n++;
 
 		// parse half-ply
-		final StringBuffer num = new StringBuffer();
+		final StringBuilder num = new StringBuilder();
 		while (Character.isDigit(st[n])) {
 			num.append(st[n]);
 			n++;
@@ -165,7 +165,7 @@ class RegPosition extends RegMoveLookup
 
 	public String printZfen()
 	{
-		final StringBuffer fen = new StringBuffer();
+		final StringBuilder fen = new StringBuilder();
 
 		printZfen_Board(fen);
 

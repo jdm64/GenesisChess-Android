@@ -21,13 +21,13 @@ import java.io.*;
 
 public class FileLogger
 {
-	private final StringBuffer buffer;
+	private final StringBuilder buffer;
 	private final Exception trace;
 
 	public FileLogger(final Exception exception)
 	{
 		trace = exception;
-		buffer = new StringBuffer();
+		buffer = new StringBuilder();
 	}
 
 	public void addItem(final String name, final Object item)

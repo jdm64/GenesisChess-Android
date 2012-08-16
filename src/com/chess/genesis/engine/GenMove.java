@@ -93,9 +93,9 @@ public class GenMove extends Move
 	// ------
 
 	@Override
-	protected StringBuffer printLoc(final int loc)
+	protected StringBuilder printLoc(final int loc)
 	{
-		final StringBuffer str = new StringBuffer();
+		final StringBuilder str = new StringBuilder();
 
 		if (loc > Piece.PLACEABLE) {
 			str.append((char) ('a' + (loc & 7)));
@@ -112,7 +112,7 @@ public class GenMove extends Move
 	@Override
 	public String toString()
 	{
-		final StringBuffer out = new StringBuffer();
+		final StringBuilder out = new StringBuilder();
 
 		if (from == Piece.PLACEABLE)
 			out.append(pieceSymbol[Math.abs(InitPieceType[index])]);

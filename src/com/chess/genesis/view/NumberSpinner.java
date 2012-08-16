@@ -433,7 +433,7 @@ public class NumberSpinner extends LinearLayout
 	private NumberSpinnerButton mIncrementButton;
 	private NumberSpinnerButton mDecrementButton;
 
-	private class NumberSpinnerInputFilter implements InputFilter
+	class NumberSpinnerInputFilter implements InputFilter
 	{
 		@Override
 		public CharSequence filter(final CharSequence source, final int start, final int end, final Spanned dest, final int dstart, final int dend)
@@ -457,7 +457,7 @@ public class NumberSpinner extends LinearLayout
 		}
 	}
 
-	private class NumberRangeKeyListener extends NumberKeyListener
+	class NumberRangeKeyListener extends NumberKeyListener
 	{
 		// XXX This doesn't allow for range limits when controlled by a
 		// soft input method!

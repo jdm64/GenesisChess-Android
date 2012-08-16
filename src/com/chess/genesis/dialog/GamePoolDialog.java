@@ -55,7 +55,7 @@ public class GamePoolDialog extends BaseDialog
 		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
 
 		data = new ObjectArray<PoolDataItem>();
-		for (int i = 0; i < pool.length(); i++) {
+		for (int i = 0, len = pool.length(); i < len; i++) {
 			final String type = pool.getJSONObject(i).getString("gametype");
 			final long time = pool.getJSONObject(i).getLong("added");
 
@@ -77,7 +77,7 @@ public class GamePoolDialog extends BaseDialog
 		final TableLayout table = (TableLayout) findViewById(R.id.layout01);
 		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
 
-		for (int i = 0; i < data.size(); i++) {
+		for (int i = 0, len = data.size(); i < len; i++) {
 			final TableRow row = new TableRow(context);
 
 			TextView txt = new TextView(context);

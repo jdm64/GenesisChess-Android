@@ -157,7 +157,7 @@ public class RegisterFrag extends BaseContentFrag
 			Toast.makeText(act, "Password too short", Toast.LENGTH_LONG).show();
 			return false;
 		}
-		for (int i = 0; i < pass1.length(); i++) {
+		for (int i = 0, len = pass1.length(); i < len; i++) {
 			if (pass1.charAt(i) < 32 || pass1.charAt(i) > 126) {
 				Toast.makeText(act, "Password can only contain ASCII characters", Toast.LENGTH_LONG).show();
 				return false;

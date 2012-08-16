@@ -271,7 +271,8 @@ public abstract class GameState
 
 	public void currentMove()
 	{
-		while (hindex + 1 < history.size())
+		final int len = history.size();
+		while (hindex + 1 < len)
 			applyMove(history.get(hindex + 1), false, true);
 	}
 

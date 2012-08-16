@@ -132,7 +132,7 @@ public abstract class Move implements Parcelable
 	public abstract void setPromote(final int type);
 	public abstract int getPromote();
 
-	protected abstract StringBuffer printLoc(final int loc);
+	protected abstract StringBuilder printLoc(final int loc);
 
 	public abstract boolean parse(final String str);
 }

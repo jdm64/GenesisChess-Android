@@ -26,7 +26,7 @@ public class IntArray
 	{
 		final int[] temp = new int[size];
 
-		for (int i = 0; i < Math.min(arr.length, size); i++)
+		for (int i = 0, len = Math.min(arr.length,size); i < len; i++)
 			temp[i] = arr[i];
 		return temp;
 	}
@@ -90,7 +90,7 @@ public class IntArray
 	@Override
 	public String toString()
 	{
-		final StringBuffer str = new StringBuffer();
+		final StringBuilder str = new StringBuilder();
 
 		for (final int element : list)
 			str.append(String.valueOf(element) + " ");

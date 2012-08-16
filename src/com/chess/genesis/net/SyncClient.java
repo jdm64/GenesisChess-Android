@@ -185,7 +185,7 @@ public class SyncClient implements Runnable
 		final JSONArray ids = json.getJSONArray("gameids");
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0; i < ids.length(); i++) {
+		for (int i = 0, len = ids.length(); i < len; i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
@@ -209,7 +209,7 @@ public class SyncClient implements Runnable
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0; i < list_need.size(); i++) {
+		for (int i = 0, len = list_need.size(); i < len; i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
@@ -237,7 +237,7 @@ public class SyncClient implements Runnable
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0; i < list_need.size(); i++) {
+		for (int i = 0, len = list_need.size(); i < len; i++) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
@@ -255,7 +255,7 @@ public class SyncClient implements Runnable
 	{
 	try {
 		final ArrayList<String> list_need = new ArrayList<String>();
-		for (int i = 0; i < ids.length(); i++)
+		for (int i = 0, len = ids.length(); i < len; i++)
 			list_need.add(ids.getString(i));
 
 		if (syncType == ACTIVE_SYNC || syncType == ARCHIVE_SYNC)
@@ -270,7 +270,7 @@ public class SyncClient implements Runnable
 		db.close();
 
 		final ArrayList<String> list_have = new ArrayList<String>();
-		for (int i = 0; i < list.size(); i++)
+		for (int i = 0, len = list.size(); i < len; i++)
 			list_have.add(list.get(i));
 
 		list_need.removeAll(list_have);
@@ -308,7 +308,7 @@ public class SyncClient implements Runnable
 		final long time = data.getLong("time");
 		final GameDataDB db = new GameDataDB(context);
 
-		for (int i = 0; i < msgs.length(); i++) {
+		for (int i = 0, len = msgs.length(); i < len; i++) {
 			final JSONObject item = msgs.getJSONObject(i);
 			db.insertMsg(item);
 		}

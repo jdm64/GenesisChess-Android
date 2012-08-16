@@ -120,9 +120,9 @@ public class RegMove extends Move
 	}
 
 	@Override
-	protected StringBuffer printLoc(final int loc)
+	protected StringBuilder printLoc(final int loc)
 	{
-		final StringBuffer str = new StringBuffer();
+		final StringBuilder str = new StringBuilder();
 
 		if (loc > Piece.PLACEABLE) {
 			str.append((char) ('a' + (loc & 7)));
@@ -141,7 +141,7 @@ public class RegMove extends Move
 				return "O-O";
 			return "O-O-O";
 		}
-		final StringBuffer out = new StringBuffer();
+		final StringBuilder out = new StringBuilder();
 
 		out.append(printLoc(from));
 		out.append(printLoc(to));

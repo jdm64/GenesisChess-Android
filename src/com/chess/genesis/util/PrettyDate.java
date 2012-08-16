@@ -148,7 +148,7 @@ public class PrettyDate extends Date
 
 	public String agoFormat()
 	{
-		final StringBuffer buff = new StringBuffer(32);
+		final StringBuilder buff = new StringBuilder(32);
 		final Date now = new Date();
 
 		long tmp, diff = Math.abs(now.getTime() - getTime());
