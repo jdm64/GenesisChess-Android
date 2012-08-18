@@ -32,6 +32,11 @@ class MoveList
 			list[i] = new MoveNode(move.newInstance());
 		}
 	}
+
+	public void add(final MoveNode move)
+	{
+		list[size++].set(move);
+	}
 }
 
 class MoveListPool

@@ -16,12 +16,8 @@
 
 package com.chess.genesis.net;
 
-import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.preference.*;
-import com.chess.genesis.data.*;
-import java.util.*;
 
 public class GenesisAlarm extends BroadcastReceiver
 {
@@ -29,7 +25,7 @@ public class GenesisAlarm extends BroadcastReceiver
 	public void onReceive(final Context context, final Intent intent)
 	{
 		if (intent.getAction() != null) {
-			ScheduleWakeup(context);
+			GenesisNotifier.ScheduleWakeup(context);
 			return;
 		}
 
@@ -40,18 +36,5 @@ public class GenesisAlarm extends BroadcastReceiver
 		nintent.putExtras(bundle);
 
 		context.startService(nintent);
-	}
-
-	private static void ScheduleWakeup(final Context context)
-	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, GenesisNotifier.POLL_FREQ));
-
-		final Intent intent = new Intent(context, GenesisAlarm.class);
-		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
 	}
 }

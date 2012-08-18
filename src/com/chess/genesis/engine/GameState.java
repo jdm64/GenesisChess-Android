@@ -172,16 +172,7 @@ public abstract class GameState
 			if (status != Enums.ACTIVE) {
 				if (Integer.parseInt(settings.getString("eventtype")) == Enums.INVITE) {
 					progress.remove();
-
-					json.put("yourcolor", ycol);
-					json.put("white_name", settings.getString("white"));
-					json.put("black_name", settings.getString("black"));
-					json.put("eventtype", settings.getString("eventtype"));
-					json.put("status", settings.getString("status"));
-					json.put("gametype", Enums.GameType(Integer.parseInt(settings.getString("gametype"))));
-					json.put("gameid", settings.getString("gameid"));
-
-					new GameStatsDialog(activity, json).show();
+					ShowGameStats(json);
 					return;
 				}
 				progress.setText("Retrieving Score");

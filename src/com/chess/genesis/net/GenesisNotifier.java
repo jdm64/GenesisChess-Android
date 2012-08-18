@@ -31,7 +31,7 @@ import org.json.*;
 
 public class GenesisNotifier extends Service implements Runnable
 {
-	public final static int POLL_FREQ = 30;
+	public final static int DEFAULT_POLL_FREQ = 30;
 
 	public final static int ERROR_NOTE = 1;
 	public final static int YOURTURN_NOTE = 2;
@@ -108,7 +108,7 @@ public class GenesisNotifier extends Service implements Runnable
 		} else if (internetIsActive() && fromalarm) {
 			CheckServer();
 		}
-		ScheduleWakeup();
+		ScheduleWakeup(this);
 		stopSelf();
 	}
 
@@ -134,15 +134,16 @@ public class GenesisNotifier extends Service implements Runnable
 		return null;
 	}
 
-	private void ScheduleWakeup()
+	public static void ScheduleWakeup(final Context context)
 	{
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, GenesisNotifier.POLL_FREQ));
+		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, DEFAULT_POLL_FREQ));
 
-		final Intent intent = new Intent(this, GenesisAlarm.class);
-		final PendingIntent pintent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		final Intent intent = new Intent(context, GenesisAlarm.class);
+		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		final AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
 	}
 

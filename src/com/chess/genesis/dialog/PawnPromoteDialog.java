@@ -33,10 +33,10 @@ public class PawnPromoteDialog extends BaseDialog
 
 	private final Context context;
 	private final Handler handle;
-	private final RegMove move;
+	private final Move move;
 	private final int color;
 
-	public PawnPromoteDialog(final Context _context, final Handler handler, final RegMove _move, final int _color)
+	public PawnPromoteDialog(final Context _context, final Handler handler, final Move _move, final int _color)
 	{
 		super(_context, BaseDialog.CANCEL);
 		context = _context;

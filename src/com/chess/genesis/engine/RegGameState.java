@@ -85,7 +85,7 @@ public class RegGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final RegMove move = new RegMove();
+			final Move move = moveType.newInstance();
 			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
@@ -133,7 +133,7 @@ public class RegGameState extends GameState
 			return;
 		}
 
-		final RegMove move = new RegMove();
+		final Move move = moveType.newInstance();
 
 		move.from = callstack.get(0);
 		move.to = callstack.get(1);

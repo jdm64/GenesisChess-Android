@@ -592,7 +592,7 @@ public class RegBoard extends RegPosition implements Board
 					}
 					unmake(item.move, undoFlags);
 
-					data.list[data.size++].set(item);
+					data.add(item);
 					for (int i = Piece.ROOK; i > Piece.PAWN; i--) {
 						item.move.setPromote(i);
 
@@ -601,7 +601,7 @@ public class RegBoard extends RegPosition implements Board
 						item.score = eval();
 						unmake(item.move, undoFlags);
 
-						data.list[data.size++].set(item);
+						data.add(item);
 					}
 				} else {
 					// must clear move flags
@@ -610,7 +610,7 @@ public class RegBoard extends RegPosition implements Board
 					if (!incheckMove(item.move, color, stmCk)) {
 						item.check = incheckMove(item.move, color ^ -2, false);
 						item.score = eval();
-						data.list[data.size++].set(item);
+						data.add(item);
 					}
 					unmake(item.move, undoFlags);
 				}
@@ -639,7 +639,7 @@ public class RegBoard extends RegPosition implements Board
 			item.score = eval();
 			item.check = false;
 
-			data.list[data.size++].set(item);
+			data.add(item);
 		}
 		// Queen Side
 		if (flags.canQueenCastle(color) != 0 && square[king - 1] == Piece.EMPTY && square[king - 2] == Piece.EMPTY &&
@@ -653,7 +653,7 @@ public class RegBoard extends RegPosition implements Board
 			item.score = eval();
 			item.check = false;
 
-			data.list[data.size++].set(item);
+			data.add(item);
 		}
 	}
 
@@ -680,7 +680,7 @@ public class RegBoard extends RegPosition implements Board
 			if (!incheck(color)) {
 				item.check = incheck(color ^ -2);
 				item.score = eval();
-				data.list[data.size++].set(item);
+				data.add(item);
 			}
 			unmake(item.move, undoFlags);
 		}
@@ -696,7 +696,7 @@ public class RegBoard extends RegPosition implements Board
 			if (!incheck(color)) {
 				item.check = incheck(color ^ -2);
 				item.score = eval();
-				data.list[data.size++].set(item);
+				data.add(item);
 			}
 			unmake(item.move, undoFlags);
 		}

@@ -72,7 +72,7 @@ public class GenGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final GenMove move = new GenMove();
+			final Move move = moveType.newInstance();
 			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
@@ -103,7 +103,7 @@ public class GenGameState extends GameState
 			return;
 		}
 
-		final GenMove move = new GenMove();
+		final Move move = moveType.newInstance();
 
 		// create move
 		if (callstack.get(0) > 0x88) {

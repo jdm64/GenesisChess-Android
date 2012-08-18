@@ -443,7 +443,7 @@ public class GenBoard extends GenPosition implements Board
 				if (!incheckMove(item.move, color, stmCk)) {
 					item.check = incheckMove(item.move, color ^ -2, false);
 					item.score = eval();
-					data.list[data.size++].set(item);
+					data.add(item);
 				}
 				unmake(item.move);
 			}
@@ -476,7 +476,7 @@ public class GenBoard extends GenPosition implements Board
 			if (!incheckMove(item.move, color, stmCk) && !incheckMove(item.move, color ^ -2, false)) {
 				// item.check initialized to false
 				item.score = eval();
-				data.list[data.size++].set(item);
+				data.add(item);
 			}
 			unmake(item.move);
 		}
