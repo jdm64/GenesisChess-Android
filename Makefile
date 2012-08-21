@@ -23,9 +23,6 @@
 
 apk : build sign zipalign
 
-bar : apk
-	$(SDK)/tools/apk2bar bin/GenesisChess.apk $(SDK)
-
 build :
 	ant release || exit
 
@@ -37,6 +34,13 @@ zipalign :
 
 upload :
 	scp bin/GenesisChess.apk $(REMOTE_SERVER)
+
+start-adb :
+	sudo $(SDK)/platform-tools/adb kill-server
+	sudo $(SDK)/platform-tools/adb start-server
+
+logcat :
+	$(SDK)/platform-tools/adb logcat
 
 install :
 	$(SDK)/platform-tools/adb install -r bin/GenesisChess.apk
