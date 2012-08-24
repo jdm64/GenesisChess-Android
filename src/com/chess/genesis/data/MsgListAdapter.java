@@ -21,16 +21,19 @@ import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
 import android.preference.*;
-import android.text.Layout.Alignment;
 import android.text.*;
+import android.text.Layout.Alignment;
+import android.text.ClipboardManager;
 import android.view.*;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MsgListAdapter extends BaseAdapter
+public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLongClickListener
 {
 	private final Context context;
 	private final String gameID;
@@ -95,6 +98,8 @@ public class MsgListAdapter extends BaseAdapter
 		// or the message list gets corrupt
 		cell = new MsgListItem(parent.getContext());
 		((MsgListItem) cell).setData(data);
+		cell.setOnLongClickListener(this);
+		cell.setOnTouchListener(this);
 
 		return cell;
 	}
@@ -108,6 +113,27 @@ public class MsgListAdapter extends BaseAdapter
 		cell.setLayoutParams(lp);
 
 		return cell;
+	}
+
+	@Override
+	public boolean onTouch(final View v, final MotionEvent event)
+	{
+		if (event.getAction() == MotionEvent.ACTION_DOWN)
+			v.setBackgroundColor(MColors.BLUE_NEON);
+		else if (event.getAction() == MotionEvent.ACTION_UP)
+			v.setBackgroundColor(MColors.CLEAR);
+		else if (event.getAction() == MotionEvent.ACTION_CANCEL)
+			v.setBackgroundColor(MColors.CLEAR);
+		return false;
+	}
+
+	@Override
+	public boolean onLongClick(final View view)
+	{
+		final ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+		clipboard.setText(((MsgListItem) view).getData().msg);
+		Toast.makeText(context, "Message copied", Toast.LENGTH_SHORT).show();
+		return true;
 	}
 }
 
@@ -227,5 +253,10 @@ class MsgListItem extends View
 		data.time = new PrettyDate(bundle.getString("time")).agoFormat();
 		data.msg = bundle.getString("msg");
 		data.isYourMsg = data.username.equals(Cache.username);
+	}
+
+	public DataItem getData()
+	{
+		return data;
 	}
 }
