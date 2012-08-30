@@ -40,7 +40,7 @@ public abstract class GameState
 	protected final Bundle settings;
 	protected final ProgressMsg progress;
 	protected final ObjectArray<Move> history;
-	protected final IntArray callstack;
+	protected HintList hintList;
 
 	protected Handler handle;
 	protected NetworkClient net;
@@ -59,6 +59,7 @@ public abstract class GameState
 	public abstract void setBoard();
 	public abstract void boardClick(final View v);
 	public abstract void placeClick(final View v);
+	public abstract void handleMove(final int from, final int to);
 
 	protected void handleOther(final Message msg)
 	{
@@ -230,9 +231,7 @@ public abstract class GameState
 		activity = _activity;
 		game = _game;
 		settings = _settings;
-
 		history = new ObjectArray<Move>();
-		callstack = new IntArray();
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 	}
@@ -240,7 +239,6 @@ public abstract class GameState
 	public void reset()
 	{
 		hindex = -1;
-		callstack.clear();
 		game.reset();
 		history.clear();
 		board.reset();
@@ -279,20 +277,6 @@ public abstract class GameState
 			return;
 		revertMove(history.get(hindex));
 		history.pop();
-	}
-
-	public void clearSelectHighlight()
-	{
-		if (callstack.size() > 0) {
-			final int indx = callstack.get(0);
-			final View last = activity.findViewById(indx);
-
-			if (indx < 0x88)
-				((BoardButton) last).setHighlight(false);
-			else
-				((PlaceButton) last).setHighlight(false);
-			callstack.clear();
-		}
 	}
 
 	protected int yourColor()
@@ -401,8 +385,7 @@ public abstract class GameState
 
 	protected void preApplyMove()
 	{
-		clearSelectHighlight();
-
+		hintList.clear();
 		if (hindex >= 0) {
 			// undo last move highlight
 			final BoardButton to = (BoardButton) activity.findViewById(history.get(hindex).to);
@@ -414,7 +397,7 @@ public abstract class GameState
 
 	protected void preRevertMove()
 	{
-		clearSelectHighlight();
+		hintList.clear();
 		preCommonMove();
 	}
 
@@ -642,5 +625,11 @@ public abstract class GameState
 		json.put("gameid", settings.getString("gameid"));
 
 		new GameStatsDialog(activity, json).show();
+	}
+
+	public boolean boardLongClick(final View v)
+	{
+		hintList.longBoardClick((BoardButton) v, yourColor());
+		return true;
 	}
 }

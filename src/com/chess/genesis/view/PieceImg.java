@@ -26,6 +26,7 @@ public class PieceImg extends View
 	protected final Matrix matrix = new Matrix();
 	protected final PieceImgCache cache;
 
+	protected boolean isHighlighted = false;
 	protected int type = Piece.EMPTY;
 	protected int count = 0;
 
@@ -102,6 +103,12 @@ public class PieceImg extends View
 	public void plusCount()
 	{
 		count++;
+		invalidate();
+	}
+
+	public void setHighlight(final boolean mode)
+	{
+		isHighlighted = mode;
 		invalidate();
 	}
 }

@@ -44,6 +44,7 @@ public class GenGameState extends GameState
 		handle = xhandle;
 		moveType = new GenMove();
 		board = new GenBoard();
+		hintList = new HintList(activity, this, board);
 
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -91,12 +92,12 @@ public class GenGameState extends GameState
 		setBoard(board.getPieceCounts(Piece.PLACEABLE));
 	}
 
-	private void handleMove()
+	@Override
+	public void handleMove(final int from, final int to)
 	{
 		if (type == Enums.ONLINE_GAME) {
 			// you can't edit the past in online games
 			if (hindex + 1 < history.size()) {
-				callstack.pop();
 				return;
 			}
 		} else if (type == Enums.ARCHIVE_GAME) {
@@ -106,20 +107,18 @@ public class GenGameState extends GameState
 		final Move move = moveType.newInstance();
 
 		// create move
-		if (callstack.get(0) > 0x88) {
-			move.index = Math.abs(callstack.get(0) - 1000);
+		if (from > 0x88) {
+			move.index = Math.abs(from - 1000);
 			move.from = Piece.PLACEABLE;
 		} else {
-			move.from = callstack.get(0);
+			move.from = from;
 		}
-		move.to = callstack.get(1);
+		move.to = to;
 
 		// return if move isn't valid
 		if (board.validMove(move) != Move.VALID_MOVE) {
-			callstack.pop();
 			return;
 		}
-		callstack.clear();
 		applyMove(move, true, true);
 	}
 
@@ -132,7 +131,6 @@ public class GenGameState extends GameState
 			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
 			final BoardButton to = (BoardButton) activity.findViewById(move.to);
 
-			from.setHighlight(false);
 			from.minusCount();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
@@ -143,7 +141,6 @@ public class GenGameState extends GameState
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 			from.setPiece(0);
-			from.setHighlight(false);
 		}
 
 		// apply move to board
@@ -195,81 +192,12 @@ public class GenGameState extends GameState
 	@Override
 	public void boardClick(final View v)
 	{
-		final BoardButton to = (BoardButton) v;
-		final int index = to.getIndex();
-		final int col = yourColor();
-
-		if (callstack.size() == 0) {
-		// No active clicks
-			// first click must be non empty and your own
-			if (to.getPiece() * col <= 0)
-				return;
-			callstack.push(index);
-			to.setHighlight(true);
-			return;
-		} else if (callstack.get(0) == index) {
-		// clicking the same square
-			callstack.clear();
-			to.setHighlight(false);
-			return;
-		} else if (callstack.get(0) > 0x88) {
-		// Place piece action
-			// can't place on another piece
-			if (to.getPiece() * col < 0) {
-				return;
-			} else if (to.getPiece() * col > 0) {
-				final PlaceButton from = (PlaceButton) activity.findViewById(callstack.get(0));
-				from.setHighlight(false);
-				to.setHighlight(true);
-				callstack.set(0, index);
-				return;
-			}
-		} else {
-		// piece move action
-			final BoardButton from = (BoardButton) activity.findViewById(callstack.get(0));
-			// capturing your own piece (switch to piece)
-			if (from.getPiece() * to.getPiece() > 0) {
-				from.setHighlight(false);
-				to.setHighlight(true);
-				callstack.set(0, index);
-				return;
-			}
-		}
-		callstack.push(index);
-		handleMove();
+		hintList.boardClick((BoardButton) v, yourColor());
 	}
 
 	@Override
 	public void placeClick(final View v)
 	{
-		final PlaceButton from = (PlaceButton) v;
-		final int col = yourColor();
-		final int ptype = from.getPiece();
-
-		// only select your own pieces where count > 0
-		if (board.getStm() != col || ptype * board.getStm() < 0 || from.getCount() <= 0)
-			return;
-		if (callstack.size() == 0) {
-		// No active clicks
-			callstack.push(ptype + 1000);
-			from.setHighlight(true);
-		} else if (callstack.get(0) < 0x88) {
-		// switching from board to place piece
-			final BoardButton to = (BoardButton) activity.findViewById(callstack.get(0));
-			to.setHighlight(false);
-			callstack.set(0, ptype + 1000);
-			from.setHighlight(true);
-		} else if (callstack.get(0) == ptype + 1000) {
-		// clicking the same square
-			callstack.clear();
-			from.setHighlight(false);
-		} else {
-		// switching to another place piece
-			final PlaceButton fromold = (PlaceButton) activity.findViewById(callstack.get(0));
-			fromold.setHighlight(false);
-			callstack.set(0, ptype + 1000);
-			from.setHighlight(true);
-		}
-		AnimationFactory.flipTransition(game.game_board);
+		hintList.placeClick((PlaceButton) v, yourColor());
 	}
 }

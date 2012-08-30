@@ -40,7 +40,6 @@ public class RegGameState extends GameState
 		{
 			switch (msg.what) {
 			case PawnPromoteDialog.MSG:
-				callstack.clear();
 				applyMove((RegMove) msg.obj, true, true);
 				break;
 			default:
@@ -57,6 +56,7 @@ public class RegGameState extends GameState
 		moveType = new RegMove();
 		board = new RegBoard();
 		flagsHistory = new ObjectArray<MoveFlags>();
+		hintList = new HintList(activity, this, board);
 
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -121,12 +121,12 @@ public class RegGameState extends GameState
 		flagsHistory.pop();
 	}
 
-	private void handleMove()
+	@Override
+	public void handleMove(final int from, final int to)
 	{
 		if (type == Enums.ONLINE_GAME) {
 			// you can't edit the past in online games
 			if (hindex + 1 < history.size()) {
-				callstack.pop();
 				return;
 			}
 		} else if (type == Enums.ARCHIVE_GAME) {
@@ -134,21 +134,16 @@ public class RegGameState extends GameState
 		}
 
 		final Move move = moveType.newInstance();
-
-		move.from = callstack.get(0);
-		move.to = callstack.get(1);
+		move.from = from;
+		move.to = to;
 
 		// return if move isn't valid
 		if (board.validMove(move) != Move.VALID_MOVE) {
-			callstack.pop();
 			return;
 		} else if (move.getPromote() != 0) {
 			new PawnPromoteDialog(activity, handle, move, board.getStm()).show();
-
-			callstack.pop();
 			return;
 		}
-		callstack.clear();
 		applyMove(move, true, true);
 	}
 
@@ -163,7 +158,6 @@ public class RegGameState extends GameState
 		to.setPiece(from.getPiece());
 		to.setLast(true);
 		from.setPiece(0);
-		from.setHighlight(false);
 
 		if (move.xindex != Piece.NONE) {
 			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
@@ -258,36 +252,7 @@ public class RegGameState extends GameState
 	@Override
 	public void boardClick(final View v)
 	{
-		final BoardButton to = (BoardButton) v;
-		final int index = to.getIndex();
-		final int col = yourColor();
-
-		if (callstack.size() == 0) {
-		// No active clicks
-			// first click must be non empty and your own
-			if (to.getPiece() * col <= 0)
-				return;
-			callstack.push(index);
-			to.setHighlight(true);
-			return;
-		} else if (callstack.get(0) == index) {
-		// clicking the same square
-			callstack.clear();
-			to.setHighlight(false);
-			return;
-		} else {
-		// piece move action
-			final BoardButton from = (BoardButton) activity.findViewById(callstack.get(0));
-			// capturing your own piece (switch to piece)
-			if (from.getPiece() * to.getPiece() > 0) {
-				from.setHighlight(false);
-				to.setHighlight(true);
-				callstack.set(0, index);
-				return;
-			}
-		}
-		callstack.push(index);
-		handleMove();
+		hintList.boardClick((BoardButton) v, yourColor());
 	}
 
 	@Override

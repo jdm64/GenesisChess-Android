@@ -34,8 +34,6 @@ public class PlaceButton extends PieceImg
 	protected final RectF inSquare = new RectF();
 	protected final RectF outSquare = new RectF();
 
-	protected boolean isHighlighted = false;
-
 	public PlaceButton(final Context context, final PieceImgCache _cache, final int Type)
 	{
 		super(context, _cache);
@@ -84,12 +82,6 @@ public class PlaceButton extends PieceImg
 	{
 		isHighlighted = false;
 		count = typeCounts[Math.abs(type)];
-		invalidate();
-	}
-
-	public void setHighlight(final boolean mode)
-	{
-		isHighlighted = mode;
 		invalidate();
 	}
 }

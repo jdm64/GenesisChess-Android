@@ -20,10 +20,11 @@ import android.content.*;
 import android.util.*;
 import android.view.*;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.*;
 import com.chess.genesis.engine.*;
 
-public class BoardLayout extends LinearLayout implements OnClickListener
+public class BoardLayout extends LinearLayout implements OnClickListener, OnLongClickListener
 {
 	private GameState gamestate;
 	private final PieceImgCache cache;
@@ -58,6 +59,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 				for (int j = 7; j >= 0; j--) {
 					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
 					button.setOnClickListener(this);
+					button.setOnLongClickListener(this);
 					row.addView(button);
 				}
 				addView(row);
@@ -70,6 +72,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 				for (int j = 0; j < 8; j++) {
 					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
 					button.setOnClickListener(this);
+					button.setOnLongClickListener(this);
 					row.addView(button);
 				}
 				addView(row);
@@ -81,5 +84,11 @@ public class BoardLayout extends LinearLayout implements OnClickListener
 	public void onClick(final View v)
 	{
 		gamestate.boardClick(v);
+	}
+
+	@Override
+	public boolean onLongClick(final View v)
+	{
+		return gamestate.boardLongClick(v);
 	}
 }
