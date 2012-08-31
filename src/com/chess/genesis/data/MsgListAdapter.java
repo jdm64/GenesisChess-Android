@@ -118,12 +118,7 @@ public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLo
 	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
-		if (event.getAction() == MotionEvent.ACTION_DOWN)
-			v.setBackgroundColor(MColors.BLUE_NEON);
-		else if (event.getAction() == MotionEvent.ACTION_UP)
-			v.setBackgroundColor(MColors.CLEAR);
-		else if (event.getAction() == MotionEvent.ACTION_CANCEL)
-			v.setBackgroundColor(MColors.CLEAR);
+		v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_NEON : MColors.CLEAR);
 		return false;
 	}
 

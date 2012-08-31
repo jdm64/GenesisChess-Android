@@ -62,10 +62,7 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
-		if (event.getAction() == MotionEvent.ACTION_DOWN)
-			setBackgroundColor(touchColor);
-		else if (event.getAction() == MotionEvent.ACTION_UP)
-			setBackgroundColor(MColors.CLEAR);
+		setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? touchColor : MColors.CLEAR);
 		return false;
 	}
 

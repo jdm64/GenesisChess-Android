@@ -315,12 +315,8 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
-		if (v.getId() == R.id.game_search) {
-			if (event.getAction() == MotionEvent.ACTION_DOWN)
-				v.setBackgroundColor(MColors.BLUE_NEON);
-			else if (event.getAction() == MotionEvent.ACTION_UP)
-				v.setBackgroundColor(MColors.CLEAR);
-		}
+		if (v.getId() == R.id.game_search)
+			v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_NEON : MColors.CLEAR);
 		return false;
 	}
 
