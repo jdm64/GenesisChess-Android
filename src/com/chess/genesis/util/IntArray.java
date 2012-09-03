@@ -87,6 +87,15 @@ public class IntArray
 		return list[list.length - 1];
 	}
 
+	public boolean contains(final int item)
+	{
+		for (final int i : list) {
+			if (i == item)
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString()
 	{

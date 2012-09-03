@@ -78,6 +78,15 @@ public class BoolArray
 		return list[list.length - 1];
 	}
 
+	public boolean contains(final boolean item)
+	{
+		for (final boolean i : list) {
+			if (i == item)
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString()
 	{

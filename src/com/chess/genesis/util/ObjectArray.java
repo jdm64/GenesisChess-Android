@@ -84,6 +84,15 @@ public class ObjectArray<Type>
 		return list[list.length - 1];
 	}
 
+	public boolean contains(final Type item)
+	{
+		for (final Type i : list) {
+			if (item.equals(i))
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString()
 	{
