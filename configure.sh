@@ -35,24 +35,6 @@ sdk.dir=$SDK_DIR_ABS
 _EOF_
 }
 
-setupLibs()
-{
-	mkdir -p libs
-
-	# setup libs link files
-	ln -fs $SDK_DIR_ABS/extras/android/support/v4/android-support-v4.jar libs/
-	ln -fs $SDK_DIR_ABS/extras/google/admob_ads_sdk/GoogleAdMobAdsSdk* libs/
-
-	# download httpmime.jar
-	wget http://hc.apache.org/downloads.cgi
-	wget $(grep binary/httpcomponents-client downloads.cgi | head -n1 | cut -d'"' -f2)
-	tar -xf	httpcomponents-client*bin.tar.gz
-	cp httpcomponents-client*/lib/httpmime*.jar libs/
-
-	# remove all downloaded files
-	rm -rf downloads.cgi httpcomponents-client*
-}
-
 cat <<_EOF_
 GenesisChess for Android configuration setup
 
@@ -90,7 +72,7 @@ read -ei "yes" -p "Do you want this script to try to setup the libs directory (y
 
 if [[ $SETUP_LIBS == "yes" ]]; then
 	echo
-	setupLibs
+	./updateLibs.sh $SDK_DIR_ABS
 fi
 
 echo

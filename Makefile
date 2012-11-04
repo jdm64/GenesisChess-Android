@@ -53,3 +53,6 @@ full-clean :
 
 config :
 	./configure.sh
+
+update-libs :
+	./updateLibs.sh $(SDK)
