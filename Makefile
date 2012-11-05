@@ -27,7 +27,7 @@ build :
 	ant release || exit
 
 sign :
-	jarsigner -verbose -keystore $(KEYSTORE_FILE) -storepass $(KEYSTORE_PASS) bin/GenesisChess-release-unsigned.apk $(KEYSTORE_ALIAS)
+	jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore $(KEYSTORE_FILE) -storepass $(KEYSTORE_PASS) bin/GenesisChess-release-unsigned.apk $(KEYSTORE_ALIAS)
 
 zipalign :
 	$(SDK)/tools/zipalign -v -f 4 bin/GenesisChess-release-unsigned.apk bin/GenesisChess.apk
