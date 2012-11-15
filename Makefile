@@ -49,7 +49,7 @@ clean :
 	rm -rf bin/classes/ bin/classes.dex bin/GenesisChess*
 
 full-clean :
-	rm -rf bin/
+	rm -rf bin/ gen/
 
 config :
 	./configure.sh
