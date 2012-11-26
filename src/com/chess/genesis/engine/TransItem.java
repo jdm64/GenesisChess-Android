@@ -35,11 +35,11 @@ class TransItem
 	public int depth;
 	public int type;
 
-	public TransItem(final Move _move)
+	public TransItem(final Move moveType)
 	{
 		hash = score = depth = 0;
 		type = NONE_NODE;
-		move = _move;
+		move = moveType.newInstance();
 	}
 
 	public void set(final TransItem item)

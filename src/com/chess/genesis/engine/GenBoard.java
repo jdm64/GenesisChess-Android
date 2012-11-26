@@ -94,6 +94,7 @@ public class GenBoard extends GenPosition implements Board
 
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
+	private static final Move moveType = new GenMove();
 
 	private final MoveNode item = new MoveNode(new GenMove());
 	private final MoveListPool pool;
@@ -123,6 +124,12 @@ public class GenBoard extends GenPosition implements Board
 	public GenBoard clone()
 	{
 		return new GenBoard(this);
+	}
+
+	@Override
+	public Move newMove()
+	{
+		return moveType.newInstance();
 	}
 
 	private int pieceIndex(final int loc, final int type)

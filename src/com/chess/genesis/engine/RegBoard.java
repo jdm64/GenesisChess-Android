@@ -85,6 +85,7 @@ public class RegBoard extends RegPosition implements Board
 
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
+	private static final Move moveType = new GenMove();
 
 	private final MoveNode item = new MoveNode(new RegMove());
 	private final MoveFlags undoFlags = new MoveFlags();
@@ -116,6 +117,12 @@ public class RegBoard extends RegPosition implements Board
 	public RegBoard clone()
 	{
 		return new RegBoard(this);
+	}
+
+	@Override
+	public Move newMove()
+	{
+		return moveType.newInstance();
 	}
 
 	private int pieceIndex(final int loc, final int type)

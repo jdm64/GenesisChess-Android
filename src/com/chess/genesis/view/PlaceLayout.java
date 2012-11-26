@@ -53,9 +53,9 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 		cache.resize(getMeasuredHeight() / 5);
 	}
 
-	private void AddPieces(final Context context, int index)
+	private void AddPieces(final Context context, final int index)
 	{
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0, idx = index; i < 2; i++) {
 			final ManualPanel row = new ManualPanel(context);
 			row.setSizes("1/5");
 
@@ -65,7 +65,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			row.addView(padding);
 
 			for (int j = 0; j < 3; j++) {
-				final PlaceButton button = new PlaceButton(context, cache, piecelist[index++]);
+				final PlaceButton button = new PlaceButton(context, cache, piecelist[idx++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}

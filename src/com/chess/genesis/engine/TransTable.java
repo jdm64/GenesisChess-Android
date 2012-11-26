@@ -22,7 +22,7 @@ class TransTable
 	protected TransItem[] table;
 	protected int size;
 
-	public TransTable(final Board board, final Move move, final int num_MB)
+	public TransTable(final Board board, final int num_MB)
 	{
 		final Rand64 rad = new Rand64();
 		final long[] hashBox = board.getHashBox();
@@ -34,7 +34,7 @@ class TransTable
 		size = (num_MB * 1048576) / 288;
 		table = new TransItem[size];
 		for (int i = 0; i < size; i++)
-			table[i] = new TransItem(move.newInstance());
+			table[i] = new TransItem(board.newMove());
 	}
 
 	public void clear()

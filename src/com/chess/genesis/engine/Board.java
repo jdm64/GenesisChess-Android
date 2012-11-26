@@ -26,6 +26,7 @@ public interface Board
 	int HOLD_START = 768;
 
 	Board clone();
+	Move newMove();
 	void reset();
 
 	int Piece(int index);

@@ -45,7 +45,7 @@ public final class SocketClient
 		return instance;
 	}
 
-	public static synchronized SocketClient getInstance(final int id)
+	public static synchronized SocketClient getNewInstance()
 	{
 		return new SocketClient();
 	}

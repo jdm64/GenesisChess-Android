@@ -50,7 +50,7 @@ public class GenGameState extends GameState
 		case Enums.LOCAL_GAME:
 		default:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-			cpu = new GenEngine(handle);
+			cpu = new GenEngine(handle, board);
 			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
 			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;

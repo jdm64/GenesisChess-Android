@@ -37,15 +37,17 @@ public abstract class Engine implements Runnable
 	protected final ObjectArray<Move> moveKiller;
 
 	protected TransTable tt;
+	protected TransItem ttItem;
 	protected MoveListPool pool;
 	protected MoveList curr;
 	protected Board board;
+	protected Move move;
 
 	protected int secT;
 	protected long endT;
 	protected boolean active;
 
-	public Engine(final Handler handler)
+	public Engine(final Handler handler, final Board boardType)
 	{
 		secT = 4;
 		active = false;
@@ -53,10 +55,13 @@ public abstract class Engine implements Runnable
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
+		move = boardType.newMove();
 
 		pvMove = new ObjectArray<Move>();
 		captureKiller = new ObjectArray<Move>();
 		moveKiller = new ObjectArray<Move>();
+		ttItem = new TransItem(move);
+		tt = new TransTable(boardType, 8);
 	}
 
 	public void setBoard(final Board _board)
@@ -80,7 +85,7 @@ public abstract class Engine implements Runnable
 			break;
 		}
 		final int ind = (int) (Math.abs(rand.next()) % end);
-		pvMove.set(0, curr.list[ind].move);
+		pvMove.get(0).set(curr.list[ind].move);
 	}
 
 	protected void pruneWeakMoves()
