@@ -70,6 +70,11 @@ public class GameDetailsDialog extends BaseDialog
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
 		txt = (RobotoText) findViewById(R.id.stime);
 		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
+		txt = (RobotoText) findViewById(R.id.zfen);
+		txt.setText(gamedata.getString("zfen"));
+		txt = (RobotoText) findViewById(R.id.history);
+		txt.setText(gamedata.getString("history"));
+
 	}
 
 	@Override
