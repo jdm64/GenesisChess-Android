@@ -80,7 +80,10 @@ public final class FileUtils
 		if (!Environment.MEDIA_MOUNTED.equals(state))
 			throw new FileNotFoundException();
 
-		final File dir = Environment.getExternalStorageDirectory();
+		final File dir = new File(Environment.getExternalStorageDirectory() + "/GenesisChess");
+		if (!dir.exists())
+			dir.mkdirs();
+
 		final File file = new File(dir, filename);
 		final FileOutputStream buffer = new FileOutputStream(file, append);
 	try {

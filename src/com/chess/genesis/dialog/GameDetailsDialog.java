@@ -87,7 +87,7 @@ public class GameDetailsDialog extends BaseDialog
 		final String gamename = isOnline?
 			gamedata.getString("white") + " Vs. " + gamedata.getString("black") :
 			gamedata.getString("name");
-		final String filename = "genesischess-" + gamename + ".txt";
+		final String filename = gamename + ".txt";
 		final String str = GameParser.parse(gamedata).toString();
 
 		FileUtils.writeFile(filename, str);

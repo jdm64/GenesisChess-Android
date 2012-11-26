@@ -82,7 +82,7 @@ abstract class GameListFrag extends BaseContentFrag
 		final String gamename =	gamedata.containsKey("gameid")?
 			gamedata.getString("white") + " V. " + gamedata.getString("black") :
 			gamedata.getString("name");
-		final String filename = "genesischess-" + gamename + ".txt";
+		final String filename = gamename + ".txt";
 		final String gamestr = GameParser.export(gamedata).toString();
 		final Uri uri = FileUtils.writeFile(filename, gamestr);
 		final Intent intent = new Intent(Intent.ACTION_SEND);
