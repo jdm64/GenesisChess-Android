@@ -34,6 +34,13 @@ public class RobotoEditText extends EditText
 	}
 
 	@Override
+	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	{
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(getMeasuredWidth(), (int) (0.9 * getMeasuredHeight()));
+	}
+
+	@Override
 	public void setTypeface(final Typeface tf, final int style)
 	{
 		super.setTypeface(RobotoText.getRobotoFont(getContext().getAssets(), style));
