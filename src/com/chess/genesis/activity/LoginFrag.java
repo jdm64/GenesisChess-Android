@@ -163,9 +163,6 @@ public class LoginFrag extends BaseContentFrag
 		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 			EditText txt = (EditText) view.findViewById(R.id.username);
 			txt.setText(pref.getString(PrefKey.USERNAME, ""));
-
-			txt = (EditText) view.findViewById(R.id.password);
-			txt.setText("");
 		}
 		return view;
 	}
