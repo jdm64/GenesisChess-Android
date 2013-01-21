@@ -29,7 +29,7 @@ public class Login extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new LoginFrag(), LoginFrag.TAG, R.layout.activity_basephone);
+		super.onCreate(savedInstanceState, new LoginFrag(), R.layout.activity_basephone);
 	}
 
 	@Override

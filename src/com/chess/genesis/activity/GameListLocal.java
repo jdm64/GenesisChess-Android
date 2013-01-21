@@ -28,7 +28,7 @@ public class GameListLocal extends BasePhoneActivity implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new GameListLocalFrag(), GameListLocalFrag.TAG, R.layout.activity_gamelist);
+		super.onCreate(savedInstanceState, new GameListLocalFrag(), R.layout.activity_gamelist);
 
 		// set click listeners
 		final View button = findViewById(R.id.topbar_plus);

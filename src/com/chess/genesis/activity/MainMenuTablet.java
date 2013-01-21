@@ -47,7 +47,7 @@ public class MainMenuTablet extends BaseActivity
 		.replace(R.id.botbar02, new BotBarFrag())
 		.replace(R.id.topbar03, new TopBarFrag())
 		.replace(R.id.botbar03, new BotBarFrag())
-		.replace(R.id.panel01, frag, MainMenuFrag.TAG)
+		.replace(R.id.panel01, frag, frag.getBTag())
 		.commit();
 	}
 

@@ -28,7 +28,7 @@ import org.json.*;
 
 public class MsgBoxFrag extends BaseContentFrag
 {
-	public final static String TAG = "MSGBOX";
+	private final static String TAG = "MSGBOX";
 
 	private MsgListAdapter msglist_adapter;
 	private ListView msglist_view;
@@ -70,6 +70,12 @@ public class MsgBoxFrag extends BaseContentFrag
 			}
 		}
 	};
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
@@ -160,17 +166,8 @@ public class MsgBoxFrag extends BaseContentFrag
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
-
+		act.lastContextMenu = getBTag();
 		act.getMenuInflater().inflate(R.menu.options_msgbox, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		if (act.lastContextMenu.equals(TAG))
-			return onOptionsItemSelected(item);
-		return super.onContextItemSelected(item);
 	}
 
 	@Override

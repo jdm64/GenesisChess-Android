@@ -20,8 +20,16 @@ import com.chess.genesis.*;
 
 public class BotBarFrag extends SimpleFrag
 {
+	private final static String TAG = "BOTBAR";
+
 	public BotBarFrag()
 	{
 		super(R.layout.include_botbar);
+	}
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
 	}
 }

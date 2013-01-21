@@ -29,7 +29,7 @@ import org.json.*;
 
 public class UserStatsFrag extends BaseContentFrag
 {
-	public final static String TAG = "USERSTATS";
+	private final static String TAG = "USERSTATS";
 
 	private final static int GEN_RAN = 0;
 	private final static int GEN_INV = 1;
@@ -75,6 +75,12 @@ public class UserStatsFrag extends BaseContentFrag
 		}
 		}
 	};
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
@@ -141,17 +147,8 @@ public class UserStatsFrag extends BaseContentFrag
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
-
+		act.lastContextMenu = getBTag();
 		act.getMenuInflater().inflate(R.menu.options_userstats, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		if (act.lastContextMenu.equals(TAG))
-			return onOptionsItemSelected(item);
-		return super.onContextItemSelected(item);
 	}
 
 	@Override

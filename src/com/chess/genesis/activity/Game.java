@@ -46,7 +46,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 			new GenGameFrag() : new RegGameFrag();
 
 		// initialize layout
-		super.onCreate(savedInstanceState, frag, GameFrag.TAG, layoutId);
+		super.onCreate(savedInstanceState, frag, layoutId);
 
 		// set click listeners
 		if (type != Enums.LOCAL_GAME) {

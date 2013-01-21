@@ -21,7 +21,6 @@ import android.content.SharedPreferences.Editor;
 import android.net.*;
 import android.os.*;
 import android.preference.*;
-import android.support.v4.app.*;
 import android.util.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -36,7 +35,7 @@ import com.chess.genesis.view.*;
 
 public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, OnGlobalLayoutListener
 {
-	public final static String TAG = "MAINMENU";
+	private final static String TAG = "MAINMENU";
 
 	public final Handler handle = new Handler()
 	{
@@ -59,6 +58,12 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			}
 		}
 	};
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
@@ -192,38 +197,37 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		for (int i = 0, len = fragMan.getBackStackEntryCount(); i < len; i++)
 			fragMan.popBackStack();
 
-		final FragmentIntent fintent = new FragmentIntent();
-		fintent.setActivity(act);
+		final FragmentIntent fintent = new FragmentIntent(act);
 
 		switch (viewId) {
 		case R.id.local_game:
-			fintent.setFrag(R.id.panel01, new GameListLocalFrag(), GameListLocalFrag.TAG);
+			fintent.setFrag(R.id.panel01, new GameListLocalFrag());
 			break;
 		case R.id.online_game:
 			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.ONLINE_LIST);
-				fintent.setFrag(R.id.panel02, frag, LoginFrag.TAG);
+				fintent.setFrag(R.id.panel02, frag);
 			} else {
-				fintent.setFrag(R.id.panel01, new GameListOnlineFrag(), GameListOnlineFrag.TAG);
+				fintent.setFrag(R.id.panel01, new GameListOnlineFrag());
 			}
 			break;
 		case R.id.user_stats:
 			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.USER_STATS);
-				fintent.setFrag(R.id.panel02, frag, LoginFrag.TAG);
+				fintent.setFrag(R.id.panel02, frag);
 			} else {
 				final BaseContentFrag frag = new UserStatsFrag();
 				final Bundle bundle = new Bundle();
 				bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 				frag.setArguments(bundle);
 
-				fintent.setFrag(R.id.panel02, frag, UserStatsFrag.TAG);
+				fintent.setFrag(R.id.panel02, frag);
 			}
 			break;
 		case R.id.login:
-			fintent.setFrag(R.id.panel02, new LoginFrag(), LoginFrag.TAG);
+			fintent.setFrag(R.id.panel02, new LoginFrag());
 			break;
 		}
 		fintent.loadFrag(fragMan);
@@ -233,17 +237,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
-
+		act.lastContextMenu = getBTag();
 		act.getMenuInflater().inflate(R.menu.options_mainmenu, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		if (act.lastContextMenu.equals(TAG))
-			return onOptionsItemSelected(item);
-		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -266,17 +261,14 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	public void startFragment(final int fragId)
 	{
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		Fragment frag;
-		String fragTag;
+		BaseContentFrag frag;
 
 		fragMan.popBackStack();
 		switch (fragId) {
 		case Enums.ONLINE_LIST:
-			fragTag = GameListOnlineFrag.TAG;
 			frag = new GameListOnlineFrag();
 			break;
 		case Enums.USER_STATS:
-			fragTag = UserStatsFrag.TAG;
 			frag = new UserStatsFrag();
 			final Bundle bundle = new Bundle();
 			bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
@@ -287,8 +279,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			return;
 		}
 		fragMan.beginTransaction()
-		.replace(R.id.panel01, frag, fragTag)
-		.addToBackStack(fragTag).commit();
+		.replace(R.id.panel01, frag, frag.getBTag())
+		.addToBackStack(frag.getBTag()).commit();
 	}
 
 	private static void resizeButtonText(final View view)

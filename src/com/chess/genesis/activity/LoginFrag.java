@@ -33,7 +33,7 @@ import org.json.*;
 
 public class LoginFrag extends BaseContentFrag
 {
-	public final static String TAG = "LOGIN";
+	private final static String TAG = "LOGIN";
 
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -125,6 +125,12 @@ public class LoginFrag extends BaseContentFrag
 		}
 	};
 
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
+
 	public void setCallBack(final int value)
 	{
 		callbackId = value;
@@ -161,7 +167,7 @@ public class LoginFrag extends BaseContentFrag
 		// Always show the currently logged in user
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
-			EditText txt = (EditText) view.findViewById(R.id.username);
+			final EditText txt = (EditText) view.findViewById(R.id.username);
 			txt.setText(pref.getString(PrefKey.USERNAME, ""));
 		}
 		return view;
@@ -199,9 +205,8 @@ public class LoginFrag extends BaseContentFrag
 			break;
 		case R.id.register:
 			if (isTablet) {
-				final FragmentIntent fintent = new FragmentIntent();
-				fintent.setActivity(act);
-				fintent.setFrag(R.id.panel02, new RegisterFrag(), RegisterFrag.TAG);
+				final FragmentIntent fintent = new FragmentIntent(act);
+				fintent.setFrag(R.id.panel02, new RegisterFrag());
 				fintent.loadFrag(fragMan);
 			} else {
 				startActivityForResult(new Intent(act, Register.class), Enums.REGISTER);
@@ -217,17 +222,8 @@ public class LoginFrag extends BaseContentFrag
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
-
+		act.lastContextMenu = getBTag();
 		act.getMenuInflater().inflate(R.menu.options_login, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		if (act.lastContextMenu.equals(TAG))
-			return onOptionsItemSelected(item);
-		return super.onContextItemSelected(item);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ abstract class BasePhoneActivity extends BaseActivity implements OnLongClickList
 {
 	protected BaseContentFrag mainFrag;
 
-	public void onCreate(final Bundle savedInstanceState, final BaseContentFrag Frag, final String Tag, final int layoutId)
+	public void onCreate(final Bundle savedInstanceState, final BaseContentFrag Frag, final int layoutId)
 	{
 		super.onCreate(savedInstanceState);
 		mainFrag = Frag;
@@ -45,7 +45,7 @@ abstract class BasePhoneActivity extends BaseActivity implements OnLongClickList
 
 		mainFrag.setArguments(settings);
 		getSupportFragmentManager().beginTransaction()
-		.replace(R.id.fragment01, mainFrag, Tag).commit();
+		.replace(R.id.fragment01, mainFrag, mainFrag.getBTag()).commit();
 	}
 
 	@Override

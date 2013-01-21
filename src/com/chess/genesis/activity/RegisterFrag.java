@@ -26,7 +26,7 @@ import org.json.*;
 
 public class RegisterFrag extends BaseContentFrag
 {
-	public final static String TAG = "REGISTER";
+	private final static String TAG = "REGISTER";
 
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -68,6 +68,12 @@ public class RegisterFrag extends BaseContentFrag
 			}
 		}
 	};
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)

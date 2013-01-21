@@ -20,8 +20,16 @@ import com.chess.genesis.*;
 
 public class TopBarFrag extends SimpleFrag
 {
+	private final static String TAG = "TOPBAR";
+
 	public TopBarFrag()
 	{
 		super(R.layout.include_topbar);
+	}
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
 	}
 }

@@ -24,7 +24,7 @@ import com.chess.genesis.*;
 
 public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 {
-	public final static String TAG = "MENUBAR";
+	private final static String TAG = "MENUBAR";
 
 	private FragmentActivity act;
 	private FragmentManager fragMan;
@@ -42,6 +42,12 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 		hasTitle = true;
 		act = activity;
 		fragMan = act.getSupportFragmentManager();
+	}
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
 	}
 
 	@Override

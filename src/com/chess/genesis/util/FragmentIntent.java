@@ -22,21 +22,21 @@ import com.chess.genesis.activity.*;
 
 public class FragmentIntent
 {
-	private FragmentActivity act;
+	private final FragmentActivity act;
 	private BaseContentFrag frag;
 	private String tag;
 	private int layoutId;
 
-	public void setActivity(final FragmentActivity activity)
+	public FragmentIntent(final FragmentActivity activity)
 	{
 		act = activity;
 	}
 
-	public void setFrag(final int LayoutId, final BaseContentFrag fragment, final String Tag)
+	public void setFrag(final int LayoutId, final BaseContentFrag fragment)
 	{
 		layoutId = LayoutId;
 		frag = fragment;
-		tag = Tag;
+		tag = fragment.getBTag();
 	}
 
 	public void loadFrag(final FragmentManager fragMan)
@@ -62,7 +62,7 @@ public class FragmentIntent
 		frag.setMenuBarFrag(menuBar);
 
 		fragMan.beginTransaction()
-		.replace(menuLayout, menuBar, MenuBarFrag.TAG)
+		.replace(menuLayout, menuBar, menuBar.getBTag())
 		.replace(layoutId, frag, tag)
 		.addToBackStack(tag).commit();
 	}

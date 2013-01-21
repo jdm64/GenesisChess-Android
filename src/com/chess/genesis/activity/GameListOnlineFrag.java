@@ -36,7 +36,7 @@ import org.json.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener
 {
-	public final static String TAG = "GAMELISTONLINE";
+	private final static String TAG = "GAMELISTONLINE";
 
 	public static final int THEIR_PAGE = 0;
 	public static final int YOUR_PAGE = 1;
@@ -241,6 +241,12 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	}
 
 	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
+
+	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag();
@@ -333,7 +339,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
+		act.lastContextMenu = getBTag();
 
 		if (v.getId() == R.id.menu) {
 			act.getMenuInflater().inflate(R.menu.options_gamelist_online, menu);
@@ -362,7 +368,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		if (!act.lastContextMenu.equals(TAG))
+		if (!act.lastContextMenu.equals(getBTag()))
 			return super.onContextItemSelected(item);
 
 		switch (item.getItemId()) {

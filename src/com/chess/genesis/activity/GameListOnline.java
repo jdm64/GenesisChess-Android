@@ -27,7 +27,7 @@ public class GameListOnline extends BasePhoneActivity implements OnClickListener
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new GameListOnlineFrag(), GameListOnlineFrag.TAG, R.layout.activity_gamelist);
+		super.onCreate(savedInstanceState, new GameListOnlineFrag(), R.layout.activity_gamelist);
 
 		// set click listeners
 		final View button = findViewById(R.id.topbar_plus);

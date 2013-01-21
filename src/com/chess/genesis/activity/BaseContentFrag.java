@@ -30,6 +30,8 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 	protected MenuBarFrag menuBar;
 	protected boolean isTablet = false;
 
+	public abstract String getBTag();
+
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState)
 	{
@@ -39,6 +41,12 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 			final View view = menuBar.getView().findViewById(R.id.menu);
 			view.setOnClickListener(this);
 		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(final MenuItem item)
+	{
+		return act.lastContextMenu.equals(getBTag())? onOptionsItemSelected(item) : super.onContextItemSelected(item);
 	}
 
 	@Override

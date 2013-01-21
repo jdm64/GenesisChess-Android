@@ -32,7 +32,7 @@ import com.chess.genesis.view.*;
 
 public abstract class GameFrag extends BaseContentFrag
 {
-	public final static String TAG = "GAME";
+	protected final static String TAG = "GAME";
 
 	public ViewAnimator game_board;
 	public CapturedLayout captured_count;
@@ -59,6 +59,12 @@ public abstract class GameFrag extends BaseContentFrag
 			}
 		}
 	};
+
+	@Override
+	public String getBTag()
+	{
+		return TAG;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
@@ -157,8 +163,8 @@ public abstract class GameFrag extends BaseContentFrag
 				frag.setArguments(settings);
 
 				fragMan.beginTransaction()
-				.replace(R.id.panel03, frag, MsgBoxFrag.TAG)
-				.addToBackStack(MsgBoxFrag.TAG).commit();
+				.replace(R.id.panel03, frag, frag.getBTag())
+				.addToBackStack(frag.getBTag()).commit();
 			} else {
 				intent = new Intent(act, MsgBox.class);
 				intent.putExtra("gameid", settings.getString("gameid"));
@@ -190,7 +196,7 @@ public abstract class GameFrag extends BaseContentFrag
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = TAG;
+		act.lastContextMenu = getBTag();
 
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -203,14 +209,6 @@ public abstract class GameFrag extends BaseContentFrag
 			act.getMenuInflater().inflate(R.menu.options_game_archive, menu);
 			break;
 		}
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		if (act.lastContextMenu.equals(TAG))
-			return onOptionsItemSelected(item);
-		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -262,9 +260,9 @@ public abstract class GameFrag extends BaseContentFrag
 			frag.setMenuBarFrag(menubar);
 
 			fragMan.beginTransaction()
-			.replace(R.id.topbar03, menubar, MenuBarFrag.TAG)
-			.replace(R.id.panel03, frag, UserStatsFrag.TAG)
-			.addToBackStack(UserStatsFrag.TAG).commit();
+			.replace(R.id.topbar03, menubar, getBTag())
+			.replace(R.id.panel03, frag, frag.getBTag())
+			.addToBackStack(frag.getBTag()).commit();
 		} else {
 			final Intent intent = new Intent(act, UserStats.class);
 			intent.putExtra("username", username);

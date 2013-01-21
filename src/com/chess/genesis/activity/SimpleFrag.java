@@ -24,10 +24,11 @@ abstract class SimpleFrag extends Fragment
 {
 	protected int layout;
 
+	public abstract String getBTag();
+
 	public SimpleFrag(final int layoutId)
 	{
 		super();
-
 		layout = layoutId;
 	}
 
