@@ -18,9 +18,10 @@ package com.chess.genesis.net;
 
 import java.io.*;
 import java.net.*;
+import java.nio.*;
 import java.security.*;
 
-final class Crypto
+public final class Crypto
 {
 	private Crypto()
 	{
@@ -47,7 +48,25 @@ final class Crypto
 
 		digst.update(str.getBytes());
 		return calcHash(digst);
-	} catch (final java.security.NoSuchAlgorithmException e) {
+	} catch (final NoSuchAlgorithmException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+	}
+
+	public static String RandomSha1Hash()
+	{
+	try {
+		final MessageDigest digst = MessageDigest.getInstance("SHA-1");
+		final SecureRandom random = new SecureRandom();
+		final byte[] buffer = new byte[512];
+		final long time = System.nanoTime();
+
+		random.nextBytes(buffer);
+		digst.update(buffer);
+		digst.update(ByteBuffer.allocate(8).putLong(time).array());
+
+		return calcHash(digst);
+	} catch (final NoSuchAlgorithmException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
@@ -66,7 +85,7 @@ final class Crypto
 		digst.update(socket.getHash().getBytes());
 
 		return calcHash(digst);
-	} catch (final java.security.NoSuchAlgorithmException e) {
+	} catch (final NoSuchAlgorithmException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
