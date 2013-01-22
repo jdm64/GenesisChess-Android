@@ -150,7 +150,7 @@ public class LoginFrag extends BaseContentFrag
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag();
+		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_login, container, false);
 

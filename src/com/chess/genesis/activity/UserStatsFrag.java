@@ -85,7 +85,7 @@ public class UserStatsFrag extends BaseContentFrag
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag();
+		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_userstats, container, false);
 

@@ -28,6 +28,7 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 	protected BaseActivity act;
 	protected FragmentManager fragMan;
 	protected MenuBarFrag menuBar;
+	protected int containerId;
 	protected boolean isTablet = false;
 
 	public abstract String getBTag();
@@ -56,10 +57,13 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 		AdsHandler.run(act);
 	}
 
-	protected void initBaseContentFrag()
+	protected void initBaseContentFrag(final ViewGroup container)
 	{
 		act = (BaseActivity) getActivity();
 		fragMan = getFragmentManager();
+
+		// set the current view id that the fragment lives in
+		containerId = container.getId();
 
 		// set what layout we're in
 		final View itab = act.findViewById(R.id.panel01);

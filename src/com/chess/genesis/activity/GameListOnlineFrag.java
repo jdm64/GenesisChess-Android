@@ -249,7 +249,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag();
+		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_gamelist_online, container, false);
 
