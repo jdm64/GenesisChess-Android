@@ -51,10 +51,8 @@ public class RegGameState extends GameState
 
 	public RegGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
 	{
-		super(_activity, _game, _settings);
+		super(_activity, _game, _settings, new RegBoard());
 		handle = xhandle;
-		moveType = new RegMove();
-		board = new RegBoard();
 		flagsHistory = new ObjectArray<MoveFlags>();
 		hintList = new HintList(activity, this, board);
 
@@ -85,7 +83,7 @@ public class RegGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final Move move = moveType.newInstance();
+			final Move move = board.newMove();
 			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
@@ -133,7 +131,7 @@ public class RegGameState extends GameState
 			return;
 		}
 
-		final Move move = moveType.newInstance();
+		final Move move = board.newMove();
 		move.from = from;
 		move.to = to;
 

@@ -40,11 +40,8 @@ public class GenGameState extends GameState
 
 	public GenGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
 	{
-		super(_activity, _game, _settings);
+		super(_activity, _game, _settings, new GenBoard());
 		handle = xhandle;
-		moveType = new GenMove();
-		board = new GenBoard();
-		hintList = new HintList(activity, this, board);
 
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -73,7 +70,7 @@ public class GenGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final Move move = moveType.newInstance();
+			final Move move = board.newMove();
 			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)
@@ -104,7 +101,7 @@ public class GenGameState extends GameState
 			return;
 		}
 
-		final Move move = moveType.newInstance();
+		final Move move = board.newMove();
 
 		// create move
 		if (from > 0x88) {

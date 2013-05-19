@@ -36,16 +36,8 @@ public class GameParser
 	private static GamePosition parsePosition(final String _history, final int gametype)
 	{
 		final GamePosition pos = new GamePosition();
-		final Board board;
-		final Move moveType;
+		final Board board = (gametype == Enums.GENESIS_CHESS)? new GenBoard() : new RegBoard();
 
-		if (gametype == Enums.GENESIS_CHESS) {
-			board = new GenBoard();
-			moveType = new GenMove();
-		} else {
-			board = new RegBoard();
-			moveType = new RegMove();
-		}
 		if (_history.length() < 3) {
 			pos.history = " ";
 			pos.zfen = board.printZfen();
@@ -55,7 +47,7 @@ public class GameParser
 		final ObjectArray<Move> history = new ObjectArray<Move>();
 
 		for (final String element : movehistory) {
-			final Move move = moveType.newInstance();
+			final Move move = board.newMove();
 			move.parse(element);
 
 			if (board.validMove(move) != Move.VALID_MOVE)

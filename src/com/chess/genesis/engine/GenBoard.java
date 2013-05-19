@@ -96,7 +96,7 @@ public class GenBoard extends GenPosition implements Board
 	public static long startHash;
 	private static final Move moveType = new GenMove();
 
-	private final MoveNode item = new MoveNode(new GenMove());
+	private final MoveNode item = new MoveNode(moveType);
 	private final MoveListPool pool;
 	private long key;
 	private int mscore;
@@ -104,7 +104,7 @@ public class GenBoard extends GenPosition implements Board
 	public GenBoard()
 	{
 		reset();
-		pool = new MoveListPool(new GenMove());
+		pool = new MoveListPool(moveType);
 	}
 
 	public GenBoard(final GenBoard board)

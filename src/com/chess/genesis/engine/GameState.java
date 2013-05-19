@@ -46,7 +46,6 @@ public abstract class GameState
 	protected NetworkClient net;
 	protected Board board;
 	protected Engine cpu;
-	protected Move moveType;
 
 	protected int ycol;
 	protected int type;
@@ -226,12 +225,14 @@ public abstract class GameState
 	}
 	}
 
-	public GameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
+	public GameState(final Activity _activity, final GameFrag _game, final Bundle _settings, final Board _board)
 	{
 		activity = _activity;
 		game = _game;
 		settings = _settings;
 		history = new ObjectArray<Move>();
+		board = _board;
+		hintList = new HintList(activity, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 	}
@@ -446,7 +447,7 @@ public abstract class GameState
 		currentMove();
 		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
 
-		final Move move = moveType.newInstance();
+		final Move move = board.newMove();
 		move.parse(sMove);
 		if (board.validMove(move) != Move.VALID_MOVE)
 			return;
