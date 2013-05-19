@@ -7,7 +7,7 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	android:paddingLeft="6dp"
 	android:paddingBottom="3dp"
 	android:textStyle="bold"
-	android:textSize="15dp"/>
+	android:textSize="14sp"/>
 	<TableLayout
 	android:layout_below="@id/welcome"
 	android:shrinkColumns="*"
@@ -108,6 +108,6 @@ xmlns:panel="http://schemas.android.com/apk/res/com.chess.genesis">
 	android:layout_above="@id/layout01"
 	android:layout_alignParentRight="true"
 	android:paddingRight="3dp"
-	android:textSize="10dp"
+	android:textSize="12sp"
 	android:text="@string/version"/>
 </RelativeLayout>

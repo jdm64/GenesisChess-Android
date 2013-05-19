@@ -6,7 +6,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_alignParentLeft="true"
 	android:layout_marginTop="6dp"
 	android:layout_marginLeft="14dp"
-	android:textSize="15dp"
+	android:textSize="14sp"
 	android:text="User Name"/>
 	<com.chess.genesis.view.RobotoEditText
 	android:id="@+id/username"
@@ -22,7 +22,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_below="@id/username"
 	android:layout_alignParentLeft="true"
 	android:layout_marginLeft="14dp"
-	android:textSize="15dp"
+	android:textSize="14sp"
 	android:text="Password"/>
 	<com.chess.genesis.view.RobotoEditText
 	android:id="@+id/password"
@@ -42,7 +42,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginRight="2dp"
 	android:layout_marginTop="4dp"
 	android:text="Login"
-	android:textSize="15dp"
+	android:textSize="14sp"
 	android:textColor="#fff"
 	android:background="@drawable/btn_blue"/>
 	<Button
@@ -54,7 +54,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_marginRight="2dp"
 	android:layout_marginBottom="8dp"
 	android:text="Sign Up"
-	android:textSize="15dp"
+	android:textSize="14sp"
 	android:textColor="#fff"
 	android:background="@drawable/btn_green"/>
 </RelativeLayout>

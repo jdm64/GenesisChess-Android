@@ -6,7 +6,7 @@ android:orientation="vertical">
 	<com.chess.genesis.view.RobotoText
 	android:text="Enter Username:"
 	android:textColor="#f000"
-	android:textSize="16dp"/>
+	android:textSize="14sp"/>
 	<com.chess.genesis.view.RobotoEditText
 	android:id="@+id/username"
 	style="@style/FillWidth"

@@ -7,11 +7,11 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	style="@style/FillWidth"
 	android:gravity="center"
 	android:textStyle="bold"
-	android:textSize="24dp"
+	android:textSize="22sp"
 	android:text="No Messages"/>
 	<com.chess.genesis.view.RobotoText
 	android:layout_centerHorizontal="true"
 	android:layout_below="@id/nomsgs"
 	android:text="Submit new messages below"
-	android:textSize="16dp"/>
+	android:textSize="14sp"/>
 </RelativeLayout>

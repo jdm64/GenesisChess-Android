@@ -28,5 +28,5 @@ android:paddingLeft="16dp"
 android:paddingRight="16dp"
 android:focusable="true"
 android:singleLine="true"
-android:textSize="16dp"
+android:textSize="14sp"
 android:background="@drawable/swipetab_indicator"/>
