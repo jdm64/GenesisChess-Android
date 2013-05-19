@@ -141,13 +141,14 @@ public class GenEngine extends Engine
 
 	private int NegaScout(final int inAlpha, final int beta, final int depth, final int inLimit)
 	{
+		int limit = inLimit;
 		if (System.currentTimeMillis() > endT) {
 			return Quiescence(inAlpha, beta, depth);
-		} else if (depth >= inLimit) {
+		} else if (depth >= limit) {
 			if (!tactical.get(depth))
 				return Quiescence(inAlpha, beta, depth);
+			limit++;
 		}
-		final int limit = inLimit + 1;
 		final Int score = new Int();
 
 		int alpha = inAlpha;
