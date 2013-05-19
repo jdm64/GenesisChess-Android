@@ -21,7 +21,7 @@ import android.database.sqlite.*;
 import android.os.*;
 import android.preference.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.util.*;
+import java.util.*;
 import org.json.*;
 
 public class GameDataDB
@@ -241,10 +241,9 @@ public class GameDataDB
 	}
 	}
 
-	public ObjectArray<String> getOnlineGameIds()
+	public List<String> getOnlineGameIds()
 	{
-		final ObjectArray<String> list = new ObjectArray<String>();
-
+		final List<String> list = new ArrayList<String>();
 		final String username = getUsername();
 		final String[] data = {username, username};
 
@@ -252,7 +251,7 @@ public class GameDataDB
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {
-			list.push(cursor.getString(0));
+			list.add(cursor.getString(0));
 			cursor.moveToNext();
 		}
 		cursor.close();
@@ -369,10 +368,9 @@ public class GameDataDB
 		db.execSQL("DELETE FROM archivegames WHERE gameid=?;", data);
 	}
 
-	public ObjectArray<String> getArchiveGameIds()
+	public List<String> getArchiveGameIds()
 	{
-		final ObjectArray<String> list = new ObjectArray<String>();
-
+		final List<String> list = new ArrayList<String>();
 		final String username = getUsername();
 		final String[] data = {username, username};
 
@@ -380,7 +378,7 @@ public class GameDataDB
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {
-			list.push(cursor.getString(0));
+			list.add(cursor.getString(0));
 			cursor.moveToNext();
 		}
 		cursor.close();

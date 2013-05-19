@@ -21,7 +21,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.*;
 import android.preference.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.util.*;
 import java.util.*;
 import java.util.concurrent.*;
 import org.json.*;
@@ -262,11 +261,8 @@ public class SyncClient implements Runnable
 			return list_need;
 
 		final GameDataDB db = new GameDataDB(context);
-		final ObjectArray<String> list;
-		if (gameType == Enums.ONLINE_GAME)
-			list = db.getOnlineGameIds();
-		else
-			list = db.getArchiveGameIds();
+		final List<String> list = gameType == Enums.ONLINE_GAME?
+			db.getOnlineGameIds() : db.getArchiveGameIds();
 		db.close();
 
 		final ArrayList<String> list_have = new ArrayList<String>();

@@ -25,12 +25,13 @@ import android.widget.TableRow.LayoutParams;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
+import java.util.*;
 import org.json.*;
 
 public class GamePoolDialog extends BaseDialog
 {
 	private final Context context;
-	private final ObjectArray<PoolDataItem> data;
+	private final List<PoolDataItem> data;
 
 	private static class PoolDataItem
 	{
@@ -54,12 +55,12 @@ public class GamePoolDialog extends BaseDialog
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
 
-		data = new ObjectArray<PoolDataItem>();
+		data = new ArrayList<PoolDataItem>();
 		for (int i = 0, len = pool.length(); i < len; i++) {
 			final String type = pool.getJSONObject(i).getString("gametype");
 			final long time = pool.getJSONObject(i).getLong("added");
 
-			data.push(new PoolDataItem(type, time));
+			data.add(new PoolDataItem(type, time));
 		}
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
@@ -77,16 +78,16 @@ public class GamePoolDialog extends BaseDialog
 		final TableLayout table = (TableLayout) findViewById(R.id.layout01);
 		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
 
-		for (int i = 0, len = data.size(); i < len; i++) {
+		for (final PoolDataItem item : data) {
 			final TableRow row = new TableRow(context);
 
 			TextView txt = new TextView(context);
 			txt.setLayoutParams(layout);
-			txt.setText(data.get(i).gametype);
+			txt.setText(item.gametype);
 			row.addView(txt);
 
 			txt = new TextView(context);
-			txt.setText(data.get(i).time);
+			txt.setText(item.time);
 			row.addView(txt);
 
 			table.addView(row);
