@@ -82,23 +82,23 @@ public class GenEngine extends Engine
 
 		// Try Killer Move
 		final Move kmove = killer.get(depth);
-		if (kmove != null && board.validMove(kmove, move)) {
+		if (kmove != null && board.validMove(kmove, kmove)) {
 			ismate.set(depth, false);
 
-			board.make(move);
+			board.make(kmove);
 
 			// set check for opponent
 			tactical.set(depth + 1, board.incheck(board.getStm()));
 
 			best.val = -NegaScout(-beta, -alpha.val, depth + 1, limit);
-			board.unmake(move);
+			board.unmake(kmove);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, move, limit - depth, TransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, kmove, limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
-				pvMove.get(depth).set(move);
+				pvMove.get(depth).set(kmove);
 			}
 		}
 		// Try all of moveType Moves
@@ -166,6 +166,7 @@ public class GenEngine extends Engine
 				return score.val;
 
 			// Try Move
+			final Move move = board.newMove();
 			if (ttItem.getMove(move)) {
 				if (!board.validMove(move, move))
 					break;

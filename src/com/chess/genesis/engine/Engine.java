@@ -41,7 +41,6 @@ public abstract class Engine implements Runnable
 	protected MoveListPool pool;
 	protected MoveList curr;
 	protected Board board;
-	protected Move move;
 
 	protected int secT;
 	protected long endT;
@@ -55,7 +54,6 @@ public abstract class Engine implements Runnable
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
-		move = boardType.newMove();
 
 		pvMove = new ObjectArray<Move>();
 		captureKiller = new ObjectArray<Move>();
