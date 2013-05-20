@@ -151,26 +151,18 @@ public class PrettyDate extends Date
 		final StringBuilder buff = new StringBuilder(32);
 		final Date now = new Date();
 
-		long tmp, diff = Math.abs(now.getTime() - getTime());
+		long diff = Math.abs(now.getTime() - getTime());
 		int count = 0;
 
 		// months
 		if (diff >= 2629743830L) {
-			tmp = diff / 2629743830L;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " mos. ");
-			else
-				buff.append(String.valueOf(tmp) + " mo. ");
+			buff.append(String.valueOf(diff / 2629743830L) + "mo ");
 			diff %= 2629743830L;
 			count++;
 		}
 		// weeks
 		if (diff >= 604800000) {
-			tmp = diff / 604800000;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " wks. ");
-			else
-				buff.append(String.valueOf(tmp) + " wk. ");
+			buff.append(String.valueOf(diff / 604800000) + "wk ");
 			diff %= 604800000;
 			count++;
 
@@ -179,11 +171,7 @@ public class PrettyDate extends Date
 		}
 		// days
 		if (diff >= 86400000) {
-			tmp = diff / 86400000;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " days ");
-			else
-				buff.append(String.valueOf(tmp) + " day ");
+			buff.append(String.valueOf(diff / 86400000) + "day ");
 			diff %= 86400000;
 			count++;
 
@@ -192,11 +180,7 @@ public class PrettyDate extends Date
 		}
 		// hours
 		if (diff >= 3600000) {
-			tmp = diff / 3600000;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " hrs. ");
-			else
-				buff.append(String.valueOf(tmp) + " hr. ");
+			buff.append(String.valueOf(diff / 3600000) + "hr ");
 			diff %= 3600000;
 			count++;
 
@@ -205,11 +189,7 @@ public class PrettyDate extends Date
 		}
 		// minutes
 		if (diff >= 60000) {
-			tmp = diff / 60000;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " mins. ");
-			else
-				buff.append(String.valueOf(tmp) + " min. ");
+			buff.append(String.valueOf(diff / 60000) + "min ");
 			diff %= 60000;
 			count++;
 
@@ -218,11 +198,7 @@ public class PrettyDate extends Date
 		}
 		// seconds
 		if (diff >= 1000) {
-			tmp = diff / 1000;
-			if (tmp > 1)
-				buff.append(String.valueOf(tmp) + " secs. ");
-			else
-				buff.append(String.valueOf(tmp) + " sec. ");
+			buff.append(String.valueOf(diff / 1000) + "sec ");
 			count++;
 		}
 
