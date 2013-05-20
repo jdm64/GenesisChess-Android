@@ -18,8 +18,9 @@
 package com.chess.genesis.engine;
 
 import android.os.*;
+import com.chess.genesis.util.*;
 
-public abstract class Move implements Parcelable
+public abstract class Move implements Parcelable, NewInstance<Move>
 {
 	public static final int[] InitPieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
@@ -121,7 +122,6 @@ public abstract class Move implements Parcelable
 		index = Piece.NULL_MOVE;
 	}
 
-	public abstract Move newInstance();
 	public abstract int getCastle();
 	public abstract void setCastle(final int side);
 	public abstract void setEnPassant();

@@ -25,11 +25,12 @@ public class GenEngine extends Engine
 {
 	public final static int MSG = 109;
 
-	private final ObjectArray<Move> placeKiller = new ObjectArray<Move>();
+	private final ObjectArray<Move> placeKiller;
 
 	public GenEngine(final Handler handler, final Board boardType)
 	{
 		super(handler, boardType);
+		placeKiller = new ObjectArray<Move>(boardType.newMove());
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class GenEngine extends Engine
 
 		// Try Killer Move
 		final Move kmove = killer.get(depth);
-		if (kmove != null && board.validMove(kmove, kmove)) {
+		if (board.validMove(kmove, kmove)) {
 			ismate.set(depth, false);
 
 			board.make(kmove);

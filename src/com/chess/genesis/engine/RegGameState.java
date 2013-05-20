@@ -53,7 +53,7 @@ public class RegGameState extends GameState
 	{
 		super(_activity, _game, _settings, new RegBoard());
 		handle = xhandle;
-		flagsHistory = new ObjectArray<MoveFlags>();
+		flagsHistory = new ObjectArray<MoveFlags>(new MoveFlags());
 		hintList = new HintList(activity, this, board);
 
 		switch (type) {

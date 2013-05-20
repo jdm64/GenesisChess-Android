@@ -54,10 +54,11 @@ public abstract class Engine implements Runnable
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
+		final Move move = boardType.newMove();
 
-		pvMove = new ObjectArray<Move>();
-		captureKiller = new ObjectArray<Move>();
-		moveKiller = new ObjectArray<Move>();
+		pvMove = new ObjectArray<Move>(move);
+		captureKiller = new ObjectArray<Move>(move);
+		moveKiller = new ObjectArray<Move>(move);
 		ttItem = new TransItem(move);
 		tt = new TransTable(boardType, 8);
 	}

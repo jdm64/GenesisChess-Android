@@ -84,7 +84,7 @@ public class RegEngine extends Engine
 
 		// Try Killer Move
 		final Move kmove = killer.get(depth);
-		if (kmove != null && board.validMove(kmove, kmove)) {
+		if (board.validMove(kmove, kmove)) {
 			ismate.set(depth, false);
 
 			board.make(kmove);

@@ -230,8 +230,8 @@ public abstract class GameState
 		activity = _activity;
 		game = _game;
 		settings = _settings;
-		history = new ObjectArray<Move>();
 		board = _board;
+		history = new ObjectArray<Move>(board.newMove());
 		hintList = new HintList(activity, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);

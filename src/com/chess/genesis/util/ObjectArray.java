@@ -18,7 +18,13 @@ package com.chess.genesis.util;
 
 public class ObjectArray<Type>
 {
+	private final NewInstance<Type> generator;
 	private Type[] list = makeArray(0);
+
+	public ObjectArray(final NewInstance<Type> instance)
+	{
+		generator = instance;
+	}
 
 	@SuppressWarnings({"unchecked", "static-method"})
 	private Type[] makeArray(final int size)
@@ -56,6 +62,8 @@ public class ObjectArray<Type>
 	{
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
+		if (list[index] == null)
+			list[index] = generator.newInstance();
 		return list[index];
 	}
 
