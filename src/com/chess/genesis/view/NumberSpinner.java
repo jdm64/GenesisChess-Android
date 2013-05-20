@@ -350,6 +350,8 @@ public class NumberSpinner extends LinearLayout
 			mCurrent = mStart;
 		} else if (current < mStart) {
 			mCurrent = mEnd;
+		} else {
+			mCurrent = current;
 		}
 		notifyChange();
 		updateView();
