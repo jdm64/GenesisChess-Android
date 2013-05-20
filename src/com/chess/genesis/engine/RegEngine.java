@@ -158,7 +158,7 @@ public class RegEngine extends Engine
 		int best = MIN_SCORE;
 
 		ismate.set(depth, true);
-		pvMove.get(depth).set(move.setNull());
+		pvMove.get(depth).setNull();
 
 		do { // goto emulator
 

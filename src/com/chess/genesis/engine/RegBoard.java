@@ -396,7 +396,7 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public boolean validMove(final Move moveIn, final Move move)
 	{
-		if (moveIn.from == moveIn.to)
+		if (moveIn.isNull() || moveIn.from == moveIn.to)
 			return false;
 
 		undoFlags.set(flags);

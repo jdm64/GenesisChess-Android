@@ -52,13 +52,6 @@ public class GenMove extends Move
 		return new GenMove();
 	}
 
-	@Override
-	public GenMove setNull()
-	{
-		super.setNull();
-		return this;
-	}
-
 	// Do Not Call The Following Functions!
 	@Override
 	public int getCastle()

@@ -69,14 +69,6 @@ public class RegMove extends Move
 	}
 
 	@Override
-	public RegMove setNull()
-	{
-		super.setNull();
-		flags = 0;
-		return this;
-	}
-
-	@Override
 	public int getCastle()
 	{
 		return flags & (CASTLE_KS | CASTLE_QS);

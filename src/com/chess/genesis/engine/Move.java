@@ -77,7 +77,7 @@ public abstract class Move implements Parcelable
 
 	public Move()
 	{
-		index = xindex = from = to = -1;
+		index = xindex = from = to = Piece.NULL_MOVE;
 	}
 
 	public Move(final Parcel in)
@@ -113,15 +113,12 @@ public abstract class Move implements Parcelable
 
 	public boolean isNull()
 	{
-		if (index == Piece.NULL_MOVE && xindex == Piece.NULL_MOVE && from == Piece.NULL_MOVE && to == Piece.NULL_MOVE)
-			return true;
-		return false;
+		return index < 0;
 	}
 
-	public Move setNull()
+	public void setNull()
 	{
-		index = xindex = from = to = Piece.NULL_MOVE;
-		return this;
+		index = Piece.NULL_MOVE;
 	}
 
 	public abstract Move newInstance();

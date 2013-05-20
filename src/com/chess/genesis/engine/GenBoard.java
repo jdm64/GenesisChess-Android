@@ -341,6 +341,8 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public boolean validMove(final Move moveIn, final Move move)
 	{
+		if (moveIn.isNull())
+			return false;
 		move.set(moveIn);
 
 		if ((move.index = pieceIndex(move.from, piecetype[move.index])) == Piece.NONE)
