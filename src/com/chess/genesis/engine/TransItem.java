@@ -35,7 +35,7 @@ class TransItem
 	public int depth;
 	public int type;
 
-	public TransItem(final Move moveType)
+	public TransItem(final NewInstance<Move> moveType)
 	{
 		hash = score = depth = 0;
 		type = NONE_NODE;

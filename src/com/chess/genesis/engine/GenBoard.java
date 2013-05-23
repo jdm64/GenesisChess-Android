@@ -125,6 +125,12 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
+	public NewInstance<Move> moveGenerator()
+	{
+		return moveType;
+	}
+
+	@Override
 	public Move newMove()
 	{
 		return moveType.newInstance();

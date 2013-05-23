@@ -34,7 +34,7 @@ class TransTable
 		size = (num_MB * 1048576) / 288;
 		table = new TransItem[size];
 		for (int i = 0; i < size; i++)
-			table[i] = new TransItem(board.newMove());
+			table[i] = new TransItem(board.moveGenerator());
 	}
 
 	public void clear()

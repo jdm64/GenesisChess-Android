@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import com.chess.genesis.util.*;
+
 public interface Board
 {
 	int ZBOX_SIZE = 838;
@@ -26,6 +28,7 @@ public interface Board
 	int HOLD_START = 768;
 
 	Board clone();
+	NewInstance<Move> moveGenerator();
 	Move newMove();
 	void reset();
 

@@ -17,6 +17,7 @@
 
 package com.chess.genesis.engine;
 
+import com.chess.genesis.util.*;
 import java.util.*;
 
 class MoveList
@@ -24,12 +25,12 @@ class MoveList
 	public final MoveNode[] list;
 	public int size;
 
-	public MoveList(final Move move)
+	public MoveList(final NewInstance<Move> moveType)
 	{
 		size = 0;
 		list = new MoveNode[320];
 		for (int i = 0; i < 320; i++) {
-			list[i] = new MoveNode(move.newInstance());
+			list[i] = new MoveNode(moveType);
 		}
 	}
 
@@ -42,17 +43,17 @@ class MoveList
 class MoveListPool
 {
 	private final LinkedList<MoveList> pool = new LinkedList<MoveList>();
-	private final Move move;
+	private final NewInstance<Move> moveType;
 
-	public MoveListPool(final Move moveType)
+	public MoveListPool(final NewInstance<Move> _moveType)
 	{
-		move = moveType;
+		moveType = _moveType;
 	}
 
 	public MoveList get()
 	{
 		if (pool.size() < 1)
-			return new MoveList(move);
+			return new MoveList(moveType);
 		synchronized (pool) {
 			return pool.removeFirst();
 		}

@@ -79,7 +79,7 @@ public abstract class GameState
 			currentMove();
 
 			final Move tmove = bundle.getParcelable("move");
-			final Move move = tmove.newInstance();
+			final Move move = board.newMove();
 			if (board.validMove(tmove, move))
 				applyMove(move, true, true);
 			break;
@@ -231,7 +231,7 @@ public abstract class GameState
 		game = _game;
 		settings = _settings;
 		board = _board;
-		history = new ObjectArray<Move>(board.newMove());
+		history = new ObjectArray<Move>(board.moveGenerator());
 		hintList = new HintList(activity, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
