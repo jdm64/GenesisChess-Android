@@ -61,12 +61,12 @@ public abstract class Engine implements Runnable
 		moveKiller = new ObjectArray<Move>(move);
 		ttItem = new TransItem(move);
 		tt = new TransTable(boardType, 8);
+		pool = boardType.getMoveListPool();
 	}
 
 	public void setBoard(final Board _board)
 	{
 		board = _board.clone();
-		pool = board.getMoveListPool();
 	}
 
 	protected abstract int getMsgId();

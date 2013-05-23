@@ -86,17 +86,16 @@ public class RegBoard extends RegPosition implements Board
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 	private static final Move moveType = new RegMove();
+	private static final MoveListPool pool = new MoveListPool(moveType);
 
 	private final MoveNode item = new MoveNode(moveType);
 	private final MoveFlags undoFlags = new MoveFlags();
-	private final MoveListPool pool;
 	private long key;
 	private int mscore;
 
 	public RegBoard()
 	{
 		reset();
-		pool = new MoveListPool(moveType);
 	}
 
 	public RegBoard(final RegBoard board)
@@ -104,7 +103,6 @@ public class RegBoard extends RegPosition implements Board
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
 		piecetype = IntArray.clone(board.piecetype);
-		pool = board.getMoveListPool();
 
 		stm = board.stm;
 		ply = board.ply;
@@ -386,11 +384,16 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public int isMate()
 	{
-		if (getMoveList(stm, Move.MOVE_ALL).size != 0)
+		final MoveList mlist = getMoveList(stm, Move.MOVE_ALL);
+	try {
+		if (mlist.size != 0)
 			return Move.NOT_MATE;
 		else if (incheck(stm))
 			return Move.CHECK_MATE;
 		return Move.STALE_MATE;
+	} finally {
+		pool.put(mlist);
+	}
 	}
 
 	@Override

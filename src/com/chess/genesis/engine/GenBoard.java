@@ -95,16 +95,15 @@ public class GenBoard extends GenPosition implements Board
 	public static final long[] hashBox = new long[ZBOX_SIZE];
 	public static long startHash;
 	private static final Move moveType = new GenMove();
+	private static final MoveListPool pool = new MoveListPool(moveType);
 
 	private final MoveNode item = new MoveNode(moveType);
-	private final MoveListPool pool;
 	private long key;
 	private int mscore;
 
 	public GenBoard()
 	{
 		reset();
-		pool = new MoveListPool(moveType);
 	}
 
 	public GenBoard(final GenBoard board)
@@ -112,7 +111,6 @@ public class GenBoard extends GenPosition implements Board
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
 		piecetype = IntArray.clone(board.piecetype);
-		pool = board.getMoveListPool();
 
 		stm = board.stm;
 		ply = board.ply;
@@ -331,11 +329,16 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public int isMate()
 	{
-		if (getMoveList(stm, Move.MOVE_ALL).size != 0)
+		final MoveList mlist = getMoveList(stm, Move.MOVE_ALL);
+	try {
+		if (mlist.size != 0)
 			return Move.NOT_MATE;
 		else if (incheck(stm))
 			return Move.CHECK_MATE;
 		return Move.STALE_MATE;
+	} finally {
+		pool.put(mlist);
+	}
 	}
 
 	@Override
