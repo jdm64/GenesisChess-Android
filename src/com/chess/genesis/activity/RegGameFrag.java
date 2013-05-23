@@ -38,17 +38,13 @@ public class RegGameFrag extends GameFrag
 		type = settings.getInt("type");
 
 		// set playingBlack
-		boolean playingBlack = false;
-		if (type != Enums.LOCAL_GAME) {
-			playingBlack = settings.getString("username").equals(settings.getString("black"));
-		} else {
-			final int oppType = Integer.parseInt(settings.getString("opponent"));
-			playingBlack = (oppType == Enums.CPU_WHITE_OPPONENT)? true : false;
-		}
+		final boolean playingBlack = type != Enums.LOCAL_GAME?
+			settings.getString("username").equals(settings.getString("black")) :
+			Integer.parseInt(settings.getString("opponent")) == Enums.CPU_WHITE_OPPONENT;
 
 		// set view as black
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		viewAsBlack = pref.getBoolean(PrefKey.VIEW_AS_BLACK, true)? playingBlack : false;
+		viewAsBlack = pref.getBoolean(PrefKey.VIEW_AS_BLACK, true) && playingBlack;
 
 		// create game stat instance
 		gamestate = new RegGameState(act, this, settings);

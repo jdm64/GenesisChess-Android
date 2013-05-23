@@ -402,7 +402,7 @@ public class NumberSpinner extends LinearLayout
 	private void validateInput(final View v)
 	{
 		final String str = String.valueOf(((TextView) v).getText());
-		if ("".equals(str)) {
+		if (str.isEmpty()) {
 			// Restore to the old value as we don't allow empty values
 			updateView();
 		} else {
@@ -432,8 +432,8 @@ public class NumberSpinner extends LinearLayout
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
 	};
 
-	private NumberSpinnerButton mIncrementButton;
-	private NumberSpinnerButton mDecrementButton;
+	private final NumberSpinnerButton mIncrementButton;
+	private final NumberSpinnerButton mDecrementButton;
 
 	class NumberSpinnerInputFilter implements InputFilter
 	{
@@ -487,7 +487,7 @@ public class NumberSpinner extends LinearLayout
 				+ filtered.toString()
 				+ dest.subSequence(dend, dest.length());
 
-			if ("".equals(result)) {
+			if (result != null && result.isEmpty()) {
 				return result;
 			}
 			final int val = getSelectedPos(result);

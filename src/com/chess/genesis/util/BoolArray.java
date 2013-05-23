@@ -20,14 +20,10 @@ public class BoolArray
 {
 	private boolean[] list = new boolean[0];
 
-	// !SICK!
-	// This only exists because Arrays.copyOf was added in API Level 9
 	private static boolean[] copyOf(final boolean[] arr, final int size)
 	{
 		final boolean[] temp = new boolean[size];
-
-		for (int i = 0, len = Math.min(arr.length,size); i < len; i++)
-			temp[i] = arr[i];
+		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
 		return temp;
 	}
 
@@ -93,7 +89,7 @@ public class BoolArray
 		final StringBuilder str = new StringBuilder();
 
 		for (final boolean element : list)
-			str.append(String.valueOf(element) + " ");
+			str.append(String.valueOf(element)).append(' ');
 		return str.toString();
 	}
 }

@@ -17,7 +17,6 @@
 package com.chess.genesis.net;
 
 import java.io.*;
-import java.net.*;
 import java.nio.*;
 import java.security.*;
 
@@ -76,7 +75,7 @@ public final class Crypto
 		return Sha1Hash(Sha1Hash(str));
 	}
 
-	public static String LoginKey(final SocketClient socket, final String str) throws SocketException, IOException
+	public static String LoginKey(final SocketClient socket, final String str) throws IOException
 	{
 	try {
 		final MessageDigest digst = MessageDigest.getInstance("SHA-1");

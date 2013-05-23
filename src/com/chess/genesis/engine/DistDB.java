@@ -67,6 +67,6 @@ class DistDB
 		type = Type;
 	}
 
-	public int step;
-	public int type;
+	public final int step;
+	public final int type;
 }

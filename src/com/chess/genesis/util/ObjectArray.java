@@ -32,14 +32,10 @@ public class ObjectArray<Type>
 		return (Type[]) new Object[size];
 	}
 
-	// !SICK!
-	// This only exists because Arrays.copyOf was added in API Level 9
 	private Type[] copyOf(final Type[] arr, final int size)
 	{
 		final Type[] temp = makeArray(size);
-
-		for (int i = 0, len = Math.min(arr.length,size); i < len; i++)
-			temp[i] = arr[i];
+		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
 		return temp;
 	}
 
@@ -107,7 +103,7 @@ public class ObjectArray<Type>
 		final StringBuilder str = new StringBuilder();
 
 		for (final Type element : list)
-			str.append(element.toString() + " ");
+			str.append(element.toString()).append(' ');
 		return str.toString();
 	}
 
@@ -116,7 +112,7 @@ public class ObjectArray<Type>
 		final StringBuilder str = new StringBuilder();
 
 		for (final Object element : array)
-			str.append(element.toString() + delim);
+			str.append(element.toString()).append(delim);
 		return str.toString();
 	}
 }

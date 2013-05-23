@@ -22,7 +22,7 @@ import android.view.*;
 
 abstract class SimpleFrag extends Fragment
 {
-	protected int layout;
+	protected final int layout;
 
 	public abstract String getBTag();
 

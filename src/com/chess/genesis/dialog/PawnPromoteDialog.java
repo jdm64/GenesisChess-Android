@@ -77,7 +77,6 @@ class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchList
 	private final BoardButton[] square = new BoardButton[4];
 	private final PieceImgCache cache;
 	private PawnPromoteDialog dialog;
-	private int color;
 
 	public PromoteLayout(final Context context, final AttributeSet attrs)
 	{
@@ -94,10 +93,9 @@ class PromoteLayout extends LinearLayout implements OnClickListener, OnTouchList
 		cache.resize(getMeasuredWidth() / 2);
 	}
 
-	public void init(final Context context, final PawnPromoteDialog _dialog, final int _color)
+	public void init(final Context context, final PawnPromoteDialog _dialog, final int color)
 	{
 		dialog = _dialog;
-		color = _color;
 
 		for (int i = 0, piece = Piece.QUEEN; i < 4;) {
 			final ManualPanel row = new ManualPanel(context);

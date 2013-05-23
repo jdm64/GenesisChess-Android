@@ -129,7 +129,7 @@ public class GameDataDB
 		final Object[] data2 = {row.get("white") + " Vs. " + row.get("black"), time, time,
 			row.get("gametype"), Enums.HUMAN_OPPONENT, row.get("zfen"), row.get("history")};
 
-		db.execSQL("INSERT INTO localgames" + tnames + " VALUES " + dstring + ";", data2);
+		db.execSQL("INSERT INTO localgames" + tnames + " VALUES " + dstring + ';', data2);
 	}
 
 	/*
@@ -140,9 +140,8 @@ public class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
-		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
 
-		if (delete) {
+		if (json.optBoolean("delete", false)) {
 			deleteOnlineGame(gameid);
 			return;
 		}
@@ -181,9 +180,8 @@ public class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
-		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
 
-		if (delete) {
+		if (json.optBoolean("delete", false)) {
 			deleteOnlineGame(gameid);
 			return;
 		}
@@ -310,9 +308,8 @@ public class GameDataDB
 	{
 	try {
 		final String gameid = json.getString("gameid");
-		final boolean delete = json.has("delete")? json.optBoolean("delete") : false;
 
-		if (delete) {
+		if (json.optBoolean("delete", false)) {
 			deleteArchiveGame(gameid);
 			return;
 		}
@@ -410,7 +407,7 @@ public class GameDataDB
 			w_from, w_to, b_from, b_to, row.get("ctime"), row.get("stime"), row.get("ply"),
 			row.get("white"), row.get("black"), row.get("zfen"), row.get("history")};
 
-		db.execSQL("INSERT OR REPLACE INTO archivegames " + tnames + " VALUES " + dstring + ";", data2);
+		db.execSQL("INSERT OR REPLACE INTO archivegames " + tnames + " VALUES " + dstring + ';', data2);
 		db.execSQL("DELETE FROM onlinegames WHERE gameid=?;", data);
 	}
 

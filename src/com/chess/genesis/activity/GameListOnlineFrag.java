@@ -197,7 +197,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 			listview.setOnItemClickListener(GameListOnlineFrag.this);
 			registerForContextMenu(listview);
 
-			((ViewPager) collection).addView(layout, 0);
+			collection.addView(layout, 0);
 
 			return layout;
 		}
@@ -206,7 +206,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		public void destroyItem(final ViewGroup collection, final int position, final Object view)
 		{
 			gamelistadapter_arr[position].close();
-			((ViewPager) collection).removeView((FrameLayout) view);
+			collection.removeView((FrameLayout) view);
 		}
 
 		@Override
@@ -224,7 +224,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		@Override
 		public boolean isViewFromObject(final View view, final Object object)
 		{
-			return view == ((FrameLayout) object);
+			return view == object;
 		}
 
 		@Override

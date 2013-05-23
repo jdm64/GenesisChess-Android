@@ -60,14 +60,14 @@ public final class SocketClient
 		isLoggedin = value;
 	}
 
-	public synchronized String getHash() throws SocketException, IOException
+	public synchronized String getHash() throws IOException
 	{
 		if (loginHash == null)
 			connect();
 		return loginHash;
 	}
 
-	private synchronized void connect() throws SocketException, IOException
+	private synchronized void connect() throws IOException
 	{
 		if (socket.isConnected())
 			return;
@@ -92,16 +92,16 @@ public final class SocketClient
 	}
 	}
 
-	public synchronized void write(final JSONObject data) throws SocketException, IOException
+	public synchronized void write(final JSONObject data) throws IOException
 	{
 		connect();
 
-		final String str = data.toString() + "\n";
+		final String str = data.toString() + '\n';
 
 		output.write(str.getBytes());
 	}
 
-	public synchronized JSONObject read() throws SocketException, IOException, JSONException
+	public synchronized JSONObject read() throws IOException, JSONException
 	{
 		connect();
 

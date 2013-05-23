@@ -67,7 +67,7 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 
 		// set what layout we're in
 		final View itab = act.findViewById(R.id.panel01);
-		isTablet = (itab != null)? true : false;
+		isTablet = itab != null;
 	}
 
 	public void setMenuBarFrag(final MenuBarFrag MenuBar)

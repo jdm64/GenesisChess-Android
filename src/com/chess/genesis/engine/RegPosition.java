@@ -158,9 +158,7 @@ class RegPosition extends RegMoveLookup
 		setMaxPly();
 
 		// check if color not on move is in check
-		if (incheck(stm ^ -2))
-			return false;
-		return true;
+		return !incheck(stm ^ -2);
 	}
 
 	public String printZfen()

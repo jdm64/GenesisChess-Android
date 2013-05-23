@@ -18,8 +18,8 @@ package com.chess.genesis.util;
 
 public class AdapterItem
 {
-	public String name;
-	public int id;
+	public final String name;
+	public final int id;
 
 	public AdapterItem(final String Name, final int Id)
 	{

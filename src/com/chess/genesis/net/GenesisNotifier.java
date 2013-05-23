@@ -117,12 +117,9 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		Bundle bundle = null;
 
-		if (intent == null)
-			fromalarm = false;
-		else if ((bundle = intent.getExtras()) == null)
-			fromalarm = false;
-		else
-			fromalarm = bundle.getBoolean("fromAlarm", false);
+		fromalarm = intent != null
+			&& (bundle = intent.getExtras()) != null
+			&& bundle.getBoolean("fromAlarm", false);
 
 		new Thread(this).start();
 		return START_STICKY;

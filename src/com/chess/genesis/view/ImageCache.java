@@ -31,14 +31,14 @@ public abstract class ImageCache
 		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
 		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
 		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
-	private static Bitmap[] pieceBitmaps = new Bitmap[pieceRes.length];
+	private static final Bitmap[] pieceBitmaps = new Bitmap[pieceRes.length];
 
 	private static final int[] countRes = {
 		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
 		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
 		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
 		R.drawable.piece_9};
-	private static Bitmap[] countBitmaps = new Bitmap[countRes.length];
+	private static final Bitmap[] countBitmaps = new Bitmap[countRes.length];
 
 	private static final int tokenRes = R.drawable.piece_token;
 	private static Bitmap tokenBitmap;

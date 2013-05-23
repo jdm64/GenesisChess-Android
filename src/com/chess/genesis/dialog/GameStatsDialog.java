@@ -106,7 +106,7 @@ public class GameStatsDialog extends BaseDialog
 		if (eventtype == Enums.INVITE)
 			psr_score = "None (Invite Game)";
 		else
-			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ')';
 	}
 
 	public GameStatsDialog(final Context context, final JSONObject json)
@@ -151,7 +151,7 @@ public class GameStatsDialog extends BaseDialog
 		if (eventtype == Enums.INVITE)
 			psr_score = "None (Invite Game)";
 		else
-			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ")";
+			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ')';
 
 		final GameDataDB db = new GameDataDB(context);
 		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);

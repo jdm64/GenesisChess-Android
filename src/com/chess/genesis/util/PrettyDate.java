@@ -33,7 +33,7 @@ public class PrettyDate extends Date
 
 	public PrettyDate(final String milliseconds)
 	{
-		super(Long.valueOf(milliseconds).longValue());
+		super(Long.valueOf(milliseconds));
 	}
 
 	// !SICK!
@@ -130,7 +130,7 @@ public class PrettyDate extends Date
 			hr_i = 12;
 		final String hr = String.valueOf(hr_i);
 
-		return week + ", " + month + " " + day + ", " + year + " @ " + hr + ":" + min + ":" + sec + " " + ampm;
+		return week + ", " + month + ' ' + day + ", " + year + " @ " + hr + ':' + min + ':' + sec + ' ' + ampm;
 	}
 
 	public String dayFormat()
@@ -143,7 +143,7 @@ public class PrettyDate extends Date
 			month = monthToString(cal.get(Calendar.MONTH)),
 			day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 
-		return year + "-" + month + "-" + day;
+		return year + '-' + month + '-' + day;
 	}
 
 	public String agoFormat()
@@ -156,54 +156,54 @@ public class PrettyDate extends Date
 
 		// months
 		if (diff >= 2629743830L) {
-			buff.append(String.valueOf(diff / 2629743830L) + "mo ");
+			buff.append(String.valueOf(diff / 2629743830L)).append("mo ");
 			diff %= 2629743830L;
 			count++;
 		}
 		// weeks
 		if (diff >= 604800000) {
-			buff.append(String.valueOf(diff / 604800000) + "wk ");
+			buff.append(String.valueOf(diff / 604800000)).append("wk ");
 			diff %= 604800000;
 			count++;
 
 			if (count == 2)
-				return buff.toString() + "ago";
+				return buff + "ago";
 		}
 		// days
 		if (diff >= 86400000) {
-			buff.append(String.valueOf(diff / 86400000) + "day ");
+			buff.append(String.valueOf(diff / 86400000)).append("day ");
 			diff %= 86400000;
 			count++;
 
 			if (count == 2)
-				return buff.toString() + "ago";
+				return buff + "ago";
 		}
 		// hours
 		if (diff >= 3600000) {
-			buff.append(String.valueOf(diff / 3600000) + "hr ");
+			buff.append(String.valueOf(diff / 3600000)).append("hr ");
 			diff %= 3600000;
 			count++;
 
 			if (count == 2)
-				return buff.toString() + "ago";
+				return buff + "ago";
 		}
 		// minutes
 		if (diff >= 60000) {
-			buff.append(String.valueOf(diff / 60000) + "min ");
+			buff.append(String.valueOf(diff / 60000)).append("min ");
 			diff %= 60000;
 			count++;
 
 			if (count == 2)
-				return buff.toString() + "ago";
+				return buff + "ago";
 		}
 		// seconds
 		if (diff >= 1000) {
-			buff.append(String.valueOf(diff / 1000) + "sec ");
+			buff.append(String.valueOf(diff / 1000)).append("sec ");
 			count++;
 		}
 
 		if (count >= 1)
-			return buff.toString() + "ago";
+			return buff + "ago";
 		return "now";
 	}
 }

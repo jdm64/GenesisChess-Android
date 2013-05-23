@@ -52,7 +52,7 @@ public final class FileUtils
 		throw new FileNotFoundException();
 	}
 
-	public static String readFile(final String path) throws FileNotFoundException, IOException
+	public static String readFile(final String path) throws IOException
 	{
 		final FileInputStream stream = tryOpenFileStream(path);
 	try {
@@ -68,12 +68,12 @@ public final class FileUtils
 	}
 	}
 
-	public static Uri writeFile(final String filename, final String data) throws FileNotFoundException, IOException
+	public static Uri writeFile(final String filename, final String data) throws IOException
 	{
 		return writeFile(filename, data, false);
 	}
 
-	public static Uri writeFile(final String filename, final String data, final boolean append) throws FileNotFoundException, IOException
+	public static Uri writeFile(final String filename, final String data, final boolean append) throws IOException
 	{
 		final String state = Environment.getExternalStorageState();
 

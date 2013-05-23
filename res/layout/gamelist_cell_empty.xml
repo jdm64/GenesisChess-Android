@@ -13,5 +13,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:id="@+id/message"
 	android:layout_centerHorizontal="true"
 	android:layout_below="@id/nogames"
-	android:textSize="14dp"/>
+	android:textSize="14sp"/>
 </RelativeLayout>

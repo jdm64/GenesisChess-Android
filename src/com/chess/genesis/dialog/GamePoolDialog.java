@@ -35,8 +35,8 @@ public class GamePoolDialog extends BaseDialog
 
 	private static class PoolDataItem
 	{
-		public String gametype;
-		public String time;
+		public final String gametype;
+		public final String time;
 
 		public PoolDataItem(final String GameType, final long Time)
 		{

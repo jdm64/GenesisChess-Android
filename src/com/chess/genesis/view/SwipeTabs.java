@@ -184,8 +184,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 
 		if (forceLayout) {
 			final int count = mAdapter.getCount();
-			for (int i = 0; i < count; i++)
-				mCurrentTabPos[i] = mFrontedTabPos[i];
+			System.arraycopy(mFrontedTabPos, 0, mCurrentTabPos, 0, count);
 		}
 	}
 
@@ -407,7 +406,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 		// update the current positions
 		for (int i = 0; i < count; i++) {
 			final float curX = mFrontedTabPos[i];
-			float toX = 0.0f;
+			float toX;
 
 			if (dir < 0)
 				toX = mLeftTabPos[i];

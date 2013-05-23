@@ -114,7 +114,7 @@ public class AnimationFactory
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator)
 	 * @return
 	 */
-	public static Animation[] flipAnimation(final View fromView, final View toView, final FlipDirection dir, final long duration, final Interpolator interpolator)
+	private static Animation[] flipAnimation(final View fromView, final View toView, final FlipDirection dir, final long duration, final Interpolator interpolator)
 	{
 		final Animation[] result = new Animation[2];
 		final float centerX;
@@ -156,7 +156,7 @@ public class AnimationFactory
 	 * @param viewAnimator the {@code ViewAnimator}
 	 * @param dir the direction of flip
 	 */
-	public static void flipTransition(final ViewAnimator viewAnimator, final FlipDirection dir)
+	private static void flipTransition(final ViewAnimator viewAnimator, final FlipDirection dir)
 	{
 		final int currentIndex = viewAnimator.getDisplayedChild();
 		final int nextIndex = (currentIndex + 1) % viewAnimator.getChildCount();
@@ -290,7 +290,7 @@ public class AnimationFactory
 	 * @return a fade animation
 	 * @see #fadeInAnimation(View, long)
 	 */
-	public static Animation fadeInAnimation(final long duration, final long delay)
+	private static Animation fadeInAnimation(final long duration, final long delay)
 	{
 		final Animation fadeIn = new AlphaAnimation(0, 1);
 		fadeIn.setInterpolator(new DecelerateInterpolator());
@@ -308,7 +308,7 @@ public class AnimationFactory
 	 * @return a fade animation
 	 * @see #fadeOutAnimation(View, long)
 	 */
-	public static Animation fadeOutAnimation(final long duration, final long delay)
+	private static Animation fadeOutAnimation(final long duration, final long delay)
 	{
 		final Animation fadeOut = new AlphaAnimation(1, 0);
 		fadeOut.setInterpolator(new AccelerateInterpolator());
@@ -324,7 +324,7 @@ public class AnimationFactory
 	 * @param duration the animation duration in milliseconds
 	 * @return a fade animation that will set the visibility of the view at the start and end of animation
 	 */
-	public static Animation fadeInAnimation(final long duration, final View view)
+	private static Animation fadeInAnimation(final long duration, final View view)
 	{
 		final Animation fadeAnimation = fadeInAnimation(500, 0);
 
@@ -357,7 +357,7 @@ public class AnimationFactory
 	 * @param duration the animation duration in milliseconds
 	 * @return a fade animation that will set the visibility of the view at the start and end of animation
 	 */
-	public static Animation fadeOutAnimation(final long duration, final View view)
+	private static Animation fadeOutAnimation(final long duration, final View view)
 	{
 		final Animation fadeAnimation = fadeOutAnimation(500, 0);
 
@@ -390,7 +390,7 @@ public class AnimationFactory
 	 * @param delay how long to wait after fading in the subject and before starting the fade out
 	 * @return a fade in then out animations
 	 */
-	public static Animation[] fadeInThenOutAnimation(final long duration, final long delay)
+	private static Animation[] fadeInThenOutAnimation(final long duration, final long delay)
 	{
 		return new Animation[] {fadeInAnimation(duration,0), fadeOutAnimation(duration, duration+delay)};
 	}

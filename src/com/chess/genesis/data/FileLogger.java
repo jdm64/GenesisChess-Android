@@ -32,15 +32,15 @@ public class FileLogger
 
 	public void addItem(final String name, final Object item)
 	{
-		buffer.append(name + "=" + String.valueOf(item) + "|");
+		buffer.append(name).append('=').append(String.valueOf(item)).append('|');
 	}
 
 	public void write()
 	{
 		final String data = new PrettyDate().stdFormat() + "\n"
-			+ buffer.toString() + "\n"
-			+ trace.getMessage() + "\n"
-			+ ObjectArray.arrayToString(trace.getStackTrace(), "\n") + "\n";
+			+ buffer + '\n'
+			+ trace.getMessage() + '\n'
+			+ ObjectArray.arrayToString(trace.getStackTrace(), "\n") + '\n';
 
 		try {
 			FileUtils.writeFile("genesis-error.log", data, true);

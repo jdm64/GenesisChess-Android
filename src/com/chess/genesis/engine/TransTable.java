@@ -19,8 +19,8 @@ package com.chess.genesis.engine;
 
 class TransTable
 {
-	protected TransItem[] table;
-	protected int size;
+	protected final TransItem[] table;
+	protected final int size;
 
 	public TransTable(final Board board, final int num_MB)
 	{

@@ -40,11 +40,11 @@ public abstract class GameState
 	protected final Bundle settings;
 	protected final ProgressMsg progress;
 	protected final ObjectArray<Move> history;
-	protected HintList hintList;
+	protected final HintList hintList;
+	protected final Board board;
 
 	protected Handler handle;
 	protected NetworkClient net;
-	protected Board board;
 	protected Engine cpu;
 
 	protected int ycol;

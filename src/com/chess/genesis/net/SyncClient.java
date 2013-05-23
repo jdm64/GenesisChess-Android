@@ -208,11 +208,11 @@ public class SyncClient implements Runnable
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0, len = list_need.size(); i < len; i++) {
+		for (final String item : list_need) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
-			nc.game_info(list_need.get(i));
+			nc.game_info(item);
 			pool.submit(nc);
 
 			lock++;
@@ -236,11 +236,11 @@ public class SyncClient implements Runnable
 		final ArrayList<String> list_need = getNeedList(json.getJSONArray("gameids"));
 		final ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0, len = list_need.size(); i < len; i++) {
+		for (final String item : list_need) {
 			if (error)
 				return;
 			final NetworkClient nc = new NetworkClient(context, handle);
-			nc.game_data(list_need.get(i));
+			nc.game_data(item);
 			pool.submit(nc);
 
 			lock++;
@@ -266,8 +266,8 @@ public class SyncClient implements Runnable
 		db.close();
 
 		final ArrayList<String> list_have = new ArrayList<String>();
-		for (int i = 0, len = list.size(); i < len; i++)
-			list_have.add(list.get(i));
+		for (final String item : list)
+			list_have.add(item);
 
 		list_need.removeAll(list_have);
 		return list_need;

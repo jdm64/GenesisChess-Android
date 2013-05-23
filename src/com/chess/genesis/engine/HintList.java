@@ -56,7 +56,6 @@ public class HintList
 	{
 		clearSelect();
 		clearHint();
-		return;
 	}
 
 	private void setSelected(final PieceImg bb, final int index)

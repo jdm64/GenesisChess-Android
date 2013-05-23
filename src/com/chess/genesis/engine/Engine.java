@@ -36,8 +36,8 @@ public abstract class Engine implements Runnable
 	protected final ObjectArray<Move> captureKiller;
 	protected final ObjectArray<Move> moveKiller;
 
-	protected TransTable tt;
-	protected TransItem ttItem;
+	protected final TransTable tt;
+	protected final TransItem ttItem;
 	protected MoveListPool pool;
 	protected MoveList curr;
 	protected Board board;
