@@ -20,7 +20,7 @@ package com.chess.genesis.engine;
 import com.chess.genesis.util.*;
 import java.util.*;
 
-class MoveList
+class MoveList implements Iterable<MoveNode>
 {
 	public final MoveNode[] list;
 	public int size;
@@ -37,6 +37,41 @@ class MoveList
 	public void add(final MoveNode move)
 	{
 		list[size++].set(move);
+	}
+
+	@Override
+	public MoveListIter iterator()
+	{
+		return new MoveListIter(this);
+	}
+}
+
+class MoveListIter implements Iterator<MoveNode>
+{
+	private final MoveList list;
+	private int index = 0;
+
+	public MoveListIter(final MoveList _list)
+	{
+		list = _list;
+	}
+
+	@Override
+	public boolean hasNext()
+	{
+		return index < list.size;
+	}
+
+	@Override
+	public MoveNode next()
+	{
+		return list.list[index++];
+	}
+
+	@Override
+	public void remove()
+	{
+		// do nothing
 	}
 }
 

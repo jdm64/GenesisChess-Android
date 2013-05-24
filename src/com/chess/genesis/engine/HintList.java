@@ -149,7 +149,7 @@ public class HintList
 		type = SelectType.PIECE_MOVES;
 		selected = square;
 		final MoveList moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
-		for (final MoveNode node : moveList.list) {
+		for (final MoveNode node : moveList) {
 			if (node.move.from == selected) {
 				hints.push(node.move.to);
 				final BoardButton button = (BoardButton) activity.findViewById(hints.top());
@@ -164,7 +164,7 @@ public class HintList
 		type = SelectType.MOVES_TO;
 		selected = square;
 		final MoveList moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
-		for (final MoveNode node : moveList.list) {
+		for (final MoveNode node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
 				hints.push(node.move.from);
 				final BoardButton button = (BoardButton) activity.findViewById(hints.top());

@@ -49,10 +49,10 @@ public class Benchmark implements Runnable
 		final MoveList ptr = gboard.getMoveList(gboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
-		for (int i = 0; i < ptr.size; i++) {
-			gboard.make(ptr.list[i].move);
+		for (final MoveNode node : ptr) {
+			gboard.make(node.move);
 			nodes += GenPerft(depth - 1);
-			gboard.unmake(ptr.list[i].move);
+			gboard.unmake(node.move);
 		}
 		pool.put(ptr);
 		return nodes;
@@ -67,10 +67,10 @@ public class Benchmark implements Runnable
 		final MoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
 
 		long nodes = 0;
-		for (int i = 0; i < ptr.size; i++) {
-			rboard.make(ptr.list[i].move);
+		for (final MoveNode node : ptr) {
+			rboard.make(node.move);
 			nodes += RegPerft(depth - 1);
-			rboard.unmake(ptr.list[i].move, flags);
+			rboard.unmake(node.move, flags);
 		}
 		pool.put(ptr);
 		return nodes;

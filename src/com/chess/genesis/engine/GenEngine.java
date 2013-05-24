@@ -57,13 +57,13 @@ public class GenEngine extends Engine
 		int alpha = Math.max(_alpha, score);
 		Arrays.sort(ptr.list, 0, ptr.size);
 
-		for (int n = 0; n < ptr.size; n++) {
+		for (final MoveNode node : ptr) {
 			// set check for opponent
-			tactical.set(depth + 1, ptr.list[n].check);
+			tactical.set(depth + 1, node.check);
 
-			board.make(ptr.list[n].move);
+			board.make(node.move);
 			score = -Quiescence(-beta, -alpha, depth + 1);
-			board.unmake(ptr.list[n].move);
+			board.unmake(node.move);
 
 			if (score >= beta) {
 				pool.put(ptr);
@@ -113,26 +113,26 @@ public class GenEngine extends Engine
 
 		ismate.set(depth, false);
 		int b = alpha.val + 1;
-		for (int n = 0; n < ptr.size; n++) {
-			board.make(ptr.list[n].move);
+		for (final MoveNode node : ptr) {
+			board.make(node.move);
 
 			// set check for opponent
-			tactical.set(depth + 1, ptr.list[n].check);
+			tactical.set(depth + 1, node.check);
 
-			ptr.list[n].score = -NegaScout(-b, -alpha.val, depth + 1, limit);
-			if (ptr.list[n].score > alpha.val && ptr.list[n].score < beta)
-				ptr.list[n].score = -NegaScout(-beta, -alpha.val, depth + 1, limit);
-			board.unmake(ptr.list[n].move);
+			node.score = -NegaScout(-b, -alpha.val, depth + 1, limit);
+			if (node.score > alpha.val && node.score < beta)
+				node.score = -NegaScout(-beta, -alpha.val, depth + 1, limit);
+			board.unmake(node.move);
 
-			best.val = Math.max(best.val, ptr.list[n].score);
+			best.val = Math.max(best.val, node.score);
 			if (best.val >= beta) {
-				killer.get(depth).set(ptr.list[n].move);
+				killer.get(depth).set(node.move);
 				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
 				pool.put(ptr);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
-				pvMove.get(depth).set(ptr.list[n].move);
+				pvMove.get(depth).set(node.move);
 			}
 			b = alpha.val + 1;
 		}
