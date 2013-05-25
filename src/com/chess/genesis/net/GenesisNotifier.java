@@ -103,6 +103,7 @@ public class GenesisNotifier extends Service implements Runnable
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false) || !pref.getBoolean(PrefKey.NOTE_ENABLED, true)) {
+			CancelWakup(this);
 			stopSelf();
 			return;
 		} else if (internetIsActive() && fromalarm) {
@@ -115,14 +116,11 @@ public class GenesisNotifier extends Service implements Runnable
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startid)
 	{
-		Bundle bundle = null;
-
-		fromalarm = intent != null
-			&& (bundle = intent.getExtras()) != null
-			&& bundle.getBoolean("fromAlarm", false);
+		final Bundle bundle = intent.getExtras();
+		fromalarm = bundle != null && bundle.getBoolean("fromAlarm", false);
 
 		new Thread(this).start();
-		return START_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	@Override
@@ -136,12 +134,23 @@ public class GenesisNotifier extends Service implements Runnable
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, DEFAULT_POLL_FREQ));
+		final long start = cal.getTimeInMillis();
+		final long interval = start - System.currentTimeMillis();
 
 		final Intent intent = new Intent(context, GenesisAlarm.class);
 		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pintent);
+		am.setInexactRepeating(AlarmManager.RTC, start, interval, pintent);
+	}
+
+	private static void CancelWakup(final Context context)
+	{
+		final Intent intent = new Intent(context, GenesisAlarm.class);
+		final PendingIntent pintent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.cancel(pintent);
 	}
 
 	private boolean internetIsActive()
