@@ -169,7 +169,7 @@ public class RegEngine extends Engine
 				return score.val;
 
 			// Try Move
-			final Move move = board.newMove();
+			final Move move = smove.get(depth);
 			if (ttItem.getMove(move)) {
 				if (!board.validMove(move, move))
 					break;

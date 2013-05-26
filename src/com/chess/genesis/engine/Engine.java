@@ -35,6 +35,7 @@ public abstract class Engine implements Runnable
 	protected final ObjectArray<Move> pvMove;
 	protected final ObjectArray<Move> captureKiller;
 	protected final ObjectArray<Move> moveKiller;
+	protected final ObjectArray<Move> smove;
 
 	protected final TransTable tt;
 	protected final TransItem ttItem;
@@ -56,6 +57,7 @@ public abstract class Engine implements Runnable
 		rand = new Rand64();
 		final NewInstance<Move> moveType = boardType.moveGenerator();
 
+		smove = new ObjectArray<Move>(moveType);
 		pvMove = new ObjectArray<Move>(moveType);
 		captureKiller = new ObjectArray<Move>(moveType);
 		moveKiller = new ObjectArray<Move>(moveType);

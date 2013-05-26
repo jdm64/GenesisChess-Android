@@ -23,6 +23,7 @@ import java.util.*;
 class MoveList implements Iterable<MoveNode>
 {
 	public final MoveNode[] list;
+	public final MoveListIter iter = new MoveListIter(this);
 	public int size;
 
 	public MoveList(final NewInstance<Move> moveType)
@@ -42,7 +43,8 @@ class MoveList implements Iterable<MoveNode>
 	@Override
 	public MoveListIter iterator()
 	{
-		return new MoveListIter(this);
+		iter.reset();
+		return iter;
 	}
 }
 
@@ -73,11 +75,16 @@ class MoveListIter implements Iterator<MoveNode>
 	{
 		// do nothing
 	}
+
+	public void reset()
+	{
+		index = 0;
+	}
 }
 
 class MoveListPool
 {
-	private final LinkedList<MoveList> pool = new LinkedList<MoveList>();
+	private final Deque<MoveList> pool = new ArrayDeque<MoveList>();
 	private final NewInstance<Move> moveType;
 
 	public MoveListPool(final NewInstance<Move> _moveType)
