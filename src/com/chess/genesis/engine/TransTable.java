@@ -17,10 +17,13 @@
 
 package com.chess.genesis.engine;
 
+import com.chess.genesis.util.*;
+
 class TransTable
 {
-	protected final TransItem[] table;
-	protected final int size;
+	private final TransItem[] table;
+	private final NewInstance<Move> moveType;
+	private final int size;
 
 	public TransTable(final Board board, final int num_MB)
 	{
@@ -33,26 +36,23 @@ class TransTable
 
 		size = (num_MB * 1048576) / 288;
 		table = new TransItem[size];
-		for (int i = 0; i < size; i++)
-			table[i] = new TransItem(board.moveGenerator());
-	}
-
-	public void clear()
-	{
-		for (int i = 0; i < size; i++)
-			table[i].hash = 0;
+		moveType = board.moveGenerator();
 	}
 
 	public boolean getItem(final long hash, final TransItem item)
 	{
-		item.set(table[(int) Math.abs(hash % size)]);
-		return (item.hash == hash);
+		final TransItem tmp = table[(int) Math.abs(hash % size)];
+		if (tmp == null)
+			return false;
+		item.set(tmp);
+		return item.hash == hash;
 	}
 
 	public void setItem(final long hash, final int score, final Move move, final int depth, final int type)
 	{
 		final int index = (int) Math.abs(hash % size);
-		final TransItem item = table[index];
+		final TransItem item = table[index] == null?
+			(table[index] = new TransItem(moveType)) : table[index];
 
 		item.hash = hash;
 		item.score = score;
