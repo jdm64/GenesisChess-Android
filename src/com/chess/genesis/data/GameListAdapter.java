@@ -17,6 +17,7 @@
 package com.chess.genesis.data;
 
 import android.content.*;
+import android.content.res.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
@@ -196,10 +197,11 @@ class GameListItem extends View
 			height = (int) ((5.0 * width) / 32.0);
 			rect = new RectF(0, 0, height, height);
 
-			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_pawn_light);
-			blackPawn = Bitmap.createScaledBitmap(bm, height, height, true);
-			bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.white_pawn_dark);
-			whitePawn = Bitmap.createScaledBitmap(bm, height, height, true);
+			final Resources res = context.getResources();
+			blackPawn = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+				res, R.drawable.black_pawn_light), height, height, true);
+			whitePawn = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+				res, R.drawable.white_pawn_dark), height, height, true);
 
 			isActive = true;
 		}

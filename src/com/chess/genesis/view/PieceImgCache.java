@@ -17,23 +17,55 @@
 package com.chess.genesis.view;
 
 import android.content.*;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.*;
 import android.graphics.*;
+import com.chess.genesis.*;
 
-public class PieceImgCache extends ImageCache
+public class PieceImgCache
 {
+	private static final int[] pieceRes = {
+		R.drawable.piece_black_king,		R.drawable.piece_black_queen,
+		R.drawable.piece_black_rook,		R.drawable.piece_black_bishop,
+		R.drawable.piece_black_knight,		R.drawable.piece_black_pawn,
+		R.drawable.square_none,
+		R.drawable.piece_white_pawn,		R.drawable.piece_white_knight,
+		R.drawable.piece_white_bishop,		R.drawable.piece_white_rook,
+		R.drawable.piece_white_queen,		R.drawable.piece_white_king};
+
+	private static final int[] countRes = {
+		R.drawable.piece_0,	R.drawable.piece_1,	R.drawable.piece_2,
+		R.drawable.piece_3,	R.drawable.piece_4,	R.drawable.piece_5,
+		R.drawable.piece_6,	R.drawable.piece_7,	R.drawable.piece_8,
+		R.drawable.piece_9};
+
+	private static final int tokenRes = R.drawable.piece_token;
+
+	private static Resources resource;
+
 	public final static int PIECE_ONLY = 1;
 	public final static int PIECE_COUNT = 3;
 
-	private final Bitmap[] scaledPieces = new Bitmap[13];
-	private final Bitmap[] scaledCount = new Bitmap[10];
-	private Bitmap scaledToken;
+	private final Bitmap[] pieceImg = new Bitmap[13];
+	private final Bitmap[] countImg = new Bitmap[10];
+	private Bitmap tokenImg;
 	private int size;
 	private final int type;
 
 	public PieceImgCache(final Context context, final int Type)
 	{
-		setContext(context);
+	try {
+		final Context cntx = context.createPackageContext(context.getPackageName(), Context.CONTEXT_INCLUDE_CODE);
+		resource = cntx.getResources();
 		type = Type;
+	} catch (final NameNotFoundException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+	}
+
+	private static Bitmap loadImage(final int id, final int isize)
+	{
+		return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resource, id), isize, isize, true);
 	}
 
 	public void resize(final int newSize)
@@ -44,12 +76,12 @@ public class PieceImgCache extends ImageCache
 		size = newSize;
 		switch (type) {
 		case PIECE_COUNT:
-			scaledToken = createTokenImg(size);
+			tokenImg = loadImage(tokenRes, size);
 			for (int i = 0; i < 10; i++)
-				scaledCount[i] = createCountImg(i, size);
+				countImg[i] = loadImage(countRes[i], size);
 		case PIECE_ONLY:
 			for (int i = 0; i < 13; i++)
-				scaledPieces[i] = createPieceImg(i, size);
+				pieceImg[i] = loadImage(pieceRes[i], size);
 		}
 	}
 
@@ -60,16 +92,16 @@ public class PieceImgCache extends ImageCache
 
 	public Bitmap getPieceImg(final int index)
 	{
-		return scaledPieces[index];
+		return pieceImg[index];
 	}
 
 	public Bitmap getCountImg(final int index)
 	{
-		return scaledCount[index];
+		return countImg[index];
 	}
 
 	public Bitmap getTokenImg()
 	{
-		return scaledToken;
+		return tokenImg;
 	}
 }
