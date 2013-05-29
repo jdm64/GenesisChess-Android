@@ -60,7 +60,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			row.setSizes("1/5");
 
 			MyImageView padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
+			padding.setResId(i == 0? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 
@@ -70,7 +70,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 				row.addView(button);
 			}
 			padding = new MyImageView(context);
-			padding.setImageResource((i == 0)? R.drawable.square_light : R.drawable.square_dark);
+			padding.setResId(i == 0? R.drawable.square_light : R.drawable.square_dark);
 			padding.setLayoutParams(LINEAR_PARAMS);
 			row.addView(padding);
 			addView(row);
@@ -88,7 +88,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 		// Center Divide
 		final LinearLayout row = new LinearLayout(context);
 		final MyImageView padding = new MyImageView(context);
-		padding.setImageResource(R.drawable.padding_480x96);
+		padding.setResId(R.drawable.padding_480x96);
 		row.addView(padding);
 		addView(row);
 

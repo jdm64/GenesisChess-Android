@@ -20,12 +20,15 @@
 
 <resources>
 	<declare-styleable name="SwipeTabs">
-        	<attr name="bottomBarColor" format="color" />
+	<attr name="bottomBarColor" format="color" />
 		<attr name="bottomBarHeight" format="dimension" />
 		<attr name="tabIndicatorHeight" format="dimension" />
 	</declare-styleable>
 	<declare-styleable name="ManualPanel">
 		<attr name="sizes" format="string"/>
 		<attr name="height_policy" format="string"/>
+	</declare-styleable>
+	<declare-styleable name="MyImageView">
+		<attr name="src" format="integer"/>
 	</declare-styleable>
 </resources>

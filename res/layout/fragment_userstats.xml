@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:genesis="http://schemas.android.com/apk/res/com.chess.genesis"
 android:orientation="vertical">
 	<com.chess.genesis.view.TabText
 	android:id="@+id/tabtxt"
@@ -17,7 +18,7 @@ android:orientation="vertical">
 	style="@style/FillWidth">
 		<com.chess.genesis.view.MyImageView
 		android:id="@+id/avatar"
-		android:src="@drawable/avatar"
+		genesis:src="@drawable/avatar"
 		android:layout_height="96dp"
 		android:layout_width="96dp"/>
 		<com.chess.genesis.view.RobotoText
