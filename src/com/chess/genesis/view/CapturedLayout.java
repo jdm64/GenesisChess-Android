@@ -39,7 +39,7 @@ public class CapturedLayout extends ManualPanel
 			cache = null;
 			return;
 		}
-		cache = new PieceImgCache(context, PieceImgCache.PIECE_COUNT);
+		cache = new PieceImgCache(context);
 		initPieces();
 	}
 

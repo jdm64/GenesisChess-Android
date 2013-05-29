@@ -43,21 +43,16 @@ public class PieceImgCache
 
 	private static Resources resource;
 
-	public final static int PIECE_ONLY = 1;
-	public final static int PIECE_COUNT = 3;
-
 	private final Bitmap[] pieceImg = new Bitmap[13];
 	private final Bitmap[] countImg = new Bitmap[10];
 	private Bitmap tokenImg;
 	private int size;
-	private final int type;
 
-	public PieceImgCache(final Context context, final int Type)
+	public PieceImgCache(final Context context)
 	{
 	try {
 		final Context cntx = context.createPackageContext(context.getPackageName(), Context.CONTEXT_INCLUDE_CODE);
 		resource = cntx.getResources();
-		type = Type;
 	} catch (final NameNotFoundException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
@@ -72,17 +67,7 @@ public class PieceImgCache
 	{
 		if (newSize == size || newSize < 1)
 			return;
-
 		size = newSize;
-		switch (type) {
-		case PIECE_COUNT:
-			tokenImg = loadImage(tokenRes, size);
-			for (int i = 0; i < 10; i++)
-				countImg[i] = loadImage(countRes[i], size);
-		case PIECE_ONLY:
-			for (int i = 0; i < 13; i++)
-				pieceImg[i] = loadImage(pieceRes[i], size);
-		}
 	}
 
 	public int getSize()
@@ -92,16 +77,22 @@ public class PieceImgCache
 
 	public Bitmap getPieceImg(final int index)
 	{
+		if (pieceImg[index] == null)
+			pieceImg[index] = loadImage(pieceRes[index], size);
 		return pieceImg[index];
 	}
 
 	public Bitmap getCountImg(final int index)
 	{
+		if (countImg[index] == null)
+			countImg[index] = loadImage(countRes[index], size);
 		return countImg[index];
 	}
 
 	public Bitmap getTokenImg()
 	{
+		if (tokenImg == null)
+			tokenImg = loadImage(tokenRes, size);
 		return tokenImg;
 	}
 }

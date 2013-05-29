@@ -40,7 +40,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	{
 		super(context, attrs);
 		setOrientation(LinearLayout.VERTICAL);
-		cache = new PieceImgCache(context, PieceImgCache.PIECE_COUNT);
+		cache = new PieceImgCache(context);
 	}
 
 	@Override

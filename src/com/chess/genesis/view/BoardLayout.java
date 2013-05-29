@@ -33,7 +33,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener, OnLong
 	{
 		super(context, attrs);
 		setOrientation(LinearLayout.VERTICAL);
-		cache = new PieceImgCache(context, PieceImgCache.PIECE_ONLY);
+		cache = new PieceImgCache(context);
 	}
 
 	@Override
