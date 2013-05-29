@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Genesis Chess</string>
-	<string name="version">1.14.4</string>
+	<string name="version">1.14.5</string>
 	<string name="register_notice">
 		NOTICE: A valid email address must be used to activate the account.
 	</string>
