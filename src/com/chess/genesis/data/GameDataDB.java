@@ -17,6 +17,7 @@
 package com.chess.genesis.data;
 
 import android.content.*;
+import android.database.*;
 import android.database.sqlite.*;
 import android.os.*;
 import android.preference.*;
@@ -40,7 +41,7 @@ public class GameDataDB
 		db.close();
 	}
 
-	public static Bundle rowToBundle(final SQLiteCursor cursor, final int index, final boolean closeCursor)
+	public static Bundle rowToBundle(final Cursor cursor, final int index, final boolean closeCursor)
 	{
 		final Bundle bundle = new Bundle();
 		final String[] column = cursor.getColumnNames();
@@ -70,9 +71,7 @@ public class GameDataDB
 		final String[] data2 = {String.valueOf(time)};
 
 		db.execSQL("INSERT INTO localgames (name, ctime, stime, gametype, opponent) VALUES (?, ?, ?, ?, ?);", data);
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2);
-
-		final Bundle game = rowToBundle(cursor, 0, true);
+		final Bundle game = rowToBundle(db.rawQuery("SELECT * FROM localgames WHERE ctime=?", data2), 0, true);
 		game.putInt("type", Enums.LOCAL_GAME);
 
 		return game;
@@ -119,9 +118,7 @@ public class GameDataDB
 	{
 		final String[] data = {gameid};
 		final String type = (gametype == Enums.ONLINE_GAME)? "onlinegames" : "archivegames";
-
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data);
-		final Bundle row = rowToBundle(cursor, 0, true);
+		final Bundle row = rowToBundle(db.rawQuery("SELECT * FROM " + type + " WHERE gameid=?", data), 0, true);
 
 		final long time = System.currentTimeMillis();
 		final String tnames = "(name, ctime, stime, gametype, opponent, zfen, history)";
@@ -241,11 +238,10 @@ public class GameDataDB
 
 	public List<String> getOnlineGameIds()
 	{
-		final List<String> list = new ArrayList<String>();
 		final String username = getUsername();
 		final String[] data = {username, username};
-
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
+		final List<String> list = new ArrayList<String>(cursor.getCount());
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {
@@ -269,10 +265,7 @@ public class GameDataDB
 
 	public Bundle getOnlineGameData(final String gameid)
 	{
-		final String[] data = {gameid};
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * from onlinegames WHERE gameid=?", data);
-
-		return rowToBundle(cursor, 0, true);
+		return rowToBundle(db.rawQuery("SELECT * from onlinegames WHERE gameid=?", new String[]{gameid}), 0, true);
 	}
 
 	public void recalcYourTurn()
@@ -367,11 +360,10 @@ public class GameDataDB
 
 	public List<String> getArchiveGameIds()
 	{
-		final List<String> list = new ArrayList<String>();
 		final String username = getUsername();
 		final String[] data = {username, username};
-
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames WHERE white=? OR black=?", data);
+		final List<String> list = new ArrayList<String>(cursor.getCount());
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {
@@ -396,9 +388,7 @@ public class GameDataDB
 	public void archiveNetworkGame(final String gameid, final int w_from, final int w_to, final int b_from, final int b_to)
 	{
 		final String[] data = {gameid};
-
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data);
-		final Bundle row = rowToBundle(cursor, 0, true);
+		final Bundle row = rowToBundle(db.rawQuery("SELECT * FROM onlinegames WHERE gameid=?", data), 0, true);
 
 		final String tnames = "(gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto, ctime, stime, ply, white, black, zfen, history)";
 		final String dstring = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

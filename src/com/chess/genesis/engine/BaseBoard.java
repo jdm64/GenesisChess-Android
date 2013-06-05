@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
+
 public abstract class BaseBoard
 {
 	protected static final int[] stype = {
@@ -342,7 +344,7 @@ public abstract class BaseBoard
 			if (square[n] > Piece.EMPTY)
 				fen.append(Move.pieceSymbol[square[n]]);
 			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase(Locale.US));
 			empty = 0;
 		}
 		fen.append(':');

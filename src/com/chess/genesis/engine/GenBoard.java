@@ -437,7 +437,7 @@ public class GenBoard extends GenPosition implements Board
 			if (piece[idx] == Piece.PLACEABLE || piece[idx] == Piece.DEAD)
 				continue;
 
-			int[] loc;
+			final int[] loc;
 			switch (movetype) {
 			case Move.MOVE_ALL:
 			default:

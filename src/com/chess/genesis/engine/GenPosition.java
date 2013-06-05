@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
+
 class GenPosition extends GenMoveLookup
 {
 	// for setPiece()
@@ -127,7 +129,7 @@ class GenPosition extends GenMoveLookup
 
 		for (int i = 0; i < 16; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase());
+				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase(Locale.US));
 		}
 		for (int i = 16; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)

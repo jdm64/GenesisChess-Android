@@ -24,6 +24,7 @@ import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
+import java.util.*;
 import org.json.*;
 
 public class GameStatsDialog extends BaseDialog
@@ -84,7 +85,7 @@ public class GameStatsDialog extends BaseDialog
 
 		final String[] statusArr = STATUS_MAP.get(status * ycol);
 		String gametype = Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
-		gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
+		gametype = gametype.substring(0,1).toUpperCase(Locale.US) + gametype.substring(1);
 
 		if (ycol == Piece.WHITE) {
 			opponent = bundle.getString("black");
@@ -122,7 +123,7 @@ public class GameStatsDialog extends BaseDialog
 			ycol = json.getInt("yourcolor");
 			statusArr = STATUS_MAP.get(json.getInt("status") * ycol);
 			gametype = json.getString("gametype");
-			gametype = gametype.substring(0,1).toUpperCase() + gametype.substring(1);
+			gametype = gametype.substring(0,1).toUpperCase(Locale.US) + gametype.substring(1);
 			eventtype = Integer.parseInt(json.getString("eventtype"));
 
 			if (ycol == Piece.WHITE)

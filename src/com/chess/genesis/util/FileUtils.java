@@ -54,17 +54,11 @@ public final class FileUtils
 
 	public static String readFile(final String path) throws IOException
 	{
-		final FileInputStream stream = tryOpenFileStream(path);
+		final Scanner scanner = new Scanner(tryOpenFileStream(path));
 	try {
-		final StringBuilder data = new StringBuilder((int) stream.getChannel().size());
-		final Scanner scanner = new Scanner(stream);
-
-		while (scanner.hasNextLine())
-			data.append(scanner.nextLine());
-		return data.toString();
+		return scanner.useDelimiter("\\A").next();
 	} finally {
-		// close stream
-		stream.close();
+		scanner.close();
 	}
 	}
 

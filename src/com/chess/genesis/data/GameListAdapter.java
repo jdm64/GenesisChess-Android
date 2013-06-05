@@ -353,10 +353,10 @@ class GameListItem extends View
 				bundle.getString("black") :
 				bundle.getString("white"));
 		data.type = (data.gametype == Enums.LOCAL_GAME)?
-			Enums.OpponentType(Integer.parseInt(bundle.getString("opponent"))) + " " +
+			Enums.OpponentType(Integer.parseInt(bundle.getString("opponent"))) + ' ' +
 			Enums.GameType(Integer.parseInt(bundle.getString("gametype")))
 			:
-			Enums.EventType(Integer.parseInt(bundle.getString("eventtype"))) + " " +
+			Enums.EventType(Integer.parseInt(bundle.getString("eventtype"))) + ' ' +
 			Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
 
 		if (data.gametype != Enums.LOCAL_GAME) {

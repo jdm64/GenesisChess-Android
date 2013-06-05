@@ -21,6 +21,8 @@ import java.util.*;
 @SuppressWarnings("serial")
 public class PrettyDate extends Date
 {
+	private final static String AGO = "ago";
+
 	public PrettyDate()
 	{
 		super();
@@ -167,7 +169,7 @@ public class PrettyDate extends Date
 			count++;
 
 			if (count == 2)
-				return buff + "ago";
+				return buff.append(AGO).toString();
 		}
 		// days
 		if (diff >= 86400000) {
@@ -176,7 +178,7 @@ public class PrettyDate extends Date
 			count++;
 
 			if (count == 2)
-				return buff + "ago";
+				return buff.append(AGO).toString();
 		}
 		// hours
 		if (diff >= 3600000) {
@@ -185,7 +187,7 @@ public class PrettyDate extends Date
 			count++;
 
 			if (count == 2)
-				return buff + "ago";
+				return buff.append(AGO).toString();
 		}
 		// minutes
 		if (diff >= 60000) {
@@ -194,7 +196,7 @@ public class PrettyDate extends Date
 			count++;
 
 			if (count == 2)
-				return buff + "ago";
+				return buff.append(AGO).toString();
 		}
 		// seconds
 		if (diff >= 1000) {
@@ -202,8 +204,6 @@ public class PrettyDate extends Date
 			count++;
 		}
 
-		if (count >= 1)
-			return buff + "ago";
-		return "now";
+		return (count >= 1)? buff.append(AGO).toString() : "now";
 	}
 }

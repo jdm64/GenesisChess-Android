@@ -14,7 +14,8 @@ android:versionName="@string/version">
 	<application
 	android:label="@string/app_name"
 	android:icon="@drawable/icon"
-	android:theme="@style/DefaultTheme">
+	android:theme="@style/DefaultTheme"
+	android:allowBackup="true">
 		<activity
 		android:name="com.chess.genesis.activity.StartActivity"
 		android:label="@string/app_name">

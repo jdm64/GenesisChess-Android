@@ -40,7 +40,7 @@ public class GamePoolDialog extends BaseDialog
 
 		public PoolDataItem(final String GameType, final long Time)
 		{
-			gametype = GameType.substring(0,1).toUpperCase() + GameType.substring(1);
+			gametype = GameType.substring(0,1).toUpperCase(Locale.US) + GameType.substring(1);
 			time = new PrettyDate(Time).agoFormat();
 		}
 	}
@@ -55,7 +55,7 @@ public class GamePoolDialog extends BaseDialog
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
 
-		data = new ArrayList<PoolDataItem>();
+		data = new ArrayList<PoolDataItem>(pool.length());
 		for (int i = 0, len = pool.length(); i < len; i++) {
 			final String type = pool.getJSONObject(i).getString("gametype");
 			final long time = pool.getJSONObject(i).getLong("added");

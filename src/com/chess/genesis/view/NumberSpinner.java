@@ -26,6 +26,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
+import java.util.*;
 
 /**
  * A view for selecting a number
@@ -402,7 +403,7 @@ public class NumberSpinner extends LinearLayout
 	private void validateInput(final View v)
 	{
 		final String str = String.valueOf(((TextView) v).getText());
-		if (str.isEmpty()) {
+		if (str.length() < 1) {
 			// Restore to the old value as we don't allow empty values
 			updateView();
 		} else {
@@ -448,9 +449,9 @@ public class NumberSpinner extends LinearLayout
 			final String result = dest.subSequence(0, dstart)
 				+ filtered.toString()
 				+ dest.subSequence(dend, dest.length());
-			final String str = String.valueOf(result).toLowerCase();
+			final String str = String.valueOf(result).toLowerCase(Locale.US);
 			for (String val : mDisplayedValues) {
-				val = val.toLowerCase();
+				val = val.toLowerCase(Locale.US);
 				if (val.startsWith(str)) {
 					return filtered;
 				}
@@ -487,9 +488,8 @@ public class NumberSpinner extends LinearLayout
 				+ filtered.toString()
 				+ dest.subSequence(dend, dest.length());
 
-			if (result != null && result.isEmpty()) {
+			if (result.length() < 1)
 				return result;
-			}
 			final int val = getSelectedPos(result);
 
 			/* Ensure the user can't type in a value greater
@@ -512,10 +512,10 @@ public class NumberSpinner extends LinearLayout
 				/* Ignore as if it's not a number we don't care */
 			}
 		} else {
-			final String dVal = str.toLowerCase();
+			final String dVal = str.toLowerCase(Locale.US);
 			for (int i = 0; i < mDisplayedValues.length; i++) {
 				/* Don't force the user to type in jan when ja will do */
-				if (mDisplayedValues[i].toLowerCase().startsWith(dVal)) {
+				if (mDisplayedValues[i].toLowerCase(Locale.US).startsWith(dVal)) {
 					return mStart + i;
 				}
 			}

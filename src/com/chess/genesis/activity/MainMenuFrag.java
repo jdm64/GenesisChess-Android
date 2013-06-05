@@ -295,6 +295,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			txt = (TextView) view.findViewById(list[i]);
 			stList[i] = (String) txt.getText();
 		}
+		if (txt == null)
+			return;
 
 		float width = view.getWidth();
 		width *= 0.9 / 3;

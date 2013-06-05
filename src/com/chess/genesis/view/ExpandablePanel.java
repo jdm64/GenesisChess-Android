@@ -25,7 +25,7 @@ import android.view.animation.*;
 import android.widget.*;
 import com.chess.genesis.data.*;
 
-class ExpandablePanel extends LinearLayout implements OnClickListener
+public class ExpandablePanel extends LinearLayout implements OnClickListener
 {
 	private View top;
 	private final static int duration = 500;

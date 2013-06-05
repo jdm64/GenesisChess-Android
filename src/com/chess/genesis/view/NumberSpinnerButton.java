@@ -28,7 +28,7 @@ import com.chess.genesis.*;
  * This class exists purely to cancel long click events, that got
  * started in NumberPicker
  */
-class NumberSpinnerButton extends ImageView
+public class NumberSpinnerButton extends ImageView
 {
 	private NumberSpinner mNumberSpinner;
 
