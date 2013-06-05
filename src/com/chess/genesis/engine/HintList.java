@@ -1,15 +1,15 @@
 package com.chess.genesis.engine;
 
 import android.app.*;
-import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
+import java.util.*;
 
 public class HintList
 {
 	protected final Activity activity;
 	protected final GameState gamestate;
 	protected final Board board;
-	protected final IntArray hints;
+	protected final List<Integer> hints;
 	protected int selected;
 	protected SelectType type;
 
@@ -23,7 +23,7 @@ public class HintList
 		gamestate = _gameState;
 		activity = _activity;
 		board = _board;
-		hints = new IntArray();
+		hints = new ArrayList<Integer>();
 		selected = Piece.NONE;
 		type = SelectType.NONE;
 	}
@@ -45,8 +45,8 @@ public class HintList
 
 	public void clearHint()
 	{
-		for (int i = 0; i < hints.size(); i++) {
-			final BoardButton button = (BoardButton) activity.findViewById(hints.get(i));
+		for (final Integer i : hints) {
+			final BoardButton button = (BoardButton) activity.findViewById(i);
 			button.setHighlight(false);
 		}
 		hints.clear();
@@ -151,8 +151,8 @@ public class HintList
 		final MoveList moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
 		for (final MoveNode node : moveList) {
 			if (node.move.from == selected) {
-				hints.push(node.move.to);
-				final BoardButton button = (BoardButton) activity.findViewById(hints.top());
+				hints.add(node.move.to);
+				final BoardButton button = (BoardButton) activity.findViewById(node.move.to);
 				button.setHighlight(true);
 			}
 		}
@@ -166,8 +166,8 @@ public class HintList
 		final MoveList moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
 		for (final MoveNode node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
-				hints.push(node.move.from);
-				final BoardButton button = (BoardButton) activity.findViewById(hints.top());
+				hints.add(node.move.from);
+				final BoardButton button = (BoardButton) activity.findViewById(node.move.from);
 				button.setHighlight(true);
 			}
 		}

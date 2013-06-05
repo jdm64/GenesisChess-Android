@@ -67,7 +67,7 @@ public class ManualPanel extends ViewGroup
 			setMeasuredDimension(maxWidth, maxHeight);
 			return;
 		}
-		final int[] arr = IntArray.copyOf(sizesArr, children);
+		final int[] arr = IntArray.clone(sizesArr, children);
 		final int[] width = new int[children];
 		int sum = 0, totalHeight = 0;
 

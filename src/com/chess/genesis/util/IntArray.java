@@ -18,9 +18,11 @@ package com.chess.genesis.util;
 
 public class IntArray
 {
-	private int[] list = new int[0];
+	private IntArray()
+	{
+	}
 
-	public static int[] copyOf(final int[] arr, final int size)
+	public static int[] clone(final int[] arr, final int size)
 	{
 		final int[] temp = new int[size];
 		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
@@ -29,74 +31,6 @@ public class IntArray
 
 	public static int[] clone(final int[] arr)
 	{
-		final int[] temp = new int[arr.length];
-		System.arraycopy(arr, 0, temp, 0, arr.length);
-		return temp;
-	}
-
-	public void clear()
-	{
-		list = new int[0];
-	}
-
-	public int size()
-	{
-		return list.length;
-	}
-
-	public void resize(final int size)
-	{
-		list = copyOf(list, size);
-	}
-
-	public int get(final int index)
-	{
-		if (index >= list.length)
-			list = copyOf(list, index + 1);
-		return list[index];
-	}
-
-	public void set(final int index, final int value)
-	{
-		if (index >= list.length)
-			list = copyOf(list, index + 1);
-		list[index] = value;
-	}
-
-	public void push(final int value)
-	{
-		list = copyOf(list, list.length + 1);
-		list[list.length - 1] = value;
-	}
-
-	public int pop()
-	{
-		final int end = list[list.length - 1];
-		list = copyOf(list, list.length - 1);
-		return end;
-	}
-
-	public int top()
-	{
-		return list[list.length - 1];
-	}
-
-	public boolean contains(final int item)
-	{
-		for (final int i : list) {
-			if (i == item)
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	public String toString()
-	{
-		final StringBuilder str = new StringBuilder();
-
-		for (final int element : list)
-			str.append(String.valueOf(element)).append(' ');
-		return str.toString();
+		return clone(arr, arr.length);
 	}
 }
