@@ -33,7 +33,7 @@ import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import org.json.*;
 
-public abstract class GameState
+public abstract class GameState implements Handler.Callback
 {
 	protected final GameFrag game;
 	protected final Activity activity;
@@ -60,7 +60,8 @@ public abstract class GameState
 	public abstract void placeClick(final View v);
 	public abstract void handleMove(final int from, final int to);
 
-	protected void handleOther(final Message msg)
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
 	try {
 		switch (msg.what) {
@@ -71,10 +72,10 @@ public abstract class GameState
 			if (bundle.getLong("time") == 0) {
 				cpu.setBoard(board);
 				new Thread(cpu).start();
-				return;
+				return true;
 			} else if (activity.isFinishing()) {
 				// activity is gone, so give up!
-				return;
+				return true;
 			}
 			currentMove();
 
@@ -97,7 +98,7 @@ public abstract class GameState
 				undoMove();
 				progress.remove();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			progress.setText("Checking Game Status");
 
@@ -130,6 +131,9 @@ public abstract class GameState
 			net.game_draw(settings.getString("gameid"), value);
 			new Thread(net).start();
 			break;
+		case PawnPromoteDialog.MSG:
+			applyMove((RegMove) msg.obj, true, true);
+			break;
 		case NetworkClient.RESIGN_GAME:
 		case NetworkClient.IDLE_RESIGN:
 			json = (JSONObject) msg.obj;
@@ -137,7 +141,7 @@ public abstract class GameState
 			if (json.getString("result").equals("error")) {
 				progress.remove();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			progress.setText("Resignation Sent");
 
@@ -157,7 +161,7 @@ public abstract class GameState
 			if (json.getString("result").equals("error")) {
 				progress.remove();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			final int status = Enums.GameStatus(json.getString("status"));
 
@@ -173,7 +177,7 @@ public abstract class GameState
 				if (Integer.parseInt(settings.getString("eventtype")) == Enums.INVITE) {
 					progress.remove();
 					ShowGameStats(json);
-					return;
+					return true;
 				}
 				progress.setText("Retrieving Score");
 
@@ -190,7 +194,7 @@ public abstract class GameState
 			if (json.getString("result").equals("error")) {
 				progress.remove();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			progress.setText("Score Loaded");
 			progress.remove();
@@ -214,27 +218,48 @@ public abstract class GameState
 			if (json.getString("result").equals("error")) {
 				progress.remove();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			progress.setText(json.getString("reason"));
 			progress.remove();
 			break;
 		}
+		return true;
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
-	public GameState(final Activity _activity, final GameFrag _game, final Bundle _settings, final Board _board)
+	public GameState(final GameFrag _game, final Board _board)
 	{
-		activity = _activity;
 		game = _game;
-		settings = _settings;
+		activity = game.getActivity();
+		settings = game.getArguments();
 		board = _board;
+		handle = new Handler(this);
 		history = new ObjectArray<Move>(board.moveGenerator());
 		hintList = new HintList(activity, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
+
+		switch (type) {
+		case Enums.LOCAL_GAME:
+		default:
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+			cpu = board instanceof GenBoard? new GenEngine(handle, board) : new RegEngine(handle, board);
+			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
+			oppType = Integer.parseInt(settings.getString("opponent"));
+			net = null;
+			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
+			break;
+		case Enums.ONLINE_GAME:
+		case Enums.ARCHIVE_GAME:
+			oppType = Enums.HUMAN_OPPONENT;
+			cpu = null;
+			net = new NetworkClient(activity, handle);
+			ycol = settings.getString("username").equals(settings.getString("white"))? Piece.WHITE : Piece.BLACK;
+			break;
+		}
 	}
 
 	public void reset()
@@ -372,6 +397,12 @@ public abstract class GameState
 
 		net.submit_move(gameid, move);
 		new Thread(net).start();
+	}
+
+	protected boolean boardNotEditable()
+	{
+		return type == Enums.ARCHIVE_GAME ||
+			(type == Enums.ONLINE_GAME && hindex + 1 < history.size());
 	}
 
 	private void preCommonMove()

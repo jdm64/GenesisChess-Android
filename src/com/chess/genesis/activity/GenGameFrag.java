@@ -34,18 +34,17 @@ public class GenGameFrag extends GameFrag
 		initBaseContentFrag(container);
 
 		// restore settings
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getArguments();
-		type = settings.getInt("type");
+		if (savedInstanceState != null)
+			setArguments(savedInstanceState);
 
 		// set view as black
 		viewAsBlack = false;
 
 		// create game state instance
-		gamestate = new GenGameState(act, this, settings);
+		gamestate = new GenGameState(this);
 
 		// finalize initialization
-		return super.onCreateView(inflater, container, settings);
+		return super.onCreateView(inflater, container, getArguments());
 	}
 
 	@Override

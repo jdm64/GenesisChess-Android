@@ -37,7 +37,6 @@ public abstract class GameFrag extends BaseContentFrag
 	public ViewAnimator game_board;
 	public CapturedLayout captured_count;
 	public GameState gamestate;
-	public Bundle settings;
 	public int type;
 	public boolean viewAsBlack = false;
 
@@ -78,6 +77,7 @@ public abstract class GameFrag extends BaseContentFrag
 		place.init(gamestate);
 
 		// set click listeners
+		type = getArguments().getInt("type");
 		if (type != Enums.LOCAL_GAME) {
 			TabText txt = (TabText) view.findViewById(R.id.white_name);
 			txt.setOnClickListener(this);
@@ -151,6 +151,7 @@ public abstract class GameFrag extends BaseContentFrag
 	@Override
 	public void onClick(final View v)
 	{
+		final Bundle settings = getArguments();
 		Intent intent;
 
 		switch (v.getId()) {

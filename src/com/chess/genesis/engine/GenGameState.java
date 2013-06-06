@@ -17,50 +17,15 @@
 
 package com.chess.genesis.engine;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.preference.*;
 import android.view.*;
 import com.chess.genesis.activity.*;
-import com.chess.genesis.data.*;
-import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
 public class GenGameState extends GameState
 {
-	private final Handler xhandle = new Handler()
+	public GenGameState(final GameFrag _game)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			handleOther(msg);
-		}
-	};
-
-	public GenGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
-	{
-		super(_activity, _game, _settings, new GenBoard());
-		handle = xhandle;
-
-		switch (type) {
-		case Enums.LOCAL_GAME:
-		default:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-			cpu = new GenEngine(handle, board);
-			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
-			oppType = Integer.parseInt(settings.getString("opponent"));
-			net = null;
-			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
-			break;
-		case Enums.ONLINE_GAME:
-		case Enums.ARCHIVE_GAME:
-			oppType = Enums.HUMAN_OPPONENT;
-			cpu = null;
-			net = new NetworkClient(activity, handle);
-			ycol = settings.getString("username").equals(settings.getString("white"))? Piece.WHITE : Piece.BLACK;
-			break;
-		}
+		super(_game, new GenBoard());
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
@@ -92,14 +57,8 @@ public class GenGameState extends GameState
 	@Override
 	public void handleMove(final int from, final int to)
 	{
-		if (type == Enums.ONLINE_GAME) {
-			// you can't edit the past in online games
-			if (hindex + 1 < history.size()) {
-				return;
-			}
-		} else if (type == Enums.ARCHIVE_GAME) {
+		if (boardNotEditable())
 			return;
-		}
 
 		final Move move = board.newMove();
 

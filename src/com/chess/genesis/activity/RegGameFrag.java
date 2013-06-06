@@ -33,8 +33,12 @@ public class RegGameFrag extends GameFrag
 		initBaseContentFrag(container);
 
 		// restore settings
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getArguments();
+		final Bundle settings;
+		if (savedInstanceState != null)
+			setArguments(settings = savedInstanceState);
+		else
+			settings = getArguments();
+
 		type = settings.getInt("type");
 
 		// set playingBlack
@@ -47,7 +51,7 @@ public class RegGameFrag extends GameFrag
 		viewAsBlack = pref.getBoolean(PrefKey.VIEW_AS_BLACK, true) && playingBlack;
 
 		// create game stat instance
-		gamestate = new RegGameState(act, this, settings);
+		gamestate = new RegGameState(this);
 
 		// finalize initialization
 		return super.onCreateView(inflater, container, settings);

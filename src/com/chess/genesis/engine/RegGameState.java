@@ -17,15 +17,9 @@
 
 package com.chess.genesis.engine;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.preference.*;
 import android.view.*;
 import com.chess.genesis.activity.*;
-import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
@@ -33,46 +27,10 @@ public class RegGameState extends GameState
 {
 	private final ObjectArray<MoveFlags> flagsHistory;
 
-	private final Handler xhandle = new Handler()
+	public RegGameState(final GameFrag _game)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case PawnPromoteDialog.MSG:
-				applyMove((RegMove) msg.obj, true, true);
-				break;
-			default:
-				handleOther(msg);
-				break;
-			}
-		}
-	};
-
-	public RegGameState(final Activity _activity, final GameFrag _game, final Bundle _settings)
-	{
-		super(_activity, _game, _settings, new RegBoard());
-		handle = xhandle;
+		super(_game, new RegBoard());
 		flagsHistory = new ObjectArray<MoveFlags>(new MoveFlags());
-
-		switch (type) {
-		case Enums.LOCAL_GAME:
-		default:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-			cpu = new RegEngine(handle, board);
-			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
-			oppType = Integer.parseInt(settings.getString("opponent"));
-			net = null;
-			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;
-			break;
-		case Enums.ONLINE_GAME:
-		case Enums.ARCHIVE_GAME:
-			oppType = Enums.HUMAN_OPPONENT;
-			cpu = null;
-			net = new NetworkClient(activity, handle);
-			ycol = settings.getString("username").equals(settings.getString("white"))? Piece.WHITE : Piece.BLACK;
-			break;
-		}
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
@@ -121,14 +79,8 @@ public class RegGameState extends GameState
 	@Override
 	public void handleMove(final int from, final int to)
 	{
-		if (type == Enums.ONLINE_GAME) {
-			// you can't edit the past in online games
-			if (hindex + 1 < history.size()) {
-				return;
-			}
-		} else if (type == Enums.ARCHIVE_GAME) {
+		if (boardNotEditable())
 			return;
-		}
 
 		final Move move = board.newMove();
 		move.from = from;

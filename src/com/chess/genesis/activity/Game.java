@@ -84,7 +84,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 	{
 		if (v.getId() == R.id.chat) {
 			final Intent intent = new Intent(this, MsgBox.class);
-			intent.putExtra("gameid", ((GameFrag) mainFrag).settings.getString("gameid"));
+			intent.putExtra("gameid", mainFrag.getArguments().getString("gameid"));
 			startActivity(intent);
 		}
 	}
