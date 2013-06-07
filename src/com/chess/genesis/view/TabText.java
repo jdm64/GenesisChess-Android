@@ -29,6 +29,9 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 	private final static int highlightColor = MColors.BLUE_NEON;
 	private final static int touchColor = MColors.BLUE_NEON_TR;
 
+	private final int THIN = dptopx(2);
+	private final int THICK = dptopx(5);
+
 	private final Paint paint;
 	private boolean active;
 
@@ -50,12 +53,18 @@ public class TabText extends RobotoText implements OnClickListener, OnTouchListe
 		setOnClickListener(this);
 	}
 
+	private int dptopx(final int dp)
+	{
+		final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+		return (int) ((dp * displayMetrics.density) + 0.5);
+	}
+
 	@Override
 	public void onDraw(final Canvas canvas)
 	{
 		super.onDraw(canvas);
 
-		final int barSize = active? 6 : 2;
+		final int barSize = active? THICK : THIN;
 		canvas.drawRect(0, getHeight() - barSize, getWidth(), getHeight(), paint);
 	}
 
