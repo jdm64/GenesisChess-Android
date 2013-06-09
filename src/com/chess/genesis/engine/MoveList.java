@@ -84,7 +84,7 @@ class MoveListIter implements Iterator<MoveNode>
 
 class MoveListPool
 {
-	private final Deque<MoveList> pool = new ArrayDeque<MoveList>();
+	private final Queue<MoveList> pool = new ArrayDeque<MoveList>();
 	private final NewInstance<Move> moveType;
 
 	public MoveListPool(final NewInstance<Move> _moveType)
@@ -97,14 +97,14 @@ class MoveListPool
 		if (pool.size() < 1)
 			return new MoveList(moveType);
 		synchronized (pool) {
-			return pool.removeFirst();
+			return pool.remove();
 		}
 	}
 
 	public void put(final MoveList item)
 	{
 		synchronized (pool) {
-			pool.addFirst(item);
+			pool.add(item);
 		}
 	}
 }
