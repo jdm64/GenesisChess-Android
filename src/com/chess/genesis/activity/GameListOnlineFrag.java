@@ -34,7 +34,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 import org.json.*;
 
-public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener
+public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, Handler.Callback
 {
 	private final static String TAG = "GAMELISTONLINE";
 
@@ -42,123 +42,122 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	public static final int YOUR_PAGE = 1;
 	public static final int ARCHIVE_PAGE = 2;
 
+	public final Handler handle = new Handler(this);
 	private GameListAdapter[] gamelistadapter_arr;
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private ViewPager pager;
 
-	public final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case DeleteArchiveDialog.MSG:
-			case ReadAllMsgsDialog.MSG:
-				updateGameList();
-				break;
-			case NewOnlineGameDialog.MSG:
-				Bundle data = (Bundle) msg.obj;
+		switch (msg.what) {
+		case DeleteArchiveDialog.MSG:
+		case ReadAllMsgsDialog.MSG:
+			updateGameList();
+			break;
+		case NewOnlineGameDialog.MSG:
+			Bundle data = (Bundle) msg.obj;
 
-				if (data.getInt("opponent") == Enums.INVITE) {
-					new InviteOptionsDialog(act, handle, data).show();
-					return;
-				}
-				progress.setText("Sending Newgame Request");
-				String gametype = Enums.GameType(data.getInt("gametype"));
-
-				net.join_game(gametype);
-				new Thread(net).start();
-				break;
-			case RematchConfirm.MSG:
-				data = (Bundle) msg.obj;
-				progress.setText("Sending Newgame Request");
-
-				final String opponent = data.getString("opp_name");
-				String color = Enums.ColorType(data.getInt("color"));
-				gametype = Enums.GameType(data.getInt("gametype"));
-
-				net.new_game(opponent, gametype, color);
-				new Thread(net).start();
-				break;
-			case NudgeConfirm.MSG:
-				progress.setText("Sending Nudge");
-
-				final String gameid = (String) msg.obj;
-				net.nudge_game(gameid);
-				new Thread(net).start();
-				break;
-			case InviteOptionsDialog.MSG:
-				data = (Bundle) msg.obj;
-				progress.setText("Sending Newgame Request");
-
-				gametype = Enums.GameType(data.getInt("gametype"));
-				color = Enums.ColorType(data.getInt("color"));
-
-				net.new_game(data.getString("opp_name"), gametype, color);
-				new Thread(net).start();
-				break;
-			case SyncClient.MSG:
-			case NetworkClient.JOIN_GAME:
-				JSONObject json = (JSONObject) msg.obj;
-				try {
-					if (json.getString("result").equals("error")) {
-						progress.remove();
-						Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
-						progress.setText("Checking Game Pool");
-						updateGameList();
-						GenesisNotifier.clearNotification(act, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
-						net.pool_info();
-						new Thread(net).start();
-					} else {
-						progress.remove();
-					}
-				} catch (final JSONException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				}
-				break;
-			case NetworkClient.POOL_INFO:
-				json = (JSONObject) msg.obj;
-				try {
-					if (json.getString("result").equals("error")) {
-						progress.remove();
-						Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					final JSONArray games = json.getJSONArray("games");
-					final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-					pref.putString(PrefKey.POOLINFO, games.toString());
-					pref.commit();
-
-					act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
-
-					progress.remove();
-				} catch (final JSONException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				}
-				break;
-			case NetworkClient.NEW_GAME:
-			case NetworkClient.NUDGE_GAME:
-				json = (JSONObject) msg.obj;
-				try {
-					if (json.getString("result").equals("error")) {
-						progress.remove();
-						Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					progress.setText("Updating Game List");
-					final SyncClient sync = new SyncClient(act, handle);
-					new Thread(sync).start();
-				} catch (final JSONException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				}
-				break;
+			if (data.getInt("opponent") == Enums.INVITE) {
+				new InviteOptionsDialog(act, handle, data).show();
+				return true;
 			}
+			progress.setText("Sending Newgame Request");
+			String gametype = Enums.GameType(data.getInt("gametype"));
+
+			net.join_game(gametype);
+			new Thread(net).start();
+			break;
+		case RematchConfirm.MSG:
+			data = (Bundle) msg.obj;
+			progress.setText("Sending Newgame Request");
+
+			final String opponent = data.getString("opp_name");
+			String color = Enums.ColorType(data.getInt("color"));
+			gametype = Enums.GameType(data.getInt("gametype"));
+
+			net.new_game(opponent, gametype, color);
+			new Thread(net).start();
+			break;
+		case NudgeConfirm.MSG:
+			progress.setText("Sending Nudge");
+
+			final String gameid = (String) msg.obj;
+			net.nudge_game(gameid);
+			new Thread(net).start();
+			break;
+		case InviteOptionsDialog.MSG:
+			data = (Bundle) msg.obj;
+			progress.setText("Sending Newgame Request");
+
+			gametype = Enums.GameType(data.getInt("gametype"));
+			color = Enums.ColorType(data.getInt("color"));
+
+			net.new_game(data.getString("opp_name"), gametype, color);
+			new Thread(net).start();
+			break;
+		case SyncClient.MSG:
+		case NetworkClient.JOIN_GAME:
+			JSONObject json = (JSONObject) msg.obj;
+			try {
+				if (json.getString("result").equals("error")) {
+					progress.remove();
+					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return true;
+				}
+				if (msg.what == SyncClient.MSG || msg.what == NetworkClient.JOIN_GAME) {
+					progress.setText("Checking Game Pool");
+					updateGameList();
+					GenesisNotifier.clearNotification(act, GenesisNotifier.YOURTURN_NOTE|GenesisNotifier.NEWMGS_NOTE);
+					net.pool_info();
+					new Thread(net).start();
+				} else {
+					progress.remove();
+				}
+			} catch (final JSONException e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+			break;
+		case NetworkClient.POOL_INFO:
+			json = (JSONObject) msg.obj;
+			try {
+				if (json.getString("result").equals("error")) {
+					progress.remove();
+					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return true;
+				}
+				final JSONArray games = json.getJSONArray("games");
+				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+				pref.putString(PrefKey.POOLINFO, games.toString());
+				pref.commit();
+
+				act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
+
+				progress.remove();
+			} catch (final JSONException e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+			break;
+		case NetworkClient.NEW_GAME:
+		case NetworkClient.NUDGE_GAME:
+			json = (JSONObject) msg.obj;
+			try {
+				if (json.getString("result").equals("error")) {
+					progress.remove();
+					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return true;
+				}
+				progress.setText("Updating Game List");
+				final SyncClient sync = new SyncClient(act, handle);
+				new Thread(sync).start();
+			} catch (final JSONException e) {
+				throw new RuntimeException(e.getMessage(), e);
+			}
+			break;
 		}
-	};
+		return true;
+	}
 
 	class GameListPager extends PagerAdapter
 	{

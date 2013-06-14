@@ -31,99 +31,98 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class LoginFrag extends BaseContentFrag
+public class LoginFrag extends BaseContentFrag implements Handler.Callback
 {
 	private final static String TAG = "LOGIN";
 
+	private final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private int callbackId = Enums.NO_ACTIVITY;
 	private boolean exitActivity = false;
 
-	public final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case NetworkClient.LOGIN:
-			case SyncClient.MSG:
-				handleNetwork(msg);
-				break;
-			case LogoutConfirm.MSG:
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+		switch (msg.what) {
+		case NetworkClient.LOGIN:
+		case SyncClient.MSG:
+			handleNetwork(msg);
+			break;
+		case LogoutConfirm.MSG:
+			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
 
-				pref.putBoolean(PrefKey.ISLOGGEDIN, false);
-				pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
-				pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
-				pref.putLong(PrefKey.LASTGAMESYNC, 0);
-				pref.putLong(PrefKey.LASTMSGSYNC, 0);
-				pref.commit();
+			pref.putBoolean(PrefKey.ISLOGGEDIN, false);
+			pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
+			pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
+			pref.putLong(PrefKey.LASTGAMESYNC, 0);
+			pref.putLong(PrefKey.LASTMSGSYNC, 0);
+			pref.commit();
 
-				EditText txt = (EditText) act.findViewById(R.id.username);
-				txt.setText("");
+			EditText txt = (EditText) act.findViewById(R.id.username);
+			txt.setText("");
 
-				txt = (EditText) act.findViewById(R.id.password);
-				txt.setText("");
-				break;
-			case ProgressMsg.MSG:
-				if (exitActivity && !isTablet)
-					act.finish();
-				break;
-			}
+			txt = (EditText) act.findViewById(R.id.password);
+			txt.setText("");
+			break;
+		case ProgressMsg.MSG:
+			if (exitActivity && !isTablet)
+				act.finish();
+			break;
 		}
+		return true;
+	}
 
-		private void handleNetwork(final Message msg)
-		{
-			final JSONObject json = (JSONObject) msg.obj;
+	private void handleNetwork(final Message msg)
+	{
+		final JSONObject json = (JSONObject) msg.obj;
 
-		try {
-			if (json.getString("result").equals("error")) {
-				exitActivity = false;
-				progress.remove();
-				Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
-			}
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
+	try {
+		if (json.getString("result").equals("error")) {
+			exitActivity = false;
+			progress.remove();
+			Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+			return;
 		}
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
 
-			switch (msg.what) {
-			case NetworkClient.LOGIN:
-				progress.setText("Syncing Data");
+		switch (msg.what) {
+		case NetworkClient.LOGIN:
+			progress.setText("Syncing Data");
 
-				EditText txt = (EditText) act.findViewById(R.id.username);
-				final String username = txt.getText().toString().trim();
+			EditText txt = (EditText) act.findViewById(R.id.username);
+			final String username = txt.getText().toString().trim();
 
-				txt = (EditText) act.findViewById(R.id.password);
-				final String password = txt.getText().toString();
+			txt = (EditText) act.findViewById(R.id.password);
+			final String password = txt.getText().toString();
 
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-				pref.putBoolean(PrefKey.ISLOGGEDIN, true);
-				pref.putString(PrefKey.USERNAME, username);
-				pref.putString(PrefKey.PASSHASH, password);
-				pref.commit();
+			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+			pref.putBoolean(PrefKey.ISLOGGEDIN, true);
+			pref.putString(PrefKey.USERNAME, username);
+			pref.putString(PrefKey.PASSHASH, password);
+			pref.commit();
 
-				SocketClient.getInstance().setIsLoggedIn(true);
+			SocketClient.getInstance().setIsLoggedIn(true);
 
-				final SyncClient sync = new SyncClient(act, handle);
-				sync.setSyncType(SyncClient.FULL_SYNC);
-				new Thread(sync).start();
-				break;
-			case SyncClient.MSG:
-				// start background notifier
-				act.startService(new Intent(act, GenesisNotifier.class));
+			final SyncClient sync = new SyncClient(act, handle);
+			sync.setSyncType(SyncClient.FULL_SYNC);
+			new Thread(sync).start();
+			break;
+		case SyncClient.MSG:
+			// start background notifier
+			act.startService(new Intent(act, GenesisNotifier.class));
 
-				final GameDataDB db = new GameDataDB(act);
-				db.recalcYourTurn();
-				db.close();
+			final GameDataDB db = new GameDataDB(act);
+			db.recalcYourTurn();
+			db.close();
 
-				sendResult(Activity.RESULT_OK);
-				progress.dismiss();
-				break;
-			}
+			sendResult(Activity.RESULT_OK);
+			progress.dismiss();
+			break;
 		}
-	};
+	}
 
 	@Override
 	public String getBTag()

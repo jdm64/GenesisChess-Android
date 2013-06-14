@@ -27,7 +27,7 @@ import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import org.json.*;
 
-public class UserStatsFrag extends BaseContentFrag
+public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 {
 	private final static String TAG = "USERSTATS";
 
@@ -41,40 +41,39 @@ public class UserStatsFrag extends BaseContentFrag
 	private final static int TIE = 2;
 	private final static int RES = 3;
 
+	private final Handler handle = new Handler(this);
 	private Bundle settings;
 	private ProgressMsg progress;
 	private NetworkClient net;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-		try {
-			switch (msg.what) {
-			case NetworkClient.USER_STATS:
-				final JSONObject json = (JSONObject) msg.obj;
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				loadStats(json);
+	try {
+		switch (msg.what) {
+		case NetworkClient.USER_STATS:
+			final JSONObject json = (JSONObject) msg.obj;
+			if (json.getString("result").equals("error")) {
 				progress.remove();
-				break;
-			case StatsLookupDialog.MSG:
-				final String username = (String) msg.obj;
-
-				progress.setText("Retrieving Stats");
-				net.user_stats(username);
-				new Thread(net).start();
-				break;
+				Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				return true;
 			}
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
+			loadStats(json);
+			progress.remove();
+			break;
+		case StatsLookupDialog.MSG:
+			final String username = (String) msg.obj;
+
+			progress.setText("Retrieving Stats");
+			net.user_stats(username);
+			new Thread(net).start();
+			break;
 		}
-		}
-	};
+		return true;
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+	}
 
 	@Override
 	public String getBTag()

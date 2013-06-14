@@ -30,7 +30,7 @@ import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
-public abstract class GameFrag extends BaseContentFrag
+public abstract class GameFrag extends BaseContentFrag implements Handler.Callback
 {
 	protected final static String TAG = "GAME";
 
@@ -43,21 +43,19 @@ public abstract class GameFrag extends BaseContentFrag
 	protected GameListFrag gameListFrag;
 	protected WakeLock wakelock;
 
-	public final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case SubmitMove.MSG:
-				if ((Boolean) msg.obj)
-					gamestate.submitMove();
-				else
-					gamestate.undoMove();
-				break;
-			}
+		switch (msg.what) {
+		case SubmitMove.MSG:
+			if ((Boolean) msg.obj)
+				gamestate.submitMove();
+			else
+				gamestate.undoMove();
+			break;
 		}
-	};
+		return true;
+	}
 
 	@Override
 	public String getBTag()
@@ -273,7 +271,7 @@ public abstract class GameFrag extends BaseContentFrag
 
 	public void displaySubmitMove()
 	{
-		final SubmitMove dialog = new SubmitMove(act, handle, isTablet);
+		final SubmitMove dialog = new SubmitMove(act, new Handler(this), isTablet);
 		dialog.show();
 	}
 

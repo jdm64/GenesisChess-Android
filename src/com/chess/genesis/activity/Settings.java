@@ -32,48 +32,49 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class Settings extends PreferenceActivity implements OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener, CallBackPreference.CallBack
+public class Settings extends PreferenceActivity implements
+	OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener,
+	CallBackPreference.CallBack, Handler.Callback
 {
+	private final Handler handle = new Handler(this);
 	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private SharedPreferences pref;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			final JSONObject json = (JSONObject) msg.obj;
-		try {
-			if (json.getString("result").equals("error")) {
-				progress.remove();
-				Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-				return;
-			}
-			switch (msg.what) {
-			case NetworkClient.GET_OPTION:
-				// only emailnote supported
-				final CheckBoxPreference email = (CheckBoxPreference) findPreference("emailNoteEnabled");
-				email.setChecked(json.getBoolean("value"));
+		final JSONObject json = (JSONObject) msg.obj;
+	try {
+		if (json.getString("result").equals("error")) {
+			progress.remove();
+			Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+			return true;
+		}
+		switch (msg.what) {
+		case NetworkClient.GET_OPTION:
+			// only emailnote supported
+			final CheckBoxPreference email = (CheckBoxPreference) findPreference("emailNoteEnabled");
+			email.setChecked(json.getBoolean("value"));
 
-				progress.remove();
-				break;
-			case NetworkClient.SET_OPTION:
-				progress.remove();
-				break;
-			case SyncClient.MSG:
-				final GameDataDB db = new GameDataDB(context);
-				db.recalcYourTurn();
-				db.close();
-				progress.remove();
-				break;
-			}
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
+			progress.remove();
+			break;
+		case NetworkClient.SET_OPTION:
+			progress.remove();
+			break;
+		case SyncClient.MSG:
+			final GameDataDB db = new GameDataDB(context);
+			db.recalcYourTurn();
+			db.close();
+			progress.remove();
+			break;
 		}
-		}
-	};
+		return true;
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState)

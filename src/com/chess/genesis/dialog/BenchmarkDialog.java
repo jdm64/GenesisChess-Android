@@ -23,25 +23,23 @@ import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
-public class BenchmarkDialog extends BaseDialog
+public class BenchmarkDialog extends BaseDialog implements Handler.Callback
 {
 	private TextView rnps;
 	private TextView gnps;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			final Bundle data = (Bundle) msg.obj;
+		final Bundle data = (Bundle) msg.obj;
 
-			rnps.setText(String.valueOf(data.getLong("rnps")) + " moves/sec");
-			gnps.setText(String.valueOf(data.getLong("gnps")) + " moves/sec");
+		rnps.setText(String.valueOf(data.getLong("rnps")) + " moves/sec");
+		gnps.setText(String.valueOf(data.getLong("gnps")) + " moves/sec");
 
-			final View button = findViewById(R.id.ok);
-			button.setEnabled(true);
-		}
-	};
+		final View button = findViewById(R.id.ok);
+		button.setEnabled(true);
+		return true;
+	}
 
 	public BenchmarkDialog(final Context context)
 	{
@@ -71,7 +69,7 @@ public class BenchmarkDialog extends BaseDialog
 			rnps.setText("running...");
 			gnps.setText("running...");
 
-			new Thread(new Benchmark(handle)).start();
+			new Thread(new Benchmark(new Handler(this))).start();
 		} else {
 			dismiss();
 		}

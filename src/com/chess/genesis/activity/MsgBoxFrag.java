@@ -26,7 +26,7 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import org.json.*;
 
-public class MsgBoxFrag extends BaseContentFrag
+public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 {
 	private final static String TAG = "MSGBOX";
 
@@ -37,39 +37,37 @@ public class MsgBoxFrag extends BaseContentFrag
 	private Bundle settings;
 	private String gameid;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			final JSONObject json = (JSONObject) msg.obj;
+		final JSONObject json = (JSONObject) msg.obj;
 
-			try {
-				if (json.getString("result").equals("error")) {
-					progress.remove();
-					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-					return;
-				}
-				switch (msg.what) {
-				case NetworkClient.SUBMIT_MSG:
-					final EditText txt = (EditText) act.findViewById(R.id.new_msg);
-					txt.setText("");
-
-					updateMsgList();
-					break;
-				case NetworkClient.SYNC_MSGS:
-					saveMsgs(json);
-					msglist_adapter.update();
-					msglist_view.setSelection(msglist_view.getCount() - 1);
-					GenesisNotifier.clearNotification(act, GenesisNotifier.NEWMGS_NOTE);
-					progress.dismiss();
-					break;
-				}
-			} catch (final JSONException e) {
-				throw new RuntimeException(e.getMessage(), e);
-			}
+	try {
+		if (json.getString("result").equals("error")) {
+			progress.remove();
+			Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+			return true;
 		}
-	};
+		switch (msg.what) {
+		case NetworkClient.SUBMIT_MSG:
+			final EditText txt = (EditText) act.findViewById(R.id.new_msg);
+			txt.setText("");
+
+			updateMsgList();
+			break;
+		case NetworkClient.SYNC_MSGS:
+			saveMsgs(json);
+			msglist_adapter.update();
+			msglist_view.setSelection(msglist_view.getCount() - 1);
+			GenesisNotifier.clearNotification(act, GenesisNotifier.NEWMGS_NOTE);
+			progress.dismiss();
+			break;
+		}
+		return true;
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
+	}
 
 	@Override
 	public String getBTag()
@@ -84,7 +82,7 @@ public class MsgBoxFrag extends BaseContentFrag
 
 		final View view = inflater.inflate(R.layout.fragment_msgbox, container, false);
 
-		net = new NetworkClient(act, handle);
+		net = new NetworkClient(act, new Handler(this));
 		progress = new ProgressMsg(act);
 
 		// restore settings

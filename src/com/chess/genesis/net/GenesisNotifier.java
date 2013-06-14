@@ -29,7 +29,7 @@ import com.chess.genesis.data.*;
 import java.util.*;
 import org.json.*;
 
-public class GenesisNotifier extends Service implements Runnable
+public class GenesisNotifier extends Service implements Runnable, Handler.Callback
 {
 	public final static int DEFAULT_POLL_FREQ = 30;
 
@@ -48,39 +48,37 @@ public class GenesisNotifier extends Service implements Runnable
 	private boolean fromalarm;
 	private boolean error;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			final JSONObject json = (JSONObject) msg.obj;
+		final JSONObject json = (JSONObject) msg.obj;
 
-		try {
-			if (json.getString("result").equals("error")) {
-				error = true;
-				socket.disconnect();
-			//	SendNotification(ERROR_NOTE, json.getString("reason"));
-				return;
-			}
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
+	try {
+		if (json.getString("result").equals("error")) {
+			error = true;
+			socket.disconnect();
+		//	SendNotification(ERROR_NOTE, json.getString("reason"));
+			return true;
 		}
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
 
-			switch (msg.what) {
-			case NetworkClient.SYNC_GAMES:
-				NewMove(json);
-				break;
-			case NetworkClient.SYNC_MSGS:
-				NewMsgs(json);
-				break;
-			case NetworkClient.GAME_STATUS:
-				game_status(json);
-				break;
-			}
-			// release lock
-			lock--;
+		switch (msg.what) {
+		case NetworkClient.SYNC_GAMES:
+			NewMove(json);
+			break;
+		case NetworkClient.SYNC_MSGS:
+			NewMsgs(json);
+			break;
+		case NetworkClient.GAME_STATUS:
+			game_status(json);
+			break;
 		}
-	};
+		// release lock
+		lock--;
+		return true;
+	}
 
 	public static void clearNotification(final Context context, final int id)
 	{
@@ -245,7 +243,7 @@ public class GenesisNotifier extends Service implements Runnable
 		error = false;
 		lock = 0;
 		socket = SocketClient.getNewInstance();
-		net = new NetworkClient(socket, this, handle);
+		net = new NetworkClient(socket, this, new Handler(this));
 		db = new GameDataDB(this);
 
 		final long mtime = pref.getLong(PrefKey.LASTMSGSYNC, 0);

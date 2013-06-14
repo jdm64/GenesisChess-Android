@@ -33,31 +33,29 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, OnGlobalLayoutListener
+public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, OnGlobalLayoutListener, Handler.Callback
 {
 	private final static String TAG = "MAINMENU";
 
-	public final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case LogoutConfirm.MSG:
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+		switch (msg.what) {
+		case LogoutConfirm.MSG:
+			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
 
-				pref.putBoolean(PrefKey.ISLOGGEDIN, false);
-				pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
-				pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
-				pref.putLong(PrefKey.LASTGAMESYNC, 0);
-				pref.putLong(PrefKey.LASTMSGSYNC, 0);
-				pref.commit();
+			pref.putBoolean(PrefKey.ISLOGGEDIN, false);
+			pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
+			pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
+			pref.putLong(PrefKey.LASTGAMESYNC, 0);
+			pref.putLong(PrefKey.LASTMSGSYNC, 0);
+			pref.commit();
 
-				updateLoggedInView();
-				break;
-			}
+			updateLoggedInView();
+			break;
 		}
-	};
+		return true;
+	}
 
 	@Override
 	public String getBTag()
@@ -248,7 +246,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		case R.id.logout:
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 			if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
-				new LogoutConfirm(act, handle).show();
+				new LogoutConfirm(act, new Handler(this)).show();
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
 			break;

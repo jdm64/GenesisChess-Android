@@ -30,40 +30,39 @@ import com.chess.genesis.util.*;
 import java.io.*;
 import org.json.*;
 
-public class GameListLocalFrag extends GameListFrag implements OnItemClickListener
+public class GameListLocalFrag extends GameListFrag implements OnItemClickListener, Handler.Callback
 {
 	public final static String TAG = "GAMELISTLOCAL";
 
+	private final Handler handle = new Handler(this);
 	private GameListAdapter gamelist_adapter;
 
-	public final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case DeleteLocalDialog.MSG:
-			case RenameGameDialog.MSG:
-				gamelist_adapter.update();
-				break;
-			case NewLocalGameDialog.MSG:
-				final GameDataDB db = new GameDataDB(act);
-				final Bundle bundle = (Bundle) msg.obj;
+		switch (msg.what) {
+		case DeleteLocalDialog.MSG:
+		case RenameGameDialog.MSG:
+			gamelist_adapter.update();
+			break;
+		case NewLocalGameDialog.MSG:
+			final GameDataDB db = new GameDataDB(act);
+			final Bundle bundle = (Bundle) msg.obj;
 
-				final int gametype2 = bundle.getInt("gametype");
-				final int gameopp = bundle.getInt("opponent");
-				String gamename = bundle.getString("name");
-				if (gamename.length() < 1)
-					gamename = "untitled";
+			final int gametype2 = bundle.getInt("gametype");
+			final int gameopp = bundle.getInt("opponent");
+			String gamename = bundle.getString("name");
+			if (gamename.length() < 1)
+				gamename = "untitled";
 
-				final Bundle gamedata = db.newLocalGame(gamename, gametype2, gameopp);
-				db.close();
+			final Bundle gamedata = db.newLocalGame(gamename, gametype2, gameopp);
+			db.close();
 
-				loadGame(gamedata);
-				break;
-			}
+			loadGame(gamedata);
+			break;
 		}
-	};
+		return true;
+	}
 
 	@Override
 	public String getBTag()

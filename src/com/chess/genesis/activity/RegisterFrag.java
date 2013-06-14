@@ -24,50 +24,49 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import org.json.*;
 
-public class RegisterFrag extends BaseContentFrag
+public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 {
 	private final static String TAG = "REGISTER";
 
+	private final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			switch (msg.what) {
-			case NetworkClient.REGISTER:
-				final JSONObject json = (JSONObject) msg.obj;
+		switch (msg.what) {
+		case NetworkClient.REGISTER:
+			final JSONObject json = (JSONObject) msg.obj;
 
-				try {
-					if (json.getString("result").equals("error")) {
-						progress.remove();
-						Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-						return;
-					}
-					progress.setText("Registration Successfull");
-					new RegisterActivation(act, handle).show();
-				} catch (final JSONException e) {
-					throw new RuntimeException(e.getMessage(), e);
+			try {
+				if (json.getString("result").equals("error")) {
+					progress.remove();
+					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+					return true;
 				}
-				break;
-			case RegisterConfirm.MSG:
-				progress.setText("Sending Registration");
-				final Bundle data = (Bundle) msg.obj;
-
-				net.register(data.getString("username"), data.getString("password"), data.getString("email"));
-				new Thread(net).start();
-				break;
-			case RegisterActivation.MSG:
-				if (isTablet)
-					getFragmentManager().popBackStack();
-				else
-					act.finish();
-				break;
+				progress.setText("Registration Successfull");
+				new RegisterActivation(act, handle).show();
+			} catch (final JSONException e) {
+				throw new RuntimeException(e.getMessage(), e);
 			}
+			break;
+		case RegisterConfirm.MSG:
+			progress.setText("Sending Registration");
+			final Bundle data = (Bundle) msg.obj;
+
+			net.register(data.getString("username"), data.getString("password"), data.getString("email"));
+			new Thread(net).start();
+			break;
+		case RegisterActivation.MSG:
+			if (isTablet)
+				getFragmentManager().popBackStack();
+			else
+				act.finish();
+			break;
 		}
-	};
+		return true;
+	}
 
 	@Override
 	public String getBTag()

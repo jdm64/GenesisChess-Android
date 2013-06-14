@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import org.json.*;
 
-public class SyncClient implements Runnable
+public class SyncClient implements Runnable, Handler.Callback
 {
 	public final static int MSG = 101;
 
@@ -37,6 +37,7 @@ public class SyncClient implements Runnable
 
 	private final Context context;
 	private final Handler callback;
+	private final Handler handle = new Handler(this);
 	private final NetworkClient net;
 
 	private int lock = 0;
@@ -44,50 +45,48 @@ public class SyncClient implements Runnable
 	private int gameType = Enums.ONLINE_GAME;
 	private boolean error = false;
 
-	private final Handler handle = new Handler()
+	@Override
+	public boolean handleMessage(final Message msg)
 	{
-		@Override
-		public void handleMessage(final Message msg)
-		{
-			final JSONObject json = (JSONObject) msg.obj;
+		final JSONObject json = (JSONObject) msg.obj;
 
-		try {
-			if (json.getString("result").equals("error")) {
-				callback.sendMessage(Message.obtain(callback, MSG, json));
-				error = true;
-				return;
-			}
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
+	try {
+		if (json.getString("result").equals("error")) {
+			callback.sendMessage(Message.obtain(callback, MSG, json));
+			error = true;
+			return true;
 		}
+	} catch (final JSONException e) {
+		throw new RuntimeException(e.getMessage(), e);
+	}
 
-			switch (msg.what) {
-			case NetworkClient.GAME_STATUS:
-				game_status(json);
-				break;
-			case NetworkClient.GAME_INFO:
-				game_info(json);
-				break;
-			case NetworkClient.GAME_DATA:
-				game_data(json);
-				break;
-			case NetworkClient.SYNC_GAMIDS:
-				if (gameType == Enums.ONLINE_GAME)
-					sync_active(json);
-				else
-					sync_archive(json);
-				break;
-			case NetworkClient.SYNC_GAMES:
-				sync_recent(json);
-				break;
-			case NetworkClient.SYNC_MSGS:
-				saveMsgs(json);
-				break;
-			}
-			// release lock
-			lock--;
+		switch (msg.what) {
+		case NetworkClient.GAME_STATUS:
+			game_status(json);
+			break;
+		case NetworkClient.GAME_INFO:
+			game_info(json);
+			break;
+		case NetworkClient.GAME_DATA:
+			game_data(json);
+			break;
+		case NetworkClient.SYNC_GAMIDS:
+			if (gameType == Enums.ONLINE_GAME)
+				sync_active(json);
+			else
+				sync_archive(json);
+			break;
+		case NetworkClient.SYNC_GAMES:
+			sync_recent(json);
+			break;
+		case NetworkClient.SYNC_MSGS:
+			saveMsgs(json);
+			break;
 		}
-	};
+		// release lock
+		lock--;
+		return true;
+	}
 
 	public SyncClient(final Context _context, final Handler handler)
 	{
