@@ -49,6 +49,47 @@ public class NetworkClient implements Runnable
 	public final static int USER_STATS = 22;
 	public final static int GAME_DRAW = 23;
 
+	private final static String _ACTION = "action";
+	private final static String _COLOR = "color";
+	private final static String _DRAW = "draw";
+	private final static String _EMAIL = "email";
+	private final static String _ERROR = "error";
+	private final static String _GAME_DATA = "gamedata";
+	private final static String _GAMEID = "gameid";
+	private final static String _GAMEIDS = "gameids";
+	private final static String _GAME_INFO = "gameinfo";
+	private final static String _GAME_SCORE = "gamescore";
+	private final static String _GAME_STATUS = "gamestatus";
+	private final static String _GAME_TYPE = "gametype";
+	private final static String _GET_OPTION = "getoption";
+	private final static String _IDLE_RESIGN = "idleresign";
+	private final static String _JOIN_GAME = "joingame";
+	private final static String _LOGIN = "login";
+	private final static String _MOVE = "move";
+	private final static String _NEW_GAME = "newgame";
+	private final static String _NUDGE = "nudge";
+	private final static String _OK = "ok";
+	private final static String _OPPONENT = "opponent";
+	private final static String _OPTION = "option";
+	private final static String _PASSHASH = "passhash";
+	private final static String _POOL_INFO = "poolinfo";
+	private final static String _REASON = "reason";
+	private final static String _REGISTER = "register";
+	private final static String _REQUEST = "request";
+	private final static String _RESIGN = "resign";
+	private final static String _RESULT = "result";
+	private final static String _SEND_MOVE = "sendmove";
+	private final static String _SEND_MSG = "sendmsg";
+	private final static String _SET_OPTION = "setoption";
+	private final static String _SYNC_GAMES = "syncgames";
+	private final static String _SYNC_MSGS = "syncmsgs";
+	private final static String _TIME = "time";
+	private final static String _TXT = "txt";
+	private final static String _TYPE = "type";
+	private final static String _USERNAME = "username";
+	private final static String _USER_STATS = "userstats";
+	private final static String _VALUE = "value";
+
 	private final static String CANT_CONTACT_MSG = "Can't contact server for sending data";
 	private final static String LOST_CONNECTION_MSG = "Lost connection during sending data";
 	private final static String SERVER_ILLOGICAL_MSG = "Server response illogical";
@@ -76,6 +117,28 @@ public class NetworkClient implements Runnable
 		socket = Socket;
 	}
 
+	private void newRequest(final String type, final int callbackId, final boolean requiresLogin)
+	{
+		fid = callbackId;
+		loginRequired = requiresLogin;
+		request = new JSONObject();
+
+		try {
+			request.put(_REQUEST, type);
+		} catch (final JSONException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	private <Type> void addValue(final String key, final Type value)
+	{
+		try {
+			request.put(key, value);
+		} catch (final JSONException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
 	// Crypto.LoginKey makes a network connection, but all
 	// network calls must be on a non-main thread. This finishes
 	// the json setup started in login_user.
@@ -85,14 +148,14 @@ public class NetworkClient implements Runnable
 
 		try {
 			try {
-				request.put("passhash", Crypto.LoginKey(socket, request.getString("passhash")));
+				request.put(_PASSHASH, Crypto.LoginKey(socket, request.getString(_PASSHASH)));
 			} catch (final JSONException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
 		} catch (final SocketException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", CANT_CONTACT_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, CANT_CONTACT_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -100,8 +163,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", LOST_CONNECTION_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, LOST_CONNECTION_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -120,8 +183,8 @@ public class NetworkClient implements Runnable
 			socket.write(data);
 		} catch (final SocketException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", CANT_CONTACT_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, CANT_CONTACT_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -129,8 +192,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", LOST_CONNECTION_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, LOST_CONNECTION_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -144,8 +207,8 @@ public class NetworkClient implements Runnable
 			json = socket.read();
 		} catch (final SocketException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", CANT_CONTACT_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, CANT_CONTACT_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -153,8 +216,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", LOST_CONNECTION_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, LOST_CONNECTION_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -162,8 +225,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final JSONException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", SERVER_ILLOGICAL_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, SERVER_ILLOGICAL_MSG);
 				socket.logError(context, e, data);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -186,16 +249,16 @@ public class NetworkClient implements Runnable
 
 		try {
 			try {
-				json.put("request", "login");
-				json.put("username", username);
-				json.put("passhash", Crypto.LoginKey(socket, password));
+				json.put(_REQUEST, _LOGIN);
+				json.put(_USERNAME, username);
+				json.put(_PASSHASH, Crypto.LoginKey(socket, password));
 			} catch (final JSONException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
 		} catch (final SocketException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", CANT_CONTACT_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, CANT_CONTACT_MSG);
 				socket.logError(context, e, json);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -203,8 +266,8 @@ public class NetworkClient implements Runnable
 			error = true;
 		} catch (final IOException e) {
 			try {
-				json.put("result", "error");
-				json.put("reason", LOST_CONNECTION_MSG);
+				json.put(_RESULT, _ERROR);
+				json.put(_REASON, LOST_CONNECTION_MSG);
 				socket.logError(context, e, request);
 			} catch (final JSONException j) {
 				throw new RuntimeException(j.getMessage(), j);
@@ -220,7 +283,7 @@ public class NetworkClient implements Runnable
 		json = send_request(json);
 
 		try {
-			if (!json.getString("result").equals("ok")) {
+			if (!json.getString(_RESULT).equals(_OK)) {
 				callback.sendMessage(Message.obtain(callback, fid, json));
 				return false;
 			}
@@ -254,329 +317,140 @@ public class NetworkClient implements Runnable
 
 	public void register(final String username, final String password, final String email)
 	{
-		fid = REGISTER;
-		loginRequired = false;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "register");
-			request.put("username", username);
-			request.put("passhash", Crypto.HashPasswd(password));
-			request.put("email", email);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_REGISTER, REGISTER, false);
+		addValue(_USERNAME, username);
+		addValue(_PASSHASH, Crypto.HashPasswd(password));
+		addValue(_EMAIL, email);
 	}
 
 	public void login_user(final String username, final String password)
 	{
-		fid = LOGIN;
-		loginRequired = false;
+		newRequest(_LOGIN, LOGIN, false);
+		addValue(_USERNAME, username);
 
-		request = new JSONObject();
-
-		try {
-			request.put("request", "login");
-			request.put("username", username);
-
-			// temporarily save password to passhash
-			// login_setup will finish the creation of
-			// the json in a new thread.
-			request.put("passhash", password);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		/*
+		 * temporarily save password to passhash login_setup will finish
+		 * the creation of the json in a new thread.
+		 */
+		addValue(_PASSHASH, password);
 	}
 
 	public void join_game(final String gametype)
 	{
-		fid = JOIN_GAME;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "joingame");
-			request.put("gametype", gametype);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_JOIN_GAME, JOIN_GAME, true);
+		addValue(_GAME_TYPE, gametype);
 	}
 
 	public void new_game(final String opponent, final String gametype, final String color)
 	{
-		fid = NEW_GAME;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "newgame");
-			request.put("opponent", opponent);
-			request.put("gametype", gametype);
-			request.put("color", color);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
-
+		newRequest(_NEW_GAME, NEW_GAME, true);
+		addValue(_OPPONENT, opponent);
+		addValue(_GAME_TYPE, gametype);
+		addValue(_COLOR, color);
 	}
 
 	public void submit_move(final String gameid, final String move)
 	{
-		fid = SUBMIT_MOVE;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "sendmove");
-			request.put("gameid", gameid);
-			request.put("move", move);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_SEND_MOVE, SUBMIT_MOVE, true);
+		addValue(_GAMEID, gameid);
+		addValue(_MOVE, move);
 	}
 
 	public void resign_game(final String gameid)
 	{
-		fid = RESIGN_GAME;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "resign");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_RESIGN, RESIGN_GAME, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void submit_msg(final String gameid, final String msg)
 	{
-		fid = SUBMIT_MSG;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "sendmsg");
-			request.put("gameid", gameid);
-			request.put("txt", msg);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_SEND_MSG, SUBMIT_MSG, true);
+		addValue(_GAMEID, gameid);
+		addValue(_TXT, msg);
 	}
 
 	public void sync_msgs(final long time)
 	{
-		fid = SYNC_MSGS;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "syncmsgs");
-			request.put("time", time);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_SYNC_MSGS, SYNC_MSGS, true);
+		addValue(_TIME, time);
 	}
 
 	public void game_status(final String gameid)
 	{
-		fid = GAME_STATUS;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "gamestatus");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GAME_STATUS, GAME_STATUS, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void game_info(final String gameid)
 	{
-		fid = GAME_INFO;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "gameinfo");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GAME_INFO, GAME_INFO, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void game_data(final String gameid)
 	{
-		fid = GAME_DATA;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "gamedata");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GAME_DATA, GAME_DATA, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void sync_gameids(final String type)
 	{
-		fid = SYNC_GAMIDS;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "gameids");
-			request.put("type", type);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GAMEIDS, SYNC_GAMIDS, true);
+		addValue(_TYPE, type);
 	}
 
 	public void sync_games(final long time)
 	{
-		fid = SYNC_GAMES;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "syncgames");
-			request.put("time", time);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_SYNC_GAMES, SYNC_GAMES, true);
+		addValue(_TIME, time);
 	}
 
 	public void game_score(final String gameid)
 	{
-		fid = GAME_SCORE;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "gamescore");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GAME_SCORE, GAME_SCORE, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public <Type> void set_option(final String option, final Type value)
 	{
-		fid = SET_OPTION;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "setoption");
-			request.put("option", option);
-			request.put("value", value);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_SET_OPTION, SET_OPTION, true);
+		addValue(_OPTION, option);
+		addValue(_VALUE, value);
 	}
 
 	public void get_option(final String option)
 	{
-		fid = GET_OPTION;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "getoption");
-			request.put("option", option);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_GET_OPTION, GET_OPTION, true);
+		addValue(_OPTION, option);
 	}
 
 	public void pool_info()
 	{
-		fid = POOL_INFO;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "poolinfo");
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_POOL_INFO, POOL_INFO, true);
 	}
 
 	public void nudge_game(final String gameid)
 	{
-		fid = NUDGE_GAME;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "nudge");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_NUDGE, NUDGE_GAME, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void idle_resign(final String gameid)
 	{
-		fid = IDLE_RESIGN;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "idleresign");
-			request.put("gameid", gameid);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_IDLE_RESIGN, IDLE_RESIGN, true);
+		addValue(_GAMEID, gameid);
 	}
 
 	public void user_stats(final String username)
 	{
-		fid = USER_STATS;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "userstats");
-			request.put("username", username);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_USER_STATS, USER_STATS, true);
+		addValue(_USERNAME, username);
 	}
 
 	public void game_draw(final String gameid, final String action)
 	{
-		fid = GAME_DRAW;
-		loginRequired = true;
-
-		request = new JSONObject();
-
-		try {
-			request.put("request", "draw");
-			request.put("gameid", gameid);
-			request.put("action", action);
-		} catch (final JSONException e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		newRequest(_DRAW, GAME_DRAW, true);
+		addValue(_GAMEID, gameid);
+		addValue(_ACTION, action);
 	}
 }
