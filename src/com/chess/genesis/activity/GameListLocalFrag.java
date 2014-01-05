@@ -188,7 +188,12 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 	public void recieveGame(final Intent data)
 	{
 	try {
-		final String str = FileUtils.readFile(data.getData().getPath());
+		if (data == null || data.getDataString() == null) {
+			Toast.makeText(act, "Intent has no data", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		final String str = FileUtils.readFile(data.getDataString());
 		final JSONObject json = (JSONObject) new JSONTokener(str).nextValue();
 		final Bundle game = GameParser.parse(json);
 		final GameDataDB db = new GameDataDB(act);
