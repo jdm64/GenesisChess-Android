@@ -24,7 +24,7 @@ public class CallBackPreference extends DialogPreference
 {
 	public interface CallBack
 	{
-		void runCallBack(final CallBackPreference preference, final boolean result);
+		void runCallBack(final CallBackPreference preference);
 	}
 
 	private CallBack action;
@@ -52,8 +52,8 @@ public class CallBackPreference extends DialogPreference
 	{
 		super.onDialogClosed(positiveResult);
 
-		if (action == null)
+		if (action == null || !positiveResult)
 			return;
-		action.runCallBack(this, positiveResult);
+		action.runCallBack(this);
 	}
 }

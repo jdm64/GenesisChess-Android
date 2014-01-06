@@ -156,11 +156,8 @@ public class Settings extends PreferenceActivity implements
 	}
 
 	@Override
-	public void runCallBack(final CallBackPreference preference, final boolean result)
+	public void runCallBack(final CallBackPreference preference)
 	{
-		if (!result)
-			return;
-
 		final String key = preference.getKey();
 		final GameDataDB db = new GameDataDB(this);
 		final SyncClient sync = new SyncClient(this, handle);
