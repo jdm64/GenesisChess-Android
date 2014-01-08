@@ -55,7 +55,7 @@ public class Settings extends PreferenceActivity implements
 		switch (msg.what) {
 		case NetworkClient.GET_OPTION:
 			// only emailnote supported
-			final CheckBoxPreference email = (CheckBoxPreference) findPreference("emailNoteEnabled");
+			final CheckBoxPreference email = (CheckBoxPreference) findPreference(PrefKey.NOTE_EMAIL);
 			email.setChecked(json.getBoolean("value"));
 
 			progress.remove();

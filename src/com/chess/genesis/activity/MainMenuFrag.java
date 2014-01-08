@@ -180,7 +180,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 				return;
 			}
 			intent = new Intent(act, UserStats.class);
-			intent.putExtra("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+			intent.putExtra(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 			startActivity(intent);
 			break;
 		case R.id.login:
@@ -218,7 +218,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			} else {
 				final BaseContentFrag frag = new UserStatsFrag();
 				final Bundle bundle = new Bundle();
-				bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+				bundle.putString(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 				frag.setArguments(bundle);
 
 				fintent.setFrag(R.id.panel02, frag);
@@ -269,7 +269,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		case Enums.USER_STATS:
 			frag = new UserStatsFrag();
 			final Bundle bundle = new Bundle();
-			bundle.putString("username", pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+			bundle.putString(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
 			frag.setArguments(bundle);
 			break;
 		default:
