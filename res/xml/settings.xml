@@ -2,32 +2,12 @@
 <PreferenceScreen
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory
-	android:title="Game Settings">
-		<Preference
-		android:key="benchmark"
-		android:persistent="false"
-		android:title="CPU Benchmark"
-		android:summary="See how fast your device can search moves"/>
+	android:title="Board Settings">
 		<CheckBoxPreference
 		android:key="viewAsBlack"
 		android:defaultValue="true"
 		android:title="View As Black"
 		android:summary="View as black when playing black"/>
-		<CheckBoxPreference
-		android:key="screenAlwaysOn"
-		android:defaultValue="false"
-		android:title="Keep Screen Active"
-		android:summary="Force the screen on while in a game"/>
-		<CheckBoxPreference
-		android:key="enableAds"
-		android:defaultValue="true"
-		android:title="Enable Ads"
-		android:summary="Enable the display of ads"/>
-		<CheckBoxPreference
-		android:key="tabletMode"
-		android:defaultValue="false"
-		android:title="Enable Tablet Layout"
-		android:summary="Load the tablet layout (App restart required)"/>
 		<CheckBoxPreference
 		android:key="showCaptured"
 		android:defaultValue="true"
@@ -35,7 +15,25 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:summary="Display captured pieces below the board"/>
 	</PreferenceCategory>
 	<PreferenceCategory
-	android:title="Device Notifications">
+	android:title="UI Settings">
+		<CheckBoxPreference
+		android:key="screenAlwaysOn"
+		android:defaultValue="false"
+		android:title="Keep Screen Active"
+		android:summary="Force the screen on while in a game"/>
+		<CheckBoxPreference
+		android:key="tabletMode"
+		android:defaultValue="false"
+		android:title="Enable Tablet Layout"
+		android:summary="Load the tablet layout (App restart required)"/>
+		<CheckBoxPreference
+		android:key="enableAds"
+		android:defaultValue="true"
+		android:title="Enable Ads"
+		android:summary="Enable the display of ads"/>
+	</PreferenceCategory>
+	<PreferenceCategory
+	android:title="Notifications">
 		<CheckBoxPreference
 		android:key="noteEnabled"
 		android:defaultValue="true"
@@ -49,69 +47,81 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:dependency="noteEnabled"
 		android:title="Update Frequency"
 		android:summary="How often the server is checked"/>
-		<CheckBoxPreference
-		android:key="noteRingtoneEnable"
-		android:defaultValue="false"
-		android:dependency="noteEnabled"
-		android:title="Enable Ringtone"
-		android:summary="Play sound for notifications"/>
-		<RingtonePreference
-		android:key="noteRingtone"
-		android:defaultValue="content://settings/system/notification_sound"
-		android:ringtoneType="notification"
-		android:showSilent="false"
-		android:dependency="noteRingtoneEnable"
-		android:title="Ringtone Sound"
-		android:summary="Select ringtone sound to play"/>
-		<CheckBoxPreference
-		android:key="noteVibrateEnable"
-		android:defaultValue="true"
-		android:dependency="noteEnabled"
-		android:title="Enable Vibrate"
-		android:summary="Vibrate when sending notifications"/>
-		<com.chess.genesis.util.VibratePreference
-		android:key="noteVibrate"
-		android:defaultValue="0,150"
-		android:entries="@array/vibrate_patt_entries"
-		android:entryValues="@array/vibrate_patt_values"
-		android:dependency="noteVibrateEnable"
-		android:title="Vibrate Pattern"
-		android:summary="Select vibrate pattern to run"/>
-	</PreferenceCategory>
-	<PreferenceCategory
-	android:title="Server Notifications">
+		<PreferenceScreen
+		android:title="Notification Settings"
+		android:summary="Ringtone and vibrate options"
+		android:dependency="noteEnabled">
+			<CheckBoxPreference
+			android:key="noteRingtoneEnable"
+			android:defaultValue="false"
+			android:dependency="noteEnabled"
+			android:title="Enable Ringtone"
+			android:summary="Play sound on notifications"/>
+			<RingtonePreference
+			android:key="noteRingtone"
+			android:defaultValue="content://settings/system/notification_sound"
+			android:ringtoneType="notification"
+			android:showSilent="false"
+			android:dependency="noteRingtoneEnable"
+			android:title="Ringtone Sound"
+			android:summary="Select ringtone sound to play"/>
+			<CheckBoxPreference
+			android:key="noteVibrateEnable"
+			android:defaultValue="true"
+			android:dependency="noteEnabled"
+			android:title="Enable Vibrate"
+			android:summary="Vibrate on notifications"/>
+			<com.chess.genesis.util.VibratePreference
+			android:key="noteVibrate"
+			android:defaultValue="0,150"
+			android:entries="@array/vibrate_patt_entries"
+			android:entryValues="@array/vibrate_patt_values"
+			android:dependency="noteVibrateEnable"
+			android:title="Vibrate Pattern"
+			android:summary="Select vibrate pattern to use"/>
+		</PreferenceScreen>
 		<CheckBoxPreference
 		android:key="emailNoteEnabled"
 		android:defaultValue="true"
 		android:persistent="false"
 		android:title="Your Turn Emails"
-		android:summary="Email notifications on your turn"/>
+		android:summary="Send email notifications on your turn"/>
 	</PreferenceCategory>
 	<PreferenceCategory
-	android:title="Database Functions">
-		<com.chess.genesis.util.CallBackPreference
-		android:key="deleteLocalTable"
+	android:title="Developer Tools">
+		<Preference
+		android:key="benchmark"
 		android:persistent="false"
-		android:title="Delete Local Games"
-		android:dialogMessage="@string/deleteLocalTable"
-		android:summary="Remove all local games"/>
-		<com.chess.genesis.util.CallBackPreference
-		android:key="resyncOnlineTable"
-		android:persistent="false"
-		android:title="Sync Active Games"
-		android:dialogMessage="@string/resyncOnlineTable"
-		android:summary="Force a full resync of all active games"/>
-		<com.chess.genesis.util.CallBackPreference
-		android:key="resyncArchiveTable"
-		android:persistent="false"
-		android:title="Sync Archive Games"
-		android:dialogMessage="@string/resyncArchiveTable"
-		android:summary="Force a full resync of all archive games"/>
-		<com.chess.genesis.util.CallBackPreference
-		android:key="resyncMsgTable"
-		android:persistent="false"
-		android:title="Sync Messages"
-		android:dialogMessage="@string/resyncMsgTable"
-		android:summary="Force a full resync of all messages"/>
+		android:title="CPU Benchmark"
+		android:summary="See how fast your device can search moves"/>
+		<PreferenceScreen
+		android:key="dbtools"
+		android:title="Database Tools"
+		android:summary="Clear and resync DB tables">
+			<com.chess.genesis.util.CallBackPreference
+			android:key="deleteLocalTable"
+			android:persistent="false"
+			android:title="Delete Local Games"
+			android:dialogMessage="@string/deleteLocalTable"
+			android:summary="Remove all local games"/>
+			<com.chess.genesis.util.CallBackPreference
+			android:key="resyncOnlineTable"
+			android:persistent="false"
+			android:title="Sync Active Games"
+			android:dialogMessage="@string/resyncOnlineTable"
+			android:summary="Force a full resync of all active games"/>
+			<com.chess.genesis.util.CallBackPreference
+			android:key="resyncArchiveTable"
+			android:persistent="false"
+			android:title="Sync Archive Games"
+			android:dialogMessage="@string/resyncArchiveTable"
+			android:summary="Force a full resync of all archive games"/>
+			<com.chess.genesis.util.CallBackPreference
+			android:key="resyncMsgTable"
+			android:persistent="false"
+			android:title="Sync Messages"
+			android:dialogMessage="@string/resyncMsgTable"
+			android:summary="Force a full resync of all messages"/>
+		</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>
