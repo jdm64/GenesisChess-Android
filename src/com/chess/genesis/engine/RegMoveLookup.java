@@ -143,7 +143,7 @@ abstract class RegMoveLookup extends BaseBoard
 	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
 	{
 		final int offset = db.step * ((To > From)? 1:-1);
-		for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
+		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
 			if (square[to] == Piece.EMPTY) {
 				continue;
 			} else if (OWN_PIECE(square[From], square[to])) {
@@ -165,7 +165,7 @@ abstract class RegMoveLookup extends BaseBoard
 	{
 		final int[] offset = offsets[Piece.BISHOP];
 		for (int i = 0; offset[i] != 0; i++) {
-			for (int to = From + offset[i], k = 1; (to & 0x88) == 0; to += offset[i], k++) {
+			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY) {
 					continue;
 				} else if (OWN_PIECE(FromColor, square[to])) {

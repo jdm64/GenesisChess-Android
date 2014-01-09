@@ -478,7 +478,7 @@ public class GenBoard extends GenPosition implements Board
 		final int color = pieceType / Math.abs(pieceType);
 		final boolean stmCk = incheck(color);
 		for (int loc = 0x77; loc >= 0; loc--) {
-			if ((loc & 0x88) != 0) {
+			if (OFF_BOARD(loc)) {
 				loc -= 7;
 				continue;
 			} else if (square[loc] != Piece.EMPTY) {

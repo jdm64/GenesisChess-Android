@@ -52,6 +52,16 @@ public abstract class BaseBoard
 		return x & 7;
 	}
 
+	public static boolean ON_BOARD(final int sq)
+	{
+		return (sq & 0x88) == 0;
+	}
+
+	public static boolean OFF_BOARD(final int sq)
+	{
+		return (sq & 0x88) != 0;
+	}
+
 	public static boolean NOT_CAPTURE(final int A, final int B)
 	{
 		return (A * B >= 0);
@@ -106,7 +116,7 @@ public abstract class BaseBoard
 		case Piece.ROOK:
 		case Piece.QUEEN:
 			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; (to & 0x88) == 0; to += offset[i]) {
+				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
 					if (square[to] == Piece.EMPTY) {
 						list[next++] = to;
 						continue;
@@ -121,7 +131,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if ((to & 0x88) != 0)
+				if (OFF_BOARD(to))
 					continue;
 				else if (ANY_MOVE(square[From], square[to]))
 					list[next++] = to;
@@ -140,7 +150,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if ((to & 0x88) != 0)
+				if (OFF_BOARD(to))
 					continue;
 				else if (CAPTURE_MOVE(square[From], square[to]))
 					list[next++] = to;
@@ -150,7 +160,7 @@ public abstract class BaseBoard
 		case Piece.ROOK:
 		case Piece.QUEEN:
 			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; (to & 0x88) == 0; to += offset[i]) {
+				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
 					if (square[to] == Piece.EMPTY)
 						continue;
 					else if (CAPTURE_MOVE(square[From], square[to]))
@@ -172,7 +182,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if ((to & 0x88) != 0)
+				if (OFF_BOARD(to))
 					continue;
 				else if (square[to] == Piece.EMPTY)
 					list[next++] = to;
@@ -182,7 +192,7 @@ public abstract class BaseBoard
 		case Piece.ROOK:
 		case Piece.QUEEN:
 			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; (to & 0x88) == 0; to += offset[i]) {
+				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
 					if (square[to] == Piece.EMPTY)
 						list[next++] = to;
 					else
@@ -216,7 +226,7 @@ public abstract class BaseBoard
 					if (OWN_PIECE(square[From], square[To]))
 						return false;
 					i += ((To - From > 0)? 0 : n);
-					for (int k = From + offset[i]; (k & 0x88) == 0; k += offset[i]) {
+					for (int k = From + offset[i]; ON_BOARD(k); k += offset[i]) {
 						if (k == To)
 							return true;
 						else if (square[k] != Piece.EMPTY)
@@ -234,7 +244,7 @@ public abstract class BaseBoard
 		// ROOK
 		int[] offset = offsets[Piece.ROOK];
 		for (int i = 0; offset[i] != 0; i++) {
-			for (int to = From + offset[i], k = 1; (to & 0x88) == 0; to += offset[i], k++) {
+			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY)
 					continue;
 				else if (OWN_PIECE(FromColor, square[to]))
@@ -251,7 +261,7 @@ public abstract class BaseBoard
 		offset = offsets[Piece.KNIGHT];
 		for (int i = 0; offset[i] != 0; i++) {
 			final int to = From + offset[i];
-			if ((to & 0x88) != 0)
+			if (OFF_BOARD(to))
 				continue;
 			else if (OWN_PIECE(FromColor, square[to]))
 				continue;
@@ -263,7 +273,7 @@ public abstract class BaseBoard
 
 	public boolean attackLine(final int From, final int To)
 	{
-		if (((From | To) & 0x88) != 0)
+		if (OFF_BOARD(From | To))
 			return false;
 
 		final int diff = Math.abs(From - To);
@@ -279,7 +289,7 @@ public abstract class BaseBoard
 			return attackLine_Bishop(db, From, To);
 		case Piece.ROOK:
 			final int offset = db.step * ((To > From)? 1:-1);
-			for (int to = From + offset, k = 1; (to & 0x88) == 0; to += offset, k++) {
+			for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
 				if (square[to] == Piece.EMPTY)
 					continue;
 				else if (OWN_PIECE(square[From], square[to]))
