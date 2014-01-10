@@ -132,11 +132,9 @@ public class HintList
 		} else if (selected == index) {
 			// clicking the same square
 			clearSelect();
-		} else if (selected < 0x88) {
-			// switching from board to place piece
-			clear();
-			setSelected(pb, index);
 		} else {
+			// switching from board to place piece
+			// OR
 			// switching to another place piece
 			clear();
 			setSelected(pb, index);

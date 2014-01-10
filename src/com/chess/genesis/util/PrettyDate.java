@@ -35,7 +35,7 @@ public class PrettyDate extends Date
 
 	public PrettyDate(final String milliseconds)
 	{
-		super(Long.valueOf(milliseconds));
+		super(Long.parseLong(milliseconds));
 	}
 
 	// !SICK!

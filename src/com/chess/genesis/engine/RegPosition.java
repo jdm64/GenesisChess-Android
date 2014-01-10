@@ -62,7 +62,7 @@ class RegPosition extends RegMoveLookup
 		ply = Math.max(ply, tply);
 
 		if (stm == Piece.WHITE) {
-			if (ply % 2 == 1)
+			if (ply % 2 != 0)
 				ply++;
 		} else if (ply % 2 == 0) {
 			ply++;
@@ -153,7 +153,7 @@ class RegPosition extends RegMoveLookup
 			n++;
 		}
 		ply = Integer.parseInt(num.toString());
-		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
+		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
 
 		setMaxPly();
 
@@ -182,7 +182,7 @@ class RegPosition extends RegMoveLookup
 
 		if (flags.canEnPassant() != 0) {
 			fen.append((char) ('a' + flags.enPassantFile()));
-			fen.append((ply % 2 == 1)? '3':'6');
+			fen.append((ply % 2 != 0)? '3':'6');
 		}
 		fen.append(':');
 		fen.append(ply);

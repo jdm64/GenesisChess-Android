@@ -54,7 +54,7 @@ class GenPosition extends GenMoveLookup
 		ply = Math.max(ply, tply);
 
 		if (stm == Piece.WHITE) {
-			if (ply % 2 == 1)
+			if (ply % 2 != 0)
 				ply++;
 		} else if (ply % 2 == 0) {
 			ply++;
@@ -113,7 +113,7 @@ class GenPosition extends GenMoveLookup
 			n++;
 		}
 		ply = Integer.parseInt(num.toString());
-		stm = (ply % 2 == 1)? Piece.BLACK : Piece.WHITE;
+		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
 
 		setMaxPly();
 

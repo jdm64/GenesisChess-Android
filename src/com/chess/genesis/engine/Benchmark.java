@@ -23,10 +23,14 @@ public class Benchmark implements Runnable
 {
 	public final static int MSG = 118;
 
+	public final static String REG_NPS = "rnps";
+	public final static String GEN_NPS = "gnps";
+
 	private final Handler handle;
 	private final RegBoard rboard;
 	private final GenBoard gboard;
 	private final MoveFlags flags;
+
 	private MoveListPool pool;
 	private long start;
 	private long end;
@@ -117,12 +121,9 @@ public class Benchmark implements Runnable
 	@Override
 	public synchronized void run()
 	{
-		final long gnps = GenBench();
-		final long rnps = RegBench();
-
 		final Bundle bundle = new Bundle();
-		bundle.putLong("rnps", rnps);
-		bundle.putLong("gnps", gnps);
+		bundle.putLong(REG_NPS, RegBench());
+		bundle.putLong(GEN_NPS, GenBench());
 
 		handle.sendMessage(handle.obtainMessage(MSG, bundle));
 	}

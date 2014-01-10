@@ -226,7 +226,7 @@ class GameListItem extends View
 	protected void onDraw(final Canvas canvas)
 	{
 		// background color
-		if (!isPressed() && index % 2 == 1)
+		if (!isPressed() && index % 2 != 0)
 			canvas.drawColor(MColors.TEAL_PASTEL);
 
 		// icon

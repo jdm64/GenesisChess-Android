@@ -39,9 +39,9 @@ public class BoardButton extends PlaceButton
 		super(context, _cache, Piece.NONE);
 
 		squareIndex = index;
-		squareColor = ((index / 16) % 2 == 1)?
-				((index % 2 == 1)? BLACK : WHITE) :
-				((index % 2 == 1)? WHITE : BLACK);
+		squareColor = ((index / 16) % 2 != 0)?
+				((index % 2 != 0)? BLACK : WHITE) :
+				((index % 2 != 0)? WHITE : BLACK);
 		setId(squareIndex);
 	}
 
