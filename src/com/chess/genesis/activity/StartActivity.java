@@ -19,7 +19,7 @@ package com.chess.genesis.activity;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
 public class StartActivity extends Activity
@@ -33,8 +33,7 @@ public class StartActivity extends Activity
 		UpgradeHandler.run(this);
 
 		// set layout mode
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean isTablet = pref.getBoolean(PrefKey.TABLETMODE, false);
+		final boolean isTablet = Pref.getBool(this, R.array.pf_tabletMode);
 
 		if (isTablet)
 			startActivity(new Intent(this, MainMenuTablet.class));

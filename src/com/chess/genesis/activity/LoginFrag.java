@@ -18,9 +18,7 @@ package com.chess.genesis.activity;
 
 import android.app.*;
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
@@ -50,13 +48,13 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 			handleNetwork(msg);
 			break;
 		case LogoutConfirm.MSG:
-			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+			final PrefEdit pref = new PrefEdit(act);
 
-			pref.putBoolean(PrefKey.ISLOGGEDIN, false);
-			pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
-			pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
-			pref.putLong(PrefKey.LASTGAMESYNC, 0);
-			pref.putLong(PrefKey.LASTMSGSYNC, 0);
+			pref.putBool(R.array.pf_isLoggedIn);
+			pref.putString(R.array.pf_username);
+			pref.putString(R.array.pf_passhash);
+			pref.putLong(R.array.pf_lastgamesync);
+			pref.putLong(R.array.pf_lastmsgsync);
 			pref.commit();
 
 			EditText txt = (EditText) act.findViewById(R.id.username);
@@ -98,10 +96,10 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 			txt = (EditText) act.findViewById(R.id.password);
 			final String password = txt.getText().toString();
 
-			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-			pref.putBoolean(PrefKey.ISLOGGEDIN, true);
-			pref.putString(PrefKey.USERNAME, username);
-			pref.putString(PrefKey.PASSHASH, password);
+			final PrefEdit pref = new PrefEdit(act);
+			pref.putBool(R.array.pf_isLoggedIn, true);
+			pref.putString(R.array.pf_username, username);
+			pref.putString(R.array.pf_passhash, password);
 			pref.commit();
 
 			SocketClient.getInstance().setIsLoggedIn(true);
@@ -164,10 +162,10 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 		image.setOnClickListener(this);
 
 		// Always show the currently logged in user
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+		final Pref pref = new Pref(act);
+		if (pref.getBool(R.array.pf_isLoggedIn)) {
 			final EditText txt = (EditText) view.findViewById(R.id.username);
-			txt.setText(pref.getString(PrefKey.USERNAME, ""));
+			txt.setText(pref.getString(R.array.pf_username));
 		}
 		return view;
 	}
@@ -238,11 +236,9 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	@Override
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
-		String username = "";
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
-			username = pref.getString(PrefKey.USERNAME, "");
+		final Pref pref = new Pref(act);
+		final String username = pref.getBool(R.array.pf_isLoggedIn)?
+			pref.getString(R.array.pf_username) : "";
 
 		EditText txt = (EditText) act.findViewById(R.id.username);
 		txt.setText(username);

@@ -17,9 +17,8 @@
 package com.chess.genesis.net;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.os.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -134,9 +133,9 @@ public class SyncClient implements Runnable, Handler.Callback
 			trylock();
 			break;
 		case REGULAR_SYNC:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-			final long mtime = pref.getLong(PrefKey.LASTMSGSYNC, 0);
-			final long gtime = pref.getLong(PrefKey.LASTGAMESYNC, 0);
+			final Pref pref = new Pref(context);
+			final long mtime = pref.getLong(R.array.pf_lastmsgsync);
+			final long gtime = pref.getLong(R.array.pf_lastgamesync);
 
 			net.sync_games(gtime);
 			net.run();
@@ -193,8 +192,8 @@ public class SyncClient implements Runnable, Handler.Callback
 			lock++;
 		}
 		// Save sync time
-		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
+		final PrefEdit pref = new PrefEdit(context);
+		pref.putLong(R.array.pf_lastgamesync, json.getLong("time"));
 		pref.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
@@ -221,8 +220,8 @@ public class SyncClient implements Runnable, Handler.Callback
 			return;
 		// Save sync time
 		final long time = json.getLong("time");
-		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong(PrefKey.LASTGAMESYNC, time);
+		final PrefEdit pref = new PrefEdit(context);
+		pref.putLong(R.array.pf_lastgamesync, time);
 		pref.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
@@ -310,8 +309,8 @@ public class SyncClient implements Runnable, Handler.Callback
 		db.close();
 
 		// Save sync time
-		final Editor pref = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		pref.putLong(PrefKey.LASTMSGSYNC, time);
+		final PrefEdit pref = new PrefEdit(context);
+		pref.putLong(R.array.pf_lastmsgsync, time);
 		pref.commit();
 	}  catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);

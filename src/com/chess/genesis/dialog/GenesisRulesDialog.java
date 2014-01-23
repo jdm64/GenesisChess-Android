@@ -17,10 +17,8 @@
 package com.chess.genesis.dialog;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.net.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -51,10 +49,10 @@ public class GenesisRulesDialog extends BaseDialog
 			v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 		} else {
 			final CheckBox agree = (CheckBox) findViewById(R.id.agree);
-			final Editor edit = PreferenceManager.getDefaultSharedPreferences(v.getContext()).edit();
+			final PrefEdit pref = new PrefEdit(getContext());
 
-			edit.putBoolean(PrefKey.SHOW_GENESIS_RULES, !agree.isChecked());
-			edit.commit();
+			pref.putBool(R.array.pf_showGenesisRules, !agree.isChecked());
+			pref.commit();
 
 			dismiss();
 		}

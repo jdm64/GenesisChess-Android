@@ -18,10 +18,8 @@ package com.chess.genesis.net;
 
 import android.app.*;
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.net.*;
 import android.os.*;
-import android.preference.*;
 import android.support.v4.app.NotificationCompat.Builder;
 import com.chess.genesis.*;
 import com.chess.genesis.activity.*;
@@ -43,7 +41,6 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 	private NetworkClient net;
 	private SocketClient socket;
 	private GameDataDB db;
-	private SharedPreferences pref;
 	private int lock;
 	private boolean fromalarm;
 	private boolean error;
@@ -98,9 +95,8 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 	@Override
 	public synchronized void run()
 	{
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false) || !pref.getBoolean(PrefKey.NOTE_ENABLED, true)) {
+		final Pref pref = new Pref(this);
+		if (!pref.getBool(R.array.pf_isLoggedIn) || !pref.getBool(R.array.pf_noteEnabled)) {
 			CancelWakup(this);
 			stopSelf();
 			return;
@@ -129,9 +125,8 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 
 	public static void ScheduleWakeup(final Context context)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, pref.getInt(PrefKey.NOTE_POLLING, DEFAULT_POLL_FREQ));
+		cal.add(Calendar.MINUTE, Pref.getInt(context, R.array.pf_notifierPolling));
 		final long start = cal.getTimeInMillis();
 		final long interval = start - System.currentTimeMillis();
 
@@ -162,7 +157,7 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 	private void SendNotification(final int id, final String text)
 	{
 		final Intent intent;
-		if (pref.getBoolean(PrefKey.TABLETMODE, false)) {
+		if (Pref.getBool(this, R.array.pf_tabletMode)) {
 			intent = new Intent(this, MainMenuTablet.class);
 
 			final Bundle bundle = new Bundle();
@@ -203,9 +198,10 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 		}
 		noteBuilder.setOnlyAlertOnce(true).setContentIntent(pintent);
 
-		if (pref.getBoolean(PrefKey.NOTE_RINGTONE_ON, false))
-			noteBuilder.setSound(Uri.parse(pref.getString(PrefKey.NOTE_RINGTONE, PrefKey.DEFAULT_RINGTONE)));
-		if (pref.getBoolean(PrefKey.NOTE_VIBRATE_ON, true))
+		final Pref pref = new Pref(this);
+		if (pref.getBool(R.array.pf_noteRingtoneEnable))
+			noteBuilder.setSound(Uri.parse(pref.getString(R.array.pf_noteRingtone)));
+		if (pref.getBool(R.array.pf_noteVibrateEnable))
 			noteBuilder.setVibrate(parseVibrate());
 
 		return noteBuilder.getNotification();
@@ -213,7 +209,7 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 
 	private long[] parseVibrate()
 	{
-		final String str = pref.getString(PrefKey.NOTE_VIBRATE, PrefKey.DEFAULT_VIBRATE);
+		final String str = Pref.getString(this, R.array.pf_noteVibrate);
 		final String[] arr = str.trim().split(",");
 		final long[] vib = new long[arr.length];
 
@@ -246,8 +242,9 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 		net = new NetworkClient(socket, this, new Handler(this));
 		db = new GameDataDB(this);
 
-		final long mtime = pref.getLong(PrefKey.LASTMSGSYNC, 0);
-		final long gtime = pref.getLong(PrefKey.LASTGAMESYNC, 0);
+		final Pref pref = new Pref(this);
+		final long mtime = pref.getLong(R.array.pf_lastmsgsync);
+		final long gtime = pref.getLong(R.array.pf_lastgamesync);
 
 		if (db.getOnlineGameList(Enums.YOUR_TURN).getCount() > 0) {
 			SendNotification(YOURTURN_NOTE, YOURTURN_MSG);
@@ -288,9 +285,9 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 			lock++;
 		}
 		// Save sync time
-		final Editor editor = pref.edit();
-		editor.putLong(PrefKey.LASTGAMESYNC, json.getLong("time"));
-		editor.commit();
+		final PrefEdit pref = new PrefEdit(this);
+		pref.putLong(R.array.pf_lastgamesync, json.getLong("time"));
+		pref.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
@@ -308,9 +305,9 @@ public class GenesisNotifier extends Service implements Runnable, Handler.Callba
 		}
 
 		// Save sync time
-		final Editor editor = pref.edit();
-		editor.putLong(PrefKey.LASTMSGSYNC, time);
-		editor.commit();
+		final PrefEdit pref = new PrefEdit(this);
+		pref.putLong(R.array.pf_lastmsgsync, time);
+		pref.commit();
 	}  catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

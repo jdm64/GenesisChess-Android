@@ -17,9 +17,7 @@
 package com.chess.genesis.activity;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.os.*;
-import android.preference.*;
 import android.support.v4.view.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -128,8 +126,8 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 					return true;
 				}
 				final JSONArray games = json.getJSONArray("games");
-				final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
-				pref.putString(PrefKey.POOLINFO, games.toString());
+				final PrefEdit pref = new PrefEdit(act);
+				pref.putString(R.array.pf_poolinfo, games.toString());
 				pref.commit();
 
 				act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
@@ -258,8 +256,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 
 	try {
 		// Set "waiting for opponent"
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		final JSONArray pool = new JSONArray(pref.getString(PrefKey.POOLINFO, "[]"));
+		final JSONArray pool = new JSONArray(Pref.getString(act, R.array.pf_poolinfo));
 		final View tpool = view.findViewById(R.id.game_search);
 
 		tpool.setVisibility((pool.length() == 0)? View.GONE : View.VISIBLE);

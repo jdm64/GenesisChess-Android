@@ -18,7 +18,7 @@ package com.chess.genesis.net;
 
 import android.content.*;
 import android.os.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import java.io.*;
 import java.net.*;
@@ -241,9 +241,9 @@ public class NetworkClient implements Runnable
 		if (socket.getIsLoggedIn())
 			return true;
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String username = pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR);
-		final String password = pref.getString(PrefKey.PASSHASH, PrefKey.KEYERROR);
+		final Pref pref = new Pref(context);
+		final String username = pref.getString(R.array.pf_username);
+		final String password = pref.getString(R.array.pf_passhash);
 
 		JSONObject json = new JSONObject();
 

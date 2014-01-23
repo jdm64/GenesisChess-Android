@@ -18,7 +18,6 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -42,9 +41,8 @@ public class Login extends BasePhoneActivity
 	@Override
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		final String username = pref.getBoolean(PrefKey.ISLOGGEDIN, false)?
-			pref.getString(PrefKey.USERNAME, "") : "";
+		final String username = Pref.getBool(this, R.array.pf_isLoggedIn)?
+			Pref.getString(this, R.array.pf_username) : "";
 
 		EditText txt = (EditText) findViewById(R.id.username);
 		txt.setText(username);

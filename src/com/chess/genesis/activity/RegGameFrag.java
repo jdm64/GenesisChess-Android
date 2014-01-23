@@ -16,10 +16,9 @@
 
 package com.chess.genesis.activity;
 
-import android.content.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
@@ -47,8 +46,7 @@ public class RegGameFrag extends GameFrag
 			Integer.parseInt(settings.getString("opponent")) == Enums.CPU_WHITE_OPPONENT;
 
 		// set view as black
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		viewAsBlack = pref.getBoolean(PrefKey.VIEW_AS_BLACK, true) && playingBlack;
+		viewAsBlack = Pref.getBool(act, R.array.pf_viewAsBlack) && playingBlack;
 
 		// create game stat instance
 		gamestate = new RegGameState(this);

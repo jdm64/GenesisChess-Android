@@ -20,7 +20,7 @@ import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
 import android.os.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 import java.util.*;
 import org.json.*;
@@ -56,8 +56,7 @@ public class GameDataDB
 
 	public String getUsername()
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		return pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR);
+		return Pref.getString(context, R.array.pf_username);
 	}
 
 	/*

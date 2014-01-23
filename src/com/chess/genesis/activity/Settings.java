@@ -40,8 +40,6 @@ public class Settings extends PreferenceActivity implements
 	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
-	private SharedPreferences pref;
-
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
@@ -55,7 +53,7 @@ public class Settings extends PreferenceActivity implements
 		switch (msg.what) {
 		case NetworkClient.GET_OPTION:
 			// only emailnote supported
-			final CheckBoxPreference email = (CheckBoxPreference) findPreference(PrefKey.NOTE_EMAIL);
+			final CheckBoxPreference email = (CheckBoxPreference) findPreference(Pref.key(context, R.array.pf_emailNoteEnabled));
 			email.setChecked(json.getBoolean("value"));
 
 			progress.remove();
@@ -82,9 +80,10 @@ public class Settings extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		context = this;
 
+		final Pref pref = new Pref(this);
+
 		// set layout mode
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		final boolean isTablet = pref.getBoolean(PrefKey.TABLETMODE, false);
+		final boolean isTablet = pref.getBool(R.array.pf_tabletMode);
 
 		if (isTablet)
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -100,19 +99,19 @@ public class Settings extends PreferenceActivity implements
 		final View button = findViewById(R.id.topbar_genesis);
 		button.setOnLongClickListener(this);
 
-		final boolean isLoggedin = pref.getBoolean(PrefKey.ISLOGGEDIN, false);
+		final boolean isLoggedin = pref.getBool(R.array.pf_isLoggedIn);
 
 		final Preference bench = findPreference("benchmark");
 		bench.setOnPreferenceClickListener(this);
 
-		final IntListPreference poll = (IntListPreference) findPreference(PrefKey.NOTE_POLLING);
+		final IntListPreference poll = (IntListPreference) findPreference(pref.key(R.array.pf_notifierPolling));
 		poll.setOnPreferenceChangeListener(this);
 
-		CheckBoxPreference check = (CheckBoxPreference) findPreference(PrefKey.NOTE_EMAIL);
+		CheckBoxPreference check = (CheckBoxPreference) findPreference(pref.key(R.array.pf_emailNoteEnabled));
 		check.setOnPreferenceChangeListener(this);
 		check.setEnabled(isLoggedin);
 
-		check = (CheckBoxPreference) findPreference(PrefKey.NOTE_ENABLED);
+		check = (CheckBoxPreference) findPreference(pref.key(R.array.pf_noteEnabled));
 		check.setOnPreferenceChangeListener(this);
 		check.setEnabled(isLoggedin);
 
@@ -129,7 +128,7 @@ public class Settings extends PreferenceActivity implements
 		callbackPref.setEnabled(isLoggedin);
 
 		// Set email note value from server
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+		if (pref.getBool(R.array.pf_isLoggedIn)) {
 			progress.setText("Retrieving Settings");
 			net.get_option("emailnote");
 			new Thread(net).start();
@@ -141,7 +140,7 @@ public class Settings extends PreferenceActivity implements
 	{
 		super.onResume();
 
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
+		if (Pref.getBool(this, R.array.pf_isLoggedIn))
 			NetActive.inc();
 		AdsHandler.run(this);
 	}
@@ -149,7 +148,7 @@ public class Settings extends PreferenceActivity implements
 	@Override
 	public void onPause()
 	{
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
+		if (Pref.getBool(this, R.array.pf_isLoggedIn))
 			NetActive.dec();
 
 		super.onPause();
@@ -187,13 +186,14 @@ public class Settings extends PreferenceActivity implements
 	public boolean onPreferenceChange(final Preference preference, final Object newValue)
 	{
 		final String key = preference.getKey();
+		final Pref pref = new Pref(this);
 
-		if (key.equals(PrefKey.NOTE_EMAIL)) {
+		if (key.equals(pref.key(R.array.pf_emailNoteEnabled))) {
 			progress.setText("Setting Option");
 
 			net.set_option("emailnote", (Boolean) newValue);
 			new Thread(net).start();
-		} else if (key.equals(PrefKey.NOTE_ENABLED) || key.equals(PrefKey.NOTE_POLLING)) {
+		} else if (key.equals(pref.key(R.array.pf_noteEnabled)) || key.equals(pref.key(R.array.pf_notifierPolling))) {
 			startService(new Intent(this, GenesisNotifier.class));
 		}
 		return true;

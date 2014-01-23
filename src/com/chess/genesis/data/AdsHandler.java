@@ -17,8 +17,7 @@
 package com.chess.genesis.data;
 
 import android.app.*;
-import android.content.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.google.ads.*;
 
 public final class AdsHandler
@@ -29,11 +28,9 @@ public final class AdsHandler
 
 	public static void run(final Activity activity)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
-
-		if (!pref.getBoolean(PrefKey.ADS_ON, true))
+		if (!Pref.getBool(activity, R.array.pf_enableAds))
 			return;
-		final AdView ad = (AdView) activity.findViewById(com.chess.genesis.R.id.adView);
+		final AdView ad = (AdView) activity.findViewById(R.id.adView);
 
 		if (ad != null)
 			ad.loadAd(new AdRequest());

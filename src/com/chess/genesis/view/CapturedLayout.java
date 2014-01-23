@@ -17,8 +17,8 @@
 package com.chess.genesis.view;
 
 import android.content.*;
-import android.preference.*;
 import android.util.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 
@@ -32,8 +32,7 @@ public class CapturedLayout extends ManualPanel
 	{
 		super(context, attributeSet);
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		isEnabled = pref.getBoolean(PrefKey.SHOW_CAPTURED, true);
+		isEnabled = Pref.getBool(context, R.array.pf_showCaptured);
 
 		if (!isEnabled) {
 			cache = null;

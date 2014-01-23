@@ -19,9 +19,7 @@ package com.chess.genesis.engine;
 
 import android.app.*;
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -85,8 +83,8 @@ public abstract class GameState implements Handler.Callback
 				applyMove(move, true, true);
 			break;
 		case CpuTimeDialog.MSG:
-			final Editor pref = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-			pref.putInt(PrefKey.CPUTIME, (Integer) msg.obj);
+			final PrefEdit pref = new PrefEdit(activity);
+			pref.putInt(R.array.pf_cputime, (Integer) msg.obj);
 			pref.commit();
 			cpu.setTime((Integer) msg.obj);
 			break;
@@ -245,9 +243,8 @@ public abstract class GameState implements Handler.Callback
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 			cpu = board instanceof GenBoard? new GenEngine(handle, board) : new RegEngine(handle, board);
-			cpu.setTime(pref.getInt(PrefKey.CPUTIME, cpu.getTime()));
+			cpu.setTime(Pref.getInt(activity, R.array.pf_cputime));
 			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;
 			ycol = (oppType == Enums.CPU_WHITE_OPPONENT)? Piece.BLACK : Piece.WHITE;

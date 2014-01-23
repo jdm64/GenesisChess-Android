@@ -21,7 +21,6 @@ import android.content.res.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
@@ -44,12 +43,12 @@ public class GameListAdapter extends BaseAdapter
 		super();
 		context = _context;
 
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		final Pref pref = new Pref(context);
 		type = Type;
 		yourturn = yourTurn;
 
 		settings = new Bundle();
-		settings.putString(PrefKey.USERNAME, prefs.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+		settings.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 		settings.putInt("type", type);
 
 		initCursor();

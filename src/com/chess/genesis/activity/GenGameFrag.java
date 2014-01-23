@@ -16,10 +16,9 @@
 
 package com.chess.genesis.activity;
 
-import android.content.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.engine.*;
@@ -52,8 +51,7 @@ public class GenGameFrag extends GameFrag
 	{
 		super.onActivityCreated(savedInstanceState);
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean(PrefKey.SHOW_GENESIS_RULES, true))
+		if (Pref.getBool(act, R.array.pf_showGenesisRules))
 			new GenesisRulesDialog(act).show();
 	}
 

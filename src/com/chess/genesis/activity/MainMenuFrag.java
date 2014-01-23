@@ -17,10 +17,8 @@
 package com.chess.genesis.activity;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.net.*;
 import android.os.*;
-import android.preference.*;
 import android.util.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -42,13 +40,13 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	{
 		switch (msg.what) {
 		case LogoutConfirm.MSG:
-			final Editor pref = PreferenceManager.getDefaultSharedPreferences(act).edit();
+			final PrefEdit pref = new PrefEdit(act);
 
-			pref.putBoolean(PrefKey.ISLOGGEDIN, false);
-			pref.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
-			pref.putString(PrefKey.PASSHASH, PrefKey.KEYERROR);
-			pref.putLong(PrefKey.LASTGAMESYNC, 0);
-			pref.putLong(PrefKey.LASTMSGSYNC, 0);
+			pref.putBool(R.array.pf_isLoggedIn);
+			pref.putString(R.array.pf_username);
+			pref.putString(R.array.pf_passhash);
+			pref.putLong(R.array.pf_lastgamesync);
+			pref.putLong(R.array.pf_lastmsgsync);
 			pref.commit();
 
 			updateLoggedInView();
@@ -150,16 +148,15 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			openMenu(v);
 			break;
 		default:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 			if (isTablet)
-				onClickTablet(v.getId(), pref);
+				onClickTablet(v.getId());
 			else
-				onClickPhone(v.getId(), pref);
+				onClickPhone(v.getId());
 			break;
 		}
 	}
 
-	private void onClickPhone(final int viewId, final SharedPreferences pref)
+	private void onClickPhone(final int viewId)
 	{
 		Intent intent;
 
@@ -168,19 +165,20 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			startActivity(new Intent(act, GameListLocal.class));
 			break;
 		case R.id.online_game:
-			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+			if (!Pref.getBool(act, R.array.pf_isLoggedIn)) {
 				startActivityForResult(new Intent(act, Login.class), Enums.ONLINE_LIST);
 				return;
 			}
 			startActivity(new Intent(act, GameListOnline.class));
 			break;
 		case R.id.user_stats:
-			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+			final Pref pref = new Pref(act);
+			if (!pref.getBool(R.array.pf_isLoggedIn)) {
 				startActivityForResult(new Intent(act, Login.class), Enums.USER_STATS);
 				return;
 			}
 			intent = new Intent(act, UserStats.class);
-			intent.putExtra(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+			intent.putExtra(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 			startActivity(intent);
 			break;
 		case R.id.login:
@@ -189,7 +187,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		}
 	}
 
-	private void onClickTablet(final int viewId, final SharedPreferences pref)
+	private void onClickTablet(final int viewId)
 	{
 		// pop everything from stack
 		for (int i = 0, len = fragMan.getBackStackEntryCount(); i < len; i++)
@@ -202,7 +200,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			fintent.setFrag(R.id.panel01, new GameListLocalFrag());
 			break;
 		case R.id.online_game:
-			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+			if (!Pref.getBool(act, R.array.pf_isLoggedIn)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.ONLINE_LIST);
 				fintent.setFrag(R.id.panel02, frag);
@@ -211,14 +209,15 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			}
 			break;
 		case R.id.user_stats:
-			if (!pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
+			final Pref pref = new Pref(act);
+			if (!pref.getBool(R.array.pf_isLoggedIn)) {
 				final LoginFrag frag = new LoginFrag();
 				frag.setCallBack(Enums.USER_STATS);
 				fintent.setFrag(R.id.panel02, frag);
 			} else {
 				final BaseContentFrag frag = new UserStatsFrag();
 				final Bundle bundle = new Bundle();
-				bundle.putString(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+				bundle.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 				frag.setArguments(bundle);
 
 				fintent.setFrag(R.id.panel02, frag);
@@ -244,8 +243,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	{
 		switch (item.getItemId()) {
 		case R.id.logout:
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-			if (pref.getBoolean(PrefKey.ISLOGGEDIN, false))
+			if (Pref.getBool(act, R.array.pf_isLoggedIn))
 				new LogoutConfirm(act, new Handler(this)).show();
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
@@ -258,7 +256,6 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 
 	public void startFragment(final int fragId)
 	{
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
 		BaseContentFrag frag;
 
 		fragMan.popBackStack();
@@ -268,8 +265,9 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			break;
 		case Enums.USER_STATS:
 			frag = new UserStatsFrag();
+			final Pref pref = new Pref(act);
 			final Bundle bundle = new Bundle();
-			bundle.putString(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+			bundle.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 			frag.setArguments(bundle);
 			break;
 		default:
@@ -311,9 +309,9 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		String welcome = "";
 		int welcomeVis = View.GONE, loginVis = View.VISIBLE;
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean(PrefKey.ISLOGGEDIN, false)) {
-			welcome = "Welcome " + pref.getString(PrefKey.USERNAME, "");
+		final Pref pref = new Pref(act);
+		if (pref.getBool(R.array.pf_isLoggedIn)) {
+			welcome = "Welcome " + pref.getString(R.array.pf_username);
 			welcomeVis = View.VISIBLE;
 			loginVis = View.GONE;
 		}

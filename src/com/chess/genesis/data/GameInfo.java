@@ -17,7 +17,7 @@
 package com.chess.genesis.data;
 
 import android.content.*;
-import android.preference.*;
+import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
 class GameInfo
@@ -49,8 +49,7 @@ class GameInfo
 		if (status != Enums.ACTIVE)
 			return Enums.YOUR_TURN;
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final int color = white.equals(pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR))? Piece.WHITE : Piece.BLACK;
+		final int color = white.equals(Pref.getString(context, R.array.pf_username))? Piece.WHITE : Piece.BLACK;
 
 		if (draw != 0)
 			return (color * draw > 0)? Enums.THEIR_TURN : Enums.YOUR_TURN;

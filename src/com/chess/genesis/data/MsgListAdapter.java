@@ -20,7 +20,6 @@ import android.content.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
-import android.preference.*;
 import android.text.*;
 import android.text.Layout.Alignment;
 import android.text.ClipboardManager;
@@ -169,11 +168,9 @@ class MsgListItem extends View
 			if (isActive)
 				return;
 
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-
 			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
 			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
-			username = pref.getString(PrefKey.USERNAME, "");
+			username = Pref.getString(context, R.array.pf_username);
 
 			largeText = (int) ((3.0 / 64.0) * width);
 			smallText = largeText - 2;

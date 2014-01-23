@@ -19,7 +19,6 @@ package com.chess.genesis.activity;
 import android.content.*;
 import android.os.*;
 import android.os.PowerManager.WakeLock;
-import android.preference.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
@@ -123,8 +122,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		if (type == Enums.ONLINE_GAME)
 			NetActive.inc();
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(act);
-		if (pref.getBoolean(PrefKey.SCREEN_ALWAYS_ON, false)) {
+		if (Pref.getBool(act, R.array.pf_screenAlwaysOn)) {
 			final PowerManager pm = (PowerManager) act.getSystemService(Context.POWER_SERVICE);
 			wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "GenesisChess");
 			wakelock.acquire();

@@ -18,7 +18,6 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.preference.*;
 import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
@@ -44,13 +43,12 @@ public class MainMenuPhone extends BasePhoneActivity
 		if (resultCode == RESULT_CANCELED)
 			return;
 
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
 		if (requestCode == Enums.ONLINE_LIST) {
 			startActivity(new Intent(this, GameListOnline.class));
 		} else if (requestCode == Enums.USER_STATS) {
+			final Pref pref = new Pref(this);
 			final Intent intent = new Intent(this, UserStats.class);
-			intent.putExtra(PrefKey.USERNAME, pref.getString(PrefKey.USERNAME, PrefKey.KEYERROR));
+			intent.putExtra(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 			startActivity(intent);
 		}
 	}

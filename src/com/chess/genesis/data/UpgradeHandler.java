@@ -17,10 +17,9 @@
 package com.chess.genesis.data;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.*;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.*;
+import com.chess.genesis.*;
 
 public final class UpgradeHandler
 {
@@ -32,28 +31,27 @@ public final class UpgradeHandler
 	{
 	try {
 		final PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		upgrade(pref, pref.getInt(PrefKey.APPVERSION, 0), pinfo.versionCode);
+		upgrade(context, Pref.getInt(context, R.array.pf_appVersion), pinfo.versionCode);
 	} catch (final NameNotFoundException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
 	}
 
-	private static void upgrade(final SharedPreferences pref, final int oldVer, final int newVer)
+	private static void upgrade(final Context context, final int oldVer, final int newVer)
 	{
 		if (oldVer == newVer)
 			return;
 
-		final Editor edit = pref.edit();
+		final PrefEdit pref = new PrefEdit(context);
 
 		if (oldVer < 28) {
-			edit.putBoolean(PrefKey.ISLOGGEDIN, false);
-			edit.putString(PrefKey.USERNAME, PrefKey.KEYERROR);
+			pref.putBool(R.array.pf_isLoggedIn);
+			pref.putString(R.array.pf_username);
 		}
 
-		edit.putBoolean(PrefKey.ADS_ON, true);
-		edit.putInt(PrefKey.APPVERSION, newVer);
-		edit.commit();
+		pref.putBool(R.array.pf_enableAds);
+		pref.putInt(R.array.pf_appVersion, newVer);
+		pref.commit();
 	}
 }
