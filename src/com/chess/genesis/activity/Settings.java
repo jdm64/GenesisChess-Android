@@ -30,6 +30,7 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 import org.json.*;
 
 public class Settings extends PreferenceActivity implements
@@ -40,6 +41,7 @@ public class Settings extends PreferenceActivity implements
 	private Context context;
 	private NetworkClient net;
 	private ProgressMsg progress;
+
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
@@ -126,6 +128,8 @@ public class Settings extends PreferenceActivity implements
 		callbackPref = (CallBackPreference) findPreference("resyncMsgTable");
 		callbackPref.setCallBack(this);
 		callbackPref.setEnabled(isLoggedin);
+		callbackPref = (CallBackPreference) findPreference("bcReset");
+		callbackPref.setCallBack(this);
 
 		// Set email note value from server
 		if (pref.getBool(R.array.pf_isLoggedIn)) {
@@ -178,6 +182,8 @@ public class Settings extends PreferenceActivity implements
 
 			sync.setSyncType(SyncClient.MSG_SYNC);
 			new Thread(sync).start();
+		} else if (key.equals("bcReset")) {
+			resetBoardColors();
 		}
 		db.close();
 	}
@@ -217,5 +223,20 @@ public class Settings extends PreferenceActivity implements
 			return true;
 		}
 		return false;
+	}
+
+	private void resetBoardColors()
+	{
+		PlaceButton.resetColors(context);
+
+		final int keys[] = new int[] { R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
+			R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
+			R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
+		final Pref pref = new Pref(context);
+
+		for (final int key : keys) {
+			final ColorPickerPreference colorPref = (ColorPickerPreference) findPreference(pref.key(key));
+			colorPref.update();
+		}
 	}
 }

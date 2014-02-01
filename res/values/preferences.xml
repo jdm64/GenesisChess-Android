@@ -84,4 +84,32 @@
 		<item>noteVibrate</item>
 		<item>0,150</item>
 	</array>
+	<array name="pf_bcInnerDark">
+		<item>bcInnerDark</item>
+		<item>@color/blue_navy_dark</item>
+	</array>
+	<array name="pf_bcInnerLight">
+		<item>bcInnerLight</item>
+		<item>@color/white</item>
+	</array>
+	<array name="pf_bcOuterDark">
+		<item>bcOuterDark</item>
+		<item>@color/blue_navy</item>
+	</array>
+	<array name="pf_bcOuterLight">
+		<item>bcOuterLight</item>
+		<item>@color/grey_light</item>
+	</array>
+	<array name="pf_bcInnerSelect">
+		<item>bcInnerSelect</item>
+		<item>@color/green_teal</item>
+	</array>
+	<array name="pf_bcInnerCheck">
+		<item>bcInnerCheck</item>
+		<item>@color/red_light</item>
+	</array>
+	<array name="pf_bcInnerLast">
+		<item>bcInnerLast</item>
+		<item>@color/purple_light</item>
+	</array>
 </resources>

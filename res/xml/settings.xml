@@ -13,6 +13,50 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:defaultValue="true"
 		android:title="Show Captured Pieces"
 		android:summary="Display captured pieces below the board"/>
+		<PreferenceScreen
+		android:title="Board Colors"
+		android:summary="Change the color of the board's squares">
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcInnerDark"
+			android:defaultValue="@color/blue_navy_dark"
+			android:persistent="true"
+			android:title="Dark Main"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcOuterDark"
+			android:defaultValue="@color/blue_navy"
+			android:persistent="true"
+			android:title="Dark Border"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcInnerLight"
+			android:defaultValue="@color/white"
+			android:persistent="true"
+			android:title="Light Main"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcOuterLight"
+			android:defaultValue="@color/grey_light"
+			android:persistent="true"
+			android:title="Light Border"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcInnerSelect"
+			android:defaultValue="@color/green_teal"
+			android:persistent="true"
+			android:title="Selected"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcInnerCheck"
+			android:defaultValue="@color/red_light"
+			android:persistent="true"
+			android:title="In Check"/>
+			<com.chess.genesis.view.ColorPickerPreference
+			android:key="bcInnerLast"
+			android:defaultValue="@color/purple_light"
+			android:persistent="true"
+			android:title="Last Move"/>
+			<com.chess.genesis.util.CallBackPreference
+			android:key="bcReset"
+			android:persistent="false"
+			android:title="Reset To Defaults"
+			android:summary="Reset all board colors to their defaults"/>
+		</PreferenceScreen>
 	</PreferenceCategory>
 	<PreferenceCategory
 	android:title="UI Settings">

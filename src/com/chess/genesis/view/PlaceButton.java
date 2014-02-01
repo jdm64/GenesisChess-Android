@@ -18,15 +18,19 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
 public class PlaceButton extends PieceImg
 {
-	protected final static int outerLight = MColors.GREY_LIGHT;
-	protected final static int outerDark = MColors.BLUE_NAVY_DARK;
-	protected final static int innerDark = MColors.BLUE_NAVY;
-	protected final static int innerLight = Color.WHITE;
-	protected final static int innerSelect = MColors.GREEN_TEAL;
+	public static int outerLight;
+	public static int outerDark;
+	public static int innerDark;
+	public static int innerLight;
+	public static int innerSelect;
+	public static int innerCheck;
+	public static int innerLast;
+	public static boolean colorsSet = false;
 
 	protected final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
@@ -40,6 +44,40 @@ public class PlaceButton extends PieceImg
 		type = Type;
 		count = typeCounts[Math.abs(type)];
 		setId(type + 1000);
+	}
+
+	public static void initColors(final Context context)
+	{
+		if (colorsSet)
+			return;
+		setColors(context);
+	}
+
+	public static void setColors(final Context context)
+	{
+		final Pref pref = new Pref(context);
+		outerLight = pref.getInt(R.array.pf_bcOuterLight);
+		outerDark = pref.getInt(R.array.pf_bcOuterDark);
+		innerDark = pref.getInt(R.array.pf_bcInnerDark);
+		innerLight = pref.getInt(R.array.pf_bcInnerLight);
+		innerSelect = pref.getInt(R.array.pf_bcInnerSelect);
+		innerCheck = pref.getInt(R.array.pf_bcInnerCheck);
+		innerLast = pref.getInt(R.array.pf_bcInnerLast);
+		colorsSet = true;
+	}
+
+	public static void resetColors(final Context context)
+	{
+		final PrefEdit pref = new PrefEdit(context);
+		pref.putInt(R.array.pf_bcInnerDark);
+		pref.putInt(R.array.pf_bcInnerLight);
+		pref.putInt(R.array.pf_bcOuterDark);
+		pref.putInt(R.array.pf_bcOuterLight);
+		pref.putInt(R.array.pf_bcInnerSelect);
+		pref.putInt(R.array.pf_bcInnerCheck);
+		pref.putInt(R.array.pf_bcInnerLast);
+		pref.commit();
+		colorsSet = false;
 	}
 
 	@Override

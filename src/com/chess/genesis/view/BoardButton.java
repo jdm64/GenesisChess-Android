@@ -18,13 +18,10 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
-import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 
 public class BoardButton extends PlaceButton
 {
-	protected final static int innerCheck = MColors.RED_LIGHT;
-	protected final static int innerLast = MColors.PURPLE_LIGHT;
 	protected final static int WHITE = 0;
 	protected final static int BLACK = 1;
 
