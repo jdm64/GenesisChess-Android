@@ -227,7 +227,7 @@ public class Settings extends PreferenceActivity implements
 
 	private void resetBoardColors()
 	{
-		PlaceButton.resetColors(context);
+		PieceImg.resetColors(context);
 
 		final int keys[] = new int[] { R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
 			R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,

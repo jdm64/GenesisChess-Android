@@ -19,21 +19,70 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.graphics.*;
 import android.view.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 
-public class PieceImg extends View
+public abstract class PieceImg extends View
 {
-	protected final Matrix matrix = new Matrix();
-	protected final PieceImgCache cache;
+	public static int outerLight;
+	public static int outerDark;
+	public static int innerDark;
+	public static int innerLight;
+	public static int innerSelect;
+	public static int innerCheck;
+	public static int innerLast;
+	public static boolean colorsSet = false;
 
-	protected boolean isHighlighted = false;
+	private final static Matrix matrix = new Matrix();
+	private final static float recScale = (float) 0.9;
+
+	private final PieceImgCache cache;
+	private final Paint paint = new Paint();
+	private final RectF inSquare = new RectF();
+	private final RectF outSquare = new RectF();
+
 	protected int type = Piece.EMPTY;
-	protected int count = 0;
 
-	public PieceImg(final Context context, final PieceImgCache _cache)
+	public PieceImg(final Context context, final PieceImgCache _cache, final int Type)
 	{
 		super(context);
 		cache = _cache;
+		type = Type;
+	}
+
+	public static void initColors(final Context context)
+	{
+		if (colorsSet)
+			return;
+		setColors(context);
+	}
+
+	public static void setColors(final Context context)
+	{
+		final Pref pref = new Pref(context);
+		outerLight = pref.getInt(R.array.pf_bcOuterLight);
+		outerDark = pref.getInt(R.array.pf_bcOuterDark);
+		innerDark = pref.getInt(R.array.pf_bcInnerDark);
+		innerLight = pref.getInt(R.array.pf_bcInnerLight);
+		innerSelect = pref.getInt(R.array.pf_bcInnerSelect);
+		innerCheck = pref.getInt(R.array.pf_bcInnerCheck);
+		innerLast = pref.getInt(R.array.pf_bcInnerLast);
+		colorsSet = true;
+	}
+
+	public static void resetColors(final Context context)
+	{
+		final PrefEdit pref = new PrefEdit(context);
+		pref.putInt(R.array.pf_bcInnerDark);
+		pref.putInt(R.array.pf_bcInnerLight);
+		pref.putInt(R.array.pf_bcOuterDark);
+		pref.putInt(R.array.pf_bcOuterLight);
+		pref.putInt(R.array.pf_bcInnerSelect);
+		pref.putInt(R.array.pf_bcInnerCheck);
+		pref.putInt(R.array.pf_bcInnerLast);
+		pref.commit();
+		colorsSet = false;
 	}
 
 	@Override
@@ -41,15 +90,21 @@ public class PieceImg extends View
 	{
 		final int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
 		setMeasuredDimension(size, size);
+
+		final float rb = size * recScale, lt = size - rb;
+		inSquare.set(lt, lt, rb, rb);
+		outSquare.set(0, 0, size, size);
 	}
 
 	@Override
-	protected void onDraw(final Canvas canvas)
+	protected abstract void onDraw(final Canvas canvas);
+
+	protected void drawSquare(final Canvas canvas, final int inColor, final int outColor)
 	{
-		if (type == Piece.EMPTY)
-			return;
-		drawPiece(canvas);
-		drawCount(canvas);
+		paint.setColor(outColor);
+		canvas.drawRect(outSquare, paint);
+		paint.setColor(inColor);
+		canvas.drawRect(inSquare, paint);
 	}
 
 	protected void drawPiece(final Canvas canvas)
@@ -57,19 +112,12 @@ public class PieceImg extends View
 		canvas.drawBitmap(cache.getPieceImg(type + 6), matrix, null);
 	}
 
-	protected void drawCount(final Canvas canvas)
+	protected void drawCount(final Canvas canvas, final int count)
 	{
 		if (count == 1)
 			return;
 		canvas.drawBitmap(cache.getTokenImg(), matrix, null);
 		canvas.drawBitmap(cache.getCountImg(count), matrix, null);
-	}
-
-	public void setPieceAndCount(final int Type, final int Count)
-	{
-		type = Type;
-		count = Count;
-		invalidate();
 	}
 
 	public int getPiece()
@@ -83,32 +131,5 @@ public class PieceImg extends View
 		invalidate();
 	}
 
-	public int getCount()
-	{
-		return count;
-	}
-
-	public void setCount(final int Count)
-	{
-		count = Count;
-		invalidate();
-	}
-
-	public void minusCount()
-	{
-		count--;
-		invalidate();
-	}
-
-	public void plusCount()
-	{
-		count++;
-		invalidate();
-	}
-
-	public void setHighlight(final boolean mode)
-	{
-		isHighlighted = mode;
-		invalidate();
-	}
+	public abstract void setHighlight(final boolean mode);
 }

@@ -59,20 +59,14 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			final ManualPanel row = new ManualPanel(context);
 			row.setSizes("1/5");
 
-			MyImageView padding = new MyImageView(context);
-			padding.setResId(i == 0? R.drawable.square_light : R.drawable.square_dark);
-			padding.setLayoutParams(LINEAR_PARAMS);
-			row.addView(padding);
+			row.addView(new BoardButton(context, cache, i + 10000));
 
 			for (int j = 0; j < 3; j++) {
 				final PlaceButton button = new PlaceButton(context, cache, piecelist[idx++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
-			padding = new MyImageView(context);
-			padding.setResId(i == 0? R.drawable.square_light : R.drawable.square_dark);
-			padding.setLayoutParams(LINEAR_PARAMS);
-			row.addView(padding);
+			row.addView(new BoardButton(context, cache, i + 10000));
 			addView(row);
 		}
 	}

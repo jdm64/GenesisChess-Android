@@ -93,7 +93,7 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 		setColor(color);
 
 		// update colors
-		PlaceButton.setColors(getContext());
+		PieceImg.setColors(getContext());
 
 		final OnPreferenceChangeListener listener = getOnPreferenceChangeListener();
 		if (listener != null)

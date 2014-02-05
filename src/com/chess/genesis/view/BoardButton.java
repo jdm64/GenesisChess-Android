@@ -20,7 +20,7 @@ import android.content.*;
 import android.graphics.*;
 import com.chess.genesis.engine.*;
 
-public class BoardButton extends PlaceButton
+public class BoardButton extends PieceImg
 {
 	protected final static int WHITE = 0;
 	protected final static int BLACK = 1;
@@ -28,12 +28,13 @@ public class BoardButton extends PlaceButton
 	private final int squareColor;
 	private final int squareIndex;
 
+	private boolean isHighlighted = false;
 	private boolean isCheck = false;
 	private boolean isLast = false;
 
 	public BoardButton(final Context context, final PieceImgCache _cache, final int index)
 	{
-		super(context, _cache, Piece.NONE);
+		super(context, _cache, Piece.EMPTY);
 
 		squareIndex = index;
 		squareColor = ((index / 16) % 2 != 0)?
@@ -45,21 +46,7 @@ public class BoardButton extends PlaceButton
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		drawBackground(canvas);
-		drawPiece(canvas);
-	}
-
-	@Override
-	protected void drawBackground(final Canvas canvas)
-	{
-		// Draw outer square
-		if (squareColor == WHITE)
-			paint.setColor(outerLight);
-		else
-			paint.setColor(outerDark);
-		canvas.drawRect(outSquare, paint);
-
-		// Draw inner square
+		final int outerColor = squareColor == WHITE? outerLight : outerDark;
 		final int innerColor =
 			isHighlighted?
 				innerSelect :
@@ -70,21 +57,28 @@ public class BoardButton extends PlaceButton
 			((squareColor == WHITE)?
 				innerLight :
 				innerDark)));
-		paint.setColor(innerColor);
-		canvas.drawRect(inSquare, paint);
+		drawSquare(canvas, innerColor, outerColor);
+		drawPiece(canvas);
 	}
 
-	@Override
 	public void reset()
 	{
 		isHighlighted = false;
 		isCheck = false;
+		isLast = false;
 		setPiece(Piece.EMPTY);
 	}
 
 	public int getIndex()
 	{
 		return squareIndex;
+	}
+
+	@Override
+	public void setHighlight(final boolean mode)
+	{
+		isHighlighted = mode;
+		invalidate();
 	}
 
 	public void setCheck(final boolean mode)
