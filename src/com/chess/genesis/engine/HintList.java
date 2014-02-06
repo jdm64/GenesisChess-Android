@@ -89,8 +89,8 @@ public class HintList
 
 		if (selected == Piece.NONE) {
 		// No active clicks
-			// first click must be non empty and your own
-			if (piece * ycolor <= 0)
+			// first click must be your own on your turn
+			if (board.getStm() != ycolor || piece * ycolor < 0)
 				return;
 			setSelected(bb, index);
 			return;
@@ -124,6 +124,10 @@ public class HintList
 
 	public void longBoardClick(final BoardButton bb, final int ycolor)
 	{
+		// only allow long click on your turn
+		if (board.getStm() != ycolor)
+			return;
+
 		final int index = bb.getIndex();
 		final boolean isYourPiece = (bb.getPiece() * ycolor > 0);
 
@@ -140,8 +144,8 @@ public class HintList
 		final int index = pb.getId();
 		final int piece = pb.getPiece();
 
-		// only select your own pieces where count > 0
-		if (piece * ycolor < 0 || pb.getCount() <= 0)
+		// only select your own pieces on your turn where count > 0
+		if (board.getStm() != ycolor || piece * ycolor < 0 || pb.getCount() <= 0)
 			return;
 		if (selected == Piece.NONE) {
 			// No active clicks
