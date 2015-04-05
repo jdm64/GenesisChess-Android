@@ -30,6 +30,13 @@ public class SubmitMove extends Dialog implements OnClickListener
 	private final Handler handle;
 	private final boolean isTablet;
 
+	public SubmitMove()
+	{
+		super(null, R.style.BlankDialog);
+		handle = null;
+		isTablet = false;
+	}
+
 	public SubmitMove(final Context context, final Handler handler, final boolean TabletMode)
 	{
 		super(context, R.style.BlankDialog);
