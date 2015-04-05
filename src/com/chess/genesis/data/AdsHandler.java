@@ -17,8 +17,8 @@
 package com.chess.genesis.data;
 
 import android.app.*;
-import com.chess.genesis.*;
-import com.google.ads.*;
+import com.chess.genesis.R;
+import com.google.android.gms.ads.*;
 
 public final class AdsHandler
 {
@@ -33,6 +33,6 @@ public final class AdsHandler
 		final AdView ad = (AdView) activity.findViewById(R.id.adView);
 
 		if (ad != null)
-			ad.loadAd(new AdRequest());
+			ad.loadAd(new AdRequest.Builder().build());
 	}
 }

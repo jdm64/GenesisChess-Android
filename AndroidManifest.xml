@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.chess.genesis"
 android:versionCode="66"
 android:versionName="@string/version">
-	<uses-sdk android:minSdkVersion="7"/>
+	<uses-sdk android:minSdkVersion="10"/>
 	<supports-screens android:smallScreens="false"/>
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -35,7 +35,7 @@ android:versionName="@string/version">
 		<activity android:name="com.chess.genesis.activity.Game" android:configChanges="orientation"/>
 		<activity android:name="com.chess.genesis.activity.MsgBox" android:configChanges="orientation" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="com.chess.genesis.dialog.SubmitMove" android:theme="@style/NoDimDialog"/>
-		<activity android:name="com.google.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+		<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 		<service android:name="com.chess.genesis.net.GenesisNotifier" android:enabled="true"/>
 		<receiver android:name="com.chess.genesis.net.GenesisAlarm">
 			<intent-filter>
@@ -47,5 +47,6 @@ android:versionName="@string/version">
 				<data android:scheme="package" android:path="com.chess.genesis"/>
 			</intent-filter>
 		</receiver>
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
 	</application>
 </manifest> 
