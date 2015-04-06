@@ -22,13 +22,18 @@ import android.view.*;
 
 abstract class SimpleFrag extends Fragment
 {
-	protected final int layout;
+	private int layout;
 
 	public abstract String getBTag();
 
 	public SimpleFrag(final int layoutId)
 	{
 		super();
+		layout = layoutId;
+	}
+
+	protected void setLayout(int layoutId)
+	{
 		layout = layoutId;
 	}
 

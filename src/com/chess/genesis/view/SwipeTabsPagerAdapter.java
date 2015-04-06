@@ -52,7 +52,7 @@ public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements Swipe
 	@Override
 	public Fragment getItem(final int position)
 	{
-		return new SwipeTabFragment(TITLES[position]);
+		return SwipeTabFragment.newInstance(TITLES[position]);
 	}
 
 	@Override
@@ -75,26 +75,5 @@ public class SwipeTabsPagerAdapter extends FragmentPagerAdapter implements Swipe
 			}
 		});
 		return view;
-	}
-}
-
-class SwipeTabFragment extends Fragment
-{
-	public SwipeTabFragment(final String title)
-	{
-		super();
-
-		final Bundle args = new Bundle();
-		args.putString("title", title);
-		setArguments(args);
-	}
-
-	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
-	{
-		final ViewGroup root = (ViewGroup) inflater.inflate(R.layout.swipetab_fragment, null);
-		final String title = getArguments().getString("title");
-		((TextView) root.findViewById(R.id.text)).setText(title);
-		return root;
 	}
 }

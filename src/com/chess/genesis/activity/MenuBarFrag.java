@@ -26,8 +26,6 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 {
 	private final static String TAG = "MENUBAR";
 
-	private FragmentActivity act;
-	private FragmentManager fragMan;
 	private boolean hasTitle = false;
 
 	public MenuBarFrag()
@@ -35,13 +33,17 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 		super(R.layout.fragment_menubar);
 	}
 
-	public MenuBarFrag(final FragmentActivity activity)
+	public static MenuBarFrag newInstance(boolean hasTitle)
 	{
-		super(R.layout.fragment_menubar_title);
+		MenuBarFrag frag = new MenuBarFrag();
+		frag.setHasTitle(hasTitle);
+		return frag;
+	}
 
-		hasTitle = true;
-		act = activity;
-		fragMan = act.getSupportFragmentManager();
+	protected void setHasTitle(boolean _hasTitle)
+	{
+		hasTitle = _hasTitle;
+		setLayout(hasTitle? R.layout.fragment_menubar_title : R.layout.fragment_menubar);
 	}
 
 	@Override
@@ -62,10 +64,11 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 	@Override
 	public boolean onLongClick(final View v)
 	{
+		FragmentManager fragMan = getFragmentManager();
 		if (fragMan.getBackStackEntryCount() > 0)
 			fragMan.popBackStack();
 		else
-			act.finish();
+			getActivity().finish();
 		return true;
 	}
 }

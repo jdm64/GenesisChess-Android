@@ -47,7 +47,7 @@ public class FragmentIntent
 		switch (layoutId) {
 		case R.id.panel01:
 			menuLayout = R.id.topbar01;
-			menuBar = new MenuBarFrag(act);
+			menuBar = MenuBarFrag.newInstance(true);
 			break;
 		case R.id.panel02:
 		default:
