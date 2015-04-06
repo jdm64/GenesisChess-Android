@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:genesis="http://schemas.android.com/apk/res/com.chess.genesis">
+xmlns:genesis="http://schemas.android.com/apk/res-auto">
 	<com.chess.genesis.view.RobotoText
 	android:id="@+id/welcome"
 	android:paddingLeft="6dp"
