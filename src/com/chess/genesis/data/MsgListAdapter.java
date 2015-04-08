@@ -117,7 +117,7 @@ public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLo
 	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
-		v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_NEON : MColors.CLEAR);
+		v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_LIGHT_500 : MColors.CLEAR);
 		return false;
 	}
 
@@ -216,9 +216,9 @@ class MsgListItem extends View
 
 		// draw msg header
 		if (data.isYourMsg)
-			paint.setColor(MColors.PURPLE_PASTEL);
+			paint.setColor(MColors.PURPLE_DEEP_100);
 		else
-			paint.setColor(MColors.BLUE_PASTEL);
+			paint.setColor(MColors.TEAL_A100);
 		canvas.drawRect(0, 0, getWidth(), Cache.headerHeight, paint);
 
 		// draw username

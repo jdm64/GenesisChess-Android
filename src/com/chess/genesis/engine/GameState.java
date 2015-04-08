@@ -553,7 +553,7 @@ public abstract class GameState implements Handler.Callback
 			black.setActive(false);
 
 			if (mate)
-				white.setTabTextColor(MColors.RED);
+				white.setTabTextColor(MColors.RED_A700);
 		} else {
 			white.setText(wstr);
 			white.setActive(false);
@@ -562,7 +562,7 @@ public abstract class GameState implements Handler.Callback
 			black.setActive(true);
 
 			if (mate)
-				black.setTabTextColor(MColors.RED);
+				black.setTabTextColor(MColors.RED_A700);
 		}
 	}
 

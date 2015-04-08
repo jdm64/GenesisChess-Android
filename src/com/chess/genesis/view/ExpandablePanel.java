@@ -43,7 +43,7 @@ public class ExpandablePanel extends LinearLayout implements OnClickListener
 		super(context, attrs);
 
 		paint = new Paint();
-		paint.setColor(MColors.BLUE_NEON);
+		paint.setColor(MColors.BLUE_LIGHT_500);
 	}
 
 	@Override

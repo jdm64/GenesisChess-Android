@@ -170,9 +170,9 @@ public class GameStatsDialog extends BaseDialog
 		final TextView score = (TextView) findViewById(R.id.psr_score);
 		score.setText(psr_score);
 		if (diff > 0)
-			score.setTextColor(MColors.GREEN_DARK);
+			score.setTextColor(MColors.GREEN_LIGHT_A700);
 		else if (diff < 0)
-			score.setTextColor(MColors.RED_DARK);
+			score.setTextColor(MColors.RED_A700);
 
 		// Set TextViews
 		final int list[] = new int[]{R.id.opponent, R.id.result, R.id.psr_type};

@@ -22,37 +22,27 @@ public final class MColors
 	{
 	}
 
-	/*
-	Android Style Colors
-	R=0..3..6..9A.C..F
-	G=0..34.6.89.BC...
-	B=0..34.......C.E.
-	*/
-
 	public final static int WHITE = 0xffffffff;
 	public final static int BLACK = 0xff000000;
 	public final static int CLEAR = 0x00ffffff;
-	public final static int GREY  = 0xff888888;
-	public final static int GREY_LIGHT = 0xffcccccc;
+	public final static int GREY_400  = 0xffbdbdbd;
 
-	public final static int RED = 0xffee0000;
-	public final static int RED_LIGHT = 0xffee4433;
-	public final static int RED_DARK = 0xffcc0000;
+	public final static int RED_500 = 0xfff44336;
+	public final static int RED_A700 = 0xffd50000;
 
-	public final static int ORANGE = 0xffff8800;
+	public final static int ORANGE_500 = 0xffff9800;
 
-	public final static int GREEN_TEAL = 0xff33bb44;
-	public final static int GREEN_DARK = 0xff449900;
+	public final static int GREEN_LIGHT_A700 = 0xff64dd17;
 
-	public final static int TEAL_PASTEL = 0xffeeffff;
+	public final static int CYAN_50 = 0xffe0f7fa;
 
-	public final static int BLUE_NEON_TR = 0x8800bbee;
-	public final static int BLUE_NEON = 0xff00bbee;
-	public final static int BLUE_DARK = 0xff3366aa;
-	public final static int BLUE_NAVY = 0xff6688bb;
-	public final static int BLUE_NAVY_DARK = 0xff446699;
-	public final static int BLUE_PASTEL = 0xffcceeff;
+	public final static int BLUE_LIGHT_500_TR = 0x8803a9f4;
+	public final static int BLUE_LIGHT_500 = 0xff03a9f4;
+	public final static int BLUE_800 = 0xff1565c0;
+	public final static int BLUE_NAVY_400 = 0xff5c84c0;
+	public final static int BLUE_NAVY_500 = 0xff3f6eb5;
+	public final static int TEAL_A100 = 0xffa7ffeb;
 
-	public final static int PURPLE_LIGHT = 0xffaa99cc;
-	public final static int PURPLE_PASTEL = 0xffddddff;
+	public final static int PURPLE_DEEP_300 = 0xff9575cd;
+	public final static int PURPLE_DEEP_100 = 0xffd1c4e9;
 }

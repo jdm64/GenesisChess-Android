@@ -115,7 +115,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		case R.id.login:
 		case R.id.settings:
 		case R.id.feedback:
-			v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_NEON : MColors.CLEAR);
+			v.setBackgroundColor((event.getAction() == MotionEvent.ACTION_DOWN)? MColors.BLUE_LIGHT_500 : MColors.CLEAR);
 			break;
 		}
 		return false;

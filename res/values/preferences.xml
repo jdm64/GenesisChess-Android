@@ -86,7 +86,7 @@
 	</array>
 	<array name="pf_bcInnerDark">
 		<item>bcInnerDark</item>
-		<item>@color/blue_navy_dark</item>
+		<item>@color/blue_navy_400</item>
 	</array>
 	<array name="pf_bcInnerLight">
 		<item>bcInnerLight</item>
@@ -94,22 +94,22 @@
 	</array>
 	<array name="pf_bcOuterDark">
 		<item>bcOuterDark</item>
-		<item>@color/blue_navy</item>
+		<item>@color/blue_navy_500</item>
 	</array>
 	<array name="pf_bcOuterLight">
 		<item>bcOuterLight</item>
-		<item>@color/grey_light</item>
+		<item>@color/grey_400</item>
 	</array>
 	<array name="pf_bcInnerSelect">
 		<item>bcInnerSelect</item>
-		<item>@color/green_teal</item>
+		<item>@color/green_light_A700</item>
 	</array>
 	<array name="pf_bcInnerCheck">
 		<item>bcInnerCheck</item>
-		<item>@color/red_light</item>
+		<item>@color/red_500</item>
 	</array>
 	<array name="pf_bcInnerLast">
 		<item>bcInnerLast</item>
-		<item>@color/purple_light</item>
+		<item>@color/purple_deep_300</item>
 	</array>
 </resources>

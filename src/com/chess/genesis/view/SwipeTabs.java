@@ -45,7 +45,7 @@ public class SwipeTabs extends ViewGroup implements OnPageChangeListener
 	private int mTabIndicatorHeight = 3;
 
 	// color for the bottom bar, fronted tab
-	private int mBottomBarColor = MColors.BLUE_NEON;
+	private int mBottomBarColor = MColors.BLUE_LIGHT_500;
 
 	// text color for all other tabs
 	private final static int mTextColor = Color.WHITE;

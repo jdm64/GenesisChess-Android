@@ -26,8 +26,8 @@ import com.chess.genesis.data.*;
 
 public class TabText extends RobotoText implements OnClickListener, OnTouchListener
 {
-	private final static int highlightColor = MColors.BLUE_NEON;
-	private final static int touchColor = MColors.BLUE_NEON_TR;
+	private final static int highlightColor = MColors.BLUE_LIGHT_500;
+	private final static int touchColor = MColors.BLUE_LIGHT_500_TR;
 
 	private final int THIN = dptopx(2);
 	private final int THICK = dptopx(5);
