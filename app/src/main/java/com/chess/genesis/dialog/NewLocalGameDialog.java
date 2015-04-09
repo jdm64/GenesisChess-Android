@@ -52,7 +52,7 @@ public class NewLocalGameDialog extends BaseDialog
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
 			new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		gametype_spin = (Spinner) findViewById(R.id.game_type);
@@ -62,7 +62,7 @@ public class NewLocalGameDialog extends BaseDialog
 			new AdapterItem("Computer As White", Enums.CPU_WHITE_OPPONENT),
 			new AdapterItem("Human", Enums.HUMAN_OPPONENT) };
 
-		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		opponent_spin = (Spinner) findViewById(R.id.opponent);

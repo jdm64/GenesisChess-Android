@@ -53,7 +53,7 @@ public class GamePoolDialog extends BaseDialog
 		// Load pool info json array
 		final JSONArray pool = new JSONArray(Pref.getString(context, R.array.pf_poolinfo));
 
-		data = new ArrayList<PoolDataItem>(pool.length());
+		data = new ArrayList<>(pool.length());
 		for (int i = 0, len = pool.length(); i < len; i++) {
 			final String type = pool.getJSONObject(i).getString("gametype");
 			final long time = pool.getJSONObject(i).getLong("added");

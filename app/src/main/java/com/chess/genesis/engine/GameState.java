@@ -41,13 +41,14 @@ public abstract class GameState implements Handler.Callback
 	protected final HintList hintList;
 	protected final Board board;
 
-	protected Handler handle;
-	protected NetworkClient net;
-	protected Engine cpu;
+	protected final Handler handle;
+	protected final NetworkClient net;
+	protected final Engine cpu;
 
-	protected int ycol;
-	protected int type;
-	protected int oppType;
+	protected final int ycol;
+	protected final int type;
+	protected final int oppType;
+
 	protected int hindex = -1;
 
 	protected abstract void revertMove(final Move move);
@@ -235,7 +236,7 @@ public abstract class GameState implements Handler.Callback
 		settings = game.getArguments();
 		board = _board;
 		handle = new Handler(this);
-		history = new ObjectArray<Move>(board.moveGenerator());
+		history = new ObjectArray<>(board.moveGenerator());
 		hintList = new HintList(activity, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);

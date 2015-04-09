@@ -84,7 +84,7 @@ class MoveListIter implements Iterator<MoveNode>
 
 class MoveListPool
 {
-	private final Queue<MoveList> pool = new ArrayDeque<MoveList>();
+	private final Queue<MoveList> pool = new ArrayDeque<>();
 	private final NewInstance<Move> moveType;
 
 	public MoveListPool(final NewInstance<Move> _moveType)

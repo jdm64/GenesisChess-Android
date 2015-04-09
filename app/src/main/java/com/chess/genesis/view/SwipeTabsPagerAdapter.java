@@ -19,7 +19,6 @@
 package com.chess.genesis.view;
 
 import android.content.*;
-import android.os.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
 import android.view.*;

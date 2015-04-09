@@ -30,7 +30,7 @@ public class RegGameState extends GameState
 	public RegGameState(final GameFrag _game)
 	{
 		super(_game, new RegBoard());
-		flagsHistory = new ObjectArray<MoveFlags>(new MoveFlags());
+		flagsHistory = new ObjectArray<>(new MoveFlags());
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {

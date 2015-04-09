@@ -40,7 +40,7 @@ public class HintList
 		gamestate = _gameState;
 		activity = _activity;
 		board = _board;
-		hints = new ArrayList<Integer>();
+		hints = new ArrayList<>();
 		selected = Piece.NONE;
 		type = SelectType.NONE;
 	}

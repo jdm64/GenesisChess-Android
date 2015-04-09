@@ -53,7 +53,7 @@ public class InviteOptionsDialog extends BaseDialog
 			new AdapterItem("White", Enums.WHITE_OPP),
 			new AdapterItem("Black", Enums.BLACK_OPP) };
 
-		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		final Spinner spinner = (Spinner) findViewById(R.id.invite_color);

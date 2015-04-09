@@ -202,7 +202,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 			break;
 		case R.id.register:
 			if (isTablet) {
-				final FragmentIntent fintent = new FragmentIntent(act);
+				final FragmentIntent fintent = new FragmentIntent();
 				fintent.setFrag(R.id.panel02, new RegisterFrag());
 				fintent.loadFrag(fragMan);
 			} else {

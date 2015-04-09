@@ -28,7 +28,7 @@ public class ColorPickerDialog extends BaseDialog
 {
 	public interface OnColorChangedListener
 	{
-		public void onColorChanged(int color);
+		void onColorChanged(int color);
 	}
 
 	private final OnColorChangedListener callback;

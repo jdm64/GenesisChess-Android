@@ -240,7 +240,7 @@ public class GameDataDB
 		final String username = getUsername();
 		final String[] data = {username, username};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM onlinegames WHERE white=? OR black=?", data);
-		final List<String> list = new ArrayList<String>(cursor.getCount());
+		final List<String> list = new ArrayList<>(cursor.getCount());
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {
@@ -362,7 +362,7 @@ public class GameDataDB
 		final String username = getUsername();
 		final String[] data = {username, username};
 		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT gameid FROM archivegames WHERE white=? OR black=?", data);
-		final List<String> list = new ArrayList<String>(cursor.getCount());
+		final List<String> list = new ArrayList<>(cursor.getCount());
 
 		cursor.moveToFirst();
 		for (int i = 0, len = cursor.getCount(); i < len; i++) {

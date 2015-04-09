@@ -55,7 +55,7 @@ public class CpuTimeDialog extends BaseDialog
 	{
 		if (v.getId() == R.id.ok) {
 			final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
-			final Integer value = Integer.valueOf(number.getCurrent());
+			final Integer value = number.getCurrent();
 			handle.sendMessage(handle.obtainMessage(MSG, value));
 		}
 		dismiss();

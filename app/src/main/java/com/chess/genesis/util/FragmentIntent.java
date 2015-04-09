@@ -22,14 +22,12 @@ import com.chess.genesis.activity.*;
 
 public class FragmentIntent
 {
-	private final FragmentActivity act;
 	private BaseContentFrag frag;
 	private String tag;
 	private int layoutId;
 
-	public FragmentIntent(final FragmentActivity activity)
+	public FragmentIntent()
 	{
-		act = activity;
 	}
 
 	public void setFrag(final int LayoutId, final BaseContentFrag fragment)

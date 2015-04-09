@@ -100,7 +100,7 @@ public class MyImageView extends ImageView
 
 		public ImageLoader(final ImageView imageView, final Resources resources)
 		{
-			viewRef = new WeakReference<ImageView>(imageView);
+			viewRef = new WeakReference<>(imageView);
 			res = resources;
 		}
 

@@ -39,7 +39,7 @@ public abstract class Engine implements Runnable
 
 	protected final TransTable tt;
 	protected final TransItem ttItem;
-	protected MoveListPool pool;
+	protected final MoveListPool pool;
 	protected MoveList curr;
 	protected Board board;
 
@@ -57,10 +57,10 @@ public abstract class Engine implements Runnable
 		rand = new Rand64();
 		final NewInstance<Move> moveType = boardType.moveGenerator();
 
-		smove = new ObjectArray<Move>(moveType);
-		pvMove = new ObjectArray<Move>(moveType);
-		captureKiller = new ObjectArray<Move>(moveType);
-		moveKiller = new ObjectArray<Move>(moveType);
+		smove = new ObjectArray<>(moveType);
+		pvMove = new ObjectArray<>(moveType);
+		captureKiller = new ObjectArray<>(moveType);
+		moveKiller = new ObjectArray<>(moveType);
 		ttItem = new TransItem(moveType);
 		tt = new TransTable(boardType, 8);
 		pool = boardType.getMoveListPool();

@@ -165,25 +165,31 @@ public class Settings extends PreferenceActivity implements
 		final GameDataDB db = new GameDataDB(this);
 		final SyncClient sync = new SyncClient(this, handle);
 
-		if (key.equals("deleteLocalTable")) {
+		switch (key) {
+		case "deleteLocalTable":
 			db.deleteAllLocalGames();
-		} else if (key.equals("resyncOnlineTable")) {
+			break;
+		case "resyncOnlineTable":
 			progress.setText("ReSyncing Active Games");
 
 			sync.setSyncType(SyncClient.ACTIVE_SYNC);
 			new Thread(sync).start();
-		} else if (key.equals("resyncArchiveTable")) {
+			break;
+		case "resyncArchiveTable":
 			progress.setText("ReSyncing Archive Games");
 
 			sync.setSyncType(SyncClient.ARCHIVE_SYNC);
 			new Thread(sync).start();
-		} else if (key.equals("resyncMsgTable")) {
+			break;
+		case "resyncMsgTable":
 			progress.setText("ReSyncing Messages");
 
 			sync.setSyncType(SyncClient.MSG_SYNC);
 			new Thread(sync).start();
-		} else if (key.equals("bcReset")) {
+			break;
+		case "bcReset":
 			resetBoardColors();
+			break;
 		}
 		db.close();
 	}
@@ -197,7 +203,7 @@ public class Settings extends PreferenceActivity implements
 		if (key.equals(pref.key(R.array.pf_emailNoteEnabled))) {
 			progress.setText("Setting Option");
 
-			net.set_option("emailnote", (Boolean) newValue);
+			net.set_option("emailnote", newValue);
 			new Thread(net).start();
 		} else if (key.equals(pref.key(R.array.pf_noteEnabled)) || key.equals(pref.key(R.array.pf_notifierPolling))) {
 			startService(new Intent(this, GenesisNotifier.class));

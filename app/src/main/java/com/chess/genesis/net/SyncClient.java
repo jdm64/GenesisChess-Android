@@ -251,7 +251,7 @@ public class SyncClient implements Runnable, Handler.Callback
 	private ArrayList<String> getNeedList(final JSONArray ids)
 	{
 	try {
-		final ArrayList<String> list_need = new ArrayList<String>(ids.length());
+		final ArrayList<String> list_need = new ArrayList<>(ids.length());
 		for (int i = 0, len = ids.length(); i < len; i++)
 			list_need.add(ids.getString(i));
 
@@ -263,7 +263,7 @@ public class SyncClient implements Runnable, Handler.Callback
 			db.getOnlineGameIds() : db.getArchiveGameIds();
 		db.close();
 
-		final ArrayList<String> list_have = new ArrayList<String>(list.size());
+		final ArrayList<String> list_have = new ArrayList<>(list.size());
 		for (final String item : list)
 			list_have.add(item);
 

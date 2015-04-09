@@ -54,7 +54,7 @@ public class RematchConfirm extends BaseDialog
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
 			new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		Spinner spinner = (Spinner) findViewById(R.id.game_type);
@@ -65,7 +65,7 @@ public class RematchConfirm extends BaseDialog
 			new AdapterItem("White", Enums.WHITE_OPP),
 			new AdapterItem("Black", Enums.BLACK_OPP) };
 
-		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		spinner = (Spinner) findViewById(R.id.color);

@@ -193,7 +193,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		for (int i = 0, len = fragMan.getBackStackEntryCount(); i < len; i++)
 			fragMan.popBackStack();
 
-		final FragmentIntent fintent = new FragmentIntent(act);
+		final FragmentIntent fintent = new FragmentIntent();
 
 		switch (viewId) {
 		case R.id.local_game:

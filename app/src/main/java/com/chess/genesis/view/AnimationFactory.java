@@ -45,7 +45,7 @@ public class AnimationFactory
 	 * @author Ephraim A. Tekle
 	 *
 	 */
-	public static enum FlipDirection
+	public enum FlipDirection
 	{
 		LEFT_RIGHT,
 		RIGHT_LEFT;

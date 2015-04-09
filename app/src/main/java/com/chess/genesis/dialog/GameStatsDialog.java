@@ -43,7 +43,7 @@ public class GameStatsDialog extends BaseDialog
 
 	private static SparseArray<String[]> createMap()
 	{
-		final SparseArray<String[]> map = new SparseArray<String[]>();
+		final SparseArray<String[]> map = new SparseArray<>();
 		map.put(Piece.WHITE * Enums.WHITEMATE, WON_CHECK);
 		map.put(Piece.WHITE * Enums.BLACKMATE, LOST_CHECK);
 		map.put(Piece.WHITE * Enums.WHITERESIGN, LOST_RESIGN);
@@ -114,9 +114,9 @@ public class GameStatsDialog extends BaseDialog
 	{
 		super(context, BaseDialog.CANCEL);
 
-		String[] statusArr = null;
-		String gametype = null, gameid = null, sign = null;
-		int eventtype = 0, ycol = 0, w_from = 0, w_to = 0, b_from = 0, b_to = 0;
+		String[] statusArr;
+		String gametype, gameid, sign;
+		int eventtype, ycol, w_from = 0, w_to = 0, b_from = 0, b_to = 0;
 
 		try {
 			gameid = json.getString("gameid");

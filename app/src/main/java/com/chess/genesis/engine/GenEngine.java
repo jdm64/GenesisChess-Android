@@ -30,7 +30,7 @@ public class GenEngine extends Engine
 	public GenEngine(final Handler handler, final Board boardType)
 	{
 		super(handler, boardType);
-		placeKiller = new ObjectArray<Move>(boardType.moveGenerator());
+		placeKiller = new ObjectArray<>(boardType.moveGenerator());
 	}
 
 	@Override

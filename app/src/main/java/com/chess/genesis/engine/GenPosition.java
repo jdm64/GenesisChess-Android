@@ -82,7 +82,7 @@ class GenPosition extends GenMoveLookup
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
 
-		return (piece[king] == Piece.PLACEABLE)? false : isAttacked(piece[king]);
+		return (piece[king] != Piece.PLACEABLE) && isAttacked(piece[king]);
 	}
 
 	public boolean parseZfen(final String pos)

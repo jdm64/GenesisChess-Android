@@ -44,8 +44,6 @@ public class FileLogger
 
 		try {
 			FileUtils.writeFile("genesis-error.log", data, true);
-		} catch (final FileNotFoundException e) {
-			// Ignore if can't write file
 		} catch (final IOException e) {
 			// Ignore if can't write file
 		}

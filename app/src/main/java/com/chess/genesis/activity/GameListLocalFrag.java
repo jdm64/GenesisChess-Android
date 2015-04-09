@@ -205,9 +205,7 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 		Toast.makeText(act, "File Not Found", Toast.LENGTH_LONG).show();
 	} catch (final IOException e) {
 		Toast.makeText(act, "Error Reading File", Toast.LENGTH_LONG).show();
-	} catch (final JSONException e) {
-		Toast.makeText(act, "Not A Game Data File", Toast.LENGTH_LONG).show();
-	} catch (final ClassCastException e) {
+	} catch (final JSONException | ClassCastException e) {
 		Toast.makeText(act, "Not A Game Data File", Toast.LENGTH_LONG).show();
 	}
 	}

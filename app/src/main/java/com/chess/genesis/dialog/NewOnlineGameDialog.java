@@ -50,7 +50,7 @@ public class NewOnlineGameDialog extends BaseDialog
 			new AdapterItem("Regular", Enums.REGULAR_CHESS),
 			new AdapterItem("Any Type", Enums.ANY_CHESS) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		Spinner spinner = (Spinner) findViewById(R.id.game_type);
@@ -61,7 +61,7 @@ public class NewOnlineGameDialog extends BaseDialog
 			{new AdapterItem("Random", Enums.RANDOM),
 			new AdapterItem("Invite", Enums.INVITE) };
 
-		adapter = new ArrayAdapter<AdapterItem>(this.getContext(), android.R.layout.simple_spinner_item, list);
+		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		spinner = (Spinner) findViewById(R.id.opp_type);
