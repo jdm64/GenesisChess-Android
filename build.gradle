@@ -1,0 +1,17 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:+'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}

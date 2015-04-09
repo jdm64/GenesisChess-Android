@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+apply from: 'signing.gradle'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            String name = output.outputFile.name.replace(".apk", "-v${variant.versionName}.apk")
+            name = name.replace("app", "GenesisChess")
+            output.outputFile = new File(output.outputFile.parent, name)
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.chess.genesis"
+        minSdkVersion 10
+        targetSdkVersion 22
+        versionCode 66
+        versionName "1.14.6"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:+'
+    compile 'com.google.android.gms:play-services-ads:+'
+}
