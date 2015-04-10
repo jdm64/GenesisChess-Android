@@ -13,13 +13,18 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:textSize="14sp"
 		android:text="Searching For Opponents..."/>
 	</FrameLayout>
-	<com.chess.genesis.view.SwipeTabs
-	android:id="@+id/swipetabs"
-	android:layout_below="@id/layout02"
-	style="@style/FillWidth"
-	android:background="#ff383838"/>
 	<android.support.v4.view.ViewPager
 	android:id="@+id/swipe_list"
-	android:layout_below="@id/swipetabs"
-	android:layout_alignParentBottom="true"/>
+	android:layout_below="@id/layout02"
+	android:layout_alignParentBottom="true">
+		<android.support.v4.view.PagerTabStrip
+		android:id="@+id/pager_title_strip"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top"
+		android:background="@color/grey_900"
+		android:textColor="@color/white"
+		android:paddingTop="4dp"
+		android:paddingBottom="4dp"/>
+    </android.support.v4.view.ViewPager>
 </RelativeLayout>

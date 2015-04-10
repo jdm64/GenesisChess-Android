@@ -6,7 +6,7 @@ android:orientation="vertical">
 	<com.chess.genesis.view.ManualPanel
 	android:id="@+id/board_names"
 	panel:sizes="1/2"
-	android:background="#ff383838">
+	android:background="@color/grey_900">
 		<com.chess.genesis.view.TabText
 		android:id="@+id/white_name"
 		android:gravity="center"

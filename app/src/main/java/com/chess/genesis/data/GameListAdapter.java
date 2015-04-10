@@ -150,6 +150,11 @@ public class GameListAdapter extends BaseAdapter
 		}
 		return cell;
 	}
+
+	public int getType()
+	{
+		return type;
+	}
 }
 
 class GameListItem extends View

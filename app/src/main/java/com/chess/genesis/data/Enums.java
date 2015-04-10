@@ -22,6 +22,11 @@ public final class Enums
 	{
 	}
 
+	// Game List Page Types
+	public static final int THEIR_PAGE = 0;
+	public static final int YOUR_PAGE = 1;
+	public static final int ARCHIVE_PAGE = 2;
+
 	// Play Types
 	public final static int LOCAL_GAME = 1;
 	public final static int ONLINE_GAME = 2;

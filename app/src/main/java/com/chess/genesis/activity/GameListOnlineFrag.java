@@ -18,30 +18,26 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.*;
 import android.support.v4.view.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.ContextMenu.*;
+import android.view.View.*;
+import android.widget.AdapterView.*;
 import android.widget.*;
+
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-import com.chess.genesis.view.*;
+
 import org.json.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, Handler.Callback
 {
-	private final static String TAG = "GAMELISTONLINE";
-
-	public static final int THEIR_PAGE = 0;
-	public static final int YOUR_PAGE = 1;
-	public static final int ARCHIVE_PAGE = 2;
+	public final static String TAG = "GAMELISTONLINE";
 
 	public final Handler handle = new Handler(this);
-	private GameListAdapter[] gamelistadapter_arr;
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private ViewPager pager;
@@ -157,86 +153,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		return true;
 	}
 
-	class GameListPager extends PagerAdapter
-	{
-		@Override
-		public int getCount()
-		{
-			return 3;
-		}
-
-		@Override
-		public Object instantiateItem(final ViewGroup collection, final int position)
-		{
-			int type = Enums.ONLINE_GAME, yourmove = Enums.YOUR_TURN;
-
-			switch (position) {
-			case THEIR_PAGE:
-				yourmove = Enums.THEIR_TURN;
-				break;
-			case YOUR_PAGE:
-				// already initialized
-				break;
-			case ARCHIVE_PAGE:
-				type = Enums.ARCHIVE_GAME;
-				break;
-			}
-			final GameListAdapter list = new GameListAdapter(act, type, yourmove);
-			gamelistadapter_arr[position] = list;
-
-			final FrameLayout layout = (FrameLayout) act.getLayoutInflater().inflate(R.layout.gamelist_listview, null);
-			final ListView listview = (ListView) layout.getChildAt(0);
-			final View empty = list.getEmptyView(act);
-
-			layout.addView(empty, 1);
-			listview.setEmptyView(empty);
-			listview.setAdapter(list);
-			listview.setOnItemClickListener(GameListOnlineFrag.this);
-			registerForContextMenu(listview);
-
-			collection.addView(layout, 0);
-
-			return layout;
-		}
-
-		@Override
-		public void destroyItem(final ViewGroup collection, final int position, final Object view)
-		{
-			gamelistadapter_arr[position].close();
-			collection.removeView((FrameLayout) view);
-		}
-
-		@Override
-		public void startUpdate(final ViewGroup arg0)
-		{
-			// do nothing
-		}
-
-		@Override
-		public void finishUpdate(final ViewGroup arg0)
-		{
-			// do nothing
-		}
-
-		@Override
-		public boolean isViewFromObject(final View view, final Object object)
-		{
-			return view == object;
-		}
-
-		@Override
-		public void restoreState(final Parcelable arg0, final ClassLoader arg1)
-		{
-			// do nothing
-		}
-
-		@Override
-		public Parcelable saveState()
-		{
-			return null;
-		}
-	}
-
 	@Override
 	public String getBTag()
 	{
@@ -250,7 +166,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 
 		final View view = inflater.inflate(R.layout.fragment_gamelist_online, container, false);
 
-		gamelistadapter_arr = new GameListAdapter[3];
 		net = new NetworkClient(act, handle);
 		progress = new ProgressMsg(act);
 
@@ -266,20 +181,16 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		throw new RuntimeException(e.getMessage(), e);
 	}
 
-		final SwipeTabsPagerAdapter tabAdapter = new SwipeTabsPagerAdapter(act, act.getSupportFragmentManager());
-		tabAdapter.setTitles(new String[]{"Their Turn", "Your Turn", "Archive Games"});
-
-		final SwipeTabs swipetabs = (SwipeTabs) view.findViewById(R.id.swipetabs);
-		swipetabs.setAdapter(tabAdapter);
+		PagerTabStrip tabs = (PagerTabStrip) view.findViewById(R.id.pager_title_strip);
+		tabs.setTabIndicatorColorResource(R.color.blue_light_500);
 
 		pager = (ViewPager) view.findViewById(R.id.swipe_list);
-		tabAdapter.setViewPager(pager);
-		pager.setAdapter(new GameListPager());
-		pager.setOnPageChangeListener(swipetabs);
-		pager.setCurrentItem(YOUR_PAGE);
+		pager.setAdapter(new GameListPager(getFragmentManager()));
+		pager.setCurrentItem(Enums.YOUR_PAGE);
 
 		return view;
 	}
+
 
 	@Override
 	public void onResume()
@@ -305,16 +216,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	}
 
 	@Override
-	public void onDestroy()
-	{
-		for (int i = 0; i < 3; i++) {
-			if (gamelistadapter_arr[i] != null)
-				gamelistadapter_arr[i].close();
-		}
-		super.onDestroy();
-	}
-
-	@Override
 	public boolean onTouch(final View v, final MotionEvent event)
 	{
 		if (v.getId() == R.id.game_search)
@@ -335,73 +236,22 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = getBTag();
 
-		if (v.getId() == R.id.menu) {
+		if (v.getId() == R.id.menu)
 			act.getMenuInflater().inflate(R.menu.options_gamelist_online, menu);
-			return;
-		}
-
-		switch (pager.getCurrentItem()) {
-		case THEIR_PAGE:
-			final AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-			final GameListAdapter listAdapter = gamelistadapter_arr[pager.getCurrentItem()];
-			final Bundle bundle = (Bundle) listAdapter.getItem((int) info.id);
-
-			if (bundle.getString("idle").equals("1")) {
-				act.getMenuInflater().inflate(R.menu.context_gamelist_online_nudge, menu);
-				break;
-			}
-		case YOUR_PAGE:
-			act.getMenuInflater().inflate(R.menu.context_gamelist_online, menu);
-			break;
-		case ARCHIVE_PAGE:
-			act.getMenuInflater().inflate(R.menu.context_gamelist_archive, menu);
-			break;
-		}
 	}
 
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		if (!act.lastContextMenu.equals(getBTag()))
-			return super.onContextItemSelected(item);
-
 		switch (item.getItemId()) {
 		case R.id.new_game:
 		case R.id.resync:
 		case R.id.readall_msgs:
 			return onOptionsItemSelected(item);
-		}
-
-		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-		final GameListAdapter listAdapter = gamelistadapter_arr[pager.getCurrentItem()];
-		final Bundle bundle = (Bundle) listAdapter.getItem((int) info.id);
-
-		switch (item.getItemId()) {
-		case R.id.delete_game:
-			new DeleteArchiveDialog(act, handle, bundle.getString("gameid")).show();
-			break;
-		case R.id.local_copy:
-			final int type = (pager.getCurrentItem() == ARCHIVE_PAGE)? Enums.ARCHIVE_GAME : Enums.ONLINE_GAME;
-			new CopyGameConfirm(act, bundle.getString("gameid"), type).show();
-			break;
-		case R.id.rematch:
-			final String username = listAdapter.getExtras().getString("username");
-			final String opponent = username.equals(bundle.getString("white"))?
-					bundle.getString("black") : bundle.getString("white");
-			new RematchConfirm(act, handle, opponent).show();
-			break;
-		case R.id.nudge:
-			new NudgeConfirm(act, handle, bundle.getString("gameid")).show();
-			break;
-		case R.id.share_game:
-			sendGame(bundle);
-			break;
 		default:
 			return super.onContextItemSelected(item);
 		}
-		return true;
 	}
 
 	@Override
@@ -423,7 +273,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		return true;
 	}
 
-	public void resyncList()
+	private void resyncList()
 	{
 		progress.setText("Updating Game List");
 
@@ -434,9 +284,8 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public void updateGameList()
 	{
-		for (int i = 0; i < 3; i++) {
-			if (gamelistadapter_arr[i] != null)
-				gamelistadapter_arr[i].update();
-		}
+		final FragmentPagerAdapter adapter = (FragmentPagerAdapter) pager.getAdapter();
+		for (int i = 0; i < adapter.getCount(); i++)
+			((GameListPage) adapter.getItem(i)).update();
 	}
 }
