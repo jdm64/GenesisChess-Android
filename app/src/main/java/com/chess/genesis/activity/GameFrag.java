@@ -18,7 +18,6 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.os.PowerManager.WakeLock;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
@@ -40,7 +39,6 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public boolean viewAsBlack = false;
 
 	protected GameListFrag gameListFrag;
-	protected WakeLock wakelock;
 
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -65,6 +63,8 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
+		setKeepScreenOn();
+
 		final View view = inflater.inflate(R.layout.fragment_game, container, false);
 
 		// initialize the board & place piece layouts
@@ -124,12 +124,6 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 
 		if (type == Enums.ONLINE_GAME)
 			NetActive.inc();
-
-		if (Pref.getBool(act, R.array.pf_screenAlwaysOn)) {
-			final PowerManager pm = (PowerManager) act.getSystemService(Context.POWER_SERVICE);
-			wakelock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "GenesisChess");
-			wakelock.acquire();
-		}
 	}
 
 	@Override
@@ -139,8 +133,6 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 
 		if (type == Enums.ONLINE_GAME)
 			NetActive.dec();
-		if (wakelock != null)
-			wakelock.release();
 
 		if (isTablet)
 			gameListFrag.updateGameList();
@@ -287,5 +279,14 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 			piece.reset();
 		}
 		gamestate.setStm();
+	}
+
+	private void setKeepScreenOn()
+	{
+		if (Pref.getBool(act, R.array.pf_screenAlwaysOn)) {
+			act.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			act.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	}
 }
