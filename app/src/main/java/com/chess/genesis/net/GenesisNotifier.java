@@ -196,7 +196,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 		if (id == ERROR_NOTE) {
 			noteBuilder.setAutoCancel(true);
-			return noteBuilder.getNotification();
+			return noteBuilder.build();
 		}
 		noteBuilder.setOnlyAlertOnce(true).setContentIntent(pintent);
 
@@ -206,7 +206,7 @@ public class GenesisNotifier extends Service implements Runnable
 		if (pref.getBool(R.array.pf_noteVibrateEnable))
 			noteBuilder.setVibrate(parseVibrate());
 
-		return noteBuilder.getNotification();
+		return noteBuilder.build();
 	}
 
 	private long[] parseVibrate()
