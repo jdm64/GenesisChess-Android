@@ -93,7 +93,7 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		net = new NetworkClient(act, handle);
 		progress = new ProgressMsg(act);
 
-		final RobotoText txt = (RobotoText) view.findViewById(R.id.username);
+		final TextView txt = (TextView) view.findViewById(R.id.username);
 		txt.setText(settings.getString("username"));
 
 		final int[] list = new int[]{R.id.apsr, R.id.total_games, R.id.total_wins,

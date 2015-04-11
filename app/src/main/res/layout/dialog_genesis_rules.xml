@@ -2,14 +2,14 @@
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical">
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:id="@+id/layout01"
 	android:textColor="#cc0000"
 	android:text="@string/genesis_rules"/>
 	<LinearLayout>
 		<CheckBox
 		android:id="@+id/agree"/>
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:textColor="#000000"
 		android:textSize="18sp"
 		android:text="I Understand"/>

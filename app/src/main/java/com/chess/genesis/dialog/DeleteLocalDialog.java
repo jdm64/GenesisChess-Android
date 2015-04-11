@@ -19,9 +19,10 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
+import android.widget.*;
+
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.view.*;
 
 public class DeleteLocalDialog extends BaseDialog
 {
@@ -46,7 +47,7 @@ public class DeleteLocalDialog extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Delete Game");
 
-		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		final TextView txt = (TextView) findViewById(R.id.text);
 		txt.setText(R.string.delete_local);
 	}
 

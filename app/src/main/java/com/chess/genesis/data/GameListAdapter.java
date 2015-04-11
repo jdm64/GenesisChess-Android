@@ -26,7 +26,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.view.*;
 
 public class GameListAdapter extends BaseAdapter
 {
@@ -180,8 +179,6 @@ class GameListItem extends View
 	{
 		public static Bitmap whitePawn;
 		public static Bitmap blackPawn;
-		public static Typeface fontNormal;
-		public static Typeface fontItalic;
 		public static RectF rect;
 		public static int height;
 		private static boolean isActive = false;
@@ -194,9 +191,6 @@ class GameListItem extends View
 		{
 			if (isActive)
 				return;
-
-			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
-			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
 
 			height = (int) ((5.0 * width) / 32.0);
 			rect = new RectF(0, 0, height, height);
@@ -216,7 +210,7 @@ class GameListItem extends View
 		super(context);
 
 		paint.setAntiAlias(true);
-		paint.setTypeface(Cache.fontNormal);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 	}
 
 	@Override
@@ -241,7 +235,7 @@ class GameListItem extends View
 		canvas.drawText(data.name, Cache.height + 8, Cache.height / 2, paint);
 
 		// set italic text
-		paint.setTypeface(Cache.fontItalic);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
 
 		// game type
 		paint.setTextSize((int) (0.30 * Cache.height));
@@ -257,7 +251,7 @@ class GameListItem extends View
 		// reset paint
 		paint.setColor(MColors.BLACK);
 		paint.setTextAlign(Paint.Align.LEFT);
-		paint.setTypeface(Cache.fontNormal);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 	}
 
 	private void setIcon(final Canvas canvas)

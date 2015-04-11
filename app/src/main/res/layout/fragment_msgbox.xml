@@ -20,7 +20,7 @@ xmlns:panel="http://schemas.android.com/apk/res-auto">
 	android:id="@+id/input_box"
 	android:layout_width="match_parent"
 	android:layout_alignParentBottom="true">
-		<com.chess.genesis.view.RobotoEditText
+		<EditText
 		android:id="@+id/new_msg"
 		android:maxLines="3"
 		android:scrollbars="horizontal"

@@ -23,7 +23,7 @@ import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.view.*;
+
 import java.io.*;
 import org.json.*;
 
@@ -48,31 +48,31 @@ public class GameDetailsDialog extends BaseDialog
 		setButtonTxt(R.id.ok, "Save To File");
 		setButtonTxt(R.id.cancel, "Close");
 
-		RobotoText txt;
+		TextView txt;
 		if (isOnline) {
-			txt = (RobotoText) findViewById(R.id.white);
+			txt = (TextView) findViewById(R.id.white);
 			txt.setText(gamedata.getString("white"));
-			txt = (RobotoText) findViewById(R.id.black);
+			txt = (TextView) findViewById(R.id.black);
 			txt.setText(gamedata.getString("black"));
-			txt = (RobotoText) findViewById(R.id.eventtype);
+			txt = (TextView) findViewById(R.id.eventtype);
 			txt.setText(Enums.EventType(Integer.parseInt(gamedata.getString("eventtype"))));
-			txt = (RobotoText) findViewById(R.id.status);
+			txt = (TextView) findViewById(R.id.status);
 			txt.setText(Enums.GameStatus(Integer.parseInt(gamedata.getString("status"))));
 		} else {
-			txt = (RobotoText) findViewById(R.id.name);
+			txt = (TextView) findViewById(R.id.name);
 			txt.setText(gamedata.getString("name"));
-			txt = (RobotoText) findViewById(R.id.opponent);
+			txt = (TextView) findViewById(R.id.opponent);
 			txt.setText(Enums.OpponentType(Integer.parseInt(gamedata.getString("opponent"))));
 		}
-		txt = (RobotoText) findViewById(R.id.gametype);
+		txt = (TextView) findViewById(R.id.gametype);
 		txt.setText(Enums.GameType(Integer.parseInt(gamedata.getString("gametype"))));
-		txt = (RobotoText) findViewById(R.id.ctime);
+		txt = (TextView) findViewById(R.id.ctime);
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
-		txt = (RobotoText) findViewById(R.id.stime);
+		txt = (TextView) findViewById(R.id.stime);
 		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
-		txt = (RobotoText) findViewById(R.id.zfen);
+		txt = (TextView) findViewById(R.id.zfen);
 		txt.setText(gamedata.getString("zfen"));
-		txt = (RobotoText) findViewById(R.id.history);
+		txt = (TextView) findViewById(R.id.history);
 		txt.setText(gamedata.getString("history"));
 
 	}

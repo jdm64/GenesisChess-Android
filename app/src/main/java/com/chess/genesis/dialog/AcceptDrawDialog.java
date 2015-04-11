@@ -19,8 +19,9 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
+import android.widget.*;
+
 import com.chess.genesis.*;
-import com.chess.genesis.view.*;
 
 public class AcceptDrawDialog extends BaseDialog
 {
@@ -44,7 +45,7 @@ public class AcceptDrawDialog extends BaseDialog
 		setButtonTxt(R.id.ok, "Accept");
 		setButtonTxt(R.id.cancel, "Decline");
 
-		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		final TextView txt = (TextView) findViewById(R.id.text);
 		txt.setText(R.string.draw_accept);
 	}
 

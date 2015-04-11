@@ -7,88 +7,88 @@ android:orientation="vertical">
 	<TableLayout
 	android:paddingBottom="12dp">
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="White:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/white"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Black:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/black"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Game Type:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/gametype"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Event Type:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/eventtype"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Status:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/status"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Create Time:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/ctime"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Save Time:  "
 			android:textColor="#000000"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/stime"
 			android:textColor="#000000"/>
 		</TableRow>
 	</TableLayout>
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:textStyle="bold"
 	android:text="Zfen:"
 	android:textColor="#000000"/>
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:id="@+id/zfen"
 	android:textColor="#000000"/>
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:textStyle="bold"
 	android:text="Move History:"
 	android:textColor="#000000"/>
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:id="@+id/history"
 	android:textColor="#000000"/>
 </LinearLayout>

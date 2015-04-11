@@ -19,8 +19,9 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
+import android.widget.*;
+
 import com.chess.genesis.*;
-import com.chess.genesis.view.*;
 
 public class PendingDrawDialog extends BaseDialog
 {
@@ -37,7 +38,7 @@ public class PendingDrawDialog extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.cancel, "Close");
 
-		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		final TextView txt = (TextView) findViewById(R.id.text);
 		txt.setText(R.string.draw_pending);
 	}
 

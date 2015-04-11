@@ -21,14 +21,14 @@ android:orientation="vertical">
 		genesis:src="@drawable/avatar"
 		android:layout_height="96dp"
 		android:layout_width="96dp"/>
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:id="@+id/username"
 		android:layout_toRightOf="@id/avatar"
 		style="@style/FillWidth"
 		android:gravity="center"
 		android:textStyle="bold"
 		android:textSize="22sp"/>
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:id="@+id/joined"
 		android:layout_toRightOf="@id/avatar"
 		android:layout_below="@id/username"
@@ -36,7 +36,7 @@ android:orientation="vertical">
 		android:gravity="center"
 		android:textSize="14sp"
 		android:text="Joined:"/>
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:id="@+id/text01"
 		android:layout_toRightOf="@id/avatar"
 		android:layout_below="@id/joined"
@@ -44,7 +44,7 @@ android:orientation="vertical">
 		android:gravity="center"
 		android:textSize="14sp"
 		android:text="Last Activity:"/>
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:id="@+id/last_activity"
 		android:layout_toRightOf="@id/avatar"
 		android:layout_below="@id/text01"
@@ -70,12 +70,12 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Average PSR: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/gpsr"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/rpsr"
 			android:layout_gravity="center"
 			android:paddingBottom="6dp"
@@ -94,20 +94,20 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Games Played: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/genesis_games"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
 			<FrameLayout
 			style="@style/FillWidth">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_random_games"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_invite_games"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -121,7 +121,7 @@ android:orientation="vertical">
 				android:layout_width="256dp"
 				android:background="#ff00b7eb"/>
 			</FrameLayout>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/regular_games"
 			android:layout_gravity="center"
 			android:textSize="14sp"
@@ -129,13 +129,13 @@ android:orientation="vertical">
 			<FrameLayout
 			style="@style/FillWidth"
 			android:paddingBottom="6dp">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_random_games"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_invite_games"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -155,20 +155,20 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Wins: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/genesis_wins"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
 			<FrameLayout
 			style="@style/FillWidth">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_random_wins"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_invite_wins"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -182,7 +182,7 @@ android:orientation="vertical">
 				android:layout_width="256dp"
 				android:background="#ff00b7eb"/>
 			</FrameLayout>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/regular_wins"
 			android:layout_gravity="center"
 			android:textSize="14sp"
@@ -190,13 +190,13 @@ android:orientation="vertical">
 			<FrameLayout
 			style="@style/FillWidth"
 			android:paddingBottom="6dp">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_random_wins"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_invite_wins"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -216,20 +216,20 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Losses: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/genesis_losses"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
 			<FrameLayout
 			style="@style/FillWidth">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_random_losses"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_invite_losses"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -243,7 +243,7 @@ android:orientation="vertical">
 				android:layout_width="256dp"
 				android:background="#ff00b7eb"/>
 			</FrameLayout>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/regular_losses"
 			android:layout_gravity="center"
 			android:textSize="14sp"
@@ -251,13 +251,13 @@ android:orientation="vertical">
 			<FrameLayout
 			style="@style/FillWidth"
 			android:paddingBottom="6dp">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_random_losses"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_invite_losses"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -277,20 +277,20 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Resigns: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/genesis_resigns"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
 			<FrameLayout
 			style="@style/FillWidth">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_random_resigns"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_invite_resigns"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -304,7 +304,7 @@ android:orientation="vertical">
 				android:layout_width="256dp"
 				android:background="#ff00b7eb"/>
 			</FrameLayout>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/regular_resigns"
 			android:layout_gravity="center"
 			android:textSize="14sp"
@@ -312,13 +312,13 @@ android:orientation="vertical">
 			<FrameLayout
 			style="@style/FillWidth"
 			android:paddingBottom="6dp">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_random_resigns"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_invite_resigns"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -338,20 +338,20 @@ android:orientation="vertical">
 			android:textSize="18sp"
 			android:padding="8dp"
 			android:text="Draws: "/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/genesis_ties"
 			android:layout_gravity="center"
 			android:textSize="14sp"
 			android:text="Genesis: "/>
 			<FrameLayout
 			style="@style/FillWidth">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_random_ties"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/genesis_invite_ties"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"
@@ -365,7 +365,7 @@ android:orientation="vertical">
 				android:layout_width="256dp"
 				android:background="#ff00b7eb"/>
 			</FrameLayout>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/regular_ties"
 			android:layout_gravity="center"
 			android:textSize="14sp"
@@ -373,13 +373,13 @@ android:orientation="vertical">
 			<FrameLayout
 			style="@style/FillWidth"
 			android:paddingBottom="6dp">
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_random_ties"
 				android:layout_gravity="left"
 				android:paddingLeft="16dp"
 				android:textSize="14sp"
 				android:text="Random: "/>
-				<com.chess.genesis.view.RobotoText
+				<TextView
 				android:id="@+id/regular_invite_ties"
 				android:layout_gravity="right"
 				android:paddingRight="16dp"

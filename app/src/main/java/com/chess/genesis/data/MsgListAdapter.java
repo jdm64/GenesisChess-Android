@@ -30,7 +30,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.view.*;
 
 public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLongClickListener
 {
@@ -147,8 +146,6 @@ class MsgListItem extends View
 
 	final static class Cache
 	{
-		public static Typeface fontNormal;
-		public static Typeface fontItalic;
 		public static String username;
 
 		public static int padding;
@@ -168,8 +165,6 @@ class MsgListItem extends View
 			if (isActive)
 				return;
 
-			fontNormal = RobotoText.getRobotoFont(context.getAssets(), Typeface.NORMAL);
-			fontItalic = RobotoText.getRobotoFont(context.getAssets(), Typeface.ITALIC);
 			username = Pref.getString(context, R.array.pf_username);
 
 			largeText = (int) ((3.0 / 64.0) * width);
@@ -187,7 +182,7 @@ class MsgListItem extends View
 		super(context);
 
 		paint.setAntiAlias(true);
-		paint.setTypeface(Cache.fontNormal);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 		paint.setTextSize(Cache.largeText);
 	}
 
@@ -228,12 +223,12 @@ class MsgListItem extends View
 
 		// draw time
 		paint.setTextAlign(Paint.Align.RIGHT);
-		paint.setTypeface(Cache.fontItalic);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
 		canvas.drawText(data.time, width - Cache.padding, Cache.headerAlign, paint);
 
 		// reset paint
 		paint.setTextAlign(Paint.Align.LEFT);
-		paint.setTypeface(Cache.fontNormal);
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 		paint.setTextSize(Cache.largeText);
 	}
 

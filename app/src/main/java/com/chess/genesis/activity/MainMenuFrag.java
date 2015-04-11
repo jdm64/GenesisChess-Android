@@ -297,7 +297,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		float width = view.getWidth();
 		width *= 0.9 / 3;
 
-		final float txtSize = RobotoText.maxTextWidth(stList, txt.getPaint(), width);
+		final float txtSize = TextUtil.maxTextWidth(stList, txt.getPaint(), width);
 		for (final int element : list) {
 			txt = (TextView) view.findViewById(element);
 			txt.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize);

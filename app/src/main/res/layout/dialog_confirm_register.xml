@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:id="@+id/layout01"
 	android:textColor="#000000"
 	android:text="@string/register_confirm"/>
@@ -11,22 +11,22 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_centerHorizontal="true"
 	android:shrinkColumns="*">
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:layout_gravity="right"
 			android:paddingRight="12dp"
 			android:textColor="#000000"
 			android:text="User Name:"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/username"
 			android:textColor="#000000"/>
 		</TableRow>
 		<TableRow>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:layout_gravity="right"
 			android:paddingRight="12dp"
 			android:textColor="#000000"
 			android:text="Email:"/>
-			<com.chess.genesis.view.RobotoText
+			<TextView
 			android:id="@+id/email"
 			android:textColor="#000000"/>
 		</TableRow>

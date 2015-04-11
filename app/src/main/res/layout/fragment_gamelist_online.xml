@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<FrameLayout
 	android:id="@+id/layout02"
 	style="@style/FillWidth">
-		<com.chess.genesis.view.RobotoText
+		<TextView
 		android:id="@+id/game_search"
 		style="@style/FillWidth"
 		android:padding="4dp"

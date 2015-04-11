@@ -3,11 +3,11 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 style="@style/FillWidth"
 android:orientation="vertical">
-	<com.chess.genesis.view.RobotoText
+	<TextView
 	android:text="Enter Username:"
 	android:textColor="#f000"
 	android:textSize="14sp"/>
-	<com.chess.genesis.view.RobotoEditText
+	<EditText
 	android:id="@+id/username"
 	style="@style/FillWidth"
 	android:singleLine="true"

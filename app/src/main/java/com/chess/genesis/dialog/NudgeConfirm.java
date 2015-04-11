@@ -19,8 +19,9 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
+import android.widget.*;
+
 import com.chess.genesis.*;
-import com.chess.genesis.view.*;
 
 public class NudgeConfirm extends BaseDialog
 {
@@ -50,7 +51,7 @@ public class NudgeConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Nudge");
 
-		final RobotoText txt = (RobotoText) findViewById(R.id.text);
+		final TextView txt = (TextView) findViewById(R.id.text);
 		txt.setText(R.string.nudge_confirm);
 	}
 

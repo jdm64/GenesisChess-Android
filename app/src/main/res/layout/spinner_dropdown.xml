@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chess.genesis.view.RobotoText
+<TextView
 xmlns:android="http://schemas.android.com/apk/res/android"
 style="?android:attr/spinnerDropDownItemStyle"
 android:layout_height="?android:attr/listPreferredItemHeight"
