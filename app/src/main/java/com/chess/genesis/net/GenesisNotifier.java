@@ -18,6 +18,7 @@ package com.chess.genesis.net;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.*;
 import android.net.*;
 import android.os.*;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -180,20 +181,26 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		final Builder noteBuilder = new Builder(getApplicationContext());
 
-		noteBuilder.setContentText(text).setSmallIcon(R.drawable.icon);
+		Bitmap icon = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon), 96, 96, true);
+		noteBuilder.setContentText(text).setSmallIcon(R.drawable.icon_note).setLargeIcon(icon);
+		int color = R.color.blue_navy_400;
 
 		switch (id) {
 		case ERROR_NOTE:
+			color = R.color.red_500;
 			noteBuilder.setContentTitle("Error!");
 			break;
 		case YOURTURN_NOTE:
+			// color already set
 			noteBuilder.setContentTitle("It's Your turn");
 			break;
 		case NEWMGS_NOTE:
+			color = R.color.green_light_A700;
 			noteBuilder.setContentTitle("New Message");
 			break;
 		}
 
+		noteBuilder.setColor(getResources().getColor(color));
 		if (id == ERROR_NOTE) {
 			noteBuilder.setAutoCancel(true);
 			return noteBuilder.build();
