@@ -18,8 +18,9 @@ package com.chess.genesis.data;
 
 import android.content.*;
 import android.content.pm.*;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageManager.*;
 import com.chess.genesis.*;
+import com.chess.genesis.view.*;
 
 public final class UpgradeHandler
 {
@@ -42,6 +43,10 @@ public final class UpgradeHandler
 	{
 		if (oldVer == newVer)
 			return;
+
+		if (oldVer < 67) {
+			PieceImg.resetColors(context);
+		}
 
 		final PrefEdit pref = new PrefEdit(context);
 
