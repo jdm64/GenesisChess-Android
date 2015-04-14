@@ -18,6 +18,8 @@ package com.chess.genesis.net;
 
 import android.content.*;
 import android.net.*;
+
+import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import java.io.*;
 import java.net.*;
@@ -26,6 +28,8 @@ import org.json.*;
 public final class SocketClient
 {
 	private static SocketClient instance = null;
+	private static String server = null;
+	private static final int port = 8338;
 
 	private boolean isLoggedin;
 	private String loginHash;
@@ -33,21 +37,34 @@ public final class SocketClient
 	private BufferedReader input;
 	private OutputStream output;
 
-	private SocketClient()
+	private SocketClient(final Context ctx)
 	{
 		disconnect();
+		if (server == null)
+			initHost(ctx);
 	}
 
-	public static synchronized SocketClient getInstance()
+	public static void initHost(final Context ctx)
+	{
+		final PrefEdit pref = new PrefEdit(ctx);
+		server = pref.getString(R.array.pf_serverhost);
+		if (server.isEmpty()) {
+			pref.putString(R.array.pf_serverhost);
+			pref.commit();
+			server = pref.getString(R.array.pf_serverhost);
+		}
+	}
+
+	public static synchronized SocketClient getInstance(final Context ctx)
 	{
 		if (instance == null)
-			instance = new SocketClient();
+			instance = new SocketClient(ctx);
 		return instance;
 	}
 
-	public static synchronized SocketClient getNewInstance()
+	public static synchronized SocketClient getNewInstance(final Context ctx)
 	{
-		return new SocketClient();
+		return new SocketClient(ctx);
 	}
 
 	public synchronized boolean getIsLoggedIn()
@@ -71,7 +88,7 @@ public final class SocketClient
 	{
 		if (socket.isConnected())
 			return;
-		socket.connect(new InetSocketAddress("genesischess.com", 8338));
+		socket.connect(new InetSocketAddress(server, port));
 		socket.setSoTimeout(8000);
 		socket.setKeepAlive(true);
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));

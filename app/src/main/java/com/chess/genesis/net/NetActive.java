@@ -16,6 +16,8 @@
 
 package com.chess.genesis.net;
 
+import android.content.*;
+
 import java.util.concurrent.atomic.*;
 
 public final class NetActive
@@ -36,22 +38,29 @@ public final class NetActive
 		active.incrementAndGet();
 	}
 
-	public static void dec()
+	public static void dec(final Context ctx)
 	{
 		if (active.decrementAndGet() < 1)
-			new Thread(new NetDisconnect()).start();
+			new Thread(new NetDisconnect(ctx)).start();
 	}
 }
 
 class NetDisconnect implements Runnable
 {
+	private final Context ctx;
+
+	NetDisconnect(final Context context)
+	{
+		ctx = context;
+	}
+
 	@Override
 	public synchronized void run()
 	{
 	try {
 		Thread.sleep(2048);
 		if (NetActive.get() < 1)
-			SocketClient.getInstance().disconnect();
+			SocketClient.getInstance(ctx).disconnect();
 	} catch (final InterruptedException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

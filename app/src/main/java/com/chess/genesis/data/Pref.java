@@ -59,6 +59,11 @@ public class Pref
 		return pref.edit();
 	}
 
+	public void setChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)
+	{
+		pref.registerOnSharedPreferenceChangeListener(listener);
+	}
+
 	private static KeyDef setKeyDef(final Resources _res, final int _key, final KeyDef _kd)
 	{
 		final TypedArray arr = _res.obtainTypedArray(_key);

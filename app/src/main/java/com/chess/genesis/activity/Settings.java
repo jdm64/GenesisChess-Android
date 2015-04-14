@@ -35,7 +35,7 @@ import org.json.*;
 
 public class Settings extends PreferenceActivity implements
 	OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener,
-	CallBackPreference.CallBack, Handler.Callback
+	CallBackPreference.CallBack, Handler.Callback, SharedPreferences.OnSharedPreferenceChangeListener
 {
 	private final Handler handle = new Handler(this);
 	private Context context;
@@ -83,6 +83,7 @@ public class Settings extends PreferenceActivity implements
 		context = this;
 
 		final Pref pref = new Pref(this);
+		pref.setChangeListener(this);
 
 		// set layout mode
 		final boolean isTablet = pref.getBool(R.array.pf_tabletMode);
@@ -153,7 +154,7 @@ public class Settings extends PreferenceActivity implements
 	public void onPause()
 	{
 		if (Pref.getBool(this, R.array.pf_isLoggedIn))
-			NetActive.dec();
+			NetActive.dec(getApplication());
 
 		super.onPause();
 	}
@@ -209,6 +210,12 @@ public class Settings extends PreferenceActivity implements
 			startService(new Intent(this, GenesisNotifier.class));
 		}
 		return true;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+	{
+		SocketClient.initHost(this);
 	}
 
 	@Override

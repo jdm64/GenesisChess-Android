@@ -211,7 +211,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public void onPause()
 	{
-		NetActive.dec();
+		NetActive.dec(getActivity());
 		super.onPause();
 	}
 

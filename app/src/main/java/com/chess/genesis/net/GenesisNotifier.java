@@ -247,7 +247,7 @@ public class GenesisNotifier extends Service implements Runnable
 	{
 		error = false;
 		lock = 0;
-		socket = SocketClient.getNewInstance();
+		socket = SocketClient.getNewInstance(this);
 		net = new NetworkClient(socket, this, handle);
 		db = new GameDataDB(this);
 

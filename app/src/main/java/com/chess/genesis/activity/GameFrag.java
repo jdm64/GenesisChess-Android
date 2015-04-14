@@ -132,7 +132,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		gamestate.save(act, true);
 
 		if (type == Enums.ONLINE_GAME)
-			NetActive.dec();
+			NetActive.dec(getActivity());
 
 		if (isTablet)
 			gameListFrag.updateGameList();

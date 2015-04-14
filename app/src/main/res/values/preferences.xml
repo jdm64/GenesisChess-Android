@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<array name="pf_serverhost">
+		<item>serverhost</item>
+		<item>genesischess.com</item>
+	</array>
 	<array name="pf_enableAds">
 		<item>enableAds</item>
 		<item>true</item>

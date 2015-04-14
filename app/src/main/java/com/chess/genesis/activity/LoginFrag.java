@@ -102,7 +102,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 			pref.putString(R.array.pf_passhash, password);
 			pref.commit();
 
-			SocketClient.getInstance().setIsLoggedIn(true);
+			SocketClient.getInstance(getActivity()).setIsLoggedIn(true);
 
 			final SyncClient sync = new SyncClient(act, handle);
 			sync.setSyncType(SyncClient.FULL_SYNC);
@@ -180,7 +180,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	@Override
 	public void onPause()
 	{
-		NetActive.dec();
+		NetActive.dec(getActivity());
 		super.onPause();
 	}
 

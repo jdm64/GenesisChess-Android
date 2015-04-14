@@ -167,5 +167,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:dialogMessage="@string/resyncMsgTable"
 			android:summary="Force a full resync of all messages"/>
 		</PreferenceScreen>
+		<EditTextPreference
+		android:key="serverhost"
+		android:persistent="true"
+		android:title="Server Host"
+		android:summary="Connect to a different server"/>
 	</PreferenceCategory>
 </PreferenceScreen>

@@ -131,7 +131,7 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 	@Override
 	public void onPause()
 	{
-		NetActive.dec();
+		NetActive.dec(getActivity());
 		super.onPause();
 	}
 

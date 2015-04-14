@@ -107,7 +107,7 @@ public class NetworkClient implements Runnable
 	{
 		callback = handler;
 		context = _context;
-		socket = SocketClient.getInstance();
+		socket = SocketClient.getInstance(context);
 	}
 
 	public NetworkClient(final SocketClient Socket, final Context _context, final Handler handler)
