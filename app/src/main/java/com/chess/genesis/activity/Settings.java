@@ -104,19 +104,19 @@ public class Settings extends PreferenceActivity implements
 
 		final boolean isLoggedin = pref.getBool(R.array.pf_isLoggedIn);
 
-		final Preference bench = findPreference("benchmark");
-		bench.setOnPreferenceClickListener(this);
+		Preference prefView = findPreference("benchmark");
+		prefView.setOnPreferenceClickListener(this);
 
-		final IntListPreference poll = (IntListPreference) findPreference(pref.key(R.array.pf_notifierPolling));
-		poll.setOnPreferenceChangeListener(this);
+		prefView = findPreference(pref.key(R.array.pf_notifierPolling));
+		prefView.setOnPreferenceChangeListener(this);
 
-		CheckBoxPreference check = (CheckBoxPreference) findPreference(pref.key(R.array.pf_emailNoteEnabled));
-		check.setOnPreferenceChangeListener(this);
-		check.setEnabled(isLoggedin);
+		prefView = findPreference(pref.key(R.array.pf_emailNoteEnabled));
+		prefView.setOnPreferenceChangeListener(this);
+		prefView.setEnabled(isLoggedin);
 
-		check = (CheckBoxPreference) findPreference(pref.key(R.array.pf_noteEnabled));
-		check.setOnPreferenceChangeListener(this);
-		check.setEnabled(isLoggedin);
+		prefView = findPreference(pref.key(R.array.pf_noteEnabled));
+		prefView.setOnPreferenceChangeListener(this);
+		prefView.setEnabled(isLoggedin);
 
 		CallBackPreference callbackPref = (CallBackPreference) findPreference("deleteLocalTable");
 		callbackPref.setCallBack(this);
