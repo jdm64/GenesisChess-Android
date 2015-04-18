@@ -58,8 +58,8 @@ public class NewLocalGameDialog extends BaseDialog
 		gametype_spin = (Spinner) findViewById(R.id.game_type);
 		gametype_spin.setAdapter(adapter);
 
-		list = new AdapterItem[] {new AdapterItem("Computer As Black", Enums.CPU_BLACK_OPPONENT),
-			new AdapterItem("Computer As White", Enums.CPU_WHITE_OPPONENT),
+		list = new AdapterItem[] {new AdapterItem("CPU As Black", Enums.CPU_BLACK_OPPONENT),
+			new AdapterItem("CPU As White", Enums.CPU_WHITE_OPPONENT),
 			new AdapterItem("Human", Enums.HUMAN_OPPONENT) };
 
 		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
