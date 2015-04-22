@@ -2,9 +2,6 @@
 <resources>
 	<string name="app_name">Genesis Chess</string>
 	<string name="version">1.14.6</string>
-	<string name="register_notice">
-		NOTICE: A valid email address must be used to activate the account.
-	</string>
 	<string name="register_activation">
 		You MUST click the activation link sent to your email before logging in.
 		Check your inbox and junk email folders for an email from:\n\tnotification@genesischess.com
