@@ -11,6 +11,8 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_gravity="center"
 		android:gravity="center"
 		android:textSize="14sp"
+		android:background="@color/grey_900"
+		android:textColor="@color/white"
 		android:text="Searching For Opponents..."/>
 	</FrameLayout>
 	<android.support.v4.view.ViewPager
