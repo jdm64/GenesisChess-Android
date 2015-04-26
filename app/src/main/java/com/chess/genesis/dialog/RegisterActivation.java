@@ -40,7 +40,7 @@ public class RegisterActivation extends BaseDialog
 	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setTitle("Activate Account");
+		setTitle("Verify Account");
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.cancel, "Close");
 

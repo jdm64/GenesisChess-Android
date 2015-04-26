@@ -3,8 +3,8 @@
 	<string name="app_name">Genesis Chess</string>
 	<string name="version">1.14.6</string>
 	<string name="register_activation">
-		You MUST click the activation link sent to your email before logging in.
-		Check your inbox and junk email folders for an email from:\n\tnotification@genesischess.com
+		Please verify your email address by clicking the activation link sent to your email address.
+		Check your inbox and junk email folders for an email from:\n\nnotification@genesischess.com
 	</string>
 	<string name="delete_local">
 		Are you sure you want to delete this game? The game can not be recovered.
