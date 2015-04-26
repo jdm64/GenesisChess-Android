@@ -45,7 +45,7 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return true;
 				}
-				progress.setText("Registration Successfull");
+				progress.setText("Registration Successful");
 				new RegisterActivation(act, handle).show();
 			} catch (final JSONException e) {
 				throw new RuntimeException(e.getMessage(), e);
