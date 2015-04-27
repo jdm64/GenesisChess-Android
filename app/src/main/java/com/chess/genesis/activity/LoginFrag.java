@@ -29,7 +29,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class LoginFrag extends BaseContentFrag implements Handler.Callback
+public class LoginFrag extends BaseContentFrag implements Handler.Callback, BroadcastWrapper.Receiver
 {
 	private final static String TAG = "LOGIN";
 
@@ -38,6 +38,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	private ProgressMsg progress;
 	private int callbackId = Enums.NO_ACTIVITY;
 	private boolean exitActivity = false;
+	private final BroadcastWrapper bw = new BroadcastWrapper(this);
 
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -148,6 +149,8 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag(container);
+		bw.setFilter(new IntentFilter("register"));
+		bw.register();
 
 		final View view = inflater.inflate(R.layout.fragment_login, container, false);
 
@@ -185,20 +188,18 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
+	public void onDestroyView()
+	{
+		bw.unregister();
+		super.onDestroyView();
+	}
+
+	@Override
 	public void onClick(final View v)
 	{
 		switch (v.getId()) {
 		case R.id.login:
-			progress.setText("Requesting Login");
-
-			EditText txt = (EditText) act.findViewById(R.id.username);
-			final String username = txt.getText().toString().trim();
-
-			txt = (EditText) act.findViewById(R.id.password);
-			final String password = txt.getText().toString();
-
-			net.login_user(username, password);
-			new Thread(net).start();
+			doLogin();
 			break;
 		case R.id.register:
 			if (isTablet) {
@@ -206,13 +207,27 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 				fintent.setFrag(R.id.panel02, new RegisterFrag());
 				fintent.loadFrag(fragMan);
 			} else {
-				startActivityForResult(new Intent(act, Register.class), Enums.REGISTER);
+				startActivity(new Intent(act, Register.class));
 			}
 			break;
 		case R.id.menu:
 			openMenu(v);
 			break;
 		}
+	}
+
+	private void doLogin()
+	{
+		progress.setText("Requesting Login");
+
+		EditText txt = (EditText) act.findViewById(R.id.username);
+		final String username = txt.getText().toString().trim();
+
+		txt = (EditText) act.findViewById(R.id.password);
+		final String password = txt.getText().toString();
+
+		net.login_user(username, password);
+		new Thread(net).start();
 	}
 
 	@Override
@@ -234,16 +249,14 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
-	public void onActivityResult(final int reques, final int result, final Intent data)
+	public void onReceive(Intent intent)
 	{
-		final Pref pref = new Pref(act);
-		final String username = pref.getBool(R.array.pf_isLoggedIn)?
-			pref.getString(R.array.pf_username) : "";
-
 		EditText txt = (EditText) act.findViewById(R.id.username);
-		txt.setText(username);
+		txt.setText(intent.getStringExtra("username"));
 
 		txt = (EditText) act.findViewById(R.id.password);
-		txt.setText("");
+		txt.setText(intent.getStringExtra("password"));
+
+		doLogin();
 	}
 }

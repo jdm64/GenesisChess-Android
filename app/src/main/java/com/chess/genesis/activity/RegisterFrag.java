@@ -16,7 +16,9 @@
 
 package com.chess.genesis.activity;
 
+import android.content.*;
 import android.os.*;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -63,6 +65,10 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 				getFragmentManager().popBackStack();
 			else
 				act.finish();
+
+			final Intent intent = new Intent("register");
+			intent.putExtras(getRegisterData());
+			BroadcastWrapper.send(act, intent);
 			break;
 		}
 		return true;
@@ -115,27 +121,16 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 
 	private void register_validate()
 	{
-		EditText txt = (EditText) act.findViewById(R.id.username);
-		final String username = txt.getText().toString().trim();
-		if (!valid_username(username))
+		final Bundle bundle = getRegisterData();
+
+		if (!valid_username(bundle.getString("username")))
 			return;
 
-		txt = (EditText) act.findViewById(R.id.password);
-		final String password = txt.getText().toString();
-		txt = (EditText) act.findViewById(R.id.password2);
-		final String password2 = txt.getText().toString();
-		if (!valid_password(password, password2))
+		if (!valid_password(bundle.getString("password"), bundle.getString("password2")))
 			return;
 
-		txt = (EditText) act.findViewById(R.id.email);
-		final String email = txt.getText().toString().trim();
-		if (!valid_email(email))
+		if (!valid_email(bundle.getString("email")))
 			return;
-
-		final Bundle bundle = new Bundle();
-		bundle.putString("username", username);
-		bundle.putString("password", password);
-		bundle.putString("email", email);
 
 		new RegisterConfirm(act, handle, bundle).show();
 	}
@@ -185,5 +180,24 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 			return false;
 		}
 		return true;
+	}
+
+	private Bundle getRegisterData()
+	{
+		final Bundle bundle = new Bundle();
+
+		EditText txt = (EditText) act.findViewById(R.id.username);
+		bundle.putString("username", txt.getText().toString().trim());
+
+		txt = (EditText) act.findViewById(R.id.password);
+		bundle.putString("password", txt.getText().toString());
+
+		txt = (EditText) act.findViewById(R.id.password2);
+		bundle.putString("password2", txt.getText().toString());
+
+		txt = (EditText) act.findViewById(R.id.email);
+		bundle.putString("email", txt.getText().toString().trim());
+
+		return bundle;
 	}
 }
