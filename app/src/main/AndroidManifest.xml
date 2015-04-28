@@ -30,7 +30,6 @@ package="com.chess.genesis">
 		<activity android:name="com.chess.genesis.activity.UserStats" android:configChanges="orientation"/>
 		<activity android:name="com.chess.genesis.activity.Game" android:configChanges="orientation"/>
 		<activity android:name="com.chess.genesis.activity.MsgBox" android:configChanges="orientation" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.dialog.SubmitMove" android:theme="@style/NoDimDialog"/>
 		<activity android:name="com.google.android.gms.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 		<service android:name="com.chess.genesis.net.GenesisNotifier" android:enabled="true"/>
 		<receiver android:name="com.chess.genesis.net.GenesisAlarm">
