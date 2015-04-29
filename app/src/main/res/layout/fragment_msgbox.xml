@@ -16,23 +16,20 @@ xmlns:panel="http://schemas.android.com/apk/res-auto">
 	android:layout_below="@id/tabtxt"
 	android:layout_above="@+id/input_box"/>
 	<com.chess.genesis.view.ManualPanel
-	panel:sizes="9,4/13"
+	panel:sizes="10,3/13"
 	android:id="@+id/input_box"
 	android:layout_width="match_parent"
 	android:layout_alignParentBottom="true">
 		<EditText
 		android:id="@+id/new_msg"
-		android:maxLines="3"
-		android:scrollbars="horizontal"
+		android:maxLines="4"
+		android:scrollbars="horizontal|vertical"
 		android:inputType="textCapSentences|textMultiLine"
 		android:maxLength="320"/>
 		<Button
 		android:id="@+id/submit_msg"
 		android:text="Submit"
-		android:layout_height="40dp"
 		android:textSize="14sp"
-		android:textColor="#fff"
-		android:layout_gravity="center"
-		android:background="@drawable/btn_green"/>
+		android:backgroundTint="@color/blue_navy_500"/>
 	</com.chess.genesis.view.ManualPanel>
 </RelativeLayout>
