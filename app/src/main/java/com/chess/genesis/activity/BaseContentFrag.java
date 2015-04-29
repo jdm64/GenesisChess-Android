@@ -47,7 +47,7 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		return act.lastContextMenu.equals(getBTag())? onOptionsItemSelected(item) : super.onContextItemSelected(item);
+		return getBTag().equals(act.lastContextMenu)? onOptionsItemSelected(item) : super.onContextItemSelected(item);
 	}
 
 	@Override
