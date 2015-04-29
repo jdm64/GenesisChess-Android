@@ -27,6 +27,8 @@ import com.chess.genesis.dialog.*;
 
 public class GameListPage extends Fragment
 {
+	private static int curContextType;
+
 	private GameListAdapter list;
 
 	public static Fragment newInstance(int type)
@@ -60,6 +62,7 @@ public class GameListPage extends Fragment
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo)
 	{
 		super.onCreateContextMenu(menu, v, menuInfo);
+		curContextType = getPageType();
 
 		final MenuInflater inflater = getActivity().getMenuInflater();
 		switch (getPageType()) {
@@ -83,6 +86,9 @@ public class GameListPage extends Fragment
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
+		if (getPageType() != curContextType)
+			return super.onContextItemSelected(item);
+
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		final Bundle bundle = (Bundle) list.getItem((int) info.id);
 		final GameListOnlineFrag frag = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.TAG);
