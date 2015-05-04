@@ -40,6 +40,12 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	private boolean exitActivity = false;
 	private final BroadcastWrapper bw = new BroadcastWrapper(this);
 
+	public LoginFrag()
+	{
+		super();
+		setArguments(new Bundle());
+	}
+
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
@@ -91,11 +97,8 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 		case NetworkClient.LOGIN:
 			progress.setText("Syncing Data");
 
-			EditText txt = (EditText) act.findViewById(R.id.username);
-			final String username = txt.getText().toString().trim();
-
-			txt = (EditText) act.findViewById(R.id.password);
-			final String password = txt.getText().toString();
+			final String username = getArguments().getString("username");
+			final String password = getArguments().getString("password");
 
 			final PrefEdit pref = new PrefEdit(act);
 			pref.putBool(R.array.pf_isLoggedIn, true);
@@ -146,17 +149,23 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	}
 
 	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	public void onCreate(Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
+		super.onCreate(savedInstanceState);
 		bw.setFilter(new IntentFilter("register"));
 		bw.register();
 
-		final View view = inflater.inflate(R.layout.fragment_login, container, false);
-
 		// create network client instance
-		net = new NetworkClient(act, handle);
-		progress = new ProgressMsg(act, handle);
+		net = new NetworkClient(getActivity(), handle);
+		progress = new ProgressMsg(getActivity(), handle);
+	}
+
+	@Override
+	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	{
+		initBaseContentFrag(container);
+
+		final View view = inflater.inflate(R.layout.fragment_login, container, false);
 
 		// setup click listeners
 		View image = view.findViewById(R.id.login);
@@ -188,10 +197,10 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	}
 
 	@Override
-	public void onDestroyView()
+	public void onDestroy()
 	{
 		bw.unregister();
-		super.onDestroyView();
+		super.onDestroy();
 	}
 
 	@Override
@@ -199,7 +208,16 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	{
 		switch (v.getId()) {
 		case R.id.login:
-			doLogin();
+			EditText txt = (EditText) act.findViewById(R.id.username);
+			final String username = txt.getText().toString().trim();
+
+			txt = (EditText) act.findViewById(R.id.password);
+			final String password = txt.getText().toString();
+
+			getArguments().putString("username", username);
+			getArguments().putString("password", password);
+
+			doLogin(username, password);
 			break;
 		case R.id.register:
 			if (isTablet) {
@@ -216,16 +234,9 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 		}
 	}
 
-	private void doLogin()
+	private void doLogin(String username, String password)
 	{
 		progress.setText("Requesting Login");
-
-		EditText txt = (EditText) act.findViewById(R.id.username);
-		final String username = txt.getText().toString().trim();
-
-		txt = (EditText) act.findViewById(R.id.password);
-		final String password = txt.getText().toString();
-
 		net.login_user(username, password);
 		new Thread(net).start();
 	}
@@ -251,12 +262,8 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	@Override
 	public void onReceive(Intent intent)
 	{
-		EditText txt = (EditText) act.findViewById(R.id.username);
-		txt.setText(intent.getStringExtra("username"));
-
-		txt = (EditText) act.findViewById(R.id.password);
-		txt.setText(intent.getStringExtra("password"));
-
-		doLogin();
+		final Bundle data = intent.getExtras();
+		getArguments().putAll(data);
+		doLogin(data.getString("username"), data.getString("password"));
 	}
 }
