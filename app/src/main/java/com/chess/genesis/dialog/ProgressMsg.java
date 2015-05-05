@@ -52,7 +52,8 @@ public class ProgressMsg extends ProgressDialog implements Runnable
 		// do nothing
 	}
 
-	public void remove()
+	@Override
+	public void dismiss()
 	{
 		new Thread(this).start();
 	}
@@ -69,7 +70,7 @@ public class ProgressMsg extends ProgressDialog implements Runnable
 	{
 	try {
 		Thread.sleep(256);
-		dismiss();
+		super.dismiss();
 	} catch (final InterruptedException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

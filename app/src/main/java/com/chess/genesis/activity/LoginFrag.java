@@ -85,7 +85,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	try {
 		if (json.getString("result").equals("error")) {
 			exitActivity = false;
-			progress.remove();
+			progress.dismiss();
 			Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 			return;
 		}

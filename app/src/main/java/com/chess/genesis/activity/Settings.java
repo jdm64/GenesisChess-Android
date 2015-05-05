@@ -48,7 +48,7 @@ public class Settings extends PreferenceActivity implements
 		final JSONObject json = (JSONObject) msg.obj;
 	try {
 		if (json.getString("result").equals("error")) {
-			progress.remove();
+			progress.dismiss();
 			Toast.makeText(context, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 			return true;
 		}
@@ -58,16 +58,16 @@ public class Settings extends PreferenceActivity implements
 			final CheckBoxPreference email = (CheckBoxPreference) findPreference(Pref.key(context, R.array.pf_emailNoteEnabled));
 			email.setChecked(json.getBoolean("value"));
 
-			progress.remove();
+			progress.dismiss();
 			break;
 		case NetworkClient.SET_OPTION:
-			progress.remove();
+			progress.dismiss();
 			break;
 		case SyncClient.MSG:
 			final GameDataDB db = new GameDataDB(context);
 			db.recalcYourTurn();
 			db.close();
-			progress.remove();
+			progress.dismiss();
 			break;
 		}
 		return true;

@@ -44,7 +44,7 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 
 	try {
 		if (json.getString("result").equals("error")) {
-			progress.remove();
+			progress.dismiss();
 			Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 			return true;
 		}

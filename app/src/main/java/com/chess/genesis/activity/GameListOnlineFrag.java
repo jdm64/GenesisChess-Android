@@ -96,7 +96,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 			JSONObject json = (JSONObject) msg.obj;
 			try {
 				if (json.getString("result").equals("error")) {
-					progress.remove();
+					progress.dismiss();
 					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return true;
 				}
@@ -107,7 +107,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 					net.pool_info();
 					new Thread(net).start();
 				} else {
-					progress.remove();
+					progress.dismiss();
 				}
 			} catch (final JSONException e) {
 				throw new RuntimeException(e.getMessage(), e);
@@ -117,7 +117,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 			json = (JSONObject) msg.obj;
 			try {
 				if (json.getString("result").equals("error")) {
-					progress.remove();
+					progress.dismiss();
 					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return true;
 				}
@@ -128,7 +128,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 
 				act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
 
-				progress.remove();
+				progress.dismiss();
 			} catch (final JSONException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
@@ -138,7 +138,7 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 			json = (JSONObject) msg.obj;
 			try {
 				if (json.getString("result").equals("error")) {
-					progress.remove();
+					progress.dismiss();
 					Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 					return true;
 				}

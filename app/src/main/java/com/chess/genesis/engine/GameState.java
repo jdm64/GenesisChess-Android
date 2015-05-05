@@ -95,7 +95,7 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error")) {
 				undoMove();
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
@@ -138,7 +138,7 @@ public abstract class GameState implements Handler.Callback
 			json = (JSONObject) msg.obj;
 
 			if (json.getString("result").equals("error")) {
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
@@ -152,13 +152,13 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error"))
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
-			progress.remove();
+			progress.dismiss();
 			break;
 		case NetworkClient.GAME_STATUS:
 			json = (JSONObject) msg.obj;
 
 			if (json.getString("result").equals("error")) {
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
@@ -174,7 +174,7 @@ public abstract class GameState implements Handler.Callback
 			applyRemoteMove(json.getString("history"));
 			if (status != Enums.ACTIVE) {
 				if (Integer.parseInt(settings.getString("eventtype")) == Enums.INVITE) {
-					progress.remove();
+					progress.dismiss();
 					ShowGameStats(json);
 					return true;
 				}
@@ -184,19 +184,19 @@ public abstract class GameState implements Handler.Callback
 				new Thread(net).start();
 			} else {
 				progress.setText("Status Synced");
-				progress.remove();
+				progress.dismiss();
 			}
 			break;
 		case NetworkClient.GAME_SCORE:
 			json = (JSONObject) msg.obj;
 
 			if (json.getString("result").equals("error")) {
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
 			progress.setText("Score Loaded");
-			progress.remove();
+			progress.dismiss();
 
 			ShowGameStats(json);
 			break;
@@ -215,12 +215,12 @@ public abstract class GameState implements Handler.Callback
 			json = (JSONObject) msg.obj;
 
 			if (json.getString("result").equals("error")) {
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
 			progress.setText(json.getString("reason"));
-			progress.remove();
+			progress.dismiss();
 			break;
 		}
 		return true;

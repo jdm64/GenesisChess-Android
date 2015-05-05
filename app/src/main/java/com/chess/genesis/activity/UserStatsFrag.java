@@ -54,12 +54,12 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		case NetworkClient.USER_STATS:
 			final JSONObject json = (JSONObject) msg.obj;
 			if (json.getString("result").equals("error")) {
-				progress.remove();
+				progress.dismiss();
 				Toast.makeText(act, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
 				return true;
 			}
 			loadStats(json);
-			progress.remove();
+			progress.dismiss();
 			break;
 		case StatsLookupDialog.MSG:
 			final String username = (String) msg.obj;
