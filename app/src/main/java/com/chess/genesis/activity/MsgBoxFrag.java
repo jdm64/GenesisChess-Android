@@ -30,6 +30,7 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 {
 	private final static String TAG = "MSGBOX";
 
+	private final Handler handle = new Handler(this);
 	private MsgListAdapter msglist_adapter;
 	private ListView msglist_view;
 	private NetworkClient net;
@@ -76,14 +77,19 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
+	public void onCreate(final Bundle data)
+	{
+		super.onCreate(data);
+		net = new NetworkClient(act, handle);
+		progress = new ProgressMsg(act);
+	}
+
+	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_msgbox, container, false);
-
-		net = new NetworkClient(act, new Handler(this));
-		progress = new ProgressMsg(act);
 
 		// restore settings
 		settings = (savedInstanceState != null)?

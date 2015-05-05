@@ -160,14 +160,19 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	}
 
 	@Override
+	public void onCreate(final Bundle data)
+	{
+		super.onCreate(data);
+		net = new NetworkClient(act, handle);
+		progress = new ProgressMsg(act);
+	}
+
+	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_gamelist_online, container, false);
-
-		net = new NetworkClient(act, handle);
-		progress = new ProgressMsg(act);
 
 	try {
 		// Set "waiting for opponent"

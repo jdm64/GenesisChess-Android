@@ -82,6 +82,14 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
+	public void onCreate(final Bundle data)
+	{
+		super.onCreate(data);
+		net = new NetworkClient(act, handle);
+		progress = new ProgressMsg(act);
+	}
+
+	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag(container);
@@ -89,9 +97,6 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		final View view = inflater.inflate(R.layout.fragment_userstats, container, false);
 
 		settings = (savedInstanceState != null)? savedInstanceState : getArguments();
-
-		net = new NetworkClient(act, handle);
-		progress = new ProgressMsg(act);
 
 		final TextView txt = (TextView) view.findViewById(R.id.username);
 		txt.setText(settings.getString("username"));

@@ -57,11 +57,16 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 		AdsHandler.run(act);
 	}
 
-	protected void initBaseContentFrag(final ViewGroup container)
+	@Override
+	public void onCreate(final Bundle data)
 	{
+		super.onCreate(data);
 		act = (BaseActivity) getActivity();
 		fragMan = getFragmentManager();
+	}
 
+	protected void initBaseContentFrag(final ViewGroup container)
+	{
 		// set the current view id that the fragment lives in
 		containerId = container.getId();
 

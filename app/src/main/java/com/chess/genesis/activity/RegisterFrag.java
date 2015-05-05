@@ -81,15 +81,19 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
+	public void onCreate(final Bundle data)
+	{
+		super.onCreate(data);
+		net = new NetworkClient(act, handle);
+		progress = new ProgressMsg(act);
+	}
+
+	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		initBaseContentFrag(container);
 
 		final View view = inflater.inflate(R.layout.fragment_register, container, false);
-
-		// create network client instance
-		net = new NetworkClient(act, handle);
-		progress = new ProgressMsg(act);
 
 		// setup click listeners
 		final View image = view.findViewById(R.id.register);
