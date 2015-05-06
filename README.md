@@ -20,12 +20,6 @@ GPLv3 if the GPLv3 chess engine is being used.
 
 There are several externel library requirements needed to build the apk:
 
-1. Android API v7+ (2.1) Platform SDK
+1. Android API v10+ (2.3) Platform SDK
 2. Android Support Package for v4
-3. Google AdMob Ads SDK
-4. HttpMime jar from Apache Http Components
-
-The Android SDK location is set in the local.properties file. The other libraries
-are jar files that need to be copied or linked into the libs folder in the root
-directory. The included Makefile provides the config command to assist setting up
-all required configuration files and setting up the libs folder.
+3. Google Play Services Ads (optional)
