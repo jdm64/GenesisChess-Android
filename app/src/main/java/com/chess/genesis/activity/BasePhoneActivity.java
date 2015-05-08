@@ -43,7 +43,7 @@ abstract class BasePhoneActivity extends BaseActivity implements OnLongClickList
 		final Bundle settings = (savedInstanceState != null)?
 			savedInstanceState : getIntent().getExtras();
 
-		mainFrag.setArguments(settings);
+		mainFrag.setArguments(settings != null? settings : new Bundle());
 		getSupportFragmentManager().beginTransaction()
 		.replace(R.id.fragment01, mainFrag, mainFrag.getBTag()).commit();
 	}
