@@ -42,7 +42,7 @@ public class IdleResignConfirm extends BaseDialog
 		super.onCreate(savedInstanceState);
 		setTitle("End Idle Game");
 		setBodyView(R.layout.dialog_single_text);
-		setButtonTxt(R.id.ok, "Force End Game");
+		setButtonTxt(R.id.ok, "Adjourn Game");
 
 		final TextView txt = (TextView) findViewById(R.id.text);
 		txt.setText(R.string.idleresign_confirm);
