@@ -61,6 +61,8 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 			new Thread(net).start();
 			break;
 		case RegisterActivation.MSG:
+			progress.dismiss();
+
 			if (isTablet)
 				getFragmentManager().popBackStack();
 			else
