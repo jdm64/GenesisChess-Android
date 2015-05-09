@@ -18,7 +18,7 @@ android {
         minSdkVersion 10
         targetSdkVersion 22
         versionCode 66
-        versionName "1.14.6"
+        versionName "1.14.7"
     }
 
     buildTypes {
