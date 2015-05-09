@@ -78,6 +78,9 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			button.setOnTouchListener(this);
 		}
 
+		final TextView textView = (TextView) view.findViewById(R.id.version);
+		textView.setText(BuildConfig.VERSION_NAME);
+
 		// create layout listner for resizing the button text
 		final View v = view.findViewById(R.id.online_game);
 		final ViewTreeObserver vto = v.getViewTreeObserver();
