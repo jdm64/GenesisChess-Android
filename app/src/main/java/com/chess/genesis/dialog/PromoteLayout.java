@@ -25,54 +25,54 @@ import com.chess.genesis.view.*;
 
 public class PromoteLayout extends LinearLayout implements View.OnClickListener, View.OnTouchListener
 {
-    private final BoardButton[] square = new BoardButton[4];
-    private final PieceImgCache cache;
-    private PawnPromoteDialog dialog;
+	private final BoardButton[] square = new BoardButton[4];
+	private final PieceImgCache cache;
+	private PawnPromoteDialog dialog;
 
-    public PromoteLayout(final Context context, final AttributeSet attrs)
-    {
-        super(context, attrs);
-        setOrientation(LinearLayout.VERTICAL);
-        cache = new PieceImgCache(context);
-    }
+	public PromoteLayout(final Context context, final AttributeSet attrs)
+	{
+		super(context, attrs);
+		setOrientation(LinearLayout.VERTICAL);
+		cache = new PieceImgCache(context);
+	}
 
-    @Override
-    public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
-    {
-        final int size = Math.min(320, Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)));
-        super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-        cache.resize(getMeasuredWidth() / 2);
-    }
+	@Override
+	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	{
+		final int size = Math.min(320, Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)));
+		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
+		cache.resize(getMeasuredWidth() / 2);
+	}
 
-    public void init(final Context context, final PawnPromoteDialog _dialog, final int color)
-    {
-        dialog = _dialog;
+	public void init(final Context context, final PawnPromoteDialog _dialog, final int color)
+	{
+		dialog = _dialog;
 
-        for (int i = 0, piece = Piece.QUEEN; i < 4;) {
-            final ManualPanel row = new ManualPanel(context);
-            row.setSizes("1/2");
+		for (int i = 0, piece = Piece.QUEEN; i < 4;) {
+			final ManualPanel row = new ManualPanel(context);
+			row.setSizes("1/2");
 
-            for (int j = 0; j < 2; piece--, j++, i++) {
-                square[i] = new BoardButton(context, cache, (i < 2)? j : j + 1);
-                square[i].setOnClickListener(this);
-                square[i].setOnTouchListener(this);
-                square[i].setPiece(piece * color);
-                row.addView(square[i]);
-            }
-            addView(row);
-        }
-    }
+			for (int j = 0; j < 2; piece--, j++, i++) {
+				square[i] = new BoardButton(context, cache, (i < 2)? j : j + 1);
+				square[i].setOnClickListener(this);
+				square[i].setOnTouchListener(this);
+				square[i].setPiece(piece * color);
+				row.addView(square[i]);
+			}
+			addView(row);
+		}
+	}
 
-    @Override
-    public void onClick(final View v)
-    {
-        dialog.onClick(v);
-    }
+	@Override
+	public void onClick(final View v)
+	{
+		dialog.onClick(v);
+	}
 
-    @Override
-    public boolean onTouch(final View v, final MotionEvent event)
-    {
-        ((IBoardSq) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
-        return false;
-    }
+	@Override
+	public boolean onTouch(final View v, final MotionEvent event)
+	{
+		((IBoardSq) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
+		return false;
+	}
 }
