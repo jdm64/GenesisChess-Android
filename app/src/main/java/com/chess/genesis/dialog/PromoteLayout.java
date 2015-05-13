@@ -72,7 +72,7 @@ public class PromoteLayout extends LinearLayout implements View.OnClickListener,
     @Override
     public boolean onTouch(final View v, final MotionEvent event)
     {
-        ((BoardButton) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
+        ((IBoardSq) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
         return false;
     }
 }

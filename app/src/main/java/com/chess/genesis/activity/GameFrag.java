@@ -271,11 +271,11 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public void reset()
 	{
 		for (int i = 994; i < 1000; i++) {
-			final PlaceButton piece = (PlaceButton) act.findViewById(i);
+			final IPlaceSq piece = (IPlaceSq) act.findViewById(i);
 			piece.reset();
 		}
 		for (int i = 1001; i < 1007; i++) {
-			final PlaceButton piece = (PlaceButton) act.findViewById(i);
+			final IPlaceSq piece = (IPlaceSq) act.findViewById(i);
 			piece.reset();
 		}
 		gamestate.setStm();

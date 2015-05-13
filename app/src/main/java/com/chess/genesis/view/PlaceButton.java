@@ -19,7 +19,9 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.graphics.*;
 
-public class PlaceButton extends PieceImg
+import com.chess.genesis.engine.*;
+
+public class PlaceButton extends PieceImg implements IPlaceSq
 {
 	private final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
@@ -69,6 +71,12 @@ public class PlaceButton extends PieceImg
 	{
 		count++;
 		invalidate();
+	}
+
+	@Override
+	public int getIndex()
+	{
+		return getId();
 	}
 
 	@Override

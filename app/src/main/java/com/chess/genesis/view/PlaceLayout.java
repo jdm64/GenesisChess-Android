@@ -93,6 +93,6 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	@Override
 	public void onClick(final View v)
 	{
-		gamestate.placeClick(v);
+		gamestate.placeClick((IPlaceSq) v);
 	}
 }

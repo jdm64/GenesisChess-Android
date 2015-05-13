@@ -19,7 +19,6 @@ package com.chess.genesis.engine;
 
 import android.view.*;
 import com.chess.genesis.activity.*;
-import com.chess.genesis.view.*;
 
 public class GenGameState extends GameState
 {
@@ -84,15 +83,15 @@ public class GenGameState extends GameState
 		preApplyMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+			final IPlaceSq from = (IPlaceSq) activity.findViewById(Move.InitPieceType[move.index] + 1000);
+			final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 			from.minusCount();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 		} else {
-			final BoardButton from = (BoardButton) activity.findViewById(move.from);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+			final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
+			final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 			to.setPiece(from.getPiece());
 			to.setLast(true);
@@ -120,15 +119,15 @@ public class GenGameState extends GameState
 		preRevertMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final PlaceButton from = (PlaceButton) activity.findViewById(Move.InitPieceType[move.index] + 1000);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+			final IPlaceSq from = (IPlaceSq) activity.findViewById(Move.InitPieceType[move.index] + 1000);
+			final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 			to.setLast(false);
 			to.setPiece(0);
 			from.plusCount();
 		} else {
-			final BoardButton from = (BoardButton) activity.findViewById(move.from);
-			final BoardButton to = (BoardButton) activity.findViewById(move.to);
+			final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
+			final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 			from.setPiece(to.getPiece());
 
@@ -146,14 +145,14 @@ public class GenGameState extends GameState
 	}
 
 	@Override
-	public void boardClick(final View v)
+	public void boardClick(final IBoardSq sq)
 	{
-		hintList.boardClick((BoardButton) v, yourColor());
+		hintList.boardClick(sq, yourColor());
 	}
 
 	@Override
-	public void placeClick(final View v)
+	public void placeClick(final IPlaceSq sq)
 	{
-		hintList.placeClick((PlaceButton) v, yourColor());
+		hintList.placeClick(sq, yourColor());
 	}
 }

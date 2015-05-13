@@ -20,7 +20,7 @@ import android.content.*;
 import android.graphics.*;
 import com.chess.genesis.engine.*;
 
-public class BoardButton extends PieceImg
+public class BoardButton extends PieceImg implements IBoardSq
 {
 	protected final static int WHITE = 0;
 	protected final static int BLACK = 1;

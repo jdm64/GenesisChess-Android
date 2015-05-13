@@ -21,7 +21,6 @@ import android.view.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.view.*;
 
 public class RegGameState extends GameState
 {
@@ -101,15 +100,15 @@ public class RegGameState extends GameState
 	{
 		preApplyMove();
 
-		final BoardButton from = (BoardButton) activity.findViewById(move.from);
-		final BoardButton to = (BoardButton) activity.findViewById(move.to);
+		final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
+		final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 		to.setPiece(from.getPiece());
 		to.setLast(true);
 		from.setPiece(0);
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = (IPlaceSq) activity.findViewById(board.PieceType(move.xindex) + 1000);
 			piece.plusCount();
 		}
 
@@ -118,15 +117,15 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
 
-			BoardButton castle = (BoardButton) activity.findViewById(castleFrom);
+			IBoardSq castle = (IBoardSq) activity.findViewById(castleFrom);
 			castle.setPiece(Piece.EMPTY);
-			castle = (BoardButton) activity.findViewById(castleTo);
+			castle = (IBoardSq) activity.findViewById(castleTo);
 			castle.setPiece(Piece.ROOK * board.getStm());
 		} else if (move.getPromote() != 0) {
-			final BoardButton pawn = (BoardButton) activity.findViewById(move.to);
+			final IBoardSq pawn = (IBoardSq) activity.findViewById(move.to);
 			pawn.setPiece(move.getPromote() * board.getStm());
 		} else if (move.getEnPassant()) {
-			final BoardButton pawn = (BoardButton) activity.findViewById(board.Piece(move.xindex));
+			final IBoardSq pawn = (IBoardSq) activity.findViewById(board.Piece(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -156,8 +155,8 @@ public class RegGameState extends GameState
 	{
 		preRevertMove();
 
-		final BoardButton from = (BoardButton) activity.findViewById(move.from);
-		final BoardButton to = (BoardButton) activity.findViewById(move.to);
+		final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
+		final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
 
 		from.setPiece(to.getPiece());
 		to.setLast(false);
@@ -166,7 +165,7 @@ public class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
 			final int loc = move.to + ((move.to - move.from > 0)? -16 : 16);
-			final BoardButton pawn = (BoardButton) activity.findViewById(loc);
+			final IBoardSq pawn = (IBoardSq) activity.findViewById(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
@@ -174,7 +173,7 @@ public class RegGameState extends GameState
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final PlaceButton piece = (PlaceButton) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = (IPlaceSq) activity.findViewById(board.PieceType(move.xindex) + 1000);
 			piece.minusCount();
 		}
 
@@ -183,12 +182,12 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
 
-			BoardButton castle = (BoardButton) activity.findViewById(castleFrom);
+			IBoardSq castle = (IBoardSq) activity.findViewById(castleFrom);
 			castle.setPiece(Piece.ROOK * -board.getStm());
-			castle = (BoardButton) activity.findViewById(castleTo);
+			castle = (IBoardSq) activity.findViewById(castleTo);
 			castle.setPiece(Piece.EMPTY);
 		} else if (move.getPromote() != 0) {
-			final BoardButton pawn = (BoardButton) activity.findViewById(move.from);
+			final IBoardSq pawn = (IBoardSq) activity.findViewById(move.from);
 			pawn.setPiece(Piece.PAWN * -board.getStm());
 		}
 
@@ -199,13 +198,13 @@ public class RegGameState extends GameState
 	}
 
 	@Override
-	public void boardClick(final View v)
+	public void boardClick(final IBoardSq sq)
 	{
-		hintList.boardClick((BoardButton) v, yourColor());
+		hintList.boardClick(sq, yourColor());
 	}
 
 	@Override
-	public void placeClick(final View v)
+	public void placeClick(final IPlaceSq sq)
 	{
 		// Required because GameState calls this function
 	}

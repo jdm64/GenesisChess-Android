@@ -21,7 +21,6 @@ import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.view.*;
 
 public class RegGameFrag extends GameFrag
 {
@@ -61,12 +60,12 @@ public class RegGameFrag extends GameFrag
 		super.reset();
 
 		for (int i = 0; i < 64; i++) {
-			final BoardButton square = (BoardButton) act.findViewById(i);
+			final IBoardSq square = (IBoardSq) act.findViewById(i);
 			square.setPiece(Piece.EMPTY);
 		}
 		for (int i = 0; i < 32; i++) {
 			final int loc = BaseBoard.EE64(RegBoard.InitRegPiece[i]);
-			final BoardButton square = (BoardButton) act.findViewById(loc);
+			final IBoardSq square = (IBoardSq) act.findViewById(loc);
 			square.setPiece(Move.InitPieceType[i]);
 		}
 	}

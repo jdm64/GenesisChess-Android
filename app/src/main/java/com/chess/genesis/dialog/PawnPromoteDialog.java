@@ -21,7 +21,6 @@ import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.view.*;
 
 public class PawnPromoteDialog extends BaseDialog
 {
@@ -54,8 +53,8 @@ public class PawnPromoteDialog extends BaseDialog
 	@Override
 	public void onClick(final View v)
 	{
-		if (v instanceof BoardButton) {
-			move.setPromote(Math.abs(((BoardButton) v).getPiece()));
+		if (v instanceof IBoardSq) {
+			move.setPromote(Math.abs(((IBoardSq) v).getPiece()));
 			handle.sendMessage(handle.obtainMessage(MSG, move));
 		}
 		dismiss();

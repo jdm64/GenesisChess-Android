@@ -54,7 +54,7 @@ public class HintList
 	{
 		if (type == SelectType.NONE)
 			return;
-		final PieceImg piece = (PieceImg) activity.findViewById(selected);
+		final ISquare piece = (ISquare) activity.findViewById(selected);
 		piece.setHighlight(false);
 		selected = Piece.NONE;
 		type = SelectType.NONE;
@@ -63,7 +63,7 @@ public class HintList
 	public void clearHint()
 	{
 		for (final Integer i : hints) {
-			final BoardButton button = (BoardButton) activity.findViewById(i);
+			final IBoardSq button = (IBoardSq) activity.findViewById(i);
 			button.setHighlight(false);
 		}
 		hints.clear();
@@ -75,14 +75,14 @@ public class HintList
 		clearHint();
 	}
 
-	private void setSelected(final PieceImg bb, final int index)
+	private void setSelected(final ISquare bb, final int index)
 	{
 		type = SelectType.SELECT;
 		selected = index;
 		bb.setHighlight(true);
 	}
 
-	public void boardClick(final BoardButton bb, final int ycolor)
+	public void boardClick(final IBoardSq bb, final int ycolor)
 	{
 		final int index = bb.getIndex();
 		final int piece = bb.getPiece();
@@ -122,7 +122,7 @@ public class HintList
 			gamestate.handleMove(selected, index);
 	}
 
-	public void longBoardClick(final BoardButton bb, final int ycolor)
+	public void longBoardClick(final IBoardSq bb, final int ycolor)
 	{
 		// only allow long click on your turn
 		if (board.getStm() != ycolor)
@@ -139,9 +139,9 @@ public class HintList
 			showMovesTo(index);
 	}
 
-	public void placeClick(final PlaceButton pb, final int ycolor)
+	public void placeClick(final IPlaceSq pb, final int ycolor)
 	{
-		final int index = pb.getId();
+		final int index = pb.getIndex();
 		final int piece = pb.getPiece();
 
 		// only select your own pieces on your turn where count > 0
@@ -171,7 +171,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.from == selected) {
 				hints.add(node.move.to);
-				final BoardButton button = (BoardButton) activity.findViewById(node.move.to);
+				final IBoardSq button = (IBoardSq) activity.findViewById(node.move.to);
 				button.setHighlight(true);
 			}
 		}
@@ -186,7 +186,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
 				hints.add(node.move.from);
-				final BoardButton button = (BoardButton) activity.findViewById(node.move.from);
+				final IBoardSq button = (IBoardSq) activity.findViewById(node.move.from);
 				button.setHighlight(true);
 			}
 		}

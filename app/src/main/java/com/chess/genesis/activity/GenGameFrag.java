@@ -22,7 +22,6 @@ import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.view.*;
 
 public class GenGameFrag extends GameFrag
 {
@@ -61,7 +60,7 @@ public class GenGameFrag extends GameFrag
 		super.reset();
 
 		for (int i = 0; i < 64; i++) {
-			final BoardButton square = (BoardButton) act.findViewById(i);
+			final IBoardSq square = (IBoardSq) act.findViewById(i);
 			square.reset();
 		}
 	}

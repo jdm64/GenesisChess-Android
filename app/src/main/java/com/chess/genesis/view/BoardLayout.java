@@ -83,12 +83,12 @@ public class BoardLayout extends LinearLayout implements OnClickListener, OnLong
 	@Override
 	public void onClick(final View v)
 	{
-		gamestate.boardClick(v);
+		gamestate.boardClick((IBoardSq) v);
 	}
 
 	@Override
 	public boolean onLongClick(final View v)
 	{
-		return gamestate.boardLongClick(v);
+		return gamestate.boardLongClick((IBoardSq) v);
 	}
 }
