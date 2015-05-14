@@ -21,16 +21,16 @@ import android.graphics.*;
 
 import com.chess.genesis.engine.*;
 
-public class PlaceButton extends PieceImg implements IPlaceSq
+public class PlaceButton extends PieceImgView implements IPlaceSq
 {
 	private final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
 	private int count = 0;
 	private boolean isHighlighted = false;
 
-	public PlaceButton(final Context context, final PieceImgCache _cache, final int Type)
+	public PlaceButton(final Context context, final PieceImgPainter painter, final int Type)
 	{
-		super(context, _cache, Type);
+		super(context, painter, Type);
 		count = typeCounts[Math.abs(type)];
 		setId(type + 1000);
 	}
@@ -38,16 +38,9 @@ public class PlaceButton extends PieceImg implements IPlaceSq
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		final int outerColor = type % 2 == 0? outerLight : outerDark;
-		final int innerColor =
-			isHighlighted?
-				innerSelect :
-			((type % 2 == 0)?
-				innerLight :
-				innerDark);
-		drawSquare(canvas, innerColor, outerColor);
-		drawPiece(canvas);
-		drawCount(canvas, count);
+		painter.drawSquare(canvas, this);
+		painter.drawPiece(canvas, type);
+		painter.drawCount(canvas, count, true);
 	}
 
 	public int getCount()
@@ -84,6 +77,12 @@ public class PlaceButton extends PieceImg implements IPlaceSq
 	{
 		isHighlighted = mode;
 		invalidate();
+	}
+
+	@Override
+	public boolean isHighlighted()
+	{
+		return isHighlighted;
 	}
 
 	public void reset()

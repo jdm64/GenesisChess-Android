@@ -20,11 +20,8 @@ import android.content.*;
 import android.graphics.*;
 import com.chess.genesis.engine.*;
 
-public class BoardButton extends PieceImg implements IBoardSq
+public class BoardButton extends PieceImgView implements IBoardSq
 {
-	protected final static int WHITE = 0;
-	protected final static int BLACK = 1;
-
 	private final int squareColor;
 	private final int squareIndex;
 
@@ -32,33 +29,22 @@ public class BoardButton extends PieceImg implements IBoardSq
 	private boolean isCheck = false;
 	private boolean isLast = false;
 
-	public BoardButton(final Context context, final PieceImgCache _cache, final int index)
+	public BoardButton(final Context context, final PieceImgPainter painter, final int index)
 	{
-		super(context, _cache, Piece.EMPTY);
+		super(context, painter, Piece.EMPTY);
 
 		squareIndex = index;
 		squareColor = ((index / 16) % 2 != 0)?
-				((index % 2 != 0)? BLACK : WHITE) :
-				((index % 2 != 0)? WHITE : BLACK);
+				((index % 2 != 0)? PieceImgPainter.BLACK : PieceImgPainter.WHITE) :
+				((index % 2 != 0)? PieceImgPainter.WHITE : PieceImgPainter.BLACK);
 		setId(squareIndex);
 	}
 
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		final int outerColor = squareColor == WHITE? outerLight : outerDark;
-		final int innerColor =
-			isHighlighted?
-				innerSelect :
-			(isLast?
-				innerLast :
-			(isCheck?
-				innerCheck :
-			((squareColor == WHITE)?
-				innerLight :
-				innerDark)));
-		drawSquare(canvas, innerColor, outerColor);
-		drawPiece(canvas);
+		painter.drawSquare(canvas, this);
+		painter.drawPiece(canvas, type);
 	}
 
 	public void reset()
@@ -81,15 +67,39 @@ public class BoardButton extends PieceImg implements IBoardSq
 		invalidate();
 	}
 
+	@Override
+	public boolean isHighlighted()
+	{
+		return isHighlighted;
+	}
+
 	public void setCheck(final boolean mode)
 	{
 		isCheck = mode;
 		invalidate();
 	}
 
+	@Override
+	public boolean isCheck()
+	{
+		return isCheck;
+	}
+
 	public void setLast(final boolean mode)
 	{
 		isLast = mode;
 		invalidate();
+	}
+
+	@Override
+	public boolean isLast()
+	{
+		return isLast;
+	}
+
+	@Override
+	public int getColor()
+	{
+		return squareColor;
 	}
 }

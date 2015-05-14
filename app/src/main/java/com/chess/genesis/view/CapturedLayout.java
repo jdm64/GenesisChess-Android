@@ -25,7 +25,7 @@ import com.chess.genesis.engine.*;
 public class CapturedLayout extends ManualPanel
 {
 	private final CapturedPiece[] pieces = new CapturedPiece[11];
-	private final PieceImgCache cache;
+	private final PieceImgPainter painter;
 	private final boolean isEnabled;
 
 	public CapturedLayout(final Context context, final AttributeSet attributeSet)
@@ -35,10 +35,10 @@ public class CapturedLayout extends ManualPanel
 		isEnabled = Pref.getBool(context, R.array.pf_showCaptured);
 
 		if (!isEnabled) {
-			cache = null;
+			painter = null;
 			return;
 		}
-		cache = new PieceImgCache(context);
+		painter = new PieceImgPainter(context);
 		initPieces();
 	}
 
@@ -50,13 +50,13 @@ public class CapturedLayout extends ManualPanel
 		if (!isEnabled)
 			return;
 		final int size = Math.min(getMeasuredHeight(), getMeasuredWidth() / 11);
-		cache.resize(size);
+		painter.resize(size);
 	}
 
 	private void initPieces()
 	{
 		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = new CapturedPiece(getContext(), cache);
+			pieces[i] = new CapturedPiece(getContext(), painter);
 			addView(pieces[i]);
 		}
 	}

@@ -94,7 +94,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		captured_count = (CapturedLayout) view.findViewById(R.id.captured_count);
 
 		// initialize board colors
-		PieceImg.initColors(container.getContext());
+		PieceImgPainter.initColors(container.getContext());
 
 		return view;
 	}

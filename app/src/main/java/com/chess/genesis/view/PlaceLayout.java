@@ -34,13 +34,13 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	private final static int[] piecelist = {1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6};
 
 	private GameState gamestate;
-	private final PieceImgCache cache;
+	private final PieceImgPainter painter;
 
 	public PlaceLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 		setOrientation(LinearLayout.VERTICAL);
-		cache = new PieceImgCache(context);
+		painter = new PieceImgPainter(context);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 		size -= size % 5;
 
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-		cache.resize(getMeasuredHeight() / 5);
+		painter.resize(getMeasuredHeight() / 5);
 	}
 
 	private void AddPieces(final Context context, final int index)
@@ -59,14 +59,14 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			final ManualPanel row = new ManualPanel(context);
 			row.setSizes("1/5");
 
-			row.addView(new BoardButton(context, cache, i + 10000));
+			row.addView(new BoardButton(context, painter, i + 10000));
 
 			for (int j = 0; j < 3; j++) {
-				final PlaceButton button = new PlaceButton(context, cache, piecelist[idx++]);
+				final PlaceButton button = new PlaceButton(context, painter, piecelist[idx++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
-			row.addView(new BoardButton(context, cache, i + 10000));
+			row.addView(new BoardButton(context, painter, i + 10000));
 			addView(row);
 		}
 	}

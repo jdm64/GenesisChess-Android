@@ -21,7 +21,13 @@ public interface IBoardSq extends ISquare
 {
 	void setCheck(boolean value);
 
+	boolean isCheck();
+
 	void setLast(boolean value);
 
+	boolean isLast();
+
 	void setPiece(int piece);
+
+	int getColor();
 }

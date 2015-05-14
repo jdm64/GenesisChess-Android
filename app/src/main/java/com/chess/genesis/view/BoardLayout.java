@@ -27,13 +27,13 @@ import com.chess.genesis.engine.*;
 public class BoardLayout extends LinearLayout implements OnClickListener, OnLongClickListener
 {
 	private GameState gamestate;
-	private final PieceImgCache cache;
+	private final PieceImgPainter painter;
 
 	public BoardLayout(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
 		setOrientation(LinearLayout.VERTICAL);
-		cache = new PieceImgCache(context);
+		painter = new PieceImgPainter(context);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener, OnLong
 		size -= size % 8;
 
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-		cache.resize(getMeasuredHeight() / 8);
+		painter.resize(getMeasuredHeight() / 8);
 	}
 
 	public void init(final GameState _gamestate, final boolean viewAsBlack)
@@ -57,7 +57,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener, OnLong
 				row.setSizes("1/8");
 
 				for (int j = 7; j >= 0; j--) {
-					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
+					final BoardButton button = new BoardButton(context, painter, 16 * i + j);
 					button.setOnClickListener(this);
 					button.setOnLongClickListener(this);
 					row.addView(button);
@@ -70,7 +70,7 @@ public class BoardLayout extends LinearLayout implements OnClickListener, OnLong
 				row.setSizes("1,1,1,1,1,1,1,1/8");
 
 				for (int j = 0; j < 8; j++) {
-					final BoardButton button = new BoardButton(context, cache, 16 * i + j);
+					final BoardButton button = new BoardButton(context, painter, 16 * i + j);
 					button.setOnClickListener(this);
 					button.setOnLongClickListener(this);
 					row.addView(button);

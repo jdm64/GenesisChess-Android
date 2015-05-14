@@ -18,21 +18,23 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
-import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 
-public abstract class PieceImg extends View
+public final class PieceImgPainter
 {
-	public static int outerLight;
-	public static int outerDark;
-	public static int innerDark;
-	public static int innerLight;
-	public static int innerSelect;
-	public static int innerCheck;
-	public static int innerLast;
-	public static boolean colorsSet = false;
+	protected final static int WHITE = 0;
+	protected final static int BLACK = 1;
+
+	private static int outerLight;
+	private static int outerDark;
+	private static int innerDark;
+	private static int innerLight;
+	private static int innerSelect;
+	private static int innerCheck;
+	private static int innerLast;
+	private static boolean colorsSet = false;
 
 	private final static Matrix matrix = new Matrix();
 	private final static float recScale = (float) 0.9;
@@ -42,13 +44,9 @@ public abstract class PieceImg extends View
 	private final RectF inSquare = new RectF();
 	private final RectF outSquare = new RectF();
 
-	protected int type = Piece.EMPTY;
-
-	public PieceImg(final Context context, final PieceImgCache _cache, final int Type)
+	public PieceImgPainter(final Context context)
 	{
-		super(context);
-		cache = _cache;
-		type = Type;
+		cache = new PieceImgCache(context);
 	}
 
 	public static void initColors(final Context context)
@@ -85,21 +83,37 @@ public abstract class PieceImg extends View
 		colorsSet = false;
 	}
 
-	@Override
-	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	public void drawSquare(final Canvas canvas, IBoardSq sq)
 	{
-		final int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-		setMeasuredDimension(size, size);
-
-		final float rb = size * recScale, lt = size - rb;
-		inSquare.set(lt, lt, rb, rb);
-		outSquare.set(0, 0, size, size);
+		boolean isWhite = sq.getColor() == WHITE;
+		int outerColor = isWhite? outerLight : outerDark;
+		int innerColor =
+			sq.isHighlighted()?
+				innerSelect :
+			(sq.isLast()?
+				innerLast :
+			(sq.isCheck()?
+				innerCheck :
+			(isWhite?
+				innerLight :
+				innerDark)));
+		drawSquare(canvas, innerColor, outerColor);
 	}
 
-	@Override
-	protected abstract void onDraw(final Canvas canvas);
+	public void drawSquare(final Canvas canvas, IPlaceSq sq)
+	{
+		int piece = sq.getPiece();
+		int outerColor = piece % 2 == 0? outerLight : outerDark;
+		int innerColor =
+			sq.isHighlighted()?
+				innerSelect :
+			((piece % 2 == 0)?
+				innerLight :
+				innerDark);
+		drawSquare(canvas, innerColor, outerColor);
+	}
 
-	protected void drawSquare(final Canvas canvas, final int inColor, final int outColor)
+	private void drawSquare(final Canvas canvas, final int inColor, final int outColor)
 	{
 		paint.setColor(outColor);
 		canvas.drawRect(outSquare, paint);
@@ -107,29 +121,27 @@ public abstract class PieceImg extends View
 		canvas.drawRect(inSquare, paint);
 	}
 
-	protected void drawPiece(final Canvas canvas)
+	public void drawPiece(final Canvas canvas, final int type)
 	{
 		canvas.drawBitmap(cache.getPieceImg(type + 6), matrix, null);
 	}
 
-	protected void drawCount(final Canvas canvas, final int count)
+	public void drawCount(final Canvas canvas, final int count, final boolean drawZero)
 	{
-		if (count == 1)
+		if (count <= 1 && !drawZero)
 			return;
 		canvas.drawBitmap(cache.getTokenImg(), matrix, null);
 		canvas.drawBitmap(cache.getCountImg(count), matrix, null);
 	}
 
-	public int getPiece()
+	public void resize(int newSize)
 	{
-		return type;
-	}
+		int size = cache.getSize();
+		if (size == newSize || newSize < 1)
+			return;
 
-	public void setPiece(final int Type)
-	{
-		type = Type;
-		invalidate();
+		final float rb = size * recScale, lt = size - rb;
+		inSquare.set(lt, lt, rb, rb);
+		outSquare.set(0, 0, size, size);
 	}
-
-	public abstract void setHighlight(final boolean mode);
 }

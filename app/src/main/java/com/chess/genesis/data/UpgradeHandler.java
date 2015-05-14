@@ -45,7 +45,7 @@ public final class UpgradeHandler
 			return;
 
 		if (oldVer < 67) {
-			PieceImg.resetColors(context);
+			PieceImgPainter.resetColors(context);
 		}
 
 		final PrefEdit pref = new PrefEdit(context);

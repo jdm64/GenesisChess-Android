@@ -20,27 +20,20 @@ import android.content.*;
 import android.graphics.*;
 import com.chess.genesis.engine.*;
 
-public class CapturedPiece extends PieceImg
+public class CapturedPiece extends PieceImgView
 {
 	private int count = 0;
 
-	public CapturedPiece(final Context context, final PieceImgCache _cache)
+	public CapturedPiece(final Context context, final PieceImgPainter painter)
 	{
-		super(context, _cache, Piece.NONE);
+		super(context, painter, Piece.NONE);
 	}
 
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		drawPiece(canvas);
-		if (count > 1)
-			drawCount(canvas, count);
-	}
-
-	@Override
-	public void setHighlight(final boolean mode)
-	{
-		// do nothing
+		painter.drawPiece(canvas, type);
+		painter.drawCount(canvas, count, false);
 	}
 
 	public void setPieceAndCount(final int piece, final int Count)

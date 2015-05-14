@@ -26,4 +26,6 @@ public interface ISquare
 	void reset();
 
 	void setHighlight(boolean value);
+
+	boolean isHighlighted();
 }
