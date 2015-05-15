@@ -60,7 +60,7 @@ public class GenGameFrag extends GameFrag
 		super.reset();
 
 		for (int i = 0; i < 64; i++) {
-			final IBoardSq square = (IBoardSq) act.findViewById(i);
+			final IBoardSq square = getBoardSq(i);
 			square.reset();
 		}
 	}

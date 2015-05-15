@@ -40,6 +40,7 @@ public abstract class GameState implements Handler.Callback
 	protected final ObjectArray<Move> history;
 	protected final HintList hintList;
 	protected final Board board;
+	protected final ISqLocator locator;
 
 	protected final Handler handle;
 	protected final NetworkClient net;
@@ -229,15 +230,16 @@ public abstract class GameState implements Handler.Callback
 	}
 	}
 
-	public GameState(final GameFrag _game, final Board _board)
+	public GameState(final GameFrag _game, final ISqLocator _locator, final Board _board)
 	{
 		game = _game;
 		activity = game.getActivity();
 		settings = game.getArguments();
+		locator = _locator;
 		board = _board;
 		handle = new Handler(this);
 		history = new ObjectArray<>(board.moveGenerator());
-		hintList = new HintList(activity, this, board);
+		hintList = new HintList(locator, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 
@@ -408,7 +410,7 @@ public abstract class GameState implements Handler.Callback
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = (IBoardSq) activity.findViewById(king);
+			final IBoardSq kingI = locator.getBoardSq(king);
 			kingI.setCheck(false);
 		}
 	}
@@ -418,7 +420,7 @@ public abstract class GameState implements Handler.Callback
 		hintList.clear();
 		if (hindex >= 0) {
 			// undo last move highlight
-			final IBoardSq to = (IBoardSq) activity.findViewById(history.get(hindex).to);
+			final IBoardSq to = locator.getBoardSq(history.get(hindex).to);
 			to.setLast(false);
 
 			preCommonMove();
@@ -436,7 +438,7 @@ public abstract class GameState implements Handler.Callback
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = (IBoardSq) activity.findViewById(king);
+			final IBoardSq kingI = locator.getBoardSq(king);
 			kingI.setCheck(true);
 		}
 		// set captured pieces
@@ -454,7 +456,7 @@ public abstract class GameState implements Handler.Callback
 	{
 		// redo last move highlight
 		if (hindex >= 0) {
-			final IBoardSq hto = (IBoardSq) activity.findViewById(history.get(hindex).to);
+			final IBoardSq hto = locator.getBoardSq(history.get(hindex).to);
 			hto.setLast(true);
 		}
 		postCommonMove();
@@ -570,11 +572,11 @@ public abstract class GameState implements Handler.Callback
 	protected void setBoard(final int[] pieces)
 	{
 		for (int i = -6; i < 0; i++) {
-			final IPlaceSq button = (IPlaceSq) activity.findViewById(i + 1000);
+			final IPlaceSq button = locator.getPlaceSq(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final IPlaceSq button = (IPlaceSq) activity.findViewById(i + 1000);
+			final IPlaceSq button = locator.getPlaceSq(i + 1000);
 			button.setCount(pieces[i + 6]);
 		}
 
@@ -582,19 +584,19 @@ public abstract class GameState implements Handler.Callback
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
 			final int loc = BaseBoard.SF88(i);
-			final IBoardSq button = (IBoardSq) activity.findViewById(loc);
+			final IBoardSq button = locator.getBoardSq(loc);
 			button.setPiece(squares[loc]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
-			final IBoardSq to = (IBoardSq) activity.findViewById(history.top().to);
+			final IBoardSq to = locator.getBoardSq(history.top().to);
 			to.setLast(true);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = (IBoardSq) activity.findViewById(king);
+			final IBoardSq kingI = locator.getBoardSq(king);
 			kingI.setCheck(true);
 		}
 		// set captured pieces

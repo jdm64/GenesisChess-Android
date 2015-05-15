@@ -28,7 +28,7 @@ import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
-public abstract class GameFrag extends BaseContentFrag implements Handler.Callback
+public abstract class GameFrag extends BaseContentFrag implements Handler.Callback, ISqLocator
 {
 	protected final static String TAG = "GAME";
 
@@ -271,11 +271,11 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public void reset()
 	{
 		for (int i = 994; i < 1000; i++) {
-			final IPlaceSq piece = (IPlaceSq) act.findViewById(i);
+			final IPlaceSq piece = getPlaceSq(i);
 			piece.reset();
 		}
 		for (int i = 1001; i < 1007; i++) {
-			final IPlaceSq piece = (IPlaceSq) act.findViewById(i);
+			final IPlaceSq piece = getPlaceSq(i);
 			piece.reset();
 		}
 		gamestate.setStm();
@@ -288,5 +288,23 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		} else {
 			act.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
+	}
+
+	@Override
+	public ISquare getSq(int index)
+	{
+		return index < 0x88? getBoardSq(index) : getPlaceSq(index);
+	}
+
+	@Override
+	public IBoardSq getBoardSq(int index)
+	{
+		return board.getSquare(index);
+	}
+
+	@Override
+	public IPlaceSq getPlaceSq(int index)
+	{
+		return (IPlaceSq) act.findViewById(index);
 	}
 }

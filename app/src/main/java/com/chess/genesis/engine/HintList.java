@@ -23,7 +23,7 @@ import java.util.*;
 
 public class HintList
 {
-	protected final Activity activity;
+	protected final ISqLocator locator;
 	protected final GameState gamestate;
 	protected final Board board;
 	protected final List<Integer> hints;
@@ -35,10 +35,10 @@ public class HintList
 		NONE, SELECT, PIECE_MOVES, MOVES_TO
 	}
 
-	public HintList(final Activity _activity, final GameState _gameState, final Board _board)
+	public HintList(final ISqLocator _locator, final GameState _gameState, final Board _board)
 	{
 		gamestate = _gameState;
-		activity = _activity;
+		locator = _locator;
 		board = _board;
 		hints = new ArrayList<>();
 		selected = Piece.NONE;
@@ -54,7 +54,7 @@ public class HintList
 	{
 		if (type == SelectType.NONE)
 			return;
-		final ISquare piece = (ISquare) activity.findViewById(selected);
+		final ISquare piece = locator.getSq(selected);
 		piece.setHighlight(false);
 		selected = Piece.NONE;
 		type = SelectType.NONE;
@@ -63,7 +63,7 @@ public class HintList
 	public void clearHint()
 	{
 		for (final Integer i : hints) {
-			final IBoardSq button = (IBoardSq) activity.findViewById(i);
+			final IBoardSq button = locator.getBoardSq(i);
 			button.setHighlight(false);
 		}
 		hints.clear();
@@ -171,7 +171,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.from == selected) {
 				hints.add(node.move.to);
-				final IBoardSq button = (IBoardSq) activity.findViewById(node.move.to);
+				final IBoardSq button = locator.getBoardSq(node.move.to);
 				button.setHighlight(true);
 			}
 		}
@@ -186,7 +186,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
 				hints.add(node.move.from);
-				final IBoardSq button = (IBoardSq) activity.findViewById(node.move.from);
+				final IBoardSq button = locator.getBoardSq(node.move.from);
 				button.setHighlight(true);
 			}
 		}

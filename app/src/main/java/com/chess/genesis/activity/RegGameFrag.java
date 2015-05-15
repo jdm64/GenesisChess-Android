@@ -60,12 +60,12 @@ public class RegGameFrag extends GameFrag
 		super.reset();
 
 		for (int i = 0; i < 64; i++) {
-			final IBoardSq square = (IBoardSq) act.findViewById(i);
+			final IBoardSq square = getBoardSq(i);
 			square.setPiece(Piece.EMPTY);
 		}
 		for (int i = 0; i < 32; i++) {
 			final int loc = BaseBoard.EE64(RegBoard.InitRegPiece[i]);
-			final IBoardSq square = (IBoardSq) act.findViewById(loc);
+			final IBoardSq square = getBoardSq(loc);
 			square.setPiece(Move.InitPieceType[i]);
 		}
 	}

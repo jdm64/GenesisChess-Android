@@ -28,7 +28,7 @@ public class RegGameState extends GameState
 
 	public RegGameState(final GameFrag _game)
 	{
-		super(_game, new RegBoard());
+		super(_game, _game, new RegBoard());
 		flagsHistory = new ObjectArray<>(new MoveFlags());
 
 		final String tmp = settings.getString("history");
@@ -100,15 +100,15 @@ public class RegGameState extends GameState
 	{
 		preApplyMove();
 
-		final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
-		final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
+		final IBoardSq from = locator.getBoardSq(move.from);
+		final IBoardSq to = locator.getBoardSq(move.to);
 
 		to.setPiece(from.getPiece());
 		to.setLast(true);
 		from.setPiece(0);
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = (IPlaceSq) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + 1000);
 			piece.plusCount();
 		}
 
@@ -117,15 +117,15 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
 
-			IBoardSq castle = (IBoardSq) activity.findViewById(castleFrom);
+			IBoardSq castle = locator.getBoardSq(castleFrom);
 			castle.setPiece(Piece.EMPTY);
-			castle = (IBoardSq) activity.findViewById(castleTo);
+			castle = locator.getBoardSq(castleTo);
 			castle.setPiece(Piece.ROOK * board.getStm());
 		} else if (move.getPromote() != 0) {
-			final IBoardSq pawn = (IBoardSq) activity.findViewById(move.to);
+			final IBoardSq pawn = locator.getBoardSq(move.to);
 			pawn.setPiece(move.getPromote() * board.getStm());
 		} else if (move.getEnPassant()) {
-			final IBoardSq pawn = (IBoardSq) activity.findViewById(board.Piece(move.xindex));
+			final IBoardSq pawn = locator.getBoardSq(board.Piece(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -155,8 +155,8 @@ public class RegGameState extends GameState
 	{
 		preRevertMove();
 
-		final IBoardSq from = (IBoardSq) activity.findViewById(move.from);
-		final IBoardSq to = (IBoardSq) activity.findViewById(move.to);
+		final IBoardSq from = locator.getBoardSq(move.from);
+		final IBoardSq to = locator.getBoardSq(move.to);
 
 		from.setPiece(to.getPiece());
 		to.setLast(false);
@@ -165,7 +165,7 @@ public class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
 			final int loc = move.to + ((move.to - move.from > 0)? -16 : 16);
-			final IBoardSq pawn = (IBoardSq) activity.findViewById(loc);
+			final IBoardSq pawn = locator.getBoardSq(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
@@ -173,7 +173,7 @@ public class RegGameState extends GameState
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = (IPlaceSq) activity.findViewById(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + 1000);
 			piece.minusCount();
 		}
 
@@ -182,12 +182,12 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
 
-			IBoardSq castle = (IBoardSq) activity.findViewById(castleFrom);
+			IBoardSq castle = locator.getBoardSq(castleFrom);
 			castle.setPiece(Piece.ROOK * -board.getStm());
-			castle = (IBoardSq) activity.findViewById(castleTo);
+			castle = locator.getBoardSq(castleTo);
 			castle.setPiece(Piece.EMPTY);
 		} else if (move.getPromote() != 0) {
-			final IBoardSq pawn = (IBoardSq) activity.findViewById(move.from);
+			final IBoardSq pawn = locator.getBoardSq(move.from);
 			pawn.setPiece(Piece.PAWN * -board.getStm());
 		}
 
