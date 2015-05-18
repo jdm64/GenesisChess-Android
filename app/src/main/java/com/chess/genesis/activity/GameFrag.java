@@ -39,6 +39,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public boolean viewAsBlack = false;
 
 	protected GameListFrag gameListFrag;
+	protected BoardView board;
 
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -68,7 +69,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		final View view = inflater.inflate(R.layout.fragment_game, container, false);
 
 		// initialize the board & place piece layouts
-		final BoardLayout board = (BoardLayout) view.findViewById(R.id.board_layout);
+		board = (BoardView) view.findViewById(R.id.board_layout);
 		board.init(gamestate, viewAsBlack);
 		final PlaceLayout place = (PlaceLayout) view.findViewById(R.id.place_layout);
 		place.init(gamestate);

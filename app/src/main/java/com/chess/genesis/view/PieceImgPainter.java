@@ -38,13 +38,15 @@ public final class PieceImgPainter
 	private static int innerLast;
 	private static boolean colorsSet = false;
 
-	private final static Matrix matrix = new Matrix();
 	private final static float recScale = (float) 0.9;
 
 	private final PieceImgCache cache;
 	private final Paint paint = new Paint();
 	private final RectF inSquare = new RectF();
 	private final RectF outSquare = new RectF();
+
+	private int x;
+	private int y;
 
 	public PieceImgPainter(final Context context)
 	{
@@ -125,15 +127,15 @@ public final class PieceImgPainter
 
 	public void drawPiece(final Canvas canvas, final int type)
 	{
-		canvas.drawBitmap(cache.getPieceImg(type + 6), matrix, null);
+		canvas.drawBitmap(cache.getPieceImg(type + 6), x, y, null);
 	}
 
 	public void drawCount(final Canvas canvas, final int count, final boolean drawZero)
 	{
 		if (count <= 1 && !drawZero)
 			return;
-		canvas.drawBitmap(cache.getTokenImg(), matrix, null);
-		canvas.drawBitmap(cache.getCountImg(count), matrix, null);
+		canvas.drawBitmap(cache.getTokenImg(), x, y, null);
+		canvas.drawBitmap(cache.getCountImg(count), x, y, null);
 	}
 
 	public void resize(int newSize)
@@ -142,9 +144,22 @@ public final class PieceImgPainter
 		if (size == newSize || newSize < 1)
 			return;
 
+		size = newSize;
 		final float rb = size * recScale, lt = size - rb;
 		inSquare.set(lt, lt, rb, rb);
 		outSquare.set(0, 0, size, size);
+		cache.resize(size);
+	}
+
+	public void offsetTo(int X, int Y)
+	{
+		x = X;
+		y = Y;
+
+		float d = (1 - recScale) * cache.getSize();
+		inSquare.offsetTo(x, y);
+		inSquare.offset(d, d);
+		outSquare.offsetTo(x, y);
 	}
 }
 

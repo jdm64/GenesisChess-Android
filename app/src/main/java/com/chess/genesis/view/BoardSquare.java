@@ -16,99 +16,120 @@
 
 package com.chess.genesis.view;
 
-import android.content.*;
 import android.graphics.*;
 import android.view.*;
 
 import com.chess.genesis.engine.*;
 
-public class BoardButton extends View implements IBoardSq
+class BoardSquare implements IBoardSq
 {
-	private final BoardSquare square;
+	private final View view;
+	private final PieceImgPainter painter;
+	private final int color;
+	private final int index;
 
-	public BoardButton(final Context context, final PieceImgPainter painter, final int index)
+	private int x;
+	private int y;
+
+	private int type = Piece.EMPTY;
+	private boolean isHighlighted = false;
+	private boolean isCheck = false;
+	private boolean isLast = false;
+
+	public BoardSquare(View _view, PieceImgPainter _painter, int _index)
 	{
-		super(context);
-		square = new BoardSquare(this, painter, index);
-		setId(square.getIndex());
+		view = _view;
+		painter = _painter;
+		index = _index;
+		color = ((index / 16) % 2 != 0)?
+			((index % 2 != 0)? PieceImgPainter.BLACK : PieceImgPainter.WHITE) :
+			((index % 2 != 0)? PieceImgPainter.WHITE : PieceImgPainter.BLACK);
 	}
 
-	@Override
-	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	public void draw(final Canvas canvas)
 	{
-		final int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-		setMeasuredDimension(size, size);
-	}
-
-	@Override
-	protected void onDraw(final Canvas canvas)
-	{
-		square.draw(canvas);
-	}
-
-	@Override
-	public void reset()
-	{
-		square.reset();
-	}
-
-	@Override
-	public int getIndex()
-	{
-		return square.getIndex();
-	}
-
-	@Override
-	public void setHighlight(final boolean mode)
-	{
-		square.setHighlight(mode);
-	}
-
-	@Override
-	public boolean isHighlighted()
-	{
-		return square.isHighlighted();
-	}
-
-	@Override
-	public void setCheck(final boolean mode)
-	{
-		square.setCheck(mode);
-	}
-
-	@Override
-	public boolean isCheck()
-	{
-		return square.isCheck();
-	}
-
-	@Override
-	public void setLast(final boolean mode)
-	{
-		square.setCheck(mode);
-	}
-
-	@Override
-	public boolean isLast()
-	{
-		return square.isLast();
-	}
-
-	@Override
-	public int getColor()
-	{
-		return square.getColor();
+		painter.offsetTo(x, y);
+		painter.drawSquare(canvas, this);
+		painter.drawPiece(canvas, type);
 	}
 
 	@Override
 	public void setPiece(int piece)
 	{
-		square.setPiece(piece);
+		type = piece;
+		view.invalidate();
 	}
 
 	@Override
 	public int getPiece()
 	{
-		return square.getPiece();
+		return type;
+	}
+
+	@Override
+	public void reset()
+	{
+		isHighlighted = false;
+		isCheck = false;
+		isLast = false;
+		type = Piece.EMPTY;
+		view.invalidate();
+	}
+
+	@Override
+	public int getIndex()
+	{
+		return index;
+	}
+
+	@Override
+	public void setHighlight(final boolean mode)
+	{
+		isHighlighted = mode;
+		view.invalidate();
+	}
+
+	@Override
+	public boolean isHighlighted()
+	{
+		return isHighlighted;
+	}
+
+	@Override
+	public void setCheck(final boolean mode)
+	{
+		isCheck = mode;
+		view.invalidate();
+	}
+
+	@Override
+	public boolean isCheck()
+	{
+		return isCheck;
+	}
+
+	@Override
+	public void setLast(final boolean mode)
+	{
+		isLast = mode;
+		view.invalidate();
+	}
+
+	@Override
+	public boolean isLast()
+	{
+		return isLast;
+	}
+
+	@Override
+	public int getColor()
+	{
+		return color;
+	}
+
+	public void setXY(int X, int Y)
+	{
+		x = X;
+		y = Y;
 	}
 }
