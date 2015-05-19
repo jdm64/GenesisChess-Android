@@ -17,8 +17,8 @@
 
 package com.chess.genesis.engine;
 
-import android.app.*;
-import com.chess.genesis.view.*;
+import android.view.*;
+
 import java.util.*;
 
 public class HintList
@@ -160,7 +160,8 @@ public class HintList
 			clear();
 			setSelected(pb, index);
 		}
-		AnimationFactory.flipTransition(gamestate.game.game_board);
+
+		gamestate.game.boardDrawer.toggle(Gravity.LEFT);
 	}
 
 	public void showPieceMoves(final int square)

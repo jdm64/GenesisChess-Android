@@ -18,16 +18,15 @@ android:orientation="vertical">
 		android:padding="6dp"
 		android:textSize="14sp"/>
 	</com.chess.genesis.view.ManualPanel>
-	<ViewFlipper
-	style="@style/FillWidth"
-	android:id="@+id/board_flip">
+	<com.chess.genesis.view.DrawerLayout2
+	android:id="@+id/board_drawer">
 		<com.chess.genesis.view.BoardView
-		android:layout_gravity="top|center_horizontal"
 		android:id="@+id/board_layout"/>
 		<com.chess.genesis.view.PlaceLayout
-		android:layout_gravity="top|center_horizontal"
+		android:layout_gravity="left"
+		android:clickable="true"
 		android:id="@+id/place_layout"/>
-	</ViewFlipper>
+	</com.chess.genesis.view.DrawerLayout2>
 	<com.chess.genesis.view.CapturedLayout
 	android:id="@+id/captured_count"
 	panel:height_policy="exact_child"

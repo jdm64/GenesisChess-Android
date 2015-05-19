@@ -32,7 +32,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 {
 	protected final static String TAG = "GAME";
 
-	public ViewAnimator game_board;
+	public DrawerLayout2 boardDrawer;
 	public CapturedLayout captured_count;
 	public GameState gamestate;
 	public int type;
@@ -91,7 +91,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 			button.setOnClickListener(this);
 		}
 
-		game_board = (ViewAnimator) view.findViewById(R.id.board_flip);
+		boardDrawer = (DrawerLayout2) view.findViewById(R.id.board_drawer);
 		captured_count = (CapturedLayout) view.findViewById(R.id.captured_count);
 
 		// initialize board colors
@@ -148,7 +148,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 
 		switch (v.getId()) {
 		case R.id.place_piece:
-			AnimationFactory.flipTransition(game_board);
+			boardDrawer.toggle(Gravity.LEFT);
 			break;
 		case R.id.chat:
 			if (isTablet) {
