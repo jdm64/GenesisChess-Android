@@ -32,7 +32,7 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 	{
 		super(context, painter, Type);
 		count = typeCounts[Math.abs(type)];
-		setId(type + 1000);
+		setId(type + GameState.PLACEOFFSET);
 	}
 
 	@Override

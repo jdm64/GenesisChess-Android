@@ -108,7 +108,7 @@ public class RegGameState extends GameState
 		from.setPiece(0);
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
 			piece.plusCount();
 		}
 
@@ -173,7 +173,7 @@ public class RegGameState extends GameState
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + 1000);
+			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
 			piece.minusCount();
 		}
 

@@ -271,11 +271,11 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 
 	public void reset()
 	{
-		for (int i = 994; i < 1000; i++) {
+		for (int i = GameState.PLACEOFFSET - 6; i < GameState.PLACEOFFSET; i++) {
 			final IPlaceSq piece = getPlaceSq(i);
 			piece.reset();
 		}
-		for (int i = 1001; i < 1007; i++) {
+		for (int i = GameState.PLACEOFFSET + 1; i < GameState.PLACEOFFSET + 7; i++) {
 			final IPlaceSq piece = getPlaceSq(i);
 			piece.reset();
 		}

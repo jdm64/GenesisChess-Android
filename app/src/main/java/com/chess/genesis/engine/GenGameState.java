@@ -63,7 +63,7 @@ public class GenGameState extends GameState
 
 		// create move
 		if (from > 0x88) {
-			move.index = Math.abs(from - 1000);
+			move.index = Math.abs(from - PLACEOFFSET);
 			move.from = Piece.PLACEABLE;
 		} else {
 			move.from = from;
@@ -83,7 +83,7 @@ public class GenGameState extends GameState
 		preApplyMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + 1000);
+			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
 			final IBoardSq to = locator.getBoardSq(move.to);
 
 			from.minusCount();
@@ -119,7 +119,7 @@ public class GenGameState extends GameState
 		preRevertMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + 1000);
+			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
 			final IBoardSq to = locator.getBoardSq(move.to);
 
 			to.setLast(false);

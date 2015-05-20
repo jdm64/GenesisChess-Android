@@ -59,14 +59,14 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			final ManualPanel row = new ManualPanel(context);
 			row.setSizes("1/5");
 
-			row.addView(new BoardButton(context, painter, i + 10000));
+			row.addView(new BoardButton(context, painter, i + 10 * GameState.PLACEOFFSET));
 
 			for (int j = 0; j < 3; j++) {
 				final PlaceButton button = new PlaceButton(context, painter, piecelist[idx++]);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
-			row.addView(new BoardButton(context, painter, i + 10000));
+			row.addView(new BoardButton(context, painter, i + 10 * GameState.PLACEOFFSET));
 			addView(row);
 		}
 	}

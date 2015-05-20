@@ -33,6 +33,8 @@ import org.json.*;
 
 public abstract class GameState implements Handler.Callback
 {
+	public static final int PLACEOFFSET = 1000;
+
 	protected final GameFrag game;
 	protected final Activity activity;
 	protected final Bundle settings;
@@ -572,11 +574,11 @@ public abstract class GameState implements Handler.Callback
 	protected void setBoard(final int[] pieces)
 	{
 		for (int i = -6; i < 0; i++) {
-			final IPlaceSq button = locator.getPlaceSq(i + 1000);
+			final IPlaceSq button = locator.getPlaceSq(i + PLACEOFFSET);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final IPlaceSq button = locator.getPlaceSq(i + 1000);
+			final IPlaceSq button = locator.getPlaceSq(i + PLACEOFFSET);
 			button.setCount(pieces[i + 6]);
 		}
 
