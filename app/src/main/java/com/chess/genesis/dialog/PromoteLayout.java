@@ -39,7 +39,11 @@ public class PromoteLayout extends LinearLayout implements View.OnClickListener,
 	@Override
 	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		final int size = Math.min(320, Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)));
+		WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics dm = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(dm);
+
+		int size = 2 * Math.min(dm.heightPixels, dm.widthPixels) / 5;
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 		painter.resize(getMeasuredWidth() / 2);
 	}
