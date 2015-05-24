@@ -20,13 +20,11 @@ package com.chess.genesis.engine;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
-import com.chess.genesis.view.*;
 import org.json.*;
 
 public abstract class GameState implements Handler.Callback
@@ -552,27 +550,12 @@ public abstract class GameState implements Handler.Callback
 			bstr = settings.getString("black");
 		}
 
-		final TabText white = (TabText) activity.findViewById(R.id.white_name);
-		final TabText black = (TabText) activity.findViewById(R.id.black_name);
-
 		if (board.getStm() == Piece.WHITE) {
-			white.setText(wstr + think);
-			white.setActive(true);
-
-			black.setText(bstr);
-			black.setActive(false);
-
-			if (mate)
-				white.setTabTextColor(MColors.RED_A700);
+			gamefrag.setNameText(true, true, mate, wstr + think);
+			gamefrag.setNameText(false, false, false, bstr);
 		} else {
-			white.setText(wstr);
-			white.setActive(false);
-
-			black.setText(bstr + think);
-			black.setActive(true);
-
-			if (mate)
-				black.setTabTextColor(MColors.RED_A700);
+			gamefrag.setNameText(true, false, false, wstr);
+			gamefrag.setNameText(false, true, mate, bstr + think);
 		}
 	}
 

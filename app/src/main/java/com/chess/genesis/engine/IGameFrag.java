@@ -30,4 +30,6 @@ public interface IGameFrag extends ISqLocator
 	Bundle getGameData();
 
 	void showToast(String text);
+
+	void setNameText(boolean isWhite, boolean isStm, boolean isMate, String text);
 }

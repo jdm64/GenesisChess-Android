@@ -319,4 +319,14 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	{
 		Toast.makeText(act, text, Toast.LENGTH_LONG).show();
 	}
+
+	@Override
+	public void setNameText(boolean isWhite, boolean isStm, boolean isMate, String text)
+	{
+		final TabText tabtext = (TabText) act.findViewById(isWhite? R.id.white_name : R.id.black_name);
+		tabtext.setText(text);
+		tabtext.setActive(isStm);
+		if (isMate)
+			tabtext.setTabTextColor(MColors.RED_A700);
+	}
 }
