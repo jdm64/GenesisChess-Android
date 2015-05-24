@@ -17,14 +17,13 @@
 
 package com.chess.genesis.engine;
 
-import android.view.*;
 import com.chess.genesis.activity.*;
 
 public class GenGameState extends GameState
 {
 	public GenGameState(final GameFrag _game)
 	{
-		super(_game, _game, new GenBoard());
+		super(_game.getActivity(), _game, new GenBoard());
 
 		final String tmp = settings.getString("history");
 		if (tmp == null || tmp.length() < 3) {
@@ -44,6 +43,15 @@ public class GenGameState extends GameState
 			hindex++;
 		}
 		check_endgame();
+	}
+
+	@Override
+	protected void resetPieces()
+	{
+		super.resetPieces();
+
+		for (int i = 0; i < 64; i++)
+			gamefrag.getBoardSq(i).reset();
 	}
 
 	@Override
@@ -83,15 +91,15 @@ public class GenGameState extends GameState
 		preApplyMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
-			final IBoardSq to = locator.getBoardSq(move.to);
+			final IPlaceSq from = gamefrag.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
+			final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 			from.minusCount();
 			to.setPiece(from.getPiece());
 			to.setLast(true);
 		} else {
-			final IBoardSq from = locator.getBoardSq(move.from);
-			final IBoardSq to = locator.getBoardSq(move.to);
+			final IBoardSq from = gamefrag.getBoardSq(move.from);
+			final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 			to.setPiece(from.getPiece());
 			to.setLast(true);
@@ -119,15 +127,15 @@ public class GenGameState extends GameState
 		preRevertMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			final IPlaceSq from = locator.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
-			final IBoardSq to = locator.getBoardSq(move.to);
+			final IPlaceSq from = gamefrag.getPlaceSq(Move.InitPieceType[move.index] + PLACEOFFSET);
+			final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 			to.setLast(false);
 			to.setPiece(0);
 			from.plusCount();
 		} else {
-			final IBoardSq from = locator.getBoardSq(move.from);
-			final IBoardSq to = locator.getBoardSq(move.to);
+			final IBoardSq from = gamefrag.getBoardSq(move.from);
+			final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 			from.setPiece(to.getPiece());
 

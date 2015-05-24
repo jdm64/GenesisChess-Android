@@ -17,13 +17,11 @@
 
 package com.chess.genesis.engine;
 
-import android.view.*;
-
 import java.util.*;
 
 public class HintList
 {
-	protected final ISqLocator locator;
+	protected final IGameFrag gamefrag;
 	protected final GameState gamestate;
 	protected final Board board;
 	protected final List<Integer> hints;
@@ -35,10 +33,10 @@ public class HintList
 		NONE, SELECT, PIECE_MOVES, MOVES_TO
 	}
 
-	public HintList(final ISqLocator _locator, final GameState _gameState, final Board _board)
+	public HintList(final IGameFrag gameFrag, final GameState _gameState, final Board _board)
 	{
 		gamestate = _gameState;
-		locator = _locator;
+		gamefrag = gameFrag;
 		board = _board;
 		hints = new ArrayList<>();
 		selected = Piece.NONE;
@@ -54,7 +52,7 @@ public class HintList
 	{
 		if (type == SelectType.NONE)
 			return;
-		final ISquare piece = locator.getSq(selected);
+		final ISquare piece = gamefrag.getSq(selected);
 		piece.setHighlight(false);
 		selected = Piece.NONE;
 		type = SelectType.NONE;
@@ -63,7 +61,7 @@ public class HintList
 	public void clearHint()
 	{
 		for (final Integer i : hints) {
-			final IBoardSq button = locator.getBoardSq(i);
+			final IBoardSq button = gamefrag.getBoardSq(i);
 			button.setHighlight(false);
 		}
 		hints.clear();
@@ -161,7 +159,7 @@ public class HintList
 			setSelected(pb, index);
 		}
 
-		gamestate.game.boardDrawer.toggle(Gravity.LEFT);
+		gamefrag.togglePlaceBoard();
 	}
 
 	public void showPieceMoves(final int square)
@@ -172,7 +170,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.from == selected) {
 				hints.add(node.move.to);
-				final IBoardSq button = locator.getBoardSq(node.move.to);
+				final IBoardSq button = gamefrag.getBoardSq(node.move.to);
 				button.setHighlight(true);
 			}
 		}
@@ -187,7 +185,7 @@ public class HintList
 		for (final MoveNode node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
 				hints.add(node.move.from);
-				final IBoardSq button = locator.getBoardSq(node.move.from);
+				final IBoardSq button = gamefrag.getBoardSq(node.move.from);
 				button.setHighlight(true);
 			}
 		}

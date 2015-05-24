@@ -17,7 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import android.view.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
@@ -28,7 +27,7 @@ public class RegGameState extends GameState
 
 	public RegGameState(final GameFrag _game)
 	{
-		super(_game, _game, new RegBoard());
+		super(_game.getActivity(), _game, new RegBoard());
 		flagsHistory = new ObjectArray<>(new MoveFlags());
 
 		final String tmp = settings.getString("history");
@@ -69,6 +68,16 @@ public class RegGameState extends GameState
 	}
 
 	@Override
+	protected void resetPieces()
+	{
+		super.resetPieces();
+
+		for (int i = 0; i < 64; i++)
+			gamefrag.getBoardSq(i).setPiece(Piece.EMPTY);
+		for (int i = 0; i < 32; i++)
+			gamefrag.getBoardSq(BaseBoard.EE64(RegBoard.InitRegPiece[i])).setPiece(Move.InitPieceType[i]);
+	}
+
 	public void undoMove()
 	{
 		super.undoMove();
@@ -100,15 +109,15 @@ public class RegGameState extends GameState
 	{
 		preApplyMove();
 
-		final IBoardSq from = locator.getBoardSq(move.from);
-		final IBoardSq to = locator.getBoardSq(move.to);
+		final IBoardSq from = gamefrag.getBoardSq(move.from);
+		final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 		to.setPiece(from.getPiece());
 		to.setLast(true);
 		from.setPiece(0);
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
+			final IPlaceSq piece = gamefrag.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
 			piece.plusCount();
 		}
 
@@ -117,15 +126,15 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.WHITE)? Piece.A1 : Piece.A8);
 
-			IBoardSq castle = locator.getBoardSq(castleFrom);
+			IBoardSq castle = gamefrag.getBoardSq(castleFrom);
 			castle.setPiece(Piece.EMPTY);
-			castle = locator.getBoardSq(castleTo);
+			castle = gamefrag.getBoardSq(castleTo);
 			castle.setPiece(Piece.ROOK * board.getStm());
 		} else if (move.getPromote() != 0) {
-			final IBoardSq pawn = locator.getBoardSq(move.to);
+			final IBoardSq pawn = gamefrag.getBoardSq(move.to);
 			pawn.setPiece(move.getPromote() * board.getStm());
 		} else if (move.getEnPassant()) {
-			final IBoardSq pawn = locator.getBoardSq(board.Piece(move.xindex));
+			final IBoardSq pawn = gamefrag.getBoardSq(board.Piece(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
 		}
 		// get copy of board flags
@@ -155,8 +164,8 @@ public class RegGameState extends GameState
 	{
 		preRevertMove();
 
-		final IBoardSq from = locator.getBoardSq(move.from);
-		final IBoardSq to = locator.getBoardSq(move.to);
+		final IBoardSq from = gamefrag.getBoardSq(move.from);
+		final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 		from.setPiece(to.getPiece());
 		to.setLast(false);
@@ -165,7 +174,7 @@ public class RegGameState extends GameState
 			to.setPiece(Piece.EMPTY);
 		} else if (move.getEnPassant()) {
 			final int loc = move.to + ((move.to - move.from > 0)? -16 : 16);
-			final IBoardSq pawn = locator.getBoardSq(loc);
+			final IBoardSq pawn = gamefrag.getBoardSq(loc);
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
@@ -173,7 +182,7 @@ public class RegGameState extends GameState
 		}
 
 		if (move.xindex != Piece.NONE) {
-			final IPlaceSq piece = locator.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
+			final IPlaceSq piece = gamefrag.getPlaceSq(board.PieceType(move.xindex) + PLACEOFFSET);
 			piece.minusCount();
 		}
 
@@ -182,12 +191,12 @@ public class RegGameState extends GameState
 			final int castleTo = move.to + (left? 1 : -1),
 				castleFrom = (left? 0:7) + ((board.getStm() == Piece.BLACK)? Piece.A1 : Piece.A8);
 
-			IBoardSq castle = locator.getBoardSq(castleFrom);
+			IBoardSq castle = gamefrag.getBoardSq(castleFrom);
 			castle.setPiece(Piece.ROOK * -board.getStm());
-			castle = locator.getBoardSq(castleTo);
+			castle = gamefrag.getBoardSq(castleTo);
 			castle.setPiece(Piece.EMPTY);
 		} else if (move.getPromote() != 0) {
-			final IBoardSq pawn = locator.getBoardSq(move.from);
+			final IBoardSq pawn = gamefrag.getBoardSq(move.from);
 			pawn.setPiece(Piece.PAWN * -board.getStm());
 		}
 

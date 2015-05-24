@@ -53,15 +53,4 @@ public class GenGameFrag extends GameFrag
 		if (Pref.getBool(act, R.array.pf_showGenesisRules))
 			new GenesisRulesDialog(act).show();
 	}
-
-	@Override
-	public void reset()
-	{
-		super.reset();
-
-		for (int i = 0; i < 64; i++) {
-			final IBoardSq square = getBoardSq(i);
-			square.reset();
-		}
-	}
 }

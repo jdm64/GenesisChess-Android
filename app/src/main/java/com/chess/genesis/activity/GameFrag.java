@@ -20,7 +20,6 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
@@ -28,16 +27,15 @@ import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
-public abstract class GameFrag extends BaseContentFrag implements Handler.Callback, ISqLocator
+public abstract class GameFrag extends BaseContentFrag implements Handler.Callback, ISqLocator, IGameFrag
 {
 	protected final static String TAG = "GAME";
 
-	public DrawerLayout2 boardDrawer;
-	public CapturedLayout captured_count;
-	public GameState gamestate;
-	public int type;
-	public boolean viewAsBlack = false;
-
+	protected DrawerLayout2 boardDrawer;
+	protected CapturedLayout captured_count;
+	protected GameState gamestate;
+	protected int type;
+	protected boolean viewAsBlack = false;
 	protected GameListFrag gameListFrag;
 	protected BoardView board;
 
@@ -263,25 +261,6 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		}
 	}
 
-	public void displaySubmitMove()
-	{
-		final SubmitMove dialog = new SubmitMove(act, new Handler(this), isTablet);
-		dialog.show();
-	}
-
-	public void reset()
-	{
-		for (int i = GameState.PLACEOFFSET - 6; i < GameState.PLACEOFFSET; i++) {
-			final IPlaceSq piece = getPlaceSq(i);
-			piece.reset();
-		}
-		for (int i = GameState.PLACEOFFSET + 1; i < GameState.PLACEOFFSET + 7; i++) {
-			final IPlaceSq piece = getPlaceSq(i);
-			piece.reset();
-		}
-		gamestate.setStm();
-	}
-
 	private void setKeepScreenOn()
 	{
 		if (Pref.getBool(act, R.array.pf_screenAlwaysOn)) {
@@ -307,5 +286,29 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public IPlaceSq getPlaceSq(int index)
 	{
 		return (IPlaceSq) act.findViewById(index);
+	}
+
+	@Override
+	public void setCapturedCounts(int[] counts)
+	{
+		captured_count.setPieces(counts);
+	}
+
+	@Override
+	public void showSubmitMove()
+	{
+		new SubmitMove(act, new Handler(this), isTablet).show();
+	}
+
+	@Override
+	public void togglePlaceBoard()
+	{
+		boardDrawer.toggle(Gravity.LEFT);
+	}
+
+	@Override
+	public Bundle getGameData()
+	{
+		return getArguments();
 	}
 }

@@ -20,10 +20,8 @@ package com.chess.genesis.engine;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
-import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
@@ -35,14 +33,13 @@ public abstract class GameState implements Handler.Callback
 {
 	public static final int PLACEOFFSET = 1000;
 
-	protected final GameFrag game;
+	protected final IGameFrag gamefrag;
 	protected final Activity activity;
 	protected final Bundle settings;
 	protected final ProgressMsg progress;
 	protected final ObjectArray<Move> history;
 	protected final HintList hintList;
 	protected final Board board;
-	protected final ISqLocator locator;
 
 	protected final Handler handle;
 	protected final NetworkClient net;
@@ -232,16 +229,15 @@ public abstract class GameState implements Handler.Callback
 	}
 	}
 
-	public GameState(final GameFrag _game, final ISqLocator _locator, final Board _board)
+	public GameState(final Activity act, final IGameFrag gameFrag, final Board _board)
 	{
-		game = _game;
-		activity = game.getActivity();
-		settings = game.getArguments();
-		locator = _locator;
+		gamefrag = gameFrag;
+		activity = act;
+		settings = gameFrag.getGameData();
 		board = _board;
 		handle = new Handler(this);
 		history = new ObjectArray<>(board.moveGenerator());
-		hintList = new HintList(locator, this, board);
+		hintList = new HintList(gamefrag, this, board);
 		progress = new ProgressMsg(activity);
 		type = settings.getInt("type", Enums.ONLINE_GAME);
 
@@ -267,9 +263,18 @@ public abstract class GameState implements Handler.Callback
 	public void reset()
 	{
 		hindex = -1;
-		game.reset();
+		resetPieces();
 		history.clear();
 		board.reset();
+	}
+
+	protected void resetPieces()
+	{
+		for (int i = PLACEOFFSET - 6; i < PLACEOFFSET; i++)
+			gamefrag.getPlaceSq(i).reset();
+		for (int i = PLACEOFFSET + 1; i < PLACEOFFSET + 7; i++)
+			gamefrag.getPlaceSq(i).reset();
+		setStm();
 	}
 
 	public void backMove()
@@ -412,7 +417,7 @@ public abstract class GameState implements Handler.Callback
 		// legal move always ends with king not in check
 		if (hindex > 1) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = locator.getBoardSq(king);
+			final IBoardSq kingI = gamefrag.getBoardSq(king);
 			kingI.setCheck(false);
 		}
 	}
@@ -422,7 +427,7 @@ public abstract class GameState implements Handler.Callback
 		hintList.clear();
 		if (hindex >= 0) {
 			// undo last move highlight
-			final IBoardSq to = locator.getBoardSq(history.get(hindex).to);
+			final IBoardSq to = gamefrag.getBoardSq(history.get(hindex).to);
 			to.setLast(false);
 
 			preCommonMove();
@@ -440,11 +445,11 @@ public abstract class GameState implements Handler.Callback
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = locator.getBoardSq(king);
+			final IBoardSq kingI = gamefrag.getBoardSq(king);
 			kingI.setCheck(true);
 		}
 		// set captured pieces
-		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
+		gamefrag.setCapturedCounts(board.getPieceCounts(Piece.DEAD));
 
 		setStm();
 	}
@@ -458,7 +463,7 @@ public abstract class GameState implements Handler.Callback
 	{
 		// redo last move highlight
 		if (hindex >= 0) {
-			final IBoardSq hto = locator.getBoardSq(history.get(hindex).to);
+			final IBoardSq hto = gamefrag.getBoardSq(history.get(hindex).to);
 			hto.setLast(true);
 		}
 		postCommonMove();
@@ -517,7 +522,7 @@ public abstract class GameState implements Handler.Callback
 		case Enums.ONLINE_GAME:
 			if (exitgame)
 				return;
-			game.displaySubmitMove();
+			gamefrag.showSubmitMove();
 		case Enums.ARCHIVE_GAME:
 			break;
 		}
@@ -574,11 +579,11 @@ public abstract class GameState implements Handler.Callback
 	protected void setBoard(final int[] pieces)
 	{
 		for (int i = -6; i < 0; i++) {
-			final IPlaceSq button = locator.getPlaceSq(i + PLACEOFFSET);
+			final IPlaceSq button = gamefrag.getPlaceSq(i + PLACEOFFSET);
 			button.setCount(pieces[i + 6]);
 		}
 		for (int i = 1; i < 7; i++) {
-			final IPlaceSq button = locator.getPlaceSq(i + PLACEOFFSET);
+			final IPlaceSq button = gamefrag.getPlaceSq(i + PLACEOFFSET);
 			button.setCount(pieces[i + 6]);
 		}
 
@@ -586,23 +591,23 @@ public abstract class GameState implements Handler.Callback
 		final int[] squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
 			final int loc = BaseBoard.SF88(i);
-			final IBoardSq button = locator.getBoardSq(loc);
+			final IBoardSq button = gamefrag.getBoardSq(loc);
 			button.setPiece(squares[loc]);
 		}
 		// set last move highlight
 		if (history.size() != 0) {
-			final IBoardSq to = locator.getBoardSq(history.top().to);
+			final IBoardSq to = gamefrag.getBoardSq(history.top().to);
 			to.setLast(true);
 		}
 
 		// move caused check
 		if (board.incheck(board.getStm())) {
 			final int king = board.kingIndex(board.getStm());
-			final IBoardSq kingI = locator.getBoardSq(king);
+			final IBoardSq kingI = gamefrag.getBoardSq(king);
 			kingI.setCheck(true);
 		}
 		// set captured pieces
-		game.captured_count.setPieces(board.getPieceCounts(Piece.DEAD));
+		gamefrag.setCapturedCounts(board.getPieceCounts(Piece.DEAD));
 
 		setStm();
 	}
