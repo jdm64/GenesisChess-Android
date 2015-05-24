@@ -20,6 +20,8 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.*;
+
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
@@ -310,5 +312,11 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public Bundle getGameData()
 	{
 		return getArguments();
+	}
+
+	@Override
+	public void showToast(String text)
+	{
+		Toast.makeText(act, text, Toast.LENGTH_LONG).show();
 	}
 }

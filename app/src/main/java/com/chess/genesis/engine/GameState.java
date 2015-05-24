@@ -96,7 +96,7 @@ public abstract class GameState implements Handler.Callback
 			if (json.getString("result").equals("error")) {
 				undoMove();
 				progress.dismiss();
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 				return true;
 			}
 			progress.setText("Checking Game Status");
@@ -139,7 +139,7 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error")) {
 				progress.dismiss();
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 				return true;
 			}
 			progress.setText("Resignation Sent");
@@ -151,7 +151,7 @@ public abstract class GameState implements Handler.Callback
 			json = (JSONObject) msg.obj;
 
 			if (json.getString("result").equals("error"))
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 			progress.dismiss();
 			break;
 		case NetworkClient.GAME_STATUS:
@@ -159,7 +159,7 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error")) {
 				progress.dismiss();
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 				return true;
 			}
 			final int status = Enums.GameStatus(json.getString("status"));
@@ -192,7 +192,7 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error")) {
 				progress.dismiss();
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 				return true;
 			}
 			progress.setText("Score Loaded");
@@ -216,7 +216,7 @@ public abstract class GameState implements Handler.Callback
 
 			if (json.getString("result").equals("error")) {
 				progress.dismiss();
-				Toast.makeText(activity, "ERROR:\n" + json.getString("reason"), Toast.LENGTH_LONG).show();
+				gamefrag.showToast("ERROR:\n" + json.getString("reason"));
 				return true;
 			}
 			progress.setText(json.getString("reason"));
@@ -483,7 +483,7 @@ public abstract class GameState implements Handler.Callback
 
 		// must be on most current move to apply it
 		currentMove();
-		Toast.makeText(activity, "New move loaded...", Toast.LENGTH_LONG).show();
+		gamefrag.showToast("New move loaded...");
 
 		final Move move = board.newMove();
 		move.parse(sMove);
@@ -627,13 +627,13 @@ public abstract class GameState implements Handler.Callback
 		switch (Integer.parseInt(data.getString("idle"))) {
 		default:
 		case Enums.NOTIDLE:
-			Toast.makeText(activity, "Game must be idle before nudging", Toast.LENGTH_LONG).show();
+			gamefrag.showToast("Game must be idle before nudging");
 			break;
 		case Enums.IDLE:
 			new NudgeConfirm(activity, handle).show();
 			break;
 		case Enums.NUDGED:
-			Toast.makeText(activity, "Game is already nudged", Toast.LENGTH_LONG).show();
+			gamefrag.showToast("Game is already nudged");
 			break;
 		case Enums.CLOSE:
 			new IdleResignConfirm(activity, handle).show();

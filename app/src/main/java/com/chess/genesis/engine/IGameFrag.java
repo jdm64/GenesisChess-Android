@@ -28,4 +28,6 @@ public interface IGameFrag extends ISqLocator
 	void togglePlaceBoard();
 
 	Bundle getGameData();
+
+	void showToast(String text);
 }
