@@ -17,8 +17,8 @@ android {
         applicationId "com.chess.genesis"
         minSdkVersion 10
         targetSdkVersion 22
-        versionCode 67
-        versionName "1.14.7.1"
+        versionCode 68
+        versionName "1.14.8"
     }
 
     buildTypes {
