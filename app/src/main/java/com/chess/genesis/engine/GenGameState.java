@@ -103,7 +103,7 @@ public class GenGameState extends GameState
 
 			to.setPiece(from.getPiece());
 			to.setLast(true);
-			from.setPiece(0);
+			from.setPiece(Piece.EMPTY);
 		}
 
 		// apply move to board
@@ -131,7 +131,7 @@ public class GenGameState extends GameState
 			final IBoardSq to = gamefrag.getBoardSq(move.to);
 
 			to.setLast(false);
-			to.setPiece(0);
+			to.setPiece(Piece.EMPTY);
 			from.plusCount();
 		} else {
 			final IBoardSq from = gamefrag.getBoardSq(move.from);
@@ -141,7 +141,7 @@ public class GenGameState extends GameState
 
 			to.setLast(false);
 			if (move.xindex == Piece.NONE)
-				to.setPiece(0);
+				to.setPiece(Piece.EMPTY);
 			else
 				to.setPiece(Move.InitPieceType[move.xindex]);
 		}
