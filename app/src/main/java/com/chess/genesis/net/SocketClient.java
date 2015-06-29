@@ -29,6 +29,7 @@ public final class SocketClient
 {
 	private static SocketClient instance = null;
 	private static String server = null;
+	private static Boolean debug = null;
 	private static final int port = 8338;
 
 	private boolean isLoggedin;
@@ -42,6 +43,8 @@ public final class SocketClient
 		disconnect();
 		if (server == null)
 			initHost(ctx);
+		if (debug == null)
+			initDebug(ctx);
 	}
 
 	public static void initHost(final Context ctx)
@@ -53,6 +56,12 @@ public final class SocketClient
 			pref.commit();
 			server = pref.getString(R.array.pf_serverhost);
 		}
+	}
+
+	public static void initDebug(final Context ctx)
+	{
+		final PrefEdit pref = new PrefEdit(ctx);
+		debug = pref.getBool(R.array.pf_netdebug);
 	}
 
 	public static synchronized SocketClient getInstance(final Context ctx)
@@ -94,6 +103,7 @@ public final class SocketClient
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = socket.getOutputStream();
 		loginHash = input.readLine().trim();
+		logTraffic(loginHash, true);
 	}
 
 	public synchronized void disconnect()
@@ -113,9 +123,10 @@ public final class SocketClient
 	{
 		connect();
 
-		final String str = data.toString() + '\n';
+		String dataStr = data.toString();
+		logTraffic(dataStr, false);
 
-		output.write(str.getBytes());
+		output.write(new String(dataStr + '\n').getBytes());
 	}
 
 	public synchronized JSONObject read() throws IOException, JSONException
@@ -123,10 +134,21 @@ public final class SocketClient
 		connect();
 
 	try {
-		return (JSONObject) new JSONTokener(input.readLine()).nextValue();
+		String data = input.readLine();
+		logTraffic(data, true);
+
+		return (JSONObject) new JSONTokener(data).nextValue();
 	} catch (final NullPointerException e) {
 		return new JSONObject("{\"result\":\"error\",\"reason\":\"connection lost\"}");
 	}
+	}
+
+	private void logTraffic(String data, boolean isRead)
+	{
+		if (debug) {
+			String dirStr = isRead? "<-- " : "--> ";
+			new FileLogger(null).addData(dirStr + data).write();
+		}
 	}
 
 	public void logError(final Context context, final Exception trace, final JSONObject json)

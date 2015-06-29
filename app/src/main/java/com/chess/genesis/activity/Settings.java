@@ -216,6 +216,7 @@ public class Settings extends PreferenceActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
 	{
 		SocketClient.initHost(this);
+		SocketClient.initDebug(this);
 	}
 
 	@Override

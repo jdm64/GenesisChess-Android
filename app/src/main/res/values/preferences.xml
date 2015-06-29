@@ -4,6 +4,10 @@
 		<item>serverhost</item>
 		<item>genesischess.com</item>
 	</array>
+	<array name="pf_netdebug">
+		<item>netdebug</item>
+		<item>false</item>
+	</array>
 	<array name="pf_enableAds">
 		<item>enableAds</item>
 		<item>true</item>

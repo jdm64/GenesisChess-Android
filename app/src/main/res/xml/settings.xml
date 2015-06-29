@@ -172,5 +172,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:persistent="true"
 		android:title="Server Host"
 		android:summary="Connect to a different server"/>
+		<CheckBoxPreference
+		android:key="netdebug"
+		android:defaultValue="false"
+		android:title="Log Traffic"
+		android:summary="Log traffic to file"/>
 	</PreferenceCategory>
 </PreferenceScreen>
