@@ -135,11 +135,11 @@ public final class SocketClient
 		final NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		final FileLogger logger = new FileLogger(trace);
 
-		logger.addItem("NetActive", (netInfo != null)? netInfo.isConnected() : null);
-		logger.addItem("isConnected", socket.isConnected());
-		logger.addItem("isLoggedIn", isLoggedin);
-		logger.addItem("loginHash", loginHash);
-		logger.addItem("request", json.toString());
-		logger.write();
+		logger.addItem("NetActive", (netInfo != null)? netInfo.isConnected() : null)
+			.addItem("isConnected", socket.isConnected())
+			.addItem("isLoggedIn", isLoggedin)
+			.addItem("loginHash", loginHash)
+			.addItem("request", json.toString())
+			.write();
 	}
 }

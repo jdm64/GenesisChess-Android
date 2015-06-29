@@ -30,17 +30,24 @@ public class FileLogger
 		buffer = new StringBuilder();
 	}
 
-	public void addItem(final String name, final Object item)
+	public FileLogger addItem(final String name, final Object item)
 	{
 		buffer.append(name).append('=').append(String.valueOf(item)).append('|');
+		return this;
+	}
+
+	public FileLogger addData(final String str)
+	{
+		buffer.append(str);
+		return this;
 	}
 
 	public void write()
 	{
-		final String data = new PrettyDate().stdFormat() + '\n'
-			+ buffer + '\n'
-			+ trace.getMessage() + '\n'
-			+ ObjectArray.arrayToString(trace.getStackTrace(), "\n") + '\n';
+		String data = new PrettyDate().stdFormat() + '\n' + buffer + '\n';
+		if (trace != null) {
+			data += trace.getMessage() + '\n' + ObjectArray.arrayToString(trace.getStackTrace(), "\n") + '\n';
+		}
 
 		try {
 			FileUtils.writeFile("genesis-error.log", data, true);
