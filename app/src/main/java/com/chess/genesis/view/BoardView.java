@@ -35,6 +35,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	private GameState gamestate;
 	private MotionEvent lastTouch;
 	private int sqSize;
+	private boolean viewAsBlack = false;
 
 	public BoardView(Context context, AttributeSet attrs)
 	{
@@ -44,20 +45,14 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		setOnLongClickListener(this);
 	}
 
-	public void init(final GameState _gamestate, final boolean viewAsBlack)
+	public void init(final GameState _gamestate, final boolean _viewAsBlack)
 	{
 		gamestate = _gamestate;
+		viewAsBlack = _viewAsBlack;
 		int x = 0;
-		if (viewAsBlack) {
-			for (int i = 0; i < 8; i++) {
-				for (int j = 7; j >= 0; j--)
-					squares[x++] = new BoardSquare(this, painter, 16 * i + j);
-			}
-		} else {
-			for (int i = 7; i >= 0; i--) {
-				for (int j = 0; j < 8; j++)
-					squares[x++] = new BoardSquare(this, painter, 16 * i + j);
-			}
+
+		for (int i = 0; i < 64; i++) {
+			squares[i] = new BoardSquare(this, painter, BaseBoard.SFF88(i));
 		}
 	}
 
@@ -69,8 +64,13 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 
 		sqSize = size / 8;
 		painter.resize(sqSize);
-		for (int i = 0; i < 64; i++)
-			squares[i].setXY(sqSize * (i % 8), sqSize * (i / 8));
+		if (viewAsBlack) {
+			for (int i = 0; i < 64; i++)
+				squares[i].setXY(sqSize * (7 - (i % 8)), sqSize * (7 - (i / 8)));
+		} else {
+			for (int i = 0; i < 64; i++)
+				squares[i].setXY(sqSize * (i % 8), sqSize * (i / 8));
+		}
 	}
 
 	@Override
@@ -119,6 +119,8 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		int x = (int) Math.floor((lastTouch.getX() - loc[0]) / sqSize);
 		int y = (int) Math.floor((lastTouch.getY() - loc[1]) / sqSize);
 		int index = (8 * y + x);
+		if (viewAsBlack)
+			index = 63 - index;
 
 		if (index < 0 || index >= 64)
 			return null;
