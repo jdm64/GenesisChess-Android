@@ -261,15 +261,15 @@ public class GenBoard extends GenPosition implements Board
 	{
 		// update board information
 		square[move.to] = piecetype[move.index];
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		if (move.from != Piece.PLACEABLE) {
-			mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
+			mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 			square[move.from] = Piece.EMPTY;
 		}
 		// update piece information
 		piece[move.index] = move.to;
 		if (move.xindex != Piece.NONE) {
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(move.to)];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(move.to)];
 			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 			piece[move.xindex] = Piece.DEAD;
 		}
@@ -294,18 +294,18 @@ public class GenBoard extends GenPosition implements Board
 	public void unmake(final Move move)
 	{
 		piece[move.index] = move.from;
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		if (move.xindex == Piece.NONE) {
 			square[move.to] = Piece.EMPTY;
 		} else {
 			square[move.to] = piecetype[move.xindex];
 			piece[move.xindex] = move.to;
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(move.to)];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(move.to)];
 			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 		}
 		if (move.from != Piece.PLACEABLE) {
 			square[move.from] = piecetype[move.index];
-			mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
+			mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		}
 
 		final int to = EE64(move.to);

@@ -299,14 +299,14 @@ public class RegBoard extends RegPosition implements Board
 
 		// update board information
 		square[move.to] = piecetype[move.index];
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
-		mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
+		mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		square[move.from] = Piece.EMPTY;
 		// update piece information
 		piece[move.index] = move.to;
 		if (move.xindex != Piece.NONE) {
 			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(piece[move.xindex])];
 			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 
 			if (move.getEnPassant())
@@ -354,7 +354,7 @@ public class RegBoard extends RegPosition implements Board
 		key ^= hashBox[13 * EE64(move.from) + piecetype[move.index] + 6];
 
 		piece[move.index] = move.from;
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64F(move.to)];
+		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		if (move.xindex == Piece.NONE) {
 			square[move.to] = Piece.EMPTY;
 		} else {
@@ -367,12 +367,12 @@ public class RegBoard extends RegPosition implements Board
 				square[move.to] = piecetype[move.xindex];
 			}
 			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64F(piece[move.xindex])];
+			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(piece[move.xindex])];
 			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
 		}
 		square[move.from] = piecetype[move.index];
 
-		mscore -= stm * locValue[Math.abs(square[move.from])][EE64F(move.from)];
+		mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		key ^= hashBox[WTM_HASH];
 		flags.bits = UndoFlags.bits;
 		stm ^= -2;
