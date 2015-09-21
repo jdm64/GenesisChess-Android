@@ -89,7 +89,7 @@ public abstract class BaseBoard
 
 	public static int EE64(final int x)
 	{
-		return (x >> 1) | (x & 7);
+		return ((x & 7) + x) >> 1;
 	}
 
 	public static int EE64F(final int x)
