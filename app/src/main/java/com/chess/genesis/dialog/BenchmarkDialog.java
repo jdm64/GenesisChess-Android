@@ -33,8 +33,8 @@ public class BenchmarkDialog extends BaseDialog implements Handler.Callback
 	{
 		final Bundle data = (Bundle) msg.obj;
 
-		rnps.setText(String.valueOf(data.getLong(Benchmark.REG_NPS)) + " moves/sec");
-		gnps.setText(String.valueOf(data.getLong(Benchmark.GEN_NPS)) + " moves/sec");
+		rnps.setText(data.getLong(Benchmark.REG_NPS) + " moves/sec");
+		gnps.setText(data.getLong(Benchmark.GEN_NPS) + " moves/sec");
 
 		final View button = findViewById(R.id.ok);
 		button.setEnabled(true);
@@ -55,8 +55,8 @@ public class BenchmarkDialog extends BaseDialog implements Handler.Callback
 		setButtonTxt(R.id.ok, "Run");
 		setButtonTxt(R.id.cancel, "Close");
 
-		rnps = (TextView) findViewById(R.id.rnps);
-		gnps = (TextView) findViewById(R.id.gnps);
+		rnps = findViewById(R.id.rnps);
+		gnps = findViewById(R.id.gnps);
 	}
 
 	@Override

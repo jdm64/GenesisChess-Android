@@ -50,29 +50,29 @@ public class GameDetailsDialog extends BaseDialog
 
 		TextView txt;
 		if (isOnline) {
-			txt = (TextView) findViewById(R.id.white);
+			txt = findViewById(R.id.white);
 			txt.setText(gamedata.getString("white"));
-			txt = (TextView) findViewById(R.id.black);
+			txt = findViewById(R.id.black);
 			txt.setText(gamedata.getString("black"));
-			txt = (TextView) findViewById(R.id.eventtype);
+			txt = findViewById(R.id.eventtype);
 			txt.setText(Enums.EventType(Integer.parseInt(gamedata.getString("eventtype"))));
-			txt = (TextView) findViewById(R.id.status);
+			txt = findViewById(R.id.status);
 			txt.setText(Enums.GameStatus(Integer.parseInt(gamedata.getString("status"))));
 		} else {
-			txt = (TextView) findViewById(R.id.name);
+			txt = findViewById(R.id.name);
 			txt.setText(gamedata.getString("name"));
-			txt = (TextView) findViewById(R.id.opponent);
+			txt = findViewById(R.id.opponent);
 			txt.setText(Enums.OpponentType(Integer.parseInt(gamedata.getString("opponent"))));
 		}
-		txt = (TextView) findViewById(R.id.gametype);
+		txt = findViewById(R.id.gametype);
 		txt.setText(Enums.GameType(Integer.parseInt(gamedata.getString("gametype"))));
-		txt = (TextView) findViewById(R.id.ctime);
+		txt = findViewById(R.id.ctime);
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
-		txt = (TextView) findViewById(R.id.stime);
+		txt = findViewById(R.id.stime);
 		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
-		txt = (TextView) findViewById(R.id.zfen);
+		txt = findViewById(R.id.zfen);
 		txt.setText(gamedata.getString("zfen"));
-		txt = (TextView) findViewById(R.id.history);
+		txt = findViewById(R.id.history);
 		txt.setText(gamedata.getString("history"));
 
 	}

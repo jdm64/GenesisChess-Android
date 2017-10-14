@@ -53,7 +53,7 @@ public class NewOnlineGameDialog extends BaseDialog
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		Spinner spinner = (Spinner) findViewById(R.id.game_type);
+		Spinner spinner = findViewById(R.id.game_type);
 		spinner.setAdapter(adapter);
 
 		// EventType dropdown
@@ -64,7 +64,7 @@ public class NewOnlineGameDialog extends BaseDialog
 		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		spinner = (Spinner) findViewById(R.id.opp_type);
+		spinner = findViewById(R.id.opp_type);
 		spinner.setAdapter(adapter);
 	}
 
@@ -74,8 +74,8 @@ public class NewOnlineGameDialog extends BaseDialog
 		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
 
-			final Spinner gametype = (Spinner) findViewById(R.id.game_type);
-			final Spinner eventtype = (Spinner) findViewById(R.id.opp_type);
+			final Spinner gametype = findViewById(R.id.game_type);
+			final Spinner eventtype = findViewById(R.id.opp_type);
 
 			data.putInt("gametype", ((AdapterItem) gametype.getSelectedItem()).id);
 			data.putInt("opponent", ((AdapterItem) eventtype.getSelectedItem()).id);

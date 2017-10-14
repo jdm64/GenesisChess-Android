@@ -186,10 +186,10 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 		throw new RuntimeException(e.getMessage(), e);
 	}
 
-		PagerTabStrip tabs = (PagerTabStrip) view.findViewById(R.id.pager_title_strip);
+		PagerTabStrip tabs = view.findViewById(R.id.pager_title_strip);
 		tabs.setTabIndicatorColorResource(R.color.blue_light_500);
 
-		pager = (ViewPager) view.findViewById(R.id.swipe_list);
+		pager = view.findViewById(R.id.swipe_list);
 		pager.setAdapter(new GameListPager(getFragmentManager()));
 		pager.setCurrentItem(Enums.YOUR_PAGE);
 

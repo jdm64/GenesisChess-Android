@@ -626,8 +626,7 @@ public abstract class GameState implements Handler.Callback
 
 	public void rematch()
 	{
-		final String opp = settings.getString("username").equals(settings.getString("white"))?
-			settings.getString("black") : settings.getString("white");
+		final String opp = settings.getString(settings.getString("username").equals(settings.getString("white")) ? "black" : "white");
 		new RematchConfirm(activity, handle, opp).show();
 	}
 

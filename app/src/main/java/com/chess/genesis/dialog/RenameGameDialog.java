@@ -51,7 +51,7 @@ public class RenameGameDialog extends BaseDialog
 		setBodyView(R.layout.dialog_rename_game);
 		setButtonTxt(R.id.ok, "Rename");
 
-		txtinput = (EditText) findViewById(R.id.game_name_input);
+		txtinput = findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);
 	}
 

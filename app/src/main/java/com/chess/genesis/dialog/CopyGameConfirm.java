@@ -45,7 +45,7 @@ public class CopyGameConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Copy");
 
-		final TextView txt = (TextView) findViewById(R.id.text);
+		final TextView txt = findViewById(R.id.text);
 		txt.setText(R.string.copygame_confirm);
 	}
 

@@ -192,16 +192,16 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 	{
 		final Bundle bundle = new Bundle();
 
-		EditText txt = (EditText) act.findViewById(R.id.username);
+		EditText txt = act.findViewById(R.id.username);
 		bundle.putString("username", txt.getText().toString().trim());
 
-		txt = (EditText) act.findViewById(R.id.password);
+		txt = act.findViewById(R.id.password);
 		bundle.putString("password", txt.getText().toString());
 
-		txt = (EditText) act.findViewById(R.id.password2);
+		txt = act.findViewById(R.id.password2);
 		bundle.putString("password2", txt.getText().toString());
 
-		txt = (EditText) act.findViewById(R.id.email);
+		txt = act.findViewById(R.id.email);
 		bundle.putString("email", txt.getText().toString().trim());
 
 		return bundle;

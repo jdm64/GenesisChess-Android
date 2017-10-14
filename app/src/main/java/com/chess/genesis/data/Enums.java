@@ -134,7 +134,7 @@ public final class Enums
 		case INVITE:
 			return "invite";
 		}
-		throw new RuntimeException("unknown eventtype: " + String.valueOf(eventtype));
+		throw new RuntimeException("unknown eventtype: " + eventtype);
 	}
 
 	public static int GameType(final String gametype)
@@ -156,7 +156,7 @@ public final class Enums
 		case ANY_CHESS:
 			return "any";
 		}
-		throw new RuntimeException("unknown gametype: " + String.valueOf(gametype));
+		throw new RuntimeException("unknown gametype: " + gametype);
 	}
 
 	public static int GameStatus(final String gamestatus)

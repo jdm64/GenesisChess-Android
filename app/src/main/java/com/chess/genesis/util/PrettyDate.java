@@ -25,7 +25,6 @@ public class PrettyDate extends Date
 
 	public PrettyDate()
 	{
-		super();
 	}
 
 	public PrettyDate(final long milliseconds)
@@ -59,7 +58,7 @@ public class PrettyDate extends Date
 		case Calendar.SATURDAY:
 			return "Sat";
 		default:
-			return "Err" + String.valueOf(day);
+			return "Err" + day;
 		}
 	}
 
@@ -94,7 +93,7 @@ public class PrettyDate extends Date
 		case Calendar.DECEMBER:
 			return "Dec";
 		default:
-			return "Err" + String.valueOf(month);
+			return "Err" + month;
 		}
 	}
 
@@ -109,7 +108,7 @@ public class PrettyDate extends Date
 		case Calendar.PM:
 			return "PM";
 		default:
-			return "Err" + String.valueOf(ampm);
+			return "Err" + ampm;
 		}
 	}
 
@@ -158,13 +157,13 @@ public class PrettyDate extends Date
 
 		// months
 		if (diff >= 2629743830L) {
-			buff.append(String.valueOf(diff / 2629743830L)).append("mo ");
+			buff.append(diff / 2629743830L).append("mo ");
 			diff %= 2629743830L;
 			count++;
 		}
 		// weeks
 		if (diff >= 604800000) {
-			buff.append(String.valueOf(diff / 604800000)).append("wk ");
+			buff.append(diff / 604800000).append("wk ");
 			diff %= 604800000;
 			count++;
 
@@ -173,7 +172,7 @@ public class PrettyDate extends Date
 		}
 		// days
 		if (diff >= 86400000) {
-			buff.append(String.valueOf(diff / 86400000)).append("day ");
+			buff.append(diff / 86400000).append("day ");
 			diff %= 86400000;
 			count++;
 
@@ -182,7 +181,7 @@ public class PrettyDate extends Date
 		}
 		// hours
 		if (diff >= 3600000) {
-			buff.append(String.valueOf(diff / 3600000)).append("hr ");
+			buff.append(diff / 3600000).append("hr ");
 			diff %= 3600000;
 			count++;
 
@@ -191,7 +190,7 @@ public class PrettyDate extends Date
 		}
 		// minutes
 		if (diff >= 60000) {
-			buff.append(String.valueOf(diff / 60000)).append("min ");
+			buff.append(diff / 60000).append("min ");
 			diff %= 60000;
 			count++;
 
@@ -200,7 +199,7 @@ public class PrettyDate extends Date
 		}
 		// seconds
 		if (diff >= 1000) {
-			buff.append(String.valueOf(diff / 1000)).append("sec ");
+			buff.append(diff / 1000).append("sec ");
 			count++;
 		}
 

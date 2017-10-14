@@ -69,7 +69,7 @@ public class ExpandablePanel extends LinearLayout implements OnClickListener
 			child.measure(getWidth(), MeasureSpec.UNSPECIFIED);
 			totalHeight += child.getMeasuredHeight();
 
-			final android.view.ViewGroup.LayoutParams lp = child.getLayoutParams();
+			final ViewGroup.LayoutParams lp = child.getLayoutParams();
 			lp.height = 0;
 
 			child.setLayoutParams(lp);
@@ -136,7 +136,7 @@ public class ExpandablePanel extends LinearLayout implements OnClickListener
 		@Override
 		protected void applyTransformation(final float interpolatedTime, final Transformation t)
 		{
-			final android.view.ViewGroup.LayoutParams lp = item.getLayoutParams();
+			final ViewGroup.LayoutParams lp = item.getLayoutParams();
 			lp.height = (int) (start + delta * interpolatedTime);
 
 			item.setLayoutParams(lp);

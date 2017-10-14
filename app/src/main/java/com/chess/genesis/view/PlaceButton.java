@@ -43,23 +43,27 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 		painter.drawCount(canvas, count, true);
 	}
 
+	@Override
 	public int getCount()
 	{
 		return count;
 	}
 
+	@Override
 	public void setCount(final int Count)
 	{
 		count = Count;
 		invalidate();
 	}
 
+	@Override
 	public void minusCount()
 	{
 		count--;
 		invalidate();
 	}
 
+	@Override
 	public void plusCount()
 	{
 		count++;
@@ -85,6 +89,7 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 		return isHighlighted;
 	}
 
+	@Override
 	public void reset()
 	{
 		isHighlighted = false;

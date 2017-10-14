@@ -69,17 +69,17 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		final View view = inflater.inflate(R.layout.fragment_game, container, false);
 
 		// initialize the board & place piece layouts
-		board = (BoardView) view.findViewById(R.id.board_layout);
+		board = view.findViewById(R.id.board_layout);
 		board.init(gamestate, viewAsBlack);
-		final PlaceLayout place = (PlaceLayout) view.findViewById(R.id.place_layout);
+		final PlaceLayout place = view.findViewById(R.id.place_layout);
 		place.init(gamestate);
 
 		// set click listeners
 		type = getArguments().getInt("type");
 		if (type != Enums.LOCAL_GAME) {
-			TabText txt = (TabText) view.findViewById(R.id.white_name);
+			TabText txt = view.findViewById(R.id.white_name);
 			txt.setOnClickListener(this);
-			txt = (TabText) view.findViewById(R.id.black_name);
+			txt = view.findViewById(R.id.black_name);
 			txt.setOnClickListener(this);
 		}
 
@@ -91,8 +91,8 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 			button.setOnClickListener(this);
 		}
 
-		boardDrawer = (DrawerLayout2) view.findViewById(R.id.board_drawer);
-		captured_count = (CapturedLayout) view.findViewById(R.id.captured_count);
+		boardDrawer = view.findViewById(R.id.board_drawer);
+		captured_count = view.findViewById(R.id.captured_count);
 
 		// initialize board colors
 		PieceImgPainter.initColors(container.getContext());
@@ -323,7 +323,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	@Override
 	public void setNameText(boolean isWhite, boolean isStm, boolean isMate, String text)
 	{
-		final TabText tabtext = (TabText) act.findViewById(isWhite? R.id.white_name : R.id.black_name);
+		final TabText tabtext = act.findViewById(isWhite? R.id.white_name : R.id.black_name);
 		tabtext.setText(text);
 		tabtext.setActive(isStm);
 		if (isMate)

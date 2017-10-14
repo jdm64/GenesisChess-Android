@@ -78,7 +78,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			button.setOnTouchListener(this);
 		}
 
-		final TextView textView = (TextView) view.findViewById(R.id.version);
+		final TextView textView = view.findViewById(R.id.version);
 		textView.setText(BuildConfig.VERSION_NAME);
 
 		// create layout listner for resizing the button text
@@ -291,7 +291,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 		final String[] stList = new String[list.length];
 		TextView txt = null;
 		for (int i = 0; i < list.length; i++) {
-			txt = (TextView) view.findViewById(list[i]);
+			txt = view.findViewById(list[i]);
 			stList[i] = (String) txt.getText();
 		}
 		if (txt == null)
@@ -302,7 +302,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 
 		final float txtSize = TextUtil.maxTextWidth(stList, txt.getPaint(), width);
 		for (final int element : list) {
-			txt = (TextView) view.findViewById(element);
+			txt = view.findViewById(element);
 			txt.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize);
 		}
 	}
@@ -319,14 +319,14 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			loginVis = View.GONE;
 		}
 
-		TextView text = (TextView) act.findViewById(R.id.welcome);
+		TextView text = act.findViewById(R.id.welcome);
 		text.setVisibility(welcomeVis);
 		text.setText(welcome);
 
-		text = (TextView) act.findViewById(R.id.login_txt);
+		text = act.findViewById(R.id.login_txt);
 		text.setVisibility(loginVis);
 
-		final MyImageView button = (MyImageView) act.findViewById(R.id.login);
+		final MyImageView button = act.findViewById(R.id.login);
 		button.setVisibility(loginVis);
 	}
 }

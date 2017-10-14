@@ -51,7 +51,7 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 		}
 		switch (msg.what) {
 		case NetworkClient.SUBMIT_MSG:
-			final EditText txt = (EditText) act.findViewById(R.id.new_msg);
+			final EditText txt = act.findViewById(R.id.new_msg);
 			txt.setText("");
 
 			updateMsgList();
@@ -105,7 +105,7 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 		// set list adapters
 		msglist_adapter = new MsgListAdapter(act, gameid);
 
-		msglist_view = (ListView) view.findViewById(R.id.msg_list);
+		msglist_view = view.findViewById(R.id.msg_list);
 		msglist_view.setAdapter(msglist_adapter);
 
 		// set empty view item
@@ -154,7 +154,7 @@ public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 		if (v.getId() == R.id.submit_msg) {
 			progress.setText("Sending Message");
 
-			final EditText txt = (EditText) act.findViewById(R.id.new_msg);
+			final EditText txt = act.findViewById(R.id.new_msg);
 			final String msg = txt.getText().toString().trim();
 
 			if (msg.length() < 1)

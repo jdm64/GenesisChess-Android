@@ -103,7 +103,7 @@ public class ObjectArray<Type>
 		final StringBuilder str = new StringBuilder();
 
 		for (final Type element : list)
-			str.append(element.toString()).append(' ');
+			str.append(element).append(' ');
 		return str.toString();
 	}
 
@@ -112,7 +112,7 @@ public class ObjectArray<Type>
 		final StringBuilder str = new StringBuilder();
 
 		for (final Object element : array)
-			str.append(element.toString()).append(delim);
+			str.append(element).append(delim);
 		return str.toString();
 	}
 }

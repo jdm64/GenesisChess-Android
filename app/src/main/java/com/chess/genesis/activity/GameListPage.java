@@ -104,8 +104,7 @@ public class GameListPage extends Fragment
 			break;
 		case R.id.rematch:
 			final String username = list.getExtras().getString("username");
-			final String opponent = username.equals(bundle.getString("white"))?
-				bundle.getString("black") : bundle.getString("white");
+			final String opponent = bundle.getString(username.equals(bundle.getString("white")) ? "black" : "white");
 			new RematchConfirm(act, handle, opponent).show();
 			break;
 		case R.id.nudge:

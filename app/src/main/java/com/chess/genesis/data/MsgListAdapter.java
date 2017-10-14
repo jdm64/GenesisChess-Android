@@ -41,7 +41,6 @@ public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLo
 
 	public MsgListAdapter(final Context _context, final String GameID)
 	{
-		super();
 
 		context = _context;
 		gameID = GameID;

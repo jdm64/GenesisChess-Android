@@ -28,7 +28,7 @@ public class Login extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new LoginFrag(), R.layout.activity_basephone);
+		onCreate(savedInstanceState, new LoginFrag(), R.layout.activity_basephone);
 	}
 
 	@Override
@@ -44,10 +44,10 @@ public class Login extends BasePhoneActivity
 		final String username = Pref.getBool(this, R.array.pf_isLoggedIn)?
 			Pref.getString(this, R.array.pf_username) : "";
 
-		EditText txt = (EditText) findViewById(R.id.username);
+		EditText txt = findViewById(R.id.username);
 		txt.setText(username);
 
-		txt = (EditText) findViewById(R.id.password);
+		txt = findViewById(R.id.password);
 		txt.setText("");
 	}
 }

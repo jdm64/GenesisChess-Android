@@ -62,13 +62,13 @@ abstract class BaseDialog extends Dialog implements OnClickListener
 
 	public void setBodyView(final int layoutID)
 	{
-		final ViewGroup gView = (ViewGroup) findViewById(R.id.body);
+		final ViewGroup gView = findViewById(R.id.body);
 		getLayoutInflater().inflate(layoutID, gView, true);
 	}
 
 	public void setButtonTxt(final int buttonId, final String txt)
 	{
-		final Button button = (Button) findViewById(buttonId);
+		final Button button = findViewById(buttonId);
 
 		if (button == null)
 			return;

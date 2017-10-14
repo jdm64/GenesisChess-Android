@@ -98,7 +98,7 @@ public class NumberSpinner extends LinearLayout
 	public static final NumberSpinner.Formatter TWO_DIGIT_FORMATTER = new NumberSpinner.Formatter()
 	{
 		final StringBuilder mBuilder = new StringBuilder();
-		final java.util.Formatter mFmt = new java.util.Formatter(mBuilder, java.util.Locale.US);
+		final java.util.Formatter mFmt = new java.util.Formatter(mBuilder, Locale.US);
 		final Object[] mArgs = new Object[1];
 
 		@Override
@@ -209,17 +209,17 @@ public class NumberSpinner extends LinearLayout
 
 		final InputFilter inputFilter = new NumberSpinnerInputFilter();
 		mNumberInputFilter = new NumberRangeKeyListener();
-		mIncrementButton = (NumberSpinnerButton) findViewById(R.id.increment);
+		mIncrementButton = findViewById(R.id.increment);
 		mIncrementButton.setOnClickListener(clickListener);
 		mIncrementButton.setOnLongClickListener(longClickListener);
 		mIncrementButton.setNumberSpinner(this);
 
-		mDecrementButton = (NumberSpinnerButton) findViewById(R.id.decrement);
+		mDecrementButton = findViewById(R.id.decrement);
 		mDecrementButton.setOnClickListener(clickListener);
 		mDecrementButton.setOnLongClickListener(longClickListener);
 		mDecrementButton.setNumberSpinner(this);
 
-		mText = (EditText) findViewById(R.id.timespinner_input);
+		mText = findViewById(R.id.timespinner_input);
 		mText.setOnFocusChangeListener(focusListener);
 		mText.setFilters(new InputFilter[] {inputFilter});
 		mText.setRawInputType(InputType.TYPE_CLASS_NUMBER);

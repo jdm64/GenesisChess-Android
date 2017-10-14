@@ -89,7 +89,7 @@ public class BoolArray
 		final StringBuilder str = new StringBuilder();
 
 		for (final boolean element : list)
-			str.append(String.valueOf(element)).append(' ');
+			str.append(element).append(' ');
 		return str.toString();
 	}
 }

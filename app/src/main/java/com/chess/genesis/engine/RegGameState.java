@@ -78,6 +78,7 @@ public class RegGameState extends GameState
 			gamefrag.getBoardSq(BaseBoard.EE64(RegBoard.InitRegPiece[i])).setPiece(Move.InitPieceType[i]);
 	}
 
+	@Override
 	public void undoMove()
 	{
 		super.undoMove();

@@ -45,10 +45,10 @@ public class RegisterConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_confirm_register);
 		setButtonTxt(R.id.ok, "Register");
 
-		TextView text = (TextView) findViewById(R.id.username);
+		TextView text = findViewById(R.id.username);
 		text.setText(data.getString("username"));
 
-		text = (TextView) findViewById(R.id.email);
+		text = findViewById(R.id.email);
 		text.setText(data.getString("email"));
 	}
 

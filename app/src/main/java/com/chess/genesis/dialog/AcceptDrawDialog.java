@@ -45,7 +45,7 @@ public class AcceptDrawDialog extends BaseDialog
 		setButtonTxt(R.id.ok, "Accept");
 		setButtonTxt(R.id.cancel, "Decline");
 
-		final TextView txt = (TextView) findViewById(R.id.text);
+		final TextView txt = findViewById(R.id.text);
 		txt.setText(R.string.draw_accept);
 	}
 

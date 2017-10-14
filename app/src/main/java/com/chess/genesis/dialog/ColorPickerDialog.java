@@ -49,7 +49,7 @@ public class ColorPickerDialog extends BaseDialog
 		setTitle("Pick Color");
 		colorPicker = new ColorPicker(getContext(), null);
 		colorPicker.setColor(color);
-		final ViewGroup view = (ViewGroup) findViewById(R.id.body);
+		final ViewGroup view = findViewById(R.id.body);
 		view.addView(colorPicker);
 	}
 

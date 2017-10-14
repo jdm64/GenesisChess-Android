@@ -44,7 +44,7 @@ public class IdleResignConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Adjourn Game");
 
-		final TextView txt = (TextView) findViewById(R.id.text);
+		final TextView txt = findViewById(R.id.text);
 		txt.setText(R.string.idleresign_confirm);
 	}
 

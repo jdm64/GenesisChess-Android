@@ -238,7 +238,7 @@ public class GenesisNotifier extends Service implements Runnable
 		while (lock > 0 && !error)
 			Thread.sleep(16);
 		lock = 0;
-	} catch (final java.lang.InterruptedException e) {
+	} catch (final InterruptedException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
 	}

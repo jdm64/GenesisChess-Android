@@ -25,7 +25,7 @@ public class UserStats extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new UserStatsFrag(), R.layout.activity_basephone);
+		onCreate(savedInstanceState, new UserStatsFrag(), R.layout.activity_basephone);
 	}
 
 	@Override

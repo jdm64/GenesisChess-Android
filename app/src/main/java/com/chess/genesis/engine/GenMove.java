@@ -38,7 +38,6 @@ public class GenMove extends Move
 
 	public GenMove()
 	{
-		super();
 	}
 
 	public GenMove(final Parcel in)

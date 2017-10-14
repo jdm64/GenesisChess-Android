@@ -45,7 +45,7 @@ public class CpuTimeDialog extends BaseDialog
 		setBodyView(R.layout.dialog_cputime);
 		setButtonTxt(R.id.ok, "Set Time");
 
-		final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
+		final NumberSpinner number = findViewById(R.id.time);
 		number.setRange(1, 30);
 		number.setCurrent(time);
 	}
@@ -54,7 +54,7 @@ public class CpuTimeDialog extends BaseDialog
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {
-			final NumberSpinner number = (NumberSpinner) findViewById(R.id.time);
+			final NumberSpinner number = findViewById(R.id.time);
 			final Integer value = number.getCurrent();
 			handle.sendMessage(handle.obtainMessage(MSG, value));
 		}

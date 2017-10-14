@@ -44,7 +44,7 @@ public class RegisterActivation extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.cancel, "Close");
 
-		final TextView txt = (TextView) findViewById(R.id.text);
+		final TextView txt = findViewById(R.id.text);
 		txt.setText(R.string.register_activation);
 	}
 

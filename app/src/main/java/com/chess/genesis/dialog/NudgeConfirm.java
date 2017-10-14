@@ -51,7 +51,7 @@ public class NudgeConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_single_text);
 		setButtonTxt(R.id.ok, "Nudge");
 
-		final TextView txt = (TextView) findViewById(R.id.text);
+		final TextView txt = findViewById(R.id.text);
 		txt.setText(R.string.nudge_confirm);
 	}
 

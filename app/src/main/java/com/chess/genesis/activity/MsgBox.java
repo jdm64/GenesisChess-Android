@@ -25,7 +25,7 @@ public class MsgBox extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new MsgBoxFrag(), R.layout.activity_basephone);
+		onCreate(savedInstanceState, new MsgBoxFrag(), R.layout.activity_basephone);
 	}
 
 	@Override

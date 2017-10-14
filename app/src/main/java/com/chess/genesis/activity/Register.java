@@ -24,6 +24,6 @@ public class Register extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new RegisterFrag(), R.layout.activity_basephone);
+		onCreate(savedInstanceState, new RegisterFrag(), R.layout.activity_basephone);
 	}
 }

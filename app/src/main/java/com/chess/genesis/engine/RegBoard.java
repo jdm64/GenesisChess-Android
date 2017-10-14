@@ -214,7 +214,7 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public int kingIndex(final int color)
 	{
-		return (Piece.WHITE == color)? piece[31] : piece[15];
+		return piece[Piece.WHITE == color ? 31 : 15];
 	}
 
 	@Override

@@ -98,13 +98,13 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 
 		settings = (savedInstanceState != null)? savedInstanceState : getArguments();
 
-		final TextView txt = (TextView) view.findViewById(R.id.username);
+		final TextView txt = view.findViewById(R.id.username);
 		txt.setText(settings.getString("username"));
 
 		final int[] list = new int[]{R.id.apsr, R.id.total_games, R.id.total_wins,
 			R.id.total_losses, R.id.total_resigns, R.id.total_ties};
 		for (final int id : list) {
-			final TabText item = (TabText) view.findViewById(id);
+			final TabText item = view.findViewById(id);
 			item.setOnTouchListener(null);
 			item.setOnClickListener((View.OnClickListener) item.getParent());
 		}
@@ -173,20 +173,20 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		int valA, valB, valC, valD;
 
 		// username
-		txt = (TextView) act.findViewById(R.id.username);
+		txt = act.findViewById(R.id.username);
 		txt.setText(data.getString("username"));
 
 		// Joined
 		time = data.getLong("joined");
 
-		txt = (TextView) act.findViewById(R.id.joined);
+		txt = act.findViewById(R.id.joined);
 		txt.setText("Joined: " + new PrettyDate(time).dayFormat());
 
 		// Last Activity
 		time = data.getJSONObject("lastmove").getLong("genesis");
 		time = Math.max(time, data.getJSONObject("lastmove").getLong("regular"));
 
-		txt = (TextView) act.findViewById(R.id.last_activity);
+		txt = act.findViewById(R.id.last_activity);
 		txt.setText(new PrettyDate(time).agoFormat());
 
 		// PSR
@@ -194,12 +194,12 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		valB = data.getInt("rpsr");
 		valC = (valA + valB) / 2;
 
-		txt = (TextView) act.findViewById(R.id.gpsr);
-		txt.setText("Genesis: " + String.valueOf(valA));
-		txt = (TextView) act.findViewById(R.id.rpsr);
-		txt.setText("Regular: " + String.valueOf(valB));
-		txt = (TextView) act.findViewById(R.id.apsr);
-		txt.setText("Average PSR: " + String.valueOf(valC));
+		txt = act.findViewById(R.id.gpsr);
+		txt.setText("Genesis: " + valA);
+		txt = act.findViewById(R.id.rpsr);
+		txt.setText("Regular: " + valB);
+		txt = act.findViewById(R.id.apsr);
+		txt.setText("Average PSR: " + valC);
 
 		// Stats
 		final JSONObject stats = data.getJSONObject("stats");
@@ -228,102 +228,102 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		valB = arr[GEN_INV][WIN] + arr[GEN_INV][LOS] + arr[GEN_INV][TIE];
 		valC = valA + valB;
 
-		txt = (TextView) act.findViewById(R.id.genesis_random_games);
-		txt.setText("Random: " + String.valueOf(valA));
-		txt = (TextView) act.findViewById(R.id.genesis_invite_games);
-		txt.setText("Invite: " + String.valueOf(valB));
-		txt = (TextView) act.findViewById(R.id.genesis_games);
-		txt.setText("Genesis: " + String.valueOf(valC));
+		txt = act.findViewById(R.id.genesis_random_games);
+		txt.setText("Random: " + valA);
+		txt = act.findViewById(R.id.genesis_invite_games);
+		txt.setText("Invite: " + valB);
+		txt = act.findViewById(R.id.genesis_games);
+		txt.setText("Genesis: " + valC);
 
 		valA = arr[REG_RAN][WIN] + arr[REG_RAN][LOS] + arr[REG_RAN][TIE];
 		valB = arr[REG_INV][WIN] + arr[REG_INV][LOS] + arr[REG_INV][TIE];
 		valD = valA + valB;
 
-		txt = (TextView) act.findViewById(R.id.regular_random_games);
-		txt.setText("Random: " + String.valueOf(valA));
-		txt = (TextView) act.findViewById(R.id.regular_invite_games);
-		txt.setText("Invite: " + String.valueOf(valB));
-		txt = (TextView) act.findViewById(R.id.regular_games);
-		txt.setText("Regular: " + String.valueOf(valD));
+		txt = act.findViewById(R.id.regular_random_games);
+		txt.setText("Random: " + valA);
+		txt = act.findViewById(R.id.regular_invite_games);
+		txt.setText("Invite: " + valB);
+		txt = act.findViewById(R.id.regular_games);
+		txt.setText("Regular: " + valD);
 
-		txt = (TextView) act.findViewById(R.id.total_games);
-		txt.setText("Total Games: " + String.valueOf(valC + valD));
+		txt = act.findViewById(R.id.total_games);
+		txt.setText("Total Games: " + (valC + valD));
 
 		// Wins
 		valC = arr[GEN_RAN][WIN] + arr[GEN_INV][WIN];
 		valD = arr[REG_RAN][WIN] + arr[REG_INV][WIN];
 
-		txt = (TextView) act.findViewById(R.id.genesis_random_wins);
-		txt.setText("Random: " + String.valueOf(arr[GEN_RAN][WIN]));
-		txt = (TextView) act.findViewById(R.id.genesis_invite_wins);
-		txt.setText("Invite: " + String.valueOf(arr[GEN_INV][WIN]));
-		txt = (TextView) act.findViewById(R.id.genesis_wins);
-		txt.setText("Genesis: " + String.valueOf(valC));
-		txt = (TextView) act.findViewById(R.id.regular_random_wins);
-		txt.setText("Random: " + String.valueOf(arr[REG_RAN][WIN]));
-		txt = (TextView) act.findViewById(R.id.regular_invite_wins);
-		txt.setText("Invite: " + String.valueOf(arr[REG_INV][WIN]));
-		txt = (TextView) act.findViewById(R.id.regular_wins);
-		txt.setText("Regular: " + String.valueOf(valD));
-		txt = (TextView) act.findViewById(R.id.total_wins);
-		txt.setText("Wins: " + String.valueOf(valC + valD));
+		txt = act.findViewById(R.id.genesis_random_wins);
+		txt.setText("Random: " + arr[GEN_RAN][WIN]);
+		txt = act.findViewById(R.id.genesis_invite_wins);
+		txt.setText("Invite: " + arr[GEN_INV][WIN]);
+		txt = act.findViewById(R.id.genesis_wins);
+		txt.setText("Genesis: " + valC);
+		txt = act.findViewById(R.id.regular_random_wins);
+		txt.setText("Random: " + arr[REG_RAN][WIN]);
+		txt = act.findViewById(R.id.regular_invite_wins);
+		txt.setText("Invite: " + arr[REG_INV][WIN]);
+		txt = act.findViewById(R.id.regular_wins);
+		txt.setText("Regular: " + valD);
+		txt = act.findViewById(R.id.total_wins);
+		txt.setText("Wins: " + (valC + valD));
 
 		// Losses
 		valC = arr[GEN_RAN][LOS] + arr[GEN_INV][LOS];
 		valD = arr[REG_RAN][LOS] + arr[REG_INV][LOS];
 
-		txt = (TextView) act.findViewById(R.id.genesis_random_losses);
-		txt.setText("Random: " + String.valueOf(arr[GEN_RAN][LOS]));
-		txt = (TextView) act.findViewById(R.id.genesis_invite_losses);
-		txt.setText("Invite: " + String.valueOf(arr[GEN_INV][LOS]));
-		txt = (TextView) act.findViewById(R.id.genesis_losses);
-		txt.setText("Genesis: " + String.valueOf(valC));
-		txt = (TextView) act.findViewById(R.id.regular_random_losses);
-		txt.setText("Random: " + String.valueOf(arr[REG_RAN][LOS]));
-		txt = (TextView) act.findViewById(R.id.regular_invite_losses);
-		txt.setText("Invite: " + String.valueOf(arr[REG_INV][LOS]));
-		txt = (TextView) act.findViewById(R.id.regular_losses);
-		txt.setText("Regular: " + String.valueOf(valD));
-		txt = (TextView) act.findViewById(R.id.total_losses);
-		txt.setText("Losses: " + String.valueOf(valC + valD));
+		txt = act.findViewById(R.id.genesis_random_losses);
+		txt.setText("Random: " + arr[GEN_RAN][LOS]);
+		txt = act.findViewById(R.id.genesis_invite_losses);
+		txt.setText("Invite: " + arr[GEN_INV][LOS]);
+		txt = act.findViewById(R.id.genesis_losses);
+		txt.setText("Genesis: " + valC);
+		txt = act.findViewById(R.id.regular_random_losses);
+		txt.setText("Random: " + arr[REG_RAN][LOS]);
+		txt = act.findViewById(R.id.regular_invite_losses);
+		txt.setText("Invite: " + arr[REG_INV][LOS]);
+		txt = act.findViewById(R.id.regular_losses);
+		txt.setText("Regular: " + valD);
+		txt = act.findViewById(R.id.total_losses);
+		txt.setText("Losses: " + (valC + valD));
 
 		// Resigns
 		valC = arr[GEN_RAN][RES] + arr[GEN_INV][RES];
 		valD = arr[REG_RAN][RES] + arr[REG_INV][RES];
 
-		txt = (TextView) act.findViewById(R.id.genesis_random_resigns);
-		txt.setText("Random: " + String.valueOf(arr[GEN_RAN][RES]));
-		txt = (TextView) act.findViewById(R.id.genesis_invite_resigns);
-		txt.setText("Invite: " + String.valueOf(arr[GEN_INV][RES]));
-		txt = (TextView) act.findViewById(R.id.genesis_resigns);
-		txt.setText("Genesis: " + String.valueOf(valC));
-		txt = (TextView) act.findViewById(R.id.regular_random_resigns);
-		txt.setText("Random: " + String.valueOf(arr[REG_RAN][RES]));
-		txt = (TextView) act.findViewById(R.id.regular_invite_resigns);
-		txt.setText("Invite: " + String.valueOf(arr[REG_INV][RES]));
-		txt = (TextView) act.findViewById(R.id.regular_resigns);
-		txt.setText("Regular: " + String.valueOf(valD));
-		txt = (TextView) act.findViewById(R.id.total_resigns);
-		txt.setText("Resigns: " + String.valueOf(valC + valD));
+		txt = act.findViewById(R.id.genesis_random_resigns);
+		txt.setText("Random: " + arr[GEN_RAN][RES]);
+		txt = act.findViewById(R.id.genesis_invite_resigns);
+		txt.setText("Invite: " + arr[GEN_INV][RES]);
+		txt = act.findViewById(R.id.genesis_resigns);
+		txt.setText("Genesis: " + valC);
+		txt = act.findViewById(R.id.regular_random_resigns);
+		txt.setText("Random: " + arr[REG_RAN][RES]);
+		txt = act.findViewById(R.id.regular_invite_resigns);
+		txt.setText("Invite: " + arr[REG_INV][RES]);
+		txt = act.findViewById(R.id.regular_resigns);
+		txt.setText("Regular: " + valD);
+		txt = act.findViewById(R.id.total_resigns);
+		txt.setText("Resigns: " + (valC + valD));
 
 		// Ties
 		valC = arr[GEN_RAN][TIE] + arr[GEN_INV][TIE];
 		valD = arr[REG_RAN][TIE] + arr[REG_INV][TIE];
 
-		txt = (TextView) act.findViewById(R.id.genesis_random_ties);
-		txt.setText("Random: " + String.valueOf(arr[GEN_RAN][TIE]));
-		txt = (TextView) act.findViewById(R.id.genesis_invite_ties);
-		txt.setText("Invite: " + String.valueOf(arr[GEN_INV][TIE]));
-		txt = (TextView) act.findViewById(R.id.genesis_ties);
-		txt.setText("Genesis: " + String.valueOf(valC));
-		txt = (TextView) act.findViewById(R.id.regular_random_ties);
-		txt.setText("Random: " + String.valueOf(arr[REG_RAN][TIE]));
-		txt = (TextView) act.findViewById(R.id.regular_invite_ties);
-		txt.setText("Invite: " + String.valueOf(arr[REG_INV][TIE]));
-		txt = (TextView) act.findViewById(R.id.regular_ties);
-		txt.setText("Regular: " + String.valueOf(valD));
-		txt = (TextView) act.findViewById(R.id.total_ties);
-		txt.setText("Draws: " + String.valueOf(valC + valD));
+		txt = act.findViewById(R.id.genesis_random_ties);
+		txt.setText("Random: " + arr[GEN_RAN][TIE]);
+		txt = act.findViewById(R.id.genesis_invite_ties);
+		txt.setText("Invite: " + arr[GEN_INV][TIE]);
+		txt = act.findViewById(R.id.genesis_ties);
+		txt.setText("Genesis: " + valC);
+		txt = act.findViewById(R.id.regular_random_ties);
+		txt.setText("Random: " + arr[REG_RAN][TIE]);
+		txt = act.findViewById(R.id.regular_invite_ties);
+		txt.setText("Invite: " + arr[REG_INV][TIE]);
+		txt = act.findViewById(R.id.regular_ties);
+		txt.setText("Regular: " + valD);
+		txt = act.findViewById(R.id.total_ties);
+		txt.setText("Draws: " + (valC + valD));
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

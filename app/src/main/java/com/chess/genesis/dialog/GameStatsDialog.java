@@ -107,7 +107,7 @@ public class GameStatsDialog extends BaseDialog
 		if (eventtype == Enums.INVITE)
 			psr_score = "None (Invite Game)";
 		else
-			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ')';
+			psr_score = sign + Math.abs(diff) + " (" + to + ')';
 	}
 
 	public GameStatsDialog(final Context context, final JSONObject json)
@@ -152,7 +152,7 @@ public class GameStatsDialog extends BaseDialog
 		if (eventtype == Enums.INVITE)
 			psr_score = "None (Invite Game)";
 		else
-			psr_score = sign + String.valueOf(Math.abs(diff)) + " (" + String.valueOf(to) + ')';
+			psr_score = sign + Math.abs(diff) + " (" + to + ')';
 
 		final GameDataDB db = new GameDataDB(context);
 		db.archiveNetworkGame(gameid, w_from, w_to, b_from, b_to);
@@ -167,7 +167,7 @@ public class GameStatsDialog extends BaseDialog
 		setBodyView(R.layout.dialog_endgame);
 		setButtonTxt(R.id.cancel, "Close");
 
-		final TextView score = (TextView) findViewById(R.id.psr_score);
+		final TextView score = findViewById(R.id.psr_score);
 		score.setText(psr_score);
 		if (diff > 0)
 			score.setTextColor(MColors.GREEN_LIGHT_A700);
@@ -178,7 +178,7 @@ public class GameStatsDialog extends BaseDialog
 		final int list[] = new int[]{R.id.opponent, R.id.result, R.id.psr_type};
 		final String data[] = new String[]{opponent, result, psr_type};
 		for (int i = 0; i < list.length; i++) {
-			final TextView tv = (TextView) findViewById(list[i]);
+			final TextView tv = findViewById(list[i]);
 			tv.setText(data[i]);
 		}
 	}

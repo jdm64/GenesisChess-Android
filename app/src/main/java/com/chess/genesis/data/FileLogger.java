@@ -32,7 +32,7 @@ public class FileLogger
 
 	public FileLogger addItem(final String name, final Object item)
 	{
-		buffer.append(name).append('=').append(String.valueOf(item)).append('|');
+		buffer.append(name).append('=').append(item).append('|');
 		return this;
 	}
 

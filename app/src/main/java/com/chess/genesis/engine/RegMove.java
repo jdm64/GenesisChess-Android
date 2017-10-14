@@ -38,7 +38,6 @@ public class RegMove extends Move
 
 	public RegMove()
 	{
-		super();
 		flags = 0;
 	}
 

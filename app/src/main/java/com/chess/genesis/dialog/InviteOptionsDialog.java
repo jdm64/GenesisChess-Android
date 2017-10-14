@@ -56,7 +56,7 @@ public class InviteOptionsDialog extends BaseDialog
 		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		final Spinner spinner = (Spinner) findViewById(R.id.invite_color);
+		final Spinner spinner = findViewById(R.id.invite_color);
 		spinner.setAdapter(adapter);
 	}
 
@@ -64,8 +64,8 @@ public class InviteOptionsDialog extends BaseDialog
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {
-			final EditText opp_name = (EditText) findViewById(R.id.opp_name);
-			final Spinner color = (Spinner) findViewById(R.id.invite_color);
+			final EditText opp_name = findViewById(R.id.opp_name);
+			final Spinner color = findViewById(R.id.invite_color);
 
 			settings.putString("opp_name", opp_name.getText().toString().trim());
 			settings.putInt("color", ((AdapterItem) color.getSelectedItem()).id);

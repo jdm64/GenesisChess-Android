@@ -46,7 +46,7 @@ public class RematchConfirm extends BaseDialog
 		setBodyView(R.layout.dialog_confirm_rematch);
 		setButtonTxt(R.id.ok, "Rematch");
 
-		final TextView txt = (TextView) findViewById(R.id.rematch_confirm);
+		final TextView txt = findViewById(R.id.rematch_confirm);
 		txt.setText("Are you sure you want to invite " + opponent +
 			" to a rematch game with the following settings?");
 
@@ -57,7 +57,7 @@ public class RematchConfirm extends BaseDialog
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		Spinner spinner = (Spinner) findViewById(R.id.game_type);
+		Spinner spinner = findViewById(R.id.game_type);
 		spinner.setAdapter(adapter);
 
 		list = new AdapterItem[]
@@ -68,7 +68,7 @@ public class RematchConfirm extends BaseDialog
 		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		spinner = (Spinner) findViewById(R.id.color);
+		spinner = findViewById(R.id.color);
 		spinner.setAdapter(adapter);
 	}
 
@@ -78,10 +78,10 @@ public class RematchConfirm extends BaseDialog
 		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
 
-			Spinner spinner = (Spinner) findViewById(R.id.game_type);
+			Spinner spinner = findViewById(R.id.game_type);
 			data.putInt("gametype", ((AdapterItem) spinner.getSelectedItem()).id);
 
-			spinner = (Spinner) findViewById(R.id.color);
+			spinner = findViewById(R.id.color);
 			data.putInt("color", ((AdapterItem) spinner.getSelectedItem()).id);
 
 			data.putString("opp_name", opponent);

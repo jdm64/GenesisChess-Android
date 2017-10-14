@@ -27,7 +27,7 @@ public class MainMenuPhone extends BasePhoneActivity
 	@Override
 	public void onCreate(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState, new MainMenuFrag(), R.layout.activity_basephone);
+		onCreate(savedInstanceState, new MainMenuFrag(), R.layout.activity_basephone);
 	}
 
 	@Override

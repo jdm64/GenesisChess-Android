@@ -49,7 +49,7 @@ public class StatsLookupDialog extends BaseDialog
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {
-			final EditText txt = (EditText) findViewById(R.id.username);
+			final EditText txt = findViewById(R.id.username);
 			final String username = txt.getText().toString().trim();
 
 			if (username.length() >= 3)

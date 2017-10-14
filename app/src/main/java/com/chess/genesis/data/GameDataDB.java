@@ -412,7 +412,7 @@ public class GameDataDB
 
 		final String gameid = json.getString("gameid"),
 			username = json.getString("username"),
-			opponent = (username.equals(players.getString(0)))? players.getString(1) : players.getString(0),
+			opponent = players.getString(username.equals(players.getString(0)) ? 1 : 0),
 			msg = json.getString("txt");
 		final long time = json.getLong("time");
 		final int unread = (user.equals(username))? 0 : 1;

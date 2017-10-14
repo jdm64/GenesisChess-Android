@@ -55,7 +55,7 @@ public class NewLocalGameDialog extends BaseDialog
 		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		gametype_spin = (Spinner) findViewById(R.id.game_type);
+		gametype_spin = findViewById(R.id.game_type);
 		gametype_spin.setAdapter(adapter);
 
 		list = new AdapterItem[] {new AdapterItem("CPU As Black", Enums.CPU_BLACK_OPPONENT),
@@ -65,7 +65,7 @@ public class NewLocalGameDialog extends BaseDialog
 		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		opponent_spin = (Spinner) findViewById(R.id.opponent);
+		opponent_spin = findViewById(R.id.opponent);
 		opponent_spin.setAdapter(adapter);
 	}
 
@@ -74,7 +74,7 @@ public class NewLocalGameDialog extends BaseDialog
 	{
 		if (v.getId() == R.id.ok) {
 			final Bundle data = new Bundle();
-			final EditText text = (EditText) findViewById(R.id.game_name);
+			final EditText text = findViewById(R.id.game_name);
 
 			data.putString("name", text.getText().toString().trim());
 			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);

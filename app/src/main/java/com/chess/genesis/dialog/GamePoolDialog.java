@@ -73,7 +73,7 @@ public class GamePoolDialog extends BaseDialog
 		setBodyView(R.layout.dialog_gamepool);
 		setButtonTxt(R.id.cancel, "Close");
 
-		final TableLayout table = (TableLayout) findViewById(R.id.layout01);
+		final TableLayout table = findViewById(R.id.layout01);
 		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
 
 		for (final PoolDataItem item : data) {

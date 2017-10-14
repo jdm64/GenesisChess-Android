@@ -46,7 +46,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 			new GenGameFrag() : new RegGameFrag();
 
 		// initialize layout
-		super.onCreate(savedInstanceState, frag, layoutId);
+		onCreate(savedInstanceState, frag, layoutId);
 
 		// set click listeners
 		if (type != Enums.LOCAL_GAME) {
@@ -74,7 +74,7 @@ public class Game extends BasePhoneActivity implements OnClickListener
 
 			db.close();
 
-			final ImageView v = (ImageView) findViewById(R.id.chat);
+			final ImageView v = findViewById(R.id.chat);
 			v.setImageResource(img);
 		}
 	}

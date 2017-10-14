@@ -80,7 +80,7 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 		// set list adapters
 		gamelist_adapter = new GameListAdapter(getActivity(), Enums.LOCAL_GAME, Enums.YOUR_TURN);
 
-		final ListView gamelist_view = (ListView) view.findViewById(R.id.game_list);
+		final ListView gamelist_view = view.findViewById(R.id.game_list);
 		gamelist_view.setAdapter(gamelist_adapter);
 		gamelist_view.setOnItemClickListener(this);
 

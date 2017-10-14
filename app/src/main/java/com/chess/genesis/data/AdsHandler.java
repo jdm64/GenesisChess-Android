@@ -30,7 +30,7 @@ public final class AdsHandler
 	{
 		if (!Pref.getBool(activity, R.array.pf_enableAds))
 			return;
-		final AdView ad = (AdView) activity.findViewById(R.id.adView);
+		final AdView ad = activity.findViewById(R.id.adView);
 
 		if (ad != null)
 			ad.loadAd(new AdRequest.Builder().build());

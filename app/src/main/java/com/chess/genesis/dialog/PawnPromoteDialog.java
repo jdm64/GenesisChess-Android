@@ -62,7 +62,7 @@ public class PawnPromoteDialog extends BaseDialog
 
 	private void setupPieces()
 	{
-		final PromoteLayout table = (PromoteLayout) findViewById(R.id.table);
+		final PromoteLayout table = findViewById(R.id.table);
 		table.init(context, this, color);
 	}
 }

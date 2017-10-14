@@ -39,7 +39,6 @@ public class GameListAdapter extends BaseAdapter
 
 	public GameListAdapter(final Context _context, final int Type, final int yourTurn)
 	{
-		super();
 		context = _context;
 
 		final Pref pref = new Pref(context);
@@ -132,7 +131,7 @@ public class GameListAdapter extends BaseAdapter
 	public View getEmptyView(final Context _context)
 	{
 		final View cell = View.inflate(_context, R.layout.gamelist_cell_empty, null);
-		final TextView txt = (TextView) cell.findViewById(R.id.message);
+		final TextView txt = cell.findViewById(R.id.message);
 
 		// Fix sizing issue
 		final LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -345,17 +344,9 @@ class GameListItem extends View
 
 		data.time = new PrettyDate(bundle.getString("stime")).agoFormat();
 		data.gametype = bundle.getInt("type");
-		data.name = (data.gametype == Enums.LOCAL_GAME)?
-			bundle.getString("name") :
-			(username.equals(bundle.getString("white"))?
-				bundle.getString("black") :
-				bundle.getString("white"));
-		data.type = (data.gametype == Enums.LOCAL_GAME)?
-			Enums.OpponentType(Integer.parseInt(bundle.getString("opponent"))) + ' ' +
-			Enums.GameType(Integer.parseInt(bundle.getString("gametype")))
-			:
-			Enums.EventType(Integer.parseInt(bundle.getString("eventtype"))) + ' ' +
-			Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
+		data.name = bundle.getString(data.gametype == Enums.LOCAL_GAME ? "name" : username.equals(bundle.getString("white")) ? "black" : "white");
+		data.type = (data.gametype == Enums.LOCAL_GAME ? Enums.OpponentType(Integer.parseInt(bundle.getString("opponent"))) : Enums.EventType(Integer.parseInt(bundle.getString("eventtype")))) + ' ' +
+		Enums.GameType(Integer.parseInt(bundle.getString("gametype")));
 
 		if (data.gametype != Enums.LOCAL_GAME) {
 			data.ply = Integer.parseInt(bundle.getString("ply"));

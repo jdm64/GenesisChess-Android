@@ -48,7 +48,7 @@ public class GenesisRulesDialog extends BaseDialog
 			final Uri uri = Uri.parse("http://genesischess.com");
 			v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 		} else {
-			final CheckBox agree = (CheckBox) findViewById(R.id.agree);
+			final CheckBox agree = findViewById(R.id.agree);
 			final PrefEdit pref = new PrefEdit(getContext());
 
 			pref.putBool(R.array.pf_showGenesisRules, !agree.isChecked());

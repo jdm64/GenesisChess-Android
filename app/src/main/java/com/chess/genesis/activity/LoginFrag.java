@@ -42,7 +42,6 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 
 	public LoginFrag()
 	{
-		super();
 		setArguments(new Bundle());
 	}
 
@@ -64,10 +63,10 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 			pref.putLong(R.array.pf_lastmsgsync);
 			pref.commit();
 
-			EditText txt = (EditText) act.findViewById(R.id.username);
+			EditText txt = act.findViewById(R.id.username);
 			txt.setText("");
 
-			txt = (EditText) act.findViewById(R.id.password);
+			txt = act.findViewById(R.id.password);
 			txt.setText("");
 			break;
 		case ProgressMsg.MSG:
@@ -176,7 +175,7 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 		// Always show the currently logged in user
 		final Pref pref = new Pref(act);
 		if (pref.getBool(R.array.pf_isLoggedIn)) {
-			final EditText txt = (EditText) view.findViewById(R.id.username);
+			final EditText txt = view.findViewById(R.id.username);
 			txt.setText(pref.getString(R.array.pf_username));
 		}
 		return view;
@@ -208,10 +207,10 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	{
 		switch (v.getId()) {
 		case R.id.login:
-			EditText txt = (EditText) act.findViewById(R.id.username);
+			EditText txt = act.findViewById(R.id.username);
 			final String username = txt.getText().toString().trim();
 
-			txt = (EditText) act.findViewById(R.id.password);
+			txt = act.findViewById(R.id.password);
 			final String password = txt.getText().toString();
 
 			getArguments().putString("username", username);
