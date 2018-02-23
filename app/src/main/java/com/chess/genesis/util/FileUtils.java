@@ -54,12 +54,9 @@ public final class FileUtils
 
 	public static String readFile(final String path) throws IOException
 	{
-		final Scanner scanner = new Scanner(tryOpenFileStream(path));
-	try {
-		return scanner.useDelimiter("\\A").next();
-	} finally {
-		scanner.close();
-	}
+		try (Scanner scanner = new Scanner(tryOpenFileStream(path))) {
+			return scanner.useDelimiter("\\A").next();
+		}
 	}
 
 	public static Uri writeFile(final String filename, final String data) throws IOException
@@ -79,13 +76,10 @@ public final class FileUtils
 			dir.mkdirs();
 
 		final File file = new File(dir, filename);
-		final FileOutputStream buffer = new FileOutputStream(file, append);
-	try {
-		buffer.write(data.getBytes());
+		try (FileOutputStream buffer = new FileOutputStream(file, append)) {
+			buffer.write(data.getBytes());
 
-		return Uri.fromFile(file);
-	} finally {
-		buffer.close();
-	}
+			return Uri.fromFile(file);
+		}
 	}
 }

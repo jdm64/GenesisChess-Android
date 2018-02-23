@@ -264,8 +264,7 @@ public class SyncClient implements Runnable, Handler.Callback
 		db.close();
 
 		final ArrayList<String> list_have = new ArrayList<>(list.size());
-		for (final String item : list)
-			list_have.add(item);
+		list_have.addAll(list);
 
 		list_need.removeAll(list_have);
 		return list_need;

@@ -223,16 +223,13 @@ public class GameDataDB
 		final String[] data = {username, username};
 
 		final String query = "SELECT stime FROM onlinegames WHERE white=? OR black=? ORDER BY stime DESC LIMIT 1";
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
 
-	try {
-		if (cursor.getCount() == 0)
-			return 0;
-		cursor.moveToFirst();
-		return cursor.getLong(0);
-	} finally {
-		cursor.close();
-	}
+		try (SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data)) {
+			if (cursor.getCount() == 0)
+				return 0;
+			cursor.moveToFirst();
+			return cursor.getLong(0);
+		}
 	}
 
 	public List<String> getOnlineGameIds()
@@ -439,13 +436,10 @@ public class GameDataDB
 	public int getUnreadMsgCount(final String gameid)
 	{
 		final String[] data = {gameid};
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT COUNT(unread) FROM msgtable WHERE unread=1 AND gameid=?", data);
-	try {
-		cursor.moveToFirst();
-		return cursor.getInt(0);
-	} finally {
-		cursor.close();
-	}
+		try (SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT COUNT(unread) FROM msgtable WHERE unread=1 AND gameid=?", data)) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
 	}
 
 	public int getUnreadMsgCount()
@@ -453,13 +447,10 @@ public class GameDataDB
 		final String username = getUsername();
 		final String[] data = {username, username};
 		final String query = "SELECT COUNT(*) FROM msgtable WHERE unread=1 AND (username=? OR opponent=?)";
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data);
-	try {
-		cursor.moveToFirst();
-		return cursor.getInt(0);
-	} finally {
-		cursor.close();
-	}
+		try (SQLiteCursor cursor = (SQLiteCursor) db.rawQuery(query, data)) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
 	}
 
 	public long getNewestMsg()
@@ -467,15 +458,12 @@ public class GameDataDB
 		final String username = getUsername();
 		final String[] data = {username, username};
 
-		final SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT time FROM msgtable WHERE username=? OR opponent=? ORDER BY time DESC LIMIT 1", data);
-	try {
-		if (cursor.getCount() == 0)
-			return 0;
-		cursor.moveToFirst();
-		return cursor.getLong(0);
-	} finally {
-		cursor.close();
-	}
+		try (SQLiteCursor cursor = (SQLiteCursor) db.rawQuery("SELECT time FROM msgtable WHERE username=? OR opponent=? ORDER BY time DESC LIMIT 1", data)) {
+			if (cursor.getCount() == 0)
+				return 0;
+			cursor.moveToFirst();
+			return cursor.getLong(0);
+		}
 	}
 
 	public SQLiteCursor getMsgList(final String gameid)

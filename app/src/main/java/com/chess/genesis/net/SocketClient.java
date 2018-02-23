@@ -126,7 +126,7 @@ public final class SocketClient
 		String dataStr = data.toString();
 		logTraffic(dataStr, false);
 
-		output.write(new String(dataStr + '\n').getBytes());
+		output.write((dataStr + '\n').getBytes());
 	}
 
 	public synchronized JSONObject read() throws IOException, JSONException

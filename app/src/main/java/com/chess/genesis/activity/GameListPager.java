@@ -53,7 +53,7 @@ public class GameListPager extends FragmentPagerAdapter
 		Fragment frag = list[position].get();
 		if (frag == null) {
 			frag = GameListPage.newInstance(position);
-			list[position] = new WeakReference<Fragment>(frag);
+			list[position] = new WeakReference<>(frag);
 		}
 		return frag;
 	}

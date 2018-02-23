@@ -131,9 +131,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				else if (ANY_MOVE(square[From], square[to]))
+				if (ON_BOARD(to) && ANY_MOVE(square[From], square[to]))
 					list[next++] = to;
 			}
 			break;
@@ -150,9 +148,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				else if (CAPTURE_MOVE(square[From], square[to]))
+				if (ON_BOARD(to) && CAPTURE_MOVE(square[From], square[to]))
 					list[next++] = to;
 			}
 			break;
@@ -182,9 +178,7 @@ public abstract class BaseBoard
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
 				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				else if (square[to] == Piece.EMPTY)
+				if (ON_BOARD(to) && square[to] == Piece.EMPTY)
 					list[next++] = to;
 			}
 			break;

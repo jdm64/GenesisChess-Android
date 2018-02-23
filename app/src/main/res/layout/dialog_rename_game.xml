@@ -4,4 +4,5 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/game_name_input"
 style="@style/FillWidth"
 android:singleLine="true"
-android:maxLength="24"/>
+android:maxLength="24"
+android:inputType="text" />

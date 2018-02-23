@@ -10,7 +10,8 @@ android:stretchColumns="1">
 		android:textColor="#000000"
 		android:text="Game Name:"/>
 		<EditText
-		android:id="@+id/game_name"/>
+		android:id="@+id/game_name"
+		android:inputType="text" />
 	</TableRow>
 	<TableRow>
 		<TextView
