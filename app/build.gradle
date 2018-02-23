@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply from: 'signing.gradle'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -12,7 +12,6 @@ android {
             output.outputFile = new File(output.outputFile.parent, name)
         }
     }
-
     defaultConfig {
         applicationId "com.chess.genesis"
         minSdkVersion 14
@@ -20,7 +19,6 @@ android {
         versionCode 70
         versionName "1.14.10"
     }
-
     buildTypes {
         release {
             minifyEnabled false
