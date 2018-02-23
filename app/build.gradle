@@ -13,8 +13,8 @@ android {
     }
     defaultConfig {
         applicationId "com.chess.genesis"
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 19
+        targetSdkVersion 27
         versionCode 70
         versionName "1.14.10"
     }
