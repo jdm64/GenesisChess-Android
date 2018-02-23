@@ -8,8 +8,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             String name = output.outputFile.name.replace(".apk", "-v${variant.versionName}.apk")
-            name = name.replace("app", "GenesisChess")
-            output.outputFile = new File(output.outputFile.parent, name)
+            output.outputFileName = name.replace("app", "GenesisChess")
         }
     }
     defaultConfig {
