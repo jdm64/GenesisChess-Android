@@ -28,7 +28,7 @@ abstract class BasePhoneActivity extends BaseActivity implements OnLongClickList
 
 	public void onCreate(final Bundle savedInstanceState, final BaseContentFrag Frag, final int layoutId)
 	{
-		onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 		mainFrag = Frag;
 
 		// set only portrait
