@@ -20,7 +20,6 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-import android.widget.TableRow.LayoutParams;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
@@ -74,7 +73,8 @@ public class GamePoolDialog extends BaseDialog
 		setButtonTxt(R.id.cancel, "Close");
 
 		final TableLayout table = findViewById(R.id.layout01);
-		final LayoutParams layout = (TableRow.LayoutParams) findViewById(R.id.left).getLayoutParams();
+		View left = findViewById(R.id.left);
+		final ViewGroup.LayoutParams layout = left.getLayoutParams();
 
 		for (final PoolDataItem item : data) {
 			final TableRow row = new TableRow(context);
