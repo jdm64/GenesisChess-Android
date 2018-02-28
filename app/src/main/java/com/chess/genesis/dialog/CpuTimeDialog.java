@@ -19,8 +19,9 @@ package com.chess.genesis.dialog;
 import android.content.*;
 import android.os.*;
 import android.view.*;
+import android.widget.*;
+
 import com.chess.genesis.*;
-import com.chess.genesis.view.*;
 
 public class CpuTimeDialog extends BaseDialog
 {
@@ -45,17 +46,17 @@ public class CpuTimeDialog extends BaseDialog
 		setBodyView(R.layout.dialog_cputime);
 		setButtonTxt(R.id.ok, "Set Time");
 
-		final NumberSpinner number = findViewById(R.id.time);
-		number.setRange(1, 30);
-		number.setCurrent(time);
+		final NumberPicker number = findViewById(R.id.time);
+		number.setMinValue(1);
+		number.setMaxValue(30);
 	}
 
 	@Override
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.ok) {
-			final NumberSpinner number = findViewById(R.id.time);
-			final Integer value = number.getCurrent();
+			final NumberPicker number = findViewById(R.id.time);
+			final Integer value = number.getValue();
 			handle.sendMessage(handle.obtainMessage(MSG, value));
 		}
 		dismiss();
