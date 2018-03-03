@@ -22,8 +22,14 @@ import com.chess.genesis.*;
 public class Register extends BasePhoneActivity
 {
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle bundle)
 	{
-		onCreate(savedInstanceState, new RegisterFrag(), R.layout.activity_basephone);
+		return new RegisterFrag();
+	}
+
+	@Override
+	protected int getLayoutId(Bundle bundle)
+	{
+		return R.layout.activity_basephone;
 	}
 }

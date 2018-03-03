@@ -25,10 +25,20 @@ import com.chess.genesis.dialog.*;
 public class GameListOnline extends BasePhoneActivity implements OnClickListener
 {
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle bundle)
 	{
-		onCreate(savedInstanceState, new GameListOnlineFrag(), R.layout.activity_gamelist);
+		return new GameListOnlineFrag();
+	}
 
+	@Override
+	protected int getLayoutId(Bundle bundle)
+	{
+		return R.layout.activity_gamelist;
+	}
+
+	@Override
+	protected void postCreate()
+	{
 		// set click listeners
 		final View button = findViewById(R.id.topbar_plus);
 		button.setOnClickListener(this);

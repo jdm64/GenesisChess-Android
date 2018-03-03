@@ -25,9 +25,15 @@ import com.chess.genesis.data.*;
 public class MainMenuPhone extends BasePhoneActivity
 {
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle bundle)
 	{
-		onCreate(savedInstanceState, new MainMenuFrag(), R.layout.activity_basephone);
+		return new MainMenuFrag();
+	}
+
+	@Override
+	protected int getLayoutId(Bundle bundle)
+	{
+		return R.layout.activity_basephone;
 	}
 
 	@Override

@@ -25,27 +25,37 @@ import com.chess.genesis.*;
 abstract class BasePhoneActivity extends BaseActivity implements OnLongClickListener
 {
 	protected BaseContentFrag mainFrag;
+	protected Bundle settings;
 
-	public void onCreate(final Bundle savedInstanceState, final BaseContentFrag Frag, final int layoutId)
+	protected abstract BaseContentFrag createFrag(Bundle bundle);
+
+	protected abstract int getLayoutId(Bundle bundle);
+
+	protected void postCreate() {}
+
+	@Override
+	public void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		mainFrag = Frag;
+
+		settings = (savedInstanceState != null)? savedInstanceState : getIntent().getExtras();
+
+		mainFrag = createFrag(settings);
 
 		// set only portrait
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		// set content view
-		setContentView(layoutId);
+		setContentView(getLayoutId(settings));
 
 		final View image = findViewById(R.id.topbar_genesis);
 		image.setOnLongClickListener(this);
 
-		final Bundle settings = (savedInstanceState != null)?
-			savedInstanceState : getIntent().getExtras();
-
 		mainFrag.setArguments(settings != null? settings : new Bundle());
 		getSupportFragmentManager().beginTransaction()
 		.replace(R.id.fragment01, mainFrag, mainFrag.getBTag()).commit();
+
+		postCreate();
 	}
 
 	@Override

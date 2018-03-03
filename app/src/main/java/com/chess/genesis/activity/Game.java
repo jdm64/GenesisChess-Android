@@ -26,28 +26,25 @@ import com.chess.genesis.data.*;
 
 public class Game extends BasePhoneActivity implements OnClickListener
 {
-	private Bundle settings;
 	private int type;
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle settings)
 	{
-		// restore settings
-		settings = (savedInstanceState != null)?
-			savedInstanceState : getIntent().getExtras();
-		type = settings.getInt("type");
-
-		// set content view layout id
-		final int layoutId = (type != Enums.LOCAL_GAME)?
-			R.layout.activity_game_online : R.layout.activity_game_local;
-
 		final int gametype = Integer.parseInt(settings.getString("gametype"));
-		final BaseContentFrag frag = (gametype == Enums.GENESIS_CHESS)?
-			new GenGameFrag() : new RegGameFrag();
+		return (gametype == Enums.GENESIS_CHESS)? new GenGameFrag() : new RegGameFrag();
+	}
 
-		// initialize layout
-		onCreate(savedInstanceState, frag, layoutId);
+	@Override
+	protected int getLayoutId(Bundle settings)
+	{
+		type = settings.getInt("type");
+		return (type != Enums.LOCAL_GAME)? R.layout.activity_game_online : R.layout.activity_game_local;
+	}
 
+	@Override
+	public void postCreate()
+	{
 		// set click listeners
 		if (type != Enums.LOCAL_GAME) {
 			final View button = findViewById(R.id.chat);

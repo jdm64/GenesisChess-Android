@@ -23,9 +23,15 @@ import com.chess.genesis.*;
 public class UserStats extends BasePhoneActivity
 {
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle bundle)
 	{
-		onCreate(savedInstanceState, new UserStatsFrag(), R.layout.activity_basephone);
+		return new UserStatsFrag();
+	}
+
+	@Override
+	protected int getLayoutId(Bundle bundle)
+	{
+		return R.layout.activity_basephone;
 	}
 
 	@Override

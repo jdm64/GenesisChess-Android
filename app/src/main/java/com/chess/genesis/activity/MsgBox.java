@@ -23,9 +23,15 @@ import com.chess.genesis.*;
 public class MsgBox extends BasePhoneActivity
 {
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	protected BaseContentFrag createFrag(Bundle bundle)
 	{
-		onCreate(savedInstanceState, new MsgBoxFrag(), R.layout.activity_basephone);
+		return new MsgBoxFrag();
+	}
+
+	@Override
+	protected int getLayoutId(Bundle bundle)
+	{
+		return R.layout.activity_basephone;
 	}
 
 	@Override
