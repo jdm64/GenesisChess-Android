@@ -11,6 +11,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<include
 	android:id="@+id/board_nav"
 	layout="@layout/include_board_nav"
-	style="@style/BlueBar"
+	android:layout_width="match_parent"
+	android:layout_height="50dp"
 	android:layout_alignParentBottom="true"/>
 </RelativeLayout>
