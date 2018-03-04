@@ -17,7 +17,6 @@
 package com.chess.genesis.data;
 
 import android.content.*;
-import android.content.res.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
@@ -25,7 +24,9 @@ import android.view.*;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.chess.genesis.*;
+import com.chess.genesis.engine.Piece;
 import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 
 public class GameListAdapter extends BaseAdapter
 {
@@ -33,45 +34,81 @@ public class GameListAdapter extends BaseAdapter
 	private final Bundle settings;
 	private final int type;
 
+	private final BoardSquare whitePawn;
+	private final BoardSquare blackPawn;
+	private final PieceImgPainter piecePainter;
+
 	private GameDataDB db;
 	private SQLiteCursor list;
 	private int yourturn;
 
-	public GameListAdapter(final Context _context, final int Type, final int yourTurn)
+	public GameListAdapter(final ListView listView, final int Type, final int yourTurn)
 	{
-		context = _context;
+		context = listView.getContext();
 
 		final Pref pref = new Pref(context);
 		type = Type;
 		yourturn = yourTurn;
 
+		piecePainter = new PieceImgPainter(context);
+		whitePawn = new BoardSquare(listView, piecePainter, 0);
+		whitePawn.setPiece(Piece.WHITE_PAWN);
+		blackPawn = new BoardSquare(listView, piecePainter, 1);
+		blackPawn.setPiece(Piece.BLACK_PAWN);
+
 		settings = new Bundle();
 		settings.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
 		settings.putInt("type", type);
 
-		initCursor();
+		View empty = getEmptyView(context);
+		((ViewGroup) listView.getParent()).addView(empty);
+		listView.setEmptyView(empty);
+		listView.setAdapter(this);
 	}
 
-	private void initCursor()
+	public Context getContext()
 	{
-		db = new GameDataDB(context);
-		switch (type) {
-		case Enums.LOCAL_GAME:
-			list = db.getLocalGameList();
-			break;
-		case Enums.ONLINE_GAME:
-			list = db.getOnlineGameList(yourturn);
-			break;
-		case Enums.ARCHIVE_GAME:
-			list = db.getArchiveGameList();
-			break;
+		return context;
+	}
+
+	private SQLiteCursor getCursor()
+	{
+		if (list == null) {
+			db = new GameDataDB(context);
+			switch (type) {
+			case Enums.LOCAL_GAME:
+				list = db.getLocalGameList();
+				break;
+			case Enums.ONLINE_GAME:
+				list = db.getOnlineGameList(yourturn);
+				break;
+			case Enums.ARCHIVE_GAME:
+				list = db.getArchiveGameList();
+				break;
+			}
 		}
+		return list;
+	}
+
+	public PieceImgPainter getPiecePainter()
+	{
+		return piecePainter;
+	}
+
+	public BoardSquare getWhitePawn()
+	{
+		return whitePawn;
+	}
+
+	public BoardSquare getBlackPawn()
+	{
+		return blackPawn;
 	}
 
 	@Override
 	public int getCount()
 	{
-		return list.getCount();
+		return getCursor().getCount();
 	}
 
 	public Bundle getExtras()
@@ -82,7 +119,7 @@ public class GameListAdapter extends BaseAdapter
 	public void update()
 	{
 		if (list.isClosed())
-			initCursor();
+			getCursor();
 		else
 			list.requery();
 		notifyDataSetChanged();
@@ -122,7 +159,7 @@ public class GameListAdapter extends BaseAdapter
 		final Bundle data = (Bundle) getItem(index);
 
 		if (cell == null)
-			cell = new GameListItem(parent.getContext());
+			cell = new GameListItem(this);
 		((GameListItem) cell).setData(data, index);
 
 		return cell;
@@ -157,6 +194,7 @@ public class GameListAdapter extends BaseAdapter
 
 class GameListItem extends View
 {
+	private final GameListAdapter adapter;
 	private final Paint paint = new Paint();
 	private DataItem data;
 	private int index;
@@ -174,40 +212,11 @@ class GameListItem extends View
 		public boolean hasMsg;
 	}
 
-	final static class Cache
+	public GameListItem(final GameListAdapter _adapter)
 	{
-		public static Bitmap whitePawn;
-		public static Bitmap blackPawn;
-		public static RectF rect;
-		public static int height;
-		private static boolean isActive = false;
+		super(_adapter.getContext());
 
-		private Cache()
-		{
-		}
-
-		public static void Init(final Context context, final int width)
-		{
-			if (isActive)
-				return;
-
-			height = (int) ((5.0 * width) / 32.0);
-			rect = new RectF(0, 0, height, height);
-
-			final Resources res = context.getResources();
-			blackPawn = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-				res, R.drawable.black_pawn_light), height, height, true);
-			whitePawn = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-				res, R.drawable.white_pawn_dark), height, height, true);
-
-			isActive = true;
-		}
-	}
-
-	public GameListItem(final Context context)
-	{
-		super(context);
-
+		adapter = _adapter;
 		paint.setAntiAlias(true);
 		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 	}
@@ -215,8 +224,9 @@ class GameListItem extends View
 	@Override
 	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
-		Cache.Init(getContext(), MeasureSpec.getSize(widthMeasureSpec));
-		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), Cache.height);
+		int size = (int) ((5.0 * MeasureSpec.getSize(widthMeasureSpec)) / 32.0);
+		adapter.getPiecePainter().resize(size);
+		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), size);
 	}
 
 	@Override
@@ -229,20 +239,21 @@ class GameListItem extends View
 		// icon
 		setIcon(canvas);
 
+		int size = adapter.getPiecePainter().getSize();
 		// game name
-		paint.setTextSize(Cache.height / 2 - 4);
-		canvas.drawText(data.name, Cache.height + 8, Cache.height / 2, paint);
+		paint.setTextSize(size / 2 - 4);
+		canvas.drawText(data.name, size + 8, size / 2, paint);
 
 		// set italic text
 		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
 
 		// game type
-		paint.setTextSize((int) (0.30 * Cache.height));
-		canvas.drawText(data.type, Cache.height + 8, 7 * Cache.height / 8, paint);
+		paint.setTextSize((int) (0.30 * size));
+		canvas.drawText(data.type, size + 8, 7 * size / 8, paint);
 
 		// time
 		paint.setTextAlign(Paint.Align.RIGHT);
-		canvas.drawText(data.time, getWidth() - 8, 7 * Cache.height / 8, paint);
+		canvas.drawText(data.time, getWidth() - 8, 7 * size / 8, paint);
 
 		if (data.gametype != Enums.LOCAL_GAME)
 			setOnlineTxt(canvas);
@@ -255,64 +266,68 @@ class GameListItem extends View
 
 	private void setIcon(final Canvas canvas)
 	{
-		final Bitmap img;
+		final BoardSquare img;
+
+		BoardSquare whitePawn = adapter.getWhitePawn();
+		BoardSquare blackPawn = adapter.getBlackPawn();
 
 		switch (data.gametype) {
 		case Enums.LOCAL_GAME:
 			switch (data.opponent) {
 			case Enums.CPU_BLACK_OPPONENT:
-				img = Cache.whitePawn;
+				img = whitePawn;
 				break;
 			case Enums.CPU_WHITE_OPPONENT:
-				img = Cache.blackPawn;
+				img = blackPawn;
 				break;
 			case Enums.HUMAN_OPPONENT:
 			default:
 				img = (index % 2 == 0)?
-					Cache.blackPawn :
-					Cache.whitePawn;
+					blackPawn :
+					whitePawn;
 				break;
 			}
 			break;
 		case Enums.ONLINE_GAME:
 		default:
 			img = (data.ply % 2 == 0)?
-				Cache.whitePawn :
-				Cache.blackPawn;
+				whitePawn :
+				blackPawn;
 			break;
 		case Enums.ARCHIVE_GAME:
 			switch (data.status) {
 			case Enums.WHITEMATE:
 			case Enums.BLACKRESIGN:
 			case Enums.BLACKIDLE:
-				img = Cache.whitePawn;
+				img = whitePawn;
 				break;
 			case Enums.BLACKMATE:
 			case Enums.WHITERESIGN:
 			case Enums.WHITEIDLE:
-				img = Cache.blackPawn;
+				img = blackPawn;
 				break;
 			case Enums.STALEMATE:
 			case Enums.IMPOSSIBLE:
 			default:
 				img = (index % 2 == 0)?
-					Cache.blackPawn :
-					Cache.whitePawn;
+					blackPawn :
+					whitePawn;
 				break;
 			}
 			break;
 		}
-		canvas.drawBitmap(img, null, Cache.rect, paint);
+		img.draw(canvas);
 	}
 
 	private void setOnlineTxt(final Canvas canvas)
 	{
 		int border = getWidth() - 8;
 
+		int size = adapter.getPiecePainter().getSize();
 		if (data.hasMsg) {
 			final String txt = "[new msg]";
 			paint.setColor(MColors.GREEN_LIGHT_A700);
-			canvas.drawText(txt, border, Cache.height / 2, paint);
+			canvas.drawText(txt, border, size / 2, paint);
 			border -= paint.measureText(txt);
 		}
 
@@ -322,15 +337,15 @@ class GameListItem extends View
 		switch (data.idle) {
 		case Enums.IDLE:
 			paint.setColor(MColors.BLUE_800);
-			canvas.drawText("[idle]", border, Cache.height / 2, paint);
+			canvas.drawText("[idle]", border, size / 2, paint);
 			break;
 		case Enums.NUDGED:
 			paint.setColor(MColors.ORANGE_500);
-			canvas.drawText("[nudged]", border, Cache.height / 2, paint);
+			canvas.drawText("[nudged]", border, size / 2, paint);
 			break;
 		case Enums.CLOSE:
 			paint.setColor(MColors.RED_A700);
-			canvas.drawText("[close]", border, Cache.height / 2, paint);
+			canvas.drawText("[close]", border, size / 2, paint);
 			break;
 		}
 	}

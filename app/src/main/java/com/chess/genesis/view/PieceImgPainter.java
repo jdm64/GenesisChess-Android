@@ -51,6 +51,7 @@ public final class PieceImgPainter
 	public PieceImgPainter(final Context context)
 	{
 		cache = new PieceImgCache(context);
+		initColors(context);
 	}
 
 	public static void initColors(final Context context)
@@ -136,6 +137,11 @@ public final class PieceImgPainter
 			return;
 		canvas.drawBitmap(cache.getTokenImg(), x, y, null);
 		canvas.drawBitmap(cache.getCountImg(count), x, y, null);
+	}
+
+	public int getSize()
+	{
+		return cache.getSize();
 	}
 
 	public void resize(int newSize)

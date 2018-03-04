@@ -77,17 +77,10 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 
 		final View view = inflater.inflate(R.layout.fragment_gamelist_local, null);
 
-		// set list adapters
-		gamelist_adapter = new GameListAdapter(getActivity(), Enums.LOCAL_GAME, Enums.YOUR_TURN);
-
 		final ListView gamelist_view = view.findViewById(R.id.game_list);
-		gamelist_view.setAdapter(gamelist_adapter);
 		gamelist_view.setOnItemClickListener(this);
 
-		// set empty view item
-		final View empty = gamelist_adapter.getEmptyView(getActivity());
-		((ViewGroup) gamelist_view.getParent()).addView(empty);
-		gamelist_view.setEmptyView(empty);
+		gamelist_adapter = new GameListAdapter(gamelist_view, Enums.LOCAL_GAME, Enums.YOUR_TURN);
 
 		registerForContextMenu(gamelist_view);
 

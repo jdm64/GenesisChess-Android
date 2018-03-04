@@ -43,17 +43,13 @@ public class GameListPage extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		final GameListAdapter adapter = getAdapter();
 		final FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.gamelist_listview, container, false);
 		final ListView listview = (ListView) layout.getChildAt(0);
-		final View empty = adapter.getEmptyView(getActivity());
 		final GameListOnlineFrag parent = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.TAG);
 
-		layout.addView(empty, 1);
-		listview.setEmptyView(empty);
-		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(parent);
 		registerForContextMenu(listview);
+		initGameList(listview);
 
 		return layout;
 	}
@@ -134,11 +130,8 @@ public class GameListPage extends Fragment
 		list.update();
 	}
 
-	private GameListAdapter getAdapter()
+	private void initGameList(ListView listView)
 	{
-		if (list != null)
-			return list;
-
 		int type = Enums.ONLINE_GAME, yourmove = Enums.YOUR_TURN;
 
 		switch (getPageType()) {
@@ -152,8 +145,7 @@ public class GameListPage extends Fragment
 			type = Enums.ARCHIVE_GAME;
 			break;
 		}
-		list = new GameListAdapter(getActivity(), type, yourmove);
-		return list;
+		list = new GameListAdapter(listView, type, yourmove);
 	}
 
 	private int getPageType()

@@ -21,7 +21,7 @@ import android.view.*;
 
 import com.chess.genesis.engine.*;
 
-class BoardSquare implements IBoardSq
+public class BoardSquare implements IBoardSq
 {
 	private final View view;
 	private final PieceImgPainter painter;
