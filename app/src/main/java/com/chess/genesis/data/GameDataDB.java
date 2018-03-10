@@ -22,10 +22,12 @@ import android.database.sqlite.*;
 import android.os.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
+
+import java.io.*;
 import java.util.*;
 import org.json.*;
 
-public class GameDataDB
+public class GameDataDB implements Closeable
 {
 	private final SQLiteDatabase db;
 	private final Context context;
@@ -36,6 +38,7 @@ public class GameDataDB
 		db = new DatabaseOpenHelper(context).getWritableDatabase();
 	}
 
+	@Override
 	public void close()
 	{
 		db.close();

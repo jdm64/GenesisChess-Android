@@ -138,7 +138,7 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 			new DeleteLocalDialog(act, handle, Integer.parseInt(bundle.getString("id"))).show();
 			break;
 		case R.id.rename_game:
-			new RenameGameDialog(act, handle, Integer.parseInt(bundle.getString("id")), bundle.getString("name")).show();
+			RenameGameDialog.create(handle, Integer.parseInt(bundle.getString("id")), bundle.getString("name")).show(getFragmentManager(), "");
 			break;
 		case R.id.share_game:
 			sendGame(bundle);

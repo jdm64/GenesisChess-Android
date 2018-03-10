@@ -16,52 +16,65 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import android.widget.TextView.BufferType;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class RenameGameDialog extends BaseDialog
+public class RenameGameDialog extends DialogFragment implements DialogInterface.OnClickListener
 {
 	public final static int MSG = 114;
 
-	private final Handler handle;
-	private final String gamename;
-	private final int gameid;
-
+	private Handler handle;
+	private String gamename;
+	private int gameid;
+	private View view;
 	private EditText txtinput;
 
-	public RenameGameDialog(final Context context, final Handler handler, final int id, final String name)
+	public static RenameGameDialog create(Handler handler, int id, String name)
 	{
-		super(context);
-
-		handle = handler;
-		gameid = id;
-		gamename = name;
+		RenameGameDialog dialog = new RenameGameDialog();
+		dialog.handle = handler;
+		dialog.gameid = id;
+		dialog.gamename = name;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Rename Game");
-		setBodyView(R.layout.dialog_rename_game);
-		setButtonTxt(R.id.ok, "Rename");
+		Activity activity = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		LayoutInflater inflater = activity.getLayoutInflater();
 
-		txtinput = findViewById(R.id.game_name_input);
+		view = inflater.inflate(R.layout.dialog_rename_game, null);
+
+		builder
+			.setTitle("Rename Game")
+			.setView(view)
+			.setPositiveButton("Rename", this)
+			.setNegativeButton("Cancel", this);
+
+		txtinput = view.findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);
+
+		return builder.create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok) {
-			final GameDataDB db = new GameDataDB(v.getContext());
-			db.renameLocalGame(gameid, txtinput.getText().toString().trim());
-			db.close();
+		if (DialogInterface.BUTTON_POSITIVE == which) {
+			try (GameDataDB db = new GameDataDB(getContext())) {
+				db.renameLocalGame(gameid, txtinput.getText().toString().trim());
+			}
 			handle.sendMessage(handle.obtainMessage(MSG));
 		}
 		dismiss();
