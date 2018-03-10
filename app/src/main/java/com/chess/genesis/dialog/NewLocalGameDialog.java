@@ -16,65 +16,78 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 
-public class NewLocalGameDialog extends BaseDialog
+public class NewLocalGameDialog extends DialogFragment implements DialogInterface.OnClickListener
 {
 	public final static int MSG = 102;
 
-	private final Handler handle;
-
+	private Handler handle;
+	private View view;
 	private Spinner gametype_spin;
 	private Spinner opponent_spin;
 
-	public NewLocalGameDialog(final Context context, final Handler handler)
+	public static NewLocalGameDialog create(Handler handler)
 	{
-		super(context);
-
-		handle = handler;
+		NewLocalGameDialog dialog = new NewLocalGameDialog();
+		dialog.handle = handler;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("New Local Game");
-		setBodyView(R.layout.dialog_newgame_local);
-		setButtonTxt(R.id.ok, "Create Game");
+		Activity activity = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		LayoutInflater inflater = activity.getLayoutInflater();
+
+		view = inflater.inflate(R.layout.dialog_newgame_local, null);
+
+		builder
+			.setTitle("New Local Game")
+			.setView(view)
+			.setPositiveButton("Create Game", this)
+			.setNegativeButton("Cancel", this);
 
 		AdapterItem[] list = new AdapterItem[]
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
 			new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		gametype_spin = findViewById(R.id.game_type);
+		gametype_spin = view.findViewById(R.id.game_type);
 		gametype_spin.setAdapter(adapter);
 
 		list = new AdapterItem[] {new AdapterItem("CPU As Black", Enums.CPU_BLACK_OPPONENT),
 			new AdapterItem("CPU As White", Enums.CPU_WHITE_OPPONENT),
 			new AdapterItem("Human", Enums.HUMAN_OPPONENT) };
 
-		adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
+		adapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
-		opponent_spin = findViewById(R.id.opponent);
+		opponent_spin = view.findViewById(R.id.opponent);
 		opponent_spin.setAdapter(adapter);
+
+		return builder.create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok) {
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			final Bundle data = new Bundle();
-			final EditText text = findViewById(R.id.game_name);
+			final EditText text = view.findViewById(R.id.game_name);
 
 			data.putString("name", text.getText().toString().trim());
 			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);

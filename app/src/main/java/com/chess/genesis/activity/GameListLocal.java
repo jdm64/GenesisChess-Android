@@ -49,7 +49,7 @@ public class GameListLocal extends BasePhoneActivity implements OnClickListener
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)
-			new NewLocalGameDialog(v.getContext(), new Handler(((GameListLocalFrag) mainFrag))).show();
+			NewLocalGameDialog.create(new Handler((GameListLocalFrag) mainFrag)).show(getSupportFragmentManager(), "");
 	}
 
 	@Override

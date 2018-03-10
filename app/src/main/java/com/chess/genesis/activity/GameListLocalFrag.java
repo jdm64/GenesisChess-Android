@@ -105,7 +105,7 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 	public void onClick(final View v)
 	{
 		if (v.getId() == R.id.topbar_plus)
-			new NewLocalGameDialog(v.getContext(), handle).show();
+			NewLocalGameDialog.create(handle).show(getFragmentManager(), "");
 		else if (v.getId() == R.id.menu)
 			openMenu(v);
 	}
@@ -154,7 +154,7 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 	{
 		switch (item.getItemId()) {
 		case R.id.new_game:
-			new NewLocalGameDialog(act, handle).show();
+			NewLocalGameDialog.create(handle).show(getFragmentManager(), "");
 			break;
 		case R.id.import_game:
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
