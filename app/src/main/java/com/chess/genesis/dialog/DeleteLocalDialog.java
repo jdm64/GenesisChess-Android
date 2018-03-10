@@ -16,48 +16,62 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class DeleteLocalDialog extends BaseDialog
+public class DeleteLocalDialog extends DialogFragment implements DialogInterface.OnClickListener
 {
 	public final static int MSG = 112;
 
-	private final Handler handle;
-	private final int gameid;
+	private Handler handle;
+	private int gameid;
+	private View view;
 
-	public DeleteLocalDialog(final Context context, final Handler handler, final int _gameid)
+	public static DeleteLocalDialog create(Handler handler, int gameid)
 	{
-		super(context);
-
-		handle = handler;
-		gameid = _gameid;
+		DeleteLocalDialog dialog = new DeleteLocalDialog();
+		dialog.handle = handler;
+		dialog.gameid = gameid;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Delete Game");
-		setBodyView(R.layout.dialog_single_text);
-		setButtonTxt(R.id.ok, "Delete Game");
+		Activity activity = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		LayoutInflater inflater = activity.getLayoutInflater();
 
-		final TextView txt = findViewById(R.id.text);
+		view = inflater.inflate(R.layout.dialog_single_text, null);
+
+		builder
+				.setTitle("Delete Game")
+				.setView(view)
+				.setPositiveButton("Delete Game", this)
+				.setNegativeButton("Cancel", this);
+
+		TextView txt = view.findViewById(R.id.text);
 		txt.setText(R.string.delete_local);
+
+		return builder.create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok) {
-			final GameDataDB db = new GameDataDB(v.getContext());
-			db.deleteLocalGame(gameid);
-			db.close();
+		if (DialogInterface.BUTTON_POSITIVE == which) {
+			try (GameDataDB db = new GameDataDB(getContext())) {
+				db.deleteLocalGame(gameid);
+			}
 			handle.sendMessage(handle.obtainMessage(MSG));
 		}
 		dismiss();
