@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.chess.genesis.dialog.PromoteLayout
+<RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/table"
-android:layout_centerInParent="true"/>
+android:layout_height="wrap_content"
+android:layout_width="wrap_content"
+android:padding="12dp">
+    <com.chess.genesis.dialog.PromoteLayout
+    android:id="@+id/table"
+    android:layout_centerInParent="true"/>
+</RelativeLayout>

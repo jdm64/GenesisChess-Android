@@ -16,42 +16,52 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
-public class PawnPromoteDialog extends BaseDialog
+public class PawnPromoteDialog extends DialogFragment implements View.OnClickListener, DialogInterface.OnClickListener
 {
 	public final static int MSG = 124;
 
-	private final Context context;
-	private final Handler handle;
-	private final Move move;
-	private final int color;
+	private Handler handle;
+	private Move move;
+	private int color;
 
-	public PawnPromoteDialog(final Context _context, final Handler handler, final Move _move, final int _color)
+	public static PawnPromoteDialog create(Handler handler, Move move, int color)
 	{
-		super(_context, BaseDialog.CANCEL);
-		context = _context;
-		handle = handler;
-		move = _move;
-		color = _color;
+		PawnPromoteDialog dialog = new PawnPromoteDialog();
+		dialog.handle = handler;
+		dialog.move = move;
+		dialog.color = color;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Pawn Promotion");
-		setBodyView(R.layout.dialog_pawnpromote);
+		Activity activity = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		LayoutInflater inflater = activity.getLayoutInflater();
 
-		setupPieces();
+		View view = inflater.inflate(R.layout.dialog_pawnpromote, null);
+
+		builder
+				.setTitle("Pawn Promotion")
+				.setView(view)
+				.setNegativeButton("Cancel", this);
+
+		PromoteLayout table = view.findViewById(R.id.table);
+		table.init(getActivity(), this, color);
+
+		return builder.create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(View v)
 	{
 		if (v instanceof IBoardSq) {
 			move.setPromote(Math.abs(((IBoardSq) v).getPiece()));
@@ -60,9 +70,9 @@ public class PawnPromoteDialog extends BaseDialog
 		dismiss();
 	}
 
-	private void setupPieces()
+	@Override
+	public void onClick(DialogInterface dialog, int which)
 	{
-		final PromoteLayout table = findViewById(R.id.table);
-		table.init(context, this, color);
+		dismiss();
 	}
 }

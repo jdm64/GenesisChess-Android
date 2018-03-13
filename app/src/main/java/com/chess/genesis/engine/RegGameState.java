@@ -99,7 +99,7 @@ public class RegGameState extends GameState
 		if (board.validMove(move) != Move.VALID_MOVE) {
 			return;
 		} else if (move.getPromote() != 0) {
-			new PawnPromoteDialog(activity, handle, move, board.getStm()).show();
+			PawnPromoteDialog.create(handle, move, board.getStm()).show(activity.getFragmentManager(), "");
 			return;
 		}
 		applyMove(move, true, true);
