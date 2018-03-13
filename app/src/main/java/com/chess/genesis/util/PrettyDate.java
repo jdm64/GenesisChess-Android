@@ -163,7 +163,7 @@ public class PrettyDate extends Date
 		}
 		// weeks
 		if (diff >= 604800000) {
-			buff.append(diff / 604800000).append("wk ");
+			buff.append(diff / 604800000).append("w ");
 			diff %= 604800000;
 			count++;
 
@@ -172,7 +172,7 @@ public class PrettyDate extends Date
 		}
 		// days
 		if (diff >= 86400000) {
-			buff.append(diff / 86400000).append("day ");
+			buff.append(diff / 86400000).append("d ");
 			diff %= 86400000;
 			count++;
 
@@ -181,7 +181,7 @@ public class PrettyDate extends Date
 		}
 		// hours
 		if (diff >= 3600000) {
-			buff.append(diff / 3600000).append("hr ");
+			buff.append(diff / 3600000).append("h ");
 			diff %= 3600000;
 			count++;
 
@@ -190,7 +190,7 @@ public class PrettyDate extends Date
 		}
 		// minutes
 		if (diff >= 60000) {
-			buff.append(diff / 60000).append("min ");
+			buff.append(diff / 60000).append("m ");
 			diff %= 60000;
 			count++;
 
@@ -199,7 +199,7 @@ public class PrettyDate extends Date
 		}
 		// seconds
 		if (diff >= 1000) {
-			buff.append(diff / 1000).append("sec ");
+			buff.append(diff / 1000).append("s ");
 			count++;
 		}
 
