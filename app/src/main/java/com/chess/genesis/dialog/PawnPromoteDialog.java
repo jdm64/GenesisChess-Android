@@ -17,11 +17,13 @@
 package com.chess.genesis.dialog;
 
 import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
+import java.util.Map.*;
 
 public class PawnPromoteDialog extends DialogFragment implements View.OnClickListener, DialogInterface.OnClickListener
 {
@@ -43,21 +45,16 @@ public class PawnPromoteDialog extends DialogFragment implements View.OnClickLis
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
-		Activity activity = getActivity();
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		LayoutInflater inflater = activity.getLayoutInflater();
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_pawnpromote);
 
-		View view = inflater.inflate(R.layout.dialog_pawnpromote, null);
-
-		builder
+		builder.getValue()
 				.setTitle("Pawn Promotion")
-				.setView(view)
 				.setNegativeButton("Cancel", this);
 
-		PromoteLayout table = view.findViewById(R.id.table);
+		PromoteLayout table = builder.getKey().findViewById(R.id.table);
 		table.init(getActivity(), this, color);
 
-		return builder.create();
+		return builder.getValue().create();
 	}
 
 	@Override

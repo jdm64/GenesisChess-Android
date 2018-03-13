@@ -16,17 +16,16 @@
 
 package com.chess.genesis.dialog;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.*;
 import android.app.Dialog;
 import android.content.*;
 import android.os.*;
 import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
-
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
+import java.util.Map.*;
 
 public class DeleteLocalDialog extends DialogFragment implements DialogInterface.OnClickListener
 {
@@ -34,7 +33,6 @@ public class DeleteLocalDialog extends DialogFragment implements DialogInterface
 
 	private Handler handle;
 	private int gameid;
-	private View view;
 
 	public static DeleteLocalDialog create(Handler handler, int gameid)
 	{
@@ -47,22 +45,17 @@ public class DeleteLocalDialog extends DialogFragment implements DialogInterface
 	@Override
 	public Dialog onCreateDialog(Bundle bundle)
 	{
-		Activity activity = getActivity();
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		LayoutInflater inflater = activity.getLayoutInflater();
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_single_text);
 
-		view = inflater.inflate(R.layout.dialog_single_text, null);
-
-		builder
+		builder.getValue()
 				.setTitle("Delete Game")
-				.setView(view)
 				.setPositiveButton("Delete Game", this)
 				.setNegativeButton("Cancel", this);
 
-		TextView txt = view.findViewById(R.id.text);
+		TextView txt = builder.getKey().findViewById(R.id.text);
 		txt.setText(R.string.delete_local);
 
-		return builder.create();
+		return builder.getValue().create();
 	}
 
 	@Override

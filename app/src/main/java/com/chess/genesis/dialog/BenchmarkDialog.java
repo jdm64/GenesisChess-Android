@@ -17,12 +17,14 @@
 package com.chess.genesis.dialog;
 
 import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
+import java.util.Map.*;
 
 public class BenchmarkDialog extends DialogFragment implements DialogInterface.OnClickListener, Handler.Callback, View.OnClickListener
 {
@@ -53,22 +55,17 @@ public class BenchmarkDialog extends DialogFragment implements DialogInterface.O
 	@Override
 	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
-		Activity activity = getActivity();
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		LayoutInflater inflater = activity.getLayoutInflater();
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_benchmark);
 
-		View view = inflater.inflate(R.layout.dialog_benchmark, null);
-
-		builder
+		builder.getValue()
 			.setTitle("CPU Benchmark")
-			.setView(view)
 			.setPositiveButton("Run", this)
 			.setNegativeButton("Close", this);
 
-		rnps = view.findViewById(R.id.rnps);
-		gnps = view.findViewById(R.id.gnps);
+		rnps = builder.getKey().findViewById(R.id.rnps);
+		gnps = builder.getKey().findViewById(R.id.gnps);
 
-		return builder.create();
+		return builder.getValue().create();
 	}
 
 	@Override

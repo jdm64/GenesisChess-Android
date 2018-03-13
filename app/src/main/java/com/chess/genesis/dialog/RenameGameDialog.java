@@ -16,8 +16,7 @@
 
 package com.chess.genesis.dialog;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.AlertDialog.*;
 import android.app.Dialog;
 import android.content.*;
 import android.os.*;
@@ -27,6 +26,7 @@ import android.widget.*;
 import android.widget.TextView.BufferType;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
+import java.util.Map.*;
 
 public class RenameGameDialog extends DialogFragment implements DialogInterface.OnClickListener
 {
@@ -35,7 +35,6 @@ public class RenameGameDialog extends DialogFragment implements DialogInterface.
 	private Handler handle;
 	private String gamename;
 	private int gameid;
-	private View view;
 	private EditText txtinput;
 
 	public static RenameGameDialog create(Handler handler, int id, String name)
@@ -50,22 +49,17 @@ public class RenameGameDialog extends DialogFragment implements DialogInterface.
 	@Override
 	public Dialog onCreateDialog(Bundle bundle)
 	{
-		Activity activity = getActivity();
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		LayoutInflater inflater = activity.getLayoutInflater();
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_rename_game);
 
-		view = inflater.inflate(R.layout.dialog_rename_game, null);
-
-		builder
+		builder.getValue()
 			.setTitle("Rename Game")
-			.setView(view)
 			.setPositiveButton("Rename", this)
 			.setNegativeButton("Cancel", this);
 
-		txtinput = view.findViewById(R.id.game_name_input);
+		txtinput = builder.getKey().findViewById(R.id.game_name_input);
 		txtinput.setText(gamename, BufferType.EDITABLE);
 
-		return builder.create();
+		return builder.getValue().create();
 	}
 
 	@Override
