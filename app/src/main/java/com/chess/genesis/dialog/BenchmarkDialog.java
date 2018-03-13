@@ -16,6 +16,7 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
@@ -23,55 +24,77 @@ import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
-public class BenchmarkDialog extends BaseDialog implements Handler.Callback
+public class BenchmarkDialog extends DialogFragment implements DialogInterface.OnClickListener, Handler.Callback, View.OnClickListener
 {
 	private TextView rnps;
 	private TextView gnps;
 
+	public static BenchmarkDialog create()
+	{
+		return new BenchmarkDialog();
+	}
+
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
-		final Bundle data = (Bundle) msg.obj;
+		AlertDialog dialog = (AlertDialog) getDialog();
+		if (dialog == null) {
+			return true;
+		}
+		dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
 
+		Bundle data = (Bundle) msg.obj;
 		rnps.setText(data.getLong(Benchmark.REG_NPS) + " moves/sec");
 		gnps.setText(data.getLong(Benchmark.GEN_NPS) + " moves/sec");
 
-		final View button = findViewById(R.id.ok);
-		button.setEnabled(true);
 		return true;
 	}
 
-	public BenchmarkDialog(final Context context)
+	@Override
+	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
-		super(context);
+		Activity activity = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		LayoutInflater inflater = activity.getLayoutInflater();
+
+		View view = inflater.inflate(R.layout.dialog_benchmark, null);
+
+		builder
+			.setTitle("CPU Benchmark")
+			.setView(view)
+			.setPositiveButton("Run", this)
+			.setNegativeButton("Close", this);
+
+		rnps = view.findViewById(R.id.rnps);
+		gnps = view.findViewById(R.id.gnps);
+
+		return builder.create();
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public void onStart()
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("CPU Benchmark");
-		setBodyView(R.layout.dialog_benchmark);
-		setButtonTxt(R.id.ok, "Run");
-		setButtonTxt(R.id.cancel, "Close");
-
-		rnps = findViewById(R.id.rnps);
-		gnps = findViewById(R.id.gnps);
+		super.onStart();
+		AlertDialog dialog = (AlertDialog) getDialog();
+		Button button = dialog.getButton(Dialog.BUTTON_POSITIVE);
+		button.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(View view)
 	{
-		if (v.getId() != R.id.ok) {
-			dismiss();
-			return;
-		}
-		final View button = findViewById(R.id.ok);
-		button.setEnabled(false);
+		AlertDialog dialog = (AlertDialog) getDialog();
+		dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
 
 		rnps.setText("running...");
 		gnps.setText("running...");
 
 		new Thread(new Benchmark(new Handler(this))).start();
+	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which)
+	{
+		dismiss();
 	}
 }

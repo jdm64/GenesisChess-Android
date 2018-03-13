@@ -222,7 +222,7 @@ public class SettingsFrag extends PreferenceFragment implements
 		final String key = preference.getKey();
 
 		if (key.equals("benchmark"))
-			new BenchmarkDialog(context).show();
+			BenchmarkDialog.create().show(getFragmentManager(), "");
 		return true;
 	}
 
