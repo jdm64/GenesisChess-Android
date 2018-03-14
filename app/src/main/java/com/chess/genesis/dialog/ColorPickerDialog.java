@@ -16,48 +16,60 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.graphics.*;
-import android.graphics.Paint.Style;
+import android.graphics.Paint.*;
 import android.os.*;
 import android.util.*;
 import android.view.*;
 import com.chess.genesis.*;
 
-public class ColorPickerDialog extends BaseDialog
+public class ColorPickerDialog extends DialogFragment implements OnClickListener
 {
 	public interface OnColorChangedListener
 	{
 		void onColorChanged(int color);
 	}
 
-	private final OnColorChangedListener callback;
+	private OnColorChangedListener callback;
 	private ColorPicker colorPicker;
-	private final int color;
+	private int color;
 
-	public ColorPickerDialog(final Context context, final OnColorChangedListener listener, final int initColor)
+	public static ColorPickerDialog create(OnColorChangedListener listener, int initColor)
 	{
-		super(context);
-		callback = listener;
-		color = initColor;
+		ColorPickerDialog dialog = new ColorPickerDialog();
+		dialog.callback = listener;
+		dialog.color = initColor;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Pick Color");
-		colorPicker = new ColorPicker(getContext(), null);
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_base);
+
+		builder.getValue()
+			.setTitle("Pick Color")
+			.setPositiveButton("Save", this)
+			.setNegativeButton("Cancel", this);
+
+		colorPicker = new ColorPicker(getActivity(), null);
 		colorPicker.setColor(color);
-		final ViewGroup view = findViewById(R.id.body);
-		view.addView(colorPicker);
+		((ViewGroup) builder.getKey()).addView(colorPicker);
+
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok)
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			callback.onColorChanged(colorPicker.getColor());
+		}
 		dismiss();
 	}
 }

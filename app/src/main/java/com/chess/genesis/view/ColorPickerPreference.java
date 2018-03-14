@@ -16,7 +16,7 @@
 
 package com.chess.genesis.view;
 
-import android.R;
+import android.app.*;
 import android.content.*;
 import android.content.res.*;
 import android.graphics.*;
@@ -61,7 +61,7 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 	public void onBindView(final View view)
 	{
 		super.onBindView(view);
-		container = view.findViewById(R.id.widget_frame);
+		container = view.findViewById(android.R.id.widget_frame);
 		container.addView(new ImageView(getContext()));
 		container.setVisibility(View.VISIBLE);
 		setColor(currColor);
@@ -82,7 +82,7 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 	@Override
 	public boolean onPreferenceClick(final Preference pref)
 	{
-		new ColorPickerDialog(getContext(), this, currColor).show();
+		ColorPickerDialog.create(this, currColor).show(((Activity)getContext()).getFragmentManager(), "");
 		return false;
 	}
 
