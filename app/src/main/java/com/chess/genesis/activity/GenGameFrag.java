@@ -51,6 +51,6 @@ public class GenGameFrag extends GameFrag
 		super.onActivityCreated(savedInstanceState);
 
 		if (Pref.getBool(act, R.array.pf_showGenesisRules))
-			new GenesisRulesDialog(act).show();
+			GenesisRulesDialog.create().show(getFragmentManager(), "");
 	}
 }

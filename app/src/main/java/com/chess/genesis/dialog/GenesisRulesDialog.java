@@ -16,45 +16,51 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.net.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class GenesisRulesDialog extends BaseDialog
+public class GenesisRulesDialog extends DialogFragment implements OnClickListener
 {
-	public GenesisRulesDialog(final Context context)
+	public static GenesisRulesDialog create()
 	{
-		super(context);
+		return new GenesisRulesDialog();
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Genesis Chess Rules!");
-		setBodyView(R.layout.dialog_genesis_rules);
-		setButtonTxt(R.id.cancel, "Close");
-		setButtonTxt(R.id.ok, "Full Rules");
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_genesis_rules);
+
+		builder.getValue()
+			.setTitle("Genesis Chess Rules!")
+			.setPositiveButton("Full Rules", this)
+			.setNegativeButton("Close", this);
+
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok) {
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			final Uri uri = Uri.parse("http://genesischess.com");
-			v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			getActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 		} else {
-			final CheckBox agree = findViewById(R.id.agree);
-			final PrefEdit pref = new PrefEdit(getContext());
-
+			CheckBox agree = getDialog().findViewById(R.id.agree);
+			PrefEdit pref = new PrefEdit(getActivity());
 			pref.putBool(R.array.pf_showGenesisRules, !agree.isChecked());
 			pref.commit();
-
-			dismiss();
 		}
+		dismiss();
 	}
 }
