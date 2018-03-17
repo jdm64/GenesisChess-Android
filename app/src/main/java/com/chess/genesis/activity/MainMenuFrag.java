@@ -19,10 +19,10 @@ package com.chess.genesis.activity;
 import android.content.*;
 import android.net.*;
 import android.os.*;
+import android.support.v4.app.*;
 import android.util.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnTouchListener;
+import android.view.View.*;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -31,10 +31,8 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, OnGlobalLayoutListener, Handler.Callback
+public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener, OnGlobalLayoutListener, Handler.Callback
 {
-	private final static String TAG = "MAINMENU";
-
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
@@ -56,16 +54,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	}
 
 	@Override
-	public String getBTag()
-	{
-		return TAG;
-	}
-
-	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
-
 		final View view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
 
 		// setup click listeners
@@ -146,9 +136,6 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			break;
 		case R.id.settings:
 			startActivity(new Intent(act, Settings.class));
-			break;
-		case R.id.menu:
-			openMenu(v);
 			break;
 		default:
 			if (isTablet)
@@ -234,11 +221,13 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 	}
 
 	@Override
-	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = getBTag();
-		act.getMenuInflater().inflate(R.menu.options_mainmenu, menu);
+		inflater.inflate(R.menu.options_mainmenu, menu);
+
+		if (!new Pref(act).getBool(R.array.pf_isLoggedIn)) {
+			menu.removeItem(R.id.logout);
+		}
 	}
 
 	@Override
@@ -259,7 +248,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 
 	public void startFragment(final int fragId)
 	{
-		BaseContentFrag frag;
+		Fragment frag;
 
 		fragMan.popBackStack();
 		switch (fragId) {
@@ -278,8 +267,8 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 			return;
 		}
 		fragMan.beginTransaction()
-		.replace(R.id.panel01, frag, frag.getBTag())
-		.addToBackStack(frag.getBTag()).commit();
+		.replace(R.id.panel01, frag, frag.getClass().getName())
+		.addToBackStack(frag.getClass().getName()).commit();
 	}
 
 	private static void resizeButtonText(final View view)
@@ -328,5 +317,7 @@ public class MainMenuFrag extends BaseContentFrag implements OnTouchListener, On
 
 		final MyImageView button = act.findViewById(R.id.login);
 		button.setVisibility(loginVis);
+
+		act.invalidateOptionsMenu();
 	}
 }

@@ -23,11 +23,10 @@ import android.view.View.OnClickListener;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public abstract class BaseContentFrag extends Fragment implements OnClickListener
+public abstract class BaseContentFrag extends BaseFrag implements OnClickListener
 {
 	protected BaseActivity act;
 	protected FragmentManager fragMan;
-	protected MenuBarFrag menuBar;
 	protected int containerId;
 	protected boolean isTablet = false;
 
@@ -73,11 +72,6 @@ public abstract class BaseContentFrag extends Fragment implements OnClickListene
 		// set what layout we're in
 		final View itab = act.findViewById(R.id.panel01);
 		isTablet = itab != null;
-	}
-
-	public void setMenuBarFrag(final MenuBarFrag MenuBar)
-	{
-		menuBar = MenuBar;
 	}
 
 	public void openMenu(final View view)

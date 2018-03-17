@@ -35,7 +35,7 @@ public class MainMenuTablet extends BaseActivity
 
 		final Bundle bundle = getIntent().getExtras();
 		final MenuBarFrag menubar = MenuBarFrag.newInstance(true);
-		final BaseContentFrag frag = (bundle != null && bundle.getInt("loadFrag") == Enums.ONLINE_LIST)?
+		final BaseFrag frag = (bundle != null && bundle.getInt("loadFrag") == Enums.ONLINE_LIST)?
 			new GameListOnlineFrag() : new MainMenuFrag();
 
 		frag.setMenuBarFrag(menubar);
@@ -47,7 +47,7 @@ public class MainMenuTablet extends BaseActivity
 		.replace(R.id.botbar02, new BotBarFrag())
 		.replace(R.id.topbar03, new TopBarFrag())
 		.replace(R.id.botbar03, new BotBarFrag())
-		.replace(R.id.panel01, frag, frag.getBTag())
+		.replace(R.id.panel01, frag, frag.getClass().getName())
 		.commit();
 	}
 
