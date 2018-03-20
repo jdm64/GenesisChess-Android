@@ -22,7 +22,7 @@ import com.chess.genesis.activity.*;
 
 public class FragmentIntent
 {
-	private BaseContentFrag frag;
+	private BaseFrag frag;
 	private String tag;
 	private int layoutId;
 
@@ -30,11 +30,11 @@ public class FragmentIntent
 	{
 	}
 
-	public void setFrag(final int LayoutId, final BaseContentFrag fragment)
+	public void setFrag(int LayoutId, BaseFrag fragment)
 	{
 		layoutId = LayoutId;
 		frag = fragment;
-		tag = fragment.getBTag();
+		tag = frag.getClass().getName();
 	}
 
 	public void loadFrag(final FragmentManager fragMan)

@@ -45,7 +45,7 @@ public class GameListPage extends Fragment
 	{
 		final FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.gamelist_listview, container, false);
 		final ListView listview = (ListView) layout.getChildAt(0);
-		final GameListOnlineFrag parent = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.TAG);
+		final GameListOnlineFrag parent = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.class.getName());
 
 		listview.setOnItemClickListener(parent);
 		registerForContextMenu(listview);
@@ -87,7 +87,7 @@ public class GameListPage extends Fragment
 
 		final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		final Bundle bundle = (Bundle) list.getItem((int) info.id);
-		final GameListOnlineFrag frag = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.TAG);
+		final GameListOnlineFrag frag = (GameListOnlineFrag) getFragmentManager().findFragmentByTag(GameListOnlineFrag.class.getName());
 		final Handler handle = new Handler(frag);
 		final FragmentActivity act = getActivity();
 

@@ -57,7 +57,7 @@ public class MainMenuTablet extends BaseActivity
 		// BUG: requestCode is wrong
 	//	if (requestCode == Enums.IMPORT_GAME) {
 			final FragmentManager fragMan = getSupportFragmentManager();
-			final GameListLocalFrag frag = (GameListLocalFrag) fragMan.findFragmentByTag(GameListLocalFrag.TAG);
+			final GameListLocalFrag frag = (GameListLocalFrag) fragMan.findFragmentByTag(GameListLocalFrag.class.getName());
 
 			frag.recieveGame(data);
 	//	}

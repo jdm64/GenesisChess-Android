@@ -17,44 +17,13 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
-import android.view.*;
-import android.view.View.OnClickListener;
-import com.chess.genesis.*;
-import com.chess.genesis.dialog.*;
+import android.support.v4.app.*;
 
-public class GameListOnline extends BasePhoneActivity implements OnClickListener
+public class GameListOnline extends AbstractPhoneActivity
 {
 	@Override
-	protected BaseContentFrag createFrag(Bundle bundle)
+	protected Fragment createFrag(Bundle bundle)
 	{
 		return new GameListOnlineFrag();
-	}
-
-	@Override
-	protected int getLayoutId(Bundle bundle)
-	{
-		return R.layout.activity_gamelist;
-	}
-
-	@Override
-	protected void postCreate()
-	{
-		// set click listeners
-		final View button = findViewById(R.id.topbar_plus);
-		button.setOnClickListener(this);
-	}
-
-	@Override
-	public void onClick(final View v)
-	{
-		if (v.getId() == R.id.topbar_plus)
-			new NewOnlineGameDialog(v.getContext(), ((GameListOnlineFrag) mainFrag).handle).show();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.options_gamelist_online, menu);
-		return true;
 	}
 }

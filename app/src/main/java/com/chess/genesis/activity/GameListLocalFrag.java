@@ -30,10 +30,8 @@ import com.chess.genesis.util.*;
 import java.io.*;
 import org.json.*;
 
-public class GameListLocalFrag extends GameListFrag implements OnItemClickListener, Handler.Callback
+public class GameListLocalFrag extends GameListFrag implements OnItemClickListener
 {
-	public final static String TAG = "GAMELISTLOCAL";
-
 	private final Handler handle = new Handler(this);
 	private GameListAdapter gamelist_adapter;
 
@@ -65,16 +63,8 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 	}
 
 	@Override
-	public String getBTag()
-	{
-		return TAG;
-	}
-
-	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
-
 		final View view = inflater.inflate(R.layout.fragment_gamelist_local, null);
 
 		final ListView gamelist_view = view.findViewById(R.id.game_list);
@@ -102,34 +92,20 @@ public class GameListLocalFrag extends GameListFrag implements OnItemClickListen
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		if (v.getId() == R.id.topbar_plus)
-			NewLocalGameDialog.create(handle).show(getFragmentManager(), "");
-		else if (v.getId() == R.id.menu)
-			openMenu(v);
+		inflater.inflate(R.menu.options_gamelist_local, menu);
 	}
 
 	@Override
 	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
 	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = getBTag();
-		act.getMenuInflater().inflate(v.getId() == R.id.menu? R.menu.options_gamelist_local : R.menu.context_gamelist_local, menu);
+		act.getMenuInflater().inflate(R.menu.context_gamelist_local, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(final MenuItem item)
 	{
-		if (!act.lastContextMenu.equals(getBTag()))
-			return super.onContextItemSelected(item);
-
-		switch (item.getItemId()) {
-		case R.id.new_game:
-		case R.id.import_game:
-			return onOptionsItemSelected(item);
-		}
-
 		final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		final Bundle bundle = (Bundle) gamelist_adapter.getItem((int) info.id);
 

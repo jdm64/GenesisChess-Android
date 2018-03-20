@@ -28,7 +28,7 @@ import com.chess.genesis.util.*;
 import java.io.*;
 import org.json.*;
 
-abstract class GameListFrag extends BaseContentFrag
+abstract class GameListFrag extends AbstractActivityFrag
 {
 	abstract public void updateGameList();
 

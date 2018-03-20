@@ -31,7 +31,7 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener, OnGlobalLayoutListener, Handler.Callback
+public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener, OnGlobalLayoutListener
 {
 	@Override
 	public boolean handleMessage(final Message msg)

@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 	<item
 	android:id="@+id/new_game"
+	app:showAsAction="ifRoom"
+	android:icon="@android:drawable/ic_menu_add"
 	android:title="New Game"/>
 	<item
 	android:id="@+id/resync"
+	android:icon="@android:drawable/stat_notify_sync"
 	android:title="Update"/>
 	<item
 	android:id="@+id/readall_msgs"
+	android:icon="@android:drawable/ic_menu_view"
 	android:title="Read All Messages"/>
 </menu>

@@ -21,7 +21,6 @@ import android.os.*;
 import android.support.v4.app.*;
 import android.support.v4.view.*;
 import android.view.*;
-import android.view.ContextMenu.*;
 import android.view.View.*;
 import android.widget.AdapterView.*;
 import android.widget.*;
@@ -33,10 +32,8 @@ import com.chess.genesis.net.*;
 
 import org.json.*;
 
-public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, Handler.Callback
+public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, OnClickListener
 {
-	public final static String TAG = "GAMELISTONLINE";
-
 	public final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -154,12 +151,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	}
 
 	@Override
-	public String getBTag()
-	{
-		return TAG;
-	}
-
-	@Override
 	public void onCreate(final Bundle data)
 	{
 		super.onCreate(data);
@@ -170,8 +161,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
-
 		final View view = inflater.inflate(R.layout.fragment_gamelist_online, container, false);
 
 	try {
@@ -195,7 +184,6 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 
 		return view;
 	}
-
 
 	@Override
 	public void onResume()
@@ -233,30 +221,12 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 	{
 		if (v.getId() == R.id.game_search)
 			new GamePoolDialog(v.getContext()).show();
-		else if (v.getId() == R.id.menu)
-			openMenu(v);
 	}
 
 	@Override
-	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-
-		if (v.getId() == R.id.menu)
-			act.getMenuInflater().inflate(R.menu.options_gamelist_online, menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(final MenuItem item)
-	{
-		switch (item.getItemId()) {
-		case R.id.new_game:
-		case R.id.resync:
-		case R.id.readall_msgs:
-			return onOptionsItemSelected(item);
-		default:
-			return super.onContextItemSelected(item);
-		}
+		inflater.inflate(R.menu.options_gamelist_online, menu);
 	}
 
 	@Override
