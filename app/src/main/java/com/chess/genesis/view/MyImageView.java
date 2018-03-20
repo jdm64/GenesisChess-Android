@@ -22,12 +22,13 @@ import android.graphics.*;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.drawable.*;
 import android.os.*;
+import android.support.v7.widget.*;
 import android.util.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import java.lang.ref.*;
 
-public class MyImageView extends ImageView
+public class MyImageView extends AppCompatImageView
 {
 	private int resId;
 

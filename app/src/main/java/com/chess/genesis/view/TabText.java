@@ -18,15 +18,15 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
+import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.*;
 
 import com.chess.genesis.data.*;
 
-public class TabText extends TextView implements OnClickListener, OnTouchListener
+public class TabText extends AppCompatTextView implements OnClickListener, OnTouchListener
 {
 	private final static int highlightColor = MColors.BLUE_LIGHT_500;
 	private final static int touchColor = MColors.BLUE_LIGHT_500_TR;
