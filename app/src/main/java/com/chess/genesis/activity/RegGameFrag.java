@@ -27,9 +27,6 @@ public class RegGameFrag extends GameFrag
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		// must be called before new GameState
-		initBaseContentFrag(container);
-
 		// restore settings
 		final Bundle settings;
 		if (savedInstanceState != null)

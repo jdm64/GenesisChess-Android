@@ -18,8 +18,10 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
+import android.os.Handler.*;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.*;
 import android.widget.*;
 
 import com.chess.genesis.*;
@@ -29,10 +31,8 @@ import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
-public abstract class GameFrag extends BaseContentFrag implements Handler.Callback, ISqLocator, IGameFrag
+public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener
 {
-	protected final static String TAG = "GAME";
-
 	protected DrawerLayout2 boardDrawer;
 	protected CapturedLayout captured_count;
 	protected GameState gamestate;
@@ -53,12 +53,6 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 			break;
 		}
 		return true;
-	}
-
-	@Override
-	public String getBTag()
-	{
-		return TAG;
 	}
 
 	@Override
@@ -87,7 +81,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
 			R.id.forwards, R.id.current};
 		for (final int element : list) {
-			final View button = act.findViewById(element);
+			final View button = view.findViewById(element);
 			button.setOnClickListener(this);
 		}
 
@@ -141,25 +135,10 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	public void onClick(final View v)
 	{
 		final Bundle settings = getArguments();
-		Intent intent;
 
 		switch (v.getId()) {
 		case R.id.place_piece:
 			boardDrawer.toggle(Gravity.LEFT);
-			break;
-		case R.id.chat:
-			if (isTablet) {
-				final MsgBoxFrag frag = new MsgBoxFrag();
-				frag.setArguments(settings);
-
-				fragMan.beginTransaction()
-				.replace(R.id.panel03, frag, frag.getBTag())
-				.addToBackStack(frag.getBTag()).commit();
-			} else {
-				intent = new Intent(act, MsgBox.class);
-				intent.putExtra("gameid", settings.getString("gameid"));
-				startActivity(intent);
-			}
 			break;
 		case R.id.backwards:
 			gamestate.backMove();
@@ -176,27 +155,21 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		case R.id.black_name:
 			showUserStats(settings.getString("black"));
 			break;
-		case R.id.menu:
-			openMenu(v);
-			break;
 		}
 	}
 
 	@Override
-	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = getBTag();
-
 		switch (type) {
 		case Enums.LOCAL_GAME:
-			act.getMenuInflater().inflate(R.menu.options_game_local, menu);
+			inflater.inflate(R.menu.options_game_local, menu);
 			break;
 		case Enums.ONLINE_GAME:
-			act.getMenuInflater().inflate(R.menu.options_game_online, menu);
+			inflater.inflate(R.menu.options_game_online, menu);
 			break;
 		case Enums.ARCHIVE_GAME:
-			act.getMenuInflater().inflate(R.menu.options_game_archive, menu);
+			inflater.inflate(R.menu.options_game_archive, menu);
 			break;
 		}
 	}
@@ -223,11 +196,25 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 		case R.id.cpu_time:
 			gamestate.setCpuTime();
 			break;
-		case R.id.local_details:
-			new GameDetailsDialog(act, gamestate.getBundle(), false).show();
+		case R.id.game_details:
+			new GameDetailsDialog(act, gamestate.getBundle(), type != Enums.LOCAL_GAME).show();
 			break;
-		case R.id.online_details:
-			new GameDetailsDialog(act, gamestate.getBundle(), true).show();
+		case R.id.chat:
+			Bundle settings = getArguments();
+			Intent intent;
+
+			if (isTablet) {
+				final MsgBoxFrag frag = new MsgBoxFrag();
+				frag.setArguments(settings);
+
+				fragMan.beginTransaction()
+				    .replace(R.id.panel03, frag, frag.getBTag())
+				    .addToBackStack(frag.getBTag()).commit();
+			} else {
+				intent = new Intent(act, MsgBox.class);
+				intent.putExtra("gameid", settings.getString("gameid"));
+				startActivity(intent);
+			}
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -239,7 +226,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 	{
 		if (isTablet) {
 			// Pop all non-game frags
-			fragMan.popBackStack(GameFrag.TAG, 0);
+			fragMan.popBackStack(GameFrag.class.getName(), 0);
 
 			final UserStatsFrag frag = new UserStatsFrag();
 			final MenuBarFrag menubar = new MenuBarFrag();
@@ -250,7 +237,7 @@ public abstract class GameFrag extends BaseContentFrag implements Handler.Callba
 			frag.setMenuBarFrag(menubar);
 
 			fragMan.beginTransaction()
-			.replace(R.id.topbar03, menubar, getBTag())
+			.replace(R.id.topbar03, menubar, menubar.getClass().getName())
 			.replace(R.id.panel03, frag, frag.getBTag())
 			.addToBackStack(frag.getBTag()).commit();
 		} else {

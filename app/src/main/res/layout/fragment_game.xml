@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:panel="http://schemas.android.com/apk/res-auto"
-android:orientation="vertical">
-	<com.chess.genesis.view.ManualPanel
-	android:id="@+id/board_names"
-	panel:sizes="1/2"
-	android:background="@color/grey_900">
-		<com.chess.genesis.view.TabText
-		android:id="@+id/white_name"
-		android:gravity="center"
-		android:padding="6dp"
-		android:textSize="14sp"/>
-		<com.chess.genesis.view.TabText
-		android:id="@+id/black_name"
-		android:gravity="center"
-		android:padding="6dp"
-		android:textSize="14sp"/>
-	</com.chess.genesis.view.ManualPanel>
-	<com.chess.genesis.view.DrawerLayout2
-	android:id="@+id/board_drawer">
-		<com.chess.genesis.view.BoardView
-		android:id="@+id/board_layout"/>
-		<com.chess.genesis.view.PlaceLayout
-		android:layout_gravity="left"
-		android:clickable="true"
-		android:id="@+id/place_layout"/>
-	</com.chess.genesis.view.DrawerLayout2>
-	<com.chess.genesis.view.CapturedLayout
-	android:id="@+id/captured_count"
-	panel:height_policy="exact_child"
-	panel:sizes="1/11"/>
-</LinearLayout>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:panel="http://schemas.android.com/apk/res-auto"
+		android:orientation="vertical">
+		<com.chess.genesis.view.ManualPanel
+			android:id="@+id/board_names"
+			panel:sizes="1/2"
+			android:background="@color/grey_900">
+			<com.chess.genesis.view.TabText
+				android:id="@+id/white_name"
+				android:gravity="center"
+				android:padding="6dp"
+				android:textSize="14sp"/>
+			<com.chess.genesis.view.TabText
+				android:id="@+id/black_name"
+				android:gravity="center"
+				android:padding="6dp"
+				android:textSize="14sp"/>
+		</com.chess.genesis.view.ManualPanel>
+		<com.chess.genesis.view.DrawerLayout2
+			android:id="@+id/board_drawer">
+			<com.chess.genesis.view.BoardView
+				android:id="@+id/board_layout"/>
+			<com.chess.genesis.view.PlaceLayout
+				android:layout_gravity="left"
+				android:clickable="true"
+				android:id="@+id/place_layout"/>
+		</com.chess.genesis.view.DrawerLayout2>
+		<com.chess.genesis.view.CapturedLayout
+			android:id="@+id/captured_count"
+			panel:height_policy="exact_child"
+			panel:sizes="1/11"/>
+	</LinearLayout>
+	<include
+		android:id="@+id/board_nav"
+		layout="@layout/include_board_nav"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:layout_alignParentBottom="true"/>
+</RelativeLayout>

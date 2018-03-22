@@ -52,12 +52,12 @@ abstract class GameListFrag extends AbstractActivityFrag
 			gameFrag.setMenuBarFrag(gameMenu);
 
 			// Pop game if already loaded
-			fragMan.popBackStack(gameFrag.getBTag(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			fragMan.popBackStack(gameFrag.getClass().getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
 			FragmentTransaction ftrans = fragMan.beginTransaction()
 			.replace(R.id.topbar02, gameMenu, gameMenu.getBTag())
 			.replace(R.id.botbar02, gameNav, gameNav.getBTag())
-			.replace(R.id.panel02, gameFrag, gameFrag.getBTag());
+			.replace(R.id.panel02, gameFrag, gameFrag.getClass().getName());
 
 			// setup chat window
 			if (isOnline) {
@@ -69,7 +69,7 @@ abstract class GameListFrag extends AbstractActivityFrag
 				ftrans = ftrans.replace(R.id.topbar03, msgMenu, msgMenu.getBTag())
 				.replace(R.id.panel03, msgFrag, msgFrag.getBTag());
 			}
-			ftrans.addToBackStack(gameFrag.getBTag()).commit();
+			ftrans.addToBackStack(gameFrag.getClass().getName()).commit();
 		} else {
 			final Intent intent = new Intent(act, Game.class);
 			intent.putExtras(gamedata);

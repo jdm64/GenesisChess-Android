@@ -16,90 +16,16 @@
 
 package com.chess.genesis.activity;
 
-import android.content.*;
 import android.os.*;
-import android.view.*;
-import android.view.View.OnClickListener;
-import android.widget.*;
-import com.chess.genesis.*;
+import android.support.v4.app.*;
 import com.chess.genesis.data.*;
 
-public class Game extends BasePhoneActivity implements OnClickListener
+public class Game extends AbstractPhoneActivity
 {
-	private int type;
-
 	@Override
-	protected BaseContentFrag createFrag(Bundle settings)
+	protected Fragment createFrag(Bundle settings)
 	{
 		final int gametype = Integer.parseInt(settings.getString("gametype"));
 		return (gametype == Enums.GENESIS_CHESS)? new GenGameFrag() : new RegGameFrag();
-	}
-
-	@Override
-	protected int getLayoutId(Bundle settings)
-	{
-		type = settings.getInt("type");
-		return (type != Enums.LOCAL_GAME)? R.layout.activity_game_online : R.layout.activity_game_local;
-	}
-
-	@Override
-	public void postCreate()
-	{
-		// set click listeners
-		if (type != Enums.LOCAL_GAME) {
-			final View button = findViewById(R.id.chat);
-			button.setOnClickListener(this);
-		}
-	}
-
-	@Override
-	public void onSaveInstanceState(final Bundle savedInstanceState)
-	{
-		savedInstanceState.putAll(settings);
-		super.onSaveInstanceState(savedInstanceState);
-	}
-
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-
-		if (type != Enums.LOCAL_GAME) {
-			final GameDataDB db = new GameDataDB(this);
-			final int count = db.getUnreadMsgCount(settings.getString("gameid"));
-			final int img = (count > 0)? R.drawable.newmsg : R.drawable.chat;
-
-			db.close();
-
-			final ImageView v = findViewById(R.id.chat);
-			v.setImageResource(img);
-		}
-	}
-
-	@Override
-	public void onClick(final View v)
-	{
-		if (v.getId() == R.id.chat) {
-			final Intent intent = new Intent(this, MsgBox.class);
-			intent.putExtra("gameid", mainFrag.getArguments().getString("gameid"));
-			startActivity(intent);
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu)
-	{
-		switch (((GameFrag) mainFrag).type) {
-		case Enums.LOCAL_GAME:
-			getMenuInflater().inflate(R.menu.options_game_local, menu);
-			break;
-		case Enums.ONLINE_GAME:
-			getMenuInflater().inflate(R.menu.options_game_online, menu);
-			break;
-		case Enums.ARCHIVE_GAME:
-			getMenuInflater().inflate(R.menu.options_game_archive, menu);
-			break;
-		}
-		return true;
 	}
 }
