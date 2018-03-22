@@ -19,33 +19,20 @@ package com.chess.genesis.activity;
 import android.app.*;
 import android.content.pm.*;
 import android.os.*;
-import android.view.*;
 import com.chess.genesis.R;
 
-public class Settings extends Activity implements View.OnLongClickListener
+public class Settings extends Activity
 {
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		setContentView(R.layout.activity_basephone);
-
-		final View image = findViewById(R.id.topbar_genesis);
-		image.setOnLongClickListener(this);
+		setContentView(R.layout.activity_settings);
 
 		getFragmentManager().beginTransaction()
 			.replace(R.id.fragment01, new SettingsFrag())
 			.commit();
-	}
-
-	@Override
-	public boolean onLongClick(final View v)
-	{
-		if (v.getId() == R.id.topbar_genesis) {
-			finish();
-			return true;
-		}
-		return false;
 	}
 }
