@@ -241,19 +241,19 @@ class GameListItem extends View
 
 		int size = adapter.getPiecePainter().getSize();
 		// game name
-		paint.setTextSize(size / 2 - 4);
-		canvas.drawText(data.name, size + 8, size / 2, paint);
+		paint.setTextSize(size * 5 / 12);
+		canvas.drawText(data.name, size * 9 / 8, size / 2, paint);
 
 		// set italic text
 		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
 
 		// game type
-		paint.setTextSize((int) (0.30 * size));
-		canvas.drawText(data.type, size + 8, 7 * size / 8, paint);
+		paint.setTextSize(size / 4);
+		canvas.drawText(data.type, size * 9 / 8, size * 7 / 8, paint);
 
 		// time
 		paint.setTextAlign(Paint.Align.RIGHT);
-		canvas.drawText(data.time, getWidth() - 8, 7 * size / 8, paint);
+		canvas.drawText(data.time, getWidth() - (size / 8), size * 7 / 8, paint);
 
 		if (data.gametype != Enums.LOCAL_GAME)
 			setOnlineTxt(canvas);
