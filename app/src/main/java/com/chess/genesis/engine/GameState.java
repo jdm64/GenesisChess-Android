@@ -17,9 +17,9 @@
 
 package com.chess.genesis.engine;
 
-import android.app.*;
 import android.content.*;
 import android.os.*;
+import android.support.v4.app.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
@@ -32,7 +32,7 @@ public abstract class GameState implements Handler.Callback
 	public static final int PLACEOFFSET = 1000;
 
 	protected final IGameFrag gamefrag;
-	protected final Activity activity;
+	protected final FragmentActivity activity;
 	protected final Bundle settings;
 	protected final ProgressMsg progress;
 	protected final ObjectArray<Move> history;
@@ -227,7 +227,7 @@ public abstract class GameState implements Handler.Callback
 	}
 	}
 
-	public GameState(final Activity act, final IGameFrag gameFrag, final Board _board)
+	public GameState(FragmentActivity act, IGameFrag gameFrag, Board _board)
 	{
 		gamefrag = gameFrag;
 		activity = act;
@@ -371,7 +371,7 @@ public abstract class GameState implements Handler.Callback
 
 	public void setCpuTime()
 	{
-		new CpuTimeDialog(activity, handle, cpu.getTime()).show();
+		CpuTimeDialog.create(handle, cpu.getTime()).show(activity.getSupportFragmentManager(), "");
 	}
 
 	protected boolean runCPU()

@@ -16,47 +16,57 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 
 import com.chess.genesis.*;
 
-public class CpuTimeDialog extends BaseDialog
+public class CpuTimeDialog extends DialogFragment implements OnClickListener
 {
 	public final static int MSG = 110;
 
-	private final Handler handle;
-	private final int time;
+	private Handler handle;
+	private int time;
 
-	public CpuTimeDialog(final Context context, final Handler handler, final int Time)
+	public static CpuTimeDialog create(Handler handler, int Time)
 	{
-		super(context);
-
-		handle = handler;
-		time = Time;
+		CpuTimeDialog dialog = new CpuTimeDialog();
+		dialog.handle = handler;
+		dialog.time = Time;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Set CPU Time Limit");
-		setBodyView(R.layout.dialog_cputime);
-		setButtonTxt(R.id.ok, "Set Time");
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_cputime);
 
-		final NumberPicker number = findViewById(R.id.time);
+		builder.getValue()
+		    .setTitle("Set CPU Time Limit")
+		    .setPositiveButton("Set Time", this)
+		    .setNegativeButton("Cancel", this);
+
+		NumberPicker number = builder.getKey().findViewById(R.id.time);
 		number.setMinValue(1);
 		number.setMaxValue(30);
+		number.setValue(time);
+
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok) {
-			final NumberPicker number = findViewById(R.id.time);
-			final Integer value = number.getValue();
+		if (DialogInterface.BUTTON_POSITIVE == which) {
+			NumberPicker number = getDialog().findViewById(R.id.time);
+			Integer value = number.getValue();
 			handle.sendMessage(handle.obtainMessage(MSG, value));
 		}
 		dismiss();
