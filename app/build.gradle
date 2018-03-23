@@ -27,8 +27,13 @@ android {
     }
 }
 
+def supportVer = '27.1.0'
+
 dependencies {
-    compile 'com.android.support:support-v4:27.1.0'
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.google.android.gms:play-services-ads:+'
+    compile "com.android.support:appcompat-v7:${supportVer}"
+    compile "com.android.support:support-compat:${supportVer}"
+    compile "com.android.support:support-core-ui:${supportVer}"
+    compile "com.android.support:support-core-utils:${supportVer}"
+    compile "com.android.support:support-fragment:${supportVer}"
+    compile "com.google.android.gms:play-services-ads-lite:12.0.0"
 }
