@@ -20,7 +20,6 @@ import android.content.*;
 import android.os.*;
 import android.os.Handler.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.*;
 import android.widget.*;
 
@@ -197,7 +196,7 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 			gamestate.setCpuTime();
 			break;
 		case R.id.game_details:
-			new GameDetailsDialog(act, gamestate.getBundle(), type != Enums.LOCAL_GAME).show();
+			GameDetailsDialog.create(gamestate.getBundle(), type != Enums.LOCAL_GAME).show(getFragmentManager(), "");
 			break;
 		case R.id.chat:
 			Bundle settings = getArguments();

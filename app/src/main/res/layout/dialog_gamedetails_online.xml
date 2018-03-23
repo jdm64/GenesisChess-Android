@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
 xmlns:android="http://schemas.android.com/apk/res/android"
+android:padding="16dp"
 android:layout_height="225dp">
 <LinearLayout
 android:orientation="vertical">
@@ -83,6 +84,7 @@ android:orientation="vertical">
 	android:textColor="#000000"/>
 	<TextView
 	android:id="@+id/zfen"
+	android:typeface="monospace"
 	android:textColor="#000000"/>
 	<TextView
 	android:textStyle="bold"
@@ -90,6 +92,7 @@ android:orientation="vertical">
 	android:textColor="#000000"/>
 	<TextView
 	android:id="@+id/history"
+	android:typeface="monospace"
 	android:textColor="#000000"/>
 </LinearLayout>
 </ScrollView>

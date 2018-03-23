@@ -16,8 +16,12 @@
 
 package com.chess.genesis.dialog;
 
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
@@ -25,65 +29,73 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
 
 import java.io.*;
+import java.util.Map.*;
 import org.json.*;
 
-public class GameDetailsDialog extends BaseDialog
+public class GameDetailsDialog extends DialogFragment implements OnClickListener
 {
-	private final Bundle gamedata;
-	private final boolean isOnline;
+	private Bundle gamedata;
+	private boolean isOnline;
 
-	public GameDetailsDialog(final Context context, final Bundle data, final boolean _isOnline)
+	public static GameDetailsDialog create(Bundle data, boolean isOnline)
 	{
-		super(context);
-		gamedata = data;
-		isOnline = _isOnline;
+		GameDetailsDialog dialog = new GameDetailsDialog();
+		dialog.gamedata = data;
+		dialog.isOnline = isOnline;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle(isOnline? "Online Game Details" : "Local Game Details");
-		setBodyView(isOnline? R.layout.dialog_gamedetails_online : R.layout.dialog_gamedetails_local);
-		setButtonTxt(R.id.ok, "Save To File");
-		setButtonTxt(R.id.cancel, "Close");
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this,
+			isOnline? R.layout.dialog_gamedetails_online : R.layout.dialog_gamedetails_local);
+
+		builder.getValue()
+		    .setTitle(isOnline? "Online Game Details" : "Local Game Details")
+		    .setPositiveButton("Save To File", this)
+		    .setNegativeButton("Close", this);
+
+		View view = builder.getKey();
 
 		TextView txt;
 		if (isOnline) {
-			txt = findViewById(R.id.white);
+			txt = view.findViewById(R.id.white);
 			txt.setText(gamedata.getString("white"));
-			txt = findViewById(R.id.black);
+			txt = view.findViewById(R.id.black);
 			txt.setText(gamedata.getString("black"));
-			txt = findViewById(R.id.eventtype);
+			txt = view.findViewById(R.id.eventtype);
 			txt.setText(Enums.EventType(Integer.parseInt(gamedata.getString("eventtype"))));
-			txt = findViewById(R.id.status);
+			txt = view.findViewById(R.id.status);
 			txt.setText(Enums.GameStatus(Integer.parseInt(gamedata.getString("status"))));
 		} else {
-			txt = findViewById(R.id.name);
+			txt = view.findViewById(R.id.name);
 			txt.setText(gamedata.getString("name"));
-			txt = findViewById(R.id.opponent);
+			txt = view.findViewById(R.id.opponent);
 			txt.setText(Enums.OpponentType(Integer.parseInt(gamedata.getString("opponent"))));
 		}
-		txt = findViewById(R.id.gametype);
+		txt = view.findViewById(R.id.gametype);
 		txt.setText(Enums.GameType(Integer.parseInt(gamedata.getString("gametype"))));
-		txt = findViewById(R.id.ctime);
+		txt = view.findViewById(R.id.ctime);
 		txt.setText(new PrettyDate(gamedata.getString("ctime")).agoFormat());
-		txt = findViewById(R.id.stime);
+		txt = view.findViewById(R.id.stime);
 		txt.setText(new PrettyDate(gamedata.getString("stime")).agoFormat());
-		txt = findViewById(R.id.zfen);
+		txt = view.findViewById(R.id.zfen);
 		txt.setText(gamedata.getString("zfen"));
-		txt = findViewById(R.id.history);
+		txt = view.findViewById(R.id.history);
 		txt.setText(gamedata.getString("history"));
 
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok)
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			saveToFile();
-		else
+		} else {
 			dismiss();
+		}
 	}
 
 	private void saveToFile()
