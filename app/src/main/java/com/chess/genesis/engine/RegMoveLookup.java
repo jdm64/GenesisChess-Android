@@ -21,7 +21,7 @@ abstract class RegMoveLookup extends BaseBoard
 {
 	private final int[] list = new int[28];
 
-	public int[] genAll(final int From)
+	int[] genAll(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		int next = 0;
@@ -55,7 +55,7 @@ abstract class RegMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public int[] genCapture(final int From)
+	int[] genCapture(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		int next = 0;
@@ -79,7 +79,7 @@ abstract class RegMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public int[] genMove(final int From)
+	int[] genMove(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		int next = 0;
@@ -105,7 +105,7 @@ abstract class RegMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public boolean fromto(final int From, final int To)
+	boolean fromto(final int From, final int To)
 	{
 		final int type = Math.abs(square[From]);
 
@@ -161,7 +161,7 @@ abstract class RegMoveLookup extends BaseBoard
 		return false;
 	}
 
-	public boolean isAttacked(final int From, final int FromColor)
+	boolean isAttacked(final int From, final int FromColor)
 	{
 		final int[] offset = offsets[Piece.BISHOP];
 		for (int i = 0; offset[i] != 0; i++) {

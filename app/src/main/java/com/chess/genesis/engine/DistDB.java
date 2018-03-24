@@ -61,7 +61,7 @@ class DistDB
 		new DistDB( 0,  Piece.EMPTY), new DistDB( 0,  Piece.EMPTY), new DistDB( 0,  Piece.EMPTY),
 		new DistDB( 0,  Piece.EMPTY), new DistDB( 0,  Piece.EMPTY), new DistDB(17, Piece.BISHOP) };
 
-	public DistDB(final int Step, final int Type)
+	private DistDB(final int Step, final int Type)
 	{
 		step = Step;
 		type = Type;

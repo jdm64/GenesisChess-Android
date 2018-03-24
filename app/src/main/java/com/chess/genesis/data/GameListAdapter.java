@@ -165,7 +165,7 @@ public class GameListAdapter extends BaseAdapter
 		return cell;
 	}
 
-	public View getEmptyView(final Context _context)
+	private View getEmptyView(final Context _context)
 	{
 		final View cell = View.inflate(_context, R.layout.gamelist_cell_empty, null);
 		final TextView txt = cell.findViewById(R.id.message);

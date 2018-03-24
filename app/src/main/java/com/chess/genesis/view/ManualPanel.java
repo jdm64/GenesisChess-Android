@@ -26,9 +26,9 @@ import com.chess.genesis.util.*;
 public class ManualPanel extends ViewGroup
 {
 	// child height policies
-	public final static int EXACT_CHILD = 0; // children are size they want to be
-	public final static int LARGEST_CHILD = 1; // all children set to size of largest child
-	public final static int MATCH_PARENT = 2; // child height matches parent
+	private final static int EXACT_CHILD = 0; // children are size they want to be
+	private final static int LARGEST_CHILD = 1; // all children set to size of largest child
+	private final static int MATCH_PARENT = 2; // child height matches parent
 
 	private int totalDivs;
 	private int[] sizesArr;

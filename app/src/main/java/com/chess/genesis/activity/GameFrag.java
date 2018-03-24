@@ -34,13 +34,13 @@ import com.chess.genesis.view.*;
 
 public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener, OnMenuItemClickListener
 {
-	protected DrawerLayout2 boardDrawer;
-	protected CapturedLayout captured_count;
-	protected GameState gamestate;
-	protected int type;
-	protected boolean viewAsBlack = false;
-	protected GameListFrag gameListFrag;
-	protected BoardView board;
+	private DrawerLayout2 boardDrawer;
+	private CapturedLayout captured_count;
+	GameState gamestate;
+	int type;
+	boolean viewAsBlack = false;
+	private GameListFrag gameListFrag;
+	private BoardView board;
 
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -229,7 +229,7 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 		return true;
 	}
 
-	protected void showUserStats(final String username)
+	private void showUserStats(final String username)
 	{
 		if (isTablet) {
 			// Pop all non-game frags

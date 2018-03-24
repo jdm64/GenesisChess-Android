@@ -26,12 +26,12 @@ abstract class SimpleFrag extends Fragment
 
 	public abstract String getBTag();
 
-	public SimpleFrag(final int layoutId)
+	SimpleFrag(final int layoutId)
 	{
 		layout = layoutId;
 	}
 
-	protected void setLayout(int layoutId)
+	void setLayout(int layoutId)
 	{
 		layout = layoutId;
 	}

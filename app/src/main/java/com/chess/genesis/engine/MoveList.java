@@ -23,7 +23,7 @@ import java.util.*;
 class MoveList implements Iterable<MoveNode>
 {
 	public final MoveNode[] list;
-	public final MoveListIter iter = new MoveListIter(this);
+	private final MoveListIter iter = new MoveListIter(this);
 	public int size;
 
 	public MoveList(final NewInstance<Move> moveType)

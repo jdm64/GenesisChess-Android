@@ -25,10 +25,10 @@ import com.chess.genesis.data.*;
 
 public abstract class BaseContentFrag extends BaseFrag implements OnClickListener
 {
-	protected BaseActivity act;
-	protected FragmentManager fragMan;
-	protected int containerId;
-	protected boolean isTablet = false;
+	BaseActivity act;
+	FragmentManager fragMan;
+	private int containerId;
+	boolean isTablet = false;
 
 	public abstract String getBTag();
 
@@ -64,7 +64,7 @@ public abstract class BaseContentFrag extends BaseFrag implements OnClickListene
 		fragMan = getFragmentManager();
 	}
 
-	protected void initBaseContentFrag(final ViewGroup container)
+	void initBaseContentFrag(final ViewGroup container)
 	{
 		// set the current view id that the fragment lives in
 		containerId = container.getId();
@@ -74,7 +74,7 @@ public abstract class BaseContentFrag extends BaseFrag implements OnClickListene
 		isTablet = itab != null;
 	}
 
-	public void openMenu(final View view)
+	void openMenu(final View view)
 	{
 		registerForContextMenu(view);
 		act.openContextMenu(view);

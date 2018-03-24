@@ -25,7 +25,7 @@ import com.chess.genesis.*;
 
 public abstract class AbstractPhoneActivity extends AppCompatActivity
 {
-	protected Fragment frag;
+	Fragment frag;
 
 	protected abstract Fragment createFrag(Bundle bundle);
 

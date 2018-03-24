@@ -21,7 +21,7 @@ import android.os.*;
 
 public class Benchmark implements Runnable
 {
-	public final static int MSG = 118;
+	private final static int MSG = 118;
 
 	public final static String REG_NPS = "rnps";
 	public final static String GEN_NPS = "gnps";

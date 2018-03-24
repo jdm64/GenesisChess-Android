@@ -20,34 +20,34 @@ package com.chess.genesis.engine;
 import android.os.*;
 import com.chess.genesis.util.*;
 
-public abstract class Engine implements Runnable
+abstract class Engine implements Runnable
 {
-	public static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
-	public static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
-	public static final int CHECKMATE_SCORE = MIN_SCORE;
-	public static final int STALEMATE_SCORE = 0;
+	static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
+	private static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
+	static final int CHECKMATE_SCORE = MIN_SCORE;
+	static final int STALEMATE_SCORE = 0;
 
-	protected final Handler handle;
-	protected final BoolArray tactical;
-	protected final BoolArray ismate;
-	protected final Rand64 rand;
+	private final Handler handle;
+	final BoolArray tactical;
+	final BoolArray ismate;
+	private final Rand64 rand;
 
-	protected final ObjectArray<Move> pvMove;
-	protected final ObjectArray<Move> captureKiller;
-	protected final ObjectArray<Move> moveKiller;
-	protected final ObjectArray<Move> smove;
+	final ObjectArray<Move> pvMove;
+	final ObjectArray<Move> captureKiller;
+	final ObjectArray<Move> moveKiller;
+	final ObjectArray<Move> smove;
 
-	protected final TransTable tt;
-	protected final TransItem ttItem;
-	protected final MoveListPool pool;
-	protected MoveList curr;
-	protected Board board;
+	final TransTable tt;
+	final TransItem ttItem;
+	final MoveListPool pool;
+	MoveList curr;
+	Board board;
 
-	protected int secT;
-	protected long endT;
-	protected boolean active;
+	private int secT;
+	long endT;
+	private boolean active;
 
-	public Engine(final Handler handler, final Board boardType)
+	Engine(final Handler handler, final Board boardType)
 	{
 		secT = 4;
 		active = false;
@@ -74,7 +74,7 @@ public abstract class Engine implements Runnable
 	protected abstract int getMsgId();
 	protected abstract void search(int minScore, int maxScore, int i, int depth);
 
-	protected void pickRandomMove()
+	private void pickRandomMove()
 	{
 		final int score = curr.list[0].score;
 		int end = curr.size;
@@ -89,7 +89,7 @@ public abstract class Engine implements Runnable
 		pvMove.get(0).set(curr.list[ind].move);
 	}
 
-	protected void pruneWeakMoves()
+	void pruneWeakMoves()
 	{
 		if (curr.list[0].score == curr.list[curr.size - 1].score)
 			return;

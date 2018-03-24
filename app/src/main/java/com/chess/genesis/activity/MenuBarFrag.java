@@ -40,7 +40,7 @@ public class MenuBarFrag extends SimpleFrag implements OnLongClickListener
 		return frag;
 	}
 
-	protected void setHasTitle(boolean _hasTitle)
+	private void setHasTitle(boolean _hasTitle)
 	{
 		hasTitle = _hasTitle;
 		setLayout(hasTitle? R.layout.fragment_menubar_title : R.layout.fragment_menubar);

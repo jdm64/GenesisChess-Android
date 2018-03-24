@@ -54,7 +54,7 @@ public class Pref
 		return PreferenceManager.getDefaultSharedPreferences(cntx);
 	}
 
-	protected Editor edit()
+	Editor edit()
 	{
 		return pref.edit();
 	}
@@ -102,7 +102,7 @@ public class Pref
 		});
 	}
 
-	public KeyDef getStringKeyDef(final int _key)
+	KeyDef getStringKeyDef(final int _key)
 	{
 		return getStringKeyDef(res, _key);
 	}
@@ -118,7 +118,7 @@ public class Pref
 		});
 	}
 
-	public KeyDef getLongKeyDef(final int _key)
+	KeyDef getLongKeyDef(final int _key)
 	{
 		return getLongKeyDef(res, _key);
 	}
@@ -133,12 +133,12 @@ public class Pref
 		});
 	}
 
-	public KeyDef getIntKeyDef(final int _key)
+	KeyDef getIntKeyDef(final int _key)
 	{
 		return getIntKeyDef(res, _key);
 	}
 
-	public static KeyDef getBoolKeyDef(final Resources _res, final int _key)
+	private static KeyDef getBoolKeyDef(final Resources _res, final int _key)
 	{
 		return setKeyDef(_res, _key, new KeyDef() {
 			@Override
@@ -148,7 +148,7 @@ public class Pref
 		});
 	}
 
-	public KeyDef getBoolKeyDef(final int _key)
+	KeyDef getBoolKeyDef(final int _key)
 	{
 		return getBoolKeyDef(res, _key);
 	}

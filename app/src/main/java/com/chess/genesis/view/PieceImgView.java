@@ -22,10 +22,10 @@ import android.view.*;
 
 public abstract class PieceImgView extends View
 {
-	protected final PieceImgPainter painter;
-	protected int type;
+	final PieceImgPainter painter;
+	int type;
 
-	public PieceImgView(final Context context, PieceImgPainter Painter, int Type)
+	PieceImgView(final Context context, PieceImgPainter Painter, int Type)
 	{
 		super(context);
 		painter = Painter;
@@ -44,7 +44,7 @@ public abstract class PieceImgView extends View
 	@Override
 	protected abstract void onDraw(final Canvas canvas);
 
-	public void setPiece(final int Type)
+	void setPiece(final int Type)
 	{
 		type = Type;
 		invalidate();

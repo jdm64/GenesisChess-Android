@@ -23,9 +23,9 @@ import com.chess.genesis.*;
 
 public abstract class AbstractActivityFrag extends BaseFrag implements Callback
 {
-	protected FragmentActivity act;
-	protected FragmentManager fragMan;
-	protected boolean isTablet = false;
+	FragmentActivity act;
+	FragmentManager fragMan;
+	boolean isTablet = false;
 
 	@Override
 	public void onCreate(final Bundle data)

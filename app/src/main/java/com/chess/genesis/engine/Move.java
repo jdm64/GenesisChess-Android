@@ -76,12 +76,12 @@ public abstract class Move implements Parcelable, NewInstance<Move>
 	// only for RegMove
 	public int flags;
 
-	public Move()
+	Move()
 	{
 		index = xindex = from = to = Piece.NULL_MOVE;
 	}
 
-	public Move(final Parcel in)
+	Move(final Parcel in)
 	{
 		index = in.readInt();
 		xindex = in.readInt();

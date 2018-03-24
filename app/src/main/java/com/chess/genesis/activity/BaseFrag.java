@@ -21,7 +21,7 @@ import android.support.v4.app.Fragment;
 // TODO exists only for refactoring
 public class BaseFrag extends Fragment
 {
-	protected MenuBarFrag menuBar;
+	MenuBarFrag menuBar;
 
 	public void setMenuBarFrag(final MenuBarFrag MenuBar)
 	{

@@ -26,18 +26,18 @@ import com.chess.genesis.*;
 
 abstract class BaseDialog extends Dialog implements OnClickListener
 {
-	public final static int CANCEL = 1;
-	public final static int OKCANCEL = 3;
+	final static int CANCEL = 1;
+	private final static int OKCANCEL = 3;
 
 	private final int buttonCount;
 
-	public BaseDialog(final Context context)
+	BaseDialog(final Context context)
 	{
 		super(context);
 		buttonCount = OKCANCEL;
 	}
 
-	public BaseDialog(final Context context, final int ButtonCount)
+	BaseDialog(final Context context, final int ButtonCount)
 	{
 		super(context);
 		buttonCount = ButtonCount;
@@ -60,13 +60,13 @@ abstract class BaseDialog extends Dialog implements OnClickListener
 		button.setOnClickListener(this);
 	}
 
-	public void setBodyView(final int layoutID)
+	void setBodyView(final int layoutID)
 	{
 		final ViewGroup gView = findViewById(R.id.body);
 		getLayoutInflater().inflate(layoutID, gView, true);
 	}
 
-	public void setButtonTxt(final int buttonId, final String txt)
+	void setButtonTxt(final int buttonId, final String txt)
 	{
 		final Button button = findViewById(buttonId);
 

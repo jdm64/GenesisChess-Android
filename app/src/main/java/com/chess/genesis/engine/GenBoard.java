@@ -92,8 +92,8 @@ public class GenBoard extends GenPosition implements Board
 	// for pieceIndex()
 	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
 
-	public static final long[] hashBox = new long[ZBOX_SIZE];
-	public static long startHash;
+	private static final long[] hashBox = new long[ZBOX_SIZE];
+	private static long startHash;
 	private static final Move moveType = new GenMove();
 	private static final MoveListPool pool = new MoveListPool(moveType);
 
@@ -106,7 +106,7 @@ public class GenBoard extends GenPosition implements Board
 		reset();
 	}
 
-	public GenBoard(final GenBoard board)
+	private GenBoard(final GenBoard board)
 	{
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);

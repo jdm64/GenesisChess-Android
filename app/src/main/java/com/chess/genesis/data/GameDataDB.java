@@ -57,7 +57,7 @@ public class GameDataDB implements Closeable
 		return bundle;
 	}
 
-	public String getUsername()
+	private String getUsername()
 	{
 		return Pref.getString(context, R.array.pf_username);
 	}
@@ -214,7 +214,7 @@ public class GameDataDB implements Closeable
 	}
 	}
 
-	public void deleteOnlineGame(final String gameid)
+	private void deleteOnlineGame(final String gameid)
 	{
 		final Object[] data = {gameid};
 		db.execSQL("DELETE FROM archivegames WHERE gameid=?;", data);

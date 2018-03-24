@@ -26,8 +26,8 @@ import com.chess.genesis.engine.*;
 
 public final class PieceImgPainter
 {
-	protected final static int WHITE = 0;
-	protected final static int BLACK = 1;
+	final static int WHITE = 0;
+	final static int BLACK = 1;
 
 	private static int outerLight;
 	private static int outerDark;
@@ -54,7 +54,7 @@ public final class PieceImgPainter
 		initColors(context);
 	}
 
-	public static void initColors(final Context context)
+	private static void initColors(final Context context)
 	{
 		if (colorsSet)
 			return;

@@ -29,7 +29,7 @@ public class SyncClient implements Runnable, Handler.Callback
 	public final static int MSG = 101;
 
 	public final static int FULL_SYNC = 0;
-	public final static int REGULAR_SYNC = 1;
+	private final static int REGULAR_SYNC = 1;
 	public final static int ACTIVE_SYNC = 2;
 	public final static int ARCHIVE_SYNC = 3;
 	public final static int MSG_SYNC = 4;

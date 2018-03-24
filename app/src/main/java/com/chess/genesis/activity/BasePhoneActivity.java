@@ -24,14 +24,14 @@ import com.chess.genesis.*;
 
 abstract class BasePhoneActivity extends BaseActivity implements OnLongClickListener
 {
-	protected BaseContentFrag mainFrag;
-	protected Bundle settings;
+	private BaseContentFrag mainFrag;
+	private Bundle settings;
 
 	protected abstract BaseContentFrag createFrag(Bundle bundle);
 
 	protected abstract int getLayoutId(Bundle bundle);
 
-	protected void postCreate() {}
+	private void postCreate() {}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState)

@@ -26,7 +26,7 @@ import org.json.*;
 
 public class NetworkClient implements Runnable
 {
-	public final static int NONE = 0;
+	private final static int NONE = 0;
 	public final static int LOGIN = 1;
 	public final static int REGISTER = 2;
 	public final static int JOIN_GAME = 3;

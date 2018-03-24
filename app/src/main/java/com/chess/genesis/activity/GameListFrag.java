@@ -39,7 +39,7 @@ abstract class GameListFrag extends AbstractActivityFrag
 		loadGame(data);
 	}
 
-	protected void loadGame(final Bundle gamedata)
+	void loadGame(final Bundle gamedata)
 	{
 		if (isTablet) {
 			final boolean isOnline = gamedata.containsKey("gameid");
@@ -75,7 +75,7 @@ abstract class GameListFrag extends AbstractActivityFrag
 		}
 	}
 
-	protected void sendGame(final Bundle gamedata)
+	void sendGame(final Bundle gamedata)
 	{
 	try {
 		final String gamename =	gamedata.containsKey("gameid")?

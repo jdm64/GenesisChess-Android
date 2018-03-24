@@ -21,7 +21,7 @@ abstract class GenMoveLookup extends BaseBoard
 {
 	private final int[] list = new int[28];
 
-	public int[] genAll(final int From)
+	int[] genAll(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		final int[] offset = offsets[type];
@@ -44,7 +44,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public int[] genCapture(final int From)
+	int[] genCapture(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		final int[] offset = offsets[type];
@@ -66,7 +66,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public int[] genMove(final int From)
+	int[] genMove(final int From)
 	{
 		final int type = Math.abs(square[From]);
 		final int[] offset = offsets[type];
@@ -88,7 +88,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return list;
 	}
 
-	public boolean fromto(final int From, final int To)
+	boolean fromto(final int From, final int To)
 	{
 		if (OFF_BOARD(From | To))
 			return false;
@@ -126,7 +126,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return false;
 	}
 
-	public boolean isAttacked(final int From)
+	boolean isAttacked(final int From)
 	{
 		// BISHOP
 		final int[] offset = offsets[Piece.BISHOP];

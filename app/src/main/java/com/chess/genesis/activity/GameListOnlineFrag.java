@@ -34,7 +34,7 @@ import org.json.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, OnClickListener
 {
-	public final Handler handle = new Handler(this);
+	private final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
 	private ViewPager pager;

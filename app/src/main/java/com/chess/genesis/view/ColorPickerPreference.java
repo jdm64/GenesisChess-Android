@@ -101,7 +101,7 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 			listener.onPreferenceChange(this, color);
 	}
 
-	public void setColor(final int color)
+	private void setColor(final int color)
 	{
 		currColor = color;
 		if (container == null)

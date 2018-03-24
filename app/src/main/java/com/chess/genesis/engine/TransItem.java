@@ -21,13 +21,13 @@ import com.chess.genesis.util.*;
 
 class TransItem
 {
-	public static final int NONE_NODE = 0;
+	private static final int NONE_NODE = 0;
 	public static final int ALL_NODE = 3;
 	public static final int CUT_NODE = 6;
 	public static final int PV_NODE = 7;
 
-	public static final int HAS_SCORE = 2;
-	public static final int HAS_MOVE = 4;
+	private static final int HAS_SCORE = 2;
+	private static final int HAS_MOVE = 4;
 
 	public final Move move;
 	public long hash;

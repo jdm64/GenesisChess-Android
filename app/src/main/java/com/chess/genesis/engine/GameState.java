@@ -31,23 +31,23 @@ public abstract class GameState implements Handler.Callback
 {
 	public static final int PLACEOFFSET = 1000;
 
-	protected final IGameFrag gamefrag;
-	protected final FragmentActivity activity;
-	protected final Bundle settings;
-	protected final ProgressMsg progress;
-	protected final ObjectArray<Move> history;
-	protected final HintList hintList;
-	protected final Board board;
+	final IGameFrag gamefrag;
+	final FragmentActivity activity;
+	final Bundle settings;
+	private final ProgressMsg progress;
+	final ObjectArray<Move> history;
+	final HintList hintList;
+	final Board board;
 
-	protected final Handler handle;
-	protected final NetworkClient net;
-	protected final Engine cpu;
+	final Handler handle;
+	private final NetworkClient net;
+	private final Engine cpu;
 
-	protected final int ycol;
-	protected final int type;
-	protected final int oppType;
+	private final int ycol;
+	private final int type;
+	private final int oppType;
 
-	protected int hindex = -1;
+	int hindex = -1;
 
 	protected abstract void revertMove(final Move move);
 	protected abstract void applyMove(final Move move, final boolean erase, final boolean localmove);
@@ -227,7 +227,7 @@ public abstract class GameState implements Handler.Callback
 	}
 	}
 
-	public GameState(FragmentActivity act, IGameFrag gameFrag, Board _board)
+	GameState(FragmentActivity act, IGameFrag gameFrag, Board _board)
 	{
 		gamefrag = gameFrag;
 		activity = act;
@@ -258,7 +258,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	public void reset()
+	void reset()
 	{
 		hindex = -1;
 		resetPieces();
@@ -266,7 +266,7 @@ public abstract class GameState implements Handler.Callback
 		board.reset();
 	}
 
-	protected void resetPieces()
+	void resetPieces()
 	{
 		for (int i = PLACEOFFSET - 6; i < PLACEOFFSET; i++)
 			gamefrag.getPlaceSq(i).reset();
@@ -310,7 +310,7 @@ public abstract class GameState implements Handler.Callback
 		history.pop();
 	}
 
-	protected int yourColor()
+	int yourColor()
 	{
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -325,7 +325,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	protected void check_endgame()
+	void check_endgame()
 	{
 		switch (type) {
 		case Enums.LOCAL_GAME:
@@ -374,7 +374,7 @@ public abstract class GameState implements Handler.Callback
 		CpuTimeDialog.create(handle, cpu.getTime()).show(activity.getSupportFragmentManager(), "");
 	}
 
-	protected boolean runCPU()
+	private boolean runCPU()
 	{
 		// Start computer player
 		if (oppType == Enums.HUMAN_OPPONENT)
@@ -404,7 +404,7 @@ public abstract class GameState implements Handler.Callback
 		new Thread(net).start();
 	}
 
-	protected boolean boardNotEditable()
+	boolean boardNotEditable()
 	{
 		return type == Enums.ARCHIVE_GAME ||
 			(type == Enums.ONLINE_GAME && hindex + 1 < history.size());
@@ -420,7 +420,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	protected void preApplyMove()
+	void preApplyMove()
 	{
 		hintList.clear();
 		if (hindex >= 0) {
@@ -432,7 +432,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	protected void preRevertMove()
+	void preRevertMove()
 	{
 		hintList.clear();
 		preCommonMove();
@@ -452,12 +452,12 @@ public abstract class GameState implements Handler.Callback
 		setStm();
 	}
 
-	protected void postApplyMove()
+	void postApplyMove()
 	{
 		postCommonMove();
 	}
 
-	protected void postRevertMove()
+	void postRevertMove()
 	{
 		// redo last move highlight
 		if (hindex >= 0) {
@@ -467,7 +467,7 @@ public abstract class GameState implements Handler.Callback
 		postCommonMove();
 	}
 
-	protected void applyRemoteMove(final String hist)
+	private void applyRemoteMove(final String hist)
 	{
 		if (hist == null || hist.length() < 3)
 			return;
@@ -526,7 +526,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	public final void setStm()
+	private void setStm()
 	{
 		String think = "", wstr, bstr;
 		boolean mate = false;
@@ -559,7 +559,7 @@ public abstract class GameState implements Handler.Callback
 		}
 	}
 
-	protected void setBoard(final int[] pieces)
+	void setBoard(final int[] pieces)
 	{
 		for (int i = -6; i < 0; i++) {
 			final IPlaceSq button = gamefrag.getPlaceSq(i + PLACEOFFSET);

@@ -40,7 +40,7 @@ public class GenMove extends Move
 	{
 	}
 
-	public GenMove(final Parcel in)
+	private GenMove(final Parcel in)
 	{
 		super(in);
 	}

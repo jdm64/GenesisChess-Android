@@ -41,7 +41,7 @@ public class RegMove extends Move
 		flags = 0;
 	}
 
-	public RegMove(final Parcel in)
+	private RegMove(final Parcel in)
 	{
 		super(in);
 		flags = in.readInt();

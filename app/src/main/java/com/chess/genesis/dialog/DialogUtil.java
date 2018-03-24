@@ -23,7 +23,7 @@ import android.view.*;
 import java.util.Map.*;
 import java.util.AbstractMap.*;
 
-public class DialogUtil
+class DialogUtil
 {
 	private DialogUtil() {}
 

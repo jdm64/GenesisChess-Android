@@ -32,7 +32,7 @@ public class GenesisNotifier extends Service implements Runnable
 {
 	public final static int DEFAULT_POLL_FREQ = 30;
 
-	public final static int ERROR_NOTE = 1;
+	private final static int ERROR_NOTE = 1;
 	public final static int YOURTURN_NOTE = 2;
 	public final static int NEWMGS_NOTE = 4;
 
@@ -243,7 +243,7 @@ public class GenesisNotifier extends Service implements Runnable
 	}
 	}
 
-	public void CheckServer()
+	private void CheckServer()
 	{
 		error = false;
 		lock = 0;

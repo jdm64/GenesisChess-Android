@@ -21,12 +21,12 @@ import java.util.*;
 
 public class HintList
 {
-	protected final IGameFrag gamefrag;
-	protected final GameState gamestate;
-	protected final Board board;
-	protected final List<Integer> hints;
-	protected int selected;
-	protected SelectType type;
+	private final IGameFrag gamefrag;
+	private final GameState gamestate;
+	private final Board board;
+	private final List<Integer> hints;
+	private int selected;
+	private SelectType type;
 
 	enum SelectType
 	{
@@ -48,7 +48,7 @@ public class HintList
 		return selected;
 	}
 
-	public void clearSelect()
+	private void clearSelect()
 	{
 		if (type == SelectType.NONE)
 			return;
@@ -58,7 +58,7 @@ public class HintList
 		type = SelectType.NONE;
 	}
 
-	public void clearHint()
+	private void clearHint()
 	{
 		for (final Integer i : hints) {
 			final IBoardSq button = gamefrag.getBoardSq(i);
@@ -162,7 +162,7 @@ public class HintList
 		gamefrag.togglePlaceBoard();
 	}
 
-	public void showPieceMoves(final int square)
+	private void showPieceMoves(final int square)
 	{
 		type = SelectType.PIECE_MOVES;
 		selected = square;
@@ -177,7 +177,7 @@ public class HintList
 		board.getMoveListPool().put(moveList);
 	}
 
-	public void showMovesTo(final int square)
+	private void showMovesTo(final int square)
 	{
 		type = SelectType.MOVES_TO;
 		selected = square;

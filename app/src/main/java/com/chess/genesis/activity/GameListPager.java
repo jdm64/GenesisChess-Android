@@ -20,7 +20,7 @@ import android.support.v4.app.*;
 
 import java.lang.ref.*;
 
-public class GameListPager extends FragmentPagerAdapter
+class GameListPager extends FragmentPagerAdapter
 {
 	private final static String[] TITLES = new String[]{"Their Turn", "Your Turn", "Archive Games"};
 

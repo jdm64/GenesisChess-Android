@@ -21,14 +21,14 @@ import java.util.*;
 
 public abstract class BaseBoard
 {
-	protected static final int[] stype = {
+	static final int[] stype = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
 		Piece.EMPTY,		Piece.BLACK_KNIGHT,	Piece.EMPTY,		Piece.BLACK_PAWN,
 		Piece.BLACK_QUEEN,	Piece.BLACK_ROOK,	Piece.EMPTY,		Piece.EMPTY,
 		Piece.WHITE_KING,	Piece.EMPTY,		Piece.BLACK_BISHOP,	Piece.WHITE_KNIGHT,
 		Piece.EMPTY,		Piece.WHITE_PAWN,	Piece.WHITE_QUEEN,	Piece.WHITE_ROOK};
 
-	protected static final int[][] offsets = {
+	static final int[][] offsets = {
 		{ 0,  0,   0,   0,   0,   0,   0,   0, 0, 0},
 		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0}, // Pawn: even=capture
 		{33, 31,  18,  14, -33, -31, -18, -14, 0, 0}, // Knight
@@ -37,27 +37,27 @@ public abstract class BaseBoard
 		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0}, // Queen
 		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0} }; // King
 
-	public int[] square;
-	public int[] piece;
-	public int[] piecetype;
-	public int ply;
-	public int stm;
+	int[] square;
+	int[] piece;
+	int[] piecetype;
+	int ply;
+	int stm;
 
 	protected abstract boolean attackLine_Bishop(final DistDB db, final int From, final int To);
 	protected abstract boolean setPiece(final int loc, final int type);
 	protected abstract void parseReset();
 
-	public static int COL(final int x)
+	static int COL(final int x)
 	{
 		return x & 7;
 	}
 
-	public static boolean ON_BOARD(final int sq)
+	static boolean ON_BOARD(final int sq)
 	{
 		return (sq & 0x88) == 0;
 	}
 
-	public static boolean OFF_BOARD(final int sq)
+	static boolean OFF_BOARD(final int sq)
 	{
 		return (sq & 0x88) != 0;
 	}
@@ -67,7 +67,7 @@ public abstract class BaseBoard
 		return (A * B >= 0);
 	}
 
-	public static boolean OWN_PIECE(final int A, final int B)
+	static boolean OWN_PIECE(final int A, final int B)
 	{
 		return (A * B >  0);
 	}
@@ -77,12 +77,12 @@ public abstract class BaseBoard
 		return (A * B == 0);
 	}
 
-	public static boolean CAPTURE_MOVE(final int A, final int B)
+	static boolean CAPTURE_MOVE(final int A, final int B)
 	{
 		return (A * B <  0);
 	}
 
-	public static boolean ANY_MOVE(final int A, final int B)
+	private static boolean ANY_MOVE(final int A, final int B)
 	{
 		return (A * B <= 0);
 	}
@@ -107,7 +107,7 @@ public abstract class BaseBoard
 		return ((7 - (x >> 3)) << 4) + (x & 7);
 	}
 
-	protected int genAll_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int genAll_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -139,7 +139,7 @@ public abstract class BaseBoard
 		return next;
 	}
 
-	protected int genCapture_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int genCapture_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -169,7 +169,7 @@ public abstract class BaseBoard
 		return next;
 	}
 
-	protected int genMove_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int genMove_xPawn(final int[] list, final int[] offset, final int From, final int type)
 	{
 		int next = 0;
 
@@ -198,7 +198,7 @@ public abstract class BaseBoard
 		return next;
 	}
 
-	protected boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
+	boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
 	{
 		final int diff = Math.abs(From - To);
 		int n = 2;
@@ -233,7 +233,7 @@ public abstract class BaseBoard
 		return false;
 	}
 
-	protected boolean isAttacked_xBishop(final int From, final int FromColor)
+	boolean isAttacked_xBishop(final int From, final int FromColor)
 	{
 		// ROOK
 		int[] offset = offsets[Piece.ROOK];
@@ -265,7 +265,7 @@ public abstract class BaseBoard
 		return false;
 	}
 
-	public boolean attackLine(final int From, final int To)
+	boolean attackLine(final int From, final int To)
 	{
 		if (OFF_BOARD(From | To))
 			return false;
@@ -300,7 +300,7 @@ public abstract class BaseBoard
 		return false;
 	}
 
-	protected int parseZfen_Board(final String pos)
+	int parseZfen_Board(final String pos)
 	{
 		parseReset();
 		final char[] st = pos.toCharArray();
@@ -334,7 +334,7 @@ public abstract class BaseBoard
 		return n;
 	}
 
-	protected void printZfen_Board(final StringBuilder fen)
+	void printZfen_Board(final StringBuilder fen)
 	{
 		for (int i = 0, empty = 0; i < 64; i++) {
 			// convert cordinate system

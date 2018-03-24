@@ -83,8 +83,8 @@ public class RegBoard extends RegPosition implements Board
 	private static final int[] pieceValue =
 		{0, 224, 336, 560, 896, 1456, 0};
 
-	public static final long[] hashBox = new long[ZBOX_SIZE];
-	public static long startHash;
+	private static final long[] hashBox = new long[ZBOX_SIZE];
+	private static long startHash;
 	private static final Move moveType = new RegMove();
 	private static final MoveListPool pool = new MoveListPool(moveType);
 
@@ -98,7 +98,7 @@ public class RegBoard extends RegPosition implements Board
 		reset();
 	}
 
-	public RegBoard(final RegBoard board)
+	private RegBoard(final RegBoard board)
 	{
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
