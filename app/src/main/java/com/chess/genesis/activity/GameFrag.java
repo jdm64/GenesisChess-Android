@@ -19,6 +19,8 @@ package com.chess.genesis.activity;
 import android.content.*;
 import android.os.*;
 import android.os.Handler.*;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -30,7 +32,7 @@ import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
 
-public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener
+public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener, OnMenuItemClickListener
 {
 	protected DrawerLayout2 boardDrawer;
 	protected CapturedLayout captured_count;
@@ -76,13 +78,11 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 			txt.setOnClickListener(this);
 		}
 
-		// set board nav click listeners
-		final int list[] = new int[]{R.id.place_piece, R.id.backwards,
-			R.id.forwards, R.id.current};
-		for (final int element : list) {
-			final View button = view.findViewById(element);
-			button.setOnClickListener(this);
-		}
+		Toolbar navBar = view.findViewById(R.id.board_nav);
+		navBar.inflateMenu(R.menu.options_nav);
+		navBar.setOnMenuItemClickListener(this);
+		navBar.setLogo(R.drawable.placepiece);
+		navBar.setOnClickListener(this);
 
 		boardDrawer = view.findViewById(R.id.board_drawer);
 		captured_count = view.findViewById(R.id.captured_count);
@@ -136,17 +136,8 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 		final Bundle settings = getArguments();
 
 		switch (v.getId()) {
-		case R.id.place_piece:
+		case R.id.board_nav:
 			boardDrawer.toggle(Gravity.LEFT);
-			break;
-		case R.id.backwards:
-			gamestate.backMove();
-			break;
-		case R.id.forwards:
-			gamestate.forwardMove();
-			break;
-		case R.id.current:
-			gamestate.currentMove();
 			break;
 		case R.id.white_name:
 			showUserStats(settings.getString("white"));
@@ -217,6 +208,23 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item)
+	{
+		switch (item.getItemId()) {
+		case R.id.backwards:
+			gamestate.backMove();
+			break;
+		case R.id.forwards:
+			gamestate.forwardMove();
+			break;
+		case R.id.current:
+			gamestate.currentMove();
+			break;
 		}
 		return true;
 	}

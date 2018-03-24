@@ -45,7 +45,6 @@ abstract class GameListFrag extends AbstractActivityFrag
 			final boolean isOnline = gamedata.containsKey("gameid");
 			final int gametype = Integer.parseInt(gamedata.getString("gametype"));
 			final MenuBarFrag gameMenu = new MenuBarFrag();
-			final BoardNavFrag gameNav = new BoardNavFrag();
 			final GameFrag gameFrag = (gametype == Enums.GENESIS_CHESS)?
 				new GenGameFrag() : new RegGameFrag();
 			gameFrag.setArguments(gamedata);
@@ -56,7 +55,6 @@ abstract class GameListFrag extends AbstractActivityFrag
 
 			FragmentTransaction ftrans = fragMan.beginTransaction()
 			.replace(R.id.topbar02, gameMenu, gameMenu.getBTag())
-			.replace(R.id.botbar02, gameNav, gameNav.getBTag())
 			.replace(R.id.panel02, gameFrag, gameFrag.getClass().getName());
 
 			// setup chat window
