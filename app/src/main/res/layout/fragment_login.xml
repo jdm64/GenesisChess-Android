@@ -44,7 +44,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:text="Login"
 	android:textSize="14sp"
 	android:textColor="#fff"
-	android:background="@drawable/btn_blue"/>
+	android:background="@color/blue_light_500"/>
 	<Button
 	android:id="@+id/register"
 	android:layout_width="110dp"
@@ -56,5 +56,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:text="Sign Up"
 	android:textSize="14sp"
 	android:textColor="#fff"
-	android:background="@drawable/btn_green"/>
+	android:background="@color/green_light_A700"/>
 </RelativeLayout>
