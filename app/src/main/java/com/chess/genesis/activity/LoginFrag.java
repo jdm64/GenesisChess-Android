@@ -19,20 +19,20 @@ package com.chess.genesis.activity;
 import android.app.*;
 import android.content.*;
 import android.os.*;
+import android.os.Handler.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.*;
+import com.chess.genesis.activity.BroadcastWrapper.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import org.json.*;
 
-public class LoginFrag extends BaseContentFrag implements Handler.Callback, BroadcastWrapper.Receiver
+public class LoginFrag extends AbstractActivityFrag implements Callback, Receiver, OnClickListener
 {
-	private final static String TAG = "LOGIN";
-
 	private final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -125,12 +125,6 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 		}
 	}
 
-	@Override
-	public String getBTag()
-	{
-		return TAG;
-	}
-
 	public void setCallBack(final int value)
 	{
 		callbackId = value;
@@ -162,8 +156,6 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
-
 		final View view = inflater.inflate(R.layout.fragment_login, container, false);
 
 		// setup click listeners
@@ -227,9 +219,6 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 				startActivity(new Intent(act, Register.class));
 			}
 			break;
-		case R.id.menu:
-			openMenu(v);
-			break;
 		}
 	}
 
@@ -241,11 +230,13 @@ public class LoginFrag extends BaseContentFrag implements Handler.Callback, Broa
 	}
 
 	@Override
-	public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo)
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		super.onCreateContextMenu(menu, v, menuInfo);
-		act.lastContextMenu = getBTag();
-		act.getMenuInflater().inflate(R.menu.options_login, menu);
+		inflater.inflate(R.menu.options_login, menu);
+
+		if (!new Pref(act).getBool(R.array.pf_isLoggedIn)) {
+			menu.removeItem(R.id.logout);
+		}
 	}
 
 	@Override

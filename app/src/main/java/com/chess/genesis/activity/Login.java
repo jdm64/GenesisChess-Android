@@ -18,30 +18,17 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.view.*;
+import android.support.v4.app.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
-public class Login extends BasePhoneActivity
+public class Login extends AbstractPhoneActivity
 {
 	@Override
-	protected BaseContentFrag createFrag(Bundle bundle)
+	protected Fragment createFrag(Bundle bundle)
 	{
 		return new LoginFrag();
-	}
-
-	@Override
-	protected int getLayoutId(Bundle bundle)
-	{
-		return R.layout.activity_basephone;
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.options_login, menu);
-		return true;
 	}
 
 	@Override
