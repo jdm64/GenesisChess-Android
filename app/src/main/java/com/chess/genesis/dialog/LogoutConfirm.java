@@ -16,43 +16,53 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 
 import com.chess.genesis.*;
 
-public class LogoutConfirm extends BaseDialog
+public class LogoutConfirm extends DialogFragment implements OnClickListener
 {
 	public final static int MSG = 105;
 
-	private final Handler handle;
+	private Handler handle;
 
-	public LogoutConfirm(final Context context, final Handler handler)
+	public static LogoutConfirm create(Handler handler)
 	{
-		super(context);
-
-		handle = handler;
+		LogoutConfirm dialog = new LogoutConfirm();
+		dialog.handle = handler;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Logout Confirmation");
-		setBodyView(R.layout.dialog_single_text);
-		setButtonTxt(R.id.ok, "Logout");
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_single_text);
 
-		final TextView txt = findViewById(R.id.text);
+		builder.getValue()
+		    .setTitle("Logout Confirmation")
+		    .setPositiveButton("Logout", this)
+		    .setNegativeButton("Cancel", this);
+
+		TextView txt = builder.getKey().findViewById(R.id.text);
 		txt.setText(R.string.logout_confirm);
+
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok)
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			handle.sendMessage(handle.obtainMessage(MSG));
+		}
 		dismiss();
 	}
 }

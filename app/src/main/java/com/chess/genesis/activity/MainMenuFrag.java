@@ -236,7 +236,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 		switch (item.getItemId()) {
 		case R.id.logout:
 			if (Pref.getBool(act, R.array.pf_isLoggedIn))
-				new LogoutConfirm(act, new Handler(this)).show();
+				LogoutConfirm.create(new Handler(this)).show(getFragmentManager(), "");
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
 			break;

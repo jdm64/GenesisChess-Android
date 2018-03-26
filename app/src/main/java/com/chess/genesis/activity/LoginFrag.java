@@ -243,7 +243,7 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		if (item.getItemId() == R.id.logout) {
-			new LogoutConfirm(act, handle).show();
+			LogoutConfirm.create(handle).show(getFragmentManager(), "");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
