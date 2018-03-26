@@ -17,19 +17,13 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
-import com.chess.genesis.*;
+import android.support.v4.app.*;
 
-public class Register extends BasePhoneActivity
+public class Register extends AbstractPhoneActivity
 {
 	@Override
-	protected BaseContentFrag createFrag(Bundle bundle)
+	protected Fragment createFrag(Bundle bundle)
 	{
 		return new RegisterFrag();
-	}
-
-	@Override
-	protected int getLayoutId(Bundle bundle)
-	{
-		return R.layout.activity_basephone;
 	}
 }

@@ -18,17 +18,17 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
+import android.os.Handler.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import org.json.*;
 
-public class RegisterFrag extends BaseContentFrag implements Handler.Callback
+public class RegisterFrag extends AbstractActivityFrag implements Callback, OnClickListener
 {
-	private final static String TAG = "REGISTER";
-
 	private final Handler handle = new Handler(this);
 	private NetworkClient net;
 	private ProgressMsg progress;
@@ -76,12 +76,6 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 	}
 
 	@Override
-	public String getBTag()
-	{
-		return TAG;
-	}
-
-	@Override
 	public void onCreate(final Bundle data)
 	{
 		super.onCreate(data);
@@ -92,8 +86,6 @@ public class RegisterFrag extends BaseContentFrag implements Handler.Callback
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		initBaseContentFrag(container);
-
 		final View view = inflater.inflate(R.layout.fragment_register, container, false);
 
 		// setup click listeners
