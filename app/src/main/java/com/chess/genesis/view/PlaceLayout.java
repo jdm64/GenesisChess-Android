@@ -21,7 +21,6 @@ import android.util.*;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
-import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
 
 public class PlaceLayout extends LinearLayout implements OnClickListener
@@ -47,17 +46,18 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	public void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
 	{
 		int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-		size -= size % 5;
+		size = size * 5 / 6;
+		size -= size % 4;
 
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-		painter.resize(getMeasuredHeight() / 5);
+		painter.resize(getMeasuredHeight() / 4);
 	}
 
 	private void AddPieces(final Context context, final int index)
 	{
 		for (int i = 0, idx = index; i < 2; i++) {
 			final ManualPanel row = new ManualPanel(context);
-			row.setSizes("1/5");
+			row.setSizes("1/4");
 
 			row.addView(new BoardButton(context, painter, i + 10 * GameState.PLACEOFFSET));
 
@@ -66,7 +66,6 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 				button.setOnClickListener(this);
 				row.addView(button);
 			}
-			row.addView(new BoardButton(context, painter, i + 10 * GameState.PLACEOFFSET));
 			addView(row);
 		}
 	}
@@ -78,13 +77,6 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 
 		// White Pieces
 		AddPieces(context, 0);
-
-		// Center Divide
-		final LinearLayout row = new LinearLayout(context);
-		final MyImageView padding = new MyImageView(context);
-		padding.setResId(R.drawable.padding_480x96);
-		row.addView(padding);
-		addView(row);
 
 		// Black Pieces
 		AddPieces(context, 6);
