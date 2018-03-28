@@ -81,8 +81,11 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 		Toolbar navBar = view.findViewById(R.id.board_nav);
 		navBar.inflateMenu(R.menu.options_nav);
 		navBar.setOnMenuItemClickListener(this);
-		navBar.setLogo(R.drawable.placepiece);
-		navBar.setOnClickListener(this);
+
+		if (Integer.parseInt(getArguments().getString("gametype")) == Enums.GENESIS_CHESS) {
+			navBar.setLogo(R.drawable.placepiece);
+			navBar.setOnClickListener(this);
+		}
 
 		boardDrawer = view.findViewById(R.id.board_drawer);
 		captured_count = view.findViewById(R.id.captured_count);
