@@ -129,7 +129,7 @@ public class RegisterFrag extends AbstractActivityFrag implements Callback, OnCl
 		if (!valid_email(bundle.getString("email")))
 			return;
 
-		new RegisterConfirm(act, handle, bundle).show();
+		RegisterConfirm.create(handle, bundle).show(getFragmentManager(), "");
 	}
 
 	private boolean valid_username(final String name)

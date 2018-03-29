@@ -16,47 +16,58 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
+import android.app.*;
+import android.app.AlertDialog.*;
 import android.content.*;
+import android.content.DialogInterface.*;
 import android.os.*;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 
-public class RegisterConfirm extends BaseDialog
+public class RegisterConfirm extends DialogFragment implements OnClickListener
 {
 	public final static int MSG = 106;
 
-	private final Handler handle;
-	private final Bundle data;
+	private Handler handle;
+	private Bundle data;
 
-	public RegisterConfirm(final Context context, final Handler handler, final Bundle bundle)
+	public static RegisterConfirm create(Handler handler, Bundle bundle)
 	{
-		super(context);
-
-		handle = handler;
-		data = bundle;
+		RegisterConfirm dialog = new RegisterConfirm();
+		dialog.handle = handler;
+		dialog.data = bundle;
+		return dialog;
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public Dialog onCreateDialog(Bundle bundle)
 	{
-		super.onCreate(savedInstanceState);
-		setTitle("Register Confirmation");
-		setBodyView(R.layout.dialog_confirm_register);
-		setButtonTxt(R.id.ok, "Register");
+		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_confirm_register);
 
-		TextView text = findViewById(R.id.username);
+		builder.getValue()
+		    .setTitle("Register Confirmation")
+		    .setPositiveButton("Register", this)
+		    .setNegativeButton("Cancel", this);
+
+		View view = builder.getKey();
+		TextView text = view.findViewById(R.id.username);
 		text.setText(data.getString("username"));
 
-		text = findViewById(R.id.email);
+		text = view.findViewById(R.id.email);
 		text.setText(data.getString("email"));
+
+		return builder.getValue().create();
 	}
 
 	@Override
-	public void onClick(final View v)
+	public void onClick(DialogInterface dialog, int which)
 	{
-		if (v.getId() == R.id.ok)
+		if (DialogInterface.BUTTON_POSITIVE == which) {
 			handle.sendMessage(handle.obtainMessage(MSG, data));
+		}
 		dismiss();
 	}
 }

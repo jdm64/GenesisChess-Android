@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:padding="16dp"
+android:orientation="vertical">
 	<TextView
 	android:id="@+id/layout01"
 	android:textColor="#000000"
@@ -31,4 +33,4 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:textColor="#000000"/>
 		</TableRow>
 	</TableLayout>
-</merge>
+</LinearLayout>
