@@ -11,5 +11,6 @@ android:layout_width="match_parent">
 	android:elevation="8dp"/>
 	<FrameLayout
 	android:id="@+id/fragment01"
+	android:layout_height="match_parent"
 	android:layout_below="@+id/main_toolbar"/>
 </RelativeLayout>
