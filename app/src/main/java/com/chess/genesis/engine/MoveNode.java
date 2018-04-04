@@ -50,6 +50,6 @@ class MoveNode implements Comparable<MoveNode>
 	@Override
 	public int compareTo(final MoveNode a)
 	{
-		return (a.score > score)? 1 : ((a.score < score)? -1 : 0);
+		return Integer.compare(a.score, score);
 	}
 }

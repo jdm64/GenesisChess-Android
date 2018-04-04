@@ -42,6 +42,6 @@ class DialogUtil
 		Builder builder = new Builder(activity);
 		View view = activity.getLayoutInflater().inflate(resourceId, null);
 		builder.setView(view);
-		return new SimpleEntry<View, Builder>(view, builder);
+		return new SimpleEntry<>(view, builder);
 	}
 }
