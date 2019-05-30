@@ -175,8 +175,8 @@ public class GameStatsDialog extends BaseDialog
 			score.setTextColor(MColors.RED_A700);
 
 		// Set TextViews
-		final int list[] = new int[]{R.id.opponent, R.id.result, R.id.psr_type};
-		final String data[] = new String[]{opponent, result, psr_type};
+		final int[] list = new int[]{R.id.opponent, R.id.result, R.id.psr_type};
+		final String[] data = new String[]{opponent, result, psr_type};
 		for (int i = 0; i < list.length; i++) {
 			final TextView tv = findViewById(list[i]);
 			tv.setText(data[i]);

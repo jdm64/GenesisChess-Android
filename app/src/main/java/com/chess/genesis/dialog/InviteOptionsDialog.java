@@ -16,6 +16,7 @@
 
 package com.chess.genesis.dialog;
 
+import android.R.layout;
 import android.content.*;
 import android.os.*;
 import android.view.*;
@@ -53,7 +54,7 @@ public class InviteOptionsDialog extends BaseDialog
 			new AdapterItem("White", Enums.WHITE_OPP),
 			new AdapterItem("Black", Enums.BLACK_OPP) };
 
-		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
+		final ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(getContext(), layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		final Spinner spinner = findViewById(R.id.invite_color);

@@ -328,7 +328,7 @@ public class GameDataDB implements Closeable
 			b_psrto = json.getJSONObject("score").getJSONObject("black").getInt("to");
 		}
 
-		final String tmp[] = zfen.split(":");
+		final String[] tmp = zfen.split(":");
 		final int ply = Integer.parseInt(tmp[tmp.length - 1]);
 
 		final Object[] data = {gameid, gametype, eventtype, status, w_psrfrom, w_psrto, b_psrfrom, b_psrto,

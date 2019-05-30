@@ -16,6 +16,7 @@
 
 package com.chess.genesis.dialog;
 
+import android.R.layout;
 import android.app.AlertDialog.*;
 import android.app.Dialog;
 import android.content.*;
@@ -57,7 +58,7 @@ public class NewLocalGameDialog extends DialogFragment implements DialogInterfac
 			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
 			new AdapterItem("Regular", Enums.REGULAR_CHESS) };
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(builder.getKey().getContext(), android.R.layout.simple_spinner_item, list);
+		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(builder.getKey().getContext(), layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		gametype_spin = builder.getKey().findViewById(R.id.game_type);
@@ -67,7 +68,7 @@ public class NewLocalGameDialog extends DialogFragment implements DialogInterfac
 			new AdapterItem("CPU As White", Enums.CPU_WHITE_OPPONENT),
 			new AdapterItem("Human", Enums.HUMAN_OPPONENT) };
 
-		adapter = new ArrayAdapter<>(builder.getKey().getContext(), android.R.layout.simple_spinner_item, list);
+		adapter = new ArrayAdapter<>(builder.getKey().getContext(), layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
 		opponent_spin = builder.getKey().findViewById(R.id.opponent);

@@ -59,7 +59,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 		final View view = inflater.inflate(R.layout.fragment_mainmenu, container, false);
 
 		// setup click listeners
-		final int list[] = new int[]{R.id.local_game, R.id.online_game,
+		final int[] list = new int[]{R.id.local_game, R.id.online_game,
 			R.id.user_stats, R.id.howtoplay, R.id.likefacebook,
 			R.id.login, R.id.settings, R.id.feedback, R.id.googleplus};
 		for (final int element : list) {
@@ -273,7 +273,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 
 	private static void resizeButtonText(final View view)
 	{
-		final int list[] = new int[]{R.id.local_game_txt, R.id.online_game_txt,
+		final int[] list = new int[]{R.id.local_game_txt, R.id.online_game_txt,
 			R.id.archive_game_txt, R.id.howtoplay_txt, R.id.login_txt,
 			R.id.settings_txt, R.id.feedback_txt};
 

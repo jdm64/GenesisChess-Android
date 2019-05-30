@@ -118,8 +118,7 @@ abstract class RegMoveLookup extends BaseBoard
 				if (square[From + 16] == 0) {
 					if (From + 16 == To)
 						return true;
-					if (From + 32 == To && From <= Piece.H2 && square[From + 32] == 0)
-						return true;
+					return From + 32 == To && From <= Piece.H2 && square[From + 32] == 0;
 				}
 			} else { // BLACK
 				if (From - 17 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
@@ -129,8 +128,8 @@ abstract class RegMoveLookup extends BaseBoard
 				if (square[From - 16] == 0) {
 					if (From - 16 == To)
 						return true;
-					else if (From - 32 == To && From >= Piece.A7 && square[From - 32] == 0)
-						return true;
+					else
+						return From - 32 == To && From >= Piece.A7 && square[From - 32] == 0;
 				}
 			}
 		} else {

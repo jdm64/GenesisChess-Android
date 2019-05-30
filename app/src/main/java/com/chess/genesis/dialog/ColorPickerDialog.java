@@ -232,7 +232,7 @@ class ColorPicker extends View
 
 	public void setColor(final int color)
 	{
-		final float hsv[] = new float[3];
+		final float[] hsv = new float[3];
 		Color.colorToHSV(color, hsv);
 		hue = hsv[0];
 		sat = hsv[1];

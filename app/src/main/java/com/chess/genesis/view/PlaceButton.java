@@ -25,7 +25,7 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 {
 	private final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
 
-	private int count = 0;
+	private int count;
 	private boolean isHighlighted = false;
 
 	public PlaceButton(final Context context, final PieceImgPainter painter, final int Type)

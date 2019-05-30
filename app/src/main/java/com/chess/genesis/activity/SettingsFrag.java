@@ -240,7 +240,7 @@ public class SettingsFrag extends PreferenceFragment implements
 	{
 		PieceImgPainter.resetColors(context);
 
-		final int keys[] = new int[] { R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
+		final int[] keys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
 			R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
 			R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
 		final Pref pref = new Pref(context);

@@ -204,7 +204,7 @@ public class UserStatsFrag extends BaseContentFrag implements Handler.Callback
 		// Stats
 		final JSONObject stats = data.getJSONObject("stats");
 
-		final int arr[][] = new int[4][4];
+		final int[][] arr = new int[4][4];
 
 		arr[GEN_RAN][WIN] = stats.getJSONObject("genesis_random").getInt("wins");
 		arr[GEN_RAN][LOS] = stats.getJSONObject("genesis_random").getInt("losses");

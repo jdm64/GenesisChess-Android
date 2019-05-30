@@ -24,6 +24,7 @@ class GameListPager extends FragmentPagerAdapter
 {
 	private final static String[] TITLES = new String[]{"Their Turn", "Your Turn", "Archive Games"};
 
+	@SuppressWarnings("unchecked")
 	private final WeakReference<Fragment>[] list = new WeakReference[] {
 		new WeakReference<Fragment>(null),
 		new WeakReference<Fragment>(null),

@@ -40,7 +40,7 @@ public class SyncClient implements Runnable, Handler.Callback
 	private final NetworkClient net;
 
 	private int lock = 0;
-	private int syncType = REGULAR_SYNC;
+	private int syncType;
 	private int gameType = Enums.ONLINE_GAME;
 	private boolean error = false;
 
