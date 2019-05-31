@@ -50,13 +50,6 @@ public abstract class BaseContentFrag extends BaseFrag implements OnClickListene
 	}
 
 	@Override
-	public void onResume()
-	{
-		super.onResume();
-		AdsHandler.run(act);
-	}
-
-	@Override
 	public void onCreate(final Bundle data)
 	{
 		super.onCreate(data);

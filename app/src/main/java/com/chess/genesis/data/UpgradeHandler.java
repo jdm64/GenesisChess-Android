@@ -55,7 +55,6 @@ public final class UpgradeHandler
 			pref.putString(R.array.pf_username);
 		}
 
-		pref.putBool(R.array.pf_enableAds);
 		pref.putInt(R.array.pf_appVersion, newVer);
 		pref.commit();
 	}

@@ -8,10 +8,6 @@
 		<item>netdebug</item>
 		<item>false</item>
 	</array>
-	<array name="pf_enableAds">
-		<item>enableAds</item>
-		<item>true</item>
-	</array>
 	<array name="pf_appVersion">
 		<item>appVersion</item>
 		<item>0</item>

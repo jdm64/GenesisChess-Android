@@ -144,7 +144,6 @@ public class SettingsFrag extends PreferenceFragment implements
 
 		if (Pref.getBool(context, R.array.pf_isLoggedIn))
 			NetActive.inc();
-		AdsHandler.run(context);
 	}
 
 	@Override

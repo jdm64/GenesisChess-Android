@@ -7,9 +7,4 @@ android:id="@+id/botbar">
 	android:layout_height="50dp"
 	android:layout_width="match_parent"
 	android:background="@drawable/bluebar_bot"/>
-	<com.google.android.gms.ads.AdView
-	android:id="@+id/adView"
-	android:layout_gravity="bottom|center_horizontal"
-	ads:adUnitId="ca-app-pub-2845622471929525/8395842892"
-	ads:adSize="BANNER"/>
 </FrameLayout>
