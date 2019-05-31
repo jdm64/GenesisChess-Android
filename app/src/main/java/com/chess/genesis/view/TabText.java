@@ -31,8 +31,8 @@ public class TabText extends AppCompatTextView implements OnClickListener, OnTou
 	private final static int highlightColor = MColors.BLUE_LIGHT_500;
 	private final static int touchColor = MColors.BLUE_LIGHT_500_TR;
 
-	private final int THIN = dptopx(2);
-	private final int THICK = dptopx(5);
+	private final int THIN = dptopx(3);
+	private final int THICK = dptopx(6);
 
 	private final Paint paint;
 	private boolean active;

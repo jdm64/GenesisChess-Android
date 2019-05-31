@@ -13,12 +13,12 @@
 				android:id="@+id/white_name"
 				android:gravity="center"
 				android:padding="6dp"
-				android:textSize="14sp"/>
+				android:textSize="18sp"/>
 			<com.chess.genesis.view.TabText
 				android:id="@+id/black_name"
 				android:gravity="center"
 				android:padding="6dp"
-				android:textSize="14sp"/>
+				android:textSize="18sp"/>
 		</com.chess.genesis.view.ManualPanel>
 		<com.chess.genesis.view.DrawerLayout2
 			android:id="@+id/board_drawer">
