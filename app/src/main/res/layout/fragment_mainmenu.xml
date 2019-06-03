@@ -67,46 +67,20 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 			</FrameLayout>
 			<FrameLayout>
 				<com.chess.genesis.view.MyImageView
-				android:id="@+id/feedback"
-				android:padding="12dp"
-				genesis:src="@drawable/main_feedback"/>
+					android:id="@+id/login"
+					android:padding="12dp"
+					genesis:src="@drawable/main_login"/>
 				<TextView
-				android:id="@+id/feedback_txt"
-				android:layout_gravity="bottom|center_horizontal"
-				android:text="Submit Feedback"/>
-			</FrameLayout>
-		</TableRow>
-		<TableRow>
-			<FrameLayout>
-				<com.chess.genesis.view.MyImageView
-				android:id="@+id/login"
-				android:padding="12dp"
-				genesis:src="@drawable/main_login"/>
-				<TextView
-				android:id="@+id/login_txt"
-				android:layout_gravity="bottom|center_horizontal"
-				android:text="Login/Register"/>
+					android:id="@+id/login_txt"
+					android:layout_gravity="bottom|center_horizontal"
+					android:text="Login/Register"/>
 			</FrameLayout>
 		</TableRow>
 	</TableLayout>
-	<com.chess.genesis.view.ManualPanel
-	android:id="@+id/layout01"
-	genesis:sizes="1/2"
-	android:layout_marginBottom="3dp"
-	android:layout_alignParentBottom="true">
-		<com.chess.genesis.view.MyImageView
-		android:id="@+id/likefacebook"
-		android:padding="3dp"
-		android:src="@drawable/btn_facebook"/>
-		<com.chess.genesis.view.MyImageView
-		android:id="@+id/googleplus"
-		android:padding="3dp"
-		android:src="@drawable/btn_googleplus"/>
-	</com.chess.genesis.view.ManualPanel>
 	<TextView
 	android:id="@+id/version"
-	android:layout_above="@id/layout01"
 	android:layout_alignParentRight="true"
+	android:layout_alignParentBottom="true"
 	android:paddingRight="3dp"
 	android:textSize="12sp"
 	android:text="@string/version"/>

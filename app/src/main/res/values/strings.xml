@@ -34,9 +34,6 @@
 	<string name="cputime_msg">
 		Set the time alloted for the computer to think. Longer times makes the computer stronger.
 	</string>
-	<string name="feedback_url">
-		https://docs.google.com/spreadsheet/viewform?formkey=dEVMcnVvbDFMWkZ0azNyQ2hRR3RjZWc6MQ
-	</string>
 	<string name="gamepool_info">
 		You are waiting to be matched with an opponent in the following game types:
 	</string>
