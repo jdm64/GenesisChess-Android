@@ -18,7 +18,6 @@ package com.chess.genesis.activity;
 
 import android.app.*;
 import android.content.*;
-import android.content.pm.*;
 import android.os.*;
 import android.preference.*;
 import android.preference.Preference.OnPreferenceChangeListener;

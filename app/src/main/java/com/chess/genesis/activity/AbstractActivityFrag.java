@@ -19,7 +19,6 @@ package com.chess.genesis.activity;
 import android.os.*;
 import android.os.Handler.*;
 import android.support.v4.app.*;
-import com.chess.genesis.*;
 
 public abstract class AbstractActivityFrag extends BaseFrag implements Callback
 {
