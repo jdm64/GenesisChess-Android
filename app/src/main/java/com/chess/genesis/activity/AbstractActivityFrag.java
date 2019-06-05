@@ -25,7 +25,6 @@ public abstract class AbstractActivityFrag extends BaseFrag implements Callback
 {
 	FragmentActivity act;
 	FragmentManager fragMan;
-	boolean isTablet = false;
 
 	@Override
 	public void onCreate(final Bundle data)
@@ -34,7 +33,6 @@ public abstract class AbstractActivityFrag extends BaseFrag implements Callback
 
 		act = getActivity();
 		fragMan = getFragmentManager();
-		isTablet = act.findViewById(R.id.panel01) != null;
 		setHasOptionsMenu(true);
 	}
 

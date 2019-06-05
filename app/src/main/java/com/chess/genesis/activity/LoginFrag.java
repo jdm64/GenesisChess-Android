@@ -70,7 +70,7 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 			txt.setText("");
 			break;
 		case ProgressMsg.MSG:
-			if (exitActivity && !isTablet)
+			if (exitActivity)
 				act.finish();
 			break;
 		}
@@ -132,13 +132,8 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 
 	private void sendResult(final int result)
 	{
-		if (isTablet) {
-			final MainMenuFrag frag = (MainMenuFrag) fragMan.findFragmentById(R.id.panel01);
-			frag.startFragment(callbackId);
-		} else {
-			exitActivity = true;
-			act.setResult(result);
-		}
+		exitActivity = true;
+		act.setResult(result);
 	}
 
 	@Override
@@ -211,13 +206,7 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 			doLogin(username, password);
 			break;
 		case R.id.register:
-			if (isTablet) {
-				final FragmentIntent fintent = new FragmentIntent();
-				fintent.setFrag(R.id.panel02, new RegisterFrag());
-				fintent.loadFrag(fragMan);
-			} else {
-				startActivity(new Intent(act, Register.class));
-			}
+			startActivity(new Intent(act, Register.class));
 			break;
 		}
 	}

@@ -86,14 +86,6 @@ public class SettingsFrag extends PreferenceFragment implements
 		final Pref pref = new Pref(context);
 		pref.setChangeListener(this);
 
-		// set layout mode
-		final boolean isTablet = pref.getBool(R.array.pf_tabletMode);
-
-		if (isTablet)
-			context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		else
-			context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 		addPreferencesFromResource(R.xml.settings);
 
 		net = new NetworkClient(context, handle);

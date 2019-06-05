@@ -19,7 +19,6 @@ package com.chess.genesis.activity;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 
 public class StartActivity extends Activity
@@ -32,13 +31,7 @@ public class StartActivity extends Activity
 		// run upgrade
 		UpgradeHandler.run(this);
 
-		// set layout mode
-		final boolean isTablet = Pref.getBool(this, R.array.pf_tabletMode);
-
-		if (isTablet)
-			startActivity(new Intent(this, MainMenuTablet.class));
-		else
-			startActivity(new Intent(this, MainMenuPhone.class));
+		startActivity(new Intent(this, MainMenuPhone.class));
 	}
 
 	@Override

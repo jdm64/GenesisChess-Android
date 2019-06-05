@@ -28,21 +28,18 @@ public class SubmitMove extends Dialog implements OnClickListener
 	public final static int MSG = 122;
 
 	private final Handler handle;
-	private final boolean isTablet;
 
 	public SubmitMove()
 	{
 		super(null, R.style.BlankDialog);
 		handle = null;
-		isTablet = false;
 	}
 
-	public SubmitMove(final Context context, final Handler handler, final boolean TabletMode)
+	public SubmitMove(final Context context, final Handler handler)
 	{
 		super(context, R.style.BlankDialog);
 
 		handle = handler;
-		isTablet = TabletMode;
 	}
 
 	@Override
@@ -52,10 +49,7 @@ public class SubmitMove extends Dialog implements OnClickListener
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		if (isTablet)
-			setContentView(R.layout.dialog_submitmove_tablet);
-		else
-			setContentView(R.layout.dialog_submitmove_phone);
+		setContentView(R.layout.dialog_submitmove_phone);
 		getWindow().setGravity(Gravity.BOTTOM);
 
 		View image = findViewById(R.id.submit);

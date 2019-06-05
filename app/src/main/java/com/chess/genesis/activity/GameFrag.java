@@ -100,8 +100,6 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 
 		// init board pieces
 		gamestate.setBoard();
-
-		gameListFrag = (GameListFrag) fragMan.findFragmentById(R.id.panel01);
 	}
 
 	@Override
@@ -128,8 +126,6 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 		if (type == Enums.ONLINE_GAME)
 			NetActive.dec(getActivity());
 
-		if (isTablet)
-			gameListFrag.updateGameList();
 		super.onPause();
 	}
 
@@ -196,18 +192,9 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 			Bundle settings = getArguments();
 			Intent intent;
 
-			if (isTablet) {
-				final MsgBoxFrag frag = new MsgBoxFrag();
-				frag.setArguments(settings);
-
-				fragMan.beginTransaction()
-				    .replace(R.id.panel03, frag, frag.getBTag())
-				    .addToBackStack(frag.getBTag()).commit();
-			} else {
-				intent = new Intent(act, MsgBox.class);
-				intent.putExtra("gameid", settings.getString("gameid"));
-				startActivity(intent);
-			}
+			intent = new Intent(act, MsgBox.class);
+			intent.putExtra("gameid", settings.getString("gameid"));
+			startActivity(intent);
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -234,27 +221,9 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 
 	private void showUserStats(final String username)
 	{
-		if (isTablet) {
-			// Pop all non-game frags
-			fragMan.popBackStack(GameFrag.class.getName(), 0);
-
-			final UserStatsFrag frag = new UserStatsFrag();
-			final MenuBarFrag menubar = new MenuBarFrag();
-			final Bundle bundle = new Bundle();
-
-			bundle.putString("username", username);
-			frag.setArguments(bundle);
-			frag.setMenuBarFrag(menubar);
-
-			fragMan.beginTransaction()
-			.replace(R.id.topbar03, menubar, menubar.getClass().getName())
-			.replace(R.id.panel03, frag, frag.getBTag())
-			.addToBackStack(frag.getBTag()).commit();
-		} else {
-			final Intent intent = new Intent(act, UserStats.class);
-			intent.putExtra("username", username);
-			startActivity(intent);
-		}
+		final Intent intent = new Intent(act, UserStats.class);
+		intent.putExtra("username", username);
+		startActivity(intent);
 	}
 
 	private void setKeepScreenOn()
@@ -293,7 +262,7 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 	@Override
 	public void showSubmitMove()
 	{
-		new SubmitMove(act, new Handler(this), isTablet).show();
+		new SubmitMove(act, new Handler(this)).show();
 	}
 
 	@Override

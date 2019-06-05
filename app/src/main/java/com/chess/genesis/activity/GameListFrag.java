@@ -41,38 +41,9 @@ abstract class GameListFrag extends AbstractActivityFrag
 
 	void loadGame(final Bundle gamedata)
 	{
-		if (isTablet) {
-			final boolean isOnline = gamedata.containsKey("gameid");
-			final int gametype = Integer.parseInt(gamedata.getString("gametype"));
-			final MenuBarFrag gameMenu = new MenuBarFrag();
-			final GameFrag gameFrag = (gametype == Enums.GENESIS_CHESS)?
-				new GenGameFrag() : new RegGameFrag();
-			gameFrag.setArguments(gamedata);
-			gameFrag.setMenuBarFrag(gameMenu);
-
-			// Pop game if already loaded
-			fragMan.popBackStack(gameFrag.getClass().getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-			FragmentTransaction ftrans = fragMan.beginTransaction()
-			.replace(R.id.topbar02, gameMenu, gameMenu.getBTag())
-			.replace(R.id.panel02, gameFrag, gameFrag.getClass().getName());
-
-			// setup chat window
-			if (isOnline) {
-				final MenuBarFrag msgMenu = new MenuBarFrag();
-				final BaseContentFrag msgFrag = new MsgBoxFrag();
-				msgFrag.setArguments(gamedata);
-				msgFrag.setMenuBarFrag(msgMenu);
-
-				ftrans = ftrans.replace(R.id.topbar03, msgMenu, msgMenu.getBTag())
-				.replace(R.id.panel03, msgFrag, msgFrag.getBTag());
-			}
-			ftrans.addToBackStack(gameFrag.getClass().getName()).commit();
-		} else {
-			final Intent intent = new Intent(act, Game.class);
-			intent.putExtras(gamedata);
-			startActivity(intent);
-		}
+		final Intent intent = new Intent(act, Game.class);
+		intent.putExtras(gamedata);
+		startActivity(intent);
 	}
 
 	void sendGame(final Bundle gamedata)

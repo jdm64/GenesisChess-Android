@@ -24,10 +24,6 @@
 		<item>showGenesisRules</item>
 		<item>true</item>
 	</array>
-	<array name="pf_tabletMode">
-		<item>tabletMode</item>
-		<item>false</item>
-	</array>
 	<array name="pf_viewAsBlack">
 		<item>viewAsBlack</item>
 		<item>true</item>

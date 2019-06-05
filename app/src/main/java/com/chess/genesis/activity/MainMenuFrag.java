@@ -124,10 +124,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 			startActivity(new Intent(act, Settings.class));
 			break;
 		default:
-			if (isTablet)
-				onClickTablet(v.getId());
-			else
-				onClickPhone(v.getId());
+			onClickPhone(v.getId());
 			break;
 		}
 	}
@@ -163,49 +160,6 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 		}
 	}
 
-	private void onClickTablet(final int viewId)
-	{
-		// pop everything from stack
-		for (int i = 0, len = fragMan.getBackStackEntryCount(); i < len; i++)
-			fragMan.popBackStack();
-
-		final FragmentIntent fintent = new FragmentIntent();
-
-		switch (viewId) {
-		case R.id.local_game:
-			fintent.setFrag(R.id.panel01, new GameListLocalFrag());
-			break;
-		case R.id.online_game:
-			if (!Pref.getBool(act, R.array.pf_isLoggedIn)) {
-				final LoginFrag frag = new LoginFrag();
-				frag.setCallBack(Enums.ONLINE_LIST);
-				fintent.setFrag(R.id.panel02, frag);
-			} else {
-				fintent.setFrag(R.id.panel01, new GameListOnlineFrag());
-			}
-			break;
-		case R.id.user_stats:
-			final Pref pref = new Pref(act);
-			if (!pref.getBool(R.array.pf_isLoggedIn)) {
-				final LoginFrag frag = new LoginFrag();
-				frag.setCallBack(Enums.USER_STATS);
-				fintent.setFrag(R.id.panel02, frag);
-			} else {
-				final BaseContentFrag frag = new UserStatsFrag();
-				final Bundle bundle = new Bundle();
-				bundle.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
-				frag.setArguments(bundle);
-
-				fintent.setFrag(R.id.panel02, frag);
-			}
-			break;
-		case R.id.login:
-			fintent.setFrag(R.id.panel02, new LoginFrag());
-			break;
-		}
-		fintent.loadFrag(fragMan);
-	}
-
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
@@ -230,31 +184,6 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
-	}
-
-	public void startFragment(final int fragId)
-	{
-		Fragment frag;
-
-		fragMan.popBackStack();
-		switch (fragId) {
-		case Enums.ONLINE_LIST:
-			frag = new GameListOnlineFrag();
-			break;
-		case Enums.USER_STATS:
-			frag = new UserStatsFrag();
-			final Pref pref = new Pref(act);
-			final Bundle bundle = new Bundle();
-			bundle.putString(pref.key(R.array.pf_username), pref.getString(R.array.pf_username));
-			frag.setArguments(bundle);
-			break;
-		default:
-			updateLoggedInView();
-			return;
-		}
-		fragMan.beginTransaction()
-		.replace(R.id.panel01, frag, frag.getClass().getName())
-		.addToBackStack(frag.getClass().getName()).commit();
 	}
 
 	private static void resizeButtonText(final View view)

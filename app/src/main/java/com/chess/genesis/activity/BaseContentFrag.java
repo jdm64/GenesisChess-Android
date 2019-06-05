@@ -21,14 +21,12 @@ import android.support.v4.app.*;
 import android.view.*;
 import android.view.View.OnClickListener;
 import com.chess.genesis.*;
-import com.chess.genesis.data.*;
 
 public abstract class BaseContentFrag extends BaseFrag implements OnClickListener
 {
 	BaseActivity act;
 	FragmentManager fragMan;
 	private int containerId;
-	boolean isTablet = false;
 
 	public abstract String getBTag();
 
@@ -61,10 +59,6 @@ public abstract class BaseContentFrag extends BaseFrag implements OnClickListene
 	{
 		// set the current view id that the fragment lives in
 		containerId = container.getId();
-
-		// set what layout we're in
-		final View itab = act.findViewById(R.id.panel01);
-		isTablet = itab != null;
 	}
 
 	void openMenu(final View view)

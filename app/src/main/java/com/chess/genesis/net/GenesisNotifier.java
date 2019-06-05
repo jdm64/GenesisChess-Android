@@ -159,16 +159,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 	private void SendNotification(final int id, final String text)
 	{
-		final Intent intent;
-		if (Pref.getBool(this, R.array.pf_tabletMode)) {
-			intent = new Intent(this, MainMenuTablet.class);
-
-			final Bundle bundle = new Bundle();
-			bundle.putInt("loadFrag", Enums.ONLINE_LIST);
-			intent.putExtras(bundle);
-		} else {
-			intent = new Intent(this, GameListOnline.class);
-		}
+		final Intent intent = new Intent(this, GameListOnline.class);
 
 		final PendingIntent pintent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		final NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

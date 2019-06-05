@@ -62,10 +62,7 @@ public class RegisterFrag extends AbstractActivityFrag implements Callback, OnCl
 		case RegisterActivation.MSG:
 			progress.dismiss();
 
-			if (isTablet)
-				getFragmentManager().popBackStack();
-			else
-				act.finish();
+			act.finish();
 
 			final Intent intent = new Intent("register");
 			intent.putExtras(getRegisterData());

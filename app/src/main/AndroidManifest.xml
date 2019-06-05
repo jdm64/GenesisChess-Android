@@ -22,7 +22,6 @@ package="com.chess.genesis">
 			</intent-filter>
 		</activity>
 		<activity android:name="com.chess.genesis.activity.MainMenuPhone" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.MainMenuTablet" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="com.chess.genesis.activity.GameListOnline" android:configChanges="orientation" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
 		<activity android:name="com.chess.genesis.activity.Settings" android:configChanges="orientation" android:launchMode="singleTask"/>
 		<activity android:name="com.chess.genesis.activity.GameListLocal" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
