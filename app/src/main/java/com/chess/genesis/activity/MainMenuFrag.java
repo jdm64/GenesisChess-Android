@@ -85,7 +85,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 		// remove layout listener once text was resized
 		final View v = getView().findViewById(R.id.online_game);
 		final ViewTreeObserver vto = v.getViewTreeObserver();
-		vto.removeGlobalOnLayoutListener(this);
+		vto.removeOnGlobalLayoutListener(this);
 	}
 
 	@Override

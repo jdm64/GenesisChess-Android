@@ -17,12 +17,12 @@
 package com.chess.genesis.data;
 
 import android.content.*;
+import android.content.ClipboardManager;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
 import android.text.*;
 import android.text.Layout.Alignment;
-import android.text.ClipboardManager;
 import android.view.*;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
@@ -122,8 +122,10 @@ public class MsgListAdapter extends BaseAdapter implements OnTouchListener, OnLo
 	@Override
 	public boolean onLongClick(final View view)
 	{
-		final ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-		clipboard.setText(((MsgListItem) view).getData().msg);
+		ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+		String str = ((MsgListItem) view).getData().msg;
+		ClipData data = ClipData.newPlainText("chat msg", str);
+		clipboard.setPrimaryClip(data);
 		Toast.makeText(context, "Message copied", Toast.LENGTH_SHORT).show();
 		return true;
 	}
