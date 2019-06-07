@@ -68,22 +68,6 @@
 		<item>notifierPolling</item>
 		<item>30</item>
 	</array>
-	<array name="pf_noteRingtoneEnable">
-		<item>noteRingtoneEnable</item>
-		<item>false</item>
-	</array>
-	<array name="pf_noteRingtone">
-		<item>noteRingtone</item>
-		<item>content://settings/system/notification_sound</item>
-	</array>
-	<array name="pf_noteVibrateEnable">
-		<item>noteVibrateEnable</item>
-		<item>true</item>
-	</array>
-	<array name="pf_noteVibrate">
-		<item>noteVibrate</item>
-		<item>0,150</item>
-	</array>
 	<array name="pf_bcInnerDark">
 		<item>bcInnerDark</item>
 		<item>@color/blue_navy_400</item>

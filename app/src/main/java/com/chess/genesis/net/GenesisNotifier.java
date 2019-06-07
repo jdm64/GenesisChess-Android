@@ -198,24 +198,7 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 		noteBuilder.setOnlyAlertOnce(true).setContentIntent(pintent);
 
-		final Pref pref = new Pref(this);
-		if (pref.getBool(R.array.pf_noteRingtoneEnable))
-			noteBuilder.setSound(Uri.parse(pref.getString(R.array.pf_noteRingtone)));
-		if (pref.getBool(R.array.pf_noteVibrateEnable))
-			noteBuilder.setVibrate(parseVibrate());
-
 		return noteBuilder.build();
-	}
-
-	private long[] parseVibrate()
-	{
-		final String str = Pref.getString(this, R.array.pf_noteVibrate);
-		final String[] arr = str.trim().split(",");
-		final long[] vib = new long[arr.length];
-
-		for (int i = 0; i < arr.length; i++)
-			vib[i] = Long.parseLong(arr[i]);
-		return vib;
 	}
 
 	/*
