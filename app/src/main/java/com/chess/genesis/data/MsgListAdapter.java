@@ -16,17 +16,16 @@
 
 package com.chess.genesis.data;
 
-import android.content.*;
 import android.content.ClipboardManager;
+import android.content.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
+import android.text.Layout.*;
 import android.text.*;
-import android.text.Layout.Alignment;
 import android.view.*;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.View.*;
+import android.view.ViewGroup.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.util.*;

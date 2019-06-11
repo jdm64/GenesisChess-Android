@@ -18,10 +18,10 @@ package com.chess.genesis.activity;
 
 import android.content.pm.*;
 import android.os.*;
-import android.support.v4.app.*;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import com.chess.genesis.*;
+import androidx.appcompat.app.*;
+import androidx.appcompat.widget.*;
+import androidx.fragment.app.*;
 
 public abstract class AbstractPhoneActivity extends AppCompatActivity
 {

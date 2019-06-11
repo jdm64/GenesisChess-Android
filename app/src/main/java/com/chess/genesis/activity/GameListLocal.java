@@ -18,7 +18,7 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.*;
+import androidx.fragment.app.*;
 
 public class GameListLocal extends AbstractPhoneActivity
 {

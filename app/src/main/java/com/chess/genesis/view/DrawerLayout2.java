@@ -17,8 +17,8 @@
 package com.chess.genesis.view;
 
 import android.content.*;
-import android.support.v4.widget.*;
 import android.util.*;
+import androidx.drawerlayout.widget.*;
 
 public class DrawerLayout2 extends DrawerLayout
 {

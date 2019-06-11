@@ -20,7 +20,7 @@ import android.content.*;
 import android.graphics.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.OnClickListener;
+import android.view.View.*;
 import android.view.animation.*;
 import android.widget.*;
 import com.chess.genesis.data.*;

@@ -18,13 +18,13 @@ package com.chess.genesis.activity;
 
 import android.os.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ContextMenu.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-import org.json.*;
 
 public class MsgBoxFrag extends BaseContentFrag implements Handler.Callback
 {

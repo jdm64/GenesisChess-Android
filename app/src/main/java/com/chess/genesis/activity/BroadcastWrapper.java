@@ -17,7 +17,7 @@
 package com.chess.genesis.activity;
 
 import android.content.*;
-import android.support.v4.content.*;
+import androidx.localbroadcastmanager.content.*;
 
 public class BroadcastWrapper extends BroadcastReceiver
 {

@@ -16,15 +16,15 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
-import java.util.*;
-import org.json.*;
 
 public class GamePoolDialog extends BaseDialog
 {

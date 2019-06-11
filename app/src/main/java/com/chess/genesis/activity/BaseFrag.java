@@ -16,7 +16,7 @@
 
 package com.chess.genesis.activity;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.*;
 
 // TODO exists only for refactoring
 public class BaseFrag extends Fragment

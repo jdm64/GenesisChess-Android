@@ -16,18 +16,18 @@
 
 package com.chess.genesis.dialog;
 
-import android.R.layout;
+import java.util.Map.*;
+import android.R.*;
 import android.app.AlertDialog.*;
-import android.app.Dialog;
+import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
-import java.util.Map.*;
+import androidx.fragment.app.DialogFragment;
 
 public class NewLocalGameDialog extends DialogFragment implements DialogInterface.OnClickListener
 {

@@ -19,13 +19,13 @@ package com.chess.genesis.engine;
 
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
-import org.json.*;
+import androidx.fragment.app.*;
 
 public abstract class GameState implements Handler.Callback
 {

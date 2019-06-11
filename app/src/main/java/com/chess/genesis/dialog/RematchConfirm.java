@@ -16,7 +16,7 @@
 
 package com.chess.genesis.dialog;
 
-import android.R.layout;
+import android.R.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;

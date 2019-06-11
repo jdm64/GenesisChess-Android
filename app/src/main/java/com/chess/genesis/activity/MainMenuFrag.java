@@ -22,7 +22,7 @@ import android.os.*;
 import android.util.*;
 import android.view.*;
 import android.view.View.*;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.ViewTreeObserver.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;

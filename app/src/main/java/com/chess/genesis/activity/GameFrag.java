@@ -19,18 +19,17 @@ package com.chess.genesis.activity;
 import android.content.*;
 import android.os.*;
 import android.os.Handler.*;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
-
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.view.*;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.*;
 
 public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener, OnMenuItemClickListener
 {

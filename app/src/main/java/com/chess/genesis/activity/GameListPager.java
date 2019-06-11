@@ -16,9 +16,8 @@
 
 package com.chess.genesis.activity;
 
-import android.support.v4.app.*;
-
 import java.lang.ref.*;
+import androidx.fragment.app.*;
 
 class GameListPager extends FragmentPagerAdapter
 {

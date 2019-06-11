@@ -16,23 +16,18 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.AbstractMap.*;
+import java.util.Map.*;
 import android.app.*;
 import android.app.AlertDialog.*;
 import android.view.*;
-
-import java.util.Map.*;
-import java.util.AbstractMap.*;
+import androidx.fragment.app.DialogFragment;
 
 class DialogUtil
 {
 	private DialogUtil() {}
 
 	public static Entry<View, Builder> createViewBuilder(DialogFragment dialog, int resourceId)
-	{
-		return create(dialog.getActivity(), resourceId);
-	}
-
-	public static Entry<View, Builder> createViewBuilder(android.support.v4.app.DialogFragment dialog, int resourceId)
 	{
 		return create(dialog.getActivity(), resourceId);
 	}

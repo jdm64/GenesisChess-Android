@@ -16,14 +16,15 @@
 
 package com.chess.genesis.dialog;
 
-import android.app.*;
+import java.util.Map.*;
 import android.app.AlertDialog.*;
+import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
-import java.util.Map.*;
+import androidx.fragment.app.DialogFragment;
 
 public class PawnPromoteDialog extends DialogFragment implements View.OnClickListener, DialogInterface.OnClickListener
 {

@@ -16,10 +16,10 @@
 
 package com.chess.genesis.util;
 
-import android.net.*;
-import android.os.*;
 import java.io.*;
 import java.util.*;
+import android.net.*;
+import android.os.*;
 
 public final class FileUtils
 {

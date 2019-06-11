@@ -17,17 +17,17 @@
 package com.chess.genesis.dialog;
 
 import java.util.Map.*;
-import android.app.*;
 import android.app.AlertDialog.*;
+import android.app.*;
 import android.content.*;
 import android.content.DialogInterface.*;
 import android.net.*;
 import android.os.*;
-import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
+import androidx.fragment.app.DialogFragment;
 
 public class GenesisRulesDialog extends DialogFragment implements OnClickListener
 {

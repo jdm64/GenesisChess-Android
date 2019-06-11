@@ -17,10 +17,10 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
-import android.support.v4.app.*;
 import android.view.*;
-import android.view.View.OnClickListener;
+import android.view.View.*;
 import com.chess.genesis.*;
+import androidx.fragment.app.*;
 
 public abstract class BaseContentFrag extends BaseFrag implements OnClickListener
 {

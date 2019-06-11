@@ -18,19 +18,17 @@ package com.chess.genesis.activity;
 
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.*;
-import android.support.v4.view.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.AdapterView.*;
 import android.widget.*;
-
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-
-import org.json.*;
+import androidx.fragment.app.*;
+import androidx.viewpager.widget.*;
 
 public class GameListOnlineFrag extends GameListFrag implements OnTouchListener, OnItemClickListener, OnClickListener
 {

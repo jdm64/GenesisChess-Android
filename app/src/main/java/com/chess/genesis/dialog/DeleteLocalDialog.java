@@ -16,16 +16,16 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
 import android.app.AlertDialog.*;
-import android.app.Dialog;
+import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
-import java.util.Map.*;
+import androidx.fragment.app.DialogFragment;
 
 public class DeleteLocalDialog extends DialogFragment implements DialogInterface.OnClickListener
 {

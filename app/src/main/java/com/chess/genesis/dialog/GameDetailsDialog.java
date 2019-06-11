@@ -16,21 +16,20 @@
 
 package com.chess.genesis.dialog;
 
-import android.app.*;
+import java.io.*;
+import java.util.Map.*;
 import android.app.AlertDialog.*;
+import android.app.*;
 import android.content.*;
 import android.content.DialogInterface.*;
 import android.os.*;
-import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
-
-import java.io.*;
-import java.util.Map.*;
-import org.json.*;
+import androidx.fragment.app.DialogFragment;
 
 public class GameDetailsDialog extends DialogFragment implements OnClickListener
 {

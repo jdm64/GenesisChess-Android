@@ -16,7 +16,7 @@
 
 package com.chess.genesis.util;
 
-import android.app.AlertDialog.Builder;
+import android.app.AlertDialog.*;
 import android.content.*;
 import android.os.*;
 import android.preference.*;

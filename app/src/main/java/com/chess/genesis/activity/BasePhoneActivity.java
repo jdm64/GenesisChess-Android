@@ -19,7 +19,7 @@ package com.chess.genesis.activity;
 import android.content.pm.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnLongClickListener;
+import android.view.View.*;
 import com.chess.genesis.*;
 
 abstract class BasePhoneActivity extends BaseActivity implements OnLongClickListener

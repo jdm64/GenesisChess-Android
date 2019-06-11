@@ -16,7 +16,7 @@
 
 package com.chess.genesis.activity;
 
-import android.support.v4.app.*;
+import androidx.fragment.app.*;
 
 abstract class BaseActivity extends FragmentActivity
 {

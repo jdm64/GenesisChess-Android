@@ -16,17 +16,17 @@
 
 package com.chess.genesis.view;
 
+import java.lang.ref.*;
 import android.content.*;
 import android.content.res.*;
 import android.graphics.*;
-import android.graphics.BitmapFactory.Options;
+import android.graphics.BitmapFactory.*;
 import android.graphics.drawable.*;
 import android.os.*;
-import android.support.v7.widget.*;
 import android.util.*;
 import android.widget.*;
 import com.chess.genesis.*;
-import java.lang.ref.*;
+import androidx.appcompat.widget.*;
 
 public class MyImageView extends AppCompatImageView
 {

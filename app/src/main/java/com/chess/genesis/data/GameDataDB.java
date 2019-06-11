@@ -16,16 +16,15 @@
 
 package com.chess.genesis.data;
 
+import java.io.*;
+import java.util.*;
 import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
 import android.os.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
-
-import java.io.*;
-import java.util.*;
-import org.json.*;
 
 public class GameDataDB implements Closeable
 {

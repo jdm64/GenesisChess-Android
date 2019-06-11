@@ -19,7 +19,7 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.OnClickListener;
+import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.engine.*;
 

@@ -20,7 +20,7 @@ import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.View.OnClickListener;
+import android.view.View.*;
 import com.chess.genesis.*;
 
 public class SubmitMove extends Dialog implements OnClickListener

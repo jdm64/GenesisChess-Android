@@ -16,6 +16,7 @@
 
 package com.chess.genesis.dialog;
 
+import java.util.Map.*;
 import android.app.*;
 import android.app.AlertDialog.*;
 import android.content.*;
@@ -24,7 +25,7 @@ import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
-import java.util.Map.*;
+import androidx.fragment.app.DialogFragment;
 
 public class BenchmarkDialog extends DialogFragment implements DialogInterface.OnClickListener, Handler.Callback, View.OnClickListener
 {

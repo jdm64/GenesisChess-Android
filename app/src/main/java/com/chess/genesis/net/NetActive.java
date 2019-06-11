@@ -16,9 +16,8 @@
 
 package com.chess.genesis.net;
 
-import android.content.*;
-
 import java.util.concurrent.atomic.*;
+import android.content.*;
 
 public final class NetActive
 {

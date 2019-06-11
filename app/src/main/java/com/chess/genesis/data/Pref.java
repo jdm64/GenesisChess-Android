@@ -17,7 +17,7 @@
 package com.chess.genesis.data;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.*;
 import android.content.res.*;
 import android.preference.*;
 

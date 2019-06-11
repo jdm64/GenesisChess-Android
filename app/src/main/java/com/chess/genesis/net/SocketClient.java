@@ -16,14 +16,13 @@
 
 package com.chess.genesis.net;
 
-import android.content.*;
-import android.net.*;
-
-import com.chess.genesis.*;
-import com.chess.genesis.data.*;
 import java.io.*;
 import java.net.*;
+import android.content.*;
+import android.net.*;
 import org.json.*;
+import com.chess.genesis.*;
+import com.chess.genesis.data.*;
 
 public final class SocketClient
 {

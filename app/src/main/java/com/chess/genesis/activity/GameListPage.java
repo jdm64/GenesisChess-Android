@@ -17,13 +17,12 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
-import android.support.v4.app.*;
 import android.view.*;
 import android.widget.*;
-
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
+import androidx.fragment.app.*;
 
 public class GameListPage extends Fragment
 {

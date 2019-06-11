@@ -16,15 +16,18 @@
 
 package com.chess.genesis.util;
 
+import android.app.*;
 import android.content.*;
-import android.preference.*;
 import android.util.*;
+import androidx.preference.*;
 
-public class CallBackPreference extends DialogPreference
+public class CallBackPreference extends Preference
 {
 	public interface CallBack
 	{
 		void runCallBack(final CallBackPreference preference);
+
+		Activity getActivity();
 	}
 
 	private CallBack action;
@@ -48,12 +51,16 @@ public class CallBackPreference extends DialogPreference
 	}
 
 	@Override
-	protected void onDialogClosed(final boolean positiveResult)
+	public void onClick()
 	{
-		super.onDialogClosed(positiveResult);
+		AlertDialog.Builder builder = new AlertDialog.Builder(action.getActivity());
 
-		if (action == null || !positiveResult)
-			return;
-		action.runCallBack(this);
+		builder
+		    .setTitle(getTitle())
+		    .setMessage(getSummary())
+		    .setPositiveButton("Ok", (dialog, id) -> action.runCallBack(this))
+		    .setNegativeButton("Cancel",null);
+
+		builder.show();
 	}
 }

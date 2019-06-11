@@ -18,13 +18,11 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
-import android.support.v7.widget.*;
 import android.util.*;
 import android.view.*;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-
+import android.view.View.*;
 import com.chess.genesis.data.*;
+import androidx.appcompat.widget.*;
 
 public class TabText extends AppCompatTextView implements OnClickListener, OnTouchListener
 {

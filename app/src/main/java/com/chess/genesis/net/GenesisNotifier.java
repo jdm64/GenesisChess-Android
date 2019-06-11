@@ -16,17 +16,17 @@
 
 package com.chess.genesis.net;
 
+import java.util.*;
 import android.app.*;
 import android.content.*;
 import android.graphics.*;
 import android.net.*;
 import android.os.*;
-import android.support.v4.app.NotificationCompat.Builder;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
-import java.util.*;
-import org.json.*;
+import androidx.core.app.NotificationCompat.*;
 
 public class GenesisNotifier extends Service implements Runnable
 {

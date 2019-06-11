@@ -19,21 +19,20 @@ package com.chess.genesis.activity;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.preference.*;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.view.*;
-import android.view.View.OnLongClickListener;
+import android.view.View.*;
 import android.widget.*;
-import com.chess.genesis.*;
+import org.json.*;
+import com.chess.genesis.R;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
-import org.json.*;
+import androidx.preference.*;
+import androidx.preference.Preference.*;
 
-public class SettingsFrag extends PreferenceFragment implements
+public class SettingsFrag extends PreferenceFragmentCompat implements
 	OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener,
 	CallBackPreference.CallBack, Handler.Callback, SharedPreferences.OnSharedPreferenceChangeListener
 {
@@ -77,9 +76,8 @@ public class SettingsFrag extends PreferenceFragment implements
 	}
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
-		super.onCreate(savedInstanceState);
 		context = getActivity();
 
 		final Pref pref = new Pref(context);
@@ -105,6 +103,13 @@ public class SettingsFrag extends PreferenceFragment implements
 		prefView = findPreference(pref.key(R.array.pf_noteEnabled));
 		prefView.setOnPreferenceChangeListener(this);
 		prefView.setEnabled(isLoggedin);
+
+		String[] keys = new String[]{"bcInnerDark", "bcOuterDark", "bcInnerLight", "bcOuterLight",
+			"bcInnerSelect", "bcInnerCheck", "bcInnerLast"};
+		for (String key : keys) {
+			ColorPickerPreference picker = (ColorPickerPreference) findPreference(key);
+			picker.setFragMan(getFragmentManager());
+		}
 
 		CallBackPreference callbackPref = (CallBackPreference) findPreference("deleteLocalTable");
 		callbackPref.setCallBack(this);

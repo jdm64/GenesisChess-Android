@@ -16,19 +16,18 @@
 
 package com.chess.genesis.activity;
 
+import java.io.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.ContextMenu.*;
+import android.widget.AdapterView.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
-import java.io.*;
-import org.json.*;
 
 public class GameListLocalFrag extends GameListFrag implements OnItemClickListener
 {

@@ -16,12 +16,12 @@
 
 package com.chess.genesis.activity;
 
-import android.app.*;
 import android.content.pm.*;
 import android.os.*;
-import com.chess.genesis.R;
+import com.chess.genesis.*;
+import androidx.fragment.app.*;
 
-public class Settings extends Activity
+public class Settings extends FragmentActivity
 {
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -31,7 +31,7 @@ public class Settings extends Activity
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_settings);
 
-		getFragmentManager().beginTransaction()
+		getSupportFragmentManager().beginTransaction()
 			.replace(R.id.fragment01, new SettingsFrag())
 			.commit();
 	}

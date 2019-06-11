@@ -23,12 +23,12 @@ import android.os.Handler.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.activity.BroadcastWrapper.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
-import org.json.*;
 
 public class LoginFrag extends AbstractActivityFrag implements Callback, Receiver, OnClickListener
 {

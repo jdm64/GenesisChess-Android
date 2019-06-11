@@ -16,15 +16,15 @@
 
 package com.chess.genesis.activity;
 
+import java.io.*;
 import android.content.*;
 import android.net.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+import org.json.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.util.*;
-import java.io.*;
-import org.json.*;
 
 abstract class GameListFrag extends AbstractActivityFrag
 {

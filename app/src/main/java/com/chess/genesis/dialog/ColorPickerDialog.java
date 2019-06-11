@@ -17,8 +17,8 @@
 package com.chess.genesis.dialog;
 
 import java.util.Map.*;
-import android.app.*;
 import android.app.AlertDialog.*;
+import android.app.*;
 import android.content.*;
 import android.content.DialogInterface.*;
 import android.graphics.*;
@@ -27,6 +27,7 @@ import android.os.*;
 import android.util.*;
 import android.view.*;
 import com.chess.genesis.*;
+import androidx.fragment.app.DialogFragment;
 
 public class ColorPickerDialog extends DialogFragment implements OnClickListener
 {
@@ -77,7 +78,7 @@ public class ColorPickerDialog extends DialogFragment implements OnClickListener
 class ColorPicker extends View
 {
 	private static final int[] COLORS = new int[]{0xFFFF0000, 0xFFFFFF00, 0xFF00FF00,
-		0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000};
+	    0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000};
 
 	enum TouchType {WHEEL, SAT_BAR, VAL_BAR, NONE}
 
@@ -92,7 +93,7 @@ class ColorPicker extends View
 	private double sat;
 	private double val;
 
-	private TouchType touchType;
+	private ColorPicker.TouchType touchType;
 	private final double[] lastTouch = new double[2];
 	private final float[] hueLoc = new float[2];
 	private final float[] satLoc = new float[2];
@@ -114,8 +115,8 @@ class ColorPicker extends View
 
 		wheelPaint.setShader(new SweepGradient(0, 0, COLORS, null));
 		wheelPaint.setStyle(Style.STROKE);
-		satBarPaint.setStyle(Paint.Style.STROKE);
-		valBarPaint.setStyle(Paint.Style.STROKE);
+		satBarPaint.setStyle(Style.STROKE);
+		valBarPaint.setStyle(Style.STROKE);
 	}
 
 	@Override
@@ -188,13 +189,13 @@ class ColorPicker extends View
 
 		final double radius = getRadius(x - offset, y - offset);
 		if (radius <= wheelRadius + pointerRadius && radius >= currentRadius)
-			touchType = TouchType.WHEEL;
+			touchType = ColorPicker.TouchType.WHEEL;
 		else if (Math.abs(y - satLoc[1] - offset) <= pointerRadius)
-			touchType = TouchType.SAT_BAR;
+			touchType = ColorPicker.TouchType.SAT_BAR;
 		else if (Math.abs(y - valLoc[1] - offset) <= pointerRadius)
-			touchType = TouchType.VAL_BAR;
+			touchType = ColorPicker.TouchType.VAL_BAR;
 		else
-			touchType = TouchType.NONE;
+			touchType = ColorPicker.TouchType.NONE;
 		lastTouch[0] = x;
 		lastTouch[1] = y;
 	}
@@ -243,9 +244,9 @@ class ColorPicker extends View
 	private void update()
 	{
 		satBarPaint.setShader(new LinearGradient(-wheelRadius, satLoc[1],
-			wheelRadius, satLoc[1], hsv2Color(hue, 0, val), hsv2Color(hue, 1, val), Shader.TileMode.CLAMP));
+		    wheelRadius, satLoc[1], hsv2Color(hue, 0, val), hsv2Color(hue, 1, val), Shader.TileMode.CLAMP));
 		valBarPaint.setShader(new LinearGradient(-wheelRadius, valLoc[1],
-			wheelRadius, valLoc[1], Color.BLACK, hsv2Color(hue, sat, 1), Shader.TileMode.CLAMP));
+		    wheelRadius, valLoc[1], Color.BLACK, hsv2Color(hue, sat, 1), Shader.TileMode.CLAMP));
 		getXY(wheelRadius, hue, hueLoc);
 		satLoc[0] = barXLoc(sat);
 		valLoc[0] = barXLoc(val);

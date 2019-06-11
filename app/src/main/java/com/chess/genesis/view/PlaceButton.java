@@ -18,7 +18,6 @@ package com.chess.genesis.view;
 
 import android.content.*;
 import android.graphics.*;
-
 import com.chess.genesis.engine.*;
 
 public class PlaceButton extends PieceImgView implements IPlaceSq

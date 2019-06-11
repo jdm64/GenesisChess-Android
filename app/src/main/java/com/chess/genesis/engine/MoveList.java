@@ -17,8 +17,8 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
 import java.util.*;
+import com.chess.genesis.util.*;
 
 class MoveList implements Iterable<MoveNode>
 {

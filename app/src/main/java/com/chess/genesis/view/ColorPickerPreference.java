@@ -16,22 +16,22 @@
 
 package com.chess.genesis.view;
 
-import android.R.id;
-import android.app.*;
+import android.R.*;
 import android.content.*;
 import android.content.res.*;
 import android.graphics.*;
-import android.preference.*;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.dialog.ColorPickerDialog.OnColorChangedListener;
+import com.chess.genesis.dialog.ColorPickerDialog.*;
+import androidx.fragment.app.*;
+import androidx.preference.*;
 
-public class ColorPickerPreference extends Preference implements OnPreferenceClickListener, OnColorChangedListener
+public class ColorPickerPreference extends Preference implements OnColorChangedListener
 {
+	private FragmentManager fragMan;
 	private ViewGroup container;
 	private int size;
 	private int border;
@@ -45,7 +45,6 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 	public ColorPickerPreference(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
-		setOnPreferenceClickListener(this);
 		final float density = (int) getContext().getResources().getDisplayMetrics().density;
 		size = (int) (40 * density);
 		border = (int) (0.05 * size);
@@ -58,11 +57,16 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 		return Color.argb(0xff, anti, anti, anti);
 	}
 
-	@Override
-	public void onBindView(final View view)
+	public void setFragMan(FragmentManager manager)
 	{
-		super.onBindView(view);
-		container = view.findViewById(id.widget_frame);
+		fragMan = manager;
+	}
+
+	@Override
+	public void onBindViewHolder(final PreferenceViewHolder view)
+	{
+		super.onBindViewHolder(view);
+		container = (ViewGroup) view.findViewById(id.widget_frame);
 		container.addView(new ImageView(getContext()));
 		container.setVisibility(View.VISIBLE);
 		setColor(currColor);
@@ -81,10 +85,9 @@ public class ColorPickerPreference extends Preference implements OnPreferenceCli
 	}
 
 	@Override
-	public boolean onPreferenceClick(final Preference pref)
+	public void onClick()
 	{
-		ColorPickerDialog.create(this, currColor).show(((Activity)getContext()).getFragmentManager(), "");
-		return false;
+		ColorPickerDialog.create(this, currColor).show(fragMan, "");
 	}
 
 	@Override

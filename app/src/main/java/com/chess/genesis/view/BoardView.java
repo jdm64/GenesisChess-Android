@@ -21,7 +21,6 @@ import android.graphics.*;
 import android.util.*;
 import android.view.*;
 import android.view.View.*;
-
 import com.chess.genesis.engine.*;
 
 public class BoardView extends View implements OnClickListener, OnLongClickListener

@@ -17,8 +17,8 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
-import android.support.v4.app.*;
 import android.view.*;
+import androidx.fragment.app.*;
 
 abstract class SimpleFrag extends Fragment
 {

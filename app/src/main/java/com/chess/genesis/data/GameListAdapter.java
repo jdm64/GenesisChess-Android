@@ -21,10 +21,10 @@ import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
 import android.view.*;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.*;
 import android.widget.*;
 import com.chess.genesis.*;
-import com.chess.genesis.engine.Piece;
+import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 

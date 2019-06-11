@@ -17,9 +17,9 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
 import android.os.*;
 import com.chess.genesis.util.*;
-import java.util.*;
 
 public class RegEngine extends Engine
 {

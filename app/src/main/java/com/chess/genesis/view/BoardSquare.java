@@ -18,7 +18,6 @@ package com.chess.genesis.view;
 
 import android.graphics.*;
 import android.view.*;
-
 import com.chess.genesis.engine.*;
 
 public class BoardSquare implements IBoardSq

@@ -17,11 +17,12 @@
 package com.chess.genesis.util;
 
 import android.content.*;
-import android.content.SharedPreferences.Editor;
-import android.preference.*;
+import android.content.SharedPreferences.*;
 import android.util.*;
+import androidx.preference.*;
+import androidx.preference.Preference.*;
 
-public class IntListPreference extends ListPreference
+public class IntListPreference extends ListPreference implements OnPreferenceChangeListener
 {
 	public IntListPreference(final Context context)
 	{
@@ -49,15 +50,11 @@ public class IntListPreference extends ListPreference
 	}
 
 	@Override
-	protected void onDialogClosed(final boolean positiveResult)
+	public boolean onPreferenceChange(Preference preference, Object newValue)
 	{
-		super.onDialogClosed(positiveResult);
-
-		if (!positiveResult)
-			return;
-
-		final Editor editor = getEditor();
+		final Editor editor = getSharedPreferences().edit();
 		editor.putInt(getKey(), Integer.parseInt(getValue()));
 		editor.commit();
+		return true;
 	}
 }

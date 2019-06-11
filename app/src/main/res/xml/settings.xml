@@ -1,138 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-xmlns:android="http://schemas.android.com/apk/res/android">
+xmlns:app="http://schemas.android.com/apk/res-auto">
 	<PreferenceCategory
-	android:title="Board Settings">
+	app:title="Board Settings">
 		<CheckBoxPreference
-		android:key="viewAsBlack"
-		android:defaultValue="true"
-		android:title="View As Black"
-		android:summary="View as black when playing black"/>
+		app:key="viewAsBlack"
+		app:defaultValue="true"
+		app:title="View As Black"
+		app:summary="View as black when playing black"/>
 		<CheckBoxPreference
-		android:key="showCaptured"
-		android:defaultValue="true"
-		android:title="Show Captured Pieces"
-		android:summary="Display captured pieces below the board"/>
-		<PreferenceScreen
-		android:title="Board Colors"
-		android:summary="Change the color of the board's squares">
+		app:key="showCaptured"
+		app:defaultValue="true"
+		app:title="Show Captured Pieces"
+		app:summary="Display captured pieces below the board"/>
+		<PreferenceCategory
+		app:title="Board Colors"
+		app:summary="Change the color of the board's squares">
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcInnerDark"
-			android:defaultValue="@color/blue_navy_400"
-			android:persistent="true"
-			android:title="Dark Main"/>
+			app:key="bcInnerDark"
+			app:defaultValue="@color/blue_navy_400"
+			app:persistent="true"
+			app:title="Dark Main"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcOuterDark"
-			android:defaultValue="@color/blue_navy_500"
-			android:persistent="true"
-			android:title="Dark Border"/>
+			app:key="bcOuterDark"
+			app:defaultValue="@color/blue_navy_500"
+			app:persistent="true"
+			app:title="Dark Border"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcInnerLight"
-			android:defaultValue="@color/white"
-			android:persistent="true"
-			android:title="Light Main"/>
+			app:key="bcInnerLight"
+			app:defaultValue="@color/white"
+			app:persistent="true"
+			app:title="Light Main"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcOuterLight"
-			android:defaultValue="@color/grey_400"
-			android:persistent="true"
-			android:title="Light Border"/>
+			app:key="bcOuterLight"
+			app:defaultValue="@color/grey_400"
+			app:persistent="true"
+			app:title="Light Border"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcInnerSelect"
-			android:defaultValue="@color/green_light_A700"
-			android:persistent="true"
-			android:title="Selected"/>
+			app:key="bcInnerSelect"
+			app:defaultValue="@color/green_light_A700"
+			app:persistent="true"
+			app:title="Selected"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcInnerCheck"
-			android:defaultValue="@color/red_500"
-			android:persistent="true"
-			android:title="In Check"/>
+			app:key="bcInnerCheck"
+			app:defaultValue="@color/red_500"
+			app:persistent="true"
+			app:title="In Check"/>
 			<com.chess.genesis.view.ColorPickerPreference
-			android:key="bcInnerLast"
-			android:defaultValue="@color/purple_deep_300"
-			android:persistent="true"
-			android:title="Last Move"/>
+			app:key="bcInnerLast"
+			app:defaultValue="@color/purple_deep_300"
+			app:persistent="true"
+			app:title="Last Move"/>
 			<com.chess.genesis.util.CallBackPreference
-			android:key="bcReset"
-			android:persistent="false"
-			android:title="Reset To Defaults"
-			android:summary="Reset all board colors to their defaults"/>
-		</PreferenceScreen>
+			app:key="bcReset"
+			app:persistent="false"
+			app:title="Reset To Defaults"
+			app:summary="Reset all board colors to their defaults"/>
+		</PreferenceCategory>
 	</PreferenceCategory>
 	<PreferenceCategory
-	android:title="UI Settings">
+	app:title="UI Settings">
 		<CheckBoxPreference
-		android:key="screenAlwaysOn"
-		android:defaultValue="false"
-		android:title="Keep Screen Active"
-		android:summary="Force the screen on while in a game"/>
+		app:key="screenAlwaysOn"
+		app:defaultValue="false"
+		app:title="Keep Screen Active"
+		app:summary="Force the screen on while in a game"/>
 	</PreferenceCategory>
 	<PreferenceCategory
-	android:title="Notifications">
+	app:title="Notifications">
 		<CheckBoxPreference
-		android:key="noteEnabled"
-		android:defaultValue="true"
-		android:title="Background Syncing"
-		android:summary="Enable in app notifications"/>
+		app:key="noteEnabled"
+		app:defaultValue="true"
+		app:title="Background Syncing"
+		app:summary="Enable in app notifications"/>
 		<com.chess.genesis.util.IntListPreference
-		android:key="notifierPolling"
-		android:defaultValue="30"
-		android:entries="@array/polling_freq_entries"
-		android:entryValues="@array/polling_freq_values"
-		android:dependency="noteEnabled"
-		android:title="Update Frequency"
-		android:summary="How often the server is checked"/>
+		app:key="notifierPolling"
+		app:defaultValue="30"
+		app:entries="@array/polling_freq_entries"
+		app:entryValues="@array/polling_freq_values"
+		app:dependency="noteEnabled"
+		app:title="Update Frequency"
+		app:summary="How often the server is checked"/>
 		<CheckBoxPreference
-		android:key="emailNoteEnabled"
-		android:defaultValue="true"
-		android:persistent="false"
-		android:title="Your Turn Emails"
-		android:summary="Send email notifications on your turn"/>
+		app:key="emailNoteEnabled"
+		app:defaultValue="true"
+		app:persistent="false"
+		app:title="Your Turn Emails"
+		app:summary="Send email notifications on your turn"/>
 	</PreferenceCategory>
 	<PreferenceCategory
-	android:title="Developer Tools">
+	app:title="Developer Tools">
 		<Preference
-		android:key="benchmark"
-		android:persistent="false"
-		android:title="CPU Benchmark"
-		android:summary="See how fast your device can search moves"/>
+		app:key="benchmark"
+		app:persistent="false"
+		app:title="CPU Benchmark"
+		app:summary="See how fast your device can search moves"/>
 		<PreferenceScreen
-		android:key="dbtools"
-		android:title="Database Tools"
-		android:summary="Clear and resync DB tables">
+		app:key="dbtools"
+		app:title="Database Tools"
+		app:summary="Clear and resync DB tables">
 			<com.chess.genesis.util.CallBackPreference
-			android:key="deleteLocalTable"
-			android:persistent="false"
-			android:title="Delete Local Games"
-			android:dialogMessage="@string/deleteLocalTable"
-			android:summary="Remove all local games"/>
+			app:key="deleteLocalTable"
+			app:persistent="false"
+			app:title="Delete Local Games"
+			app:dialogMessage="@string/deleteLocalTable"
+			app:summary="Remove all local games"/>
 			<com.chess.genesis.util.CallBackPreference
-			android:key="resyncOnlineTable"
-			android:persistent="false"
-			android:title="Sync Active Games"
-			android:dialogMessage="@string/resyncOnlineTable"
-			android:summary="Force a full resync of all active games"/>
+			app:key="resyncOnlineTable"
+			app:persistent="false"
+			app:title="Sync Active Games"
+			app:dialogMessage="@string/resyncOnlineTable"
+			app:summary="Force a full resync of all active games"/>
 			<com.chess.genesis.util.CallBackPreference
-			android:key="resyncArchiveTable"
-			android:persistent="false"
-			android:title="Sync Archive Games"
-			android:dialogMessage="@string/resyncArchiveTable"
-			android:summary="Force a full resync of all archive games"/>
+			app:key="resyncArchiveTable"
+			app:persistent="false"
+			app:title="Sync Archive Games"
+			app:dialogMessage="@string/resyncArchiveTable"
+			app:summary="Force a full resync of all archive games"/>
 			<com.chess.genesis.util.CallBackPreference
-			android:key="resyncMsgTable"
-			android:persistent="false"
-			android:title="Sync Messages"
-			android:dialogMessage="@string/resyncMsgTable"
-			android:summary="Force a full resync of all messages"/>
+			app:key="resyncMsgTable"
+			app:persistent="false"
+			app:title="Sync Messages"
+			app:dialogMessage="@string/resyncMsgTable"
+			app:summary="Force a full resync of all messages"/>
 		</PreferenceScreen>
 		<EditTextPreference
-		android:key="serverhost"
-		android:persistent="true"
-		android:title="Server Host"
-		android:summary="Connect to a different server"/>
+		app:key="serverhost"
+		app:persistent="true"
+		app:title="Server Host"
+		app:summary="Connect to a different server"/>
 		<CheckBoxPreference
-		android:key="netdebug"
-		android:defaultValue="false"
-		android:title="Log Traffic"
-		android:summary="Log traffic to file"/>
+		app:key="netdebug"
+		app:defaultValue="false"
+		app:title="Log Traffic"
+		app:summary="Log traffic to file"/>
 	</PreferenceCategory>
 </PreferenceScreen>

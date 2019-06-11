@@ -17,15 +17,15 @@
 package com.chess.genesis.dialog;
 
 import java.util.Map.*;
-import android.app.*;
 import android.app.AlertDialog.*;
+import android.app.*;
 import android.content.*;
 import android.content.DialogInterface.*;
 import android.os.*;
-import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
+import androidx.fragment.app.DialogFragment;
 
 public class RegisterConfirm extends DialogFragment implements OnClickListener
 {
