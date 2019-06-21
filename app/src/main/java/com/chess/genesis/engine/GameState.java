@@ -275,6 +275,11 @@ public abstract class GameState implements Handler.Callback
 		setStm();
 	}
 
+	public Board getBoard()
+	{
+		return board;
+	}
+
 	public void backMove()
 	{
 		if (hindex < 0)

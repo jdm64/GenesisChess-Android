@@ -110,6 +110,11 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		return squares[BaseBoard.EE64F(index)];
 	}
 
+	public GameState getState()
+	{
+		return gamestate;
+	}
+
 	private IBoardSq getTouchedSquare()
 	{
 		final int[] loc = new int[2];
