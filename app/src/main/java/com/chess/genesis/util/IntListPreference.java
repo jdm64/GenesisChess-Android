@@ -37,7 +37,7 @@ public class IntListPreference extends ListPreference implements OnPreferenceCha
 	}
 
 	@Override
-	protected void onSetInitialValue(final boolean restoreValue, final Object defaultValue)
+	protected void onSetInitialValue(Object defaultValue)
 	{
 		final SharedPreferences pref = getSharedPreferences();
 		final int value = pref.getInt(getKey(), Integer.parseInt((String) defaultValue));
@@ -54,7 +54,7 @@ public class IntListPreference extends ListPreference implements OnPreferenceCha
 	{
 		final Editor editor = getSharedPreferences().edit();
 		editor.putInt(getKey(), Integer.parseInt(getValue()));
-		editor.commit();
+		editor.apply();
 		return true;
 	}
 }

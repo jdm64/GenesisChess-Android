@@ -44,13 +44,11 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
-		switch (msg.what) {
-		case SubmitMove.MSG:
+		if (msg.what == SubmitMove.MSG) {
 			if ((Boolean) msg.obj)
 				gamestate.submitMove();
 			else
 				gamestate.undoMove();
-			break;
 		}
 		return true;
 	}

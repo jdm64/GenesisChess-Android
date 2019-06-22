@@ -20,7 +20,6 @@ import android.content.pm.*;
 import android.os.*;
 import com.chess.genesis.*;
 import androidx.appcompat.app.*;
-import androidx.appcompat.widget.*;
 import androidx.fragment.app.*;
 
 public abstract class AbstractPhoneActivity extends AppCompatActivity
@@ -36,7 +35,7 @@ public abstract class AbstractPhoneActivity extends AppCompatActivity
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_abstract_phone);
-		setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
+		setSupportActionBar(findViewById(R.id.main_toolbar));
 		getSupportActionBar().setDisplayUseLogoEnabled(true);
 		getSupportActionBar().setLogo(R.drawable.genesischess);
 

@@ -35,8 +35,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 	@Override
 	public boolean handleMessage(final Message msg)
 	{
-		switch (msg.what) {
-		case LogoutConfirm.MSG:
+		if (msg.what == LogoutConfirm.MSG) {
 			final PrefEdit pref = new PrefEdit(act);
 
 			pref.putBool(R.array.pf_isLoggedIn);
@@ -47,7 +46,6 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 			pref.commit();
 
 			updateLoggedInView();
-			break;
 		}
 		return true;
 	}
@@ -172,14 +170,12 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		switch (item.getItemId()) {
-		case R.id.logout:
+		if (item.getItemId() == R.id.logout) {
 			if (Pref.getBool(act, R.array.pf_isLoggedIn))
 				LogoutConfirm.create(new Handler(this)).show(getFragmentManager(), "");
 			else
 				Toast.makeText(act, "Already Logged Out", Toast.LENGTH_LONG).show();
-			break;
-		default:
+		} else {
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
