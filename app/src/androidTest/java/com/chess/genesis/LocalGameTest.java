@@ -61,19 +61,32 @@ public class LocalGameTest
 		onView(withText("Create Game")).perform(click());
 
 		onView(withId(R.id.board_layout)).perform(new BoardClicks(
-		"a2a4 h7h6 a4a5 h6h5 a5a6 h5h4 a6b7 h4h3 b7a8"
+		"a2a4 h7h6 a4a5 h6h5 a5a6 h5h4 a6b7 h4h3"
 		));
 
-		onView(withId(R.id.table)).perform(new GeneralClickAction(
-			Tap.SINGLE,
-			GeneralLocation.TOP_LEFT,
-			Press.FINGER,
-			InputDevice.SOURCE_UNKNOWN,
-			MotionEvent.BUTTON_PRIMARY));
+		GeneralLocation[] locations = new GeneralLocation[]{
+			GeneralLocation.TOP_LEFT, GeneralLocation.TOP_RIGHT,
+			GeneralLocation.BOTTOM_LEFT, GeneralLocation.BOTTOM_RIGHT
+		};
+		String[] promotion = new String[]{"Q", "R", "B", "N"};
 
-		onView(withId(R.id.board_layout)).check(new ValidateBoard("Qnbqkbnrp1ppppp32p1PPPPPPPRNBQKBNR:KQkq::9"));
+		for (int i = 0; i < 4; i++) {
+			onView(withId(R.id.board_layout)).perform(new BoardClicks("b7a8"));
+			onView(withId(R.id.table)).perform(doClick(locations[i]));
+			onView(withId(R.id.board_layout)).check(new ValidateBoard(promotion[i] + "nbqkbnrp1ppppp32p1PPPPPPPRNBQKBNR:KQkq::9"));
+			onView(withId(R.id.backwards)).perform(click());
+		}
 	}
 
+	static ViewAction doClick(GeneralLocation location)
+	{
+		return new GeneralClickAction(
+			Tap.SINGLE,
+			location,
+			Press.FINGER,
+			InputDevice.SOURCE_UNKNOWN,
+			MotionEvent.BUTTON_PRIMARY);
+	}
 
 	static class BoardClicks implements ViewAction
 	{
