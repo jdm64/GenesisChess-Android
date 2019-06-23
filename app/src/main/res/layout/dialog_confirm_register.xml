@@ -5,7 +5,7 @@ android:padding="16dp"
 android:orientation="vertical">
 	<TextView
 	android:id="@+id/layout01"
-	android:textColor="#000000"
+	android:textColor="?android:attr/textColorPrimary"
 	android:text="@string/register_confirm"/>
 	<TableLayout
 	android:layout_below="@id/layout01"
@@ -16,21 +16,21 @@ android:orientation="vertical">
 			<TextView
 			android:layout_gravity="right"
 			android:paddingRight="12dp"
-			android:textColor="#000000"
+			android:textColor="?android:attr/textColorPrimary"
 			android:text="User Name:"/>
 			<TextView
 			android:id="@+id/username"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:layout_gravity="right"
 			android:paddingRight="12dp"
-			android:textColor="#000000"
+			android:textColor="?android:attr/textColorPrimary"
 			android:text="Email:"/>
 			<TextView
 			android:id="@+id/email"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 	</TableLayout>
 </LinearLayout>

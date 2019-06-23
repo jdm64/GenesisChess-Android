@@ -7,7 +7,7 @@ android:stretchColumns="1">
 		<TextView
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
-		android:textColor="#000000"
+		android:textColor="?android:attr/textColorPrimary"
 		android:text="User Name:"/>
 		<EditText
 		android:id="@+id/opp_name"
@@ -17,7 +17,7 @@ android:stretchColumns="1">
 		<TextView
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
-		android:textColor="#000000"
+		android:textColor="?android:attr/textColorPrimary"
 		android:text="Your Color:"/>
 		<Spinner
 		android:id="@+id/invite_color"/>

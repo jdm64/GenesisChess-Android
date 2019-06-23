@@ -12,87 +12,87 @@ android:orientation="vertical">
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="White:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/white"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Black:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/black"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Game Type:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/gametype"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Event Type:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/eventtype"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Status:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/status"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Create Time:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/ctime"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 		<TableRow>
 			<TextView
 			android:gravity="right"
 			android:textStyle="bold"
 			android:text="Save Time:  "
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 			<TextView
 			android:id="@+id/stime"
-			android:textColor="#000000"/>
+			android:textColor="?android:attr/textColorPrimary"/>
 		</TableRow>
 	</TableLayout>
 	<TextView
 	android:textStyle="bold"
 	android:text="Zfen:"
-	android:textColor="#000000"/>
+	android:textColor="?android:attr/textColorPrimary"/>
 	<TextView
 	android:id="@+id/zfen"
 	android:typeface="monospace"
-	android:textColor="#000000"/>
+	android:textColor="?android:attr/textColorPrimary"/>
 	<TextView
 	android:textStyle="bold"
 	android:text="Move History:"
-	android:textColor="#000000"/>
+	android:textColor="?android:attr/textColorPrimary"/>
 	<TextView
 	android:id="@+id/history"
 	android:typeface="monospace"
-	android:textColor="#000000"/>
+	android:textColor="?android:attr/textColorPrimary"/>
 </LinearLayout>
 </ScrollView>

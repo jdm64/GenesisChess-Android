@@ -16,7 +16,10 @@
 
 package com.chess.genesis.data;
 
+import static android.graphics.Color.*;
+import java.util.function.*;
 import android.content.*;
+import android.content.res.*;
 import android.database.sqlite.*;
 import android.graphics.*;
 import android.os.*;
@@ -229,12 +232,23 @@ class GameListItem extends View
 		setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), size);
 	}
 
+	private static float luminance(int color)
+	{
+		return (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
+	}
+
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
+		TypedArray arr = adapter.getContext().obtainStyledAttributes(new int[]{android.R.attr.textColorPrimary});
+		int txtColor = arr.getColor(0, MColors.BLACK);
+		arr.recycle();
+
+		paint.setColor(txtColor);
+
 		// background color
 		if (!isPressed() && index % 2 != 0)
-			canvas.drawColor(MColors.CYAN_50);
+			canvas.drawColor(luminance(txtColor) < 0.5 ? MColors.CYAN_50 : MColors.BLUE_NAVY_400);
 
 		// icon
 		setIcon(canvas);
@@ -259,7 +273,6 @@ class GameListItem extends View
 			setOnlineTxt(canvas);
 
 		// reset paint
-		paint.setColor(MColors.BLACK);
 		paint.setTextAlign(Paint.Align.LEFT);
 		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 	}

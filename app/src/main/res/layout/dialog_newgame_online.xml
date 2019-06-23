@@ -7,7 +7,7 @@ android:stretchColumns="1">
 		<TextView
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
-		android:textColor="#000000"
+		android:textColor="?android:attr/textColorPrimary"
 		android:text="Game Type:"/>
 		<Spinner
 		android:id="@+id/game_type"/>
@@ -16,7 +16,7 @@ android:stretchColumns="1">
 		<TextView
 		android:layout_gravity="right|center_vertical"
 		android:paddingRight="6dp"
-		android:textColor="#000000"
+		android:textColor="?android:attr/textColorPrimary"
 		android:text="Opponent:"/>
 		<Spinner
 		android:id="@+id/opp_type"/>

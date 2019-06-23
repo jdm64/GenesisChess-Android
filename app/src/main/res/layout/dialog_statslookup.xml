@@ -5,7 +5,7 @@ style="@style/FillWidth"
 android:orientation="vertical">
 	<TextView
 	android:text="Enter Username:"
-	android:textColor="#f000"
+	android:textColor="?android:attr/textColorPrimary"
 	android:textSize="14sp"/>
 	<EditText
 	android:id="@+id/username"

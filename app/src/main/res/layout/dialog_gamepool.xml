@@ -3,7 +3,7 @@
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<TextView
 	android:id="@+id/text01"
-	android:textColor="#ff000000"
+	android:textColor="?android:attr/textColorPrimary"
 	android:text="@string/gamepool_info"/>
 	<TableLayout
 	android:id="@+id/layout01"
@@ -17,12 +17,12 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		<TableRow>
 			<TextView
 			android:id="@+id/left"
-			android:textColor="#ff000000"
+			android:textColor="?android:attr/textColorPrimary"
 			android:textStyle="bold"
 			android:text="Game Type"/>
 			<TextView
 			android:id="@+id/right"
-			android:textColor="#ff000000"
+			android:textColor="?android:attr/textColorPrimary"
 			android:textStyle="bold"
 			android:text="Time Submitted"/>
 		</TableRow>

@@ -13,7 +13,7 @@ android:orientation="vertical">
 		<CheckBox
 		android:id="@+id/agree"/>
 		<TextView
-		android:textColor="#000000"
+		android:textColor="?android:attr/textColorPrimary"
 		android:textSize="18sp"
 		android:text="I Understand"/>
 	</LinearLayout>
