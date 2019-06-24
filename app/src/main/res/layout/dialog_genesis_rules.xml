@@ -6,13 +6,18 @@ android:layout_width="wrap_content"
 android:padding="16dp"
 android:orientation="vertical">
 	<TextView
+	style="@style/FillNone"
 	android:id="@+id/layout01"
 	android:textColor="#cc0000"
 	android:text="@string/genesis_rules"/>
-	<LinearLayout>
+	<LinearLayout
+	android:paddingTop="16dp"
+	style="@style/FillNone">
 		<CheckBox
+		style="@style/FillNone"
 		android:id="@+id/agree"/>
 		<TextView
+		style="@style/FillNone"
 		android:textColor="?android:attr/textColorPrimary"
 		android:textSize="18sp"
 		android:text="I Understand"/>
