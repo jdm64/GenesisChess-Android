@@ -30,7 +30,7 @@ import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
-public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener, OnGlobalLayoutListener
+public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener
 {
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -67,23 +67,7 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 		final TextView textView = view.findViewById(R.id.version);
 		textView.setText(BuildConfig.VERSION_NAME);
 
-		// create layout listner for resizing the button text
-		final View v = view.findViewById(R.id.online_game);
-		final ViewTreeObserver vto = v.getViewTreeObserver();
-		vto.addOnGlobalLayoutListener(this);
-
 		return view;
-	}
-
-	@Override
-	public void onGlobalLayout()
-	{
-		resizeButtonText(getView());
-
-		// remove layout listener once text was resized
-		final View v = getView().findViewById(R.id.online_game);
-		final ViewTreeObserver vto = v.getViewTreeObserver();
-		vto.removeOnGlobalLayoutListener(this);
 	}
 
 	@Override
@@ -179,31 +163,6 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 			return super.onOptionsItemSelected(item);
 		}
 		return true;
-	}
-
-	private static void resizeButtonText(final View view)
-	{
-		final int[] list = new int[]{R.id.local_game_txt, R.id.online_game_txt,
-			R.id.archive_game_txt, R.id.howtoplay_txt, R.id.login_txt,
-			R.id.settings_txt};
-
-		final String[] stList = new String[list.length];
-		TextView txt = null;
-		for (int i = 0; i < list.length; i++) {
-			txt = view.findViewById(list[i]);
-			stList[i] = (String) txt.getText();
-		}
-		if (txt == null)
-			return;
-
-		float width = view.getWidth();
-		width *= 0.9 / 3;
-
-		final float txtSize = TextUtil.maxTextWidth(stList, txt.getPaint(), width);
-		for (final int element : list) {
-			txt = view.findViewById(element);
-			txt.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize);
-		}
 	}
 
 	private void updateLoggedInView()

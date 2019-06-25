@@ -20,6 +20,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 				genesis:src="@drawable/main_local"/>
 				<TextView
 				android:id="@+id/local_game_txt"
+				android:textSize="16sp"
+				android:textColor="?android:attr/textColorPrimary"
 				android:layout_gravity="bottom|center_horizontal"
 				android:text="Local Play"/>
 			</FrameLayout>
@@ -30,6 +32,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 				genesis:src="@drawable/main_online"/>
 				<TextView
 				android:id="@+id/online_game_txt"
+				android:textSize="16sp"
+				android:textColor="?android:attr/textColorPrimary"
 				android:layout_gravity="bottom|center_horizontal"
 				android:text="Online Matches"/>
 			</FrameLayout>
@@ -40,6 +44,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 				genesis:src="@drawable/main_stats"/>
 				<TextView
 				android:id="@+id/archive_game_txt"
+				android:textSize="16sp"
+				android:textColor="?android:attr/textColorPrimary"
 				android:layout_gravity="bottom|center_horizontal"
 				android:text="User Stats"/>
 			</FrameLayout>
@@ -52,6 +58,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 				genesis:src="@drawable/main_howto"/>
 				<TextView
 				android:id="@+id/howtoplay_txt"
+				android:textSize="16sp"
+				android:textColor="?android:attr/textColorPrimary"
 				android:layout_gravity="bottom|center_horizontal"
 				android:text="How To Play"/>
 			</FrameLayout>
@@ -62,6 +70,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 				genesis:src="@drawable/main_settings"/>
 				<TextView
 				android:id="@+id/settings_txt"
+				android:textSize="16sp"
+				android:textColor="?android:attr/textColorPrimary"
 				android:layout_gravity="bottom|center_horizontal"
 				android:text="Settings"/>
 			</FrameLayout>
@@ -72,6 +82,8 @@ xmlns:genesis="http://schemas.android.com/apk/res-auto">
 					genesis:src="@drawable/main_login"/>
 				<TextView
 					android:id="@+id/login_txt"
+					android:textSize="16sp"
+					android:textColor="?android:attr/textColorPrimary"
 					android:layout_gravity="bottom|center_horizontal"
 					android:text="Login/Register"/>
 			</FrameLayout>
