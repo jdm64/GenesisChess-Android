@@ -24,7 +24,7 @@ import android.view.*;
 import android.widget.*;
 import org.json.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.util.*;
+import com.chess.genesis.util.FileUtils;
 
 abstract class GameListFrag extends AbstractActivityFrag
 {

@@ -27,7 +27,7 @@ import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.util.*;
+import com.chess.genesis.util.FileUtils;
 
 public class GameListLocalFrag extends GameListFrag implements OnItemClickListener
 {
