@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply from: 'signing.gradle'
 
 android {
     compileSdkVersion 29
@@ -16,6 +15,25 @@ android {
         versionCode 70
         versionName "1.14.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            def props = new Properties()
+            def propFile = rootProject.file("keystore.properties")
+            if (propFile.exists()) {
+                props.load(new FileInputStream(propFile))
+            } else {
+                props.setProperty('storeFile', debug.storeFile.toString())
+                props.setProperty('storePassword', debug.storePassword)
+                props.setProperty('keyAlias', debug.keyAlias)
+                props.setProperty('keyPassword', debug.keyPassword)
+            }
+
+            storeFile file(props['storeFile'])
+            storePassword props['storePassword']
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
+        }
     }
     buildTypes {
         release {
