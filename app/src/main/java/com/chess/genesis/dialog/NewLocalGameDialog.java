@@ -17,25 +17,25 @@
 package com.chess.genesis.dialog;
 
 import java.util.Map.*;
-import android.R.*;
 import android.app.AlertDialog.*;
 import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+import android.widget.RadioGroup.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.util.*;
 import androidx.fragment.app.DialogFragment;
 
-public class NewLocalGameDialog extends DialogFragment implements DialogInterface.OnClickListener
+public class NewLocalGameDialog extends DialogFragment implements DialogInterface.OnClickListener, OnCheckedChangeListener
 {
 	public final static int MSG = 102;
 
 	private Handler handle;
-	private Spinner gametype_spin;
-	private Spinner opponent_spin;
+	private RadioGroup gametype_group;
+	private RadioGroup white_group;
+	private RadioGroup black_group;
 
 	public static NewLocalGameDialog create(Handler handler)
 	{
@@ -54,27 +54,44 @@ public class NewLocalGameDialog extends DialogFragment implements DialogInterfac
 			.setPositiveButton("Create Game", this)
 			.setNegativeButton("Cancel", this);
 
-		AdapterItem[] list = new AdapterItem[]
-			{new AdapterItem("Genesis", Enums.GENESIS_CHESS),
-			new AdapterItem("Regular", Enums.REGULAR_CHESS) };
+		gametype_group = builder.getKey().findViewById(R.id.type_group);
+		gametype_group.check(R.id.genesis_radio);
 
-		ArrayAdapter<AdapterItem> adapter = new ArrayAdapter<>(builder.getKey().getContext(), layout.simple_spinner_item, list);
-		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+		white_group = builder.getKey().findViewById(R.id.white_group);
+		white_group.check(R.id.white_human);
+		white_group.setOnCheckedChangeListener(this);
 
-		gametype_spin = builder.getKey().findViewById(R.id.game_type);
-		gametype_spin.setAdapter(adapter);
-
-		list = new AdapterItem[] {new AdapterItem("CPU As Black", Enums.CPU_BLACK_OPPONENT),
-			new AdapterItem("CPU As White", Enums.CPU_WHITE_OPPONENT),
-			new AdapterItem("Human", Enums.HUMAN_OPPONENT) };
-
-		adapter = new ArrayAdapter<>(builder.getKey().getContext(), layout.simple_spinner_item, list);
-		adapter.setDropDownViewResource(R.layout.spinner_dropdown);
-
-		opponent_spin = builder.getKey().findViewById(R.id.opponent);
-		opponent_spin.setAdapter(adapter);
+		black_group = builder.getKey().findViewById(R.id.black_group);
+		black_group.check(R.id.black_cpu);
+		black_group.setOnCheckedChangeListener(this);
 
 		return builder.getValue().create();
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup radioGroup, int id)
+	{
+		if (radioGroup == white_group && id == R.id.white_cpu && black_group.getCheckedRadioButtonId() == R.id.black_cpu) {
+			((RadioButton) black_group.findViewById(R.id.black_human)).toggle();
+		} else if (radioGroup == black_group && id == R.id.black_cpu && white_group.getCheckedRadioButtonId() == R.id.white_cpu) {
+			((RadioButton) white_group.findViewById(R.id.white_human)).toggle();
+		}
+	}
+
+	public int getOpponent()
+	{
+		int isWhiteHuman = white_group.getCheckedRadioButtonId() == R.id.white_human ? 1 : 0;
+		int isBlackHuman = black_group.getCheckedRadioButtonId() == R.id.black_human ? 2 : 0;
+
+		switch (isWhiteHuman + isBlackHuman) {
+		case 3:
+			return Enums.HUMAN_OPPONENT;
+		case 2:
+			return Enums.CPU_WHITE_OPPONENT;
+		case 1:
+		default:
+			return Enums.CPU_BLACK_OPPONENT;
+		}
 	}
 
 	@Override
@@ -84,9 +101,12 @@ public class NewLocalGameDialog extends DialogFragment implements DialogInterfac
 			final Bundle data = new Bundle();
 			final EditText text = getDialog().findViewById(R.id.game_name);
 
+			int gameType = gametype_group.getCheckedRadioButtonId() == R.id.genesis_radio
+				? Enums.GENESIS_CHESS : Enums.REGULAR_CHESS;
+
 			data.putString("name", text.getText().toString().trim());
-			data.putInt("gametype", ((AdapterItem) gametype_spin.getSelectedItem()).id);
-			data.putInt("opponent", ((AdapterItem) opponent_spin.getSelectedItem()).id);
+			data.putInt("gametype", gameType);
+			data.putInt("opponent", getOpponent());
 
 			handle.sendMessage(handle.obtainMessage(MSG, data));
 		}

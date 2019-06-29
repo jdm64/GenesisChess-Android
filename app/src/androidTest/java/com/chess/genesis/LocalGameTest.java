@@ -43,21 +43,13 @@ public class LocalGameTest
 	public ActivityTestRule<StartActivity> rule = new ActivityTestRule<>(StartActivity.class);
 
 	@Test
-	public void promoteDialog()
+	public void promoteDialog() throws InterruptedException
 	{
 		onView(withId(R.id.local_game)).perform(click());
 		onView(withId(R.id.new_game)).perform(click());
 
-		onView(withId(R.id.game_type)).perform(click());
-		onView(withText("Regular"))
-			.inRoot(RootMatchers.isPlatformPopup())
-			.perform(click());
-
-		onView(withId(R.id.opponent)).perform(click());
-		onView(withText("Human"))
-			.inRoot(RootMatchers.isPlatformPopup())
-			.perform(click());
-
+		onView(withId(R.id.regular_radio)).perform(click());
+		onView(withId(R.id.black_human)).perform(click());
 		onView(withText("Create Game")).perform(click());
 
 		onView(withId(R.id.board_layout)).perform(new BoardClicks(
@@ -72,16 +64,16 @@ public class LocalGameTest
 
 		for (int i = 0; i < 4; i++) {
 			onView(withId(R.id.board_layout)).perform(new BoardClicks("b7a8"));
-			onView(withId(R.id.table)).perform(doClick(locations[i]));
+			onView(withId(R.id.table)).perform(doClick(locations[i], Tap.DOUBLE));
 			onView(withId(R.id.board_layout)).check(new ValidateBoard(promotion[i] + "nbqkbnrp1ppppp32p1PPPPPPPRNBQKBNR:KQkq::9"));
 			onView(withId(R.id.backwards)).perform(click());
 		}
 	}
 
-	static ViewAction doClick(GeneralLocation location)
+	static ViewAction doClick(GeneralLocation location, Tap tap)
 	{
 		return new GeneralClickAction(
-			Tap.SINGLE,
+			tap,
 			location,
 			Press.FINGER,
 			InputDevice.SOURCE_UNKNOWN,

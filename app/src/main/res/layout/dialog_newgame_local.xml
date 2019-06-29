@@ -1,37 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:padding="16dp"
-android:shrinkColumns="*"
-android:stretchColumns="1"
-android:layout_height="match_parent"
-android:layout_width="match_parent">
-	<TableRow>
-		<TextView
-		android:layout_gravity="right|center_vertical"
-		android:paddingRight="6dp"
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/tableLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/name_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="32dp"
+		android:layout_marginTop="16dp"
+		android:text="Name:"
 		android:textColor="?android:attr/textColorPrimary"
-		android:text="Game Name:"/>
-		<EditText
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"/>
+
+	<EditText
 		android:id="@+id/game_name"
-		android:inputType="text" />
-	</TableRow>
-	<TableRow>
-		<TextView
-		android:layout_gravity="right|center_vertical"
-		android:paddingRight="6dp"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="32dp"
+		android:inputType="text"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="@+id/name_label"
+		app:layout_constraintTop_toBottomOf="@+id/name_label"/>
+
+	<TextView
+		android:id="@+id/type_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="12dp"
+		android:text="Type:"
 		android:textColor="?android:attr/textColorPrimary"
-		android:text="Game Type:"/>
-		<Spinner
-		android:id="@+id/game_type"/>
-	</TableRow>
-	<TableRow>
-		<TextView
-		android:layout_gravity="right|center_vertical"
-		android:paddingRight="6dp"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="@+id/name_label"
+		app:layout_constraintTop_toBottomOf="@+id/game_name"/>
+
+	<RadioGroup
+		android:id="@+id/type_group"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="8dp"
+		app:layout_constraintStart_toEndOf="@+id/type_label"
+		app:layout_constraintTop_toBottomOf="@+id/game_name">
+
+		<RadioButton
+			android:id="@+id/genesis_radio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Genesis"/>
+
+		<RadioButton
+			android:id="@+id/regular_radio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Regular"/>
+	</RadioGroup>
+
+	<TextView
+		android:id="@+id/white_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="12dp"
+		android:text="White:"
 		android:textColor="?android:attr/textColorPrimary"
-		android:text="Opponent:"/>
-		<Spinner
-		android:id="@+id/opponent"/>
-	</TableRow>
-</TableLayout>
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="@+id/name_label"
+		app:layout_constraintTop_toBottomOf="@+id/type_group"/>
+
+	<RadioGroup
+		android:id="@+id/white_group"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:orientation="horizontal"
+		app:layout_constraintStart_toStartOf="@+id/type_group"
+		app:layout_constraintTop_toBottomOf="@+id/type_group">
+
+		<RadioButton
+			android:id="@+id/white_human"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:text="Human"/>
+
+		<RadioButton
+			android:id="@+id/white_cpu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="CPU"/>
+	</RadioGroup>
+
+	<TextView
+		android:id="@+id/black_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="12dp"
+		android:text="Black:"
+		android:textColor="?android:attr/textColorPrimary"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="@+id/name_label"
+		app:layout_constraintTop_toBottomOf="@+id/white_group"/>
+
+	<RadioGroup
+		android:id="@+id/black_group"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:orientation="horizontal"
+		app:layout_constraintStart_toStartOf="@+id/type_group"
+		app:layout_constraintTop_toBottomOf="@+id/white_group">
+
+		<RadioButton
+			android:id="@+id/black_human"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:text="Human"/>
+
+		<RadioButton
+			android:id="@+id/black_cpu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="CPU"/>
+	</RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
