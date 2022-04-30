@@ -170,7 +170,7 @@ public class GenesisNotifier extends Service implements Runnable
 
 	private Notification createNotification(final int id, final String text, final PendingIntent pintent)
 	{
-		final Builder noteBuilder = new Builder(getApplicationContext(), null);
+		final Builder noteBuilder = new Builder(getApplicationContext(), NotificationChannel.DEFAULT_CHANNEL_ID);
 
 		Bitmap icon = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon), 96, 96, true);
 		noteBuilder.setContentText(text).setSmallIcon(R.drawable.icon_note).setLargeIcon(icon);
