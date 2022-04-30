@@ -31,6 +31,7 @@ public class GameListLocal extends AbstractPhoneActivity
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
+		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_CANCELED || data == null)
 			return;
 

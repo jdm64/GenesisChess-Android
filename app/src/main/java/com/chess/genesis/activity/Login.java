@@ -34,8 +34,8 @@ public class Login extends AbstractPhoneActivity
 	@Override
 	public void onActivityResult(final int reques, final int result, final Intent data)
 	{
-		final String username = Pref.getBool(this, R.array.pf_isLoggedIn)?
-			Pref.getString(this, R.array.pf_username) : "";
+		super.onActivityResult(reques, result, data);
+		final String username = Pref.getBool(this, R.array.pf_isLoggedIn) ? Pref.getString(this, R.array.pf_username) : "";
 
 		EditText txt = findViewById(R.id.username);
 		txt.setText(username);
