@@ -247,7 +247,7 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 	@Override
 	public IPlaceSq getPlaceSq(int index)
 	{
-		return (IPlaceSq) act.findViewById(index);
+		return act.findViewById(index);
 	}
 
 	@Override

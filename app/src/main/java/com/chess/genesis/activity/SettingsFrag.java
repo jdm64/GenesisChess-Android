@@ -54,7 +54,7 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 		switch (msg.what) {
 		case NetworkClient.GET_OPTION:
 			// only emailnote supported
-			final CheckBoxPreference email = (CheckBoxPreference) findPreference(Pref.key(context, R.array.pf_emailNoteEnabled));
+			final CheckBoxPreference email = findPreference(Pref.key(context, R.array.pf_emailNoteEnabled));
 			email.setChecked(json.getBoolean("value"));
 
 			progress.dismiss();
@@ -107,22 +107,22 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 		String[] keys = new String[]{"bcInnerDark", "bcOuterDark", "bcInnerLight", "bcOuterLight",
 			"bcInnerSelect", "bcInnerCheck", "bcInnerLast"};
 		for (String key : keys) {
-			ColorPickerPreference picker = (ColorPickerPreference) findPreference(key);
+			ColorPickerPreference picker = findPreference(key);
 			picker.setFragMan(getFragmentManager());
 		}
 
-		CallBackPreference callbackPref = (CallBackPreference) findPreference("deleteLocalTable");
+		CallBackPreference callbackPref = findPreference("deleteLocalTable");
 		callbackPref.setCallBack(this);
-		callbackPref = (CallBackPreference) findPreference("resyncOnlineTable");
-		callbackPref.setCallBack(this);
-		callbackPref.setEnabled(isLoggedin);
-		callbackPref = (CallBackPreference) findPreference("resyncArchiveTable");
+		callbackPref = findPreference("resyncOnlineTable");
 		callbackPref.setCallBack(this);
 		callbackPref.setEnabled(isLoggedin);
-		callbackPref = (CallBackPreference) findPreference("resyncMsgTable");
+		callbackPref = findPreference("resyncArchiveTable");
 		callbackPref.setCallBack(this);
 		callbackPref.setEnabled(isLoggedin);
-		callbackPref = (CallBackPreference) findPreference("bcReset");
+		callbackPref = findPreference("resyncMsgTable");
+		callbackPref.setCallBack(this);
+		callbackPref.setEnabled(isLoggedin);
+		callbackPref = findPreference("bcReset");
 		callbackPref.setCallBack(this);
 
 		// Set email note value from server
@@ -241,7 +241,7 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 		final Pref pref = new Pref(context);
 
 		for (final int key : keys) {
-			final ColorPickerPreference colorPref = (ColorPickerPreference) findPreference(pref.key(key));
+			final ColorPickerPreference colorPref = findPreference(pref.key(key));
 			colorPref.update();
 		}
 	}
