@@ -14,8 +14,8 @@ android {
         applicationId "com.chess.genesis"
         minSdkVersion 27
         targetSdkVersion 32
-        versionCode 70
-        versionName "1.14.10"
+        versionCode 71
+        versionName "1.15.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
