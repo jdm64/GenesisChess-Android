@@ -15,7 +15,8 @@ package="com.chess.genesis">
 	android:fullBackupContent="@xml/backup_descriptor">
 		<activity
 		android:name="com.chess.genesis.activity.StartActivity"
-		android:label="@string/app_name">
+		android:label="@string/app_name"
+		android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
@@ -31,7 +32,7 @@ package="com.chess.genesis">
 		<activity android:name="com.chess.genesis.activity.Game" android:configChanges="orientation"/>
 		<activity android:name="com.chess.genesis.activity.MsgBox" android:configChanges="orientation" android:windowSoftInputMode="adjustPan"/>
 		<service android:name="com.chess.genesis.net.GenesisNotifier" android:enabled="true"/>
-		<receiver android:name="com.chess.genesis.net.GenesisAlarm">
+		<receiver android:name="com.chess.genesis.net.GenesisAlarm" android:exported="false">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED"/>
 				<category android:name="android.intent.category.HOME"/>
