@@ -105,7 +105,7 @@ public class LocalGameTest
 		public void perform(UiController uiController, View view)
 		{
 			BoardView v = (BoardView) view;
-			GameState state = v.getState();
+			var state = v.getState();
 			Board board = state.getBoard();
 			for (String move : moves.trim().split(" +")) {
 				Move mv = board.newMove();

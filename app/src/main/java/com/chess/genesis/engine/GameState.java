@@ -27,7 +27,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import androidx.fragment.app.*;
 
-public abstract class GameState implements Handler.Callback
+public abstract class GameState implements IGameState, Handler.Callback
 {
 	public static final int PLACEOFFSET = 1000;
 

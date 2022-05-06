@@ -3,18 +3,13 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.chess.genesis">
 	<supports-screens android:smallScreens="false"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.VIBRATE"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<application
 	android:label="@string/app_name"
 	android:icon="@drawable/icon"
-	android:theme="@style/DefaultTheme"
-	android:allowBackup="true"
-	android:fullBackupContent="@xml/backup_descriptor">
+	android:theme="@style/Theme.Material3.DynamicColors.DayNight"
+	android:allowBackup="true">
 		<activity
-		android:name="com.chess.genesis.activity.StartActivity"
+		android:name="com.chess.genesis.activity.MainActivity"
 		android:label="@string/app_name"
 		android:exported="true">
 			<intent-filter>
@@ -22,25 +17,5 @@ package="com.chess.genesis">
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name="com.chess.genesis.activity.MainMenuPhone" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.GameListOnline" android:configChanges="orientation" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.Settings" android:configChanges="orientation" android:launchMode="singleTask"/>
-		<activity android:name="com.chess.genesis.activity.GameListLocal" android:launchMode="singleTask" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.Login" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.Register" android:windowSoftInputMode="adjustPan"/>
-		<activity android:name="com.chess.genesis.activity.UserStats" android:configChanges="orientation"/>
-		<activity android:name="com.chess.genesis.activity.Game" android:configChanges="orientation"/>
-		<activity android:name="com.chess.genesis.activity.MsgBox" android:configChanges="orientation" android:windowSoftInputMode="adjustPan"/>
-		<service android:name="com.chess.genesis.net.GenesisNotifier" android:enabled="true"/>
-		<receiver android:name="com.chess.genesis.net.GenesisAlarm" android:exported="false">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED"/>
-				<category android:name="android.intent.category.HOME"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.PACKAGE_REPLACED"/>
-				<data android:scheme="package" android:path="com.chess.genesis"/>
-			</intent-filter>
-		</receiver>
 	</application>
 </manifest> 

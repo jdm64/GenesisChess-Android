@@ -31,7 +31,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	private final PieceImgPainter painter;
 	private final BoardSquare[] squares = new BoardSquare[64];
 
-	private GameState gamestate;
+	private IGameState gamestate;
 	private MotionEvent lastTouch;
 	private int sqSize;
 	private boolean viewAsBlack = false;
@@ -44,11 +44,10 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		setOnLongClickListener(this);
 	}
 
-	public void init(final GameState _gamestate, final boolean _viewAsBlack)
+	public void init(IGameState _gamestate, boolean _viewAsBlack)
 	{
 		gamestate = _gamestate;
 		viewAsBlack = _viewAsBlack;
-		int x = 0;
 
 		for (int i = 0; i < 64; i++) {
 			squares[i] = new BoardSquare(this, painter, BaseBoard.SFF88(i));
@@ -110,7 +109,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		return squares[BaseBoard.EE64F(index)];
 	}
 
-	public GameState getState()
+	public IGameState getState()
 	{
 		return gamestate;
 	}
