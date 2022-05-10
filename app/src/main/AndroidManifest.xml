@@ -17,5 +17,9 @@ package="com.chess.genesis">
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+		<activity
+			android:name="com.chess.genesis.activity.SettingsPage"
+			android:label="Settings">
+		</activity>
 	</application>
 </manifest> 

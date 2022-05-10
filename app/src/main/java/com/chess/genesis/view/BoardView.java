@@ -42,16 +42,26 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		painter = new PieceImgPainter(context);
 		setOnClickListener(this);
 		setOnLongClickListener(this);
-	}
-
-	public void init(IGameState _gamestate, boolean _viewAsBlack)
-	{
-		gamestate = _gamestate;
-		viewAsBlack = _viewAsBlack;
 
 		for (int i = 0; i < 64; i++) {
 			squares[i] = new BoardSquare(this, painter, BaseBoard.SFF88(i));
 		}
+	}
+
+	public void init(IGameState _gamestate, boolean _viewAsBlack)
+	{
+		setGameState(_gamestate);
+		setViewAsBlack(_viewAsBlack);
+	}
+
+	public void setGameState(IGameState _gamestate)
+	{
+		gamestate = _gamestate;
+	}
+
+	public void setViewAsBlack(boolean _viewAsBlack)
+	{
+		viewAsBlack = _viewAsBlack;
 	}
 
 	@Override
@@ -89,7 +99,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	public void onClick(View view)
 	{
 		IBoardSq sq = getTouchedSquare();
-		if (sq != null)
+		if (sq != null && gamestate != null)
 			gamestate.boardClick(sq);
 	}
 
@@ -97,7 +107,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	public boolean onLongClick(View view)
 	{
 		IBoardSq sq = getTouchedSquare();
-		if (sq != null) {
+		if (sq != null && gamestate != null) {
 			gamestate.boardLongClick(sq);
 			return true;
 		}

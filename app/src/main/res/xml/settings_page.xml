@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:title="Board Settings">
+        <CheckBoxPreference
+            app:key="viewAsBlack"
+            app:defaultValue="true"
+            app:title="View As Black"
+            app:summary="View as black when playing black"/>
+        <CheckBoxPreference
+            app:key="showCaptured"
+            app:defaultValue="true"
+            app:title="Show Captured Pieces"
+            app:summary="Display captured pieces below the board"/>
+    </PreferenceCategory>
+</PreferenceScreen>
