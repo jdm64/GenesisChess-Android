@@ -18,8 +18,9 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
+import com.chess.genesis.api.*;
 
-public class HintList
+public class HintList implements IMoveHandler
 {
 	private final IGameFrag gamefrag;
 	private final GameState gamestate;
@@ -80,7 +81,8 @@ public class HintList
 		bb.setHighlight(true);
 	}
 
-	public void boardClick(final IBoardSq bb, final int ycolor)
+	@Override
+	public void onBoardClick(IBoardSq bb, int ycolor)
 	{
 		final int index = bb.getIndex();
 		final int piece = bb.getPiece();
@@ -120,7 +122,8 @@ public class HintList
 			gamestate.handleMove(selected, index);
 	}
 
-	public void longBoardClick(final IBoardSq bb, final int ycolor)
+	@Override
+	public void onBoardLongClick(IBoardSq bb, int ycolor)
 	{
 		// only allow long click on your turn
 		if (board.getStm() != ycolor)
@@ -137,7 +140,8 @@ public class HintList
 			showMovesTo(index);
 	}
 
-	public void placeClick(final IPlaceSq pb, final int ycolor)
+	@Override
+	public void onPlaceClick(IPlaceSq pb, int ycolor)
 	{
 		final int index = pb.getIndex();
 		final int piece = pb.getPiece();

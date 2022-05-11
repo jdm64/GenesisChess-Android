@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.chess.genesis.engine;
+package com.chess.genesis.api;
 
 import android.os.*;
 
-public interface IGameFrag extends ISqLocator
+public interface IGameFrag extends IGameView
 {
-	void setCapturedCounts(int[] counts);
-
 	void showSubmitMove();
 
 	void togglePlaceBoard();

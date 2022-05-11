@@ -23,6 +23,7 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 import androidx.fragment.app.DialogFragment;
 

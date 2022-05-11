@@ -21,13 +21,15 @@ import android.content.*;
 import android.os.*;
 import org.json.*;
 import com.chess.genesis.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
+import com.chess.genesis.view.*;
 import androidx.fragment.app.*;
 
-public abstract class GameState implements Handler.Callback
+public abstract class GameState implements IGameController, Handler.Callback
 {
 	public static final int PLACEOFFSET = 1000;
 
@@ -36,7 +38,7 @@ public abstract class GameState implements Handler.Callback
 	final Bundle settings;
 	private final ProgressMsg progress;
 	final ObjectArray<Move> history;
-	final HintList hintList;
+	final IMoveHandler hintList;
 	final Board board;
 
 	final Handler handle;
@@ -52,9 +54,6 @@ public abstract class GameState implements Handler.Callback
 	protected abstract void revertMove(final Move move);
 	protected abstract void applyMove(final Move move, final boolean erase, final boolean localmove);
 
-	public abstract void setBoard();
-	public abstract void boardClick(final IBoardSq sq);
-	public abstract void placeClick(final IPlaceSq sq);
 	public abstract void handleMove(final int from, final int to);
 
 	@Override
@@ -74,7 +73,7 @@ public abstract class GameState implements Handler.Callback
 				// activity is gone, so give up!
 				return true;
 			}
-			currentMove();
+			onCurrentClick();
 
 			final Move tmove = bundle.getParcelable("move");
 			final Move move = board.newMove();
@@ -275,26 +274,41 @@ public abstract class GameState implements Handler.Callback
 		setStm();
 	}
 
+	@Override
+	public BoardView getBoardView()
+	{
+		return gamefrag.getBoardView();
+	}
+
+	@Override
+	public CapturedLayout getCapturedView()
+	{
+		return gamefrag.getCapturedView();
+	}
+
 	public Board getBoard()
 	{
 		return board;
 	}
 
-	public void backMove()
+	@Override
+	public void onBackClick()
 	{
 		if (hindex < 0)
 			return;
 		revertMove(history.get(hindex));
 	}
 
-	public void forwardMove()
+	@Override
+	public void onForwardClick()
 	{
 		if (hindex + 1 >= history.size())
 			return;
 		applyMove(history.get(hindex + 1), false, true);
 	}
 
-	public void currentMove()
+	@Override
+	public void onCurrentClick()
 	{
 		final int len = history.size();
 		while (hindex + 1 < len)
@@ -485,7 +499,7 @@ public abstract class GameState implements Handler.Callback
 			return;
 
 		// must be on most current move to apply it
-		currentMove();
+		onCurrentClick();
 		gamefrag.showToast("New move loaded...");
 
 		final Move move = board.newMove();
@@ -653,9 +667,15 @@ public abstract class GameState implements Handler.Callback
 		new GameStatsDialog(activity, json).show();
 	}
 
-	public boolean boardLongClick(final IBoardSq sq)
+	@Override
+	public void onBoardLongClick(IBoardSq sq)
 	{
-		hintList.longBoardClick(sq, yourColor());
-		return true;
+		hintList.onBoardLongClick(sq, yourColor());
+	}
+
+	@Override
+	public void onPlaceClick()
+	{
+		gamefrag.togglePlaceBoard();
 	}
 }

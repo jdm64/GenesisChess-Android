@@ -21,6 +21,7 @@ import android.graphics.*;
 import android.util.*;
 import android.view.*;
 import android.view.View.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 
 public class BoardView extends View implements OnClickListener, OnLongClickListener
@@ -31,7 +32,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	private final PieceImgPainter painter;
 	private final BoardSquare[] squares = new BoardSquare[64];
 
-	private GameState gamestate;
+	private IGameController gameCtrl;
 	private MotionEvent lastTouch;
 	private int sqSize;
 	private boolean viewAsBlack = false;
@@ -42,17 +43,26 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		painter = new PieceImgPainter(context);
 		setOnClickListener(this);
 		setOnLongClickListener(this);
-	}
-
-	public void init(final GameState _gamestate, final boolean _viewAsBlack)
-	{
-		gamestate = _gamestate;
-		viewAsBlack = _viewAsBlack;
-		int x = 0;
 
 		for (int i = 0; i < 64; i++) {
 			squares[i] = new BoardSquare(this, painter, BaseBoard.SFF88(i));
 		}
+	}
+
+	public void init(IGameController _gameCtrl, boolean _viewAsBlack)
+	{
+		setController(_gameCtrl);
+		setViewAsBlack(_viewAsBlack);
+	}
+
+	public void setController(IGameController _gameCtrl)
+	{
+		gameCtrl = _gameCtrl;
+	}
+
+	public void setViewAsBlack(boolean _viewAsBlack)
+	{
+		viewAsBlack = _viewAsBlack;
 	}
 
 	@Override
@@ -90,16 +100,16 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	public void onClick(View view)
 	{
 		IBoardSq sq = getTouchedSquare();
-		if (sq != null)
-			gamestate.boardClick(sq);
+		if (sq != null && gameCtrl != null)
+			gameCtrl.onBoardClick(sq);
 	}
 
 	@Override
 	public boolean onLongClick(View view)
 	{
 		IBoardSq sq = getTouchedSquare();
-		if (sq != null) {
-			gamestate.boardLongClick(sq);
+		if (sq != null && gameCtrl != null) {
+			gameCtrl.onBoardLongClick(sq);
 			return true;
 		}
 		return false;
@@ -108,11 +118,6 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	public IBoardSq getSquare(int index)
 	{
 		return squares[BaseBoard.EE64F(index)];
-	}
-
-	public GameState getState()
-	{
-		return gamestate;
 	}
 
 	private IBoardSq getTouchedSquare()

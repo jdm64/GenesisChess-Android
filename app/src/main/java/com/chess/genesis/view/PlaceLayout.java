@@ -21,6 +21,7 @@ import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 
 public class PlaceLayout extends LinearLayout implements OnClickListener
@@ -85,6 +86,6 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 	@Override
 	public void onClick(final View v)
 	{
-		gamestate.placeClick((IPlaceSq) v);
+		gamestate.onPlaceClick((IPlaceSq) v);
 	}
 }

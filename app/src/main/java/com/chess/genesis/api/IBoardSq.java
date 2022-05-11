@@ -15,15 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.chess.genesis.engine;
+package com.chess.genesis.api;
 
-public interface IPlaceSq extends ISquare
+public interface IBoardSq extends ISquare
 {
-	void setCount(int count);
+	void setCheck(boolean value);
 
-	int getCount();
+	boolean isCheck();
 
-	void minusCount();
+	void setLast(boolean value);
 
-	void plusCount();
+	boolean isLast();
+
+	void setPiece(int piece);
+
+	int getColor();
 }

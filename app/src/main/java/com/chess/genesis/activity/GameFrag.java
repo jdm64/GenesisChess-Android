@@ -23,6 +23,7 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.engine.*;
@@ -31,7 +32,7 @@ import com.chess.genesis.view.*;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar.*;
 
-public abstract class GameFrag extends AbstractActivityFrag implements Callback, ISqLocator, IGameFrag, OnClickListener, OnMenuItemClickListener
+public abstract class GameFrag extends AbstractActivityFrag implements Callback, IGameFrag, OnClickListener, OnMenuItemClickListener
 {
 	private DrawerLayout2 boardDrawer;
 	private CapturedLayout captured_count;
@@ -40,6 +41,18 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 	boolean viewAsBlack = false;
 	private GameListFrag gameListFrag;
 	private BoardView board;
+
+	@Override
+	public BoardView getBoardView()
+	{
+		return board;
+	}
+
+	@Override
+	public CapturedLayout getCapturedView()
+	{
+		return captured_count;
+	}
 
 	@Override
 	public boolean handleMessage(final Message msg)
@@ -96,7 +109,7 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 		super.onActivityCreated(savedInstanceState);
 
 		// init board pieces
-		gamestate.setBoard();
+		gamestate.loadBoard();
 	}
 
 	@Override
@@ -204,13 +217,13 @@ public abstract class GameFrag extends AbstractActivityFrag implements Callback,
 	{
 		switch (item.getItemId()) {
 		case R.id.backwards:
-			gamestate.backMove();
+			gamestate.onBackClick();
 			break;
 		case R.id.forwards:
-			gamestate.forwardMove();
+			gamestate.onForwardClick();
 			break;
 		case R.id.current:
-			gamestate.currentMove();
+			gamestate.onCurrentClick();
 			break;
 		}
 		return true;

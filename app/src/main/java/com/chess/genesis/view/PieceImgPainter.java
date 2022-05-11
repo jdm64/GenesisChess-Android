@@ -21,8 +21,8 @@ import android.content.pm.*;
 import android.content.res.*;
 import android.graphics.*;
 import com.chess.genesis.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.engine.*;
 
 public final class PieceImgPainter
 {

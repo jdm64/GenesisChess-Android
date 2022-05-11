@@ -14,20 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.chess.genesis.api;
 
-package com.chess.genesis.engine;
+import com.chess.genesis.view.*;
 
-public interface IBoardSq extends ISquare
+public interface IGameView
 {
-	void setCheck(boolean value);
+	BoardView getBoardView();
 
-	boolean isCheck();
+	CapturedLayout getCapturedView();
 
-	void setLast(boolean value);
+	ISquare getSq(int index);
 
-	boolean isLast();
+	IBoardSq getBoardSq(int index);
 
-	void setPiece(int piece);
+	IPlaceSq getPlaceSq(int index);
 
-	int getColor();
+	void setCapturedCounts(int[] counts);
 }

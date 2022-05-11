@@ -19,7 +19,7 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.graphics.*;
 import android.view.*;
-import com.chess.genesis.engine.*;
+import com.chess.genesis.api.*;
 
 public class BoardButton extends View implements IBoardSq
 {

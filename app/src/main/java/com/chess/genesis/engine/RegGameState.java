@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import com.chess.genesis.activity.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.dialog.*;
 import com.chess.genesis.util.*;
 
@@ -54,7 +55,7 @@ public class RegGameState extends GameState
 	}
 
 	@Override
-	public void setBoard()
+	public void loadBoard()
 	{
 		// set dead piece counts
 		setBoard(board.getPieceCounts(Piece.DEAD));
@@ -208,13 +209,13 @@ public class RegGameState extends GameState
 	}
 
 	@Override
-	public void boardClick(final IBoardSq sq)
+	public void onBoardClick(IBoardSq sq)
 	{
-		hintList.boardClick(sq, yourColor());
+		hintList.onBoardClick(sq, yourColor());
 	}
 
 	@Override
-	public void placeClick(final IPlaceSq sq)
+	public void onPlaceClick(IPlaceSq sq)
 	{
 		// Required because GameState calls this function
 	}

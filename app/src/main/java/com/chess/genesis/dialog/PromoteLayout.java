@@ -20,6 +20,7 @@ import android.content.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
