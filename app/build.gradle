@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+    namespace 'com.chess.genesis'
     compileSdk 32
 
     applicationVariants.all { variant ->
