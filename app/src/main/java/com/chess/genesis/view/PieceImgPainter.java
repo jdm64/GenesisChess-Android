@@ -107,12 +107,12 @@ public final class PieceImgPainter
 
 	public void drawSquare(final Canvas canvas, IPlaceSq sq)
 	{
-		int piece = sq.getPiece();
-		int outerColor = piece % 2 == 0? outerLight : outerDark;
+		int index = sq.getIndex();
+		int outerColor = index % 2 == 0? outerLight : outerDark;
 		int innerColor =
 			sq.isHighlighted()?
 				innerSelect :
-			((piece % 2 == 0)?
+			((index % 2 == 0)?
 				innerLight :
 				innerDark);
 		drawSquare(canvas, innerColor, outerColor);

@@ -42,9 +42,17 @@ public class ManualPanel extends ViewGroup
 	public ManualPanel(final Context context, final AttributeSet attrs)
 	{
 		super(context, attrs);
+		setLayout(context, attrs);
+	}
 
-		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ManualPanel);
-		final String hp = a.getString(R.styleable.ManualPanel_height_policy);
+	private void setLayout(Context context, AttributeSet attrs)
+	{
+		if (attrs == null) {
+			return;
+		}
+
+		var a = context.obtainStyledAttributes(attrs, R.styleable.ManualPanel);
+		var hp = a.getString(R.styleable.ManualPanel_height_policy);
 
 		if (hp != null) {
 			if (hp.equals("match_parent"))
