@@ -90,9 +90,7 @@ public class GenMove extends Move
 		final StringBuilder str = new StringBuilder();
 
 		if (loc > Piece.PLACEABLE) {
-			str.append((char) ('a' + (loc & 7)));
-			str.append((char) ('1' + (loc >> 4)));
-			return str;
+			str.append(printSq(loc));
 		} else if (loc == Piece.PLACEABLE) {
 			str.append("aval");
 		} else {

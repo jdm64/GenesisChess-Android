@@ -89,6 +89,11 @@ public abstract class Move implements Parcelable, NewInstance<Move>
 		to = in.readInt();
 	}
 
+	public static String printSq(int sq)
+	{
+		return "" + (char)('a' + (sq & 7)) + (char)('1' + (sq >> 4));
+	}
+
 	@Override
 	public int describeContents()
 	{
