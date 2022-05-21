@@ -117,6 +117,8 @@ public class GenMove extends Move
 	@Override
 	public boolean parse(final String str)
 	{
+		if (str == null || str.isEmpty())
+			return false;
 		final char[] s = str.toCharArray();
 		int piece = Piece.NONE;
 		boolean place = true;

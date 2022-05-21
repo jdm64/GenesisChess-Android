@@ -157,6 +157,8 @@ public class RegMove extends Move
 	@Override
 	public boolean parse(final String str)
 	{
+		if (str == null || str.isEmpty())
+			return false;
 		final char[] s = str.toCharArray();
 
 		switch (s[0]) {
