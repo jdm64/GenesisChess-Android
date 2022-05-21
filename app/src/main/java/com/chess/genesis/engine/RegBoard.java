@@ -145,6 +145,7 @@ public class RegBoard extends RegPosition implements Board
 	{
 		piece = IntArray.clone(InitRegPiece);
 		piecetype = IntArray.clone(Move.InitPieceType);
+		square = new int[128];
 		for (int i = 0; i < 32; i++)
 			square[piece[i]] = piecetype[i];
 
