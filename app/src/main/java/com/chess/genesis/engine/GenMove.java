@@ -51,39 +51,6 @@ public class GenMove extends Move
 		return new GenMove();
 	}
 
-	// Do Not Call The Following Functions!
-	@Override
-	public int getCastle()
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	@Override
-	public void setCastle(final int side)
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	@Override
-	public void setEnPassant()
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	@Override
-	public boolean getEnPassant()
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	@Override
-	public void setPromote(final int type)
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	@Override
-	public int getPromote()
-	{
-		throw new RuntimeException("RegMove function called from GenMove class");
-	}
-	// ------
-
 	@Override
 	protected StringBuilder printLoc(final int loc)
 	{

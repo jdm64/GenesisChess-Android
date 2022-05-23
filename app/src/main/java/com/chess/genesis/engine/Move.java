@@ -127,12 +127,32 @@ public abstract class Move implements Parcelable, NewInstance<Move>
 		index = Piece.NULL_MOVE;
 	}
 
-	public abstract int getCastle();
-	public abstract void setCastle(final int side);
-	public abstract void setEnPassant();
-	public abstract boolean getEnPassant();
-	public abstract void setPromote(final int type);
-	public abstract int getPromote();
+	public int getCastle()
+	{
+		return 0;
+	}
+
+	public void setCastle(int side)
+	{
+	}
+
+	public void setEnPassant()
+	{
+	}
+
+	public boolean getEnPassant()
+	{
+		return false;
+	}
+
+	public void setPromote(int type)
+	{
+	}
+
+	public int getPromote()
+	{
+		return 0;
+	}
 
 	protected abstract StringBuilder printLoc(final int loc);
 
