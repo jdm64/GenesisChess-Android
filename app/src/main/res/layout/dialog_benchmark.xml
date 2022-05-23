@@ -8,7 +8,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<TextView
 	style="@style/FillNone"
 	android:id="@+id/text01"
-	android:textColor="?android:attr/textColorPrimary"
 	android:text="@string/benchmark"/>
 	<TableLayout
 	android:id="@+id/layout01"
@@ -21,22 +20,18 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:stretchColumns="*">
 		<TableRow>
 			<TextView
-			android:textColor="#ff000000"
 			android:textStyle="bold"
 			android:text="Genesis:"/>
 			<TextView
 			android:id="@+id/gnps"
-			android:textColor="#ff000000"
 			android:text="----"/>
 		</TableRow>
 		<TableRow>
 			<TextView
-			android:textColor="#ff000000"
 			android:textStyle="bold"
 			android:text="Regular:"/>
 			<TextView
 			android:id="@+id/rnps"
-			android:textColor="#ff000000"
 			android:text="----"/>
 		</TableRow>
 	</TableLayout>
