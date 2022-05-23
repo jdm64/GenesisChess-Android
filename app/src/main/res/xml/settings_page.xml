@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:title="Board Settings">
+        <CheckBoxPreference
+            app:key="viewAsBlack"
+            app:defaultValue="true"
+            app:title="View As Black"
+            app:summary="View as black when playing black"/>
+        <CheckBoxPreference
+            app:key="showCaptured"
+            app:defaultValue="true"
+            app:title="Show Captured Pieces"
+            app:summary="Display captured pieces below the board"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:title="Board Colors"
+        app:summary="Change the color of the board's squares">
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcInnerDark"
+            app:defaultValue="@color/blue_navy_400"
+            app:persistent="true"
+            app:title="Dark Main"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcOuterDark"
+            app:defaultValue="@color/blue_navy_500"
+            app:persistent="true"
+            app:title="Dark Border"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcInnerLight"
+            app:defaultValue="@color/white"
+            app:persistent="true"
+            app:title="Light Main"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcOuterLight"
+            app:defaultValue="@color/grey_400"
+            app:persistent="true"
+            app:title="Light Border"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcInnerSelect"
+            app:defaultValue="@color/green_light_A700"
+            app:persistent="true"
+            app:title="Selected"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcInnerCheck"
+            app:defaultValue="@color/red_500"
+            app:persistent="true"
+            app:title="In Check"/>
+        <com.chess.genesis.view.ColorPickerPreference
+            app:key="bcInnerLast"
+            app:defaultValue="@color/purple_deep_300"
+            app:persistent="true"
+            app:title="Last Move"/>
+        <com.chess.genesis.util.CallBackPreference
+            app:key="bcReset"
+            app:persistent="false"
+            app:title="Reset To Defaults"
+            app:summary="Reset all board colors to their defaults"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:title="Developer Tools">
+        <Preference
+            app:key="benchmark"
+            app:persistent="false"
+            app:title="CPU Benchmark"
+            app:summary="See how fast your device can search moves"/>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -17,7 +17,6 @@
 package com.chess.genesis.activity;
 
 import android.content.*;
-import androidx.localbroadcastmanager.content.*;
 
 public class BroadcastWrapper extends BroadcastReceiver
 {
@@ -48,21 +47,22 @@ public class BroadcastWrapper extends BroadcastReceiver
 
 	public void register()
 	{
-		getLBM(rec.getActivity()).registerReceiver(this, filter);
+//		getLBM(rec.getActivity()).registerReceiver(this, filter);
 	}
 
 	public void unregister()
 	{
-		getLBM(rec.getActivity()).unregisterReceiver(this);
+//		getLBM(rec.getActivity()).unregisterReceiver(this);
 	}
 
 	public static boolean send(Context context, Intent intent)
 	{
-		return getLBM(context).sendBroadcast(intent);
+//		return getLBM(context).sendBroadcast(intent);
+		return false;
 	}
 
-	private static LocalBroadcastManager getLBM(Context context)
-	{
-		return LocalBroadcastManager.getInstance(context);
-	}
+//	private static LocalBroadcastManager getLBM(Context context)
+//	{
+//		return LocalBroadcastManager.getInstance(context);
+//	}
 }
