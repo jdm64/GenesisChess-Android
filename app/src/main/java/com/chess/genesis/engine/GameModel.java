@@ -184,6 +184,8 @@ public abstract class GameModel implements IGameModel
 		}
 		// set captured pieces
 		view.setCapturedCounts(board.getPieceCounts(Piece.DEAD));
+
+		controller.onStmChange();
 	}
 
 	void postRevertMove()

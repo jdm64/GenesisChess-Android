@@ -36,6 +36,7 @@ public class GameController implements IGameController2
 	private MutableState<Boolean> promoteState;
 	private MutableState<Boolean> placeState;
 	private MutableState<Boolean> captureState;
+	private MutableState<StmState> stmState;
 
 	public static GameController get(Context context)
 	{
@@ -53,6 +54,7 @@ public class GameController implements IGameController2
 		placeState = Util.getState(false);
 		isGenState = Util.getState(false);
 		captureState = Util.getState(Pref.getBool(ctx, R.array.pf_showCaptured));
+		stmState = Util.getState(new StmState("White", "Black", 1, 0));
 	}
 
 	@Override
@@ -70,6 +72,8 @@ public class GameController implements IGameController2
 		model.setBoard(data);
 		isGenState.setValue(isGen);
 		captureState.setValue(Pref.getBool(ctx, R.array.pf_showCaptured));
+
+		onStmChange();
 	}
 
 	@Override
@@ -119,6 +123,19 @@ public class GameController implements IGameController2
 	public PlaceView getPlaceView()
 	{
 		return view.getPlaceView();
+	}
+
+	@Override
+	public void onStmChange()
+	{
+		var board = model.getBoard();
+		stmState.setValue(new StmState("White", "Black", board.getStm(), board.isMate()));
+	}
+
+	@Override
+	public MutableState<StmState> getStmState()
+	{
+		return stmState;
 	}
 
 	@Override

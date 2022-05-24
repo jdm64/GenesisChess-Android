@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.chess.genesis.api.IGameController2
+import com.chess.genesis.engine.Piece
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -87,10 +88,38 @@ fun BottomBarMenu(state: ModalBottomSheetState, nav: NavHostController) {
 @Composable
 fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 	var showCapture = remember { gameCtlr.showCapture() }
+	var stmState = remember { gameCtlr.stmState }
+	var colors = MaterialTheme.colors
+	var whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
+		colors.error else colors.onPrimary
+	var blackColor = if (stmState.value.mate * stmState.value.stm < 0)
+		colors.error else colors.onPrimary
 
 	Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
 		TopAppBar {
-			Text("GENESIS CHESS")
+			Column {
+				Text("GENESIS CHESS")
+				TabRow(selectedTabIndex = if (stmState.value.stm == Piece.WHITE) 0 else 1) {
+					Tab(
+						onClick = {},
+						selected = stmState.value.stm == Piece.WHITE,
+						text = {
+							Text(
+								stmState.value.white,
+								color = whiteColor
+							)
+						})
+					Tab(
+						onClick = {},
+						selected = stmState.value.stm == Piece.BLACK,
+						text = {
+							Text(
+								stmState.value.black,
+								color = blackColor
+							)
+						})
+				}
+			}
 		}
 		Column {
 			AndroidView({ gameCtlr.boardView })

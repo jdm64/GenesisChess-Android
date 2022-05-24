@@ -15,34 +15,18 @@
  */
 package com.chess.genesis.api;
 
-import com.chess.genesis.db.*;
-import com.chess.genesis.engine.*;
-import com.chess.genesis.view.*;
-import androidx.compose.runtime.*;
-
-public interface IGameController2 extends IGameController
+public class StmState
 {
-	MutableState<Boolean> isGenChess();
+	public String white;
+	public String black;
+	public int stm;
+	public int mate;
 
-	MutableState<Boolean> showCapture();
-
-	void setBoard(LocalGameEntity data);
-
-	MutableState<Boolean> getPromoteState();
-
-	PromoteView getPromoteView();
-
-	void showPromoteDialog();
-
-	void onPromoteClick(Move move);
-
-	MutableState<Boolean> getPlaceState();
-
-	PlaceView getPlaceView();
-
-	void onStmChange();
-
-	MutableState<StmState> getStmState();
-
-	void onMove(Move move);
+	public StmState(String White, String Black, int Stm, int Mate)
+	{
+		white = White;
+		black = Black;
+		stm = Stm;
+		mate = Mate;
+	}
 }

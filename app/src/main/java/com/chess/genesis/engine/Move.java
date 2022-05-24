@@ -49,9 +49,9 @@ public abstract class Move implements Parcelable, NewInstance<Move>
 	public static final int MOVE_MOVE = 2;
 	public static final int MOVE_PLACE = 3;
 
-	public static final int NOT_MATE = 1;
-	public static final int CHECK_MATE = 2;
-	public static final int STALE_MATE = 3;
+	public static final int NOT_MATE = 0;
+	public static final int CHECK_MATE = 1;
+	public static final int STALE_MATE = 2;
 
 	public final static int EP_FILE = 0x07;
 	public final static int CAN_EP = 0x08;
