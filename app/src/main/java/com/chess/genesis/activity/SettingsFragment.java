@@ -27,6 +27,10 @@ import androidx.preference.Preference.*;
 public class SettingsFragment extends PreferenceFragmentCompat implements
     OnPreferenceClickListener, CallBackPreference.CallBack
 {
+	private final static int[] colorKeys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
+	    R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
+	    R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
+
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
 	{
@@ -35,11 +39,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 		var prefView = findPreference("benchmark");
 		prefView.setOnPreferenceClickListener(this);
 
-		String[] keys = new String[]{"bcInnerDark", "bcOuterDark", "bcInnerLight", "bcOuterLight",
-		    "bcInnerSelect", "bcInnerCheck", "bcInnerLast"};
-		for (String key : keys) {
-			ColorPickerPreference picker = findPreference(key);
-			picker.setFragMan(getParentFragmentManager());
+		var pref = new Pref(getContext());
+		for (var key : colorKeys) {
+			ColorPickerPreference picker = findPreference(pref.key(key));
+			picker.init(key, getParentFragmentManager());
 		}
 
 		CallBackPreference callbackPref = findPreference("bcReset");
@@ -72,12 +75,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 	{
 		PieceImgPainter.resetColors(getContext());
 
-		var keys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
-		    R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
-		    R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
 		var pref = new Pref(getContext());
-
-		for (var key : keys) {
+		for (var key : colorKeys) {
 			ColorPickerPreference colorPref = findPreference(pref.key(key));
 			colorPref.update();
 		}

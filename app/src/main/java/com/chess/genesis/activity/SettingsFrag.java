@@ -36,6 +36,10 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 	OnPreferenceChangeListener, OnPreferenceClickListener, OnLongClickListener,
 	CallBackPreference.CallBack, Handler.Callback, SharedPreferences.OnSharedPreferenceChangeListener
 {
+	private final static int[] colorKeys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
+	    R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
+	    R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
+
 	private final Handler handle = new Handler(this);
 	private Activity context;
 	private NetworkClient net;
@@ -104,11 +108,9 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 		prefView.setOnPreferenceChangeListener(this);
 		prefView.setEnabled(isLoggedin);
 
-		String[] keys = new String[]{"bcInnerDark", "bcOuterDark", "bcInnerLight", "bcOuterLight",
-			"bcInnerSelect", "bcInnerCheck", "bcInnerLast"};
-		for (String key : keys) {
-			ColorPickerPreference picker = findPreference(key);
-			picker.setFragMan(getFragmentManager());
+		for (var key : colorKeys) {
+			ColorPickerPreference picker = findPreference(pref.key(key));
+			picker.init(key, getParentFragmentManager());
 		}
 
 		CallBackPreference callbackPref = findPreference("deleteLocalTable");
@@ -235,13 +237,9 @@ public class SettingsFrag extends PreferenceFragmentCompat implements
 	{
 		PieceImgPainter.resetColors(context);
 
-		final int[] keys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
-			R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
-			R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
-		final Pref pref = new Pref(context);
-
-		for (final int key : keys) {
-			final ColorPickerPreference colorPref = findPreference(pref.key(key));
+		var pref = new Pref(context);
+		for (var key : colorKeys) {
+			ColorPickerPreference colorPref = findPreference(pref.key(key));
 			colorPref.update();
 		}
 	}

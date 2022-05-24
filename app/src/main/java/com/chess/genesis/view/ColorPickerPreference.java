@@ -35,6 +35,7 @@ public class ColorPickerPreference extends Preference implements OnColorChangedL
 	private ViewGroup container;
 	private int size;
 	private int border;
+	private int intKey;
 	private int currColor;
 
 	public ColorPickerPreference(final Context context)
@@ -57,8 +58,9 @@ public class ColorPickerPreference extends Preference implements OnColorChangedL
 		return Color.argb(0xff, anti, anti, anti);
 	}
 
-	public void setFragMan(FragmentManager manager)
+	public void init(int prefIntKey, FragmentManager manager)
 	{
+		intKey = prefIntKey;
 		fragMan = manager;
 	}
 
@@ -69,19 +71,13 @@ public class ColorPickerPreference extends Preference implements OnColorChangedL
 		container = (ViewGroup) view.findViewById(id.widget_frame);
 		container.addView(new ImageView(getContext()));
 		container.setVisibility(View.VISIBLE);
-		setColor(currColor);
+		setColor(new Pref(getContext()).getInt(intKey));
 	}
 
 	@Override
 	protected Object onGetDefaultValue(final TypedArray a, final int index)
 	{
 		return a.getColor(index, MColors.WHITE);
-	}
-
-	@Override
-	protected void onSetInitialValue(Object defaultValue)
-	{
-		onColorChanged(getPersistedInt(currColor));
 	}
 
 	@Override
@@ -125,6 +121,6 @@ public class ColorPickerPreference extends Preference implements OnColorChangedL
 
 	public void update()
 	{
-		setColor(getPersistedInt(MColors.WHITE));
+		setColor(getPersistedInt(currColor));
 	}
 }

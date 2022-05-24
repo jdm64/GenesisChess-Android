@@ -76,7 +76,7 @@ public final class PieceImgPainter
 
 	public static void resetColors(final Context context)
 	{
-		final PrefEdit pref = new PrefEdit(context);
+		var pref = new PrefEdit(context);
 		pref.putInt(R.array.pf_bcInnerDark);
 		pref.putInt(R.array.pf_bcInnerLight);
 		pref.putInt(R.array.pf_bcOuterDark);
@@ -85,7 +85,8 @@ public final class PieceImgPainter
 		pref.putInt(R.array.pf_bcInnerCheck);
 		pref.putInt(R.array.pf_bcInnerLast);
 		pref.commit();
-		colorsSet = false;
+
+		setColors(context);
 	}
 
 	public void drawSquare(final Canvas canvas, IBoardSq sq)
