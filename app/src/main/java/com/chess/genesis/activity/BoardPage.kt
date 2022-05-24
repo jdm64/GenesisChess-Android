@@ -31,12 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
 import com.chess.genesis.api.IGameController2
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GamePage() {
+fun GamePage(nav: NavHostController) {
 	var state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 	var gameCtlr = GameController.get(LocalContext.current)
 
@@ -44,7 +45,7 @@ fun GamePage() {
 		sheetElevation = 16.dp,
 		sheetShape = RoundedCornerShape(32.dp),
 		sheetState = state,
-		sheetContent = { BottomBarMenu(state) })
+		sheetContent = { BottomBarMenu(state, nav) })
 	{
 		GameContent(gameCtlr, state)
 	}
@@ -54,18 +55,18 @@ fun GamePage() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomBarMenu(state: ModalBottomSheetState) {
+fun BottomBarMenu(state: ModalBottomSheetState, nav: NavHostController) {
 	var ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
 	Column {
 		ListItem(
-			modifier = Modifier.clickable(onClick = {}),
+			modifier = Modifier.clickable(onClick = { scope.launch { state.hide() } }),
 			icon = { Icon(Icons.Filled.Home, "Game Board") },
 			text = { Text("Game Board") }
 		)
 		ListItem(
-			modifier = Modifier.clickable(onClick = {}),
+			modifier = Modifier.clickable(onClick = { nav.navigate("list") }),
 			icon = { Icon(Icons.Filled.List, "Game List") },
 			text = { Text("Game List") }
 		)

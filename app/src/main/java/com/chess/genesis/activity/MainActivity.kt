@@ -40,7 +40,7 @@ fun MainApp() {
 
 	MaterialTheme {
 		NavHost(nav, "list") {
-			composable("board") { GamePage() }
+			composable("board") { GamePage(nav) }
 			composable("list") { GameListPage(nav) }
 		}
 	}
