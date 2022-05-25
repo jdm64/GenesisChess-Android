@@ -133,53 +133,50 @@ fun LocalGameList(nav: NavHostController) {
 		}
 	}
 
-	if (editState.value.show.value) {
-		AlertDialog(onDismissRequest = { editState.value.show.value = false },
-			title = {
-				Text(
-					text = "Edit",
-					fontWeight = FontWeight.Bold,
-					fontSize = 20.sp
-				)
-			},
-			text = {
-				Column {
-					Text(
-						"Game Name:",
-						modifier = Modifier.padding(bottom = 4.dp)
-					)
-					TextField(
-						value = editState.value.name.value,
-						onValueChange = { editState.value.name.value = it })
-				}
-			},
-			buttons = {
-				Row(
-					modifier = Modifier
-						.fillMaxWidth()
-						.padding(8.dp),
-					horizontalArrangement = Arrangement.SpaceBetween
+	showEditGameDialog(editState)
+}
+
+@Composable
+fun showEditGameDialog(editState: MutableState<EditGameState>) {
+	if (!editState.value.show.value) {
+		return
+	}
+	var context = LocalContext.current
+
+	AlertDialog(onDismissRequest = { editState.value.show.value = false },
+		title = {
+			Text(text = "Edit", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+		},
+		text = {
+			Column {
+				Text("Game Name:", modifier = Modifier.padding(bottom = 4.dp))
+				TextField(
+					value = editState.value.name.value,
+					onValueChange = { editState.value.name.value = it })
+			}
+		},
+		buttons = {
+			Row(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(8.dp),
+				horizontalArrangement = Arrangement.SpaceBetween
+			) {
+				Button(colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
+					onClick = { onDeleteGame(editState.value, context) }
 				) {
-					Button(colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
-						onClick = { onDeleteGame(editState.value, context) }
-					) {
-						Text("Delete")
-					}
-					OutlinedButton(onClick = {
-						editState.value.show.value = false
-					}) {
-						Text("Cancel")
-					}
-					Button(colors = ButtonDefaults.buttonColors(),
-						onClick = {
-							onUpdateGame(editState.value, context)
-						}) {
-						Text("Rename")
-					}
+					Text("Delete")
+				}
+				OutlinedButton(onClick = { editState.value.show.value = false }) {
+					Text("Cancel")
+				}
+				Button(colors = ButtonDefaults.buttonColors(),
+					onClick = { onUpdateGame(editState.value, context) }) {
+					Text("Rename")
 				}
 			}
-		)
-	}
+		}
+	)
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
