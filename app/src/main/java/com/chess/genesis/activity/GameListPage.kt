@@ -17,6 +17,7 @@ package com.chess.genesis.activity
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.chess.genesis.R
 import com.chess.genesis.data.Enums
 import com.chess.genesis.db.LocalGameDao
 import com.chess.genesis.db.LocalGameEntity
@@ -100,7 +103,15 @@ fun GameListPage(nav: NavHostController) {
 
 	Scaffold(
 		topBar = {
-			TopAppBar { Text("GENESIS CHESS") }
+			TopAppBar {
+				Image(
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(26.dp),
+					painter = painterResource(R.drawable.genesischess),
+					contentDescription = "Genesis Chess"
+				)
+			}
 		},
 		floatingActionButton = {
 			FloatingActionButton(onClick = { newGameState.value.show.value = true }) {
