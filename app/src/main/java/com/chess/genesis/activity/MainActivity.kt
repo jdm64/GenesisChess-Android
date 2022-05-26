@@ -40,7 +40,12 @@ fun MainApp() {
 
 	MaterialTheme {
 		NavHost(nav, "list") {
-			composable("board") { GamePage(nav) }
+			composable("board/{gameId}") { entry ->
+				var id = entry.arguments?.getString("gameId")
+				if (id != null) {
+					GamePage(nav, id)
+				}
+			}
 			composable("list") { GameListPage(nav) }
 		}
 	}

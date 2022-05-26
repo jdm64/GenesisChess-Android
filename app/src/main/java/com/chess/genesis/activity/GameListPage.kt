@@ -59,8 +59,7 @@ class EditGameState {
 }
 
 fun onLoadGame(data: LocalGameEntity, nav: NavHostController, context: Context) {
-	nav.navigate("board")
-	GameController.get(context).setBoard(data)
+	nav.navigate("board/" + data.gameid)
 }
 
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {

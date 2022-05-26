@@ -28,6 +28,8 @@ public interface IGameController2 extends IGameController
 
 	void setBoard(LocalGameEntity data);
 
+	void setBoard(String gameId);
+
 	MutableState<Boolean> getPromoteState();
 
 	PromoteView getPromoteView();

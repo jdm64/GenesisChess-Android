@@ -56,6 +56,9 @@ public interface LocalGameDao
 		return game;
 	}
 
+	@Query("SELECT * FROM local_games WHERE gameid = :gameId")
+	LocalGameEntity getGame(String gameId);
+
 	@Query("SELECT * FROM local_games ORDER BY stime DESC")
 	PagingSource<Integer, LocalGameEntity> getAllGames();
 

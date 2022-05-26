@@ -38,9 +38,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GamePage(nav: NavHostController) {
+fun GamePage(nav: NavHostController, gameId: String) {
 	var state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 	var gameCtlr = GameController.get(LocalContext.current)
+	gameCtlr.setBoard(gameId)
 
 	ModalBottomSheetLayout(
 		sheetElevation = 16.dp,

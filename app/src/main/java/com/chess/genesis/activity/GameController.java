@@ -77,6 +77,15 @@ public class GameController implements IGameController2
 	}
 
 	@Override
+	public void setBoard(String gameId)
+	{
+		Util.runThread(() -> {
+			var game = LocalGameDao.get(ctx).getGame(gameId);
+			Util.runUI(() -> { setBoard(game); });
+		});
+	}
+
+	@Override
 	public MutableState<Boolean> isGenChess()
 	{
 		return isGenState;
