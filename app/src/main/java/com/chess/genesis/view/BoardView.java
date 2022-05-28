@@ -62,7 +62,10 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 
 	public void setViewAsBlack(boolean _viewAsBlack)
 	{
+		if (viewAsBlack == _viewAsBlack)
+			return;
 		viewAsBlack = _viewAsBlack;
+		setXY();
 	}
 
 	@Override
@@ -73,6 +76,11 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 
 		sqSize = size / 8;
 		painter.resize(sqSize);
+		setXY();
+	}
+
+	private void setXY()
+	{
 		if (viewAsBlack) {
 			for (int i = 0; i < 64; i++)
 				squares[i].setXY(sqSize * (7 - (i % 8)), sqSize * (7 - (i / 8)));
