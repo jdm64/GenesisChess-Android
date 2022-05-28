@@ -16,8 +16,6 @@
 
 package com.chess.genesis.data;
 
-import static android.graphics.Color.*;
-import java.util.function.*;
 import android.content.*;
 import android.content.res.*;
 import android.database.sqlite.*;

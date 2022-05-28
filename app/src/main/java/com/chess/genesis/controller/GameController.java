@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chess.genesis.activity;
+package com.chess.genesis.controller;
 
 import android.content.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
-import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;

@@ -18,7 +18,6 @@
 package com.chess.genesis.engine;
 
 import android.os.*;
-import com.chess.genesis.util.*;
 
 public abstract class Move implements Parcelable, NewInstance<Move>
 {

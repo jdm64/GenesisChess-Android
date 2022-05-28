@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 class TransTable
 {
 	private final TransItem[] table;

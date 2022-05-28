@@ -14,9 +14,24 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.util;
+package com.chess.genesis.engine;
 
-public interface NewInstance<Type>
+public class Int
 {
-	Type newInstance();
+	public int val;
+
+	public Int()
+	{
+		val = 0;
+	}
+
+	public Int(final int a)
+	{
+		val = a;
+	}
+
+	public Int(final Int a)
+	{
+		val = a.val;
+	}
 }

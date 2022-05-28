@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 class TransItem
 {
 	private static final int NONE_NODE = 0;

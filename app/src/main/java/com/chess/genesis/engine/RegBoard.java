@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 public class RegBoard extends RegPosition implements Board
 {
 	private static final int[][] locValue = {

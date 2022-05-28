@@ -14,34 +14,22 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.util;
+package com.chess.genesis.engine;
 
-public class ObjectArray<Type>
+public class BoolArray
 {
-	private final NewInstance<Type> generator;
-	private Type[] list = makeArray(0);
+	private boolean[] list = new boolean[0];
 
-	public ObjectArray(final NewInstance<Type> instance)
+	private static boolean[] copyOf(final boolean[] arr, final int size)
 	{
-		generator = instance;
-	}
-
-	@SuppressWarnings({"unchecked", "static-method"})
-	private Type[] makeArray(final int size)
-	{
-		return (Type[]) new Object[size];
-	}
-
-	private Type[] copyOf(final Type[] arr, final int size)
-	{
-		final Type[] temp = makeArray(size);
+		final boolean[] temp = new boolean[size];
 		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
 		return temp;
 	}
 
 	public void clear()
 	{
-		list = makeArray(0);
+		list = new boolean[0];
 	}
 
 	public int size()
@@ -54,44 +42,42 @@ public class ObjectArray<Type>
 		list = copyOf(list, size);
 	}
 
-	public Type get(final int index)
+	public boolean get(final int index)
 	{
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
-		if (list[index] == null)
-			list[index] = generator.newInstance();
 		return list[index];
 	}
 
-	public void set(final int index, final Type value)
+	public void set(final int index, final boolean value)
 	{
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
 		list[index] = value;
 	}
 
-	public void push(final Type value)
+	public void push(final boolean value)
 	{
 		list = copyOf(list, list.length + 1);
 		list[list.length - 1] = value;
 	}
 
-	public Type pop()
+	public boolean pop()
 	{
-		final Type end = list[list.length - 1];
+		final boolean end = list[list.length - 1];
 		list = copyOf(list, list.length - 1);
 		return end;
 	}
 
-	public Type top()
+	public boolean top()
 	{
 		return list[list.length - 1];
 	}
 
-	public boolean contains(final Type item)
+	public boolean contains(final boolean item)
 	{
-		for (final Type i : list) {
-			if (item.equals(i))
+		for (final boolean i : list) {
+			if (i == item)
 				return true;
 		}
 		return false;
@@ -102,17 +88,8 @@ public class ObjectArray<Type>
 	{
 		final StringBuilder str = new StringBuilder();
 
-		for (final Type element : list)
+		for (final boolean element : list)
 			str.append(element).append(' ');
-		return str.toString();
-	}
-
-	public static String arrayToString(final Object[] array, final String delim)
-	{
-		final StringBuilder str = new StringBuilder();
-
-		for (final Object element : array)
-			str.append(element).append(delim);
 		return str.toString();
 	}
 }

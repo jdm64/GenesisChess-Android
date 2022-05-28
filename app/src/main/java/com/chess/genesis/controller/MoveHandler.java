@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.chess.genesis.engine;
+package com.chess.genesis.controller;
 
 import java.util.*;
 import com.chess.genesis.api.*;
+import com.chess.genesis.engine.*;
 
 public class MoveHandler implements IMoveHandler
 {

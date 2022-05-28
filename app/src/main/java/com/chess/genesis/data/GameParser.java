@@ -19,7 +19,6 @@ package com.chess.genesis.data;
 import android.os.*;
 import org.json.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.util.*;
 
 public class GameParser
 {

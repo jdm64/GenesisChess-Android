@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.chess.genesis.api.IGameController2
+import com.chess.genesis.controller.GameController
 import com.chess.genesis.engine.Piece
 import kotlinx.coroutines.launch
 

@@ -28,8 +28,8 @@ import android.widget.*;
 import org.json.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.util.*;
 import com.chess.genesis.util.FileUtils;
+import com.chess.genesis.util.*;
 import androidx.fragment.app.DialogFragment;
 
 public class GameDetailsDialog extends DialogFragment implements OnClickListener

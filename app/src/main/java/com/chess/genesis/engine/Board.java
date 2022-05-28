@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 public interface Board
 {
 	int ZBOX_SIZE = 838;

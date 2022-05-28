@@ -17,16 +17,11 @@
 
 package com.chess.genesis.engine;
 
-import android.os.*;
-
-public class Benchmark implements Runnable
+public class Benchmark
 {
-	private final static int MSG = 118;
-
 	public final static String REG_NPS = "rnps";
 	public final static String GEN_NPS = "gnps";
 
-	private final Handler handle;
 	private final RegBoard rboard;
 	private final GenBoard gboard;
 	private final MoveFlags flags;
@@ -36,10 +31,8 @@ public class Benchmark implements Runnable
 	private long end;
 	private long tNodes;
 
-	public Benchmark(final Handler handler)
+	public Benchmark()
 	{
-		handle = handler;
-
 		rboard = new RegBoard();
 		gboard = new GenBoard();
 		flags = new MoveFlags();
@@ -80,7 +73,7 @@ public class Benchmark implements Runnable
 		return nodes;
 	}
 
-	private long GenBench()
+	public long genBench()
 	{
 		long now = System.currentTimeMillis();
 
@@ -99,7 +92,7 @@ public class Benchmark implements Runnable
 		return (1000 * tNodes) / (now - start);
 	}
 
-	private long RegBench()
+	public long regBench()
 	{
 		long now = System.currentTimeMillis();
 
@@ -116,15 +109,5 @@ public class Benchmark implements Runnable
 				break;
 		}
 		return (1000 * tNodes) / (now - start);
-	}
-
-	@Override
-	public synchronized void run()
-	{
-		final Bundle bundle = new Bundle();
-		bundle.putLong(REG_NPS, RegBench());
-		bundle.putLong(GEN_NPS, GenBench());
-
-		handle.sendMessage(handle.obtainMessage(MSG, bundle));
 	}
 }

@@ -17,6 +17,7 @@
 package com.chess.genesis.data;
 
 import java.io.*;
+import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
 
 public class FileLogger

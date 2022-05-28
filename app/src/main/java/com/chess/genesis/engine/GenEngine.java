@@ -18,7 +18,6 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
-import com.chess.genesis.util.*;
 
 public class GenEngine extends Engine
 {

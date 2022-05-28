@@ -18,9 +18,8 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
-import com.chess.genesis.util.*;
 
-class MoveList implements Iterable<MoveNode>
+public class MoveList implements Iterable<MoveNode>
 {
 	public final MoveNode[] list;
 	private final MoveListIter iter = new MoveListIter(this);
@@ -82,29 +81,3 @@ class MoveListIter implements Iterator<MoveNode>
 	}
 }
 
-class MoveListPool
-{
-	private final Queue<MoveList> pool = new ArrayDeque<>();
-	private final NewInstance<Move> moveType;
-
-	public MoveListPool(final NewInstance<Move> _moveType)
-	{
-		moveType = _moveType;
-	}
-
-	public MoveList get()
-	{
-		if (pool.size() < 1)
-			return new MoveList(moveType);
-		synchronized (pool) {
-			return pool.remove();
-		}
-	}
-
-	public void put(final MoveList item)
-	{
-		synchronized (pool) {
-			pool.add(item);
-		}
-	}
-}

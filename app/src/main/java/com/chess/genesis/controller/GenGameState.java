@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.chess.genesis.engine;
+package com.chess.genesis.controller;
 
 import com.chess.genesis.activity.*;
 import com.chess.genesis.api.*;
+import com.chess.genesis.engine.*;
 
 public class GenGameState extends GameState
 {

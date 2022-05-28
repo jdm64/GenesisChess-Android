@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.chess.genesis.engine;
+package com.chess.genesis.controller;
 
 import android.content.*;
 import android.os.*;
@@ -24,6 +24,7 @@ import com.chess.genesis.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
+import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
@@ -399,7 +400,7 @@ public abstract class GameState implements IGameController, Handler.Callback
 	{
 		cpu.setBoard(board);
 		var move = cpu.getMove();
-		if (cpu.endT == 0) {
+		if (cpu.getTime() == 0) {
 			cpu.setBoard(board);
 			Util.runThread(() -> { runCpu(); });
 			return;

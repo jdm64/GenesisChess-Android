@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 public class GenBoard extends GenPosition implements Board
 {
 	private static final int[][] locValue = {

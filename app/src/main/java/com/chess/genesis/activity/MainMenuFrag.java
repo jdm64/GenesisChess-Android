@@ -19,15 +19,12 @@ package com.chess.genesis.activity;
 import android.content.*;
 import android.net.*;
 import android.os.*;
-import android.util.*;
 import android.view.*;
 import android.view.View.*;
-import android.view.ViewTreeObserver.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 
 public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListener, OnClickListener

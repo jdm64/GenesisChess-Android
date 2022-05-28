@@ -25,9 +25,10 @@ import android.view.*;
 import android.widget.*;
 import com.chess.genesis.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 import androidx.fragment.app.DialogFragment;
 
-public class BenchmarkDialog extends DialogFragment implements DialogInterface.OnClickListener, Handler.Callback, View.OnClickListener
+public class BenchmarkDialog extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener
 {
 	private TextView rnps;
 	private TextView gnps;
@@ -35,22 +36,6 @@ public class BenchmarkDialog extends DialogFragment implements DialogInterface.O
 	public static BenchmarkDialog create()
 	{
 		return new BenchmarkDialog();
-	}
-
-	@Override
-	public boolean handleMessage(final Message msg)
-	{
-		AlertDialog dialog = (AlertDialog) getDialog();
-		if (dialog == null) {
-			return true;
-		}
-		dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-
-		Bundle data = (Bundle) msg.obj;
-		rnps.setText(data.getLong(Benchmark.REG_NPS) + " moves/sec");
-		gnps.setText(data.getLong(Benchmark.GEN_NPS) + " moves/sec");
-
-		return true;
 	}
 
 	@Override
@@ -87,7 +72,19 @@ public class BenchmarkDialog extends DialogFragment implements DialogInterface.O
 		rnps.setText("running...");
 		gnps.setText("running...");
 
-		new Thread(new Benchmark(new Handler(this))).start();
+		Util.runThread(() -> {
+			var benchmark = new Benchmark();
+			long[] count = new long[1];
+
+			count[0] = benchmark.genBench();
+			Util.runUI(() -> gnps.setText(String.valueOf(count[0]) + " moves/sec"));
+
+			count[0] = benchmark.regBench();
+			Util.runUI(() -> {
+				rnps.setText(String.valueOf(count[0]) + " moves/sec");
+				dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+			});
+		});
 	}
 
 	@Override

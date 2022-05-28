@@ -17,11 +17,10 @@
 package com.chess.genesis.view;
 
 import android.content.*;
-import android.content.res.*;
 import android.util.*;
 import android.view.*;
 import com.chess.genesis.*;
-import com.chess.genesis.util.*;
+import com.chess.genesis.engine.*;
 
 public class ManualPanel extends ViewGroup
 {

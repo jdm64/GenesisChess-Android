@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.util;
+package com.chess.genesis.engine;
 
 public class IntArray
 {

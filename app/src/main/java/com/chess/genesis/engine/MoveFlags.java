@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 public class MoveFlags implements NewInstance<MoveFlags>
 {
 	public int bits;

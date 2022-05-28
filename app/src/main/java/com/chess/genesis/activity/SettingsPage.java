@@ -17,7 +17,7 @@ package com.chess.genesis.activity;
 
 import android.os.*;
 import android.view.*;
-import com.chess.genesis.R;
+import com.chess.genesis.*;
 import androidx.appcompat.app.*;
 
 public class SettingsPage extends AppCompatActivity

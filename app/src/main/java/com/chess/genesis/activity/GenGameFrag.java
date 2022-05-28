@@ -19,9 +19,9 @@ package com.chess.genesis.activity;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
+import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.dialog.*;
-import com.chess.genesis.engine.*;
 
 public class GenGameFrag extends GameFrag
 {

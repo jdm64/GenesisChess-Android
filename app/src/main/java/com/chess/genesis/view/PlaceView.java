@@ -22,6 +22,7 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.api.*;
+import com.chess.genesis.controller.*;
 import com.chess.genesis.engine.*;
 
 public class PlaceView extends LinearLayout implements OnClickListener, OnTouchListener

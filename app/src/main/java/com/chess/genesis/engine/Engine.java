@@ -17,8 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import com.chess.genesis.util.*;
-
 public abstract class Engine
 {
 	static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
