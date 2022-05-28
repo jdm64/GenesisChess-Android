@@ -23,19 +23,11 @@ import com.chess.genesis.util.*;
 
 public class RegEngine extends Engine
 {
-	public final static int MSG = 111;
-
 	private final MoveFlags undoflags = new MoveFlags();
 
-	public RegEngine(final Handler handler, final Board boardType)
+	public RegEngine(Board boardType)
 	{
-		super(handler, boardType);
-	}
-
-	@Override
-	protected int getMsgId()
-	{
-		return MSG;
+		super(boardType);
 	}
 
 	private int Quiescence(final int _alpha, final int beta, final int depth)

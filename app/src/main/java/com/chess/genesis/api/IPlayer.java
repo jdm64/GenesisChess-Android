@@ -15,36 +15,16 @@
  */
 package com.chess.genesis.api;
 
-import com.chess.genesis.db.*;
+import android.content.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.view.*;
-import androidx.compose.runtime.*;
 
-public interface IGameController2 extends IGameController
+public interface IPlayer
 {
-	MutableState<Boolean> isGenChess();
+	boolean canClick(int stm);
 
-	MutableState<Boolean> showCapture();
+	String getStmName(boolean overwrite);
 
-	void setBoard(LocalGameEntity data);
+	void finalizeMove(Move move, Context context);
 
-	void setBoard(String gameId);
-
-	MutableState<Boolean> getPromoteState();
-
-	PromoteView getPromoteView();
-
-	void showPromoteDialog();
-
-	void onPromoteClick(Move move);
-
-	MutableState<Boolean> getPlaceState();
-
-	PlaceView getPlaceView();
-
-	void onStmChange(boolean overwrite);
-
-	MutableState<StmState> getStmState();
-
-	void onMove(Move move);
+	void takeTurn();
 }

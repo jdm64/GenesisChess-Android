@@ -18,6 +18,7 @@ package com.chess.genesis.activity;
 import android.content.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
+import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
@@ -32,6 +33,8 @@ public class GameController implements IGameController2
 	private Context ctx;
 	private IGameModel model;
 	private IGameView2 view;
+	private IPlayer white;
+	private IPlayer black;
 	private MutableState<Boolean> isGenState;
 	private MutableState<Boolean> promoteState;
 	private MutableState<Boolean> placeState;
@@ -57,6 +60,16 @@ public class GameController implements IGameController2
 		stmState = Util.getState(new StmState("White", "Black", 1, 0));
 	}
 
+	private IPlayer getStmPlayer()
+	{
+		return model.getBoard().getStm() == Piece.WHITE ? white : black;
+	}
+
+	private IPlayer getNonStmPlayer()
+	{
+		return model.getBoard().getStm() == Piece.WHITE ? black : white;
+	}
+
 	@Override
 	public void setBoard(LocalGameEntity data)
 	{
@@ -73,7 +86,14 @@ public class GameController implements IGameController2
 		isGenState.setValue(isGen);
 		captureState.setValue(Pref.getBool(ctx, R.array.pf_showCaptured));
 
-		onStmChange();
+		white = data.opponent == Enums.CPU_WHITE_OPPONENT ?
+		    new ComputerPlayer(Piece.WHITE, model) : new LocalPlayer(Piece.WHITE, model);
+		black = data.opponent == Enums.CPU_BLACK_OPPONENT ?
+		    new ComputerPlayer(Piece.BLACK, model) : new LocalPlayer(Piece.BLACK, model);
+
+		onStmChange(true);
+
+		getStmPlayer().takeTurn();
 	}
 
 	@Override
@@ -135,10 +155,11 @@ public class GameController implements IGameController2
 	}
 
 	@Override
-	public void onStmChange()
+	public void onStmChange(boolean overwrite)
 	{
 		var board = model.getBoard();
-		stmState.setValue(new StmState("White", "Black", board.getStm(), board.isMate()));
+		var state = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate());
+		stmState.setValue(state);
 	}
 
 	@Override
@@ -150,10 +171,8 @@ public class GameController implements IGameController2
 	@Override
 	public void onMove(Move move)
 	{
-		Util.runThread(() -> {
-			var data = model.saveBoard();
-			GameDatabase.getInstance(ctx).getLocalGameDao().update((LocalGameEntity) data);
-		});
+		getNonStmPlayer().finalizeMove(move, ctx);
+		getStmPlayer().takeTurn();
 	}
 
 	@Override
@@ -177,12 +196,18 @@ public class GameController implements IGameController2
 	@Override
 	public void onBoardClick(IBoardSq sq)
 	{
+		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+			return;
+
 		model.getMoveHandler().onBoardClick(sq, model.getBoard().getStm());
 	}
 
 	@Override
 	public void onBoardLongClick(IBoardSq sq)
 	{
+		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+			return;
+
 		model.getMoveHandler().onBoardLongClick(sq, model.getBoard().getStm());
 	}
 
@@ -198,6 +223,9 @@ public class GameController implements IGameController2
 	@Override
 	public void onPlaceClick(IPlaceSq sq)
 	{
+		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+			return;
+
 		model.getMoveHandler().onPlaceClick(sq, model.getBoard().getStm());
 		placeState.setValue(false);
 	}

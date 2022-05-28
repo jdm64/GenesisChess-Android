@@ -70,7 +70,7 @@ public class GenGameModel extends GameModel
 		board.make(move);
 		hindex++;
 
-		postCommonMove();
+		postCommonMove(erase);
 
 		if (erase) {
 			if (hindex < history.size())

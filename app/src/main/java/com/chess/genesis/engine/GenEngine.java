@@ -18,25 +18,16 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
-import android.os.*;
 import com.chess.genesis.util.*;
 
 public class GenEngine extends Engine
 {
-	public final static int MSG = 109;
-
 	private final ObjectArray<Move> placeKiller;
 
-	public GenEngine(final Handler handler, final Board boardType)
+	public GenEngine(Board boardType)
 	{
-		super(handler, boardType);
+		super(boardType);
 		placeKiller = new ObjectArray<>(boardType.moveGenerator());
-	}
-
-	@Override
-	protected int getMsgId()
-	{
-		return MSG;
 	}
 
 	private int Quiescence(final int _alpha, final int beta, final int depth)

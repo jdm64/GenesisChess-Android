@@ -96,7 +96,7 @@ public class RegGameModel extends GameModel
 		board.make(move);
 		hindex++;
 
-		postCommonMove();
+		postCommonMove(erase);
 
 		if (erase) {
 			if (hindex < history.size()) {

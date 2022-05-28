@@ -61,25 +61,6 @@ public abstract class GameState implements IGameController, Handler.Callback
 	{
 	try {
 		switch (msg.what) {
-		case GenEngine.MSG:
-		case RegEngine.MSG:
-			final Bundle bundle = (Bundle) msg.obj;
-
-			if (bundle.getLong("time") == 0) {
-				cpu.setBoard(board);
-				new Thread(cpu).start();
-				return true;
-			} else if (activity.isFinishing()) {
-				// activity is gone, so give up!
-				return true;
-			}
-			onCurrentClick();
-
-			final Move tmove = bundle.getParcelable("move");
-			final Move move = board.newMove();
-			if (board.validMove(tmove, move))
-				applyMove(move, true, true);
-			break;
 		case CpuTimeDialog.MSG:
 			final PrefEdit pref = new PrefEdit(activity);
 			pref.putInt(R.array.pf_cputime, (Integer) msg.obj);
@@ -241,7 +222,7 @@ public abstract class GameState implements IGameController, Handler.Callback
 		switch (type) {
 		case Enums.LOCAL_GAME:
 		default:
-			cpu = board instanceof GenBoard? new GenEngine(handle, board) : new RegEngine(handle, board);
+			cpu = board instanceof GenBoard? new GenEngine(board) : new RegEngine(board);
 			cpu.setTime(Pref.getInt(activity, R.array.pf_cputime));
 			oppType = Integer.parseInt(settings.getString("opponent"));
 			net = null;
@@ -407,9 +388,31 @@ public abstract class GameState implements IGameController, Handler.Callback
 			cpu.stop();
 			return true;
 		}
-		cpu.setBoard(board);
-		new Thread(cpu).start();
+
+		Util.runThread(() -> {
+			runCpu();
+		});
 		return true;
+	}
+
+	private void runCpu()
+	{
+		cpu.setBoard(board);
+		var move = cpu.getMove();
+		if (cpu.endT == 0) {
+			cpu.setBoard(board);
+			Util.runThread(() -> { runCpu(); });
+			return;
+		} else if (activity.isFinishing()) {
+			// activity is gone, so give up!
+			return;
+		}
+
+		onCurrentClick();
+
+		var vMove = board.newMove();
+		if (board.validMove(move, vMove))
+			applyMove(vMove, true, true);
 	}
 
 	public void submitMove()

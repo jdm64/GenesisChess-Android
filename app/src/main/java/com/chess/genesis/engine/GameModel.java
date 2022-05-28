@@ -174,7 +174,7 @@ public abstract class GameModel implements IGameModel
 		preCommonMove();
 	}
 
-	void postCommonMove()
+	void postCommonMove(boolean overwrite)
 	{
 		// move caused check
 		if (board.incheck(board.getStm())) {
@@ -185,7 +185,7 @@ public abstract class GameModel implements IGameModel
 		// set captured pieces
 		view.setCapturedCounts(board.getPieceCounts(Piece.DEAD));
 
-		controller.onStmChange();
+		controller.onStmChange(overwrite);
 	}
 
 	void postRevertMove()
@@ -195,6 +195,6 @@ public abstract class GameModel implements IGameModel
 			var hto = view.getBoardSq(history.get(hindex).to);
 			hto.setLast(true);
 		}
-		postCommonMove();
+		postCommonMove(false);
 	}
 }

@@ -17,17 +17,15 @@
 
 package com.chess.genesis.engine;
 
-import android.os.*;
 import com.chess.genesis.util.*;
 
-abstract class Engine implements Runnable
+public abstract class Engine
 {
 	static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
 	private static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
 	static final int CHECKMATE_SCORE = MIN_SCORE;
 	static final int STALEMATE_SCORE = 0;
 
-	private final Handler handle;
 	final BoolArray tactical;
 	final BoolArray ismate;
 	private final Rand64 rand;
@@ -43,15 +41,14 @@ abstract class Engine implements Runnable
 	MoveList curr;
 	Board board;
 
-	private int secT;
+	private int secT = 2;
 	long endT;
 	private boolean active;
 
-	Engine(final Handler handler, final Board boardType)
+	Engine(Board boardType)
 	{
 		secT = 4;
 		active = false;
-		handle = handler;
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
@@ -66,12 +63,16 @@ abstract class Engine implements Runnable
 		pool = boardType.getMoveListPool();
 	}
 
+	public static Engine create(Board board)
+	{
+		return board instanceof GenBoard ? new GenEngine(board) : new RegEngine(board);
+	}
+
 	public void setBoard(final Board _board)
 	{
 		board = _board.clone();
 	}
 
-	protected abstract int getMsgId();
 	protected abstract void search(int minScore, int maxScore, int i, int depth);
 
 	private void pickRandomMove()
@@ -131,13 +132,19 @@ abstract class Engine implements Runnable
 		return secT;
 	}
 
-	@Override
-	public synchronized void run()
+	public long getEndTime()
 	{
-		active = true;
-		endT = System.currentTimeMillis() + secT * 1000;
-		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+		return endT;
+	}
 
+	public void setEndTime(long time)
+	{
+		endT = time;
+	}
+
+	private void think()
+	{
+		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
 			if (System.currentTimeMillis() > endT)
@@ -148,12 +155,17 @@ abstract class Engine implements Runnable
 		if (board.getPly() < 7)
 			pickRandomMove();
 		pool.put(curr);
+	}
 
-		final Bundle bundle = new Bundle();
-		bundle.putParcelable("move", pvMove.get(0));
-		bundle.putLong("time", endT);
-
-		handle.sendMessage(handle.obtainMessage(getMsgId(), bundle));
-		active = false;
+	public Move getMove()
+	{
+		try {
+			active = true;
+			endT = System.currentTimeMillis() + secT * 1000;
+			think();
+			return pvMove.get(0);
+		} finally {
+			active = false;
+		}
 	}
 }
