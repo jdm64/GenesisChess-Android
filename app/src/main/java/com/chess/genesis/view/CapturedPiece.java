@@ -26,7 +26,7 @@ public class CapturedPiece extends PieceImgView
 
 	public CapturedPiece(final Context context, final PieceImgPainter painter)
 	{
-		super(context, painter, Piece.NONE);
+		super(context, painter, Piece.EMPTY);
 	}
 
 	@Override
