@@ -127,7 +127,7 @@ fun GameListPage(nav: NavHostController) {
 @Composable
 fun LocalGameList(nav: NavHostController) {
 	var context = LocalContext.current
-	var pager = Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames }
+	var pager = remember { Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames } }
 	var lazyItems = pager.flow.collectAsLazyPagingItems()
 	var editState = remember { mutableStateOf(EditGameState()) }
 
