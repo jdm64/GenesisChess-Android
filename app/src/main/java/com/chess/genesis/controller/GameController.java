@@ -99,8 +99,7 @@ public class GameController implements IGameController2
 	public void setBoard(String gameId)
 	{
 		Util.runThread(() -> {
-			var game = LocalGameDao.get(ctx).getGame(gameId);
-			Util.runUI(() -> { setBoard(game); });
+			setBoard(LocalGameDao.get(ctx).getGame(gameId));
 		});
 	}
 
