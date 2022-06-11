@@ -21,7 +21,12 @@ import java.util.*;
 @SuppressWarnings("serial")
 public class PrettyDate extends Date
 {
-	private final static String AGO = "ago";
+	private final static long MONTHS = 2629743830L;
+	private final static long WEEKS = 604800000;
+	private final static long DAYS = 86400000;
+	private final static long HOURS = 3600000;
+	private final static long MINUTES = 60000;
+	private final static long SECONDS = 1000;
 
 	public PrettyDate()
 	{
@@ -149,60 +154,61 @@ public class PrettyDate extends Date
 
 	public String agoFormat()
 	{
-		final StringBuilder buff = new StringBuilder(32);
 		final Date now = new Date();
 
 		long diff = Math.abs(now.getTime() - getTime());
 		int count = 0;
 
+		List<String> parts = new ArrayList<>();
+
 		// months
-		if (diff >= 2629743830L) {
-			buff.append(diff / 2629743830L).append("mo ");
-			diff %= 2629743830L;
+		if (diff >= MONTHS) {
+			parts.add((diff / MONTHS) + "m");
+			diff %= MONTHS;
 			count++;
 		}
 		// weeks
-		if (diff >= 604800000) {
-			buff.append(diff / 604800000).append("w ");
-			diff %= 604800000;
+		if (diff >= WEEKS) {
+			parts.add((diff / WEEKS) + "w");
+			diff %= WEEKS;
 			count++;
 
 			if (count == 2)
-				return buff.append(AGO).toString();
+				return String.join(" ", parts);
 		}
 		// days
-		if (diff >= 86400000) {
-			buff.append(diff / 86400000).append("d ");
-			diff %= 86400000;
+		if (diff >= DAYS) {
+			parts.add((diff / DAYS) + "d");
+			diff %= DAYS;
 			count++;
 
 			if (count == 2)
-				return buff.append(AGO).toString();
+				return String.join(" ", parts);
 		}
 		// hours
-		if (diff >= 3600000) {
-			buff.append(diff / 3600000).append("h ");
-			diff %= 3600000;
+		if (diff >= HOURS) {
+			parts.add((diff / HOURS) + "h");
+			diff %= HOURS;
 			count++;
 
 			if (count == 2)
-				return buff.append(AGO).toString();
+				return String.join(" ", parts);
 		}
 		// minutes
-		if (diff >= 60000) {
-			buff.append(diff / 60000).append("m ");
-			diff %= 60000;
+		if (diff >= MINUTES) {
+			parts.add((diff / MINUTES) + "m");
+			diff %= MINUTES;
 			count++;
 
 			if (count == 2)
-				return buff.append(AGO).toString();
+				return String.join(" ", parts);
 		}
 		// seconds
-		if (diff >= 1000) {
-			buff.append(diff / 1000).append("s ");
+		if (diff >= SECONDS) {
+			parts.add((diff / SECONDS) + "s");
 			count++;
 		}
 
-		return (count >= 1)? buff.append(AGO).toString() : "now";
+		return (count >= 1)? String.join(" ", parts) : "now";
 	}
 }
