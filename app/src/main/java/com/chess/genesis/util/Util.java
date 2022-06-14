@@ -15,12 +15,15 @@
  */
 package com.chess.genesis.util;
 
+import java.security.*;
 import java.util.concurrent.*;
 import android.os.*;
 import androidx.compose.runtime.*;
 
 public class Util
 {
+	private final static String SUID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~";
+
 	private Util() {}
 
 	public static void runThread(Runnable runner)
@@ -36,5 +39,27 @@ public class Util
 	public static <T> MutableState<T> getState(T val)
 	{
 		return SnapshotStateKt.mutableStateOf(val, SnapshotStateKt.structuralEqualityPolicy());
+	}
+
+	public static String getSUID()
+	{
+		var rand = new SecureRandom();
+		var buff = new StringBuilder();
+
+		buff.append(randChar(rand, true));
+		for (int i = 0; i < 6; i++) {
+			buff.append(randChar(rand, false));
+		}
+		buff.append(randChar(rand, true));
+		return buff.toString();
+	}
+
+	private static char randChar(SecureRandom rand, boolean onlyAlphNum)
+	{
+		char c;
+		do {
+			c = SUID_CHARS.charAt(Math.abs(rand.nextInt() % SUID_CHARS.length()));
+		} while (onlyAlphNum && !Character.isLetterOrDigit(c));
+		return c;
 	}
 }
