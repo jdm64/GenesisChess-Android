@@ -50,7 +50,7 @@ public class ComputerPlayer extends LocalPlayer
 	@Override
 	public void takeTurn()
 	{
-		Util.runThread(() -> { runEngine(); });
+		Util.runThread(this::runEngine);
 	}
 
 	private void runEngine()
@@ -59,14 +59,13 @@ public class ComputerPlayer extends LocalPlayer
 		engine.setBoard(board);
 		var move = engine.getMove();
 		if (engine.getEndTime() == 0) {
-			Util.runThread(() -> { runEngine(); });
+			Util.runThread(this::runEngine);
 			return;
 		}
 
 		model.currentMove();
 
-		var vMove = board.newMove();
-		if (board.validMove(move, vMove))
-			model.applyMove(vMove, true);
+		if (board.validMove(move) == Move.VALID_MOVE)
+			model.applyMove(move, true);
 	}
 }
