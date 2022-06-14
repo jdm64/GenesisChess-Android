@@ -77,11 +77,11 @@ public class BenchmarkDialog extends DialogFragment implements DialogInterface.O
 			long[] count = new long[1];
 
 			count[0] = benchmark.genBench();
-			Util.runUI(() -> gnps.setText(String.valueOf(count[0]) + " moves/sec"));
+			Util.runUI(() -> gnps.setText(count[0] + " moves/sec"));
 
 			count[0] = benchmark.regBench();
 			Util.runUI(() -> {
-				rnps.setText(String.valueOf(count[0]) + " moves/sec");
+				rnps.setText(count[0] + " moves/sec");
 				dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
 			});
 		});

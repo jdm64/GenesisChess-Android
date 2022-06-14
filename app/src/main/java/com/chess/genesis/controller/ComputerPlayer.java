@@ -23,7 +23,7 @@ import com.chess.genesis.util.*;
 
 public class ComputerPlayer extends LocalPlayer
 {
-	private Engine engine;
+	private final Engine engine;
 
 	public ComputerPlayer(int ycol, IGameModel model)
 	{

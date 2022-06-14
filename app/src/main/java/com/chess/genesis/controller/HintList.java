@@ -69,6 +69,7 @@ public class HintList implements IMoveHandler
 		hints.clear();
 	}
 
+	@Override
 	public void clear()
 	{
 		clearSelect();

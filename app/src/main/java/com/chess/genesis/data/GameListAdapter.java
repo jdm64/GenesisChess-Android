@@ -16,6 +16,7 @@
 
 package com.chess.genesis.data;
 
+import android.R.attr;
 import android.content.*;
 import android.content.res.*;
 import android.database.sqlite.*;
@@ -238,7 +239,7 @@ class GameListItem extends View
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		TypedArray arr = adapter.getContext().obtainStyledAttributes(new int[]{android.R.attr.textColorPrimary});
+		TypedArray arr = adapter.getContext().obtainStyledAttributes(new int[]{attr.textColorPrimary});
 		int txtColor = arr.getColor(0, MColors.BLACK);
 		arr.recycle();
 

@@ -27,7 +27,7 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 
 	private int count;
 	private boolean isHighlighted = false;
-	private boolean drawZero;
+	private final boolean drawZero;
 
 	public PlaceButton(Context context, PieceImgPainter painter, int Type, boolean DrawZero)
 	{

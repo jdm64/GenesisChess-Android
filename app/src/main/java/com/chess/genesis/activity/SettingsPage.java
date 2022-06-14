@@ -15,6 +15,7 @@
  */
 package com.chess.genesis.activity;
 
+import android.R.id;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;
@@ -35,7 +36,7 @@ public class SettingsPage extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (item.getItemId() == android.R.id.home) {
+		if (item.getItemId() == id.home) {
 			finish();
 		}
 		return super.onOptionsItemSelected(item);

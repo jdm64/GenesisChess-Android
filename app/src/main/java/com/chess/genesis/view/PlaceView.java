@@ -32,7 +32,7 @@ public class PlaceView extends LinearLayout implements OnClickListener, OnTouchL
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-	private PlaceButton[] squares = new PlaceButton[6];
+	private final PlaceButton[] squares = new PlaceButton[6];
 
 	private IGameController2 controller;
 	private final PieceImgPainter painter;

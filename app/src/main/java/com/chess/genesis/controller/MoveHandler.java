@@ -22,10 +22,10 @@ import com.chess.genesis.engine.*;
 
 public class MoveHandler implements IMoveHandler
 {
-	private IGameView view;
-	private IGameModel model;
-	private Board board;
-	private List<Integer> hints;
+	private final IGameView view;
+	private final IGameModel model;
+	private final Board board;
+	private final List<Integer> hints;
 	private int selected;
 	private SelectType type;
 
@@ -68,6 +68,7 @@ public class MoveHandler implements IMoveHandler
 		hints.clear();
 	}
 
+	@Override
 	public void clear()
 	{
 		clearSelect();

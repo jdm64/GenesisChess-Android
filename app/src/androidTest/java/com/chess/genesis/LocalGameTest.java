@@ -24,7 +24,6 @@ import android.view.*;
 import org.hamcrest.*;
 import org.junit.*;
 import org.junit.runner.*;
-import com.chess.genesis.R;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
