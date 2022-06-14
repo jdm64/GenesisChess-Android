@@ -19,7 +19,7 @@ package com.chess.genesis.engine;
 
 import java.util.*;
 
-class GenPosition extends GenMoveLookup
+abstract class GenPosition extends GenMoveLookup
 {
 	// for setPiece()
 	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};

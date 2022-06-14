@@ -50,6 +50,7 @@ public interface Board
 	int isMate();
 
 	String printZfen();
+	boolean parseZfen(String zfen);
 
 	void make(final Move move);
 	void unmake(final Move move);

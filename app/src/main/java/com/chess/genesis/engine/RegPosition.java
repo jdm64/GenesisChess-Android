@@ -17,7 +17,7 @@
 
 package com.chess.genesis.engine;
 
-class RegPosition extends RegMoveLookup
+abstract class RegPosition extends RegMoveLookup
 {
 	// for setPiece()
 	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
