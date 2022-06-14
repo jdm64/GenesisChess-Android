@@ -49,7 +49,7 @@ fun GamePage(nav: NavHostController, gameId: String) {
 		sheetElevation = 16.dp,
 		sheetShape = RoundedCornerShape(32.dp),
 		sheetState = state,
-		sheetContent = { BottomBarMenu(state, nav) })
+		sheetContent = { GameMenu(state, nav) })
 	{
 		GameContent(gameCtlr, state)
 	}
@@ -59,7 +59,7 @@ fun GamePage(nav: NavHostController, gameId: String) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomBarMenu(state: ModalBottomSheetState, nav: NavHostController) {
+fun GameMenu(state: ModalBottomSheetState, nav: NavHostController) {
 	var ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 

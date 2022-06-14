@@ -16,18 +16,20 @@
 package com.chess.genesis.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +49,7 @@ import com.chess.genesis.db.LocalGameDao
 import com.chess.genesis.db.LocalGameEntity
 import com.chess.genesis.util.PrettyDate
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NewGameState {
 	var show = mutableStateOf(false)
@@ -97,31 +100,74 @@ fun onEditGame(state: MutableState<EditGameState>, data: LocalGameEntity) {
 	state.value.show.value = true
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameListPage(nav: NavHostController) {
-	var newGameState = remember { mutableStateOf(NewGameState()) }
+	val newGameState = remember { mutableStateOf(NewGameState()) }
+	val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+	val scaffoldState = rememberScaffoldState()
+	val coroutineScope = rememberCoroutineScope()
 
-	Scaffold(
-		topBar = {
-			TopAppBar {
-				Image(
-					modifier = Modifier
-						.fillMaxWidth()
-						.height(26.dp),
-					painter = painterResource(R.drawable.genesischess),
-					contentDescription = "Genesis Chess"
-				)
-			}
-		},
-		floatingActionButton = {
-			FloatingActionButton(onClick = { newGameState.value.show.value = true }) {
-				Icon(Icons.Filled.Add, "New Game")
-			}
-		},
-		content = { LocalGameList(nav) }
-	)
+	ModalBottomSheetLayout(
+		sheetElevation = 16.dp,
+		sheetShape = RoundedCornerShape(32.dp),
+		sheetState = sheetState,
+		sheetContent = { ListMenu(sheetState) })
+	{
+		Scaffold(
+			scaffoldState = scaffoldState,
+			topBar = {
+				TopAppBar {
+					Row(verticalAlignment = Alignment.CenterVertically) {
+						IconButton(onClick = { coroutineScope.launch { sheetState.show() } }) {
+							Icon(
+								Icons.Filled.Menu,
+								"menu",
+								Modifier.size(30.dp)
+							)
+						}
+						Image(
+							modifier = Modifier
+								.fillMaxWidth()
+								.height(26.dp),
+							painter = painterResource(R.drawable.genesischess),
+							contentDescription = "Genesis Chess"
+						)
+					}
+				}
+			},
+			floatingActionButton = {
+				FloatingActionButton(onClick = {
+					newGameState.value.show.value = true
+				}) {
+					Icon(Icons.Filled.Add, "New Game")
+				}
+			},
+			content = { LocalGameList(nav) },
+		)
+	}
 
 	showNewGameDialog(newGameState, nav)
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ListMenu(sheetState: ModalBottomSheetState) {
+	var ctx = LocalContext.current
+	val scope = rememberCoroutineScope()
+
+	Column {
+		ListItem(
+			modifier = Modifier.clickable(onClick = {
+				scope.launch {
+					ctx.startActivity(Intent(ctx, SettingsPage::class.java))
+					sheetState.hide()
+				}
+			}),
+			icon = { Icon(Icons.Filled.Settings, "Settings") },
+			text = { Text("Settings") }
+		)
+	}
 }
 
 @Composable
