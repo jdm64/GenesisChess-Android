@@ -41,7 +41,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun GamePage(nav: NavHostController, gameId: String) {
 	var state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-	var gameCtlr = GameController.get(LocalContext.current)
+	var ctx = LocalContext.current
+	var gameCtlr = remember { GameController(ctx) }
 	gameCtlr.setBoard(gameId)
 
 	ModalBottomSheetLayout(
@@ -100,7 +101,8 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 	Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
 		TopAppBar {
 			Column {
-				Text("GENESIS CHESS")
+				var id = gameCtlr.gameId
+				Text("Game ID: $id")
 				TabRow(selectedTabIndex = if (stmState.value.stm == Piece.WHITE) 0 else 1) {
 					Tab(
 						onClick = {},

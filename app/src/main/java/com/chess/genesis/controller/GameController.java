@@ -27,28 +27,20 @@ import androidx.compose.runtime.*;
 
 public class GameController implements IGameController2
 {
-	private static GameController INST;
+	private final Context ctx;
+	private final IGameView2 view;
+	private final MutableState<Boolean> isGenState;
+	private final MutableState<Boolean> promoteState;
+	private final MutableState<Boolean> placeState;
+	private final MutableState<Boolean> captureState;
+	private final MutableState<StmState> stmState;
 
-	private Context ctx;
 	private IGameModel model;
-	private IGameView2 view;
+	private String gameID = "";
 	private IPlayer white;
 	private IPlayer black;
-	private MutableState<Boolean> isGenState;
-	private MutableState<Boolean> promoteState;
-	private MutableState<Boolean> placeState;
-	private MutableState<Boolean> captureState;
-	private MutableState<StmState> stmState;
 
-	public static GameController get(Context context)
-	{
-		if (INST == null || context != INST.ctx) {
-			INST = new GameController(context);
-		}
-		return INST;
-	}
-
-	private GameController(Context context)
+	public GameController(Context context)
 	{
 		ctx = context;
 		view = new GameView(this, ctx);
@@ -73,9 +65,7 @@ public class GameController implements IGameController2
 	public void setBoard(LocalGameEntity data)
 	{
 		var isGen = data.gametype == Enums.GENESIS_CHESS;
-		if (model == null || !(isGen ? GenGameModel.class : RegGameModel.class).equals(model.getClass())) {
-			model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
-		}
+		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
 
 		var playingBlack = data.gametype == Enums.REGULAR_CHESS && data.opponent == Enums.CPU_WHITE_OPPONENT;
 		var viewAsBlack = Pref.getBool(ctx, R.array.pf_viewAsBlack) && playingBlack;
@@ -85,22 +75,46 @@ public class GameController implements IGameController2
 		isGenState.setValue(isGen);
 		captureState.setValue(Pref.getBool(ctx, R.array.pf_showCaptured));
 
-		white = data.opponent == Enums.CPU_WHITE_OPPONENT ?
-		    new ComputerPlayer(Piece.WHITE, model) : new LocalPlayer(Piece.WHITE, model);
-		black = data.opponent == Enums.CPU_BLACK_OPPONENT ?
-		    new ComputerPlayer(Piece.BLACK, model) : new LocalPlayer(Piece.BLACK, model);
+		setPlayers(data.opponent);
 
 		onStmChange(true);
 
 		getStmPlayer().takeTurn();
 	}
 
+	private void setPlayers(int oppType)
+	{
+		switch (oppType) {
+		default:
+		case Enums.HUMAN_OPPONENT:
+			white = new LocalPlayer(Piece.WHITE, model);
+			black = new LocalPlayer(Piece.BLACK, model);
+			return;
+		case Enums.CPU_WHITE_OPPONENT:
+			white = new ComputerPlayer(Piece.WHITE, model);
+			black = new LocalPlayer(Piece.BLACK, model);
+			return;
+		case Enums.CPU_BLACK_OPPONENT:
+			white = new LocalPlayer(Piece.WHITE, model);
+			black = new ComputerPlayer(Piece.BLACK, model);
+			return;
+		}
+	}
+
 	@Override
 	public void setBoard(String gameId)
 	{
+		gameID = gameId;
 		Util.runThread(() -> {
-			setBoard(LocalGameDao.get(ctx).getGame(gameId));
+			var game = LocalGameDao.get(ctx).getGame(gameID);
+			Util.runUI(() -> { setBoard(game); });
 		});
+	}
+
+	@Override
+	public String getGameId()
+	{
+		return gameID;
 	}
 
 	@Override
