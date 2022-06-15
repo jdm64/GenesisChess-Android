@@ -69,9 +69,7 @@ public class GameController implements IGameController2
 		var isGen = data.gametype == Enums.GENESIS_CHESS;
 		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
 
-		var playingBlack = data.gametype == Enums.REGULAR_CHESS && data.opponent == Enums.CPU_WHITE_OPPONENT;
-		var viewAsBlack = Pref.getBool(ctx, R.array.pf_viewAsBlack) && playingBlack;
-		view.getBoardView().setViewAsBlack(viewAsBlack);
+		view.getBoardView().setViewAsBlack(viewAsBlack(data.gametype, data.opponent));
 
 		model.setBoard(data);
 		isGenState.setValue(isGen);
@@ -82,6 +80,15 @@ public class GameController implements IGameController2
 		onStmChange(true);
 
 		getStmPlayer().takeTurn();
+	}
+
+	private boolean viewAsBlack(int gametype, int opponent)
+	{
+		if (gametype == Enums.GENESIS_CHESS) {
+			return false;
+		}
+		var playingBlack = opponent == Enums.CPU_WHITE_OPPONENT || opponent == Enums.INVITE_WHITE_OPPONENT;
+		return playingBlack && Pref.getBool(ctx, R.array.pf_viewAsBlack);
 	}
 
 	private void setPlayers(int oppType)
