@@ -32,6 +32,7 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	private final static String BASE_TOPIC = "genchess/adhoc";
 
 	private static AdhocMqttClient INST = null;
+	private static Object lock = new Object();
 
 	MqttClient client;
 	Map<String,IMoveListener> moveListeners = new HashMap<>();
@@ -53,26 +54,27 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		try {
 			var ctx = getApplicationContext();
 			var id = "Android-" + Pref.getUUID(ctx);
-			var persistence = new MqttDefaultFilePersistence(ctx.getCacheDir().getAbsolutePath());
+			var persistence = new MemoryPersistence();
 			client = new MqttClient(URL, id, persistence);
 			client.setCallback(this);
 
 			INST = this;
+			synchronized (lock) {
+				lock.notifyAll();
+			}
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
-	{
-		connect();
-		return super.onStartCommand(intent, flags, startId);
-	}
-
-	@Override
 	public void onDestroy()
 	{
+		try {
+			client.disconnect();
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
 		INST = null;
 	}
 
@@ -80,6 +82,16 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	{
 		if (INST == null) {
 			ctx.startService(new Intent(ctx, AdhocMqttClient.class));
+			synchronized (lock) {
+				for (int i = 0; INST == null && i < 20; i++) {
+					try {
+						lock.wait(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+			}
 		}
 		return INST;
 	}
