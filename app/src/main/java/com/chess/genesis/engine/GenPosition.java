@@ -108,7 +108,7 @@ abstract class GenPosition extends GenMoveLookup
 
 		// parse half-ply
 		final StringBuilder num = new StringBuilder();
-		while (Character.isDigit(st[n])) {
+		while (n < st.length && Character.isDigit(st[n])) {
 			num.append(st[n]);
 			n++;
 		}
