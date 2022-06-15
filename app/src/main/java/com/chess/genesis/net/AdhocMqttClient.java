@@ -190,6 +190,8 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		case "i":
 			var msg = InviteMsg.parse(message);
 			LocalGameDao.get(getApplicationContext()).importInviteGame(gameId, msg.type, msg.color);
+			client.unsubscribe(topic);
+			publish(topic, message.getPayload(), false);
 			break;
 		case "w":
 		case "b":
