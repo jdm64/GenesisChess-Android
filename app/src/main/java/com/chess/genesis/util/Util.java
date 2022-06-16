@@ -46,9 +46,11 @@ public class Util
 		var rand = new SecureRandom();
 		var buff = new StringBuilder();
 
-		buff.append(randChar(rand, true));
+		var last = randChar(rand, true);
+		buff.append(last);
 		for (int i = 0; i < 6; i++) {
-			buff.append(randChar(rand, false));
+			last = randChar(rand, !Character.isLetterOrDigit(last));
+			buff.append(last);
 		}
 		buff.append(randChar(rand, true));
 		return buff.toString();
