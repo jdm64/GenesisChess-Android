@@ -28,5 +28,5 @@ public interface IPlayer
 
 	void takeTurn();
 
-	default void onDispose() {}
+	default void onDispose(Context context) {}
 }

@@ -25,14 +25,12 @@ import com.chess.genesis.util.*;
 
 public class LocalMqttPlayer extends LocalPlayer
 {
-	AdhocMqttClient client;
 	String gameId;
 
-	public LocalMqttPlayer(int YColor, IGameModel Model, AdhocMqttClient Client)
+	public LocalMqttPlayer(int YColor, IGameModel Model)
 	{
 		super(YColor, Model);
 		gameId = model.saveBoard().gameid;
-		client = Client;
 	}
 
 	@Override
@@ -44,6 +42,7 @@ public class LocalMqttPlayer extends LocalPlayer
 	@Override
 	public void finalizeMove(Move move, Context context)
 	{
+		var client = AdhocMqttClient.get(context);
 		client.sendMove(gameId, yColor, model.getHistory().size(), move);
 		super.finalizeMove(move, context);
 	}

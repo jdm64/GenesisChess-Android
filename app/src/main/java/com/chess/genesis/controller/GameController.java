@@ -108,14 +108,12 @@ public class GameController implements IGameController2
 			black = new ComputerPlayer(Piece.BLACK, model);
 			return;
 		case Enums.INVITE_WHITE_OPPONENT:
-			var client = AdhocMqttClient.get(ctx);
-			white = new RemoteMqttPlayer(Piece.WHITE, model, client);
-			black = new LocalMqttPlayer(Piece.BLACK, model, client);
+			white = new RemoteMqttPlayer(Piece.WHITE, model, ctx);
+			black = new LocalMqttPlayer(Piece.BLACK, model);
 			return;
 		case Enums.INVITE_BLACK_OPPONENT:
-			client = AdhocMqttClient.get(ctx);
-			white = new LocalMqttPlayer(Piece.WHITE, model, client);
-			black = new RemoteMqttPlayer(Piece.BLACK, model, client);
+			white = new LocalMqttPlayer(Piece.WHITE, model);
+			black = new RemoteMqttPlayer(Piece.BLACK, model, ctx);
 			return;
 		}
 	}
@@ -209,8 +207,8 @@ public class GameController implements IGameController2
 	@Override
 	public void onDispose()
 	{
-		white.onDispose();
-		black.onDispose();
+		white.onDispose(ctx);
+		black.onDispose(ctx);
 	}
 
 	@Override
