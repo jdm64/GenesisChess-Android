@@ -182,6 +182,7 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		case "w":
 		case "b":
 			var moveMsg = MoveMsg.parse(message);
+			LocalGameDao.get(getApplicationContext()).saveMove(gameId, moveMsg.index, moveMsg.move);
 
 			var listener = moveListeners.get(gameId);
 			if (listener != null) {

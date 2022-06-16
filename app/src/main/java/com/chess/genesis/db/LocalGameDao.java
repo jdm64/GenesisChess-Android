@@ -92,6 +92,32 @@ public interface LocalGameDao
 		return game;
 	}
 
+	default boolean saveMove(String gameId, int index, String move)
+	{
+		var game = getGame(gameId);
+		if (game == null) {
+			return false;
+		}
+
+		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
+		if (!board.parseZfen(game.zfen)) {
+			return false;
+		} else if (board.getPly() + 1 != index) {
+			return false;
+		}
+
+		var mv = board.newMove();
+		if (!mv.parse(move) || board.validMove(mv) != Move.VALID_MOVE) {
+			return false;
+		}
+
+		game.history += " " + mv;
+		game.stime = System.currentTimeMillis();
+
+		update(game);
+		return true;
+	}
+
 	@Query("SELECT * FROM local_games WHERE gameid = :gameId")
 	LocalGameEntity getGame(String gameId);
 
