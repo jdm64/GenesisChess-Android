@@ -27,6 +27,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -48,6 +49,10 @@ fun GamePage(nav: NavHostController, gameId: String) {
 	var ctx = LocalContext.current
 	var gameCtlr = remember { GameController(ctx) }
 	gameCtlr.setBoard(gameId)
+
+	DisposableEffect(gameCtlr) {
+		onDispose { gameCtlr.onDispose()  }
+	}
 
 	ModalBottomSheetLayout(
 		sheetElevation = 16.dp,

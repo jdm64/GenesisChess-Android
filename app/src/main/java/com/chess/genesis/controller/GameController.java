@@ -200,6 +200,13 @@ public class GameController implements IGameController2
 	}
 
 	@Override
+	public void onDispose()
+	{
+		white.onDispose();
+		black.onDispose();
+	}
+
+	@Override
 	public void showPromoteDialog()
 	{
 		promoteState.setValue(true);

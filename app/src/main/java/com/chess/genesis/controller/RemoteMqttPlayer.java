@@ -52,4 +52,10 @@ public class RemoteMqttPlayer extends LocalPlayer implements IMoveListener
 		}
 		model.applyMove(move, true);
 	}
+
+	@Override
+	public void onDispose()
+	{
+		client.setMoveListener(gameId, null);
+	}
 }

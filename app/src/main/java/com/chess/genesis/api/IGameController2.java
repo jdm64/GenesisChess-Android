@@ -49,4 +49,6 @@ public interface IGameController2 extends IGameController
 	MutableState<StmState> getStmState();
 
 	void onMove(Move move);
+
+	void onDispose();
 }
