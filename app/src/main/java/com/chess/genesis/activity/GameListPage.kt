@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
@@ -47,6 +48,7 @@ import com.chess.genesis.R
 import com.chess.genesis.data.Enums
 import com.chess.genesis.db.LocalGameDao
 import com.chess.genesis.db.LocalGameEntity
+import com.chess.genesis.net.AdhocMqttClient
 import com.chess.genesis.util.PrettyDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,13 +57,19 @@ class NewGameState {
 	var show = mutableStateOf(false)
 	var name = mutableStateOf("Untitled")
 	var type = mutableStateOf(Enums.GENESIS_CHESS)
-	var cpu = mutableStateOf(Enums.HUMAN_OPPONENT)
+	var opp = mutableStateOf(Enums.CPU_OPPONENT)
+	var color = mutableStateOf(Enums.BLACK_OPP)
 }
 
 class EditGameState {
 	var show = mutableStateOf(false)
 	var name = mutableStateOf("")
 	lateinit var data: LocalGameEntity
+}
+
+class ImportGameState {
+	var show = mutableStateOf(false)
+	var id = mutableStateOf("")
 }
 
 fun onLoadGame(data: LocalGameEntity, nav: NavHostController, context: Context) {
@@ -72,6 +80,9 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
 		val newGame = LocalGameDao.get(context).newLocalGame(data)
+		if (newGame.opponent == Enums.INVITE_WHITE_OPPONENT || newGame.opponent == Enums.INVITE_BLACK_OPPONENT) {
+			AdhocMqttClient.get(context).sendInvite(newGame)
+		}
 		Dispatchers.Main.dispatch(Dispatchers.Main) {
 			onLoadGame(newGame, nav, context)
 		}
@@ -100,6 +111,14 @@ fun onEditGame(state: MutableState<EditGameState>, data: LocalGameEntity) {
 	state.value.show.value = true
 }
 
+fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
+	state.value.show.value = false
+	Dispatchers.IO.dispatch(Dispatchers.IO) {
+		var client = AdhocMqttClient.get(context)
+		client.listenInvite(state.value.id.value)
+	}
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameListPage(nav: NavHostController) {
@@ -107,12 +126,13 @@ fun GameListPage(nav: NavHostController) {
 	val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 	val scaffoldState = rememberScaffoldState()
 	val coroutineScope = rememberCoroutineScope()
+	val importState = remember { mutableStateOf(ImportGameState()) }
 
 	ModalBottomSheetLayout(
 		sheetElevation = 16.dp,
 		sheetShape = RoundedCornerShape(32.dp),
 		sheetState = sheetState,
-		sheetContent = { ListMenu(sheetState) })
+		sheetContent = { ListMenu(sheetState, importState) })
 	{
 		Scaffold(
 			scaffoldState = scaffoldState,
@@ -148,15 +168,27 @@ fun GameListPage(nav: NavHostController) {
 	}
 
 	showNewGameDialog(newGameState, nav)
+
+	showImportInviteDialog(importState)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ListMenu(sheetState: ModalBottomSheetState) {
+fun ListMenu(sheetState: ModalBottomSheetState, importState: MutableState<ImportGameState>) {
 	var ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
 	Column {
+		ListItem(
+			modifier = Modifier.clickable(onClick = {
+				scope.launch {
+					importState.value.show.value = true
+					sheetState.hide()
+				}
+			}),
+			icon = { Icon(Icons.Filled.Email, "Import Invite Game") },
+			text = { Text("Import Invite Game") }
+		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
 				scope.launch {
@@ -308,8 +340,7 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Genesis")
-				}
-				Row(verticalAlignment = Alignment.CenterVertically) {
+					Spacer(modifier = Modifier.width(8.dp))
 					RadioButton(
 						selected = state.type.value == Enums.REGULAR_CHESS,
 						onClick = {
@@ -320,37 +351,73 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					Text("Regular")
 				}
 				Text(
-					"Computer Player:",
+					"Opponent Type:",
 					fontWeight = FontWeight.Bold,
 					modifier = Modifier.padding(top = 8.dp)
 				)
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
-						selected = state.cpu.value == Enums.HUMAN_OPPONENT,
+						selected = state.opp.value == Enums.CPU_OPPONENT,
 						onClick = {
-							state.cpu.value = Enums.HUMAN_OPPONENT
+							state.opp.value = Enums.CPU_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
-					Text("None")
-					Spacer(modifier = Modifier.width(16.dp))
+					Text("CPU")
+					Spacer(modifier = Modifier.width(8.dp))
 					RadioButton(
-						selected = state.cpu.value == Enums.CPU_WHITE_OPPONENT,
+						selected = state.opp.value == Enums.HUMAN_OPPONENT,
 						onClick = {
-							state.cpu.value = Enums.CPU_WHITE_OPPONENT
+							state.opp.value = Enums.HUMAN_OPPONENT
+						},
+						modifier = Modifier.size(36.dp)
+					)
+					Text("Local")
+					Spacer(modifier = Modifier.width(8.dp))
+					RadioButton(
+						selected = state.opp.value == Enums.INVITE_OPPONENT,
+						onClick = {
+							state.opp.value = Enums.INVITE_OPPONENT
+						},
+						modifier = Modifier.size(36.dp)
+					)
+					Text("Invite")
+				}
+				Text(
+					"Play as Color:",
+					fontWeight = FontWeight.Bold,
+					modifier = Modifier.padding(top = 8.dp)
+				)
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					RadioButton(
+						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
+						selected = state.color.value == Enums.BLACK_OPP,
+						onClick = {
+							state.color.value = Enums.BLACK_OPP
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("White")
-					Spacer(modifier = Modifier.width(16.dp))
+					Spacer(modifier = Modifier.width(8.dp))
 					RadioButton(
-						selected = state.cpu.value == Enums.CPU_BLACK_OPPONENT,
+						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
+						selected = state.color.value == Enums.WHITE_OPP,
 						onClick = {
-							state.cpu.value = Enums.CPU_BLACK_OPPONENT
+							state.color.value = Enums.WHITE_OPP
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Black")
+					Spacer(modifier = Modifier.width(8.dp))
+					RadioButton(
+						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
+						selected = state.color.value == Enums.RANDOM_OPP,
+						onClick = {
+							state.color.value = Enums.RANDOM_OPP
+						},
+						modifier = Modifier.size(36.dp)
+					)
+					Text("Random")
 				}
 				Text(
 					"Name:",
@@ -375,6 +442,48 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				}
 				TextButton(onClick = { onNewGame(state, nav, ctx) }) {
 					Text("Create")
+				}
+			}
+		}
+	)
+}
+
+@Composable
+fun showImportInviteDialog(state: MutableState<ImportGameState>) {
+	if (!state.value.show.value) {
+		return
+	}
+	var context = LocalContext.current
+
+	AlertDialog(onDismissRequest = { state.value.show.value = false },
+		title = {
+			Text(
+				text = "Import Invite Game",
+				fontWeight = FontWeight.Bold,
+				fontSize = 20.sp
+			)
+		},
+		text = {
+			Column {
+				Text("Enter Game ID:", fontWeight = FontWeight.Bold)
+				Spacer(modifier = Modifier.height(8.dp))
+				TextField(
+					value = state.value.id.value,
+					onValueChange = { state.value.id.value = it })
+			}
+		},
+		buttons = {
+			Row(
+				Modifier
+					.fillMaxWidth()
+					.padding(8.dp),
+				horizontalArrangement = Arrangement.SpaceBetween
+			) {
+				TextButton(onClick = { state.value.show.value = false }) {
+					Text("Cancel")
+				}
+				TextButton(onClick = { onImportGame(state, context) }) {
+					Text("Import")
 				}
 			}
 		}

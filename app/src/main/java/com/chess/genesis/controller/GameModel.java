@@ -46,6 +46,12 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public ObjectArray<Move> getHistory()
+	{
+		return history;
+	}
+
+	@Override
 	public IMoveHandler getMoveHandler()
 	{
 		return moveHandler;
@@ -123,6 +129,12 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public boolean isCurrentMove()
+	{
+		return hindex + 1 >= history.size();
+	}
+
+	@Override
 	public void backMove()
 	{
 		if (hindex < 0)
@@ -133,7 +145,7 @@ public abstract class GameModel implements IGameModel
 	@Override
 	public void forwardMove()
 	{
-		if (hindex + 1 >= history.size())
+		if (isCurrentMove())
 			return;
 		applyMove(history.get(hindex + 1), false);
 	}

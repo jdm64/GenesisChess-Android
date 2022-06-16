@@ -15,11 +15,13 @@
  */
 package com.chess.genesis.db;
 
+import java.security.*;
 import java.util.*;
 import android.content.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 import androidx.paging.*;
 import androidx.room.*;
 
@@ -35,18 +37,52 @@ public interface LocalGameDao
 	{
 		var name = data.getName().getValue();
 		var type = data.getType().getValue();
-		var opp = data.getCpu().getValue();
+		var opp = data.getOpp().getValue();
+		var color = data.getColor().getValue();
+
+		if (color == Enums.RANDOM_OPP)
+			color = new SecureRandom().nextBoolean() ? Enums.WHITE_OPP : Enums.BLACK_OPP;
+
+		switch (opp) {
+		case Enums.CPU_OPPONENT:
+			opp = color == Enums.WHITE_OPP ? Enums.CPU_BLACK_OPPONENT : Enums.CPU_WHITE_OPPONENT;
+			break;
+		case Enums.INVITE_OPPONENT:
+			opp = color == Enums.WHITE_OPP ? Enums.INVITE_WHITE_OPPONENT : Enums.INVITE_BLACK_OPPONENT;
+		case Enums.HUMAN_OPPONENT:
+		default:
+			// do nothing
+		}
+
 		return newLocalGame(name, type, opp);
 	}
 
 	default LocalGameEntity newLocalGame(String gamename, int gametype, int opponent)
 	{
 		var game = new LocalGameEntity();
-		game.gameid = UUID.randomUUID().toString();
+		game.gameid = (opponent == Enums.INVITE_WHITE_OPPONENT || opponent == Enums.INVITE_BLACK_OPPONENT) ?
+			Util.getSUID() : UUID.randomUUID().toString();
 		game.name = gamename;
 		game.gametype = gametype;
 		game.opponent = opponent;
 		game.zfen = (gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZfen();
+		game.history = "";
+		game.ctime = System.currentTimeMillis();
+		game.stime = System.currentTimeMillis();
+
+		insert(game);
+
+		return game;
+	}
+
+	default LocalGameEntity importInviteGame(String gameId, int gameType, int color)
+	{
+		var game = new LocalGameEntity();
+		game.gameid = gameId;
+		game.name = "Invite " + Enums.GameType(gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
+		game.gametype = gameType;
+		game.opponent = color == Piece.WHITE ? Enums.INVITE_BLACK_OPPONENT : Enums.INVITE_WHITE_OPPONENT;
+		game.zfen = (gameType == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZfen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();

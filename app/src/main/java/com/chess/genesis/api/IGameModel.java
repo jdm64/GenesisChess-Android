@@ -22,6 +22,8 @@ public interface IGameModel
 {
 	Board getBoard();
 
+	ObjectArray<Move> getHistory();
+
 	IMoveHandler getMoveHandler();
 
 	void reset();
@@ -31,6 +33,8 @@ public interface IGameModel
 	GameEntity saveBoard();
 
 	void loadBoard();
+
+	boolean isCurrentMove();
 
 	void backMove();
 

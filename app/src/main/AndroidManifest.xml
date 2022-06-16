@@ -20,5 +20,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:name="com.chess.genesis.activity.SettingsPage"
 			android:label="Settings">
 		</activity>
+		<service android:name=".net.AdhocMqttClient" android:exported="false" />
 	</application>
 </manifest> 

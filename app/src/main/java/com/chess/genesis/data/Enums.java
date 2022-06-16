@@ -41,6 +41,10 @@ public final class Enums
 	public final static int HUMAN_OPPONENT = 1;
 	public final static int CPU_WHITE_OPPONENT = 2;
 	public final static int CPU_BLACK_OPPONENT = 3;
+	public final static int INVITE_WHITE_OPPONENT = 4;
+	public final static int INVITE_BLACK_OPPONENT = 5;
+	public final static int CPU_OPPONENT = -1;
+	public final static int INVITE_OPPONENT = -2;
 
 	// Opponent Selection
 	public final static int RANDOM = 1;
@@ -90,18 +94,28 @@ public final class Enums
 			return "cpu-white";
 		case CPU_BLACK_OPPONENT:
 			return "cpu-black";
+		case INVITE_WHITE_OPPONENT:
+			return "invite-white";
+		case INVITE_BLACK_OPPONENT:
+			return "invite-black";
 		}
 	}
 
 	public static int OpponentType(final String opponent)
 	{
-		if (opponent.equals("human"))
+		switch (opponent) {
+		default:
+		case "human":
 			return HUMAN_OPPONENT;
-		if (opponent.equals("cpu-white"))
+		case "cpu-white":
 			return CPU_WHITE_OPPONENT;
-		if (opponent.equals("cpu-black"))
+		case "cpu-black":
 			return CPU_BLACK_OPPONENT;
-		throw new RuntimeException("unknown opponenttype: " + opponent);
+		case "invite-white":
+			return INVITE_WHITE_OPPONENT;
+		case "invite-black":
+			return INVITE_BLACK_OPPONENT;
+		}
 	}
 
 	public static String ColorType(final int color)

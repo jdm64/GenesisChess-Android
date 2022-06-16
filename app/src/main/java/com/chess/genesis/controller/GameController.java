@@ -16,11 +16,13 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
+import android.util.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
@@ -97,6 +99,16 @@ public class GameController implements IGameController2
 		case Enums.CPU_BLACK_OPPONENT:
 			white = new LocalPlayer(Piece.WHITE, model);
 			black = new ComputerPlayer(Piece.BLACK, model);
+			return;
+		case Enums.INVITE_WHITE_OPPONENT:
+			var client = AdhocMqttClient.get(ctx);
+			white = new RemoteMqttPlayer(Piece.WHITE, model, client);
+			black = new LocalMqttPlayer(Piece.BLACK, model, client);
+			return;
+		case Enums.INVITE_BLACK_OPPONENT:
+			client = AdhocMqttClient.get(ctx);
+			white = new LocalMqttPlayer(Piece.WHITE, model, client);
+			black = new RemoteMqttPlayer(Piece.BLACK, model, client);
 			return;
 		}
 	}
