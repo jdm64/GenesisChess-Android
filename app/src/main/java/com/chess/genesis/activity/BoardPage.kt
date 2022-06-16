@@ -15,7 +15,11 @@
  */
 package com.chess.genesis.activity
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +53,7 @@ fun GamePage(nav: NavHostController, gameId: String) {
 		sheetElevation = 16.dp,
 		sheetShape = RoundedCornerShape(32.dp),
 		sheetState = state,
-		sheetContent = { GameMenu(state, nav) })
+		sheetContent = { GameMenu(gameCtlr, state, nav) })
 	{
 		GameContent(gameCtlr, state)
 	}
@@ -59,15 +63,21 @@ fun GamePage(nav: NavHostController, gameId: String) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GameMenu(state: ModalBottomSheetState, nav: NavHostController) {
+fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHostController) {
 	var ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
 	Column {
 		ListItem(
-			modifier = Modifier.clickable(onClick = { scope.launch { state.hide() } }),
-			icon = { Icon(Icons.Filled.Home, "Game Board") },
-			text = { Text("Game Board") }
+			modifier = Modifier.clickable(onClick = {
+				val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+				var clip = ClipData.newPlainText("simple text", gameCtlr.gameId)
+				clipboard.setPrimaryClip(clip)
+				Toast.makeText(ctx, "Game ID copied", Toast.LENGTH_SHORT).show()
+				scope.launch { state.hide() }
+			}),
+			icon = { Icon(Icons.Filled.Share, "Copy Game ID") },
+			text = { Text("Copy Game ID") }
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = { nav.navigate("list") }),
