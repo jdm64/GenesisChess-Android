@@ -15,6 +15,7 @@
  */
 package com.chess.genesis.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,10 +24,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.chess.genesis.db.LocalGameDao
+import com.chess.genesis.net.AdhocMqttClient
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
+		Dispatchers.IO.dispatch(Dispatchers.IO) {
+			if (LocalGameDao.get(this).hasInviteGame()) {
+				startService(Intent(this, AdhocMqttClient::class.java))
+			}
+		}
 
 		setContent {
 			MainApp()

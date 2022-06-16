@@ -98,6 +98,10 @@ public interface LocalGameDao
 	@Query("SELECT * FROM local_games ORDER BY stime DESC")
 	PagingSource<Integer, LocalGameEntity> getAllGames();
 
+	@Query("SELECT COUNT(*) FROM local_games WHERE opponent = "
+	    + Enums.INVITE_WHITE_OPPONENT + " OR opponent = " + Enums.INVITE_BLACK_OPPONENT + " LIMIT 1")
+	boolean hasInviteGame();
+
 	@Insert
 	void insert(LocalGameEntity game);
 
