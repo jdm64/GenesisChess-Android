@@ -17,7 +17,6 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
-import android.os.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.AdhocMqttClient.*;

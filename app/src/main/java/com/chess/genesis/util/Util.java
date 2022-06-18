@@ -24,11 +24,16 @@ public class Util
 {
 	private final static String SUID_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~";
 
+	static ExecutorService pool = null;
+
 	private Util() {}
 
-	public static void runThread(Runnable runner)
+	public synchronized static void runThread(Runnable runner)
 	{
-		Executors.newSingleThreadExecutor().execute(runner);
+		if (pool == null) {
+			pool = Executors.newCachedThreadPool();
+		}
+		pool.execute(runner);
 	}
 
 	public static void runUI(Runnable runner)

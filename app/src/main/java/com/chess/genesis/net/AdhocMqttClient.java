@@ -25,6 +25,7 @@ import org.eclipse.paho.client.mqttv3.persist.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 
 public class AdhocMqttClient extends Service implements MqttCallback
 {
@@ -60,7 +61,9 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service)
 		{
-			onServiceConnected(((LocalBinder) service).get());
+			Util.runThread(() -> {
+				onServiceConnected(((LocalBinder) service).get());
+			});
 		}
 
 		@Override
