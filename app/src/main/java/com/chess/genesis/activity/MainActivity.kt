@@ -15,7 +15,6 @@
  */
 package com.chess.genesis.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,18 +28,38 @@ import com.chess.genesis.net.AdhocMqttClient
 import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
+
+	private var hasInviteGames = false
+
+	private val connection = object : AdhocMqttClient.LocalConnection() {
+		override fun onServiceConnected(client: AdhocMqttClient?) {
+		}
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
 		Dispatchers.IO.dispatch(Dispatchers.IO) {
-			if (LocalGameDao.get(this).hasInviteGame()) {
-				startService(Intent(this, AdhocMqttClient::class.java))
-			}
+			hasInviteGames = LocalGameDao.get(this).hasInviteGame()
 		}
 
 		setContent {
 			MainApp()
 		}
+	}
+
+	override fun onStart() {
+		super.onStart()
+		if (hasInviteGames) {
+			AdhocMqttClient.bind(applicationContext, connection)
+		}
+	}
+
+	override fun onStop() {
+		if (hasInviteGames) {
+			applicationContext.unbindService(connection)
+		}
+		super.onStop()
 	}
 }
 

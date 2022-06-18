@@ -81,7 +81,7 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
 		val newGame = LocalGameDao.get(context).newLocalGame(data)
 		if (newGame.opponent == Enums.INVITE_WHITE_OPPONENT || newGame.opponent == Enums.INVITE_BLACK_OPPONENT) {
-			AdhocMqttClient.get(context).sendInvite(newGame)
+			AdhocMqttClient.bind(context) { client -> client.sendInvite(newGame) }
 		}
 		Dispatchers.Main.dispatch(Dispatchers.Main) {
 			onLoadGame(newGame, nav, context)
@@ -114,8 +114,7 @@ fun onEditGame(state: MutableState<EditGameState>, data: LocalGameEntity) {
 fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 	state.value.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		var client = AdhocMqttClient.get(context)
-		client.listenInvite(state.value.id.value)
+		AdhocMqttClient.bind(context) { client -> client.listenInvite(state.value.id.value) }
 	}
 }
 

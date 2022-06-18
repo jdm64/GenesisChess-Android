@@ -31,21 +31,66 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	private final static String URL = "tcp://broker.hivemq.com:1883";
 	private final static String BASE_TOPIC = "genchess/adhoc";
 
-	private static AdhocMqttClient INST = null;
-	private static Object lock = new Object();
-
+	LocalBinder binder = new LocalBinder();
 	MqttClient client;
-	Map<String,IMoveListener> moveListeners = new HashMap<>();
+	Map<String, IMoveListener> moveListeners = new HashMap<>();
 
 	public interface IMoveListener
 	{
 		void onMove(MoveMsg msg);
 	}
 
+	public class LocalBinder extends Binder
+	{
+		public AdhocMqttClient get()
+		{
+			return AdhocMqttClient.this;
+		}
+	}
+
+	public interface RunCommand
+	{
+		void run(AdhocMqttClient client);
+	}
+
+	public static abstract class LocalConnection implements ServiceConnection
+	{
+		public abstract void onServiceConnected(AdhocMqttClient client);
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service)
+		{
+			onServiceConnected(((LocalBinder) service).get());
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name)
+		{
+		}
+	}
+
+	public static void bind(Context ctx, LocalConnection connection)
+	{
+		ctx.bindService(new Intent(ctx, AdhocMqttClient.class), connection, Context.BIND_AUTO_CREATE);
+	}
+
+	public static void bind(Context ctx, RunCommand command)
+	{
+		bind(ctx, new LocalConnection()
+		{
+			@Override
+			public void onServiceConnected(AdhocMqttClient client)
+			{
+				command.run(client);
+				ctx.unbindService(this);
+			}
+		});
+	}
+
 	@Override
 	public IBinder onBind(Intent intent)
 	{
-		return null;
+		return binder;
 	}
 
 	@Override
@@ -57,11 +102,6 @@ public class AdhocMqttClient extends Service implements MqttCallback
 			var persistence = new MemoryPersistence();
 			client = new MqttClient(URL, id, persistence);
 			client.setCallback(this);
-
-			INST = this;
-			synchronized (lock) {
-				lock.notifyAll();
-			}
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
@@ -75,25 +115,6 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
-		INST = null;
-	}
-
-	public static synchronized AdhocMqttClient get(Context ctx)
-	{
-		if (INST == null) {
-			ctx.startService(new Intent(ctx, AdhocMqttClient.class));
-			synchronized (lock) {
-				for (int i = 0; INST == null && i < 20; i++) {
-					try {
-						lock.wait(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						break;
-					}
-				}
-			}
-		}
-		return INST;
 	}
 
 	public void sendInvite(LocalGameEntity data)

@@ -17,6 +17,7 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
+import android.os.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.AdhocMqttClient.*;
@@ -25,12 +26,23 @@ import com.chess.genesis.engine.*;
 public class RemoteMqttPlayer extends LocalPlayer implements IMoveListener
 {
 	String gameId;
+	AdhocMqttClient client;
+
+	LocalConnection connection = new LocalConnection()
+	{
+		@Override
+		public void onServiceConnected(AdhocMqttClient mqttClient)
+		{
+			client = mqttClient;
+			client.listenMoves(gameId, yColor, RemoteMqttPlayer.this);
+		}
+	};
 
 	public RemoteMqttPlayer(int YColor, IGameModel Model, Context context)
 	{
 		super(YColor, Model);
 		gameId = model.saveBoard().gameid;
-		AdhocMqttClient.get(context).listenMoves(gameId, YColor, this);
+		AdhocMqttClient.bind(context, connection);
 	}
 
 	@Override
@@ -55,6 +67,7 @@ public class RemoteMqttPlayer extends LocalPlayer implements IMoveListener
 	@Override
 	public void onDispose(Context context)
 	{
-		AdhocMqttClient.get(context).setMoveListener(gameId, null);
+		client.setMoveListener(gameId, null);
+		context.unbindService(connection);
 	}
 }
