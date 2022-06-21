@@ -63,9 +63,9 @@ public abstract class GameState implements IGameController, Handler.Callback
 	try {
 		switch (msg.what) {
 		case CpuTimeDialog.MSG:
-			final PrefEdit pref = new PrefEdit(activity);
-			pref.putInt(R.array.pf_cputime, (Integer) msg.obj);
-			pref.commit();
+			new PrefEdit(activity)
+				.putInt(R.array.pf_cputime, (Integer) msg.obj)
+				.commit();
 			cpu.setTime((Integer) msg.obj);
 			break;
 		case NetworkClient.GAME_DRAW:

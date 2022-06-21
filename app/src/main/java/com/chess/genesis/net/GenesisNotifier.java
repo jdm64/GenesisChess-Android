@@ -268,9 +268,9 @@ public class GenesisNotifier extends Service implements Runnable
 			lock++;
 		}
 		// Save sync time
-		final PrefEdit pref = new PrefEdit(this);
-		pref.putLong(R.array.pf_lastgamesync, json.getLong("time"));
-		pref.commit();
+		new PrefEdit(this)
+			.putLong(R.array.pf_lastgamesync, json.getLong("time"))
+			.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
@@ -288,9 +288,9 @@ public class GenesisNotifier extends Service implements Runnable
 		}
 
 		// Save sync time
-		final PrefEdit pref = new PrefEdit(this);
-		pref.putLong(R.array.pf_lastmsgsync, time);
-		pref.commit();
+		new PrefEdit(this)
+			.putLong(R.array.pf_lastmsgsync, time)
+			.commit();
 	}  catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

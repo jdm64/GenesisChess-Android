@@ -53,14 +53,13 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 			handleNetwork(msg);
 			break;
 		case LogoutConfirm.MSG:
-			final PrefEdit pref = new PrefEdit(act);
-
-			pref.putBool(R.array.pf_isLoggedIn);
-			pref.putString(R.array.pf_username);
-			pref.putString(R.array.pf_passhash);
-			pref.putLong(R.array.pf_lastgamesync);
-			pref.putLong(R.array.pf_lastmsgsync);
-			pref.commit();
+			new PrefEdit(act)
+				.putBool(R.array.pf_isLoggedIn)
+				.putString(R.array.pf_username)
+				.putString(R.array.pf_passhash)
+				.putLong(R.array.pf_lastgamesync)
+				.putLong(R.array.pf_lastmsgsync)
+				.commit();
 
 			EditText txt = act.findViewById(R.id.username);
 			txt.setText("");
@@ -98,11 +97,11 @@ public class LoginFrag extends AbstractActivityFrag implements Callback, Receive
 			final String username = getArguments().getString("username");
 			final String password = getArguments().getString("password");
 
-			final PrefEdit pref = new PrefEdit(act);
-			pref.putBool(R.array.pf_isLoggedIn, true);
-			pref.putString(R.array.pf_username, username);
-			pref.putString(R.array.pf_passhash, password);
-			pref.commit();
+			new PrefEdit(act)
+				.putBool(R.array.pf_isLoggedIn, true)
+				.putString(R.array.pf_username, username)
+				.putString(R.array.pf_passhash, password)
+				.commit();
 
 			SocketClient.getInstance(getActivity()).setIsLoggedIn(true);
 

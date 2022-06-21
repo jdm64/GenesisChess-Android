@@ -192,9 +192,9 @@ public class SyncClient implements Runnable, Handler.Callback
 			lock++;
 		}
 		// Save sync time
-		final PrefEdit pref = new PrefEdit(context);
-		pref.putLong(R.array.pf_lastgamesync, json.getLong("time"));
-		pref.commit();
+		new PrefEdit(context)
+			.putLong(R.array.pf_lastgamesync, json.getLong("time"))
+			.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
@@ -220,9 +220,9 @@ public class SyncClient implements Runnable, Handler.Callback
 			return;
 		// Save sync time
 		final long time = json.getLong("time");
-		final PrefEdit pref = new PrefEdit(context);
-		pref.putLong(R.array.pf_lastgamesync, time);
-		pref.commit();
+		new PrefEdit(context)
+			.putLong(R.array.pf_lastgamesync, time)
+			.commit();
 	} catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}
@@ -308,9 +308,9 @@ public class SyncClient implements Runnable, Handler.Callback
 		db.close();
 
 		// Save sync time
-		final PrefEdit pref = new PrefEdit(context);
-		pref.putLong(R.array.pf_lastmsgsync, time);
-		pref.commit();
+		new PrefEdit(context)
+			.putLong(R.array.pf_lastmsgsync, time)
+			.commit();
 	}  catch (final JSONException e) {
 		throw new RuntimeException(e.getMessage(), e);
 	}

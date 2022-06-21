@@ -57,9 +57,9 @@ public class GenesisRulesDialog extends DialogFragment implements OnClickListene
 			getActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 		} else {
 			CheckBox agree = getDialog().findViewById(R.id.agree);
-			PrefEdit pref = new PrefEdit(getActivity());
-			pref.putBool(R.array.pf_showGenesisRules, !agree.isChecked());
-			pref.commit();
+			new PrefEdit(getActivity())
+				.putBool(R.array.pf_showGenesisRules, !agree.isChecked())
+				.commit();
 		}
 		dismiss();
 	}

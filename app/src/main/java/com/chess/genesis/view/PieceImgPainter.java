@@ -76,15 +76,15 @@ public final class PieceImgPainter
 
 	public static void resetColors(final Context context)
 	{
-		var pref = new PrefEdit(context);
-		pref.putInt(R.array.pf_bcInnerDark);
-		pref.putInt(R.array.pf_bcInnerLight);
-		pref.putInt(R.array.pf_bcOuterDark);
-		pref.putInt(R.array.pf_bcOuterLight);
-		pref.putInt(R.array.pf_bcInnerSelect);
-		pref.putInt(R.array.pf_bcInnerCheck);
-		pref.putInt(R.array.pf_bcInnerLast);
-		pref.commit();
+		new PrefEdit(context)
+			.putInt(R.array.pf_bcInnerDark)
+			.putInt(R.array.pf_bcInnerLight)
+			.putInt(R.array.pf_bcOuterDark)
+			.putInt(R.array.pf_bcOuterLight)
+			.putInt(R.array.pf_bcInnerSelect)
+			.putInt(R.array.pf_bcInnerCheck)
+			.putInt(R.array.pf_bcInnerLast)
+			.commit();
 
 		setColors(context);
 	}

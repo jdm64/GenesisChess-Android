@@ -29,48 +29,56 @@ public class PrefEdit extends Pref
 		editor = edit();
 	}
 
-	public void putString(final int _key, final String _value)
+	public PrefEdit putString(final int _key, final String _value)
 	{
 		editor.putString(key(_key), _value);
+		return this;
 	}
 
-	public void putString(final int _key)
+	public PrefEdit putString(final int _key)
 	{
 		final KeyDef kd = getStringKeyDef(_key);
 		editor.putString(kd.key, (String) kd.def);
+		return this;
 	}
 
-	public void putLong(final int _key, final long _value)
+	public PrefEdit putLong(final int _key, final long _value)
 	{
 		editor.putLong(key(_key), _value);
+		return this;
 	}
 
-	public void putLong(final int _key)
+	public PrefEdit putLong(final int _key)
 	{
 		final KeyDef kd = getLongKeyDef(_key);
 		editor.putLong(kd.key, (Long) kd.def);
+		return this;
 	}
 
-	public void putInt(final int _key, final int _value)
+	public PrefEdit putInt(final int _key, final int _value)
 	{
 		editor.putInt(key(_key), _value);
+		return this;
 	}
 
-	public void putInt(final int _key)
+	public PrefEdit putInt(final int _key)
 	{
 		final KeyDef kd = getIntKeyDef(_key);
 		editor.putInt(kd.key, (Integer) kd.def);
+		return this;
 	}
 
-	public void putBool(final int _key, final boolean _value)
+	public PrefEdit putBool(final int _key, final boolean _value)
 	{
 		editor.putBoolean(key(_key), _value);
+		return this;
 	}
 
-	public void putBool(final int _key)
+	public PrefEdit putBool(final int _key)
 	{
 		final KeyDef kd = getBoolKeyDef(_key);
 		editor.putBoolean(kd.key, (Boolean) kd.def);
+		return this;
 	}
 
 	public void commit()

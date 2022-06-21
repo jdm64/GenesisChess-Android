@@ -33,14 +33,13 @@ public class MainMenuFrag extends AbstractActivityFrag implements OnTouchListene
 	public boolean handleMessage(final Message msg)
 	{
 		if (msg.what == LogoutConfirm.MSG) {
-			final PrefEdit pref = new PrefEdit(act);
-
-			pref.putBool(R.array.pf_isLoggedIn);
-			pref.putString(R.array.pf_username);
-			pref.putString(R.array.pf_passhash);
-			pref.putLong(R.array.pf_lastgamesync);
-			pref.putLong(R.array.pf_lastmsgsync);
-			pref.commit();
+			new PrefEdit(act)
+				.putBool(R.array.pf_isLoggedIn)
+				.putString(R.array.pf_username)
+				.putString(R.array.pf_passhash)
+				.putLong(R.array.pf_lastgamesync)
+				.putLong(R.array.pf_lastmsgsync)
+				.commit();
 
 			updateLoggedInView();
 		}

@@ -117,9 +117,9 @@ public class GameListOnlineFrag extends GameListFrag implements OnTouchListener,
 					return true;
 				}
 				final JSONArray games = json.getJSONArray("games");
-				final PrefEdit pref = new PrefEdit(act);
-				pref.putString(R.array.pf_poolinfo, games.toString());
-				pref.commit();
+				new PrefEdit(act)
+					.putString(R.array.pf_poolinfo, games.toString())
+					.commit();
 
 				act.findViewById(R.id.game_search).setVisibility((games.length() == 0)? View.GONE : View.VISIBLE);
 
