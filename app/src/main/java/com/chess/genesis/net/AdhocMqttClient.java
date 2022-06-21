@@ -162,7 +162,7 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		return gameId + "/" + (color == Piece.WHITE ? "w" : "b");
 	}
 
-	private void publish(String topic, byte[] data, boolean retained)
+	private synchronized void publish(String topic, byte[] data, boolean retained)
 	{
 		try {
 			connect();
@@ -172,7 +172,7 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		}
 	}
 
-	private void subscribe(String topic)
+	private synchronized void subscribe(String topic)
 	{
 		try {
 			connect();
