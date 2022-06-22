@@ -85,7 +85,11 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 			text = { Text("Copy Game ID") }
 		)
 		ListItem(
-			modifier = Modifier.clickable(onClick = { nav.navigate("list") }),
+			modifier = Modifier.clickable(onClick = {
+				if (!nav.popBackStack("list", false)) {
+					nav.navigate("list")
+				}
+			}),
 			icon = { Icon(Icons.Filled.List, "Game List") },
 			text = { Text("Game List") }
 		)
