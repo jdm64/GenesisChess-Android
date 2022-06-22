@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp() {
-	var nav = rememberNavController()
+	val nav = rememberNavController()
 
 	nav.addOnDestinationChangedListener { _, _, bundle ->
 		val intent = bundle?.get("android-support-nav:controller:deepLinkIntent")
@@ -91,7 +91,7 @@ fun MainApp() {
 			composable("start") { LoadingPage(nav) }
 			composable("list") { GameListPage(nav) }
 			composable("board/{gameId}") { entry ->
-				var id = entry.arguments?.getString("gameId")
+				val id = entry.arguments?.getString("gameId")
 				if (id != null) {
 					GamePage(nav, id)
 				}

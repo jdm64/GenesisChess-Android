@@ -45,9 +45,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GamePage(nav: NavHostController, gameId: String) {
-	var state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-	var ctx = LocalContext.current
-	var gameCtlr = remember { GameController(ctx) }
+	val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+	val ctx = LocalContext.current
+	val gameCtlr = remember { GameController(ctx) }
 	gameCtlr.setBoard(gameId)
 
 	DisposableEffect(gameCtlr) {
@@ -69,14 +69,14 @@ fun GamePage(nav: NavHostController, gameId: String) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHostController) {
-	var ctx = LocalContext.current
+	val ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
 	Column {
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
 				val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-				var clip = ClipData.newPlainText("simple text", gameCtlr.gameId)
+				val clip = ClipData.newPlainText("simple text", gameCtlr.gameId)
 				clipboard.setPrimaryClip(clip)
 				Toast.makeText(ctx, "Game ID copied", Toast.LENGTH_SHORT).show()
 				scope.launch { state.hide() }
@@ -109,18 +109,18 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
-	var showCapture = remember { gameCtlr.showCapture() }
-	var stmState = remember { gameCtlr.stmState }
-	var colors = MaterialTheme.colors
-	var whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
+	val showCapture = remember { gameCtlr.showCapture() }
+	val stmState = remember { gameCtlr.stmState }
+	val colors = MaterialTheme.colors
+	val whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
 		colors.error else colors.onPrimary
-	var blackColor = if (stmState.value.mate * stmState.value.stm < 0)
+	val blackColor = if (stmState.value.mate * stmState.value.stm < 0)
 		colors.error else colors.onPrimary
 
 	Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
 		TopAppBar {
 			Column {
-				var id = gameCtlr.gameId
+				val id = gameCtlr.gameId
 				Text("Game ID: $id")
 				TabRow(selectedTabIndex = if (stmState.value.stm == Piece.WHITE) 0 else 1) {
 					Tab(

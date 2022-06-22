@@ -21,7 +21,7 @@ import android.os.*;
 
 public class GenMove extends Move
 {
-	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<GenMove>()
+	public static final Parcelable.Creator<GenMove> CREATOR = new Parcelable.Creator<>()
 	{
 		@Override
 		public GenMove createFromParcel(final Parcel in)

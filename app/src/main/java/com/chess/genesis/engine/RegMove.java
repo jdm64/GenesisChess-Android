@@ -21,7 +21,7 @@ import android.os.*;
 
 public class RegMove extends Move
 {
-	public static final Parcelable.Creator<RegMove> CREATOR = new Parcelable.Creator<RegMove>()
+	public static final Parcelable.Creator<RegMove> CREATOR = new Parcelable.Creator<>()
 	{
 		@Override
 		public RegMove createFromParcel(final Parcel in)

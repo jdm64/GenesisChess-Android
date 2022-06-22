@@ -17,11 +17,9 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
-import android.os.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
-import com.chess.genesis.net.AdhocMqttClient.*;
 
 public class LocalMqttPlayer extends LocalPlayer
 {
@@ -42,9 +40,7 @@ public class LocalMqttPlayer extends LocalPlayer
 	@Override
 	public void finalizeMove(Move move, Context context)
 	{
-		AdhocMqttClient.bind(context, (client) -> {
-			client.sendMove(gameId, yColor, model.getHistory().size(), move);
-		});
+		AdhocMqttClient.bind(context, (client) -> client.sendMove(gameId, yColor, model.getHistory().size(), move));
 		super.finalizeMove(move, context);
 	}
 }

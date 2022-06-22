@@ -99,7 +99,7 @@ fun onDeleteGame(state: EditGameState, context: Context) {
 fun onUpdateGame(state: EditGameState, context: Context) {
 	state.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		var data = state.data
+		val data = state.data
 		data.name = state.name.value
 		LocalGameDao.get(context).update(data)
 	}
@@ -174,7 +174,7 @@ fun GameListPage(nav: NavHostController) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListMenu(sheetState: ModalBottomSheetState, importState: MutableState<ImportGameState>) {
-	var ctx = LocalContext.current
+	val ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
 	Column {
@@ -203,10 +203,10 @@ fun ListMenu(sheetState: ModalBottomSheetState, importState: MutableState<Import
 
 @Composable
 fun LocalGameList(nav: NavHostController) {
-	var context = LocalContext.current
-	var pager = remember { Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames } }
-	var lazyItems = pager.flow.collectAsLazyPagingItems()
-	var editState = remember { mutableStateOf(EditGameState()) }
+	val context = LocalContext.current
+	val pager = remember { Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames } }
+	val lazyItems = pager.flow.collectAsLazyPagingItems()
+	val editState = remember { mutableStateOf(EditGameState()) }
 
 	LazyColumn(
 		modifier = Modifier
@@ -228,7 +228,7 @@ fun showEditGameDialog(editState: MutableState<EditGameState>) {
 	if (!editState.value.show.value) {
 		return
 	}
-	var context = LocalContext.current
+	val context = LocalContext.current
 
 	AlertDialog(onDismissRequest = { editState.value.show.value = false },
 		title = {
@@ -266,18 +266,18 @@ fun showEditGameDialog(editState: MutableState<EditGameState>) {
 	)
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LocalGameItem(
 	data: LocalGameEntity,
 	state: MutableState<EditGameState>,
 	nav: NavHostController
 ) {
-	var type = Enums.GameType(data.gametype)
-	var opponent = Enums.OpponentType(data.opponent)
-	var time = PrettyDate(data.stime).agoFormat()
-	var details = "type: $type  opponent: $opponent"
-	var ctx = LocalContext.current
+	val type = Enums.GameType(data.gametype)
+	val opponent = Enums.OpponentType(data.opponent)
+	val time = PrettyDate(data.stime).agoFormat()
+	val details = "type: $type  opponent: $opponent"
+	val ctx = LocalContext.current
 
 	Card(
 		modifier = Modifier
@@ -319,11 +319,11 @@ fun LocalGameItem(
 
 @Composable
 fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) {
-	var state = data.value
+	val state = data.value
 	if (!state.show.value) {
 		return
 	}
-	var ctx = LocalContext.current
+	val ctx = LocalContext.current
 
 	AlertDialog(onDismissRequest = { state.show.value = false },
 		title = { Text(text = "New Game", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
@@ -452,7 +452,7 @@ fun showImportInviteDialog(state: MutableState<ImportGameState>) {
 	if (!state.value.show.value) {
 		return
 	}
-	var context = LocalContext.current
+	val context = LocalContext.current
 
 	AlertDialog(onDismissRequest = { state.value.show.value = false },
 		title = {

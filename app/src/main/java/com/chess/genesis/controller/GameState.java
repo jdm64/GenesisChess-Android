@@ -390,9 +390,7 @@ public abstract class GameState implements IGameController, Handler.Callback
 			return true;
 		}
 
-		Util.runThread(() -> {
-			runCpu();
-		});
+		Util.runThread(this::runCpu);
 		return true;
 	}
 
@@ -402,7 +400,7 @@ public abstract class GameState implements IGameController, Handler.Callback
 		var move = cpu.getMove();
 		if (cpu.getTime() == 0) {
 			cpu.setBoard(board);
-			Util.runThread(() -> { runCpu(); });
+			Util.runThread(this::runCpu);
 			return;
 		} else if (activity.isFinishing()) {
 			// activity is gone, so give up!

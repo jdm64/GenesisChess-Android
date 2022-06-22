@@ -61,9 +61,7 @@ public class AdhocMqttClient extends Service implements MqttCallback
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service)
 		{
-			Util.runThread(() -> {
-				onServiceConnected(((LocalBinder) service).get());
-			});
+			Util.runThread(() -> onServiceConnected(((LocalBinder) service).get()));
 		}
 
 		@Override

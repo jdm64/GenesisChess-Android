@@ -119,10 +119,8 @@ public abstract class Engine
 	{
 		if (time > 30)
 			secT = 30;
-		else if (time < 1)
-			secT = 1;
 		else
-			secT = time;
+			secT = Math.max(time, 1);
 	}
 
 	public int getTime()

@@ -16,13 +16,11 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
-import android.util.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
@@ -124,7 +122,7 @@ public class GameController implements IGameController2
 		gameID = gameId;
 		Util.runThread(() -> {
 			var game = LocalGameDao.get(ctx).getGame(gameID);
-			Util.runUI(() -> { setBoard(game); });
+			Util.runUI(() -> setBoard(game));
 		});
 	}
 
