@@ -44,6 +44,10 @@
 		<item>lastmsgsync</item>
 		<item>0</item>
 	</array>
+	<array name="pf_lastpage">
+		<item>lastpage</item>
+		<item>list</item>
+	</array>
 	<array name="pf_passhash">
 		<item>passhash</item>
 		<item>!error!</item>
