@@ -57,8 +57,8 @@ class NewGameState {
 	var show = mutableStateOf(false)
 	var name = mutableStateOf("Untitled")
 	var type = mutableStateOf(Enums.GENESIS_CHESS)
-	var opp = mutableStateOf(Enums.CPU_OPPONENT)
-	var color = mutableStateOf(Enums.BLACK_OPP)
+	var opp = mutableStateOf(Enums.INVITE_OPPONENT)
+	var color = mutableStateOf(Enums.RANDOM_OPP)
 }
 
 class EditGameState {
@@ -339,7 +339,7 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Genesis")
-					Spacer(modifier = Modifier.width(8.dp))
+					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
 						selected = state.type.value == Enums.REGULAR_CHESS,
 						onClick = {
@@ -356,14 +356,14 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				)
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
-						selected = state.opp.value == Enums.CPU_OPPONENT,
+						selected = state.opp.value == Enums.INVITE_OPPONENT,
 						onClick = {
-							state.opp.value = Enums.CPU_OPPONENT
+							state.opp.value = Enums.INVITE_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
-					Text("CPU")
-					Spacer(modifier = Modifier.width(8.dp))
+					Text("Invite")
+					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
 						selected = state.opp.value == Enums.HUMAN_OPPONENT,
 						onClick = {
@@ -372,15 +372,15 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Local")
-					Spacer(modifier = Modifier.width(8.dp))
+					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						selected = state.opp.value == Enums.INVITE_OPPONENT,
+						selected = state.opp.value == Enums.CPU_OPPONENT,
 						onClick = {
-							state.opp.value = Enums.INVITE_OPPONENT
+							state.opp.value = Enums.CPU_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
-					Text("Invite")
+					Text("Computer")
 				}
 				Text(
 					"Play as Color:",
@@ -390,6 +390,16 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
 						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
+						selected = state.color.value == Enums.RANDOM_OPP,
+						onClick = {
+							state.color.value = Enums.RANDOM_OPP
+						},
+						modifier = Modifier.size(36.dp)
+					)
+					Text("Random")
+					Spacer(modifier = Modifier.width(6.dp))
+					RadioButton(
+						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
 						selected = state.color.value == Enums.BLACK_OPP,
 						onClick = {
 							state.color.value = Enums.BLACK_OPP
@@ -397,7 +407,7 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						modifier = Modifier.size(36.dp)
 					)
 					Text("White")
-					Spacer(modifier = Modifier.width(8.dp))
+					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
 						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
 						selected = state.color.value == Enums.WHITE_OPP,
@@ -407,16 +417,6 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Black")
-					Spacer(modifier = Modifier.width(8.dp))
-					RadioButton(
-						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
-						selected = state.color.value == Enums.RANDOM_OPP,
-						onClick = {
-							state.color.value = Enums.RANDOM_OPP
-						},
-						modifier = Modifier.size(36.dp)
-					)
-					Text("Random")
 				}
 				Text(
 					"Name:",
