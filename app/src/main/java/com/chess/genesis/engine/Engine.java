@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
+
 public abstract class Engine
 {
 	static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
@@ -50,7 +52,7 @@ public abstract class Engine
 		tactical = new BoolArray();
 		ismate = new BoolArray();
 		rand = new Rand64();
-		final NewInstance<Move> moveType = boardType.moveGenerator();
+		Supplier<Move> moveType = boardType.moveGenerator();
 
 		smove = new ObjectArray<>(moveType);
 		pvMove = new ObjectArray<>(moveType);

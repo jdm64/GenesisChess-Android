@@ -46,7 +46,7 @@ public class GenMove extends Move
 	}
 
 	@Override
-	public GenMove newInstance()
+	public GenMove get()
 	{
 		return new GenMove();
 	}

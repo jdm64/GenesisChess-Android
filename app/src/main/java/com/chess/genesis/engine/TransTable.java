@@ -17,10 +17,12 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
+
 class TransTable
 {
 	private final TransItem[] table;
-	private final NewInstance<Move> moveType;
+	private final Supplier<Move> moveType;
 	private final int size;
 
 	public TransTable(final Board board, final int num_MB)

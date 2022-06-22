@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
+import java.util.function.*;
 
 public class MoveList implements Iterable<MoveNode>
 {
@@ -25,7 +26,7 @@ public class MoveList implements Iterable<MoveNode>
 	private final MoveListIter iter = new MoveListIter(this);
 	public int size;
 
-	public MoveList(final NewInstance<Move> moveType)
+	public MoveList(Supplier<Move> moveType)
 	{
 		size = 0;
 		list = new MoveNode[320];

@@ -17,13 +17,14 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
+import java.util.function.*;
 
 public class MoveListPool
 {
 	private final Queue<MoveList> pool = new ArrayDeque<>();
-	private final NewInstance<Move> moveType;
+	private final Supplier<Move> moveType;
 
-	public MoveListPool(final NewInstance<Move> _moveType)
+	public MoveListPool(Supplier<Move> _moveType)
 	{
 		moveType = _moveType;
 	}

@@ -17,7 +17,9 @@
 
 package com.chess.genesis.engine;
 
-public class MoveFlags implements NewInstance<MoveFlags>
+import java.util.function.*;
+
+public class MoveFlags implements Supplier<MoveFlags>
 {
 	public int bits;
 
@@ -32,7 +34,7 @@ public class MoveFlags implements NewInstance<MoveFlags>
 	}
 
 	@Override
-	public MoveFlags newInstance()
+	public MoveFlags get()
 	{
 		return new MoveFlags();
 	}

@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
+
 public class RegBoard extends RegPosition implements Board
 {
 	private static final int[][] locValue = {
@@ -116,7 +118,7 @@ public class RegBoard extends RegPosition implements Board
 	}
 
 	@Override
-	public NewInstance<Move> moveGenerator()
+	public Supplier<Move> moveGenerator()
 	{
 		return moveType;
 	}
@@ -124,7 +126,7 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public Move newMove()
 	{
-		return moveType.newInstance();
+		return moveType.get();
 	}
 
 	private int pieceIndex(final int loc, final int type)

@@ -17,9 +17,10 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
 import android.os.*;
 
-public abstract class Move implements Parcelable, NewInstance<Move>
+public abstract class Move implements Parcelable, Supplier<Move>
 {
 	public static final int[] InitPieceType = {
 		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,

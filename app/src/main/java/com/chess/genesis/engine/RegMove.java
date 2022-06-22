@@ -48,7 +48,7 @@ public class RegMove extends Move
 	}
 
 	@Override
-	public RegMove newInstance()
+	public RegMove get()
 	{
 		return new RegMove();
 	}

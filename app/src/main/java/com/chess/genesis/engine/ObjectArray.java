@@ -16,12 +16,14 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
+
 public class ObjectArray<Type>
 {
-	private final NewInstance<Type> generator;
+	private final Supplier<Type> generator;
 	private Type[] list = makeArray(0);
 
-	public ObjectArray(final NewInstance<Type> instance)
+	public ObjectArray(Supplier<Type> instance)
 	{
 		generator = instance;
 	}
@@ -59,7 +61,7 @@ public class ObjectArray<Type>
 		if (index >= list.length)
 			list = copyOf(list, index + 1);
 		if (list[index] == null)
-			list[index] = generator.newInstance();
+			list[index] = generator.get();
 		return list[index];
 	}
 

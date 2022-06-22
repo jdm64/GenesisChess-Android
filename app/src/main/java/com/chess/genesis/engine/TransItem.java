@@ -17,6 +17,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.function.*;
+
 class TransItem
 {
 	private static final int NONE_NODE = 0;
@@ -33,11 +35,11 @@ class TransItem
 	public int depth;
 	public int type;
 
-	public TransItem(final NewInstance<Move> moveType)
+	public TransItem(Supplier<Move> moveType)
 	{
 		hash = score = depth = 0;
 		type = NONE_NODE;
-		move = moveType.newInstance();
+		move = moveType.get();
 	}
 
 	public void set(final TransItem item)
