@@ -112,7 +112,9 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	public void onDestroy()
 	{
 		try {
-			client.disconnect();
+			if (client.isConnected()) {
+				client.disconnect();
+			}
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
