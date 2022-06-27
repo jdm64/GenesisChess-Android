@@ -39,9 +39,11 @@ import kotlinx.coroutines.Dispatchers
 class MainActivity : ComponentActivity() {
 
 	private var hasInviteGames = false
+	private var serviceConnected = false
 
 	private val connection = object : AdhocMqttClient.LocalConnection() {
 		override fun onServiceConnected(client: AdhocMqttClient?) {
+			serviceConnected = true
 		}
 	}
 
@@ -65,8 +67,9 @@ class MainActivity : ComponentActivity() {
 	}
 
 	override fun onStop() {
-		if (hasInviteGames) {
+		if (serviceConnected) {
 			applicationContext.unbindService(connection)
+			serviceConnected = false
 		}
 		super.onStop()
 	}
