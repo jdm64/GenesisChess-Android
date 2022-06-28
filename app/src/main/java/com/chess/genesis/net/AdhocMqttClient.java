@@ -22,6 +22,8 @@ import android.content.*;
 import android.os.*;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.*;
+import org.msgpack.core.*;
+import org.zeromq.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
@@ -29,6 +31,7 @@ import com.chess.genesis.util.*;
 
 public class AdhocMqttClient extends Service implements MqttCallback
 {
+	private final static String NOTE_HOST = "tcp://jdserver.org:8335";
 	private final static String URL = "tcp://broker.hivemq.com:1883";
 	private final static String BASE_TOPIC = "genchess/adhoc";
 
@@ -145,6 +148,28 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	public void sendMove(String gameId, int color, int index, Move move)
 	{
 		publish(movesTopic(gameId, color), MoveMsg.write(move, index), true);
+		sendNotification(gameId);
+	}
+
+	private void sendNotification(String gameId)
+	{
+		Util.runThread(() ->
+		{
+			try (var zctx = new ZContext(); var sock = zctx.createSocket(SocketType.REQ)) {
+				sock.connect(NOTE_HOST);
+
+				var packer = MessagePack.newDefaultBufferPacker();
+				var fireId = Pref.getFirebaseId(getApplicationContext());
+
+				packer.packInt(1);
+				packer.packString(gameId);
+				packer.packString(fireId);
+
+				sock.send(packer.toByteArray());
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		});
 	}
 
 	public void setMoveListener(String gameId, IMoveListener listener)

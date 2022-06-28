@@ -24,5 +24,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:label="Settings">
 		</activity>
 		<service android:name=".net.AdhocMqttClient" android:exported="false" />
+		<service android:name=".net.NotificationService" android:exported="false">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>
 	</application>
 </manifest> 

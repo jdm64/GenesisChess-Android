@@ -48,6 +48,10 @@
 		<item>lastpage</item>
 		<item>list</item>
 	</array>
+	<array name="pf_firebaseToken">
+		<item>firebaseToken</item>
+		<item>!error!</item>
+	</array>
 	<array name="pf_passhash">
 		<item>passhash</item>
 		<item>!error!</item>

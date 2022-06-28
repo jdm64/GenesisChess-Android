@@ -21,6 +21,9 @@ import android.content.*;
 import android.content.SharedPreferences.*;
 import android.content.res.*;
 import android.preference.*;
+import com.chess.genesis.R;
+import com.google.android.gms.tasks.*;
+import com.google.firebase.messaging.*;
 
 public class Pref
 {
@@ -230,5 +233,21 @@ public class Pref
 			ed.commit();
 		}
 		return id;
+	}
+
+	public synchronized static String getFirebaseId(Context ctx)
+	{
+		var pref = getPref(ctx);
+		var token = pref.getString(key(ctx, R.array.pf_firebaseToken), null);
+		if (token == null) {
+			var task = FirebaseMessaging.getInstance().getToken();
+			try {
+				token = Tasks.await(task);
+				new PrefEdit(ctx).putString(R.array.pf_firebaseToken, token).commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return token;
 	}
 }

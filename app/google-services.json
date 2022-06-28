@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "456119020327",
+    "project_id": "genesis-chess",
+    "storage_bucket": "genesis-chess.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456119020327:android:b0ef6dae588e7e8e7b9702",
+        "android_client_info": {
+          "package_name": "com.chess.genesis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456119020327-n8v17i4gao61a2ha43emkrtcm079ruae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1XgEAzz5Rxz7dfMKJTf4c81hI1Cx_tsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456119020327-n8v17i4gao61a2ha43emkrtcm079ruae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
