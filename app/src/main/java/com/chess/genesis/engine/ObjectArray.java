@@ -21,15 +21,21 @@ import java.util.function.*;
 public class ObjectArray<Type>
 {
 	private final Supplier<Type> generator;
-	private Type[] list = makeArray(0);
+	private Type[] list;
 
 	public ObjectArray(Supplier<Type> instance)
 	{
+		this(instance, makeArray(0));
+	}
+
+	public ObjectArray(Supplier<Type> instance, Type[] arr)
+	{
 		generator = instance;
+		list = arr;
 	}
 
 	@SuppressWarnings({"unchecked", "static-method"})
-	private Type[] makeArray(final int size)
+	private static <Type> Type[] makeArray(final int size)
 	{
 		return (Type[]) new Object[size];
 	}
@@ -102,11 +108,7 @@ public class ObjectArray<Type>
 	@Override
 	public String toString()
 	{
-		final StringBuilder str = new StringBuilder();
-
-		for (final Type element : list)
-			str.append(element).append(' ');
-		return str.toString();
+		return arrayToString(list, " ");
 	}
 
 	public static String arrayToString(final Object[] array, final String delim)
