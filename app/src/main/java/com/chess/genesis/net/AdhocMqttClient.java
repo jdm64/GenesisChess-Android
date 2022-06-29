@@ -148,10 +148,10 @@ public class AdhocMqttClient extends Service implements MqttCallback
 	public void sendMove(String gameId, int color, int index, Move move)
 	{
 		publish(movesTopic(gameId, color), MoveMsg.write(move, index), true);
-		sendNotification(gameId);
+		sendNotification(gameId, color);
 	}
 
-	private void sendNotification(String gameId)
+	private void sendNotification(String gameId, int color)
 	{
 		Util.runThread(() ->
 		{
@@ -163,9 +163,11 @@ public class AdhocMqttClient extends Service implements MqttCallback
 
 				packer.packInt(1);
 				packer.packString(gameId);
+				packer.packInt(color);
 				packer.packString(fireId);
 
 				sock.send(packer.toByteArray());
+				sock.recv();
 			} catch (Throwable t) {
 				t.printStackTrace();
 			}
