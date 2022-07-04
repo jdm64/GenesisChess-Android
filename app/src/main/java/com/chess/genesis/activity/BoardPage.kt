@@ -20,6 +20,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,14 +31,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
 import com.chess.genesis.api.IGameController2
+import com.chess.genesis.api.SubmitState
 import com.chess.genesis.controller.GameController
 import com.chess.genesis.engine.Piece
 import kotlinx.coroutines.launch
@@ -64,6 +69,8 @@ fun GamePage(nav: NavHostController, gameId: String) {
 	}
 
 	ShowGameDialogs(gameCtlr)
+
+	ShowSubmitDialog(gameCtlr)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -225,5 +232,52 @@ fun ShowGameDialogs(gameCtlr: IGameController2) {
 				}
 			}
 		)
+	}
+}
+
+@Composable
+fun ShowSubmitDialog(gameCtlr: GameController) {
+	val submitState = remember { gameCtlr.submitState }
+	if (!submitState.value.show) {
+		return
+	}
+
+	val ctx = LocalContext.current
+
+	Popup(alignment = Alignment.BottomCenter,
+		onDismissRequest =  {
+			gameCtlr.undoMove()
+			submitState.value = SubmitState()
+		}
+	) {
+		Row(
+			modifier = Modifier
+				.height(64.dp)
+				.background(Color.Gray)
+		) {
+			OutlinedButton(
+				onClick = {
+					gameCtlr.undoMove()
+					submitState.value = SubmitState()
+				},
+				modifier = Modifier
+					.fillMaxWidth(.5f)
+					.padding(12.dp)
+			) {
+				Text("Cancel", fontSize = 20.sp)
+			}
+			Button(
+				onClick = {
+					val move = submitState.value.move
+					gameCtlr.submitMove(move)
+					submitState.value = SubmitState()
+				},
+				modifier = Modifier
+					.fillMaxWidth(1f)
+					.padding(12.dp)
+			) {
+				Text("Submit", fontSize = 20.sp)
+			}
+		}
 	}
 }

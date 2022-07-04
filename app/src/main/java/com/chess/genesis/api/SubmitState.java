@@ -15,38 +15,22 @@
  */
 package com.chess.genesis.api;
 
-import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 
-public interface IGameModel
+public class SubmitState
 {
-	Board getBoard();
+	public final boolean show;
+	public final Move move;
 
-	ObjectArray<Move> getHistory();
+	public SubmitState()
+	{
+		show = false;
+		move = null;
+	}
 
-	IMoveHandler getMoveHandler();
-
-	void reset();
-
-	void setBoard(GameEntity gameData);
-
-	GameEntity saveBoard();
-
-	void loadBoard();
-
-	boolean isCurrentMove();
-
-	void backMove();
-
-	void forwardMove();
-
-	void currentMove();
-
-	void handleMove(int from, int to);
-
-	void applyMove(Move move, boolean erase);
-
-	void revertMove(Move move);
-
-	void undoMove();
+	public SubmitState(Move submitMove)
+	{
+		show = true;
+		move = submitMove;
+	}
 }

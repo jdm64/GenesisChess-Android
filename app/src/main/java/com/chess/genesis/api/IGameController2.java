@@ -50,5 +50,11 @@ public interface IGameController2 extends IGameController
 
 	void onMove(Move move);
 
+	MutableState<SubmitState> getSubmitState();
+
+	void submitMove(Move move);
+
+	void undoMove();
+
 	void onDispose();
 }

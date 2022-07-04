@@ -135,6 +135,14 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public void undoMove()
+	{
+		if (hindex < 0)
+			return;
+		revertMove(history.pop());
+	}
+
+	@Override
 	public void backMove()
 	{
 		if (hindex < 0)

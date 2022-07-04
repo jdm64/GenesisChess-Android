@@ -20,15 +20,18 @@ import android.content.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
+import androidx.compose.runtime.*;
 
 public class LocalMqttPlayer extends LocalPlayer
 {
 	String gameId;
+	MutableState<SubmitState> submitState;
 
-	public LocalMqttPlayer(int YColor, IGameModel Model)
+	public LocalMqttPlayer(int YColor, IGameModel Model, MutableState<SubmitState> SubmitState)
 	{
 		super(YColor, Model);
 		gameId = model.saveBoard().gameid;
+		submitState = SubmitState;
 	}
 
 	@Override
@@ -39,6 +42,12 @@ public class LocalMqttPlayer extends LocalPlayer
 
 	@Override
 	public void finalizeMove(Move move, Context context)
+	{
+		submitState.setValue(new SubmitState(move));
+	}
+
+	@Override
+	public void submitMove(Move move, Context context)
 	{
 		AdhocMqttClient.bind(context, (client) -> client.sendMove(gameId, yColor, model.getHistory().size(), move));
 		super.finalizeMove(move, context);

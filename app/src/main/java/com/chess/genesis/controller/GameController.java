@@ -34,6 +34,7 @@ public class GameController implements IGameController2
 	private final MutableState<Boolean> placeState;
 	private final MutableState<Boolean> captureState;
 	private final MutableState<StmState> stmState;
+	private final MutableState<SubmitState> submitState;
 
 	private IGameModel model;
 	private String gameID = "";
@@ -49,6 +50,7 @@ public class GameController implements IGameController2
 		isGenState = Util.getState(false);
 		captureState = Util.getState(Pref.getBool(ctx, R.array.pf_showCaptured));
 		stmState = Util.getState(new StmState("White", "Black", 1, 0));
+		submitState = Util.getState(new SubmitState());
 	}
 
 	private IPlayer getStmPlayer()
@@ -107,10 +109,10 @@ public class GameController implements IGameController2
 			return;
 		case Enums.INVITE_WHITE_OPPONENT:
 			white = new RemoteMqttPlayer(Piece.WHITE, model, ctx);
-			black = new LocalMqttPlayer(Piece.BLACK, model);
+			black = new LocalMqttPlayer(Piece.BLACK, model, submitState);
 			return;
 		case Enums.INVITE_BLACK_OPPONENT:
-			white = new LocalMqttPlayer(Piece.WHITE, model);
+			white = new LocalMqttPlayer(Piece.WHITE, model, submitState);
 			black = new RemoteMqttPlayer(Piece.BLACK, model, ctx);
 			return;
 		}
@@ -200,6 +202,24 @@ public class GameController implements IGameController2
 	{
 		getNonStmPlayer().finalizeMove(move, ctx);
 		getStmPlayer().takeTurn();
+	}
+
+	@Override
+	public MutableState<SubmitState> getSubmitState()
+	{
+		return submitState;
+	}
+
+	@Override
+	public void submitMove(Move move)
+	{
+		getNonStmPlayer().submitMove(move, ctx);
+	}
+
+	@Override
+	public void undoMove()
+	{
+		model.undoMove();
 	}
 
 	@Override
