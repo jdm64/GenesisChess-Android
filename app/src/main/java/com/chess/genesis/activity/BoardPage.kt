@@ -63,7 +63,7 @@ fun GamePage(nav: NavHostController, gameId: String) {
 		GameContent(gameCtlr, state)
 	}
 
-	showGameDialogs(gameCtlr)
+	ShowGameDialogs(gameCtlr)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -189,7 +189,7 @@ fun GameNav(gameCtlr: IGameController2) {
 }
 
 @Composable
-fun showGameDialogs(gameCtlr: IGameController2) {
+fun ShowGameDialogs(gameCtlr: IGameController2) {
 	val promoteState = remember { gameCtlr.promoteState }
 	if (promoteState.value) {
 		AlertDialog(onDismissRequest = { promoteState.value = false },
