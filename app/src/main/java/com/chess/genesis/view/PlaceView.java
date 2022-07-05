@@ -24,6 +24,7 @@ import android.widget.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 
 public class PlaceView extends LinearLayout implements OnClickListener
 {
@@ -39,6 +40,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 		Piece.EMPTY, Piece.BLACK_BISHOP, Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, Piece.EMPTY
 	};
 
+	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final PlaceButton[] squares = new PlaceButton[13];
 	private final PieceImgPainter painter;
 
@@ -77,11 +79,9 @@ public class PlaceView extends LinearLayout implements OnClickListener
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
-		var wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-		var dm = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(dm);
+		Util.getMetrics(METRICS, getContext());
 
-		var size = Math.min(dm.heightPixels, dm.widthPixels);
+		var size = Math.min(METRICS.heightPixels, METRICS.widthPixels);
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 		painter.resize(getMeasuredWidth() / (TYPES.length / 2));
 	}

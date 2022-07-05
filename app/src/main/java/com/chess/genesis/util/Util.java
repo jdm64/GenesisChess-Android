@@ -17,7 +17,10 @@ package com.chess.genesis.util;
 
 import java.security.*;
 import java.util.concurrent.*;
+import android.content.*;
 import android.os.*;
+import android.util.*;
+import android.view.*;
 import androidx.compose.runtime.*;
 
 public class Util
@@ -68,5 +71,11 @@ public class Util
 			c = SUID_CHARS.charAt(Math.abs(rand.nextInt() % SUID_CHARS.length()));
 		} while (onlyAlphNum && !Character.isLetterOrDigit(c));
 		return c;
+	}
+
+	public static void getMetrics(DisplayMetrics dm, Context context)
+	{
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		wm.getDefaultDisplay().getMetrics(dm);
 	}
 }

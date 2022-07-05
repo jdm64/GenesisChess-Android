@@ -22,9 +22,11 @@ import android.view.*;
 import android.widget.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 
 public class PromoteView extends LinearLayout implements View.OnClickListener, View.OnTouchListener
 {
+	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final BoardButton[] square = new BoardButton[4];
 	private final PieceImgPainter painter;
 	private IGameController2 controller;
@@ -57,11 +59,9 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
-		var wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-		var dm = new DisplayMetrics();
-		wm.getDefaultDisplay().getMetrics(dm);
+		Util.getMetrics(METRICS, getContext());
 
-		int size = 2 * Math.min(dm.heightPixels, dm.widthPixels) / 6;
+		int size = 2 * Math.min(METRICS.heightPixels, METRICS.widthPixels) / 6;
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 		painter.resize(getMeasuredWidth() / 2);
 	}
