@@ -29,14 +29,16 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final BoardButton[] square = new BoardButton[4];
 	private final PieceImgPainter painter;
-	private IGameController2 controller;
+	private final IGameController2 controller;
+
 	private Move move;
 
-	public PromoteView(Context context, AttributeSet attrs)
+	public PromoteView(Context context, IGameController2 Ctrl)
 	{
-		super(context, attrs);
+		super(context, null);
 		setOrientation(LinearLayout.VERTICAL);
 		painter = new PieceImgPainter(context);
+		controller = Ctrl;
 		init();
 	}
 
@@ -64,11 +66,6 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 		int size = 2 * Math.min(METRICS.heightPixels, METRICS.widthPixels) / 6;
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 		painter.resize(getMeasuredWidth() / 2);
-	}
-
-	public void setController(IGameController2 gameController)
-	{
-		controller = gameController;
 	}
 
 	public void setMove(Move _move, int color)

@@ -43,14 +43,14 @@ public class PlaceView extends LinearLayout implements OnClickListener
 	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final PlaceButton[] squares = new PlaceButton[13];
 	private final PieceImgPainter painter;
+	private final IGameController2 controller;
 
-	private IGameController2 controller;
-
-	public PlaceView(Context context, AttributeSet attrs)
+	public PlaceView(Context context, IGameController2 Ctrl)
 	{
-		super(context, attrs);
+		super(context, null);
 		setOrientation(LinearLayout.VERTICAL);
 		painter = new PieceImgPainter(context);
+		controller = Ctrl;
 		init();
 	}
 
@@ -84,11 +84,6 @@ public class PlaceView extends LinearLayout implements OnClickListener
 		var size = Math.min(METRICS.heightPixels, METRICS.widthPixels);
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
 		painter.resize(getMeasuredWidth() / (TYPES.length / 2));
-	}
-
-	public void setController(IGameController2 gameController)
-	{
-		controller = gameController;
 	}
 
 	public void setPieces(int[] counts)

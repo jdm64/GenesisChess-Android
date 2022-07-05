@@ -59,8 +59,7 @@ public class GameView implements IGameView2
 	public PromoteView getPromoteView()
 	{
 		if (promoteView == null) {
-			promoteView = new PromoteView(ctx, null);
-			promoteView.setController(controller);
+			promoteView = new PromoteView(ctx, controller);
 		}
 		return promoteView;
 	}
@@ -76,8 +75,7 @@ public class GameView implements IGameView2
 	public PlaceView getPlaceView()
 	{
 		if (placeView == null) {
-			placeView = new PlaceView(ctx, null);
-			placeView.setController(controller);
+			placeView = new PlaceView(ctx, controller);
 		}
 		return placeView;
 	}
