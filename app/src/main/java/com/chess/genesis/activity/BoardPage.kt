@@ -154,6 +154,7 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 		Column {
 			AndroidView({ gameCtlr.boardView })
 			if (showCapture.value) {
+				Spacer(modifier = Modifier.height(10.dp))
 				AndroidView({ gameCtlr.capturedView })
 			}
 		}
