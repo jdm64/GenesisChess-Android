@@ -675,7 +675,6 @@ public abstract class GameState implements IGameController, Handler.Callback
 		hintList.onBoardLongClick(sq, yourColor());
 	}
 
-	@Override
 	public void onPlaceClick()
 	{
 		gamefrag.togglePlaceBoard();

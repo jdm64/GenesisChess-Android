@@ -26,5 +26,5 @@ public interface IGameView2 extends IGameView
 
 	PlaceView getPlaceView();
 
-	void showPlaceDialog(int[] counts, int stm);
+	void setPlaceCounts(int[] counts);
 }

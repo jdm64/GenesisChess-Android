@@ -36,7 +36,5 @@ public interface IGameController
 
 	void onCurrentClick();
 
-	void onPlaceClick();
-
 	void onPlaceClick(IPlaceSq sq);
 }

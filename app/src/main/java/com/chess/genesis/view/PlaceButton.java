@@ -28,20 +28,29 @@ public class PlaceButton extends PieceImgView implements IPlaceSq
 	private int count;
 	private boolean isHighlighted = false;
 	private final boolean drawZero;
+	private final boolean drawBoard;
 
-	public PlaceButton(Context context, PieceImgPainter painter, int Type, boolean DrawZero)
+	public PlaceButton(Context context, PieceImgPainter painter, int Type, boolean DrawZero, boolean DrawBoard)
 	{
 		super(context, painter, Type);
 		count = typeCounts[Math.abs(type)];
 		drawZero = DrawZero;
+		drawBoard = DrawBoard;
 		setId(type + GameState.PLACEOFFSET);
 	}
 
 	@Override
 	protected void onDraw(final Canvas canvas)
 	{
-		painter.drawSquare(canvas, this);
-		painter.drawPiece(canvas, type);
+		if (drawBoard) {
+			painter.drawSquare(canvas, this);
+		} else {
+			painter.drawHighlight(canvas, this);
+		}
+
+		if (count != 0) {
+			painter.drawPiece(canvas, type);
+		}
 		painter.drawCount(canvas, count, drawZero);
 	}
 

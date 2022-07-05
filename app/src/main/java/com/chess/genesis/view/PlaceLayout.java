@@ -63,7 +63,7 @@ public class PlaceLayout extends LinearLayout implements OnClickListener
 			row.addView(new BoardButton(context, painter, i + 10 * GameState.PLACEOFFSET));
 
 			for (int j = 0; j < 3; j++) {
-				var button = new PlaceButton(context, painter, piecelist[idx++], true);
+				var button = new PlaceButton(context, painter, piecelist[idx++], true, true);
 				button.setOnClickListener(this);
 				row.addView(button);
 			}

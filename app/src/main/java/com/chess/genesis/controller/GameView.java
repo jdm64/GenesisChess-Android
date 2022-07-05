@@ -83,12 +83,6 @@ public class GameView implements IGameView2
 	}
 
 	@Override
-	public void showPlaceDialog(int[] counts, int stm)
-	{
-		getPlaceView().setPieces(counts, stm);
-	}
-
-	@Override
 	public ISquare getSq(int index)
 	{
 		return index > 0x88 ? getPlaceSq(index) : getBoardSq(index);
@@ -112,5 +106,11 @@ public class GameView implements IGameView2
 		if (capturedView != null) {
 			capturedView.setPieces(counts);
 		}
+	}
+
+	@Override
+	public void setPlaceCounts(int[] counts)
+	{
+		getPlaceView().setPieces(counts);
 	}
 }

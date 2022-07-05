@@ -29,6 +29,13 @@ public class GenGameModel extends GameModel
 	}
 
 	@Override
+	public void loadBoard()
+	{
+		super.loadBoard();
+		view.setPlaceCounts(board.getPieceCounts(Piece.PLACEABLE));
+	}
+
+	@Override
 	public void handleMove(int from, int to)
 	{
 		var move = board.newMove();
@@ -55,9 +62,12 @@ public class GenGameModel extends GameModel
 		preApplyMove();
 
 		if (move.from == Piece.PLACEABLE) {
+			var type = Move.InitPieceType[move.index];
+			var from = view.getPlaceSq(type + PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
-			to.setPiece(Move.InitPieceType[move.index]);
+			from.minusCount();
+			to.setPiece(type);
 			to.setLast(true);
 		} else {
 			var from = view.getBoardSq(move.from);
@@ -87,8 +97,11 @@ public class GenGameModel extends GameModel
 		preRevertMove();
 
 		if (move.from == Piece.PLACEABLE) {
+			var type = Move.InitPieceType[move.index];
+			var from = view.getPlaceSq(type + PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
+			from.plusCount();
 			to.setLast(false);
 			to.setPiece(Piece.EMPTY);
 		} else {

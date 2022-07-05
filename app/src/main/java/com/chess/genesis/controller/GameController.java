@@ -31,7 +31,6 @@ public class GameController implements IGameController2
 	private final IGameView2 view;
 	private final MutableState<Boolean> isGenState;
 	private final MutableState<Boolean> promoteState;
-	private final MutableState<Boolean> placeState;
 	private final MutableState<Boolean> captureState;
 	private final MutableState<StmState> stmState;
 	private final MutableState<SubmitState> submitState;
@@ -46,7 +45,6 @@ public class GameController implements IGameController2
 		ctx = context;
 		view = new GameView(this, ctx);
 		promoteState = Util.getState(false);
-		placeState = Util.getState(false);
 		isGenState = Util.getState(false);
 		captureState = Util.getState(Pref.getBool(ctx, R.array.pf_showCaptured));
 		stmState = Util.getState(new StmState("White", "Black", 1, 0));
@@ -172,12 +170,6 @@ public class GameController implements IGameController2
 	}
 
 	@Override
-	public MutableState<Boolean> getPlaceState()
-	{
-		return placeState;
-	}
-
-	@Override
 	public PlaceView getPlaceView()
 	{
 		return view.getPlaceView();
@@ -266,22 +258,12 @@ public class GameController implements IGameController2
 	}
 
 	@Override
-	public void onPlaceClick()
-	{
-		placeState.setValue(true);
-		var board = model.getBoard();
-		var counts = board.getPieceCounts(Piece.PLACEABLE);
-		view.showPlaceDialog(counts, board.getStm());
-	}
-
-	@Override
 	public void onPlaceClick(IPlaceSq sq)
 	{
 		if (!getStmPlayer().canClick(model.getBoard().getStm()))
 			return;
 
 		model.getMoveHandler().onPlaceClick(sq, model.getBoard().getStm());
-		placeState.setValue(false);
 	}
 
 	@Override

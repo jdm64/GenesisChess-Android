@@ -40,8 +40,6 @@ public interface IGameController2 extends IGameController
 
 	void onPromoteClick(Move move);
 
-	MutableState<Boolean> getPlaceState();
-
 	PlaceView getPlaceView();
 
 	void onStmChange(boolean overwrite);

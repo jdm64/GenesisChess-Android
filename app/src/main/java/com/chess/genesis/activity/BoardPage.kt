@@ -152,6 +152,10 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 			}
 		}
 		Column {
+			if (gameCtlr.isGenChess.value) {
+				AndroidView({ gameCtlr.placeView })
+			}
+			Spacer(modifier = Modifier.height(20.dp))
 			AndroidView({ gameCtlr.boardView })
 			if (showCapture.value) {
 				Spacer(modifier = Modifier.height(10.dp))
@@ -189,11 +193,6 @@ fun GameNav(gameCtlr: IGameController2) {
 	IconButton(onClick = { gameCtlr.onCurrentClick() }) {
 		Icon(Icons.Filled.PlayArrow, "Last", Modifier.size(30.dp))
 	}
-	if (isGen.value) {
-		IconButton(onClick = { gameCtlr.onPlaceClick() }) {
-			Icon(Icons.Filled.Place, "Place", Modifier.size(30.dp))
-		}
-	}
 }
 
 @Composable
@@ -211,24 +210,6 @@ fun ShowGameDialogs(gameCtlr: IGameController2) {
 			text = { AndroidView({ gameCtlr.promoteView }) },
 			buttons = {
 				TextButton(onClick = { promoteState.value = false }) {
-					Text("Cancel")
-				}
-			}
-		)
-	}
-	val placeState = remember { gameCtlr.placeState }
-	if (placeState.value) {
-		AlertDialog(onDismissRequest = { placeState.value = false },
-			title = {
-				Text(
-					text = "Place Piece",
-					fontWeight = FontWeight.Bold,
-					fontSize = 20.sp
-				)
-			},
-			text = { AndroidView({ gameCtlr.placeView }) },
-			buttons = {
-				TextButton(onClick = { placeState.value = false }) {
 					Text("Cancel")
 				}
 			}

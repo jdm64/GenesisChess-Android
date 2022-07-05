@@ -127,6 +127,18 @@ public final class PieceImgPainter
 		canvas.drawRect(inSquare, paint);
 	}
 
+	/**
+	 * highlights the full square not just the inner area
+	 */
+	public void drawHighlight(Canvas canvas, IPlaceSq sq)
+	{
+		if (!sq.isHighlighted()) {
+			return;
+		}
+		var highlight = innerSelect;
+		drawSquare(canvas, highlight, highlight);
+	}
+
 	public void drawPiece(final Canvas canvas, final int type)
 	{
 		canvas.drawBitmap(cache.getPieceImg(type + 6), x, y, null);

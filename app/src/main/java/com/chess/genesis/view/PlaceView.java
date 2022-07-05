@@ -25,17 +25,24 @@ import com.chess.genesis.api.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.engine.*;
 
-public class PlaceView extends LinearLayout implements OnClickListener, OnTouchListener
+public class PlaceView extends LinearLayout implements OnClickListener
 {
 	public static final LayoutParams LINEAR_PARAMS =
 		new LayoutParams(
 			ViewGroup.LayoutParams.MATCH_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-	private final PlaceButton[] squares = new PlaceButton[6];
+	final static int[] TYPES = {
+		Piece.EMPTY, Piece.WHITE_KING, Piece.WHITE_QUEEN, Piece.WHITE_ROOK, Piece.EMPTY,
+		Piece.EMPTY, Piece.BLACK_KING, Piece.BLACK_QUEEN, Piece.BLACK_ROOK, Piece.EMPTY,
+		Piece.EMPTY, Piece.WHITE_BISHOP, Piece.WHITE_KNIGHT, Piece.WHITE_PAWN, Piece.EMPTY,
+		Piece.EMPTY, Piece.BLACK_BISHOP, Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, Piece.EMPTY
+	};
+
+	private final PlaceButton[] squares = new PlaceButton[13];
+	private final PieceImgPainter painter;
 
 	private IGameController2 controller;
-	private final PieceImgPainter painter;
 
 	public PlaceView(Context context, AttributeSet attrs)
 	{
@@ -47,18 +54,23 @@ public class PlaceView extends LinearLayout implements OnClickListener, OnTouchL
 
 	private void init()
 	{
-		for (int i = 0, idx = Piece.KING; i < 6;) {
+		for (int i = 0; i < TYPES.length;) {
 			var row = new ManualPanel(getContext());
-			row.setSizes("1/3");
-
-			for (int j = 0; j < 3; j++, i++) {
-				squares[i] = new PlaceButton(getContext(), painter, idx--, false);
-				squares[i].setOnClickListener(this);
-				squares[i].setOnTouchListener(this);
-				squares[i].setId(i);
-				row.addView(squares[i]);
-			}
+			row.setSizes("1/10");
 			addView(row);
+
+			for (int j = 0; j < TYPES.length / 2; j++, i++) {
+				var type = TYPES[i];
+				var view = new PlaceButton(getContext(), painter, type, false, false);
+				if (type != Piece.EMPTY) {
+					var idx = type + 6;
+					squares[idx] = view;
+					squares[idx].setOnClickListener(this);
+				}
+				row.addView(view);
+			}
+
+			squares[6] = new PlaceButton(getContext(), painter, Piece.EMPTY, false, false);
 		}
 	}
 
@@ -69,9 +81,9 @@ public class PlaceView extends LinearLayout implements OnClickListener, OnTouchL
 		var dm = new DisplayMetrics();
 		wm.getDefaultDisplay().getMetrics(dm);
 
-		var size = 3 * Math.min(dm.heightPixels, dm.widthPixels) / 6;
+		var size = Math.min(dm.heightPixels, dm.widthPixels);
 		super.onMeasure(MeasureSpec.AT_MOST | size, MeasureSpec.AT_MOST | size);
-		painter.resize(getMeasuredWidth() / 3);
+		painter.resize(getMeasuredWidth() / (TYPES.length / 2));
 	}
 
 	public void setController(IGameController2 gameController)
@@ -79,20 +91,17 @@ public class PlaceView extends LinearLayout implements OnClickListener, OnTouchL
 		controller = gameController;
 	}
 
-	public void setPieces(int[] counts, int stm)
+	public void setPieces(int[] counts)
 	{
-		for (int i = 0, piece = Piece.KING; i < 6; i++, piece--) {
-			var type = piece * stm;
-			var count = counts[type + 6];
-			squares[i].setPiece(count > 0 ? type : Piece.EMPTY);
-			squares[i].setCount(count);
+		for (int i = 0; i < counts.length; i++) {
+			squares[i].setCount(counts[i]);
 		}
 	}
 
 	public IPlaceSq getPiece(int index)
 	{
 		var type = index - GenGameModel.PLACEOFFSET;
-		return squares[6 - Math.abs(type)];
+		return squares[type + 6];
 	}
 
 	@Override
@@ -102,15 +111,5 @@ public class PlaceView extends LinearLayout implements OnClickListener, OnTouchL
 		if (sq.getCount() > 0) {
 			controller.onPlaceClick(sq);
 		}
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event)
-	{
-		var sq = (IPlaceSq) v;
-		if (sq.getCount() > 0) {
-			sq.setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
-		}
-		return false;
 	}
 }
