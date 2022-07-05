@@ -181,8 +181,6 @@ fun BottomBar(state: ModalBottomSheetState, content: @Composable () -> Unit) {
 
 @Composable
 fun GameNav(gameCtlr: IGameController2) {
-	val isGen = remember { gameCtlr.isGenChess }
-
 	IconButton(onClick = { gameCtlr.onBackClick() }) {
 		Icon(Icons.Filled.ArrowBack, "Back", Modifier.size(30.dp))
 	}
