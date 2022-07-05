@@ -95,6 +95,7 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 				if (!nav.popBackStack("list", false)) {
 					nav.navigate("list")
 				}
+				scope.launch { state.hide() }
 			}),
 			icon = { Icon(Icons.Filled.List, "Game List") },
 			text = { Text("Game List") }
