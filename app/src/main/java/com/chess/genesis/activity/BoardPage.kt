@@ -52,8 +52,7 @@ import kotlinx.coroutines.launch
 fun GamePage(nav: NavHostController, gameId: String) {
 	val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 	val ctx = LocalContext.current
-	val gameCtlr = remember { GameController(ctx) }
-	gameCtlr.setBoard(gameId)
+	val gameCtlr = remember { GameController(ctx, gameId) }
 
 	DisposableEffect(gameCtlr) {
 		onDispose { gameCtlr.onDispose()  }

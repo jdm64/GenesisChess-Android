@@ -40,7 +40,7 @@ public class GameController implements IGameController2
 	private IPlayer white;
 	private IPlayer black;
 
-	public GameController(Context context)
+	public GameController(Context context, String gameID)
 	{
 		ctx = context;
 		view = new GameView(this, ctx);
@@ -49,6 +49,8 @@ public class GameController implements IGameController2
 		captureState = Util.getState(Pref.getBool(ctx, R.array.pf_showCaptured));
 		stmState = Util.getState(new StmState("White", "Black", 1, 0));
 		submitState = Util.getState(new SubmitState());
+
+		setBoard(gameID);
 	}
 
 	private IPlayer getStmPlayer()
