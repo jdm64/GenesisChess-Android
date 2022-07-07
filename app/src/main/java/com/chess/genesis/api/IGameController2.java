@@ -24,8 +24,6 @@ public interface IGameController2 extends IGameController
 {
 	MutableState<Boolean> isGenChess();
 
-	MutableState<Boolean> showCapture();
-
 	void setBoard(LocalGameEntity data);
 
 	void setBoard(String gameId);

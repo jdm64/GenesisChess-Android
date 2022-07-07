@@ -32,6 +32,10 @@
 		<item>showCaptured</item>
 		<item>true</item>
 	</array>
+	<array name="pf_capturedBelow">
+		<item>capturedBelow</item>
+		<item>true</item>
+	</array>
 	<array name="pf_isLoggedIn">
 		<item>isLoggedIn</item>
 		<item>false</item>

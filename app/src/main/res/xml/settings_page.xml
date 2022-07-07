@@ -12,7 +12,12 @@
             app:key="showCaptured"
             app:defaultValue="true"
             app:title="Show Captured Pieces"
-            app:summary="Display captured pieces below the board"/>
+            app:summary="Display captured pieces next to the board"/>
+        <CheckBoxPreference
+            app:key="capturedBelow"
+            app:defaultValue="true"
+            app:title="Show Captured Below"
+            app:summary="Display captured pieces below the board else above the board"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:title="Board Colors"

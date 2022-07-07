@@ -31,7 +31,6 @@ public class GameController implements IGameController2
 	private final IGameView2 view;
 	private final MutableState<Boolean> isGenState;
 	private final MutableState<Boolean> promoteState;
-	private final MutableState<Boolean> captureState;
 	private final MutableState<StmState> stmState;
 	private final MutableState<SubmitState> submitState;
 
@@ -46,7 +45,6 @@ public class GameController implements IGameController2
 		view = new GameView(this, ctx);
 		promoteState = Util.getState(false);
 		isGenState = Util.getState(false);
-		captureState = Util.getState(Pref.getBool(ctx, R.array.pf_showCaptured));
 		stmState = Util.getState(new StmState("White", "Black", 1, 0));
 		submitState = Util.getState(new SubmitState());
 
@@ -73,7 +71,6 @@ public class GameController implements IGameController2
 
 		model.setBoard(data);
 		isGenState.setValue(isGen);
-		captureState.setValue(Pref.getBool(ctx, R.array.pf_showCaptured));
 
 		setPlayers(data.opponent);
 
@@ -138,12 +135,6 @@ public class GameController implements IGameController2
 	public MutableState<Boolean> isGenChess()
 	{
 		return isGenState;
-	}
-
-	@Override
-	public MutableState<Boolean> showCapture()
-	{
-		return captureState;
 	}
 
 	@Override

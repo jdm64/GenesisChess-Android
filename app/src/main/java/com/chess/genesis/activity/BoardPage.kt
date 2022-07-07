@@ -27,10 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,9 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
+import com.chess.genesis.R
 import com.chess.genesis.api.IGameController2
 import com.chess.genesis.api.SubmitState
 import com.chess.genesis.controller.GameController
+import com.chess.genesis.data.Pref
 import com.chess.genesis.engine.Piece
 import kotlinx.coroutines.launch
 
@@ -116,7 +115,6 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
-	val showCapture = remember { gameCtlr.showCapture() }
 	val stmState = remember { gameCtlr.stmState }
 	val colors = MaterialTheme.colors
 	val whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
@@ -151,18 +149,41 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 				}
 			}
 		}
-		Column {
-			if (gameCtlr.isGenChess.value) {
+		BoardAndPieces(gameCtlr)
+		BottomBar(state) { GameNav(gameCtlr) }
+	}
+}
+
+@Composable
+fun BoardAndPieces(gameCtlr: IGameController2)
+{
+	val ctx = LocalContext.current
+	val showCapture = Pref.getBool(ctx, R.array.pf_showCaptured)
+	val capturedBelow = Pref.getBool(ctx, R.array.pf_capturedBelow)
+	val isGenChess = remember { gameCtlr.isGenChess }
+
+	Column {
+		if (capturedBelow) {
+			if (isGenChess.value) {
 				AndroidView({ gameCtlr.placeView })
+				Spacer(modifier = Modifier.height(20.dp))
 			}
-			Spacer(modifier = Modifier.height(20.dp))
-			AndroidView({ gameCtlr.boardView })
-			if (showCapture.value) {
+		} else if (showCapture) {
+			AndroidView({ gameCtlr.capturedView })
+			Spacer(modifier = Modifier.height(10.dp))
+		}
+
+		AndroidView({ gameCtlr.boardView })
+
+		if (capturedBelow) {
+			if (showCapture) {
 				Spacer(modifier = Modifier.height(10.dp))
 				AndroidView({ gameCtlr.capturedView })
 			}
+		} else if (isGenChess.value) {
+			Spacer(modifier = Modifier.height(20.dp))
+			AndroidView({ gameCtlr.placeView })
 		}
-		BottomBar(state) { GameNav(gameCtlr) }
 	}
 }
 
