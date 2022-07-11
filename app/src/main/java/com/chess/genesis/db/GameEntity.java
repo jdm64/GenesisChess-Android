@@ -45,7 +45,7 @@ public class GameEntity
 		var moves = history != null ? history.split(" +") : new String[]{""};
 		var move = gametype == Enums.GENESIS_CHESS ? new GenMove() : new RegMove();
 		if (!move.parse(moves[moves.length - 1]))
-			return "xx";
+			return "--";
 		if (move.getCastle() != 0)
 			return "oo";
 		return Move.printSq(move.to);
