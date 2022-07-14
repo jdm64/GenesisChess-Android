@@ -45,7 +45,7 @@ public interface LocalGameDao
 
 		switch (opp) {
 		case Enums.CPU_OPPONENT:
-			opp = color == Enums.WHITE_OPP ? Enums.CPU_BLACK_OPPONENT : Enums.CPU_WHITE_OPPONENT;
+			opp = color == Enums.WHITE_OPP ? Enums.CPU_WHITE_OPPONENT : Enums.CPU_BLACK_OPPONENT;
 			break;
 		case Enums.INVITE_OPPONENT:
 			opp = color == Enums.WHITE_OPP ? Enums.INVITE_WHITE_OPPONENT : Enums.INVITE_BLACK_OPPONENT;
