@@ -159,7 +159,7 @@ public abstract class Engine
 	{
 		try {
 			active = true;
-			endT = System.currentTimeMillis() + secT * 1000;
+			endT = System.currentTimeMillis() + secT * 1000L;
 			think();
 			return pvMove.get(0);
 		} finally {

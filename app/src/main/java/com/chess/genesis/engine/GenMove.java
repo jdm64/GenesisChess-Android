@@ -17,7 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import java.util.*;
 import android.os.*;
 
 public class GenMove extends Move
@@ -125,8 +124,7 @@ public class GenMove extends Move
 			from = Piece.PLACEABLE;
 		} else {
 			// parse movement move
-			if (s[0] < 'a' || s[0] > 'h' || s[1] < '0' || s[1] > '9' ||
-					s[2] < 'a' || s[2] > 'h' || s[3] < '0' || s[3] > '9')
+			if (s[1] < '0' || s[1] > '9' || s[2] < 'a' || s[2] > 'h' || s[3] < '0' || s[3] > '9')
 				return false;
 			from = 16 * (s[1] - '1') + (s[0] - 'a');
 			to = 16 * (s[3] - '1') + (s[2] - 'a');
