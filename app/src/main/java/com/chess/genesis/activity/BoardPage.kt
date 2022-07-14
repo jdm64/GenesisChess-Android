@@ -122,7 +122,7 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 	val blackColor = if (stmState.value.mate * stmState.value.stm < 0)
 		colors.error else colors.onPrimary
 
-	Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+	Column(Modifier.fillMaxHeight().background(Color.Gray), verticalArrangement = Arrangement.SpaceBetween) {
 		TopAppBar {
 			Column {
 				val id = gameCtlr.gameId
