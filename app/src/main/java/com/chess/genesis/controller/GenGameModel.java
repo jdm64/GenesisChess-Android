@@ -21,8 +21,6 @@ import com.chess.genesis.engine.*;
 
 public class GenGameModel extends GameModel
 {
-	public final static int PLACEOFFSET = 1000;
-
 	public GenGameModel(IGameView2 _view, IGameController2 controller)
 	{
 		super(new GenBoard(), _view, controller);
@@ -38,21 +36,9 @@ public class GenGameModel extends GameModel
 	@Override
 	public void handleMove(int from, int to)
 	{
-		var move = board.newMove();
-
-		// create move
-		if (from > 0x88) {
-			move.index = Math.abs(from - PLACEOFFSET);
-			move.from = Piece.PLACEABLE;
-		} else {
-			move.from = from;
-		}
-		move.to = to;
-
-		// return if move isn't valid
-		if (board.validMove(move) != Move.VALID_MOVE) {
+		var move = board.parseMove(from, to);
+		if (move == null)
 			return;
-		}
 		applyMove(move, true);
 	}
 
@@ -63,7 +49,7 @@ public class GenGameModel extends GameModel
 
 		if (move.from == Piece.PLACEABLE) {
 			var type = Move.InitPieceType[move.index];
-			var from = view.getPlaceSq(type + PLACEOFFSET);
+			var from = view.getPlaceSq(type + Move.PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
 			from.minusCount();
@@ -98,7 +84,7 @@ public class GenGameModel extends GameModel
 
 		if (move.from == Piece.PLACEABLE) {
 			var type = Move.InitPieceType[move.index];
-			var from = view.getPlaceSq(type + PLACEOFFSET);
+			var from = view.getPlaceSq(type + Move.PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
 			from.plusCount();

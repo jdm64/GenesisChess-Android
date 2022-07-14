@@ -56,11 +56,10 @@ public class RemoteMqttPlayer extends LocalPlayer implements IMoveListener
 		model.currentMove();
 
 		var board = model.getBoard();
-		var move = board.newMove();
-		if (!move.parse(msg.move) || board.validMove(move) != Move.VALID_MOVE) {
+		var res = board.parseMove(msg.move);
+		if (res.second != Move.VALID_MOVE)
 			return;
-		}
-		model.applyMove(move, true);
+		model.applyMove(res.first, true);
 	}
 
 	@Override

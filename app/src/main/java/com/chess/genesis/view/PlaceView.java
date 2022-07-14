@@ -95,7 +95,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 
 	public IPlaceSq getPiece(int index)
 	{
-		var type = index - GenGameModel.PLACEOFFSET;
+		var type = index - Move.PLACEOFFSET;
 		return squares[type + 6];
 	}
 

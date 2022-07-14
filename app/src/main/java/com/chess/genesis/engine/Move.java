@@ -32,6 +32,8 @@ public abstract class Move implements Parcelable, Supplier<Move>
 		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
 		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
 
+	public final static int PLACEOFFSET = 1000;
+
 	public static final int VALID_MOVE = 0;
 	public static final int INVALID_FORMAT = 1;
 	public static final int NOPIECE_ERROR = 2;

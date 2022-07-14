@@ -39,16 +39,14 @@ public class RegGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final Move move = board.newMove();
-			move.parse(element);
-
-			if (board.validMove(move) != Move.VALID_MOVE)
+			var res = board.parseMove(element);
+			if (res.second != Move.VALID_MOVE)
 				break;
 			final MoveFlags flags = new MoveFlags();
 			board.getMoveFlags(flags);
 			flagsHistory.push(flags);
-			history.push(move);
-			board.make(move);
+			history.push(res.first);
+			board.make(res.first);
 			hindex++;
 		}
 		check_endgame();
@@ -92,12 +90,8 @@ public class RegGameState extends GameState
 		if (boardNotEditable())
 			return;
 
-		final Move move = board.newMove();
-		move.from = from;
-		move.to = to;
-
-		// return if move isn't valid
-		if (board.validMove(move) != Move.VALID_MOVE) {
+		var move = board.parseMove(from, to);
+		if (move == null) {
 			return;
 		} else if (move.getPromote() != 0) {
 			PawnPromoteDialog.create(handle, move, board.getStm()).show(activity.getSupportFragmentManager(), "");

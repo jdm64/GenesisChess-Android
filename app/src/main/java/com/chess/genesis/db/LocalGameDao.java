@@ -106,12 +106,12 @@ public interface LocalGameDao
 			return false;
 		}
 
-		var mv = board.newMove();
-		if (!mv.parse(move) || board.validMove(mv) != Move.VALID_MOVE) {
+		var res = board.parseMove(move);
+		if (res.second != Move.VALID_MOVE) {
 			return false;
 		}
 
-		game.history += " " + mv;
+		game.history += " " + res.first;
 		game.stime = System.currentTimeMillis();
 
 		update(game);

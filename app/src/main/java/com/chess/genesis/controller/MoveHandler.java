@@ -145,7 +145,7 @@ public class MoveHandler implements IMoveHandler
 	public void onPlaceClick(IPlaceSq pb, int ycolor)
 	{
 		var piece = pb.getPiece();
-		var index = piece + GenGameModel.PLACEOFFSET;
+		var index = piece + Move.PLACEOFFSET;
 
 		// only select your own pieces on your turn where count > 0
 		if (board.getStm() != ycolor || piece * ycolor < 0 || pb.getCount() <= 0)

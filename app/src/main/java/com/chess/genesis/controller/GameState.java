@@ -504,11 +504,10 @@ public abstract class GameState implements IGameController, Handler.Callback
 		onCurrentClick();
 		gamefrag.showToast("New move loaded...");
 
-		final Move move = board.newMove();
-		move.parse(sMove);
-		if (board.validMove(move) != Move.VALID_MOVE)
+		var res = board.parseMove(sMove);
+		if (res.second != Move.VALID_MOVE)
 			return;
-		applyMove(move, true, false);
+		applyMove(res.first, true, false);
 	}
 
 	public void save(final Context context, final boolean exitgame)

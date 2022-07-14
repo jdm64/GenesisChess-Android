@@ -35,13 +35,12 @@ public class GenGameState extends GameState
 		final String[] movehistory = tmp.trim().split(" +");
 
 		for (final String element : movehistory) {
-			final Move move = board.newMove();
-			move.parse(element);
+			var res = board.parseMove(element);
 
-			if (board.validMove(move) != Move.VALID_MOVE)
+			if (res.second != Move.VALID_MOVE)
 				break;
-			history.push(move);
-			board.make(move);
+			history.push(res.first);
+			board.make(res.first);
 			hindex++;
 		}
 		check_endgame();
@@ -69,21 +68,9 @@ public class GenGameState extends GameState
 		if (boardNotEditable())
 			return;
 
-		final Move move = board.newMove();
-
-		// create move
-		if (from > 0x88) {
-			move.index = Math.abs(from - PLACEOFFSET);
-			move.from = Piece.PLACEABLE;
-		} else {
-			move.from = from;
-		}
-		move.to = to;
-
-		// return if move isn't valid
-		if (board.validMove(move) != Move.VALID_MOVE) {
+		var move = board.parseMove(from, to);
+		if (move == null)
 			return;
-		}
 		applyMove(move, true, true);
 	}
 

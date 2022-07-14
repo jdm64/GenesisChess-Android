@@ -47,12 +47,8 @@ public class RegGameModel extends GameModel
 	@Override
 	public void handleMove(int from, int to)
 	{
-		var move = board.newMove();
-		move.from = from;
-		move.to = to;
-
-		// return if move isn't valid
-		if (board.validMove(move) != Move.VALID_MOVE) {
+		var move = board.parseMove(from, to);
+		if (move == null) {
 			return;
 		} else if (move.getPromote() != 0) {
 			view.showPromoteDialog(move, board.getStm());

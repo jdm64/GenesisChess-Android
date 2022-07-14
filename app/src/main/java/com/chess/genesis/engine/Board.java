@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import java.util.function.*;
+import android.util.*;
 
 public interface Board
 {
@@ -58,8 +59,22 @@ public interface Board
 	void unmake(final Move move);
 	void unmake(final Move move, final MoveFlags UndoFlags);
 
-	int validMove(final Move move);
+	Pair<Move,Integer> parseMove(String moveStr);
 	boolean validMove(final Move moveIn, final Move move);
+
+	default Move parseMove(int from, int to)
+	{
+		var move = "";
+		if (from > 0x88) {
+			move += Move.pieceSymbol[Math.abs(from - Move.PLACEOFFSET)];
+		} else {
+			move += Move.printSq(from);
+		}
+		move += Move.printSq(to);
+
+		var res = parseMove(move);
+		return res.second == Move.VALID_MOVE ? res.first : null;
+	}
 
 	int eval();
 	MoveList getMoveList(int stm, int type);

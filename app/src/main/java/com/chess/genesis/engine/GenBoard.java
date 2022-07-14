@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import java.util.function.*;
+import android.util.*;
 
 public class GenBoard extends GenPosition implements Board
 {
@@ -383,32 +384,37 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public int validMove(final Move move)
+	public Pair<Move,Integer> parseMove(String moveStr)
 	{
+		var move = newMove();
+		if (!move.parse(moveStr)) {
+			return new Pair<>(move, Move.INVALID_FORMAT);
+		}
+
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
 			move.index = pieceIndex(Piece.PLACEABLE, move.index * stm);
 			if (move.index == Piece.NONE)
-				return Move.NOPIECE_ERROR;
+				return new Pair<>(move, Move.NOPIECE_ERROR);
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE)
-				return Move.NON_EMPTY_PLACE;
+				return new Pair<>(move, Move.NON_EMPTY_PLACE);
 		} else {
 			move.index = pieceIndex(move.from);
 			if (move.index == Piece.NONE)
-				return Move.NOPIECE_ERROR;
+				return new Pair<>(move, Move.NOPIECE_ERROR);
 			else if (square[move.from] * stm < 0)
-				return Move.DONT_OWN;
+				return new Pair<>(move, Move.DONT_OWN);
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE && square[move.to] * stm > 0)
-				return Move.CAPTURE_OWN;
+				return new Pair<>(move, Move.CAPTURE_OWN);
 		}
 		// must place king first
 		if (ply < 2 && Math.abs(piecetype[move.index]) != Piece.KING)
-			return Move.KING_FIRST;
+			return new Pair<>(move, Move.KING_FIRST);
 
 		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
-				return Move.INVALID_MOVEMENT;
+			return new Pair<>(move, Move.INVALID_MOVEMENT);
 		int ret = Move.VALID_MOVE;
 
 		make(move);
@@ -419,7 +425,7 @@ public class GenBoard extends GenPosition implements Board
 			ret = Move.IN_CHECK_PLACE;
 		unmake(move);
 
-		return ret;
+		return new Pair<>(move, ret);
 	}
 
 	@Override

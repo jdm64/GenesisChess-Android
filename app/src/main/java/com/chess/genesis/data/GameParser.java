@@ -46,13 +46,11 @@ public class GameParser
 		final ObjectArray<Move> history = new ObjectArray<>(board.moveGenerator());
 
 		for (final String element : movehistory) {
-			final Move move = board.newMove();
-			move.parse(element);
-
-			if (board.validMove(move) != Move.VALID_MOVE)
+			var res = board.parseMove(element);
+			if (res.second != Move.VALID_MOVE)
 				break;
-			history.push(move);
-			board.make(move);
+			history.push(res.first);
+			board.make(res.first);
 		}
 		pos.history = history.toString();
 		pos.zfen = board.printZfen();

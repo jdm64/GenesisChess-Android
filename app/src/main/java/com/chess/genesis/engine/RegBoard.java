@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import java.util.function.*;
+import android.util.*;
 
 public class RegBoard extends RegPosition implements Board
 {
@@ -502,25 +503,29 @@ public class RegBoard extends RegPosition implements Board
 	}
 
 	@Override
-	public int validMove(final Move move)
+	public Pair<Move,Integer> parseMove(String moveStr)
 	{
+		var move = newMove();
+		if (!move.parse(moveStr))
+			return new Pair<>(move, Move.INVALID_FORMAT);
+
 		undoFlags.set(flags);
 		final int color = getStm();
 
 		// if castle flag is set, move must a castle to be valid
 		if (move.getCastle() != 0)
-			return validCastle(move, color);
+			return new Pair<>(move, validCastle(move, color));
 
 		move.index = pieceIndex(move.from, square[move.from]);
 
 		if (move.index == Piece.NONE)
-			return Move.INVALID_MOVEMENT;
+			return new Pair<>(move, Move.INVALID_MOVEMENT);
 
 		switch (Math.abs(piecetype[move.index])) {
 		case Piece.PAWN:
 			// en passant
 			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == Move.VALID_MOVE)
-				return Move.VALID_MOVE;
+				return new Pair<>(move, Move.VALID_MOVE);
 
 			if (!isPromote(move, color)) {
 				move.flags = 0;
@@ -534,7 +539,7 @@ public class RegBoard extends RegPosition implements Board
 			// manual castling without proper O-O/O-O-O notation
 			if (Math.abs(move.from - move.to) == 2) {
 				move.setCastle((move.from > move.to)? Move.CASTLE_QS : Move.CASTLE_KS);
-				return validCastle(move, color);
+				return new Pair<>(move, validCastle(move, color));
 			}
 		default:
 			// move can't be special, so clear flags
@@ -542,15 +547,15 @@ public class RegBoard extends RegPosition implements Board
 		}
 
 		if (move.index == Piece.NONE)
-			return Move.NOPIECE_ERROR;
+			return new Pair<>(move, Move.NOPIECE_ERROR);
 		else if (square[move.from] * color < 0)
-			return Move.DONT_OWN;
+			return new Pair<>(move, Move.DONT_OWN);
 		move.xindex = pieceIndex(move.to, square[move.to]);
 		if (move.xindex != Piece.NONE && square[move.to] * color > 0)
-			return Move.CAPTURE_OWN;
+			return new Pair<>(move, Move.CAPTURE_OWN);
 
 		if (!fromto(move.from, move.to))
-			return Move.INVALID_MOVEMENT;
+			return new Pair<>(move, Move.INVALID_MOVEMENT);
 
 		int ret = Move.VALID_MOVE;
 
@@ -560,7 +565,7 @@ public class RegBoard extends RegPosition implements Board
 			ret = Move.IN_CHECK;
 		unmake(move, undoFlags);
 
-		return ret;
+		return new Pair<>(move, ret);
 	}
 
 	@Override

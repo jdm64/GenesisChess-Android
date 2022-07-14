@@ -17,6 +17,7 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
 import android.os.*;
 
 public class GenMove extends Move
@@ -85,7 +86,6 @@ public class GenMove extends Move
 		if (str == null || str.isEmpty())
 			return false;
 		final char[] s = str.toCharArray();
-		int piece = Piece.NONE;
 		boolean place = true;
 
 		switch (s[0]) {
@@ -94,24 +94,25 @@ public class GenMove extends Move
 		case 'e':	case 'f':
 		case 'g':	case 'h':
 			place = false;
+			index = Piece.EMPTY;
 			break;
 		case 'P':
-			piece = Piece.PAWN;
+			index = Piece.PAWN;
 			break;
 		case 'N':
-			piece = Piece.KNIGHT;
+			index = Piece.KNIGHT;
 			break;
 		case 'B':
-			piece = Piece.BISHOP;
+			index = Piece.BISHOP;
 			break;
 		case 'R':
-			piece = Piece.ROOK;
+			index = Piece.ROOK;
 			break;
 		case 'Q':
-			piece = Piece.QUEEN;
+			index = Piece.QUEEN;
 			break;
 		case 'K':
-			piece = Piece.KING;
+			index = Piece.KING;
 			break;
 		default:
 			return false;
@@ -122,7 +123,6 @@ public class GenMove extends Move
 				return false;
 			to = 16 * (s[2] - '1') + (s[1] - 'a');
 			from = Piece.PLACEABLE;
-			index = piece;
 		} else {
 			// parse movement move
 			if (s[0] < 'a' || s[0] > 'h' || s[1] < '0' || s[1] > '9' ||
