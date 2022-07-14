@@ -44,7 +44,7 @@
             app:title="Light Border"/>
         <com.chess.genesis.view.ColorPickerPreference
             app:key="bcInnerSelect"
-            app:defaultValue="@color/green_light_A700"
+            app:defaultValue="@color/green_A700"
             app:persistent="true"
             app:title="Selected"/>
         <com.chess.genesis.view.ColorPickerPreference

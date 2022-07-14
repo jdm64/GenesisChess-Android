@@ -186,7 +186,7 @@ public class GenesisNotifier extends Service implements Runnable
 			noteBuilder.setContentTitle("It's Your turn");
 			break;
 		case NEWMGS_NOTE:
-			color = R.color.green_light_A700;
+			color = R.color.green_A700;
 			noteBuilder.setContentTitle("New Message");
 			break;
 		}

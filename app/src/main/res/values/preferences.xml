@@ -98,7 +98,7 @@
 	</array>
 	<array name="pf_bcInnerSelect">
 		<item>bcInnerSelect</item>
-		<item>@color/green_light_A700</item>
+		<item>@color/green_A700</item>
 	</array>
 	<array name="pf_bcInnerCheck">
 		<item>bcInnerCheck</item>

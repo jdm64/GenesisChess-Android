@@ -4,11 +4,12 @@
 	<color name="black">#ff000000</color>
 	<color name="clear">#00ffffff</color>
 	<color name="grey_400">#ffbdbdbd</color>
+	<color name="grey_800">#ff424242</color>
 	<color name="grey_900">#ff212121</color>
 	<color name="red_500">#fff44336</color>
 	<color name="red_A700">#ffd50000</color>
 	<color name="orange_500">#ffff9800</color>
-	<color name="green_light_A700">#ff64dd17</color>
+	<color name="green_A700">#ff00c853</color>
 	<color name="cyan_50">#ffe0f7fa</color>
 	<color name="blue_light_500_tr">#8803a9f4</color>
 	<color name="blue_light_500">#ff03a9f4</color>

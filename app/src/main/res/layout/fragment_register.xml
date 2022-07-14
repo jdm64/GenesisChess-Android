@@ -76,5 +76,5 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:text="Submit"
 	android:textSize="14sp"
 	android:textColor="#fff"
-	android:background="@color/green_light_A700"/>
+	android:background="@color/green_A700"/>
 </RelativeLayout>
