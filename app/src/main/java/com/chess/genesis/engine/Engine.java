@@ -143,6 +143,8 @@ public abstract class Engine
 	private void think()
 	{
 		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+		if (curr.size == 0)
+			return;
 		for (int depth = 1; true; depth++) {
 			search(MIN_SCORE, MAX_SCORE, 0, depth);
 			if (System.currentTimeMillis() > endT)
