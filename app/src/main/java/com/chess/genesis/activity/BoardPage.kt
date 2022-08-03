@@ -196,7 +196,7 @@ fun BottomBar(state: ModalBottomSheetState, content: @Composable () -> Unit) {
 		IconButton(onClick = { scope.launch { state.show() } }) {
 			Icon(Icons.Filled.Menu, "menu", Modifier.size(30.dp))
 		}
-		Spacer(Modifier.aspectRatio(1.0f))
+		Spacer(Modifier.aspectRatio(1.25f))
 		content.invoke()
 	}
 }
