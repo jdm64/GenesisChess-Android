@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.chess.genesis'
-    compileSdk 32
+    compileSdk 33
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "com.chess.genesis"
         minSdkVersion 27
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 71
         versionName "2.0.0-alpha1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -69,14 +69,14 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.compose.material:material:1.2.0'
+    implementation 'androidx.compose.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-compose:2.5.1'
     implementation 'androidx.room:room-paging:2.4.3'
     implementation 'androidx.room:room-runtime:2.4.3'
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha15'
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha16'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
