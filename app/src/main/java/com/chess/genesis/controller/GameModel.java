@@ -84,6 +84,7 @@ public abstract class GameModel implements IGameModel
 
 		var movehistory = data.history.trim().split(" +");
 		for (var element : movehistory) {
+			element = element.split(",")[0];
 			var res = board.parseMove(element);
 			if (res.second != Move.VALID_MOVE)
 				break;

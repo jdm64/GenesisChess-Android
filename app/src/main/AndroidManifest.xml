@@ -23,7 +23,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 			android:name="com.chess.genesis.activity.SettingsPage"
 			android:label="Settings">
 		</activity>
-		<service android:name=".net.AdhocMqttClient" android:exported="false" />
+		<service android:name=".net.ZeroMQClient" android:exported="false" />
 		<service android:name=".net.NotificationService" android:exported="false">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />

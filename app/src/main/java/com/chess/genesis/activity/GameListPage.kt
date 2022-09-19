@@ -48,7 +48,7 @@ import com.chess.genesis.R
 import com.chess.genesis.data.Enums
 import com.chess.genesis.db.LocalGameDao
 import com.chess.genesis.db.LocalGameEntity
-import com.chess.genesis.net.AdhocMqttClient
+import com.chess.genesis.net.ZeroMQClient
 import com.chess.genesis.util.PrettyDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,12 +79,19 @@ fun onLoadGame(data: LocalGameEntity, nav: NavHostController, context: Context) 
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		val newGame = LocalGameDao.get(context).newLocalGame(data)
-		if (newGame.opponent == Enums.INVITE_WHITE_OPPONENT || newGame.opponent == Enums.INVITE_BLACK_OPPONENT) {
-			AdhocMqttClient.bind(context) { client -> client.sendInvite(newGame) }
-		}
-		Dispatchers.Main.dispatch(Dispatchers.Main) {
-			onLoadGame(newGame, nav, context)
+		if (data.opp.value == Enums.INVITE_OPPONENT) {
+			val playAs = Enums.OppToPlayAs(data.opp.value)
+			ZeroMQClient.bind(context) { client ->
+				client.createInvite(
+					data.type.value,
+					playAs
+				)
+			}
+		} else {
+			val newGame = LocalGameDao.get(context).newLocalGame(data)
+			Dispatchers.Main.dispatch(Dispatchers.Main) {
+				onLoadGame(newGame, nav, context)
+			}
 		}
 	}
 }
@@ -114,7 +121,7 @@ fun onEditGame(state: MutableState<EditGameState>, data: LocalGameEntity) {
 fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 	state.value.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		AdhocMqttClient.bind(context) { client -> client.listenInvite(state.value.id.value) }
+		ZeroMQClient.bind(context) { client -> client.joinInvite(state.value.id.value) }
 	}
 }
 

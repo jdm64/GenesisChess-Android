@@ -105,12 +105,12 @@ public class GameController implements IGameController2
 			black = new ComputerPlayer(Piece.BLACK, model);
 			return;
 		case Enums.INVITE_WHITE_OPPONENT:
-			white = new RemoteMqttPlayer(Piece.WHITE, model, ctx);
-			black = new LocalMqttPlayer(Piece.BLACK, model, submitState);
+			white = new RemoteZeroMQPlayer(Piece.WHITE, model, ctx);
+			black = new LocalZeroMQPlayer(Piece.BLACK, model, submitState);
 			return;
 		case Enums.INVITE_BLACK_OPPONENT:
-			white = new LocalMqttPlayer(Piece.WHITE, model, submitState);
-			black = new RemoteMqttPlayer(Piece.BLACK, model, ctx);
+			white = new LocalZeroMQPlayer(Piece.WHITE, model, submitState);
+			black = new RemoteZeroMQPlayer(Piece.BLACK, model, ctx);
 			return;
 		}
 	}

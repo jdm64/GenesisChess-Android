@@ -18,9 +18,11 @@ package com.chess.genesis.db;
 import java.security.*;
 import java.util.*;
 import android.content.*;
+import android.util.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;
 import androidx.paging.*;
 import androidx.room.*;
@@ -61,7 +63,7 @@ public interface LocalGameDao
 	{
 		var game = new LocalGameEntity();
 		game.gameid = (opponent == Enums.INVITE_WHITE_OPPONENT || opponent == Enums.INVITE_BLACK_OPPONENT) ?
-			Util.getSUID() : UUID.randomUUID().toString();
+			Util.getSUID(6) : UUID.randomUUID().toString();
 		game.name = gamename;
 		game.gametype = gametype;
 		game.opponent = opponent;
@@ -92,6 +94,59 @@ public interface LocalGameDao
 		return game;
 	}
 
+	default LocalGameEntity importInviteGame(ActiveGameDataMsg msg, Context ctx)
+	{
+		var game = new LocalGameEntity();
+
+		String name;
+		var opp = msg.getOpponent(ctx);
+		if (opp.isEmpty()) {
+			name = "Invite Game";
+		} else {
+			name = "Game with " + opp;
+		}
+
+		game.gameid = msg.game_id;
+		game.ctime = msg.create_time;
+		game.stime = msg.save_time;
+		game.name = name;
+		game.white = msg.white;
+		game.black = msg.black;
+		game.gametype = msg.game_type;
+		game.opponent = msg.getOpponentType(ctx);
+		game.history = msg.movesString();
+
+		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
+		game.zfen = board.printZfen();
+
+		insert(game);
+
+		return game;
+	}
+
+	default List<Pair<String,Integer>> updateInviteGame(ActiveGameDataMsg msg, Context ctx)
+	{
+		var game = getGame(msg.game_id);
+		if (game == null) {
+			return Collections.emptyList();
+		}
+
+		game.stime = msg.save_time;
+		game.white = msg.white;
+		game.black = msg.black;
+		game.history = msg.movesString();
+
+		var newMoves = new ArrayList<Pair<String,Integer>>();
+		var moves = game.history.split(" +");
+		for (int i = moves.length - 1; i < msg.moves.size(); i++) {
+			newMoves.add(new Pair<>(msg.moves.get(i).first, i));
+		}
+
+		update(game);
+
+		return newMoves;
+	}
+
 	default boolean saveMove(String gameId, int index, String move)
 	{
 		var game = getGame(gameId);
@@ -113,6 +168,32 @@ public interface LocalGameDao
 
 		game.history += " " + res.first;
 		game.stime = System.currentTimeMillis();
+
+		update(game);
+		return true;
+	}
+
+	default boolean saveMove(LastMoveMsg msg)
+	{
+		var game = getGame(msg.game_id);
+		if (game == null) {
+			return false;
+		}
+
+		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
+		if (!board.parseZfen(game.zfen)) {
+			return false;
+		} else if (board.getPly() != msg.move_idx) {
+			return false;
+		}
+
+		var res = board.parseMove(msg.move_str);
+		if (res.second != Move.VALID_MOVE) {
+			return false;
+		}
+
+		game.history += " " + res.first + "," + msg.move_time;
+		game.stime = msg.move_time;
 
 		update(game);
 		return true;

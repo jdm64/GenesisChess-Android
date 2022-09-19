@@ -13,19 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chess.genesis.db;
+package com.chess.genesis.net.msgs;
 
-import androidx.room.*;
+import java.io.*;
+import org.msgpack.core.*;
 
-@Entity(tableName = "local_games")
-public class LocalGameEntity extends GameEntity
+public class LoginResultMsg extends ZmqMsg
 {
-	public int opponent;
+	public static final int ID = 15;
 
-	@ColumnInfo(defaultValue = "Untitled")
+	public boolean is_ok;
 	public String name;
+	public String msg;
 
-	public String white;
+	@Override
+	public int type()
+	{
+		return ID;
+	}
 
-	public String black;
+	@Override
+	ZmqMsg parse(MessageUnpacker packer) throws IOException
+	{
+		is_ok = packer.unpackBoolean();
+		name = packer.unpackString();
+		msg = packer.unpackString();
+		return this;
+	}
+
+	@Override
+	void toBytes(MessageBufferPacker packer) throws IOException
+	{
+		packer.packBoolean(is_ok);
+		packer.packString(name);
+		packer.packString(msg);
+	}
 }

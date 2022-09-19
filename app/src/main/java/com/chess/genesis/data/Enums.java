@@ -16,6 +16,8 @@
 
 package com.chess.genesis.data;
 
+import java.security.*;
+
 public final class Enums
 {
 	private Enums()
@@ -54,6 +56,10 @@ public final class Enums
 	public final static int WHITE_OPP = 1;
 	public final static int BLACK_OPP = 2;
 	public final static int RANDOM_OPP = 3;
+
+	// Play As Color
+	public final static int PLAY_AS_WHITE = 1;
+	public final static int PLAY_AS_BLACK = 2;
 
 	// Game Status
 	public final static int ACTIVE = 1;
@@ -115,6 +121,19 @@ public final class Enums
 			return INVITE_WHITE_OPPONENT;
 		case "invite-black":
 			return INVITE_BLACK_OPPONENT;
+		}
+	}
+
+	public static int OppToPlayAs(int value)
+	{
+		switch (value) {
+		case WHITE_OPP:
+			return PLAY_AS_BLACK;
+		case BLACK_OPP:
+			return PLAY_AS_WHITE;
+		case RANDOM_OPP:
+		default:
+			return new SecureRandom().nextBoolean() ? PLAY_AS_WHITE : PLAY_AS_BLACK;
 		}
 	}
 

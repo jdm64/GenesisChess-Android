@@ -22,6 +22,7 @@ import android.content.SharedPreferences.*;
 import android.content.res.*;
 import android.preference.*;
 import com.chess.genesis.R;
+import com.chess.genesis.util.*;
 import com.google.android.gms.tasks.*;
 import com.google.firebase.messaging.*;
 
@@ -29,7 +30,6 @@ public class Pref
 {
 	private final static int KEY_INDX = 0;
 	private final static int DEF_INDX = 1;
-	private final static String UUID_KEY = "UUID";
 
 	private final SharedPreferences pref;
 	private final Resources res;
@@ -220,19 +220,6 @@ public class Pref
 	public boolean getBool(final int _key)
 	{
 		return getBool(pref, res, _key);
-	}
-
-	public synchronized static String getUUID(Context ctx)
-	{
-		var pref = getPref(ctx);
-		var id = pref.getString(UUID_KEY, null);
-		if (id == null) {
-			id = UUID.randomUUID().toString();
-			var ed = new Pref(ctx).edit();
-			ed.putString(UUID_KEY, id);
-			ed.commit();
-		}
-		return id;
 	}
 
 	public synchronized static String getFirebaseId(Context ctx)

@@ -33,7 +33,7 @@ import com.chess.genesis.R
 import com.chess.genesis.data.Pref
 import com.chess.genesis.data.PrefEdit
 import com.chess.genesis.db.LocalGameDao
-import com.chess.genesis.net.AdhocMqttClient
+import com.chess.genesis.net.ZeroMQClient
 import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
@@ -41,8 +41,8 @@ class MainActivity : ComponentActivity() {
 	private var hasInviteGames = false
 	private var serviceConnected = false
 
-	private val connection = object : AdhocMqttClient.LocalConnection() {
-		override fun onServiceConnected(client: AdhocMqttClient?) {
+	private val connection = object : ZeroMQClient.LocalConnection() {
+		override fun onServiceConnected(client: ZeroMQClient?) {
 			serviceConnected = true
 		}
 	}
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 	override fun onStart() {
 		super.onStart()
 		if (hasInviteGames) {
-			AdhocMqttClient.bind(applicationContext, connection)
+			ZeroMQClient.bind(applicationContext, connection)
 		}
 	}
 

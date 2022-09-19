@@ -49,14 +49,14 @@ public class Util
 		return SnapshotStateKt.mutableStateOf(val, SnapshotStateKt.structuralEqualityPolicy());
 	}
 
-	public static String getSUID()
+	public static String getSUID(int size)
 	{
 		var rand = new SecureRandom();
 		var buff = new StringBuilder();
 
 		var last = randChar(rand, true);
 		buff.append(last);
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < size - 2; i++) {
 			last = randChar(rand, !Character.isLetterOrDigit(last));
 			buff.append(last);
 		}

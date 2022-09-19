@@ -40,6 +40,22 @@
 		<item>isLoggedIn</item>
 		<item>false</item>
 	</array>
+	<array name="pf_username">
+		<item>username</item>
+		<item></item>
+	</array>
+	<array name="pf_passhash">
+		<item>passhash</item>
+		<item></item>
+	</array>
+	<array name="pf_anon_username">
+		<item>anon_username</item>
+		<item></item>
+	</array>
+	<array name="pf_anon_passhash">
+		<item>anon_passhash</item>
+		<item></item>
+	</array>
 	<array name="pf_lastgamesync">
 		<item>lastgamesync</item>
 		<item>0</item>
@@ -56,17 +72,9 @@
 		<item>firebaseToken</item>
 		<item>!error!</item>
 	</array>
-	<array name="pf_passhash">
-		<item>passhash</item>
-		<item>!error!</item>
-	</array>
 	<array name="pf_poolinfo">
 		<item>poolinfo</item>
 		<item>[]</item>
-	</array>
-	<array name="pf_username">
-		<item>username</item>
-		<item></item>
 	</array>
 	<array name="pf_emailNoteEnabled">
 		<item>emailNoteEnabled</item>
