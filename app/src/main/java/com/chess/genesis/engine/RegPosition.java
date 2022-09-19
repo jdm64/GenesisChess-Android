@@ -75,7 +75,15 @@ abstract class RegPosition extends RegMoveLookup
 		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
 			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
 
-		// first try for setting non promoted pieces
+		// try pieces in their initial location
+		for (int i = start; i < end; i++) {
+			if (InitRegPiece[i] == loc && piece[i] == Piece.DEAD) {
+				piece[i] = loc;
+				square[loc] = type;
+				return true;
+			}
+		}
+		// piece moved but not promoted
 		for (int i = start; i < end; i++) {
 			if (piece[i] == Piece.DEAD) {
 				piece[i] = loc;
