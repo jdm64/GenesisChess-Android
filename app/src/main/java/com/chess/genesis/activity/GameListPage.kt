@@ -144,7 +144,22 @@ fun GameListPage(nav: NavHostController) {
 			scaffoldState = scaffoldState,
 			topBar = {
 				TopAppBar {
-					Row(verticalAlignment = Alignment.CenterVertically) {
+					Image(
+						modifier = Modifier
+							.fillMaxWidth()
+							.height(26.dp),
+						painter = painterResource(R.drawable.genesischess),
+						contentDescription = "Genesis Chess"
+					)
+				}
+			},
+			bottomBar = {
+				TopAppBar {
+					Row(
+						modifier = Modifier.fillMaxWidth(1f),
+						verticalAlignment = Alignment.CenterVertically,
+						horizontalArrangement = Arrangement.SpaceBetween
+					) {
 						IconButton(onClick = { coroutineScope.launch { sheetState.show() } }) {
 							Icon(
 								Icons.Filled.Menu,
@@ -152,21 +167,16 @@ fun GameListPage(nav: NavHostController) {
 								Modifier.size(30.dp)
 							)
 						}
-						Image(
-							modifier = Modifier
-								.fillMaxWidth()
-								.height(26.dp),
-							painter = painterResource(R.drawable.genesischess),
-							contentDescription = "Genesis Chess"
-						)
+						IconButton(onClick = {
+							newGameState.value.show.value = true
+						}) {
+							Icon(
+								Icons.Filled.Add,
+								"New Game",
+								Modifier.size(30.dp)
+							)
+						}
 					}
-				}
-			},
-			floatingActionButton = {
-				FloatingActionButton(onClick = {
-					newGameState.value.show.value = true
-				}) {
-					Icon(Icons.Filled.Add, "New Game")
 				}
 			},
 			content = { LocalGameList(nav) },
