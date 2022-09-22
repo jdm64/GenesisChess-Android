@@ -56,14 +56,6 @@
 		<item>anon_passhash</item>
 		<item></item>
 	</array>
-	<array name="pf_lastgamesync">
-		<item>lastgamesync</item>
-		<item>0</item>
-	</array>
-	<array name="pf_lastmsgsync">
-		<item>lastmsgsync</item>
-		<item>0</item>
-	</array>
 	<array name="pf_lastpage">
 		<item>lastpage</item>
 		<item>list</item>
@@ -71,22 +63,6 @@
 	<array name="pf_firebaseToken">
 		<item>firebaseToken</item>
 		<item>!error!</item>
-	</array>
-	<array name="pf_poolinfo">
-		<item>poolinfo</item>
-		<item>[]</item>
-	</array>
-	<array name="pf_emailNoteEnabled">
-		<item>emailNoteEnabled</item>
-		<item>true</item>
-	</array>
-	<array name="pf_noteEnabled">
-		<item>noteEnabled</item>
-		<item>true</item>
-	</array>
-	<array name="pf_notifierPolling">
-		<item>notifierPolling</item>
-		<item>30</item>
 	</array>
 	<array name="pf_bcInnerDark">
 		<item>bcInnerDark</item>

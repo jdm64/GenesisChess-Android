@@ -4,7 +4,4 @@
 		<attr name="sizes" format="string"/>
 		<attr name="height_policy" format="string"/>
 	</declare-styleable>
-	<declare-styleable name="MyImageView">
-		<attr name="src" format="integer"/>
-	</declare-styleable>
 </resources>

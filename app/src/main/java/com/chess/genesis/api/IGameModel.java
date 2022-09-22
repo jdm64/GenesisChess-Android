@@ -20,6 +20,8 @@ import com.chess.genesis.engine.*;
 
 public interface IGameModel
 {
+	int PLACEOFFSET = 1000;
+
 	Board getBoard();
 
 	ObjectArray<Move> getHistory();

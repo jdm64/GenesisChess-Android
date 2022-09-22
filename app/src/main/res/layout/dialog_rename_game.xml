@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<EditText
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/game_name_input"
-style="@style/FillWidth"
-android:padding="16dp"
-android:singleLine="true"
-android:maxLength="24"
-android:inputType="text" />

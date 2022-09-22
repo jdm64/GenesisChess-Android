@@ -21,28 +21,10 @@
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 	</style>
-	<style name="BlueBar">
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:layout_height">50dp</item>
-	</style>
 	<style name="NoDimDialog" parent="android:Theme.DeviceDefault.Light.Panel">
 		<item name="android:backgroundDimAmount">0.0</item>
 		<item name="android:backgroundDimEnabled">false</item>
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
-	</style>
-	<style name="TopBlueBar">
-		<item name="android:layout_height">50dp</item>
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:padding">9dp</item>
-		<item name="android:scaleType">fitCenter</item>
-		<item name="android:background">@drawable/btn_bluebar_top</item>
-	</style>
-	<style name="BotBlueBar">
-		<item name="android:layout_height">50dp</item>
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:padding">9dp</item>
-		<item name="android:scaleType">fitCenter</item>
-		<item name="android:background">@drawable/btn_bluebar_bot</item>
 	</style>
 </resources>
