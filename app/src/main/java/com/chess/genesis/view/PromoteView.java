@@ -29,11 +29,11 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final BoardButton[] square = new BoardButton[4];
 	private final PieceImgPainter painter;
-	private final IGameController2 controller;
+	private final IGameController controller;
 
 	private Move move;
 
-	public PromoteView(Context context, IGameController2 Ctrl)
+	public PromoteView(Context context, IGameController Ctrl)
 	{
 		super(context, null);
 		setOrientation(LinearLayout.VERTICAL);

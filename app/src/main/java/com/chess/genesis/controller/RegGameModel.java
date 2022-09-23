@@ -23,7 +23,7 @@ public class RegGameModel extends GameModel
 {
 	ObjectArray<MoveFlags> flagsHistory = new ObjectArray<>(new MoveFlags());
 
-	public RegGameModel(IGameView2 _view, IGameController2 controller)
+	public RegGameModel(IGameView _view, IGameController controller)
 	{
 		super(new RegBoard(), _view, controller);
 	}

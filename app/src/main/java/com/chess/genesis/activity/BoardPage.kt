@@ -39,7 +39,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
 import com.chess.genesis.R
-import com.chess.genesis.api.IGameController2
+import com.chess.genesis.api.IGameController
 import com.chess.genesis.api.SubmitState
 import com.chess.genesis.controller.GameController
 import com.chess.genesis.data.Pref
@@ -114,7 +114,7 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
+fun GameContent(gameCtlr: IGameController, state: ModalBottomSheetState) {
 	val stmState = remember { gameCtlr.stmState }
 	val colors = MaterialTheme.colors
 	val whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
@@ -155,7 +155,7 @@ fun GameContent(gameCtlr: IGameController2, state: ModalBottomSheetState) {
 }
 
 @Composable
-fun BoardAndPieces(gameCtlr: IGameController2)
+fun BoardAndPieces(gameCtlr: IGameController)
 {
 	val ctx = LocalContext.current
 	val showCapture = Pref.getBool(ctx, R.array.pf_showCaptured)
@@ -202,7 +202,7 @@ fun BottomBar(state: ModalBottomSheetState, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun GameNav(gameCtlr: IGameController2) {
+fun GameNav(gameCtlr: IGameController) {
 	IconButton(onClick = { gameCtlr.onBackClick() }) {
 		Icon(Icons.Filled.ArrowBack, "Back", Modifier.size(30.dp))
 	}
@@ -215,7 +215,7 @@ fun GameNav(gameCtlr: IGameController2) {
 }
 
 @Composable
-fun ShowGameDialogs(gameCtlr: IGameController2) {
+fun ShowGameDialogs(gameCtlr: IGameController) {
 	val promoteState = remember { gameCtlr.promoteState }
 	if (promoteState.value) {
 		AlertDialog(onDismissRequest = { promoteState.value = false },

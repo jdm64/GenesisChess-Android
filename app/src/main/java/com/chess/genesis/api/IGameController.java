@@ -15,16 +15,16 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.db.*;
+import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
+import androidx.compose.runtime.*;
 
 public interface IGameController
 {
 	BoardView getBoardView();
 
 	CapturedLayout getCapturedView();
-
-	@Deprecated
-	void loadBoard();
 
 	void onBoardClick(IBoardSq sq);
 
@@ -37,4 +37,36 @@ public interface IGameController
 	void onCurrentClick();
 
 	void onPlaceClick(IPlaceSq sq);
+
+	MutableState<Boolean> isGenChess();
+
+	void setBoard(LocalGameEntity data);
+
+	void setBoard(String gameId);
+
+	String getGameId();
+
+	MutableState<Boolean> getPromoteState();
+
+	PromoteView getPromoteView();
+
+	void showPromoteDialog();
+
+	void onPromoteClick(Move move);
+
+	PlaceView getPlaceView();
+
+	void onStmChange(boolean overwrite);
+
+	MutableState<StmState> getStmState();
+
+	void onMove(Move move);
+
+	MutableState<SubmitState> getSubmitState();
+
+	void submitMove(Move move);
+
+	void undoMove();
+
+	void onDispose();
 }

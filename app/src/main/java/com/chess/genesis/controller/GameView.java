@@ -22,16 +22,16 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
-public class GameView implements IGameView2
+public class GameView implements IGameView
 {
-	IGameController2 controller;
+	IGameController controller;
 	Context ctx;
 	BoardView boardView;
 	CapturedLayout capturedView;
 	PromoteView promoteView;
 	PlaceView placeView;
 
-	public GameView(IGameController2 gameCntlr, Context context)
+	public GameView(IGameController gameCntlr, Context context)
 	{
 		ctx = context;
 		controller = gameCntlr;

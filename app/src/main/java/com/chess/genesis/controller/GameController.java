@@ -25,10 +25,10 @@ import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
 
-public class GameController implements IGameController2
+public class GameController implements IGameController
 {
 	private final Context ctx;
-	private final IGameView2 view;
+	private final IGameView view;
 	private final MutableState<Boolean> isGenState;
 	private final MutableState<Boolean> promoteState;
 	private final MutableState<StmState> stmState;
@@ -224,12 +224,6 @@ public class GameController implements IGameController2
 	public MutableState<Boolean> getPromoteState()
 	{
 		return promoteState;
-	}
-
-	@Override
-	public void loadBoard()
-	{
-		model.loadBoard();
 	}
 
 	@Override

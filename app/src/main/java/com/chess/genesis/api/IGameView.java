@@ -16,6 +16,7 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
 public interface IGameView
@@ -31,4 +32,12 @@ public interface IGameView
 	IPlaceSq getPlaceSq(int index);
 
 	void setCapturedCounts(int[] counts);
+
+	PromoteView getPromoteView();
+
+	void showPromoteDialog(Move move, int stm);
+
+	PlaceView getPlaceView();
+
+	void setPlaceCounts(int[] counts);
 }

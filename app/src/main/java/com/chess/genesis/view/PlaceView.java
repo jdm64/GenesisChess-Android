@@ -43,9 +43,9 @@ public class PlaceView extends LinearLayout implements OnClickListener
 	private final DisplayMetrics METRICS = new DisplayMetrics();
 	private final PlaceButton[] squares = new PlaceButton[13];
 	private final PieceImgPainter painter;
-	private final IGameController2 controller;
+	private final IGameController controller;
 
-	public PlaceView(Context context, IGameController2 Ctrl)
+	public PlaceView(Context context, IGameController Ctrl)
 	{
 		super(context, null);
 		setOrientation(LinearLayout.VERTICAL);

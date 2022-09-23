@@ -21,7 +21,7 @@ import com.chess.genesis.engine.*;
 
 public class GenGameModel extends GameModel
 {
-	public GenGameModel(IGameView2 _view, IGameController2 controller)
+	public GenGameModel(IGameView _view, IGameController controller)
 	{
 		super(new GenBoard(), _view, controller);
 	}

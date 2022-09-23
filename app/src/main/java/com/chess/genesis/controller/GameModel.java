@@ -26,11 +26,11 @@ public abstract class GameModel implements IGameModel
 	protected Board board;
 	protected IMoveHandler moveHandler;
 	protected ObjectArray<Move> history;
-	protected IGameView2 view;
+	protected IGameView view;
 	protected GameEntity data;
-	protected IGameController2 controller;
+	protected IGameController controller;
 
-	public GameModel(Board _board, IGameView2 _view, IGameController2 _controller)
+	public GameModel(Board _board, IGameView _view, IGameController _controller)
 	{
 		controller = _controller;
 		view = _view;
