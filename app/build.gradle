@@ -76,7 +76,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.4.3'
     implementation 'androidx.paging:paging-compose:1.0.0-alpha16'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation platform('com.google.firebase:firebase-bom:30.5.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'org.msgpack:msgpack-core:0.9.3'
