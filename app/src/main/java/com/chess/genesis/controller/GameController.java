@@ -15,7 +15,10 @@
  */
 package com.chess.genesis.controller;
 
+import android.app.*;
 import android.content.*;
+import android.view.*;
+import android.view.WindowManager.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
@@ -64,6 +67,8 @@ public class GameController implements IGameController
 	@Override
 	public void setBoard(LocalGameEntity data)
 	{
+		Util.setScreenOnFlag(ctx, true);
+
 		var isGen = data.gametype == Enums.GENESIS_CHESS;
 		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
 
@@ -210,6 +215,7 @@ public class GameController implements IGameController
 	@Override
 	public void onDispose()
 	{
+		Util.setScreenOnFlag(ctx, false);
 		white.onDispose(ctx);
 		black.onDispose(ctx);
 	}

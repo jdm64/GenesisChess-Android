@@ -18,6 +18,11 @@
             app:defaultValue="true"
             app:title="Show Captured Below"
             app:summary="Display captured pieces below the board else above the board"/>
+        <CheckBoxPreference
+            app:key="screenAlwaysOn"
+            app:defaultValue="false"
+            app:title="Keep Screen Active"
+            app:summary="Force the screen on while in a game"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:title="Board Colors"

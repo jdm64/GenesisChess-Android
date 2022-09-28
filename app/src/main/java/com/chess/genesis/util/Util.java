@@ -17,10 +17,14 @@ package com.chess.genesis.util;
 
 import java.security.*;
 import java.util.concurrent.*;
+import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.util.*;
 import android.view.*;
+import android.view.WindowManager.*;
+import com.chess.genesis.R;
+import com.chess.genesis.data.*;
 import androidx.compose.runtime.*;
 
 public class Util
@@ -77,5 +81,24 @@ public class Util
 	{
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		wm.getDefaultDisplay().getMetrics(dm);
+	}
+
+	public static void setScreenOnFlag(Context ctx, boolean toggle)
+	{
+		var flag = LayoutParams.FLAG_KEEP_SCREEN_ON;
+		var window = getActivity(ctx).getWindow();
+		if (toggle) {
+			var screenOn = Pref.getBool(ctx, R.array.pf_screenAlwaysOn);
+			window.setFlags(screenOn ? flag : 0, flag);
+		} else {
+			window.setFlags(0, flag);
+		}
+	}
+
+	private static Activity getActivity(Context context) {
+		if (context == null) return null;
+		if (context instanceof Activity) return (Activity) context;
+		if (context instanceof ContextWrapper) return getActivity(((ContextWrapper)context).getBaseContext());
+		return null;
 	}
 }
