@@ -21,7 +21,7 @@ import java.util.function.*;
 public class ObjectArray<Type>
 {
 	private final Supplier<Type> generator;
-	private Type[] list;
+	protected Type[] list;
 
 	public ObjectArray(Supplier<Type> instance)
 	{
@@ -35,16 +35,16 @@ public class ObjectArray<Type>
 	}
 
 	@SuppressWarnings({"unchecked", "static-method"})
-	private static <Type> Type[] makeArray(final int size)
+	private static <Type> Type[] makeArray(int size)
 	{
 		return (Type[]) new Object[size];
 	}
 
-	private Type[] copyOf(final Type[] arr, final int size)
+	private void copy(int size)
 	{
-		final Type[] temp = makeArray(size);
-		System.arraycopy(arr, 0, temp, 0, Math.min(arr.length, size));
-		return temp;
+		Type[] temp = makeArray(size);
+		System.arraycopy(list, 0, temp, 0, Math.min(list.length, size));
+		list = temp;
 	}
 
 	public void clear()
@@ -57,37 +57,36 @@ public class ObjectArray<Type>
 		return list.length;
 	}
 
-	public void resize(final int size)
+	public void resize(int size)
 	{
-		list = copyOf(list, size);
+		copy(size);
 	}
 
-	public Type get(final int index)
+	public Type get(int index)
 	{
 		if (index >= list.length)
-			list = copyOf(list, index + 1);
+			copy(index + 1);
 		if (list[index] == null)
 			list[index] = generator.get();
 		return list[index];
 	}
 
-	public void set(final int index, final Type value)
+	public void set(int index, Type value)
 	{
 		if (index >= list.length)
-			list = copyOf(list, index + 1);
+			copy(index + 1);
 		list[index] = value;
 	}
 
-	public void push(final Type value)
+	public void push(Type value)
 	{
-		list = copyOf(list, list.length + 1);
-		list[list.length - 1] = value;
+		set(list.length, value);
 	}
 
 	public Type pop()
 	{
-		final Type end = list[list.length - 1];
-		list = copyOf(list, list.length - 1);
+		var end = top();
+		copy(list.length - 1);
 		return end;
 	}
 
@@ -96,26 +95,17 @@ public class ObjectArray<Type>
 		return list[list.length - 1];
 	}
 
-	public boolean contains(final Type item)
-	{
-		for (final Type i : list) {
-			if (item.equals(i))
-				return true;
-		}
-		return false;
-	}
-
 	@Override
 	public String toString()
 	{
 		return arrayToString(list, " ");
 	}
 
-	public static String arrayToString(final Object[] array, final String delim)
+	public static String arrayToString(Object[] array, String delim)
 	{
-		final StringBuilder str = new StringBuilder();
+		var str = new StringBuilder();
 
-		for (final Object element : array)
+		for (var element : array)
 			str.append(element).append(delim);
 		return str.toString();
 	}

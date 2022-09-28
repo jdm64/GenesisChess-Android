@@ -25,7 +25,7 @@ public abstract class GameModel implements IGameModel
 	protected int hindex = -1;
 	protected Board board;
 	protected IMoveHandler moveHandler;
-	protected ObjectArray<Move> history;
+	protected TimedObjectArr<Move> history;
 	protected IGameView view;
 	protected GameEntity data;
 	protected IGameController controller;
@@ -36,7 +36,7 @@ public abstract class GameModel implements IGameModel
 		view = _view;
 		board = _board;
 		moveHandler = new MoveHandler(this, view);
-		history = new ObjectArray<>(board.moveGenerator());
+		history = new TimedObjectArr<>(board.moveGenerator());
 	}
 
 	@Override
@@ -69,11 +69,11 @@ public abstract class GameModel implements IGameModel
 	/**
 	 * for adding moved to history from data from setBoard()
 	 */
-	protected void addMove(Move move)
+	protected void addMove(Move move, long time)
 	{
 		hindex++;
 		board.make(move);
-		history.push(move);
+		history.pushWithTime(move, time);
 	}
 
 	@Override
@@ -84,11 +84,11 @@ public abstract class GameModel implements IGameModel
 
 		var movehistory = data.history.trim().split(" +");
 		for (var element : movehistory) {
-			element = element.split(",")[0];
-			var res = board.parseMove(element);
+			var parts = element.split(",");
+			var res = board.parseMove(parts[0]);
 			if (res.second != Move.VALID_MOVE)
 				break;
-			addMove(res.first);
+			addMove(res.first, Long.parseLong(parts[1]));
 		}
 		loadBoard();
 	}

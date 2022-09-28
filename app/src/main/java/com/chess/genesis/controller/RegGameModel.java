@@ -29,12 +29,12 @@ public class RegGameModel extends GameModel
 	}
 
 	@Override
-	public void addMove(Move move)
+	public void addMove(Move move, long time)
 	{
 		var flags = new MoveFlags();
 		board.getMoveFlags(flags);
 		flagsHistory.push(flags);
-		super.addMove(move);
+		super.addMove(move, time);
 	}
 
 	@Override
