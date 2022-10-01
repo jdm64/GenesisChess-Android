@@ -24,6 +24,13 @@ public class PingMsg extends ZmqMsg
 
 	public long time;
 
+	public static PingMsg build()
+	{
+		var msg = new PingMsg();
+		msg.time = System.currentTimeMillis();
+		return msg;
+	}
+
 	@Override
 	public int type()
 	{

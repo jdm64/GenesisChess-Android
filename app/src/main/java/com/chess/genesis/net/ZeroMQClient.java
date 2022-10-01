@@ -22,6 +22,7 @@ import android.content.*;
 import android.content.Context;
 import android.os.*;
 import android.util.*;
+import android.widget.*;
 import org.zeromq.*;
 import org.zeromq.ZMQ.*;
 import com.chess.genesis.*;
@@ -33,14 +34,20 @@ import com.chess.genesis.util.*;
 
 public class ZeroMQClient extends Service
 {
+	private final static String URL = "tcp://jdserver.org:1993";
 	private final static String ANON = "anonymous";
+	private final static int HEARTBEAT_LIMIT = 10000;
 
 	LocalBinder binder = new LocalBinder();
 	LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
 	Map<String, IMoveListener> moveListeners = new HashMap<>();
 
 	Socket socket;
+	long lastPing;
+	long lastPong;
+	boolean isActive = false;
 	boolean isLoggedin = false;
+	Future<?> receiveFuture;
 
 	public interface IMoveListener
 	{
@@ -105,12 +112,17 @@ public class ZeroMQClient extends Service
 	{
 		Util.runThread(() -> {
 			try (var ctx = new ZContext()) {
+				isActive = true;
 				socket = ctx.createSocket(SocketType.DEALER);
-				socket.connect("tcp://jdserver.org:1993");
-				Util.runThread(this::sendLoop);
-				recieveLoop();
+				socket.connect(URL);
+				receiveFuture = Util.runThread(this::receiveLoop);
+				heartbeat();
+				sendLoop();
 			} catch (Throwable e) {
 				e.printStackTrace();
+			} finally {
+				isActive = false;
+				Log.i(getClass().getSimpleName(), "Shutting down service");
 			}
 		});
 	}
@@ -118,6 +130,7 @@ public class ZeroMQClient extends Service
 	@Override
 	public void onDestroy()
 	{
+		isActive = false;
 		isLoggedin = false;
 	}
 
@@ -127,6 +140,39 @@ public class ZeroMQClient extends Service
 		if (player != null) {
 			getActiveData(gameId);
 		}
+	}
+
+	public void heartbeat()
+	{
+		Util.runThread(() -> {
+			try {
+				ping();
+				Thread.sleep(HEARTBEAT_LIMIT);
+				if (lastPong < lastPing) {
+					shutdown(true);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	public void shutdown(boolean showError)
+	{
+		isActive = false;
+		ping();
+		receiveFuture.cancel(true);
+		if (showError) {
+			Util.runUI(() -> {
+				Toast.makeText(this, "Server connection failed", Toast.LENGTH_SHORT).show();
+			});
+		}
+	}
+
+	public void ping()
+	{
+		send(PingMsg.build());
+		lastPing = System.currentTimeMillis();
 	}
 
 	public void register(String username, String hash)
@@ -194,9 +240,9 @@ public class ZeroMQClient extends Service
 		}
 	}
 
-	private void recieveLoop()
+	private void receiveLoop()
 	{
-		while (true) {
+		while (isActive) {
 			try {
 				var msg = ZmqMsg.parse(socket.recv());
 				switch (msg.type()) {
@@ -241,8 +287,10 @@ public class ZeroMQClient extends Service
 						listener.onMove(moveMsg.move_str, moveMsg.move_idx);
 					}
 					break;
-				case OkMsg.ID:
 				case PongMsg.ID:
+					lastPong = System.currentTimeMillis();
+					break;
+				case OkMsg.ID:
 					break;
 				case ErrorMsg.ID:
 				case UnknownMsg.ID:
@@ -254,19 +302,18 @@ public class ZeroMQClient extends Service
 				e.printStackTrace();
 			}
 		}
+		Log.i(getClass().getSimpleName(), "Shutting down receiveLoop");
 	}
 
 	private void sendLoop()
 	{
-		while (true) {
+		while (isActive) {
 			try {
-				var msg = sendQueue.take();
-				if (msg != null) {
-					socket.send(msg.toBytes());
-				}
+				socket.send(sendQueue.take().toBytes());
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}
+		Log.i(getClass().getSimpleName(), "Shutting down sendLoop");
 	}
 }

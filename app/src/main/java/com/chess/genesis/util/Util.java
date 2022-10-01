@@ -35,12 +35,12 @@ public class Util
 
 	private Util() {}
 
-	public synchronized static void runThread(Runnable runner)
+	public synchronized static Future<?> runThread(Runnable runner)
 	{
 		if (pool == null) {
 			pool = Executors.newCachedThreadPool();
 		}
-		pool.execute(runner);
+		return pool.submit(runner);
 	}
 
 	public static void runUI(Runnable runner)
