@@ -22,7 +22,6 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.chess.genesis.api.*;
-import com.chess.genesis.controller.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
 
@@ -40,8 +39,10 @@ public class PlaceView extends LinearLayout implements OnClickListener
 		Piece.EMPTY, Piece.BLACK_BISHOP, Piece.BLACK_KNIGHT, Piece.BLACK_PAWN, Piece.EMPTY
 	};
 
+	private final static int[] typeCounts = {0, 8, 2, 2, 2, 1, 1};
+
 	private final DisplayMetrics METRICS = new DisplayMetrics();
-	private final PlaceButton[] squares = new PlaceButton[13];
+	private final PieceImgView[] squares = new PieceImgView[13];
 	private final PieceImgPainter painter;
 	private final IGameController controller;
 
@@ -63,7 +64,9 @@ public class PlaceView extends LinearLayout implements OnClickListener
 
 			for (int j = 0; j < TYPES.length / 2; j++, i++) {
 				var type = TYPES[i];
-				var view = new PlaceButton(getContext(), painter, type, false, false);
+				var count = typeCounts[Math.abs(type)];
+				var index = type + IGameModel.PLACEOFFSET;
+				var view = new PieceImgView(getContext(), painter, index, type, count, false, false);
 				if (type != Piece.EMPTY) {
 					var idx = type + 6;
 					squares[idx] = view;
@@ -72,7 +75,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 				row.addView(view);
 			}
 
-			squares[6] = new PlaceButton(getContext(), painter, Piece.EMPTY, false, false);
+			squares[6] = new PieceImgView(getContext(), painter, 0, Piece.EMPTY, 0, false, false);
 		}
 	}
 
@@ -93,7 +96,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 		}
 	}
 
-	public IPlaceSq getPiece(int index)
+	public ICountSq getPiece(int index)
 	{
 		var type = index - Move.PLACEOFFSET;
 		return squares[type + 6];
@@ -102,7 +105,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		var sq = (IPlaceSq) v;
+		var sq = (ICountSq) v;
 		if (sq.getCount() > 0) {
 			controller.onPlaceClick(sq);
 		}

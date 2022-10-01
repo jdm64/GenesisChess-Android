@@ -24,7 +24,7 @@ import com.chess.genesis.engine.*;
 
 public class CapturedLayout extends ManualPanel
 {
-	private final CapturedPiece[] pieces = new CapturedPiece[11];
+	private final PieceImgView[] pieces = new PieceImgView[11];
 	private final PieceImgPainter painter;
 	private final boolean isEnabled;
 
@@ -56,7 +56,7 @@ public class CapturedLayout extends ManualPanel
 	private void initPieces()
 	{
 		for (int i = 0; i < pieces.length; i++) {
-			pieces[i] = new CapturedPiece(getContext(), painter);
+			pieces[i] = new PieceImgView(getContext(), painter, 0, Piece.EMPTY, 0, false, false);
 			addView(pieces[i]);
 		}
 	}

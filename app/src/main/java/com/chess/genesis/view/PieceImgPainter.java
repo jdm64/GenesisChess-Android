@@ -23,6 +23,7 @@ import android.graphics.*;
 import com.chess.genesis.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.engine.*;
 
 public final class PieceImgPainter
 {
@@ -106,7 +107,7 @@ public final class PieceImgPainter
 		drawSquare(canvas, innerColor, outerColor);
 	}
 
-	public void drawSquare(final Canvas canvas, IPlaceSq sq)
+	public void drawSquare(Canvas canvas, ICountSq sq)
 	{
 		int index = sq.getIndex();
 		int outerColor = index % 2 == 0? outerLight : outerDark;
@@ -130,7 +131,7 @@ public final class PieceImgPainter
 	/**
 	 * highlights the full square not just the inner area
 	 */
-	public void drawHighlight(Canvas canvas, IPlaceSq sq)
+	public void drawHighlight(Canvas canvas, ICountSq sq)
 	{
 		if (!sq.isHighlighted()) {
 			return;
@@ -141,6 +142,8 @@ public final class PieceImgPainter
 
 	public void drawPiece(final Canvas canvas, final int type)
 	{
+		if (type == Piece.EMPTY)
+			return;
 		canvas.drawBitmap(cache.getPieceImg(type + 6), x, y, null);
 	}
 

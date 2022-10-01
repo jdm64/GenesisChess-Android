@@ -21,7 +21,7 @@ public interface IMoveHandler
 
 	void onBoardLongClick(IBoardSq bb, int ycolor);
 
-	void onPlaceClick(IPlaceSq pb, int ycolor);
+	void onPlaceClick(ICountSq pb, int ycolor);
 
 	void clear();
 }

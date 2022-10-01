@@ -15,10 +15,7 @@
  */
 package com.chess.genesis.controller;
 
-import android.app.*;
 import android.content.*;
-import android.view.*;
-import android.view.WindowManager.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
@@ -251,7 +248,7 @@ public class GameController implements IGameController
 	}
 
 	@Override
-	public void onPlaceClick(IPlaceSq sq)
+	public void onPlaceClick(ICountSq sq)
 	{
 		if (!getStmPlayer().canClick(model.getBoard().getStm()))
 			return;

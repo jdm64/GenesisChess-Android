@@ -29,7 +29,7 @@ public interface IGameView
 
 	IBoardSq getBoardSq(int index);
 
-	IPlaceSq getPlaceSq(int index);
+	ICountSq getPlaceSq(int index);
 
 	void setCapturedCounts(int[] counts);
 

@@ -19,39 +19,124 @@ package com.chess.genesis.view;
 import android.content.*;
 import android.graphics.*;
 import android.view.*;
+import com.chess.genesis.api.*;
 
-public abstract class PieceImgView extends View
+public class PieceImgView extends View implements ICountSq
 {
 	final PieceImgPainter painter;
-	int type;
+	final int initCount;
+	final boolean drawZero;
+	final boolean drawBoard;
 
-	PieceImgView(final Context context, PieceImgPainter Painter, int Type)
+	int type;
+	int count;
+	boolean isHighlighted = false;
+
+	public PieceImgView(Context context, PieceImgPainter Painter, int index, int Type, int Count, boolean DrawZero, boolean DrawBoard)
 	{
 		super(context);
 		painter = Painter;
 		type = Type;
+		initCount = Count;
+		count = Count;
+		drawZero = DrawZero;
+		drawBoard = DrawBoard;
+		setId(index);
 	}
 
 	@Override
-	protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec)
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
 	{
-		final int size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
+		var size = Math.min(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
 		setMeasuredDimension(size, size);
-
 		painter.resize(size);
 	}
 
 	@Override
-	protected abstract void onDraw(final Canvas canvas);
+	protected void onDraw(Canvas canvas)
+	{
+		if (drawBoard) {
+			painter.drawSquare(canvas, this);
+		}
+		painter.drawHighlight(canvas, this);
 
-	void setPiece(final int Type)
+		if (count != 0) {
+			painter.drawPiece(canvas, type);
+		}
+		painter.drawCount(canvas, count, drawZero);
+	}
+
+	@Override
+	public void setPiece(int Type)
 	{
 		type = Type;
 		invalidate();
 	}
 
+	@Override
 	public int getPiece()
 	{
 		return type;
+	}
+
+	@Override
+	public int getCount()
+	{
+		return count;
+	}
+
+	@Override
+	public void setCount(int Count)
+	{
+		count = Count;
+		invalidate();
+	}
+
+	@Override
+	public void minusCount()
+	{
+		count--;
+		invalidate();
+	}
+
+	@Override
+	public void plusCount()
+	{
+		count++;
+		invalidate();
+	}
+
+	@Override
+	public int getIndex()
+	{
+		return getId();
+	}
+
+	@Override
+	public void setHighlight(boolean mode)
+	{
+		isHighlighted = mode;
+		invalidate();
+	}
+
+	@Override
+	public boolean isHighlighted()
+	{
+		return isHighlighted;
+	}
+
+	@Override
+	public void setPieceAndCount(int piece, int Count)
+	{
+		count = Count;
+		setPiece(piece);
+	}
+
+	@Override
+	public void reset()
+	{
+		isHighlighted = false;
+		count = initCount;
+		invalidate();
 	}
 }

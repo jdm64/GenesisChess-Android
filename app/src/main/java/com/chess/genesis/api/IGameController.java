@@ -36,7 +36,7 @@ public interface IGameController
 
 	void onCurrentClick();
 
-	void onPlaceClick(IPlaceSq sq);
+	void onPlaceClick(ICountSq sq);
 
 	MutableState<Boolean> isGenChess();
 

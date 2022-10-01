@@ -27,7 +27,7 @@ import com.chess.genesis.util.*;
 public class PromoteView extends LinearLayout implements View.OnClickListener, View.OnTouchListener
 {
 	private final DisplayMetrics METRICS = new DisplayMetrics();
-	private final BoardButton[] square = new BoardButton[4];
+	private final PieceImgView[] square = new PieceImgView[4];
 	private final PieceImgPainter painter;
 	private final IGameController controller;
 
@@ -49,7 +49,8 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 			row.setSizes("1/2");
 
 			for (int j = 0; j < 2; piece--, j++, i++) {
-				square[i] = new BoardButton(getContext(), painter, (i < 2)? j : j + 1);
+				var index = (i < 2)? j : j + 1;
+				square[i] = new PieceImgView(getContext(), painter, index, Piece.EMPTY, 1, false, true);
 				square[i].setOnClickListener(this);
 				square[i].setOnTouchListener(this);
 				row.addView(square[i]);
@@ -81,7 +82,7 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 	@Override
 	public void onClick(View v)
 	{
-		var sq = (IBoardSq) v;
+		var sq = (ICountSq) v;
 		var type = Math.abs(sq.getPiece());
 		move.setPromote(type);
 		controller.onPromoteClick(move);
@@ -90,7 +91,7 @@ public class PromoteView extends LinearLayout implements View.OnClickListener, V
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
-		((ISquare) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
+		((ICountSq) v).setHighlight(event.getAction() == MotionEvent.ACTION_DOWN);
 		return false;
 	}
 }

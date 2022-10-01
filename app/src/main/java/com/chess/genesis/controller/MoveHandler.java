@@ -142,7 +142,7 @@ public class MoveHandler implements IMoveHandler
 	}
 
 	@Override
-	public void onPlaceClick(IPlaceSq pb, int ycolor)
+	public void onPlaceClick(ICountSq pb, int ycolor)
 	{
 		var piece = pb.getPiece();
 		var index = piece + Move.PLACEOFFSET;

@@ -27,7 +27,5 @@ public interface IBoardSq extends ISquare
 
 	boolean isLast();
 
-	void setPiece(int piece);
-
 	int getColor();
 }

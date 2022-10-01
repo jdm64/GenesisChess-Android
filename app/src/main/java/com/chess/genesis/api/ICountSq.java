@@ -15,7 +15,7 @@
  */
 package com.chess.genesis.api;
 
-public interface IPlaceSq extends ISquare
+public interface ICountSq extends ISquare
 {
 	void setCount(int count);
 
@@ -24,4 +24,6 @@ public interface IPlaceSq extends ISquare
 	void minusCount();
 
 	void plusCount();
+
+	void setPieceAndCount(int piece, int count);
 }

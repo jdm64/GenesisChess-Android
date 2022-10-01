@@ -93,7 +93,7 @@ public class GameView implements IGameView
 	}
 
 	@Override
-	public IPlaceSq getPlaceSq(int index)
+	public ICountSq getPlaceSq(int index)
 	{
 		return getPlaceView().getPiece(index);
 	}
