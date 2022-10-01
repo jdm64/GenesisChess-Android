@@ -127,6 +127,7 @@ public class BoardSquare implements IBoardSq
 		return color;
 	}
 
+	@Override
 	public void setXY(int X, int Y)
 	{
 		x = X;
