@@ -15,36 +15,30 @@
  */
 package com.chess.genesis.activity
 
-import android.content.ClipData
+import android.content.*
 import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import android.widget.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Popup
-import androidx.navigation.NavHostController
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import androidx.compose.ui.viewinterop.*
+import androidx.compose.ui.window.*
+import androidx.navigation.*
 import com.chess.genesis.R
-import com.chess.genesis.api.IGameController
-import com.chess.genesis.api.SubmitState
-import com.chess.genesis.controller.GameController
-import com.chess.genesis.data.Pref
-import com.chess.genesis.engine.Piece
-import kotlinx.coroutines.launch
+import com.chess.genesis.api.*
+import com.chess.genesis.controller.*
+import com.chess.genesis.data.*
+import com.chess.genesis.engine.*
+import kotlinx.coroutines.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

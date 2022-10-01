@@ -15,7 +15,7 @@
  */
 package com.chess.genesis.activity;
 
-import android.R.id;
+import android.R.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.*;

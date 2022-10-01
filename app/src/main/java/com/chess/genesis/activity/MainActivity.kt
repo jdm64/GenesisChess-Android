@@ -15,26 +15,21 @@
  */
 package com.chess.genesis.activity
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import android.content.*
+import android.os.*
+import androidx.activity.*
+import androidx.activity.compose.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.navigation.*
+import androidx.navigation.compose.*
 import com.chess.genesis.R
-import com.chess.genesis.data.Pref
-import com.chess.genesis.data.PrefEdit
-import com.chess.genesis.db.LocalGameDao
-import com.chess.genesis.net.ZeroMQClient
-import kotlinx.coroutines.Dispatchers
+import com.chess.genesis.data.*
+import com.chess.genesis.db.*
+import com.chess.genesis.net.*
+import kotlinx.coroutines.*
 
 class MainActivity : ComponentActivity() {
 

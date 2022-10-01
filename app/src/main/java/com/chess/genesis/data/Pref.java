@@ -16,13 +16,11 @@
 
 package com.chess.genesis.data;
 
-import java.util.*;
 import android.content.*;
 import android.content.SharedPreferences.*;
 import android.content.res.*;
 import android.preference.*;
 import com.chess.genesis.R;
-import com.chess.genesis.util.*;
 import com.google.android.gms.tasks.*;
 import com.google.firebase.messaging.*;
 

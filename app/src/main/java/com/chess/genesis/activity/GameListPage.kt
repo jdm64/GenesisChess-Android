@@ -15,43 +15,29 @@
  */
 package com.chess.genesis.activity
 
-import android.content.Context
-import android.content.Intent
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import android.content.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.compose.ui.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.font.*
+import androidx.compose.ui.unit.*
+import androidx.navigation.*
+import androidx.paging.*
+import androidx.paging.compose.*
 import com.chess.genesis.R
-import com.chess.genesis.data.Enums
-import com.chess.genesis.db.LocalGameDao
-import com.chess.genesis.db.LocalGameEntity
-import com.chess.genesis.net.ZeroMQClient
-import com.chess.genesis.util.PrettyDate
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.chess.genesis.data.*
+import com.chess.genesis.db.*
+import com.chess.genesis.net.*
+import com.chess.genesis.util.*
+import kotlinx.coroutines.*
 
 class NewGameState {
 	var show = mutableStateOf(false)
