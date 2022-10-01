@@ -24,8 +24,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.dialog.*;
-import com.chess.genesis.dialog.ColorPickerDialog.*;
+import com.chess.genesis.view.ColorPickerDialog.*;
 import androidx.fragment.app.*;
 import androidx.preference.*;
 

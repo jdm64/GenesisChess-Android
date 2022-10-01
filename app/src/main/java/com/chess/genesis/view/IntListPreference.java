@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.util;
+package com.chess.genesis.view;
 
 import android.content.*;
 import android.content.SharedPreferences.*;

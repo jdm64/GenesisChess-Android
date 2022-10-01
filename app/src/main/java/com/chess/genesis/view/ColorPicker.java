@@ -1,5 +1,5 @@
 /* GenesisChess, an Android chess application
- * Copyright 2014, Justin Madru (justin.jdm64@gmail.com)
+ * Copyright 2022, Justin Madru (justin.jdm64@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,74 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.chess.genesis.view;
 
-package com.chess.genesis.dialog;
-
-import java.util.Map.*;
-import android.app.AlertDialog.*;
-import android.app.*;
 import android.content.*;
-import android.content.DialogInterface.*;
 import android.graphics.*;
 import android.graphics.Paint.*;
-import android.os.*;
 import android.util.*;
 import android.view.*;
-import com.chess.genesis.*;
-import androidx.fragment.app.DialogFragment;
-
-public class ColorPickerDialog extends DialogFragment implements OnClickListener
-{
-	public interface OnColorChangedListener
-	{
-		void onColorChanged(int color);
-	}
-
-	private OnColorChangedListener callback;
-	private ColorPicker colorPicker;
-	private int color;
-
-	public static ColorPickerDialog create(OnColorChangedListener listener, int initColor)
-	{
-		ColorPickerDialog dialog = new ColorPickerDialog();
-		dialog.callback = listener;
-		dialog.color = initColor;
-		return dialog;
-	}
-
-	@Override
-	public Dialog onCreateDialog(Bundle bundle)
-	{
-		Entry<View, Builder> builder = DialogUtil.createViewBuilder(this, R.layout.dialog_base);
-
-		builder.getValue()
-			.setTitle("Pick Color")
-			.setPositiveButton("Save", this)
-			.setNegativeButton("Cancel", this);
-
-		colorPicker = new ColorPicker(getActivity(), null);
-		colorPicker.setColor(color);
-		((ViewGroup) builder.getKey()).addView(colorPicker);
-
-		return builder.getValue().create();
-	}
-
-	@Override
-	public void onClick(DialogInterface dialog, int which)
-	{
-		if (DialogInterface.BUTTON_POSITIVE == which) {
-			callback.onColorChanged(colorPicker.getColor());
-		}
-		dismiss();
-	}
-}
 
 class ColorPicker extends View
 {
-	private static final int[] COLORS = new int[]{0xFFFF0000, 0xFFFFFF00, 0xFF00FF00,
-	    0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000};
+	private static final int[] COLORS = new int[]{0xFFFF0000, 0xFFFFFF00, 0xFF00FF00, 0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF, 0xFFFF0000};
 
-	enum TouchType {WHEEL, SAT_BAR, VAL_BAR, NONE}
+	enum TouchType
+	{WHEEL, SAT_BAR, VAL_BAR, NONE}
 
 	private final static float WHEEL_SCALE = (float) 0.85;
 	private final static float WHEEL_THICKNESS = (float) 0.05;
@@ -93,7 +39,7 @@ class ColorPicker extends View
 	private double sat;
 	private double val;
 
-	private ColorPicker.TouchType touchType;
+	private TouchType touchType;
 	private final double[] lastTouch = new double[2];
 	private final float[] hueLoc = new float[2];
 	private final float[] satLoc = new float[2];
@@ -189,13 +135,13 @@ class ColorPicker extends View
 
 		final double radius = getRadius(x - offset, y - offset);
 		if (radius <= wheelRadius + pointerRadius && radius >= currentRadius)
-			touchType = ColorPicker.TouchType.WHEEL;
+			touchType = TouchType.WHEEL;
 		else if (Math.abs(y - satLoc[1] - offset) <= pointerRadius)
-			touchType = ColorPicker.TouchType.SAT_BAR;
+			touchType = TouchType.SAT_BAR;
 		else if (Math.abs(y - valLoc[1] - offset) <= pointerRadius)
-			touchType = ColorPicker.TouchType.VAL_BAR;
+			touchType = TouchType.VAL_BAR;
 		else
-			touchType = ColorPicker.TouchType.NONE;
+			touchType = TouchType.NONE;
 		lastTouch[0] = x;
 		lastTouch[1] = y;
 	}
@@ -243,10 +189,8 @@ class ColorPicker extends View
 
 	private void update()
 	{
-		satBarPaint.setShader(new LinearGradient(-wheelRadius, satLoc[1],
-		    wheelRadius, satLoc[1], hsv2Color(hue, 0, val), hsv2Color(hue, 1, val), Shader.TileMode.CLAMP));
-		valBarPaint.setShader(new LinearGradient(-wheelRadius, valLoc[1],
-		    wheelRadius, valLoc[1], Color.BLACK, hsv2Color(hue, sat, 1), Shader.TileMode.CLAMP));
+		satBarPaint.setShader(new LinearGradient(-wheelRadius, satLoc[1], wheelRadius, satLoc[1], hsv2Color(hue, 0, val), hsv2Color(hue, 1, val), Shader.TileMode.CLAMP));
+		valBarPaint.setShader(new LinearGradient(-wheelRadius, valLoc[1], wheelRadius, valLoc[1], Color.BLACK, hsv2Color(hue, sat, 1), Shader.TileMode.CLAMP));
 		getXY(wheelRadius, hue, hueLoc);
 		satLoc[0] = barXLoc(sat);
 		valLoc[0] = barXLoc(val);
@@ -274,7 +218,7 @@ class ColorPicker extends View
 
 	private static double clamp(final double n)
 	{
-		return n < 0? 0 : (n > 1? 1 : n);
+		return n < 0 ? 0 : (n > 1 ? 1 : n);
 	}
 
 	private static double mod(final double v, final double r)

@@ -62,7 +62,7 @@
             app:defaultValue="@color/purple_deep_300"
             app:persistent="true"
             app:title="Last Move"/>
-        <com.chess.genesis.util.CallBackPreference
+        <com.chess.genesis.view.CallBackPreference
             app:key="bcReset"
             app:persistent="false"
             app:title="Reset To Defaults"

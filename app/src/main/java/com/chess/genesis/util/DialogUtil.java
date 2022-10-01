@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.dialog;
+package com.chess.genesis.util;
 
 import java.util.AbstractMap.*;
 import java.util.Map.*;
@@ -23,7 +23,7 @@ import android.app.AlertDialog.*;
 import android.view.*;
 import androidx.fragment.app.DialogFragment;
 
-class DialogUtil
+public class DialogUtil
 {
 	private DialogUtil() {}
 

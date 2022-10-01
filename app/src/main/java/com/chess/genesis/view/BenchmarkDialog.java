@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chess.genesis.dialog;
+package com.chess.genesis.view;
 
 import java.util.Map.*;
 import android.app.*;

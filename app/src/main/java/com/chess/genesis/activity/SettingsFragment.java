@@ -18,8 +18,6 @@ package com.chess.genesis.activity;
 import android.os.*;
 import com.chess.genesis.R;
 import com.chess.genesis.data.*;
-import com.chess.genesis.dialog.*;
-import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.preference.*;
 import androidx.preference.Preference.*;
