@@ -16,7 +16,7 @@
 
 package com.chess.genesis.view;
 
-import android.R.*;
+import android.R.id;
 import android.content.*;
 import android.content.res.*;
 import android.graphics.*;

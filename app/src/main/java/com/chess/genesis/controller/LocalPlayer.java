@@ -24,8 +24,8 @@ import com.chess.genesis.util.*;
 
 public class LocalPlayer implements IPlayer
 {
-	protected IGameModel model;
-	protected int yColor;
+	protected final IGameModel model;
+	protected final int yColor;
 
 	public LocalPlayer(int color, IGameModel _model)
 	{

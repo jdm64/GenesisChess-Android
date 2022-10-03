@@ -22,7 +22,7 @@ public class UnknownMsg extends ZmqMsg
 {
 	public static final int ID = 0;
 
-	public byte[] data;
+	public final byte[] data;
 
 	public UnknownMsg(byte[] data)
 	{

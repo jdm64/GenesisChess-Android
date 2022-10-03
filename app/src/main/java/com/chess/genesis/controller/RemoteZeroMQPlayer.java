@@ -23,10 +23,10 @@ import com.chess.genesis.net.ZeroMQClient.*;
 
 public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 {
-	String gameId;
+	final String gameId;
 	ZeroMQClient client;
 
-	LocalConnection connection = new LocalConnection()
+	final LocalConnection connection = new LocalConnection()
 	{
 		@Override
 		public void onServiceConnected(ZeroMQClient mqttClient)

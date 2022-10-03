@@ -73,7 +73,7 @@ public class ActiveGameDataMsg extends ZmqMsg
 		var move_size = packer.unpackArrayHeader();
 		moves = new ArrayList<>();
 		for (int i = 0; i < move_size; i++) {
-			moves.add(new Pair<String,Long>(packer.unpackString(), packer.unpackLong()));
+			moves.add(new Pair<>(packer.unpackString(), packer.unpackLong()));
 		}
 		return this;
 	}

@@ -21,7 +21,7 @@ import com.chess.genesis.engine.*;
 
 public class RegGameModel extends GameModel
 {
-	ObjectArray<MoveFlags> flagsHistory = new ObjectArray<>(new MoveFlags());
+	final ObjectArray<MoveFlags> flagsHistory = new ObjectArray<>(new MoveFlags());
 
 	public RegGameModel(IGameView _view, IGameController controller)
 	{

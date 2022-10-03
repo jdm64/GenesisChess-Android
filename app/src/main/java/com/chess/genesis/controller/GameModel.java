@@ -22,13 +22,14 @@ import com.chess.genesis.engine.*;
 
 public abstract class GameModel implements IGameModel
 {
-	protected int hindex = -1;
-	protected Board board;
-	protected IMoveHandler moveHandler;
-	protected TimedObjectArr<Move> history;
-	protected IGameView view;
+	protected final Board board;
+	protected final IMoveHandler moveHandler;
+	protected final TimedObjectArr<Move> history;
+	protected final IGameView view;
+	protected final IGameController controller;
+
 	protected GameEntity data;
-	protected IGameController controller;
+	protected int hindex = -1;
 
 	public GameModel(Board _board, IGameView _view, IGameController _controller)
 	{

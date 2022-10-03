@@ -24,9 +24,10 @@ import com.chess.genesis.view.*;
 
 public class GameView implements IGameView
 {
-	IGameController controller;
-	Context ctx;
-	BoardView boardView;
+	final IGameController controller;
+	final Context ctx;
+	final BoardView boardView;
+
 	CapturedLayout capturedView;
 	PromoteView promoteView;
 	PlaceView placeView;

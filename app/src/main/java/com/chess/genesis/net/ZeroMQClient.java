@@ -38,9 +38,9 @@ public class ZeroMQClient extends Service
 	private final static String ANON = "anonymous";
 	private final static int HEARTBEAT_LIMIT = 10000;
 
-	LocalBinder binder = new LocalBinder();
-	LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
-	Map<String, IMoveListener> moveListeners = new HashMap<>();
+	final LocalBinder binder = new LocalBinder();
+	final LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
+	final Map<String, IMoveListener> moveListeners = new HashMap<>();
 
 	Socket socket;
 	long lastPing;
@@ -163,9 +163,7 @@ public class ZeroMQClient extends Service
 		ping();
 		receiveFuture.cancel(true);
 		if (showError) {
-			Util.runUI(() -> {
-				Toast.makeText(this, "Server connection failed", Toast.LENGTH_SHORT).show();
-			});
+			Util.runUI(() -> Toast.makeText(this, "Server connection failed", Toast.LENGTH_SHORT).show());
 		}
 	}
 
@@ -295,7 +293,7 @@ public class ZeroMQClient extends Service
 				case ErrorMsg.ID:
 				case UnknownMsg.ID:
 				default:
-					Log.e(getClass().getSimpleName(), "Unexpected message: " + msg.toString());
+					Log.e(getClass().getSimpleName(), "Unexpected message: " + msg);
 					break;
 				}
 			} catch (Throwable e) {

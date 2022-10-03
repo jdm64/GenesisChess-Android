@@ -23,8 +23,8 @@ import androidx.compose.runtime.*;
 
 public class LocalZeroMQPlayer extends LocalPlayer
 {
-	String gameId;
-	MutableState<SubmitState> submitState;
+	final String gameId;
+	final MutableState<SubmitState> submitState;
 
 	public LocalZeroMQPlayer(int YColor, IGameModel Model, MutableState<SubmitState> SubmitState)
 	{

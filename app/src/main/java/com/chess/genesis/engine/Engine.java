@@ -38,12 +38,12 @@ public abstract class Engine
 	final TransTable tt;
 	final TransItem ttItem;
 	final MoveListPool pool;
+
 	MoveList curr;
 	Board board;
-
-	private int secT = 2;
+	int secT;
 	long endT;
-	private boolean active;
+	boolean active;
 
 	Engine(Board boardType)
 	{
