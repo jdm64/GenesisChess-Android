@@ -17,6 +17,7 @@
 package com.chess.genesis.data;
 
 import java.security.*;
+import com.chess.genesis.engine.*;
 
 public final class Enums
 {
@@ -134,6 +135,21 @@ public final class Enums
 		case RANDOM_OPP:
 		default:
 			return new SecureRandom().nextBoolean() ? PLAY_AS_WHITE : PLAY_AS_BLACK;
+		}
+	}
+
+	public static int OppToYourColor(int value)
+	{
+		switch (value) {
+		default:
+		case HUMAN_OPPONENT:
+			return Piece.EMPTY;
+		case CPU_BLACK_OPPONENT:
+		case INVITE_BLACK_OPPONENT:
+			return Piece.WHITE;
+		case CPU_WHITE_OPPONENT:
+		case INVITE_WHITE_OPPONENT:
+			return Piece.BLACK;
 		}
 	}
 

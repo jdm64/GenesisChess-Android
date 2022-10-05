@@ -21,12 +21,14 @@ public class StmState
 	public String black;
 	public int stm;
 	public int mate;
+	public int yourColor;
 
-	public StmState(String White, String Black, int Stm, int Mate)
+	public StmState(String White, String Black, int Stm, int Mate, int YourColor)
 	{
 		white = White;
 		black = Black;
 		stm = Stm;
 		mate = Mate;
+		yourColor = YourColor;
 	}
 }

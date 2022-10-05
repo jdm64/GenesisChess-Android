@@ -26,6 +26,7 @@ import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.text.font.*
@@ -109,42 +110,75 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameContent(gameCtlr: IGameController, state: ModalBottomSheetState) {
-	val stmState = remember { gameCtlr.stmState }
-	val colors = MaterialTheme.colors
-	val whiteColor = if (stmState.value.mate * stmState.value.stm > 0)
-		colors.error else colors.onPrimary
-	val blackColor = if (stmState.value.mate * stmState.value.stm < 0)
-		colors.error else colors.onPrimary
-
-	Column(Modifier.fillMaxHeight().background(Color.Gray), verticalArrangement = Arrangement.SpaceBetween) {
-		TopAppBar {
-			Column {
-				val id = gameCtlr.gameId
-				Text("Game ID: $id")
-				TabRow(selectedTabIndex = if (stmState.value.stm == Piece.WHITE) 0 else 1) {
-					Tab(
-						onClick = {},
-						selected = stmState.value.stm == Piece.WHITE,
-						text = {
-							Text(
-								stmState.value.white,
-								color = whiteColor
-							)
-						})
-					Tab(
-						onClick = {},
-						selected = stmState.value.stm == Piece.BLACK,
-						text = {
-							Text(
-								stmState.value.black,
-								color = blackColor
-							)
-						})
-				}
-			}
-		}
+	Column(
+		Modifier
+			.fillMaxHeight()
+			.background(Color.Gray),
+		verticalArrangement = Arrangement.SpaceBetween
+	) {
+		TopBarInfo(gameCtlr)
 		BoardAndPieces(gameCtlr)
 		BottomBar(state) { GameNav(gameCtlr) }
+	}
+}
+
+@Composable
+fun TopBarInfo(gameCtlr: IGameController) {
+	val stmState = remember { gameCtlr.stmState }
+	val colors = MaterialTheme.colors
+	val mate = stmState.value.mate
+	val stm = stmState.value.stm
+	val yColor = stmState.value.yourColor
+	val whiteColor =
+		if (mate * stm > 0) colors.error else if (stm > 0) colors.onPrimary else Color.Gray
+	val blackColor =
+		if (mate * stm < 0) colors.error else if (stm < 0) colors.onPrimary else Color.Gray
+
+	Row(Modifier.fillMaxWidth(1f)) {
+		Row(
+			Modifier
+				.fillMaxWidth(.5f)
+				.background(colors.primary)
+				.border(3.dp, whiteColor)
+				.padding(8.dp, 16.dp, 8.dp, 16.dp)
+		) {
+			if (yColor > 0) {
+				Box(
+					Modifier
+						.size(16.dp)
+						.clip(CircleShape)
+						.background(colors.secondaryVariant)
+						.align(Alignment.CenterVertically)
+				)
+			}
+			Text(
+				stmState.value.white,
+				color = colors.onPrimary,
+				modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp)
+			)
+		}
+		Row(
+			Modifier
+				.fillMaxWidth(1f)
+				.background(colors.primary)
+				.border(3.dp, blackColor)
+				.padding(8.dp, 16.dp, 8.dp, 16.dp)
+		) {
+			if (yColor < 0) {
+				Box(
+					Modifier
+						.size(16.dp)
+						.clip(CircleShape)
+						.background(colors.secondaryVariant)
+						.align(Alignment.CenterVertically)
+				)
+			}
+			Text(
+				stmState.value.black,
+				color = colors.onPrimary,
+				modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp)
+			)
+		}
 	}
 }
 

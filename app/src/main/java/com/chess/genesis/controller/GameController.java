@@ -38,6 +38,7 @@ public class GameController implements IGameController
 	private String gameID = "";
 	private IPlayer white;
 	private IPlayer black;
+	private int yourColor = 0;
 
 	public GameController(Context context, String gameID)
 	{
@@ -45,7 +46,7 @@ public class GameController implements IGameController
 		view = new GameView(this, ctx);
 		promoteState = Util.getState(false);
 		isGenState = Util.getState(false);
-		stmState = Util.getState(new StmState("White", "Black", 1, 0));
+		stmState = Util.getState(new StmState("White", "Black", 1, 0, yourColor));
 		submitState = Util.getState(new SubmitState());
 
 		setBoard(gameID);
@@ -68,7 +69,7 @@ public class GameController implements IGameController
 
 		var isGen = data.gametype == Enums.GENESIS_CHESS;
 		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
-
+		yourColor = Enums.OppToYourColor(data.opponent);
 		view.getBoardView().setViewAsBlack(viewAsBlack(data.gametype, data.opponent));
 
 		model.setBoard(data);
@@ -174,7 +175,7 @@ public class GameController implements IGameController
 	public void onStmChange(boolean overwrite)
 	{
 		var board = model.getBoard();
-		var state = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate());
+		var state = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate(), yourColor);
 		stmState.setValue(state);
 	}
 
