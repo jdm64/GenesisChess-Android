@@ -38,7 +38,6 @@ import com.chess.genesis.R
 import com.chess.genesis.api.*
 import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
-import com.chess.genesis.engine.*
 import kotlinx.coroutines.*
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -49,7 +48,7 @@ fun GamePage(nav: NavHostController, gameId: String) {
 	val gameCtlr = remember { GameController(ctx, gameId) }
 
 	DisposableEffect(gameCtlr) {
-		onDispose { gameCtlr.onDispose()  }
+		onDispose { gameCtlr.onDispose() }
 	}
 
 	ModalBottomSheetLayout(
@@ -75,7 +74,8 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 	Column {
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
-				val clipboard = ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+				val clipboard =
+					ctx.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 				val clip = ClipData.newPlainText("simple text", gameCtlr.gameId)
 				clipboard.setPrimaryClip(clip)
 				Toast.makeText(ctx, "Game ID copied", Toast.LENGTH_SHORT).show()
@@ -183,8 +183,7 @@ fun TopBarInfo(gameCtlr: IGameController) {
 }
 
 @Composable
-fun BoardAndPieces(gameCtlr: IGameController)
-{
+fun BoardAndPieces(gameCtlr: IGameController) {
 	val ctx = LocalContext.current
 	val showCapture = Pref.getBool(ctx, R.array.pf_showCaptured)
 	val capturedBelow = Pref.getBool(ctx, R.array.pf_capturedBelow)
@@ -270,11 +269,10 @@ fun ShowSubmitDialog(gameCtlr: GameController) {
 	if (!submitState.value.show) {
 		return
 	}
-
 	val ctx = LocalContext.current
 
 	Popup(alignment = Alignment.BottomCenter,
-		onDismissRequest =  {
+		onDismissRequest = {
 			gameCtlr.undoMove()
 			submitState.value = SubmitState()
 		}
