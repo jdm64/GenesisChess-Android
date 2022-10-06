@@ -41,13 +41,11 @@ public abstract class Engine
 
 	MoveList curr;
 	Board board;
-	int secT;
 	long endT;
 	boolean active;
 
 	Engine(Board boardType)
 	{
-		secT = 4;
 		active = false;
 		tactical = new BoolArray();
 		ismate = new BoolArray();
@@ -107,27 +105,9 @@ public abstract class Engine
 		curr.size = cut;
 	}
 
-	public void stop()
-	{
-		endT = 0;
-	}
-
 	public boolean isActive()
 	{
 		return active;
-	}
-
-	public void setTime(final int time)
-	{
-		if (time > 30)
-			secT = 30;
-		else
-			secT = Math.max(time, 1);
-	}
-
-	public int getTime()
-	{
-		return secT;
 	}
 
 	public long getEndTime()
@@ -157,11 +137,11 @@ public abstract class Engine
 		pool.put(curr);
 	}
 
-	public Move getMove()
+	public Move getMove(int millisecond)
 	{
 		try {
 			active = true;
-			endT = System.currentTimeMillis() + secT * 1000L;
+			endT = System.currentTimeMillis() + millisecond;
 			think();
 			return pvMove.get(0);
 		} finally {

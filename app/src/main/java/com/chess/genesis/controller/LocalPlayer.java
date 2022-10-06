@@ -55,7 +55,7 @@ public class LocalPlayer implements IPlayer
 	}
 
 	@Override
-	public void takeTurn()
+	public void takeTurn(Context context)
 	{
 		// Do nothing
 	}

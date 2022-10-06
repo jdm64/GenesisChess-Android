@@ -17,7 +17,9 @@
 package com.chess.genesis.controller;
 
 import android.content.*;
+import com.chess.genesis.*;
 import com.chess.genesis.api.*;
+import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
 
@@ -48,18 +50,19 @@ public class ComputerPlayer extends LocalPlayer
 	}
 
 	@Override
-	public void takeTurn()
+	public void takeTurn(Context context)
 	{
-		Util.runThread(this::runEngine);
+		var cpuTime = Pref.getInt(context, R.array.pf_cpuTime);
+		Util.runThread(() -> runEngine(cpuTime));
 	}
 
-	private void runEngine()
+	private void runEngine(int cpuTime)
 	{
 		var board = model.getBoard();
 		engine.setBoard(board);
-		var move = engine.getMove();
+		var move = engine.getMove(cpuTime);
 		if (engine.getEndTime() == 0) {
-			Util.runThread(this::runEngine);
+			Util.runThread(() -> runEngine(cpuTime));
 			return;
 		}
 

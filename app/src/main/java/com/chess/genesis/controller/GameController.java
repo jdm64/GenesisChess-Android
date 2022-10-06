@@ -79,7 +79,7 @@ public class GameController implements IGameController
 
 		onStmChange(true);
 
-		getStmPlayer().takeTurn();
+		getStmPlayer().takeTurn(ctx);
 	}
 
 	private boolean viewAsBlack(int gametype, int opponent)
@@ -189,7 +189,7 @@ public class GameController implements IGameController
 	public void onMove(Move move)
 	{
 		getNonStmPlayer().finalizeMove(move, ctx);
-		getStmPlayer().takeTurn();
+		getStmPlayer().takeTurn(ctx);
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public interface IPlayer
 
 	default void submitMove(Move move, Context context) {}
 
-	void takeTurn();
+	void takeTurn(Context context);
 
 	default void onDispose(Context context) {}
 }

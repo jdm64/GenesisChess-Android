@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         app:title="Board Settings">
@@ -23,6 +24,14 @@
             app:defaultValue="false"
             app:title="Keep Screen Active"
             app:summary="Force the screen on while in a game"/>
+        <SeekBarPreference
+            app:key="cpuTime"
+            app:defaultValue="4000"
+            app:min="500"
+            android:max="6000"
+            app:showSeekBarValue="true"
+            app:title="CPU Player Think Time"
+            app:summary="Milliseconds for computer to think"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:title="Board Colors"

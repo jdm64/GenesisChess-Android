@@ -12,9 +12,9 @@
 		<item>appVersion</item>
 		<item>0</item>
 	</array>
-	<array name="pf_cputime">
-		<item>cputime</item>
-		<item>4</item>
+	<array name="pf_cpuTime">
+		<item>cpuTime</item>
+		<item>4000</item>
 	</array>
 	<array name="pf_screenAlwaysOn">
 		<item>screenAlwaysOn</item>
