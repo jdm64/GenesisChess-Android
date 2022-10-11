@@ -23,6 +23,7 @@ import android.os.*;
 import android.util.*;
 import android.view.*;
 import android.view.WindowManager.*;
+import android.widget.*;
 import com.chess.genesis.R;
 import com.chess.genesis.data.*;
 import androidx.compose.runtime.*;
@@ -51,6 +52,11 @@ public class Util
 	public static <T> MutableState<T> getState(T val)
 	{
 		return SnapshotStateKt.mutableStateOf(val, SnapshotStateKt.structuralEqualityPolicy());
+	}
+
+	public static void showToast(String txt, Context ctx)
+	{
+		runUI(() -> Toast.makeText(ctx, txt, Toast.LENGTH_SHORT).show());
 	}
 
 	public static String getSUID(int size)

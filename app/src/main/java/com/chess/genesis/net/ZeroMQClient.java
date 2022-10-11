@@ -163,7 +163,7 @@ public class ZeroMQClient extends Service
 		ping();
 		receiveFuture.cancel(true);
 		if (showError) {
-			Util.runUI(() -> Toast.makeText(this, "Server connection failed", Toast.LENGTH_SHORT).show());
+			Util.showToast("Server connection failed", this);
 		}
 	}
 
@@ -291,6 +291,9 @@ public class ZeroMQClient extends Service
 				case OkMsg.ID:
 					break;
 				case ErrorMsg.ID:
+					var errMsg = msg.as(ErrorMsg.class);
+					Util.showToast(errMsg.msg, getApplicationContext());
+					break;
 				case UnknownMsg.ID:
 				default:
 					Log.e(getClass().getSimpleName(), "Unexpected message: " + msg);
