@@ -27,46 +27,15 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.chess.genesis.R
 import com.chess.genesis.data.*
-import com.chess.genesis.db.*
-import com.chess.genesis.net.*
-import kotlinx.coroutines.*
 
 class MainActivity : ComponentActivity() {
-
-	private var hasInviteGames = false
-	private var serviceConnected = false
-
-	private val connection = object : ZeroMQClient.LocalConnection() {
-		override fun onServiceConnected(client: ZeroMQClient?) {
-			serviceConnected = true
-		}
-	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		Dispatchers.IO.dispatch(Dispatchers.IO) {
-			hasInviteGames = LocalGameDao.get(this).hasInviteGame()
-		}
-
 		setContent {
 			MainApp()
 		}
-	}
-
-	override fun onStart() {
-		super.onStart()
-		if (hasInviteGames) {
-			ZeroMQClient.bind(applicationContext, connection)
-		}
-	}
-
-	override fun onStop() {
-		if (serviceConnected) {
-			applicationContext.unbindService(connection)
-			serviceConnected = false
-		}
-		super.onStop()
 	}
 }
 
