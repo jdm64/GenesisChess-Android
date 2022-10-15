@@ -88,7 +88,7 @@ abstract class GenMoveLookup extends BaseBoard
 		return list;
 	}
 
-	boolean fromto(final int From, final int To)
+	boolean fromTo(final int From, final int To)
 	{
 		if (OFF_BOARD(From | To))
 			return false;

@@ -18,6 +18,7 @@
 package com.chess.genesis.engine;
 
 import android.os.*;
+import androidx.annotation.*;
 
 public class GenMove extends Move
 {
@@ -66,6 +67,7 @@ public class GenMove extends Move
 		return str;
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{

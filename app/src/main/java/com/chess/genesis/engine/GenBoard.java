@@ -19,6 +19,7 @@ package com.chess.genesis.engine;
 
 import java.util.function.*;
 import android.util.*;
+import androidx.annotation.*;
 
 public class GenBoard extends GenPosition implements Board
 {
@@ -100,7 +101,7 @@ public class GenBoard extends GenPosition implements Board
 
 	private final MoveNode item = new MoveNode(moveType);
 	private long key;
-	private int mscore;
+	private int mScore;
 
 	public GenBoard()
 	{
@@ -111,14 +112,15 @@ public class GenBoard extends GenPosition implements Board
 	{
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
-		piecetype = IntArray.clone(board.piecetype);
+		pieceType = IntArray.clone(board.pieceType);
 
 		stm = board.stm;
 		ply = board.ply;
 		key = board.key;
-		mscore = board.mscore;
+		mScore = board.mScore;
 	}
 
+	@NonNull
 	@Override
 	public GenBoard clone()
 	{
@@ -162,11 +164,11 @@ public class GenBoard extends GenPosition implements Board
 	{
 		square = new int[128];
 		piece = new int[32];
-		piecetype = IntArray.clone(Move.InitPieceType);
+		pieceType = IntArray.clone(Move.InitPieceType);
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.PLACEABLE;
 
-		mscore = 0;
+		mScore = 0;
 		ply = 0;
 		stm = Piece.WHITE;
 		key = startHash;
@@ -181,7 +183,7 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public int PieceType(final int index)
 	{
-		return piecetype[index];
+		return pieceType[index];
 	}
 
 	// Do Not call the following functions!
@@ -246,7 +248,7 @@ public class GenBoard extends GenPosition implements Board
 
 		for (int i = 0; i < 32; i++) {
 			if (piece[i] == Loc)
-				counts[piecetype[i] + 6]++;
+				counts[pieceType[i] + 6]++;
 		}
 		return counts;
 	}
@@ -261,17 +263,17 @@ public class GenBoard extends GenPosition implements Board
 	public void make(final Move move)
 	{
 		// update board information
-		square[move.to] = piecetype[move.index];
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
+		square[move.to] = pieceType[move.index];
+		mScore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		if (move.from != Piece.PLACEABLE) {
-			mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
+			mScore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 			square[move.from] = Piece.EMPTY;
 		}
 		// update piece information
 		piece[move.index] = move.to;
 		if (move.xindex != Piece.NONE) {
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(move.to)];
-			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
+			mScore += stm * locValue[Math.abs(pieceType[move.xindex])][EE64(move.to)];
+			mScore += stm * pieceValue[Math.abs(pieceType[move.xindex])];
 			piece[move.xindex] = Piece.DEAD;
 		}
 
@@ -295,18 +297,18 @@ public class GenBoard extends GenPosition implements Board
 	public void unmake(final Move move)
 	{
 		piece[move.index] = move.from;
-		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
+		mScore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		if (move.xindex == Piece.NONE) {
 			square[move.to] = Piece.EMPTY;
 		} else {
-			square[move.to] = piecetype[move.xindex];
+			square[move.to] = pieceType[move.xindex];
 			piece[move.xindex] = move.to;
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(move.to)];
-			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
+			mScore += stm * locValue[Math.abs(pieceType[move.xindex])][EE64(move.to)];
+			mScore += stm * pieceValue[Math.abs(pieceType[move.xindex])];
 		}
 		if (move.from != Piece.PLACEABLE) {
-			square[move.from] = piecetype[move.index];
-			mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
+			square[move.from] = pieceType[move.index];
+			mScore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		}
 
 		final int to = EE64(move.to);
@@ -325,26 +327,26 @@ public class GenBoard extends GenPosition implements Board
 		ply--;
 	}
 
-	private boolean incheckMove(final Move move, final int color, final boolean stmCk)
+	private boolean inCheckMove(final Move move, final int color, final boolean stmCk)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
 		if (stmCk || move.index == king)
-			return incheck(color);
-		return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
+			return inCheck(color);
+		return attackLine(piece[king], move.from) || attackLine(piece[king], move.to);
 	}
 
 	@Override
 	public int isMate()
 	{
-		final MoveList mlist = getMoveList(stm, Move.MOVE_ALL);
+		final MoveList mList = getMoveList(stm, Move.MOVE_ALL);
 	try {
-		if (mlist.size != 0)
+		if (mList.size != 0)
 			return Move.NOT_MATE;
-		else if (incheck(stm))
+		else if (inCheck(stm))
 			return Move.CHECK_MATE;
 		return Move.STALE_MATE;
 	} finally {
-		pool.put(mlist);
+		pool.put(mList);
 	}
 	}
 
@@ -355,28 +357,28 @@ public class GenBoard extends GenPosition implements Board
 			return false;
 		move.set(moveIn);
 
-		if ((move.index = pieceIndex(move.from, piecetype[move.index])) == Piece.NONE)
+		if ((move.index = pieceIndex(move.from, pieceType[move.index])) == Piece.NONE)
 			return false;
-		if (piecetype[move.index] * stm <= 0)
+		if (pieceType[move.index] * stm <= 0)
 			return false;
 		if (move.xindex != Piece.NONE) {
-			if ((move.xindex = pieceIndex(move.to, piecetype[move.xindex])) == Piece.NONE)
+			if ((move.xindex = pieceIndex(move.to, pieceType[move.xindex])) == Piece.NONE)
 				return false;
 		} else if (square[move.to] != Piece.EMPTY) {
 			return false;
 		}
 
-		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
+		if (move.from != Piece.PLACEABLE && !fromTo(move.from, move.to))
 				return false;
-		if (ply < 2 && Math.abs(piecetype[move.index]) != Piece.KING)
+		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
 			return false;
 
 		boolean ret = true;
 
 		make(move);
-		if (incheck(stm ^ -2))
+		if (inCheck(stm ^ -2))
 			ret = false;
-		if (move.from == Piece.PLACEABLE && incheck(stm))
+		if (move.from == Piece.PLACEABLE && inCheck(stm))
 			ret = false;
 		unmake(move);
 
@@ -410,18 +412,18 @@ public class GenBoard extends GenPosition implements Board
 				return new Pair<>(move, Move.CAPTURE_OWN);
 		}
 		// must place king first
-		if (ply < 2 && Math.abs(piecetype[move.index]) != Piece.KING)
+		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
 			return new Pair<>(move, Move.KING_FIRST);
 
-		if (move.from != Piece.PLACEABLE && !fromto(move.from, move.to))
+		if (move.from != Piece.PLACEABLE && !fromTo(move.from, move.to))
 			return new Pair<>(move, Move.INVALID_MOVEMENT);
 		int ret = Move.VALID_MOVE;
 
 		make(move);
 		// curr is opponent after make
-		if (incheck(stm ^ -2))
+		if (inCheck(stm ^ -2))
 			ret = Move.IN_CHECK;
-		else if (move.from == Piece.PLACEABLE && incheck(stm))
+		else if (move.from == Piece.PLACEABLE && inCheck(stm))
 			ret = Move.IN_CHECK_PLACE;
 		unmake(move);
 
@@ -431,12 +433,12 @@ public class GenBoard extends GenPosition implements Board
 	@Override
 	public int eval()
 	{
-		return (stm == Piece.WHITE)? -mscore : mscore;
+		return (stm == Piece.WHITE)? -mScore : mScore;
 	}
 
-	private void getMoveList(final MoveList data, final int color, final int movetype)
+	private void getMoveList(final MoveList data, final int color, final int moveType)
 	{
-		final boolean stmCk = incheck(color);
+		final boolean stmCk = inCheck(color);
 		final int start = (color == Piece.WHITE)? 31:15, end = (color == Piece.WHITE)? 16:0;
 
 		for (int idx = start; idx >= end; idx--) {
@@ -444,7 +446,7 @@ public class GenBoard extends GenPosition implements Board
 				continue;
 
 			final int[] loc;
-			switch (movetype) {
+			switch (moveType) {
 			case Move.MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
@@ -464,8 +466,8 @@ public class GenBoard extends GenPosition implements Board
 				item.move.index = idx;
 
 				make(item.move);
-				if (!incheckMove(item.move, color, stmCk)) {
-					item.check = incheckMove(item.move, color ^ -2, false);
+				if (!inCheckMove(item.move, color, stmCk)) {
+					item.check = inCheckMove(item.move, color ^ -2, false);
 					item.score = eval();
 					data.add(item);
 				}
@@ -482,7 +484,7 @@ public class GenBoard extends GenPosition implements Board
 			return;
 
 		final int color = pieceType / Math.abs(pieceType);
-		final boolean stmCk = incheck(color);
+		final boolean stmCk = inCheck(color);
 		for (int loc = 0x77; loc >= 0; loc--) {
 			if (OFF_BOARD(loc)) {
 				loc -= 7;
@@ -497,7 +499,7 @@ public class GenBoard extends GenPosition implements Board
 
 			make(item.move);
 			// place moves are only valid if neither side is inCheck
-			if (!incheckMove(item.move, color, stmCk) && !incheckMove(item.move, color ^ -2, false)) {
+			if (!inCheckMove(item.move, color, stmCk) && !inCheckMove(item.move, color ^ -2, false)) {
 				// item.check initialized to false
 				item.score = eval();
 				data.add(item);
@@ -507,12 +509,12 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public MoveList getMoveList(final int color, final int movetype)
+	public MoveList getMoveList(final int color, final int moveType)
 	{
 		final MoveList data = pool.get();
 		data.size = 0;
 
-		switch (movetype) {
+		switch (moveType) {
 		case Move.MOVE_ALL:
 			if (ply < 2) {
 				getPlaceMoveList(data, Piece.KING * color);
@@ -524,7 +526,7 @@ public class GenBoard extends GenPosition implements Board
 			break;
 		case Move.MOVE_CAPTURE:
 		case Move.MOVE_MOVE:
-			getMoveList(data, color, movetype);
+			getMoveList(data, color, moveType);
 			break;
 		case Move.MOVE_PLACE:
 			if (ply < 2) {

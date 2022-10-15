@@ -19,6 +19,7 @@ package com.chess.genesis.engine;
 
 import java.util.function.*;
 import android.util.*;
+import androidx.annotation.*;
 
 public interface Board
 {
@@ -28,7 +29,9 @@ public interface Board
 	int CASTLE_HASH = 834;
 	int HOLD_START = 768;
 
+	@NonNull
 	Board clone();
+
 	Supplier<Move> moveGenerator();
 	Move newMove();
 	void reset();
@@ -49,11 +52,11 @@ public interface Board
 	long[] getHashBox();
 
 	int kingIndex(final int color);
-	boolean incheck(final int color);
+	boolean inCheck(final int color);
 	int isMate();
 
-	String printZfen();
-	boolean parseZfen(String zfen);
+	String printZFen();
+	boolean parseZFen(String zFen);
 
 	void make(final Move move);
 	void unmake(final Move move);

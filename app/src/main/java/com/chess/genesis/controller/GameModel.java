@@ -112,7 +112,7 @@ public abstract class GameModel implements IGameModel
 		}
 
 		// move caused check
-		if (board.incheck(board.getStm())) {
+		if (board.inCheck(board.getStm())) {
 			var king = board.kingIndex(board.getStm());
 			var kingI = view.getBoardSq(king);
 			kingI.setCheck(true);
@@ -125,7 +125,7 @@ public abstract class GameModel implements IGameModel
 	public GameEntity saveBoard()
 	{
 		data.history = history.toString();
-		data.zfen = board.printZfen();
+		data.zfen = board.printZFen();
 		data.stime = System.currentTimeMillis();
 		return data;
 	}
@@ -199,7 +199,7 @@ public abstract class GameModel implements IGameModel
 	void postCommonMove(boolean overwrite)
 	{
 		// move caused check
-		if (board.incheck(board.getStm())) {
+		if (board.inCheck(board.getStm())) {
 			var king = board.kingIndex(board.getStm());
 			var kingI = view.getBoardSq(king);
 			kingI.setCheck(true);

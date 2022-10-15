@@ -16,6 +16,8 @@
 
 package com.chess.genesis.engine;
 
+import androidx.annotation.*;
+
 public class BoolArray
 {
 	private boolean[] list = new boolean[0];
@@ -83,6 +85,7 @@ public class BoolArray
 		return false;
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{

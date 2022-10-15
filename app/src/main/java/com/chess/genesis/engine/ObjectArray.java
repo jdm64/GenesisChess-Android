@@ -17,6 +17,7 @@
 package com.chess.genesis.engine;
 
 import java.util.function.*;
+import androidx.annotation.*;
 
 public class ObjectArray<Type>
 {
@@ -95,6 +96,7 @@ public class ObjectArray<Type>
 		return list[list.length - 1];
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{

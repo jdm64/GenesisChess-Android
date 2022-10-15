@@ -19,6 +19,7 @@ package com.chess.genesis.engine;
 
 import java.util.function.*;
 import android.util.*;
+import androidx.annotation.*;
 
 public class RegBoard extends RegPosition implements Board
 {
@@ -103,7 +104,7 @@ public class RegBoard extends RegPosition implements Board
 	{
 		square = IntArray.clone(board.square);
 		piece = IntArray.clone(board.piece);
-		piecetype = IntArray.clone(board.piecetype);
+		pieceType = IntArray.clone(board.pieceType);
 
 		stm = board.stm;
 		ply = board.ply;
@@ -112,6 +113,7 @@ public class RegBoard extends RegPosition implements Board
 		flags.set(board.flags);
 	}
 
+	@NonNull
 	@Override
 	public RegBoard clone()
 	{
@@ -135,7 +137,7 @@ public class RegBoard extends RegPosition implements Board
 		final int start = (type > 0)? 16:0, end = (type > 0)? 32:16;
 
 		for (int i = start; i < end; i++) {
-			if (piece[i] == loc && piecetype[i] == type)
+			if (piece[i] == loc && pieceType[i] == type)
 				return i;
 		}
 		return Piece.NONE;
@@ -145,10 +147,10 @@ public class RegBoard extends RegPosition implements Board
 	public final void reset()
 	{
 		piece = IntArray.clone(InitRegPiece);
-		piecetype = IntArray.clone(Move.InitPieceType);
+		pieceType = IntArray.clone(Move.InitPieceType);
 		square = new int[128];
 		for (int i = 0; i < 32; i++)
-			square[piece[i]] = piecetype[i];
+			square[piece[i]] = pieceType[i];
 
 		mscore = 0;
 		ply = 0;
@@ -166,7 +168,7 @@ public class RegBoard extends RegPosition implements Board
 	@Override
 	public int PieceType(final int index)
 	{
-		return piecetype[index];
+		return pieceType[index];
 	}
 
 	// Do Not call the following functions!
@@ -232,7 +234,7 @@ public class RegBoard extends RegPosition implements Board
 
 		for (int i = 0; i < 32; i++) {
 			if (piece[i] == Loc)
-				counts[piecetype[i] + 6]++;
+				counts[pieceType[i] + 6]++;
 		}
 		return counts;
 	}
@@ -254,27 +256,27 @@ public class RegBoard extends RegPosition implements Board
 		final boolean isWhite = (move.index > 15);
 		final int color = isWhite? Piece.WHITE : Piece.BLACK;
 
-		key ^= hashBox[13 * EE64(move.from) + piecetype[move.index] + 6];
+		key ^= hashBox[13 * EE64(move.from) + pieceType[move.index] + 6];
 
 		if (move.getCastle() != 0) {
 			final boolean left = (move.getCastle() == Move.CASTLE_QS);
 			final int castleTo = move.to + (left? 1 : -1);
 			final int castleI = pieceIndex(move.to - (move.to & Move.EP_FILE) + (left? 0 : 7), color * Piece.ROOK);
 
-			key ^= hashBox[13 * EE64(piece[castleI]) + piecetype[castleI] + 6];
-			key ^= hashBox[13 * EE64(castleTo) + piecetype[castleI] + 6];
+			key ^= hashBox[13 * EE64(piece[castleI]) + pieceType[castleI] + 6];
+			key ^= hashBox[13 * EE64(castleTo) + pieceType[castleI] + 6];
 			if (flags.canKingCastle(color) != 0)
 				key ^= hashBox[CASTLE_HASH + color];
 			if (flags.canQueenCastle(color) != 0)
 				key ^= hashBox[CASTLE_HASH + color * 2];
 
-			square[castleTo] = piecetype[castleI];
+			square[castleTo] = pieceType[castleI];
 			square[piece[castleI]] = Piece.EMPTY;
 			piece[castleI] = castleTo;
 			mscore += stm * locValue[Piece.ROOK][EE64(castleTo)];
 			mscore -= stm * locValue[Piece.ROOK][EE64(castleI)];
 			flags.clearCastle(color);
-		} else if (Math.abs(piecetype[move.index]) == Piece.ROOK) {
+		} else if (Math.abs(pieceType[move.index]) == Piece.ROOK) {
 			if (move.from == (isWhite? Piece.H1:Piece.H8) && flags.canKingCastle(color) != 0) {
 				flags.clearKingCastle(color);
 				key ^= hashBox[CASTLE_HASH + color];
@@ -282,7 +284,7 @@ public class RegBoard extends RegPosition implements Board
 				flags.clearQueenCastle(color);
 				key ^= hashBox[CASTLE_HASH + color * 2];
 			}
-		} else if (Math.abs(piecetype[move.index]) == Piece.KING && flags.canCastle(color) != 0) {
+		} else if (Math.abs(pieceType[move.index]) == Piece.KING && flags.canCastle(color) != 0) {
 			if (flags.canKingCastle(color) != 0)
 				key ^= hashBox[CASTLE_HASH + color];
 			if (flags.canQueenCastle(color) != 0)
@@ -290,9 +292,9 @@ public class RegBoard extends RegPosition implements Board
 
 			flags.clearCastle(color);
 		} else if (move.getPromote() != 0) {
-			piecetype[move.index] = move.getPromote() * color;
+			pieceType[move.index] = move.getPromote() * color;
 		}
-		key ^= hashBox[13 * EE64(move.to) + piecetype[move.index] + 6];
+		key ^= hashBox[13 * EE64(move.to) + pieceType[move.index] + 6];
 
 		if (flags.canEnPassant() != 0) {
 			flags.clearEnPassant();
@@ -300,21 +302,21 @@ public class RegBoard extends RegPosition implements Board
 		}
 
 		// update board information
-		square[move.to] = piecetype[move.index];
+		square[move.to] = pieceType[move.index];
 		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
 		mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		square[move.from] = Piece.EMPTY;
 		// update piece information
 		piece[move.index] = move.to;
 		if (move.xindex != Piece.NONE) {
-			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(piece[move.xindex])];
-			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
+			key ^= hashBox[13 * EE64(piece[move.xindex]) + pieceType[move.xindex] + 6];
+			mscore += stm * locValue[Math.abs(pieceType[move.xindex])][EE64(piece[move.xindex])];
+			mscore += stm * pieceValue[Math.abs(pieceType[move.xindex])];
 
 			if (move.getEnPassant())
 				square[piece[move.xindex]] = Piece.EMPTY;
 			piece[move.xindex] = Piece.DEAD;
-		} else if (Math.abs(piecetype[move.index]) == Piece.PAWN && Math.abs(move.to - move.from) == 32) {
+		} else if (Math.abs(pieceType[move.index]) == Piece.PAWN && Math.abs(move.to - move.from) == 32) {
 			flags.setEnPassant(move.to & Move.EP_FILE);
 			key ^= hashBox[ENPASSANT_HASH];
 		}
@@ -334,26 +336,26 @@ public class RegBoard extends RegPosition implements Board
 		key ^= ((bits & (isWhite? Move.WK_CASTLE : Move.BK_CASTLE)) != 0)? hashBox[CASTLE_HASH + color] : 0;
 		key ^= ((bits & (isWhite? Move.WQ_CASTLE : Move.BQ_CASTLE)) != 0)? hashBox[CASTLE_HASH + 2 * color] : 0;
 		key ^= ((bits & Move.CAN_EP) != 0)? hashBox[ENPASSANT_HASH] : 0;
-		key ^= hashBox[13 * EE64(move.to) + piecetype[move.index] + 6];
+		key ^= hashBox[13 * EE64(move.to) + pieceType[move.index] + 6];
 
 		if (move.getCastle() != 0) {
 			final boolean left = (move.from - move.to > 0);
 			final int castleFrom = move.to - (move.to & Move.EP_FILE) + (left? 0 : 7);
 			final int castleI = pieceIndex(move.to + (left? 1 : -1), isWhite? Piece.WHITE_ROOK : Piece.BLACK_ROOK);
 
-			key ^= hashBox[13 * EE64(piece[castleI]) + piecetype[castleI] + 6];
-			key ^= hashBox[13 * EE64(castleFrom) + piecetype[castleI] + 6];
+			key ^= hashBox[13 * EE64(piece[castleI]) + pieceType[castleI] + 6];
+			key ^= hashBox[13 * EE64(castleFrom) + pieceType[castleI] + 6];
 
 			square[piece[castleI]] = Piece.EMPTY;
-			square[castleFrom] = piecetype[castleI];
+			square[castleFrom] = pieceType[castleI];
 			piece[castleI] = castleFrom;
 			mscore += stm * locValue[Piece.ROOK][EE64(castleFrom)];
 			mscore -= stm * locValue[Piece.ROOK][EE64(castleI)];
 		} else if (move.getPromote() != 0) {
-			piecetype[move.index] = Piece.PAWN * color;
+			pieceType[move.index] = Piece.PAWN * color;
 		}
 
-		key ^= hashBox[13 * EE64(move.from) + piecetype[move.index] + 6];
+		key ^= hashBox[13 * EE64(move.from) + pieceType[move.index] + 6];
 
 		piece[move.index] = move.from;
 		mscore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
@@ -366,13 +368,13 @@ public class RegBoard extends RegPosition implements Board
 				square[move.to] = Piece.EMPTY;
 			} else {
 				piece[move.xindex] = move.to;
-				square[move.to] = piecetype[move.xindex];
+				square[move.to] = pieceType[move.xindex];
 			}
-			key ^= hashBox[13 * EE64(piece[move.xindex]) + piecetype[move.xindex] + 6];
-			mscore += stm * locValue[Math.abs(piecetype[move.xindex])][EE64(piece[move.xindex])];
-			mscore += stm * pieceValue[Math.abs(piecetype[move.xindex])];
+			key ^= hashBox[13 * EE64(piece[move.xindex]) + pieceType[move.xindex] + 6];
+			mscore += stm * locValue[Math.abs(pieceType[move.xindex])][EE64(piece[move.xindex])];
+			mscore += stm * pieceValue[Math.abs(pieceType[move.xindex])];
 		}
-		square[move.from] = piecetype[move.index];
+		square[move.from] = pieceType[move.index];
 
 		mscore -= stm * locValue[Math.abs(square[move.from])][EE64(move.from)];
 		key ^= hashBox[WTM_HASH];
@@ -381,26 +383,26 @@ public class RegBoard extends RegPosition implements Board
 		ply--;
 	}
 
-	private boolean incheckMove(final Move move, final int color, final boolean stmCk)
+	private boolean inCheckMove(final Move move, final int color, final boolean stmCk)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
 		if (stmCk || move.index == king)
-			return incheck(color);
-		return (attackLine(piece[king], move.from) || attackLine(piece[king], move.to));
+			return inCheck(color);
+		return attackLine(piece[king], move.from) || attackLine(piece[king], move.to);
 	}
 
 	@Override
 	public int isMate()
 	{
-		final MoveList mlist = getMoveList(stm, Move.MOVE_ALL);
+		final MoveList mList = getMoveList(stm, Move.MOVE_ALL);
 	try {
-		if (mlist.size != 0)
+		if (mList.size != 0)
 			return Move.NOT_MATE;
-		else if (incheck(stm))
+		else if (inCheck(stm))
 			return Move.CHECK_MATE;
 		return Move.STALE_MATE;
 	} finally {
-		pool.put(mlist);
+		pool.put(mList);
 	}
 	}
 
@@ -433,14 +435,14 @@ public class RegBoard extends RegPosition implements Board
 			move.flags = 0;
 		}
 
-		if (!fromto(move.from, move.to))
+		if (!fromTo(move.from, move.to))
 			return false;
 
 		boolean ret = true;
 
 		make(move);
 		// stm is opponent after make
-		if (incheck(stm ^ -2))
+		if (inCheck(stm ^ -2))
 			ret = false;
 		unmake(move, undoFlags);
 
@@ -453,7 +455,7 @@ public class RegBoard extends RegPosition implements Board
 		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
 			return Move.CANT_CASTLE;
 		// can't castle while in check
-		if (incheck(color))
+		if (inCheck(color))
 			return Move.CANT_CASTLE;
 
 		final int king = (color == Piece.WHITE)? Piece.E1 : Piece.E8;
@@ -494,7 +496,7 @@ public class RegBoard extends RegPosition implements Board
 
 			make(move);
 			// stm is opponent after make
-			if (incheck(stm ^ -2))
+			if (inCheck(stm ^ -2))
 				ret = Move.IN_CHECK;
 			unmake(move, undoFlags);
 			return ret;
@@ -521,7 +523,7 @@ public class RegBoard extends RegPosition implements Board
 		if (move.index == Piece.NONE)
 			return new Pair<>(move, Move.INVALID_MOVEMENT);
 
-		switch (Math.abs(piecetype[move.index])) {
+		switch (Math.abs(pieceType[move.index])) {
 		case Piece.PAWN:
 			// en passant
 			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == Move.VALID_MOVE)
@@ -531,7 +533,7 @@ public class RegBoard extends RegPosition implements Board
 				move.flags = 0;
 				break;
 			} else if (move.getPromote() == 0) {
-				// manualy set to queen if not specified
+				// manually set to queen if not specified
 				move.setPromote(Piece.QUEEN);
 			}
 			break;
@@ -554,14 +556,14 @@ public class RegBoard extends RegPosition implements Board
 		if (move.xindex != Piece.NONE && square[move.to] * color > 0)
 			return new Pair<>(move, Move.CAPTURE_OWN);
 
-		if (!fromto(move.from, move.to))
+		if (!fromTo(move.from, move.to))
 			return new Pair<>(move, Move.INVALID_MOVEMENT);
 
 		int ret = Move.VALID_MOVE;
 
 		make(move);
 		// stm is opponent after make
-		if (incheck(stm ^ -2))
+		if (inCheck(stm ^ -2))
 			ret = Move.IN_CHECK;
 		unmake(move, undoFlags);
 
@@ -574,9 +576,9 @@ public class RegBoard extends RegPosition implements Board
 		return (stm == Piece.WHITE)? -mscore : mscore;
 	}
 
-	private void getMoveList(final MoveList data, final int color, final int movetype)
+	private void getMoveList(final MoveList data, final int color, final int moveType)
 	{
-		final boolean stmCk = incheck(color);
+		final boolean stmCk = inCheck(color);
 		final int start = (color == Piece.WHITE)? 31:15, end = (color == Piece.WHITE)? 16:0;
 		undoFlags.set(flags);
 
@@ -585,7 +587,7 @@ public class RegBoard extends RegPosition implements Board
 				continue;
 
 			final int[] loc;
-			switch (movetype) {
+			switch (moveType) {
 			case Move.MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
@@ -604,11 +606,11 @@ public class RegBoard extends RegPosition implements Board
 				item.move.from = piece[idx];
 				item.move.index = idx;
 
-				if (Math.abs(piecetype[idx]) == Piece.PAWN && isPromote(item.move, color)) {
+				if (Math.abs(pieceType[idx]) == Piece.PAWN && isPromote(item.move, color)) {
 					item.move.setPromote(Piece.QUEEN);
 
 					make(item.move);
-					if (incheckMove(item.move, color, stmCk)) {
+					if (inCheckMove(item.move, color, stmCk)) {
 						unmake(item.move, undoFlags);
 						continue;
 					}
@@ -619,7 +621,7 @@ public class RegBoard extends RegPosition implements Board
 						item.move.setPromote(i);
 
 						make(item.move);
-						item.check = incheckMove(item.move, color ^ -2, false);
+						item.check = inCheckMove(item.move, color ^ -2, false);
 						item.score = eval();
 						unmake(item.move, undoFlags);
 
@@ -629,8 +631,8 @@ public class RegBoard extends RegPosition implements Board
 					// must clear move flags
 					item.move.flags = 0;
 					make(item.move);
-					if (!incheckMove(item.move, color, stmCk)) {
-						item.check = incheckMove(item.move, color ^ -2, false);
+					if (!inCheckMove(item.move, color, stmCk)) {
+						item.check = inCheckMove(item.move, color ^ -2, false);
 						item.score = eval();
 						data.add(item);
 					}
@@ -643,11 +645,11 @@ public class RegBoard extends RegPosition implements Board
 	private void getCastleMoveList(final MoveList data, final int color)
 	{
 		// can't castle while in check
-		if (incheck(color))
+		if (inCheck(color))
 			return;
 
 		final int king = (color == Piece.WHITE)? Piece.E1 : Piece.E8,
-			kindex = (color == Piece.WHITE)? 31 : 15;
+			kIndex = (color == Piece.WHITE)? 31 : 15;
 
 		// King Side
 		if (flags.canKingCastle(color) != 0 && square[king + 1] == Piece.EMPTY && square[king + 2] == Piece.EMPTY &&
@@ -656,7 +658,7 @@ public class RegBoard extends RegPosition implements Board
 			item.move.xindex = Piece.NONE;
 			item.move.to = king + 2;
 			item.move.from = king;
-			item.move.index = kindex;
+			item.move.index = kIndex;
 			item.move.setCastle(Move.CASTLE_KS);
 			item.score = eval();
 			item.check = false;
@@ -670,7 +672,7 @@ public class RegBoard extends RegPosition implements Board
 			item.move.xindex = Piece.NONE;
 			item.move.to = king - 2;
 			item.move.from = king;
-			item.move.index = kindex;
+			item.move.index = kIndex;
 			item.move.setCastle(Move.CASTLE_QS);
 			item.score = eval();
 			item.check = false;
@@ -699,8 +701,8 @@ public class RegBoard extends RegPosition implements Board
 			item.move.setEnPassant();
 
 			make(item.move);
-			if (!incheck(color)) {
-				item.check = incheck(color ^ -2);
+			if (!inCheck(color)) {
+				item.check = inCheck(color ^ -2);
 				item.score = eval();
 				data.add(item);
 			}
@@ -715,8 +717,8 @@ public class RegBoard extends RegPosition implements Board
 			item.move.setEnPassant();
 
 			make(item.move);
-			if (!incheck(color)) {
-				item.check = incheck(color ^ -2);
+			if (!inCheck(color)) {
+				item.check = inCheck(color ^ -2);
 				item.score = eval();
 				data.add(item);
 			}
@@ -725,24 +727,24 @@ public class RegBoard extends RegPosition implements Board
 	}
 
 	@Override
-	public MoveList getMoveList(final int color, final int movetype)
+	public MoveList getMoveList(final int color, final int moveType)
 	{
 		final MoveList data = pool.get();
 		data.size = 0;
 
-		switch (movetype) {
+		switch (moveType) {
 		case Move.MOVE_ALL:
 		default:
-			getMoveList(data, color, movetype);
+			getMoveList(data, color, moveType);
 			getCastleMoveList(data, color);
 			getEnPassantMoveList(data, color);
 			break;
 		case Move.MOVE_CAPTURE:
-			getMoveList(data, color, movetype);
+			getMoveList(data, color, moveType);
 			getEnPassantMoveList(data, color);
 			break;
 		case Move.MOVE_MOVE:
-			getMoveList(data, color, movetype);
+			getMoveList(data, color, moveType);
 			getCastleMoveList(data, color);
 			break;
 		}

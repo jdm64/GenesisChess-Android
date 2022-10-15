@@ -21,7 +21,7 @@ import java.util.*;
 
 public class RegEngine extends Engine
 {
-	private final MoveFlags undoflags = new MoveFlags();
+	private final MoveFlags undoFlags = new MoveFlags();
 
 	public RegEngine(Board boardType)
 	{
@@ -36,7 +36,7 @@ public class RegEngine extends Engine
 			pool.put(ptr);
 			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
 		}
-		board.getMoveFlags(undoflags);
+		board.getMoveFlags(undoFlags);
 
 		int score = -board.eval();
 		if (score >= beta) {
@@ -53,7 +53,7 @@ public class RegEngine extends Engine
 
 			board.make(ptr.list[n].move);
 			score = -Quiescence(-beta, -alpha, depth + 1);
-			board.unmake(ptr.list[n].move, undoflags);
+			board.unmake(ptr.list[n].move, undoFlags);
 
 			if (score >= beta) {
 				pool.put(ptr);
@@ -69,28 +69,28 @@ public class RegEngine extends Engine
 	private boolean NegaMoveType(final Int alpha, final int beta, final Int best,
 		final int depth, final int limit, final ObjectArray<Move> killer, final int type)
 	{
-		board.getMoveFlags(undoflags);
+		board.getMoveFlags(undoFlags);
 		best.val = MIN_SCORE;
 
 		// Try Killer Move
-		final Move kmove = killer.get(depth);
-		if (board.validMove(kmove, kmove)) {
-			ismate.set(depth, false);
+		final Move kMove = killer.get(depth);
+		if (board.validMove(kMove, kMove)) {
+			isMate.set(depth, false);
 
-			board.make(kmove);
+			board.make(kMove);
 
 			// set check for opponent
-			tactical.set(depth + 1, board.incheck(board.getStm()));
+			tactical.set(depth + 1, board.inCheck(board.getStm()));
 
 			best.val = -NegaScout(-beta, -alpha.val, depth + 1, limit);
-			board.unmake(kmove, undoflags);
+			board.unmake(kMove, undoFlags);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, kmove, limit - depth, TransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, kMove, limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
-				pvMove.get(depth).set(kmove);
+				pvMove.get(depth).set(kMove);
 			}
 		}
 		// Try all of moveType Moves
@@ -102,7 +102,7 @@ public class RegEngine extends Engine
 		}
 		Arrays.sort(ptr.list, 0, ptr.size);
 
-		ismate.set(depth, false);
+		isMate.set(depth, false);
 		int b = alpha.val + 1;
 		for (final MoveNode node : ptr) {
 			board.make(node.move);
@@ -113,7 +113,7 @@ public class RegEngine extends Engine
 			node.score = -NegaScout(-b, -alpha.val, depth + 1, limit);
 			if (node.score > alpha.val && node.score < beta)
 				node.score = -NegaScout(-beta, -alpha.val, depth + 1, limit);
-			board.unmake(node.move, undoflags);
+			board.unmake(node.move, undoFlags);
 
 			best.val = Math.max(best.val, node.score);
 			if (best.val >= beta) {
@@ -142,12 +142,12 @@ public class RegEngine extends Engine
 			limit++;
 		}
 		final Int score = new Int();
-		board.getMoveFlags(undoflags);
+		board.getMoveFlags(undoFlags);
 
 		int alpha = inAlpha;
 		int best = MIN_SCORE;
 
-		ismate.set(depth, true);
+		isMate.set(depth, true);
 		pvMove.get(depth).setNull();
 
 		do { // goto emulator
@@ -159,19 +159,19 @@ public class RegEngine extends Engine
 				return score.val;
 
 			// Try Move
-			final Move move = smove.get(depth);
+			final Move move = sMove.get(depth);
 			if (ttItem.getMove(move)) {
 				if (!board.validMove(move, move))
 					break;
-				ismate.set(depth, false);
+				isMate.set(depth, false);
 
 				board.make(move);
 
 				// set check for opponent
-				tactical.set(depth + 1, board.incheck(board.getStm()));
+				tactical.set(depth + 1, board.inCheck(board.getStm()));
 
 				best = -NegaScout(-beta, -alpha, depth + 1, limit);
-				board.unmake(move, undoflags);
+				board.unmake(move, undoFlags);
 
 				if (best >= beta) {
 					tt.setItem(board.hash(), best, move, limit - depth, TransItem.CUT_NODE);
@@ -192,7 +192,7 @@ public class RegEngine extends Engine
 			return score.val;
 		best = Math.max(best, score.val);
 
-		if (ismate.get(depth))
+		if (isMate.get(depth))
 			best = tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : STALEMATE_SCORE;
 		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? TransItem.ALL_NODE : TransItem.PV_NODE);
 
@@ -202,7 +202,7 @@ public class RegEngine extends Engine
 	@Override
 	protected void search(final int Alpha, final int beta, final int depth, final int limit)
 	{
-		board.getMoveFlags(undoflags);
+		board.getMoveFlags(undoFlags);
 
 		int alpha = Alpha, b = beta;
 		for (int n = 0; n < curr.size; n++) {
@@ -212,7 +212,7 @@ public class RegEngine extends Engine
 			curr.list[n].score = -NegaScout(-b, -alpha, depth + 1, limit);
 			if (curr.list[n].score > alpha && curr.list[n].score < beta && n > 0)
 				curr.list[n].score = -NegaScout(-beta, -alpha, depth + 1, limit);
-			board.unmake(curr.list[n].move, undoflags);
+			board.unmake(curr.list[n].move, undoFlags);
 
 			if (curr.list[n].score > alpha) {
 				alpha = curr.list[n].score;

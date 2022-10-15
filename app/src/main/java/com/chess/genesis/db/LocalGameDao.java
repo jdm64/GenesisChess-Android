@@ -67,7 +67,7 @@ public interface LocalGameDao
 		game.name = gamename;
 		game.gametype = gametype;
 		game.opponent = opponent;
-		game.zfen = (gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZfen();
+		game.zfen = (gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();
@@ -84,7 +84,7 @@ public interface LocalGameDao
 		game.name = "Invite " + Enums.GameType(gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
 		game.gametype = gameType;
 		game.opponent = color == Piece.WHITE ? Enums.INVITE_BLACK_OPPONENT : Enums.INVITE_WHITE_OPPONENT;
-		game.zfen = (gameType == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZfen();
+		game.zfen = (gameType == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();
@@ -115,9 +115,7 @@ public interface LocalGameDao
 		game.gametype = msg.game_type;
 		game.opponent = msg.getOpponentType(ctx);
 		game.history = msg.movesString();
-
-		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
-		game.zfen = board.printZfen();
+		game.zfen = (game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
 
 		insert(game);
 
@@ -155,7 +153,7 @@ public interface LocalGameDao
 		}
 
 		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
-		if (!board.parseZfen(game.zfen)) {
+		if (!board.parseZFen(game.zfen)) {
 			return false;
 		} else if (board.getPly() + 1 != index) {
 			return false;
@@ -181,7 +179,7 @@ public interface LocalGameDao
 		}
 
 		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
-		if (!board.parseZfen(game.zfen)) {
+		if (!board.parseZFen(game.zfen)) {
 			return false;
 		} else if (board.getPly() != msg.move_idx) {
 			return false;

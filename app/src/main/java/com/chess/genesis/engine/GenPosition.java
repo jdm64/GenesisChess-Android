@@ -28,7 +28,7 @@ abstract class GenPosition extends GenMoveLookup
 	{
 		square = new int[128];
 		piece = new int[32];
-		piecetype = new int[32];
+		pieceType = new int[32];
 	}
 
 	@Override
@@ -38,20 +38,20 @@ abstract class GenPosition extends GenMoveLookup
 			square[i] = Piece.EMPTY;
 		for (int i = 0; i < 32; i++) {
 			piece[i] = Piece.DEAD;
-			piecetype[i] = Move.InitPieceType[i];
+			pieceType[i] = Move.InitPieceType[i];
 		}
 	}
 
 	private void setMaxPly()
 	{
-		int tply = 0;
+		int tPly = 0;
 		for (int i = 0; i < 32; i++) {
 			if (piece[i] == Piece.DEAD)
-				tply += 2;
+				tPly += 2;
 			else if (piece[i] != Piece.PLACEABLE)
-				tply++;
+				tPly++;
 		}
-		ply = Math.max(ply, tply);
+		ply = Math.max(ply, tPly);
 
 		if (stm == Piece.WHITE) {
 			if (ply % 2 != 0)
@@ -78,14 +78,15 @@ abstract class GenPosition extends GenMoveLookup
 		return false;
 	}
 
-	public boolean incheck(final int color)
+	@Override
+	public boolean inCheck(int color)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
 
 		return (piece[king] != Piece.PLACEABLE) && isAttacked(piece[king]);
 	}
 
-	public boolean parseZfen(final String pos)
+	public boolean parseZFen(final String pos)
 	{
 		int n = parseZfen_Board(pos);
 
@@ -118,10 +119,10 @@ abstract class GenPosition extends GenMoveLookup
 		setMaxPly();
 
 		// check if color not on move is in check
-		return !incheck(stm ^ -2);
+		return !inCheck(stm ^ -2);
 	}
 
-	public String printZfen()
+	public String printZFen()
 	{
 		final StringBuilder fen = new StringBuilder();
 

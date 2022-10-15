@@ -27,13 +27,13 @@ public abstract class Engine
 	static final int STALEMATE_SCORE = 0;
 
 	final BoolArray tactical;
-	final BoolArray ismate;
+	final BoolArray isMate;
 	private final Rand64 rand;
 
 	final ObjectArray<Move> pvMove;
 	final ObjectArray<Move> captureKiller;
 	final ObjectArray<Move> moveKiller;
-	final ObjectArray<Move> smove;
+	final ObjectArray<Move> sMove;
 
 	final TransTable tt;
 	final TransItem ttItem;
@@ -48,11 +48,11 @@ public abstract class Engine
 	{
 		active = false;
 		tactical = new BoolArray();
-		ismate = new BoolArray();
+		isMate = new BoolArray();
 		rand = new Rand64();
 		Supplier<Move> moveType = boardType.moveGenerator();
 
-		smove = new ObjectArray<>(moveType);
+		sMove = new ObjectArray<>(moveType);
 		pvMove = new ObjectArray<>(moveType);
 		captureKiller = new ObjectArray<>(moveType);
 		moveKiller = new ObjectArray<>(moveType);

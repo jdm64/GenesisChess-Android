@@ -39,7 +39,7 @@ public class GameParser
 
 		if (_history.length() < 3) {
 			pos.history = " ";
-			pos.zfen = board.printZfen();
+			pos.zfen = board.printZFen();
 			return pos;
 		}
 		final String[] movehistory = _history.trim().split(" +");
@@ -53,7 +53,7 @@ public class GameParser
 			board.make(res.first);
 		}
 		pos.history = history.toString();
-		pos.zfen = board.printZfen();
+		pos.zfen = board.printZFen();
 		return pos;
 	}
 

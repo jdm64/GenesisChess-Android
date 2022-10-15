@@ -72,24 +72,24 @@ public class GenEngine extends Engine
 		best.val = MIN_SCORE;
 
 		// Try Killer Move
-		final Move kmove = killer.get(depth);
-		if (board.validMove(kmove, kmove)) {
-			ismate.set(depth, false);
+		final Move kMove = killer.get(depth);
+		if (board.validMove(kMove, kMove)) {
+			isMate.set(depth, false);
 
-			board.make(kmove);
+			board.make(kMove);
 
 			// set check for opponent
-			tactical.set(depth + 1, board.incheck(board.getStm()));
+			tactical.set(depth + 1, board.inCheck(board.getStm()));
 
 			best.val = -NegaScout(-beta, -alpha.val, depth + 1, limit);
-			board.unmake(kmove);
+			board.unmake(kMove);
 
 			if (best.val >= beta) {
-				tt.setItem(board.hash(), best.val, kmove, limit - depth, TransItem.CUT_NODE);
+				tt.setItem(board.hash(), best.val, kMove, limit - depth, TransItem.CUT_NODE);
 				return true;
 			} else if (best.val > alpha.val) {
 				alpha.val = best.val;
-				pvMove.get(depth).set(kmove);
+				pvMove.get(depth).set(kMove);
 			}
 		}
 		// Try all of moveType Moves
@@ -101,7 +101,7 @@ public class GenEngine extends Engine
 		}
 		Arrays.sort(ptr.list, 0, ptr.size);
 
-		ismate.set(depth, false);
+		isMate.set(depth, false);
 		int b = alpha.val + 1;
 		for (final MoveNode node : ptr) {
 			board.make(node.move);
@@ -145,7 +145,7 @@ public class GenEngine extends Engine
 		int alpha = inAlpha;
 		int best = MIN_SCORE;
 
-		ismate.set(depth, true);
+		isMate.set(depth, true);
 		pvMove.get(depth).setNull();
 
 		do { // goto emulator
@@ -157,16 +157,16 @@ public class GenEngine extends Engine
 				return score.val;
 
 			// Try Move
-			final Move move = smove.get(depth);
+			final Move move = sMove.get(depth);
 			if (ttItem.getMove(move)) {
 				if (!board.validMove(move, move))
 					break;
-				ismate.set(depth, false);
+				isMate.set(depth, false);
 
 				board.make(move);
 
 				// set check for opponent
-				tactical.set(depth + 1, board.incheck(board.getStm()));
+				tactical.set(depth + 1, board.inCheck(board.getStm()));
 
 				best = -NegaScout(-beta, -alpha, depth + 1, limit);
 				board.unmake(move);
@@ -193,7 +193,7 @@ public class GenEngine extends Engine
 			return score.val;
 		best = Math.max(best, score.val);
 
-		if (ismate.get(depth))
+		if (isMate.get(depth))
 			best = tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : STALEMATE_SCORE;
 		tt.setItem(board.hash(), best, pvMove.get(depth), limit - depth, (pvMove.get(depth).isNull())? TransItem.ALL_NODE : TransItem.PV_NODE);
 

@@ -105,7 +105,7 @@ abstract class RegMoveLookup extends BaseBoard
 		return list;
 	}
 
-	boolean fromto(final int From, final int To)
+	boolean fromTo(final int From, final int To)
 	{
 		final int type = Math.abs(square[From]);
 

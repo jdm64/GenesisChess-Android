@@ -39,12 +39,13 @@ public abstract class BaseBoard
 
 	int[] square;
 	int[] piece;
-	int[] piecetype;
+	int[] pieceType;
 	int ply;
 	int stm;
 
 	protected abstract boolean attackLine_Bishop(final DistDB db, final int From, final int To);
 	protected abstract boolean setPiece(final int loc, final int type);
+	protected abstract boolean inCheck(final int color);
 	protected abstract void parseReset();
 
 	static int COL(final int x)
@@ -337,7 +338,7 @@ public abstract class BaseBoard
 	void printZfen_Board(final StringBuilder fen)
 	{
 		for (int i = 0, empty = 0; i < 64; i++) {
-			// convert cordinate system
+			// convert coordinate system
 			final int n = SFF88(i);
 			if (square[n] == Piece.EMPTY) {
 				empty++;

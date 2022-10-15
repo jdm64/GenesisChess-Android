@@ -34,7 +34,7 @@ abstract class RegPosition extends RegMoveLookup
 	{
 		square = new int[128];
 		piece = new int[32];
-		piecetype = new int[32];
+		pieceType = new int[32];
 		flags = new MoveFlags();
 	}
 
@@ -45,21 +45,21 @@ abstract class RegPosition extends RegMoveLookup
 			square[i] = Piece.EMPTY;
 		for (int i = 0; i < 32; i++) {
 			piece[i] = Piece.DEAD;
-			piecetype[i] = Move.InitPieceType[i];
+			pieceType[i] = Move.InitPieceType[i];
 		}
 		flags.reset();
 	}
 
 	private void setMaxPly()
 	{
-		int tply = 0;
+		int tPly = 0;
 		for (int i = 0; i < 32; i++) {
 			if (piece[i] == Piece.DEAD)
-				tply += 2;
+				tPly += 2;
 			else if (piece[i] != InitRegPiece[i])
-				tply++;
+				tPly++;
 		}
-		ply = Math.max(ply, tply);
+		ply = Math.max(ply, tPly);
 
 		if (stm == Piece.WHITE) {
 			if (ply % 2 != 0)
@@ -96,11 +96,11 @@ abstract class RegPosition extends RegMoveLookup
 		if (Math.abs(type) == Piece.PAWN || Math.abs(type) == Piece.KING)
 			return false;
 
-		final int pstart = (type > 0)? 16:0, pend = (type > 0)? 24:8;
-		for (int i = pstart; i < pend; i++) {
+		final int pStart = (type > 0)? 16:0, pend = (type > 0)? 24:8;
+		for (int i = pStart; i < pend; i++) {
 			if (piece[i] == Piece.DEAD) {
 				piece[i] = loc;
-				piecetype[i] = type;
+				pieceType[i] = type;
 				square[loc] = type;
 				return true;
 			}
@@ -108,14 +108,14 @@ abstract class RegPosition extends RegMoveLookup
 		return false;
 	}
 
-	public boolean incheck(final int color)
+	@Override
+	public boolean inCheck(final int color)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
-
 		return isAttacked(piece[king], color);
 	}
 
-	public boolean parseZfen(final String pos)
+	public boolean parseZFen(final String pos)
 	{
 		int n = parseZfen_Board(pos);
 
@@ -166,10 +166,10 @@ abstract class RegPosition extends RegMoveLookup
 		setMaxPly();
 
 		// check if color not on move is in check
-		return !incheck(stm ^ -2);
+		return !inCheck(stm ^ -2);
 	}
 
-	public String printZfen()
+	public String printZFen()
 	{
 		final StringBuilder fen = new StringBuilder();
 
