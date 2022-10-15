@@ -19,127 +19,105 @@ package com.chess.genesis.engine;
 
 abstract class RegMoveLookup extends BaseBoard
 {
-	private final int[] list = new int[28];
-
-	int[] genAll(final int From)
+	@Override
+	protected int[] genAll_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			if (square[From] == Piece.WHITE_PAWN) { // WHITE
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
-					list[next++] = From + 15;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
-					list[next++] = From + 17;
-				if (square[From + 16] == 0) {
-					list[next++] = From + 16;
-					if (From <= Piece.H2 && square[From + 32] == 0)
-						list[next++] = From + 32;
-				}
-			} else { // BLACK
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
-					list[next++] = From - 17;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
-					list[next++] = From - 15;
-				if (square[From - 16] == 0) {
-					list[next++] = From - 16;
-					if (From >= Piece.A7 && square[From - 32] == 0)
-						list[next++] = From - 32;
-				}
+		if (square[From] == Piece.WHITE_PAWN) { // WHITE
+			if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+				list[next++] = From + 15;
+			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
+				list[next++] = From + 17;
+			if (square[From + 16] == 0) {
+				list[next++] = From + 16;
+				if (From <= Piece.H2 && square[From + 32] == 0)
+					list[next++] = From + 32;
 			}
-		} else {
-			next = genAll_xPawn(list, offsets[type], From, type);
+		} else { // BLACK
+			if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
+				list[next++] = From - 17;
+			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
+				list[next++] = From - 15;
+			if (square[From - 16] == 0) {
+				list[next++] = From - 16;
+				if (From >= Piece.A7 && square[From - 32] == 0)
+					list[next++] = From - 32;
+			}
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	int[] genCapture(final int From)
+	@Override
+	protected int[] genCapture_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			if (square[From] == Piece.WHITE_PAWN) { // WHITE
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
-					list[next++] = From + 15;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
-					list[next++] = From + 17;
-			} else { // BLACK
-				if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
-					list[next++] = From - 17;
-				if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
-					list[next++] = From - 15;
-			}
-		} else {
-			next = genCapture_xPawn(list, offsets[type], From, type);
+		if (square[From] == Piece.WHITE_PAWN) { // WHITE
+			if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+				list[next++] = From + 15;
+			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
+				list[next++] = From + 17;
+		} else { // BLACK
+			if (COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
+				list[next++] = From - 17;
+			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
+				list[next++] = From - 15;
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	int[] genMove(final int From)
+	@Override
+	protected int[] genMove_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			if (square[From] == Piece.WHITE_PAWN) { // WHITE
-				if (square[From + 16] == 0) {
-					list[next++] = From + 16;
-					if (From <= Piece.H2 && square[From + 32] == 0)
-						list[next++] = From + 32;
-				}
-			} else { // BLACK
-				if (square[From - 16] == 0) {
-					list[next++] = From - 16;
-					if (From >= Piece.A7 && square[From - 32] == 0)
-						list[next++] = From - 32;
-				}
+		if (square[From] == Piece.WHITE_PAWN) { // WHITE
+			if (square[From + 16] == 0) {
+				list[next++] = From + 16;
+				if (From <= Piece.H2 && square[From + 32] == 0)
+					list[next++] = From + 32;
 			}
-		} else {
-			next = genMove_xPawn(list, offsets[type], From, type);
+		} else { // BLACK
+			if (square[From - 16] == 0) {
+				list[next++] = From - 16;
+				if (From >= Piece.A7 && square[From - 32] == 0)
+					list[next++] = From - 32;
+			}
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	boolean fromTo(final int From, final int To)
+	@Override
+	protected boolean fromTo_Pawn(int From, int To)
 	{
-		final int type = Math.abs(square[From]);
-
-		if (type == Piece.PAWN) {
-			if (square[From] == Piece.WHITE_PAWN) { // WHITE
-				if (From + 15 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+		if (square[From] == Piece.WHITE_PAWN) { // WHITE
+			if (From + 15 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From + 15]))
+				return true;
+			if (From + 17 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
+				return true;
+			if (square[From + 16] == 0) {
+				if (From + 16 == To)
 					return true;
-				if (From + 17 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
-					return true;
-				if (square[From + 16] == 0) {
-					if (From + 16 == To)
-						return true;
-					return From + 32 == To && From <= Piece.H2 && square[From + 32] == 0;
-				}
-			} else { // BLACK
-				if (From - 17 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
-					return true;
-				if (From - 15 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
-					return true;
-				if (square[From - 16] == 0) {
-					if (From - 16 == To)
-						return true;
-					else
-						return From - 32 == To && From >= Piece.A7 && square[From - 32] == 0;
-				}
+				return From + 32 == To && From <= Piece.H2 && square[From + 32] == 0;
 			}
-		} else {
-			return fromto_xPawn(From, To, type, offsets[type]);
+		} else { // BLACK
+			if (From - 17 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
+				return true;
+			if (From - 15 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
+				return true;
+			if (square[From - 16] == 0) {
+				if (From - 16 == To)
+					return true;
+				else
+					return From - 32 == To && From >= Piece.A7 && square[From - 32] == 0;
+			}
 		}
 		return false;
 	}
 
 	@Override
-	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
+	public boolean attackLine_Bishop(int From, int To, DistDB db)
 	{
 		final int offset = db.step * ((To > From)? 1:-1);
 		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
@@ -160,19 +138,20 @@ abstract class RegMoveLookup extends BaseBoard
 		return false;
 	}
 
-	boolean isAttacked(final int From, final int FromColor)
+	@Override
+	protected boolean isAttacked_Bishop(int From, int Color)
 	{
 		final int[] offset = offsets[Piece.BISHOP];
 		for (int i = 0; offset[i] != 0; i++) {
 			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY) {
 					continue;
-				} else if (OWN_PIECE(FromColor, square[to])) {
+				} else if (OWN_PIECE(Color, square[to])) {
 					break;
 				} else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN) {
 					return true;
 				} else if (k == 1) {
-					if (Math.abs(square[to]) == Piece.PAWN && FromColor * (to - From) > 0)
+					if (Math.abs(square[to]) == Piece.PAWN && Color * (to - From) > 0)
 						return true;
 					else if (Math.abs(square[to]) == Piece.KING)
 						return true;
@@ -180,6 +159,6 @@ abstract class RegMoveLookup extends BaseBoard
 				break;
 			}
 		}
-		return isAttacked_xBishop(From, FromColor);
+		return false;
 	}
 }

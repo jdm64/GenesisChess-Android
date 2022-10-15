@@ -42,7 +42,8 @@ abstract class GenPosition extends GenMoveLookup
 		}
 	}
 
-	private void setMaxPly()
+	@Override
+	protected void setMaxPly()
 	{
 		int tPly = 0;
 		for (int i = 0; i < 32; i++) {
@@ -82,18 +83,12 @@ abstract class GenPosition extends GenMoveLookup
 	public boolean inCheck(int color)
 	{
 		final int king = (color == Piece.WHITE)? 31:15;
-
-		return (piece[king] != Piece.PLACEABLE) && isAttacked(piece[king]);
+		return (piece[king] != Piece.PLACEABLE) && isAttacked(piece[king], color);
 	}
 
-	public boolean parseZFen(final String pos)
+	@Override
+	protected int parseZFen_Specific(int n, String pos)
 	{
-		int n = parseZfen_Board(pos);
-
-		// check if board parsing failed
-		if (n <= 0)
-			return false;
-
 		// parse placeable pieces
 		final char[] st = pos.toCharArray();
 		for (;; n++) {
@@ -101,33 +96,17 @@ abstract class GenPosition extends GenMoveLookup
 				n++;
 				break;
 			} else if (!Character.isLetter(st[n])) {
-				return false;
+				return -1;
 			} else if (!setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
-				return false;
+				return -1;
 			}
 		}
-
-		// parse half-ply
-		final StringBuilder num = new StringBuilder();
-		while (n < st.length && Character.isDigit(st[n])) {
-			num.append(st[n]);
-			n++;
-		}
-		ply = Integer.parseInt(num.toString());
-		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
-
-		setMaxPly();
-
-		// check if color not on move is in check
-		return !inCheck(stm ^ -2);
+		return n;
 	}
 
-	public String printZFen()
+	@Override
+	protected void printZFen_Specific(StringBuilder fen)
 	{
-		final StringBuilder fen = new StringBuilder();
-
-		printZfen_Board(fen);
-
 		for (int i = 0; i < 16; i++) {
 			if (piece[i] == Piece.PLACEABLE)
 				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase(Locale.US));
@@ -136,9 +115,5 @@ abstract class GenPosition extends GenMoveLookup
 			if (piece[i] == Piece.PLACEABLE)
 				fen.append(Move.pieceSymbol[Move.InitPieceType[i]]);
 		}
-		fen.append(':');
-		fen.append(ply);
-
-		return fen.toString();
 	}
 }

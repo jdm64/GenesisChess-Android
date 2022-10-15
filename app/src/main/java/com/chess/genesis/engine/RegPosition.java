@@ -50,7 +50,8 @@ abstract class RegPosition extends RegMoveLookup
 		flags.reset();
 	}
 
-	private void setMaxPly()
+	@Override
+	public void setMaxPly()
 	{
 		int tPly = 0;
 		for (int i = 0; i < 32; i++) {
@@ -115,14 +116,9 @@ abstract class RegPosition extends RegMoveLookup
 		return isAttacked(piece[king], color);
 	}
 
-	public boolean parseZFen(final String pos)
+	@Override
+	public int parseZFen_Specific(int n, String pos)
 	{
-		int n = parseZfen_Board(pos);
-
-		// check if board parsing failed
-		if (n <= 0)
-			return false;
-
 		final char[] st = pos.toCharArray();
 
 		// parse castle rights
@@ -153,28 +149,12 @@ abstract class RegPosition extends RegMoveLookup
 			flags.setEnPassant(eps & Move.EP_FILE);
 		}
 		n++;
-
-		// parse half-ply
-		final StringBuilder num = new StringBuilder();
-		while (n < st.length && Character.isDigit(st[n])) {
-			num.append(st[n]);
-			n++;
-		}
-		ply = Integer.parseInt(num.toString());
-		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
-
-		setMaxPly();
-
-		// check if color not on move is in check
-		return !inCheck(stm ^ -2);
+		return n;
 	}
 
-	public String printZFen()
+	@Override
+	protected void printZFen_Specific(StringBuilder fen)
 	{
-		final StringBuilder fen = new StringBuilder();
-
-		printZfen_Board(fen);
-
 		// print castle rights
 		if ((flags.bits & 0xf0) != 0) {
 			if (flags.canKingCastle(Piece.WHITE) != 0)
@@ -192,9 +172,5 @@ abstract class RegPosition extends RegMoveLookup
 			fen.append((char) ('a' + flags.enPassantFile()));
 			fen.append((ply % 2 != 0)? '3':'6');
 		}
-		fen.append(':');
-		fen.append(ply);
-
-		return fen.toString();
 	}
 }

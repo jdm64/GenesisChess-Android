@@ -21,6 +21,12 @@ import java.util.*;
 
 public abstract class BaseBoard
 {
+	static final int ZBOX_SIZE = 838;
+	static final int WTM_HASH = 837;
+	static final int ENPASSANT_HASH = 834;
+	static final int CASTLE_HASH = 834;
+	static final int HOLD_START = 768;
+
 	static final int[] stype = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
 		Piece.EMPTY,		Piece.BLACK_KNIGHT,	Piece.EMPTY,		Piece.BLACK_PAWN,
@@ -37,16 +43,29 @@ public abstract class BaseBoard
 		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0}, // Queen
 		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0} }; // King
 
+	private final int[] list = new int[28];
+
 	int[] square;
 	int[] piece;
 	int[] pieceType;
 	int ply;
 	int stm;
 
-	protected abstract boolean attackLine_Bishop(final DistDB db, final int From, final int To);
-	protected abstract boolean setPiece(final int loc, final int type);
-	protected abstract boolean inCheck(final int color);
-	protected abstract void parseReset();
+	abstract boolean setPiece(int loc, int type);
+	abstract void parseReset();
+	abstract void setMaxPly();
+	abstract boolean inCheck(int stm);
+
+	abstract int[] genAll_Pawn(int From, int[] list);
+	abstract int[] genCapture_Pawn(int From, int[] list);
+	abstract int[] genMove_Pawn(int From, int[] list);
+
+	abstract boolean fromTo_Pawn(int From, int To);
+	abstract boolean isAttacked_Bishop(int From, int Color);
+	abstract boolean attackLine_Bishop(int From, int To, DistDB db);
+
+	abstract void printZFen_Specific(StringBuilder fen);
+	abstract int parseZFen_Specific(int n, String pos);
 
 	static int COL(final int x)
 	{
@@ -108,11 +127,15 @@ public abstract class BaseBoard
 		return ((7 - (x >> 3)) << 4) + (x & 7);
 	}
 
-	int genAll_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int[] genAll(int From)
 	{
 		int next = 0;
+		var type = Math.abs(square[From]);
+		var offset = offsets[type];
 
 		switch (type) {
+		case Piece.PAWN:
+			return genAll_Pawn(From, list);
 		case Piece.BISHOP:
 		case Piece.ROOK:
 		case Piece.QUEEN:
@@ -137,14 +160,19 @@ public abstract class BaseBoard
 			}
 			break;
 		}
-		return next;
+		list[next] = -1;
+		return list;
 	}
 
-	int genCapture_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int[] genCapture(int From)
 	{
 		int next = 0;
+		var type = Math.abs(square[From]);
+		var offset = offsets[type];
 
 		switch (type) {
+		case Piece.PAWN:
+			return genCapture_Pawn(From, list);
 		case Piece.KNIGHT:
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
@@ -167,14 +195,19 @@ public abstract class BaseBoard
 			}
 			break;
 		}
-		return next;
+		list[next] = -1;
+		return list;
 	}
 
-	int genMove_xPawn(final int[] list, final int[] offset, final int From, final int type)
+	int[] genMove(int From)
 	{
 		int next = 0;
+		var type = Math.abs(square[From]);
+		var offset = offsets[type];
 
 		switch (type) {
+		case Piece.PAWN:
+			return genMove_Pawn(From, list);
 		case Piece.KNIGHT:
 		case Piece.KING:
 			for (int i = 0; offset[i] != 0; i++) {
@@ -196,15 +229,23 @@ public abstract class BaseBoard
 			}
 			break;
 		}
-		return next;
+		list[next] = -1;
+		return list;
 	}
 
-	boolean fromto_xPawn(final int From, final int To, final int type, final int[] offset)
+	boolean fromTo(int From, int To)
 	{
+		if (OFF_BOARD(From | To))
+			return false;
+
 		final int diff = Math.abs(From - To);
 		int n = 2;
+		var type = Math.abs(square[From]);
+		var offset = offsets[type];
 
 		switch (type) {
+		case Piece.PAWN:
+			return fromTo_Pawn(From, To);
 		case Piece.KNIGHT:
 		case Piece.KING:
 			for (int i = 0; i < 4; i++) {
@@ -234,15 +275,19 @@ public abstract class BaseBoard
 		return false;
 	}
 
-	boolean isAttacked_xBishop(final int From, final int FromColor)
+	boolean isAttacked(int From, int Color)
 	{
+		if (isAttacked_Bishop(From, Color)) {
+			return true;
+		}
+
 		// ROOK
 		int[] offset = offsets[Piece.ROOK];
 		for (int i = 0; offset[i] != 0; i++) {
 			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY)
 					continue;
-				else if (OWN_PIECE(FromColor, square[to]))
+				else if (OWN_PIECE(Color, square[to]))
 					break;
 				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
 					return true;
@@ -258,7 +303,7 @@ public abstract class BaseBoard
 			final int to = From + offset[i];
 			if (OFF_BOARD(to))
 				continue;
-			else if (OWN_PIECE(FromColor, square[to]))
+			else if (OWN_PIECE(Color, square[to]))
 				continue;
 			else if (Math.abs(square[to]) == Piece.KNIGHT)
 				return true;
@@ -272,7 +317,6 @@ public abstract class BaseBoard
 			return false;
 
 		final int diff = Math.abs(From - To);
-
 		if (DistDB.TABLE[diff].step == 0)
 			return false;
 
@@ -281,7 +325,7 @@ public abstract class BaseBoard
 		case Piece.KNIGHT:
 			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
 		case Piece.BISHOP:
-			return attackLine_Bishop(db, From, To);
+			return attackLine_Bishop(From, To, db);
 		case Piece.ROOK:
 			final int offset = db.step * ((To > From)? 1:-1);
 			for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
@@ -301,7 +345,7 @@ public abstract class BaseBoard
 		return false;
 	}
 
-	int parseZfen_Board(final String pos)
+	public boolean parseZFen(String pos)
 	{
 		parseReset();
 		final char[] st = pos.toCharArray();
@@ -323,20 +367,38 @@ public abstract class BaseBoard
 					act = false;
 				}
 				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
-					return -1;
+					return false;
 				loc++;
 			} else if (st[n] == ':') {
 				n++;
 				break;
 			} else {
-				return -1;
+				return false;
 			}
 		}
-		return n;
+
+		n = parseZFen_Specific(n, pos);
+		if (n < 0)
+			return false;
+
+		// parse half-ply
+		num = new StringBuilder();
+		while (n < st.length && Character.isDigit(st[n])) {
+			num.append(st[n]);
+			n++;
+		}
+		ply = Integer.parseInt(num.toString());
+		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
+
+		setMaxPly();
+
+		// check if color not on move is in check
+		return !inCheck(stm ^ -2);
 	}
 
-	void printZfen_Board(final StringBuilder fen)
+	public String printZFen()
 	{
+		var fen = new StringBuilder();
 		for (int i = 0, empty = 0; i < 64; i++) {
 			// convert coordinate system
 			final int n = SFF88(i);
@@ -353,5 +415,10 @@ public abstract class BaseBoard
 			empty = 0;
 		}
 		fen.append(':');
+		printZFen_Specific(fen);
+		fen.append(':');
+		fen.append(ply);
+
+		return fen.toString();
 	}
 }

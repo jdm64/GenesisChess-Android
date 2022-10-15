@@ -19,97 +19,70 @@ package com.chess.genesis.engine;
 
 abstract class GenMoveLookup extends BaseBoard
 {
-	private final int[] list = new int[28];
-
-	int[] genAll(final int From)
+	@Override
+	protected int[] genAll_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type];
+		var offset = offsets[Piece.PAWN];
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			boolean evn = true;
-			for (int i = 0; offset[i] != 0; i++, evn ^= true) {
-				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				final boolean val = evn? CAPTURE_MOVE(square[From], square[to]) : (square[to] == Piece.EMPTY);
-				if (val)
-					list[next++] = to;
-			}
-		} else {
-			next = genAll_xPawn(list, offset, From, type);
+		boolean evn = true;
+		for (int i = 0; offset[i] != 0; i++, evn ^= true) {
+			final int to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			final boolean val = evn? CAPTURE_MOVE(square[From], square[to]) : (square[to] == Piece.EMPTY);
+			if (val)
+				list[next++] = to;
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	int[] genCapture(final int From)
+	@Override
+	protected int[] genCapture_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type];
+		var offset = offsets[Piece.PAWN];
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			// captures
-			for (int i = 0; offset[i] != 0; i += 2) {
-				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				else if (CAPTURE_MOVE(square[From], square[to]))
-					list[next++] = to;
-			}
-		} else {
-			next = genCapture_xPawn(list, offset, From, type);
+		for (int i = 0; offset[i] != 0; i += 2) {
+			final int to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			else if (CAPTURE_MOVE(square[From], square[to]))
+				list[next++] = to;
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	int[] genMove(final int From)
+	@Override
+	protected int[] genMove_Pawn(int From, int[] list)
 	{
-		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type];
+		var offset = offsets[Piece.PAWN];
 		int next = 0;
-
-		if (type == Piece.PAWN) {
-			// moves
-			for (int i = 1; offset[i] != 0; i += 2) {
-				final int to = From + offset[i];
-				if (OFF_BOARD(to))
-					continue;
-				else if (square[to] == Piece.EMPTY)
-					list[next++] = to;
-			}
-		} else {
-			next = genMove_xPawn(list, offset, From, type);
+		for (int i = 1; offset[i] != 0; i += 2) {
+			final int to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			else if (square[to] == Piece.EMPTY)
+				list[next++] = to;
 		}
 		list[next] = -1;
 		return list;
 	}
 
-	boolean fromTo(final int From, final int To)
+	@Override
+	protected boolean fromTo_Pawn(int From, int To)
 	{
-		if (OFF_BOARD(From | To))
-			return false;
-
-		final int type = Math.abs(square[From]);
-		final int[] offset = offsets[type];
-
-		if (type == Piece.PAWN) {
-			final int diff = Math.abs(From - To);
-			for (int i = 0; i < 4; i++) {
-				if (diff == offset[i])
-					return ((i%2 != 0)? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]));
-			}
-		} else {
-			return fromto_xPawn(From, To, type, offset);
+		var offset = offsets[Piece.PAWN];
+		final int diff = Math.abs(From - To);
+		for (int i = 0; i < 4; i++) {
+			if (diff == offset[i])
+				return ((i%2 != 0)? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]));
 		}
 		return false;
 	}
 
 	@Override
-	public boolean attackLine_Bishop(final DistDB db, final int From, final int To)
+	public boolean attackLine_Bishop(int From, int To, DistDB db)
 	{
 		final int offset = db.step * ((To > From)? 1:-1);
 		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
@@ -126,15 +99,15 @@ abstract class GenMoveLookup extends BaseBoard
 		return false;
 	}
 
-	boolean isAttacked(final int From)
+	@Override
+	protected boolean isAttacked_Bishop(int From, int Color)
 	{
-		// BISHOP
 		final int[] offset = offsets[Piece.BISHOP];
 		for (int i = 0; offset[i] != 0; i++) {
 			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
 				if (square[to] == Piece.EMPTY)
 					continue;
-				else if (OWN_PIECE(square[From], square[to]))
+				else if (OWN_PIECE(Color, square[to]))
 					break;
 				else if (k == 1 && (Math.abs(square[to]) == Piece.PAWN || Math.abs(square[to]) == Piece.KING))
 					return true;
@@ -144,6 +117,6 @@ abstract class GenMoveLookup extends BaseBoard
 					break;
 			}
 		}
-		return isAttacked_xBishop(From, square[From]);
+		return false;
 	}
 }

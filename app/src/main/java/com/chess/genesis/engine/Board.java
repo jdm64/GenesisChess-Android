@@ -23,12 +23,6 @@ import androidx.annotation.*;
 
 public interface Board
 {
-	int ZBOX_SIZE = 838;
-	int WTM_HASH = 837;
-	int ENPASSANT_HASH = 834;
-	int CASTLE_HASH = 834;
-	int HOLD_START = 768;
-
 	@NonNull
 	Board clone();
 
