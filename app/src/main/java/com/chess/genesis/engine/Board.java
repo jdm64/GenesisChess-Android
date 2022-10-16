@@ -28,8 +28,8 @@ public interface Board
 	Move newMove();
 	void reset();
 
-	int Piece(int index);
-	int PieceType(int index);
+	int pieceLoc(int index);
+	int pieceType(int index);
 
 	long hash();
 	int getPly();

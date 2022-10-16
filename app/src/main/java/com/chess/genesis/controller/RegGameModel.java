@@ -82,7 +82,7 @@ public class RegGameModel extends GameModel
 			var pawn = view.getBoardSq(move.to);
 			pawn.setPiece(move.getPromote() * board.getStm());
 		} else if (move.getEnPassant()) {
-			var pawn = view.getBoardSq(board.Piece(move.xindex));
+			var pawn = view.getBoardSq(board.pieceLoc(move.xindex));
 			pawn.setPiece(Piece.EMPTY);
 		}
 
@@ -123,7 +123,7 @@ public class RegGameModel extends GameModel
 			pawn.setPiece(Piece.PAWN * board.getStm());
 			to.setPiece(Piece.EMPTY);
 		} else {
-			to.setPiece(board.PieceType(move.xindex));
+			to.setPiece(board.pieceType(move.xindex));
 		}
 
 		if (move.getCastle() != 0) {

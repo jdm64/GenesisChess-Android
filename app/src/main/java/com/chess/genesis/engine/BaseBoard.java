@@ -134,13 +134,13 @@ public abstract class BaseBoard implements Board
 	}
 
 	@Override
-	public int Piece(int index)
+	public int pieceLoc(int index)
 	{
 		return piece[index];
 	}
 
 	@Override
-	public int PieceType(int index)
+	public int pieceType(int index)
 	{
 		return pieceType[index];
 	}
