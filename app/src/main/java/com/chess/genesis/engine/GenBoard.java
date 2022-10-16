@@ -17,11 +17,11 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
 import java.util.function.*;
 import android.util.*;
-import androidx.annotation.*;
 
-public class GenBoard extends GenPosition implements Board
+public class GenBoard extends BaseBoard
 {
 	private static final int[][] locValue = {
 	{	0, 0, 0, 0, 0, 0, 0, 0,
@@ -88,20 +88,12 @@ public class GenBoard extends GenPosition implements Board
 		6, 6, 6, 6, 6, 6,  6,  6,
 		7, 7, 8, 8, 9, 9, 10, 11};
 
-	private static final int[] pieceValue =
-		{0, 224, 336, 560, 896, 1456, 0};
-
-	// for pieceIndex()
-	private final static int[] offset = {-1, 0, 8, 10, 12, 14, 15, 16};
-
 	private static final long[] hashBox = new long[ZBOX_SIZE];
 	private static long startHash;
 	private static final Move moveType = new GenMove();
 	private static final MoveListPool pool = new MoveListPool(moveType);
 
 	private final MoveNode item = new MoveNode(moveType);
-	private long key;
-	private int mScore;
 
 	public GenBoard()
 	{
@@ -120,9 +112,8 @@ public class GenBoard extends GenPosition implements Board
 		mScore = board.mScore;
 	}
 
-	@NonNull
 	@Override
-	public GenBoard clone()
+	public GenBoard copy()
 	{
 		return new GenBoard(this);
 	}
@@ -141,10 +132,10 @@ public class GenBoard extends GenPosition implements Board
 
 	private int pieceIndex(final int loc, final int type)
 	{
-		final int start = ((type < 0)? 0 : 16) + offset[Math.abs(type)],
-			end = ((type < 0)? 0 : 16) + offset[Math.abs(type) + 1];
+		var start = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type)];
+		var end = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type) + 1];
 
-		for (int i = start; i < end; i++) {
+		for (var i = start; i < end; i++) {
 			if (piece[i] == loc)
 				return i;
 		}
@@ -174,18 +165,6 @@ public class GenBoard extends GenPosition implements Board
 		key = startHash;
 	}
 
-	@Override
-	public int Piece(final int index)
-	{
-		return piece[index];
-	}
-
-	@Override
-	public int PieceType(final int index)
-	{
-		return pieceType[index];
-	}
-
 	// Do Not call the following functions!
 	@Override
 	public void getMoveFlags(final MoveFlags Flags)
@@ -198,24 +177,6 @@ public class GenBoard extends GenPosition implements Board
 		throw new RuntimeException("RegBoard function called from GenBoard class");
 	}
 	// ------
-
-	@Override
-	public int getStm()
-	{
-		return stm;
-	}
-
-	@Override
-	public int getPly()
-	{
-		return ply;
-	}
-
-	@Override
-	public long hash()
-	{
-		return key;
-	}
 
 	@Override
 	public long[] getHashBox()
@@ -233,30 +194,6 @@ public class GenBoard extends GenPosition implements Board
 	public MoveListPool getMoveListPool()
 	{
 		return pool;
-	}
-
-	@Override
-	public int kingIndex(final int color)
-	{
-		return piece[Piece.WHITE == color ? 31 : 15];
-	}
-
-	@Override
-	public int[] getPieceCounts(final int Loc)
-	{
-		final int[] counts = new int[13];
-
-		for (int i = 0; i < 32; i++) {
-			if (piece[i] == Loc)
-				counts[pieceType[i] + 6]++;
-		}
-		return counts;
-	}
-
-	@Override
-	public int[] getBoardArray()
-	{
-		return square;
 	}
 
 	@Override
@@ -325,14 +262,6 @@ public class GenBoard extends GenPosition implements Board
 
 		stm ^= -2;
 		ply--;
-	}
-
-	private boolean inCheckMove(final Move move, final int color, final boolean stmCk)
-	{
-		final int king = (color == Piece.WHITE)? 31:15;
-		if (stmCk || move.index == king)
-			return inCheck(color);
-		return attackLine(piece[king], move.from) || attackLine(piece[king], move.to);
 	}
 
 	@Override
@@ -431,9 +360,190 @@ public class GenBoard extends GenPosition implements Board
 	}
 
 	@Override
-	public int eval()
+	protected void parseReset()
 	{
-		return (stm == Piece.WHITE)? -mScore : mScore;
+		for (var i = 0; i < 128; i++)
+			square[i] = Piece.EMPTY;
+		for (var i = 0; i < 32; i++) {
+			piece[i] = Piece.DEAD;
+			pieceType[i] = Move.InitPieceType[i];
+		}
+	}
+
+	@Override
+	protected void setMaxPly()
+	{
+		var tPly = 0;
+		for (var i = 0; i < 32; i++) {
+			if (piece[i] == Piece.DEAD)
+				tPly += 2;
+			else if (piece[i] != Piece.PLACEABLE)
+				tPly++;
+		}
+		ply = Math.max(ply, tPly);
+
+		if (stm == Piece.WHITE) {
+			if (ply % 2 != 0)
+				ply++;
+		} else if (ply % 2 == 0) {
+			ply++;
+		}
+	}
+
+	@Override
+	protected boolean setPiece(int loc, int type)
+	{
+		var start = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type)];
+		var end = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type) + 1];
+
+		for (var i = start; i < end; i++) {
+			if (piece[i] == Piece.DEAD) {
+				piece[i] = loc;
+				if (loc != Piece.PLACEABLE)
+					square[loc] = type;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean inCheck(int color)
+	{
+		var king = (color == Piece.WHITE)? 31:15;
+		return (piece[king] != Piece.PLACEABLE) && isAttacked(piece[king], color);
+	}
+
+	@Override
+	protected int parseZFen_Specific(int n, String pos)
+	{
+		// parse placeable pieces
+		var st = pos.toCharArray();
+		for (;; n++) {
+			if (st[n] == ':') {
+				n++;
+				break;
+			} else if (!Character.isLetter(st[n])) {
+				return -1;
+			} else if (!setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
+				return -1;
+			}
+		}
+		return n;
+	}
+
+	@Override
+	protected void printZFen_Specific(StringBuilder fen)
+	{
+		for (var i = 0; i < 16; i++) {
+			if (piece[i] == Piece.PLACEABLE)
+				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase(Locale.US));
+		}
+		for (var i = 16; i < 32; i++) {
+			if (piece[i] == Piece.PLACEABLE)
+				fen.append(Move.pieceSymbol[Move.InitPieceType[i]]);
+		}
+	}
+
+	@Override
+	protected int[] genAll_Pawn(int From, int[] list)
+	{
+		var offset = offsets[Piece.PAWN];
+		var next = 0;
+		var evn = true;
+		for (var i = 0; offset[i] != 0; i++, evn ^= true) {
+			var to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			var val = evn? CAPTURE_MOVE(square[From], square[to]) : (square[to] == Piece.EMPTY);
+			if (val)
+				list[next++] = to;
+		}
+		list[next] = -1;
+		return list;
+	}
+
+	@Override
+	protected int[] genCapture_Pawn(int From, int[] list)
+	{
+		var offset = offsets[Piece.PAWN];
+		var next = 0;
+		for (var i = 0; offset[i] != 0; i += 2) {
+			var to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			else if (CAPTURE_MOVE(square[From], square[to]))
+				list[next++] = to;
+		}
+		list[next] = -1;
+		return list;
+	}
+
+	@Override
+	protected int[] genMove_Pawn(int From, int[] list)
+	{
+		var offset = offsets[Piece.PAWN];
+		var next = 0;
+		for (var i = 1; offset[i] != 0; i += 2) {
+			var to = From + offset[i];
+			if (OFF_BOARD(to))
+				continue;
+			else if (square[to] == Piece.EMPTY)
+				list[next++] = to;
+		}
+		list[next] = -1;
+		return list;
+	}
+
+	@Override
+	protected boolean fromTo_Pawn(int From, int To)
+	{
+		var offset = offsets[Piece.PAWN];
+		var diff = Math.abs(From - To);
+		for (var i = 0; i < 4; i++) {
+			if (diff == offset[i])
+				return ((i%2 != 0)? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]));
+		}
+		return false;
+	}
+
+	@Override
+	public boolean attackLine_Bishop(int From, int To, DistDB db)
+	{
+		var offset = db.step * ((To > From)? 1:-1);
+		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
+			if (square[to] == Piece.EMPTY)
+				continue;
+			else if (OWN_PIECE(square[From], square[to]))
+				return false;
+			else if (k == 1 && (Math.abs(square[to]) == Piece.PAWN || Math.abs(square[to]) == Piece.KING))
+				return true;
+			else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN)
+				return true;
+			break;
+		}
+		return false;
+	}
+
+	@Override
+	protected boolean isAttacked_Bishop(int From, int Color)
+	{
+		var offset = offsets[Piece.BISHOP];
+		for (var i = 0; offset[i] != 0; i++) {
+			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
+				if (square[to] == Piece.EMPTY)
+					continue;
+				else if (OWN_PIECE(Color, square[to]))
+					break;
+				else if (k == 1 && (Math.abs(square[to]) == Piece.PAWN || Math.abs(square[to]) == Piece.KING))
+					return true;
+				else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN)
+					return true;
+				else
+					break;
+			}
+		}
+		return false;
 	}
 
 	private void getMoveList(final MoveList data, final int color, final int moveType)

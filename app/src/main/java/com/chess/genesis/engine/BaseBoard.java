@@ -19,13 +19,18 @@ package com.chess.genesis.engine;
 
 import java.util.*;
 
-public abstract class BaseBoard
+public abstract class BaseBoard implements Board
 {
 	static final int ZBOX_SIZE = 838;
 	static final int WTM_HASH = 837;
 	static final int ENPASSANT_HASH = 834;
 	static final int CASTLE_HASH = 834;
 	static final int HOLD_START = 768;
+
+	protected static final int[] pieceValue =
+		{0, 224, 336, 560, 896, 1456, 0};
+
+	protected final static int[] idxOffset = {-1, 0, 8, 10, 12, 14, 15, 16};
 
 	static final int[] stype = {
 		Piece.EMPTY,		Piece.EMPTY,		Piece.BLACK_KING,	Piece.WHITE_BISHOP,
@@ -50,11 +55,12 @@ public abstract class BaseBoard
 	int[] pieceType;
 	int ply;
 	int stm;
+	long key;
+	int mScore;
 
 	abstract boolean setPiece(int loc, int type);
 	abstract void parseReset();
 	abstract void setMaxPly();
-	abstract boolean inCheck(int stm);
 
 	abstract int[] genAll_Pawn(int From, int[] list);
 	abstract int[] genCapture_Pawn(int From, int[] list);
@@ -125,6 +131,73 @@ public abstract class BaseBoard
 	public static int SFF88(final int x)
 	{
 		return ((7 - (x >> 3)) << 4) + (x & 7);
+	}
+
+	@Override
+	public int Piece(int index)
+	{
+		return piece[index];
+	}
+
+	@Override
+	public int PieceType(int index)
+	{
+		return pieceType[index];
+	}
+
+	@Override
+	public int getStm()
+	{
+		return stm;
+	}
+
+	@Override
+	public int getPly()
+	{
+		return ply;
+	}
+
+	@Override
+	public long hash()
+	{
+		return key;
+	}
+
+	@Override
+	public int kingIndex(int color)
+	{
+		return piece[Piece.WHITE == color ? 31 : 15];
+	}
+
+	@Override
+	public int[] getPieceCounts(int Loc)
+	{
+		var counts = new int[13];
+		for (var i = 0; i < 32; i++) {
+			if (piece[i] == Loc)
+				counts[pieceType[i] + 6]++;
+		}
+		return counts;
+	}
+
+	@Override
+	public int[] getBoardArray()
+	{
+		return square;
+	}
+
+	boolean inCheckMove(Move move, int color, boolean stmCk)
+	{
+		var king = (color == Piece.WHITE)? 31:15;
+		if (stmCk || move.index == king)
+			return inCheck(color);
+		return attackLine(piece[king], move.from) || attackLine(piece[king], move.to);
+	}
+
+	@Override
+	public int eval()
+	{
+		return (stm == Piece.WHITE)? -mScore : mScore;
 	}
 
 	int[] genAll(int From)
@@ -345,6 +418,7 @@ public abstract class BaseBoard
 		return false;
 	}
 
+	@Override
 	public boolean parseZFen(String pos)
 	{
 		parseReset();
@@ -396,6 +470,7 @@ public abstract class BaseBoard
 		return !inCheck(stm ^ -2);
 	}
 
+	@Override
 	public String printZFen()
 	{
 		var fen = new StringBuilder();

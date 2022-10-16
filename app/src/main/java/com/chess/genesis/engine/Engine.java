@@ -68,7 +68,7 @@ public abstract class Engine
 
 	public void setBoard(final Board _board)
 	{
-		board = _board.clone();
+		board = _board.copy();
 	}
 
 	protected abstract void search(int minScore, int maxScore, int i, int depth);

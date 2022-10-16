@@ -19,12 +19,10 @@ package com.chess.genesis.engine;
 
 import java.util.function.*;
 import android.util.*;
-import androidx.annotation.*;
 
 public interface Board
 {
-	@NonNull
-	Board clone();
+	Board copy();
 
 	Supplier<Move> moveGenerator();
 	Move newMove();
