@@ -448,16 +448,15 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected int[] genAll_Pawn(int From, int[] list)
 	{
-		var offset = offsets[Piece.PAWN];
 		var next = 0;
 		var evn = true;
-		for (var i = 0; offset[i] != 0; i++, evn ^= true) {
-			var to = From + offset[i];
-			if (OFF_BOARD(to))
-				continue;
-			var val = evn? CAPTURE_MOVE(square[From], square[to]) : (square[to] == Piece.EMPTY);
-			if (val)
+		var from_piece = square[From];
+		for (var diff : QUEEN_OFFSETS) {
+			var to = From + diff;
+			if (ON_BOARD(to) && (evn ? CAPTURE_MOVE(from_piece, square[to]) : (square[to] == Piece.EMPTY))) {
 				list[next++] = to;
+			}
+			evn ^= true;
 		}
 		list[next] = -1;
 		return list;
@@ -466,14 +465,15 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected int[] genCapture_Pawn(int From, int[] list)
 	{
-		var offset = offsets[Piece.PAWN];
 		var next = 0;
-		for (var i = 0; offset[i] != 0; i += 2) {
-			var to = From + offset[i];
-			if (OFF_BOARD(to))
-				continue;
-			else if (CAPTURE_MOVE(square[From], square[to]))
-				list[next++] = to;
+		var evn = true;
+		for (var diff : QUEEN_OFFSETS) {
+			if (evn) {
+				var to = From + diff;
+				if (ON_BOARD(to) && CAPTURE_MOVE(square[From], square[to]))
+					list[next++] = to;
+			}
+			evn ^= true;
 		}
 		list[next] = -1;
 		return list;
@@ -482,14 +482,15 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected int[] genMove_Pawn(int From, int[] list)
 	{
-		var offset = offsets[Piece.PAWN];
 		var next = 0;
-		for (var i = 1; offset[i] != 0; i += 2) {
-			var to = From + offset[i];
-			if (OFF_BOARD(to))
-				continue;
-			else if (square[to] == Piece.EMPTY)
-				list[next++] = to;
+		var evn = true;
+		for (var diff : QUEEN_OFFSETS) {
+			if (!evn) {
+				var to = From + diff;
+				if (ON_BOARD(to) && square[to] == Piece.EMPTY)
+					list[next++] = to;
+			}
+			evn ^= true;
 		}
 		list[next] = -1;
 		return list;
@@ -498,29 +499,28 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected boolean fromTo_Pawn(int From, int To)
 	{
-		var offset = offsets[Piece.PAWN];
-		var diff = Math.abs(From - To);
-		for (var i = 0; i < 4; i++) {
-			if (diff == offset[i])
-				return ((i%2 != 0)? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]));
+		var diff = From - To;
+		var idx = IntArray.indexOf(QUEEN_OFFSETS, diff);
+		if (idx >= 0) {
+			return idx % 2 != 0 ? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean attackLine_Bishop(int From, int To, DistDB db)
+	public boolean attackLine_Bishop(int From, int offset)
 	{
-		var offset = db.step * ((To > From)? 1:-1);
 		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
-			if (square[to] == Piece.EMPTY)
-				continue;
-			else if (OWN_PIECE(square[From], square[to]))
+			if (CAPTURE_MOVE(square[From], square[to])) {
+				var to_piece = Math.abs(square[to]);
+				if (to_piece == Piece.BISHOP || to_piece == Piece.QUEEN) {
+					return true;
+				} else {
+					return k == 1 && (to_piece == Piece.PAWN || to_piece == Piece.KING);
+				}
+			} else if (OWN_PIECE(square[From], square[to])) {
 				return false;
-			else if (k == 1 && (Math.abs(square[to]) == Piece.PAWN || Math.abs(square[to]) == Piece.KING))
-				return true;
-			else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN)
-				return true;
-			break;
+			}
 		}
 		return false;
 	}
@@ -528,19 +528,19 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected boolean isAttacked_Bishop(int From, int Color)
 	{
-		var offset = offsets[Piece.BISHOP];
-		for (var i = 0; offset[i] != 0; i++) {
-			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
-				if (square[to] == Piece.EMPTY)
-					continue;
-				else if (OWN_PIECE(Color, square[to]))
+		for (var diff : BISHOP_OFFSETS) {
+			for (int to = From + diff, k = 1; ON_BOARD(to); to += diff, k++) {
+				var to_piece = square[to];
+				var to_type = Math.abs(to_piece);
+				if (CAPTURE_MOVE(Color, to_piece)) {
+					if (k == 1 && (to_type == Piece.PAWN || to_type == Piece.KING))
+						return true;
+					else if (to_type == Piece.BISHOP || to_type == Piece.QUEEN)
+						return true;
 					break;
-				else if (k == 1 && (Math.abs(square[to]) == Piece.PAWN || Math.abs(square[to]) == Piece.KING))
-					return true;
-				else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN)
-					return true;
-				else
+				} else if (OWN_PIECE(Color, to_piece)) {
 					break;
+				}
 			}
 		}
 		return false;

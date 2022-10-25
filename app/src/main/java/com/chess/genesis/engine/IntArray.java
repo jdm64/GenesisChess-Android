@@ -33,4 +33,19 @@ public class IntArray
 	{
 		return clone(arr, arr.length);
 	}
+
+	public static int indexOf(int[] arr, int value)
+	{
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static boolean contains(int[] arr, int value)
+	{
+		return indexOf(arr, value) >= 0;
+	}
 }

@@ -743,23 +743,22 @@ public class RegBoard extends BaseBoard
 	}
 
 	@Override
-	public boolean attackLine_Bishop(int From, int To, DistDB db)
+	public boolean attackLine_Bishop(int From, int offset)
 	{
-		var offset = db.step * ((To > From)? 1:-1);
 		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
-			if (square[to] == Piece.EMPTY) {
-				continue;
+			if (CAPTURE_MOVE(square[From], square[to])) {
+				var to_type = Math.abs(square[to]);
+				if (to_type == Piece.BISHOP || to_type == Piece.QUEEN) {
+					return true;
+				} else if (k == 1) {
+					if (to_type == Piece.PAWN && square[From] * (to - From) > 0)
+						return true;
+					else
+						return to_type == Piece.KING;
+				}
 			} else if (OWN_PIECE(square[From], square[to])) {
 				return false;
-			} else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN) {
-				return true;
-			} else if (k == 1) {
-				if (Math.abs(square[to]) == Piece.PAWN && square[From] * (to - From) > 0)
-					return true;
-				else if (Math.abs(square[to]) == Piece.KING)
-					return true;
 			}
-			break;
 		}
 		return false;
 	}
@@ -767,22 +766,21 @@ public class RegBoard extends BaseBoard
 	@Override
 	protected boolean isAttacked_Bishop(int From, int Color)
 	{
-		var offset = offsets[Piece.BISHOP];
-		for (var i = 0; offset[i] != 0; i++) {
-			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
-				if (square[to] == Piece.EMPTY) {
-					continue;
-				} else if (OWN_PIECE(Color, square[to])) {
+		for (var diff : BISHOP_OFFSETS) {
+			for (int to = From + diff, k = 1; ON_BOARD(to); to += diff, k++) {
+				var to_piece = square[to];
+				if (CAPTURE_MOVE(Color, to_piece)) {
+					var to_type = Math.abs(to_piece);
+					if (to_type == Piece.BISHOP || to_type == Piece.QUEEN) {
+						return true;
+					} else if (k == 1) {
+						if (to_type == Piece.PAWN && Color * (to - From) > 0)
+							return true;
+						else if (to_type == Piece.KING)
+							return true;
+					}
 					break;
-				} else if (Math.abs(square[to]) == Piece.BISHOP || Math.abs(square[to]) == Piece.QUEEN) {
-					return true;
-				} else if (k == 1) {
-					if (Math.abs(square[to]) == Piece.PAWN && Color * (to - From) > 0)
-						return true;
-					else if (Math.abs(square[to]) == Piece.KING)
-						return true;
 				}
-				break;
 			}
 		}
 		return false;

@@ -39,14 +39,24 @@ public abstract class BaseBoard implements Board
 		Piece.WHITE_KING,	Piece.EMPTY,		Piece.BLACK_BISHOP,	Piece.WHITE_KNIGHT,
 		Piece.EMPTY,		Piece.WHITE_PAWN,	Piece.WHITE_QUEEN,	Piece.WHITE_ROOK};
 
-	static final int[][] offsets = {
-		{ 0,  0,   0,   0,   0,   0,   0,   0, 0, 0},
-		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0}, // Pawn: even=capture
-		{33, 31,  18,  14, -33, -31, -18, -14, 0, 0}, // Knight
-		{17, 15, -17, -15,   0,   0,   0,   0, 0, 0}, // Bishop
-		{16,  1, -16,  -1,   0,   0,   0,   0, 0, 0}, // Rook
-		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0}, // Queen
-		{17, 16,  15,   1, -17, -16, -15,  -1, 0, 0} }; // King
+	static final int[] KNIGHT_OFFSETS = {33, 31, 18, 14, -33, -31, -18, -14};
+	static final int[] BISHOP_OFFSETS = {17, 15, -17, -15};
+	static final int[] ROOK_OFFSETS = {16, 1, -16, -1};
+	static final int[] QUEEN_OFFSETS = {17, 16, 15, 1, -17, -16, -15, -1}; // Pawn: even=capture
+
+	protected static int[] getOffset(int piece)
+	{
+		switch (Math.abs(piece)) {
+		case Piece.KNIGHT:
+			return KNIGHT_OFFSETS;
+		case Piece.BISHOP:
+			return BISHOP_OFFSETS;
+		case Piece.ROOK:
+			return ROOK_OFFSETS;
+		default:
+			return QUEEN_OFFSETS;
+		}
+	}
 
 	private final int[] list = new int[28];
 
@@ -68,7 +78,7 @@ public abstract class BaseBoard implements Board
 
 	abstract boolean fromTo_Pawn(int From, int To);
 	abstract boolean isAttacked_Bishop(int From, int Color);
-	abstract boolean attackLine_Bishop(int From, int To, DistDB db);
+	abstract boolean attackLine_Bishop(int From, int offset);
 
 	abstract void printZFen_Specific(StringBuilder fen);
 	abstract int parseZFen_Specific(int n, String pos);
@@ -88,19 +98,9 @@ public abstract class BaseBoard implements Board
 		return (sq & 0x88) != 0;
 	}
 
-	public static boolean NOT_CAPTURE(final int A, final int B)
-	{
-		return (A * B >= 0);
-	}
-
 	static boolean OWN_PIECE(final int A, final int B)
 	{
 		return (A * B >  0);
-	}
-
-	public static boolean EMPTY_MOVE(final int A, final int B)
-	{
-		return (A * B == 0);
 	}
 
 	static boolean CAPTURE_MOVE(final int A, final int B)
@@ -203,8 +203,8 @@ public abstract class BaseBoard implements Board
 	int[] genAll(int From)
 	{
 		int next = 0;
-		var type = Math.abs(square[From]);
-		var offset = offsets[type];
+		var from_piece = square[From];
+		var type = Math.abs(from_piece);
 
 		switch (type) {
 		case Piece.PAWN:
@@ -212,23 +212,22 @@ public abstract class BaseBoard implements Board
 		case Piece.BISHOP:
 		case Piece.ROOK:
 		case Piece.QUEEN:
-			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
-					if (square[to] == Piece.EMPTY) {
+			for (var diff : getOffset(from_piece)) {
+				for (var to = From + diff; ON_BOARD(to); to += diff) {
+					var to_piece = square[to];
+					if (ANY_MOVE(from_piece, to_piece)) {
 						list[next++] = to;
-						continue;
-					} else if (CAPTURE_MOVE(square[From], square[to])) {
-						list[next++] = to;
+					} else if (to_piece != Piece.EMPTY) {
+						break;
 					}
-					break;
 				}
 			}
 			break;
 		case Piece.KNIGHT:
 		case Piece.KING:
-			for (int i = 0; offset[i] != 0; i++) {
-				final int to = From + offset[i];
-				if (ON_BOARD(to) && ANY_MOVE(square[From], square[to]))
+			for (var diff : getOffset(from_piece)) {
+				var to = From + diff;
+				if (ON_BOARD(to) && ANY_MOVE(from_piece, square[to]))
 					list[next++] = to;
 			}
 			break;
@@ -240,30 +239,29 @@ public abstract class BaseBoard implements Board
 	int[] genCapture(int From)
 	{
 		int next = 0;
-		var type = Math.abs(square[From]);
-		var offset = offsets[type];
+		var from_piece = square[From];
+		var type = Math.abs(from_piece);
 
 		switch (type) {
 		case Piece.PAWN:
 			return genCapture_Pawn(From, list);
 		case Piece.KNIGHT:
 		case Piece.KING:
-			for (int i = 0; offset[i] != 0; i++) {
-				final int to = From + offset[i];
-				if (ON_BOARD(to) && CAPTURE_MOVE(square[From], square[to]))
+			for (var diff : getOffset(from_piece)) {
+				var to = From + diff;
+				if (ON_BOARD(to) && CAPTURE_MOVE(from_piece, square[to]))
 					list[next++] = to;
 			}
 			break;
 		case Piece.BISHOP:
 		case Piece.ROOK:
 		case Piece.QUEEN:
-			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
-					if (square[to] == Piece.EMPTY)
-						continue;
-					else if (CAPTURE_MOVE(square[From], square[to]))
+			for (var diff : getOffset(from_piece)) {
+				for (var to = From + diff; ON_BOARD(to); to += diff) {
+					if (CAPTURE_MOVE(from_piece, square[to])) {
 						list[next++] = to;
-					break;
+						break;
+					}
 				}
 			}
 			break;
@@ -275,16 +273,16 @@ public abstract class BaseBoard implements Board
 	int[] genMove(int From)
 	{
 		int next = 0;
-		var type = Math.abs(square[From]);
-		var offset = offsets[type];
+		var from_piece = square[From];
+		var type = Math.abs(from_piece);
 
 		switch (type) {
 		case Piece.PAWN:
 			return genMove_Pawn(From, list);
 		case Piece.KNIGHT:
 		case Piece.KING:
-			for (int i = 0; offset[i] != 0; i++) {
-				final int to = From + offset[i];
+			for (var diff : getOffset(from_piece)) {
+				var to = From + diff;
 				if (ON_BOARD(to) && square[to] == Piece.EMPTY)
 					list[next++] = to;
 			}
@@ -292,8 +290,8 @@ public abstract class BaseBoard implements Board
 		case Piece.BISHOP:
 		case Piece.ROOK:
 		case Piece.QUEEN:
-			for (int i = 0; offset[i] != 0; i++) {
-				for (int to = From + offset[i]; ON_BOARD(to); to += offset[i]) {
+			for (var diff : getOffset(from_piece)) {
+				for (var to = From + diff; ON_BOARD(to); to += diff) {
 					if (square[to] == Piece.EMPTY)
 						list[next++] = to;
 					else
@@ -308,42 +306,55 @@ public abstract class BaseBoard implements Board
 
 	boolean fromTo(int From, int To)
 	{
-		if (OFF_BOARD(From | To))
+		if (OFF_BOARD(From | To) || OWN_PIECE(square[From], square[To]))
 			return false;
 
-		final int diff = Math.abs(From - To);
-		int n = 2;
-		var type = Math.abs(square[From]);
-		var offset = offsets[type];
+		var from_piece = square[From];
+		var type = Math.abs(from_piece);
+		var diff = Math.abs(To - From);
 
 		switch (type) {
 		case Piece.PAWN:
 			return fromTo_Pawn(From, To);
 		case Piece.KNIGHT:
 		case Piece.KING:
-			for (int i = 0; i < 4; i++) {
-				if (diff == offset[i])
-					return ANY_MOVE(square[From], square[To]);
-			}
-			break;
+			return IntArray.contains(getOffset(from_piece), To - From);
 		case Piece.QUEEN:
-			n = 4;
-		case Piece.BISHOP:
-		case Piece.ROOK:
-			for (int i = 0; i < n; i++) {
-				if (diff % offset[i] == 0) {
-					if (OWN_PIECE(square[From], square[To]))
-						return false;
-					i += ((To - From > 0)? 0 : n);
-					for (int k = From + offset[i]; ON_BOARD(k); k += offset[i]) {
-						if (k == To)
-							return true;
-						else if (square[k] != Piece.EMPTY)
-							return false;
-					}
-				}
+			if (diff < 8) {
+				return fromTo_Diff(From, To, To > From ? 1 : -1);
+			} else if (diff % 16 == 0) {
+				return fromTo_Diff(From, To, To > From ? 16 : -16);
+			} else if (diff % 15 == 0) {
+				return fromTo_Diff(From, To, To > From ? 15 : -15);
+			} else if (diff % 17 == 0) {
+				return fromTo_Diff(From, To, To > From ? 17 : -17);
 			}
-			break;
+			return false;
+		case Piece.BISHOP:
+			if (diff % 15 == 0) {
+				return fromTo_Diff(From, To, To > From ? 15 : -15);
+			} else if (diff % 17 == 0) {
+				return fromTo_Diff(From, To, To > From ? 17 : -17);
+			}
+			return false;
+		case Piece.ROOK:
+			if (diff < 8) {
+				return fromTo_Diff(From, To, To > From ? 1 : -1);
+			} else if (diff % 16 == 0) {
+				return fromTo_Diff(From, To, To > From ? 16 : -16);
+			}
+			return false;
+		}
+		return false;
+	}
+
+	boolean fromTo_Diff(int From, int To, int offset)
+	{
+		for (int k = From + offset; ON_BOARD(k); k += offset) {
+			if (k == To)
+				return true;
+			else if (square[k] != Piece.EMPTY)
+				return false;
 		}
 		return false;
 	}
@@ -355,65 +366,65 @@ public abstract class BaseBoard implements Board
 		}
 
 		// ROOK
-		int[] offset = offsets[Piece.ROOK];
-		for (int i = 0; offset[i] != 0; i++) {
-			for (int to = From + offset[i], k = 1; ON_BOARD(to); to += offset[i], k++) {
-				if (square[to] == Piece.EMPTY)
-					continue;
-				else if (OWN_PIECE(Color, square[to]))
+		for (int diff : ROOK_OFFSETS) {
+			for (int to = From + diff, k = 1; ON_BOARD(to); to += diff, k++) {
+				var to_piece = square[to];
+				var to_type = Math.abs(to_piece);
+				if (CAPTURE_MOVE(Color, to_piece)) {
+					if (k == 1 && to_type == Piece.KING)
+						return true;
+					else if (to_type == Piece.ROOK || to_type == Piece.QUEEN)
+						return true;
 					break;
-				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
-					return true;
-				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
-					return true;
-				else
+				} else if (OWN_PIECE(Color, to_piece)) {
 					break;
+				}
 			}
 		}
 		// KNIGHT
-		offset = offsets[Piece.KNIGHT];
-		for (int i = 0; offset[i] != 0; i++) {
-			final int to = From + offset[i];
-			if (OFF_BOARD(to))
-				continue;
-			else if (OWN_PIECE(Color, square[to]))
-				continue;
-			else if (Math.abs(square[to]) == Piece.KNIGHT)
-				return true;
+		for (var diff : KNIGHT_OFFSETS) {
+			var to = From + diff;
+			if (ON_BOARD(to)) {
+				var to_piece = square[to];
+				var to_type = Math.abs(to_piece);
+				if (CAPTURE_MOVE(Color, to_piece) && to_type == Piece.KNIGHT)
+					return true;
+			}
 		}
 		return false;
 	}
 
-	boolean attackLine(final int From, final int To)
+	boolean attackLine(int From, int To)
 	{
 		if (OFF_BOARD(From | To))
 			return false;
 
-		final int diff = Math.abs(From - To);
-		if (DistDB.TABLE[diff].step == 0)
-			return false;
+		var diff = Math.abs(To - From);
+		if (diff < 8) {
+			return attackLine_Rook(From, To > From ? 1 : -1);
+		} else if (diff % 15 == 0) {
+			return attackLine_Bishop(From, To > From ? 15 : -15);
+		} else if (diff % 17 == 0) {
+			return attackLine_Bishop(From, To > From ? 17 : -17);
+		} else if (diff % 16 == 0) {
+			return attackLine_Rook(From, To > From ? 16 : -16);
+		}
+		return Math.abs(square[To]) == Piece.KNIGHT && IntArray.contains(KNIGHT_OFFSETS, diff);
+	}
 
-		final DistDB db = DistDB.TABLE[diff];
-		switch (db.type) {
-		case Piece.KNIGHT:
-			return (Math.abs(square[To]) == Piece.KNIGHT && CAPTURE_MOVE(square[From], square[To]));
-		case Piece.BISHOP:
-			return attackLine_Bishop(From, To, db);
-		case Piece.ROOK:
-			final int offset = db.step * ((To > From)? 1:-1);
-			for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
-				if (square[to] == Piece.EMPTY)
-					continue;
-				else if (OWN_PIECE(square[From], square[to]))
-					break;
-				else if (k == 1 && Math.abs(square[to]) == Piece.KING)
-					return true;
-				else if (Math.abs(square[to]) == Piece.ROOK || Math.abs(square[to]) == Piece.QUEEN)
+	boolean attackLine_Rook(int From, int offset)
+	{
+		for (int to = From + offset, k = 1; ON_BOARD(to); to += offset, k++) {
+			var to_piece = square[to];
+			var to_type = Math.abs(to_piece);
+			if (CAPTURE_MOVE(square[From], to_piece)) {
+				if (k == 1 && to_type == Piece.KING)
 					return true;
 				else
-					break;
+					return to_type == Piece.ROOK || to_type == Piece.QUEEN;
+			} else if (OWN_PIECE(square[From], to_piece)) {
+				return false;
 			}
-			break;
 		}
 		return false;
 	}
