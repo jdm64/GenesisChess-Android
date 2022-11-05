@@ -435,13 +435,9 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected void printZFen_Specific(StringBuilder fen)
 	{
-		for (var i = 0; i < 16; i++) {
+		for (var i = 0; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(String.valueOf(Move.pieceSymbol[-Move.InitPieceType[i]]).toLowerCase(Locale.US));
-		}
-		for (var i = 16; i < 32; i++) {
-			if (piece[i] == Piece.PLACEABLE)
-				fen.append(Move.pieceSymbol[Move.InitPieceType[i]]);
+				fen.append(Move.PIECE_SYM[Move.InitPieceType[i] + 6]);
 		}
 	}
 

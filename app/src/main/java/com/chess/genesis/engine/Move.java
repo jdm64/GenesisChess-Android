@@ -68,7 +68,7 @@ public abstract class Move implements Parcelable, Supplier<Move>
 	public final static int K_CASTLE = (WK_CASTLE | BK_CASTLE);
 	public final static int Q_CASTLE = (WQ_CASTLE | BQ_CASTLE);
 
-	public static final char[] pieceSymbol = {' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
+	public static final char[] PIECE_SYM = {'k', 'q', 'r', 'b', 'n', 'p', ' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 
 	public int index;
 	public int xindex;

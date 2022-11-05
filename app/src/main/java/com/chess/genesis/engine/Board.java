@@ -61,7 +61,7 @@ public interface Board
 	{
 		var move = "";
 		if (from > 0x88) {
-			move += Move.pieceSymbol[Math.abs(from - Move.PLACEOFFSET)];
+			move += Move.PIECE_SYM[Math.abs(from - Move.PLACEOFFSET) + 6];
 		} else {
 			move += Move.printSq(from);
 		}

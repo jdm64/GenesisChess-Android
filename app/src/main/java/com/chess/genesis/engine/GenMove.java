@@ -74,7 +74,7 @@ public class GenMove extends Move
 		final StringBuilder out = new StringBuilder();
 
 		if (from == Piece.PLACEABLE)
-			out.append(pieceSymbol[Math.abs(InitPieceType[index])]);
+			out.append(PIECE_SYM[Math.abs(InitPieceType[index]) + 6]);
 		else
 			out.append(printLoc(from));
 		out.append(printLoc(to));

@@ -494,10 +494,8 @@ public abstract class BaseBoard implements Board
 			} else if (empty != 0) {
 				fen.append(empty);
 			}
-			if (square[n] > Piece.EMPTY)
-				fen.append(Move.pieceSymbol[square[n]]);
-			else
-				fen.append(String.valueOf(Move.pieceSymbol[-square[n]]).toLowerCase(Locale.US));
+
+			fen.append(Move.PIECE_SYM[square[n] + 6]);
 			empty = 0;
 		}
 		fen.append(':');
