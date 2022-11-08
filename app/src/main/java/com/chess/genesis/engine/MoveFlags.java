@@ -46,7 +46,7 @@ public class MoveFlags implements Supplier<MoveFlags>
 
 	public final void reset()
 	{
-		bits = 0xf0;
+		bits = Move.DEFAULT_FLAGS;
 	}
 
 	public int canEnPassant()
@@ -61,12 +61,12 @@ public class MoveFlags implements Supplier<MoveFlags>
 
 	public void setEnPassant(final int file)
 	{
-		bits = (bits & ~0x0f) | (file | Move.CAN_EP);
+		bits = (bits & ~Move.EP_FLAG) | (file | Move.CAN_EP);
 	}
 
 	public void clearEnPassant()
 	{
-		bits &= ~0x0f;
+		bits &= ~Move.EP_FLAG;
 	}
 
 	public int canCastle(final int color)

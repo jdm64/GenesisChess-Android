@@ -104,6 +104,12 @@ public class RegMove extends Move
 		return flags & 0x07;
 	}
 
+	@Override
+	public boolean isPromote(int color)
+	{
+		return (color == Piece.WHITE) ? (to >= Piece.A8) : (to <= Piece.H1);
+	}
+
 	public int type()
 	{
 		if (xindex != Piece.NONE)
@@ -140,16 +146,16 @@ public class RegMove extends Move
 		out.append(printLoc(to));
 
 		switch (getPromote()) {
-		case 2:
+		case Piece.KNIGHT:
 			out.append('N');
 			break;
-		case 3:
+		case Piece.BISHOP:
 			out.append('B');
 			break;
-		case 4:
+		case Piece.ROOK:
 			out.append('R');
 			break;
-		case 5:
+		case Piece.QUEEN:
 			out.append('Q');
 			break;
 		}

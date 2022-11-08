@@ -191,11 +191,6 @@ public class RegBoard extends BaseBoard
 		Flags.set(flags);
 	}
 
-	private static boolean isPromote(final Move move, final int color)
-	{
-		return (color == Piece.WHITE)? (move.to >= Piece.A8) : (move.to <= Piece.H1);
-	}
-
 	@Override
 	public void make(final Move move)
 	{
@@ -366,7 +361,7 @@ public class RegBoard extends BaseBoard
 			return validCastle(move, stm) == Move.VALID_MOVE;
 		} else if (move.getEnPassant() && flags.canEnPassant() != 0) {
 			return validEnPassant(move, stm) == Move.VALID_MOVE;
-		} else if (isPromote(move, stm) && Math.abs(square[move.from]) == Piece.PAWN) {
+		} else if (move.isPromote(stm) && Math.abs(square[move.from]) == Piece.PAWN) {
 			if (move.getPromote() == 0)
 				move.setPromote(Piece.QUEEN);
 		} else {
@@ -467,7 +462,7 @@ public class RegBoard extends BaseBoard
 			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == Move.VALID_MOVE)
 				return new Pair<>(move, Move.VALID_MOVE);
 
-			if (!isPromote(move, color)) {
+			if (!move.isPromote(color)) {
 				move.flags = 0;
 				break;
 			} else if (move.getPromote() == 0) {
@@ -543,8 +538,10 @@ public class RegBoard extends BaseBoard
 	@Override
 	protected boolean setPiece(final int loc, final int type)
 	{
-		var start = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type)];
-		var end = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type) + 1];
+		var idx = type < 0 ? 0 : 16;
+		var abs_type = Math.abs(type);
+		var start = idx + idxOffset[abs_type];
+		var end = idx + idxOffset[abs_type + 1];
 
 		// try pieces in their initial location
 		for (var i = start; i < end; i++) {
@@ -564,12 +561,11 @@ public class RegBoard extends BaseBoard
 		}
 
 		// piece might be a promote
-		if (Math.abs(type) == Piece.PAWN || Math.abs(type) == Piece.KING)
+		if (abs_type == Piece.PAWN || abs_type == Piece.KING)
 			return false;
 
-		var pStart = (type > 0)? 16:0;
-		var pend = (type > 0)? 24:8;
-		for (var i = pStart; i < pend; i++) {
+		var pend = (type < 0)? 8 : 24;
+		for (var i = start; i < pend; i++) {
 			if (piece[i] == Piece.DEAD) {
 				piece[i] = loc;
 				pieceType[i] = type;
@@ -641,7 +637,7 @@ public class RegBoard extends BaseBoard
 
 		if (flags.canEnPassant() != 0) {
 			fen.append((char) ('a' + flags.enPassantFile()));
-			fen.append((ply % 2 != 0)? '3':'6');
+			fen.append(ply % 2 == 0 ? '6' : '3');
 		}
 	}
 
@@ -654,9 +650,9 @@ public class RegBoard extends BaseBoard
 				list[next++] = From + 15;
 			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
 				list[next++] = From + 17;
-			if (square[From + 16] == 0) {
+			if (square[From + 16] == Piece.EMPTY) {
 				list[next++] = From + 16;
-				if (From <= Piece.H2 && square[From + 32] == 0)
+				if (From <= Piece.H2 && square[From + 32] == Piece.EMPTY)
 					list[next++] = From + 32;
 			}
 		} else { // BLACK
@@ -664,9 +660,9 @@ public class RegBoard extends BaseBoard
 				list[next++] = From - 17;
 			if (COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
 				list[next++] = From - 15;
-			if (square[From - 16] == 0) {
+			if (square[From - 16] == Piece.EMPTY) {
 				list[next++] = From - 16;
-				if (From >= Piece.A7 && square[From - 32] == 0)
+				if (From >= Piece.A7 && square[From - 32] == Piece.EMPTY)
 					list[next++] = From - 32;
 			}
 		}
@@ -698,15 +694,15 @@ public class RegBoard extends BaseBoard
 	{
 		var next = 0;
 		if (square[From] == Piece.WHITE_PAWN) { // WHITE
-			if (square[From + 16] == 0) {
+			if (square[From + 16] == Piece.EMPTY) {
 				list[next++] = From + 16;
-				if (From <= Piece.H2 && square[From + 32] == 0)
+				if (From <= Piece.H2 && square[From + 32] == Piece.EMPTY)
 					list[next++] = From + 32;
 			}
 		} else { // BLACK
-			if (square[From - 16] == 0) {
+			if (square[From - 16] == Piece.EMPTY) {
 				list[next++] = From - 16;
-				if (From >= Piece.A7 && square[From - 32] == 0)
+				if (From >= Piece.A7 && square[From - 32] == Piece.EMPTY)
 					list[next++] = From - 32;
 			}
 		}
@@ -722,21 +718,20 @@ public class RegBoard extends BaseBoard
 				return true;
 			if (From + 17 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From + 17]))
 				return true;
-			if (square[From + 16] == 0) {
+			if (square[From + 16] == Piece.EMPTY) {
 				if (From + 16 == To)
 					return true;
-				return From + 32 == To && From <= Piece.H2 && square[From + 32] == 0;
+				return From + 32 == To && From <= Piece.H2 && square[From + 32] == Piece.EMPTY;
 			}
 		} else { // BLACK
 			if (From - 17 == To && COL(From) != 0 && CAPTURE_MOVE(square[From], square[From - 17]))
 				return true;
 			if (From - 15 == To && COL(From) != 7 && CAPTURE_MOVE(square[From], square[From - 15]))
 				return true;
-			if (square[From - 16] == 0) {
+			if (square[From - 16] == Piece.EMPTY) {
 				if (From - 16 == To)
 					return true;
-				else
-					return From - 32 == To && From >= Piece.A7 && square[From - 32] == 0;
+				return From - 32 == To && From >= Piece.A7 && square[From - 32] == Piece.EMPTY;
 			}
 		}
 		return false;
@@ -771,13 +766,10 @@ public class RegBoard extends BaseBoard
 				var to_piece = square[to];
 				if (CAPTURE_MOVE(Color, to_piece)) {
 					var to_type = Math.abs(to_piece);
-					if (to_type == Piece.BISHOP || to_type == Piece.QUEEN) {
+					if (to_type == Piece.BISHOP ||
+					    to_type == Piece.QUEEN ||
+					    ((k == 1 && ((to_type == Piece.PAWN && Color * (to - From) > 0) || to_type == Piece.KING)))) {
 						return true;
-					} else if (k == 1) {
-						if (to_type == Piece.PAWN && Color * (to - From) > 0)
-							return true;
-						else if (to_type == Piece.KING)
-							return true;
 					}
 					break;
 				}
@@ -816,7 +808,7 @@ public class RegBoard extends BaseBoard
 				item.move.from = piece[idx];
 				item.move.index = idx;
 
-				if (Math.abs(pieceType[idx]) == Piece.PAWN && isPromote(item.move, color)) {
+				if (Math.abs(pieceType[idx]) == Piece.PAWN && item.move.isPromote(color)) {
 					item.move.setPromote(Piece.QUEEN);
 
 					make(item.move);
@@ -858,8 +850,9 @@ public class RegBoard extends BaseBoard
 		if (inCheck(color))
 			return;
 
-		final int king = (color == Piece.WHITE)? Piece.E1 : Piece.E8,
-			kIndex = (color == Piece.WHITE)? 31 : 15;
+		var isWhite = color == Piece.WHITE;
+		var king = isWhite ? Piece.E1 : Piece.E8;
+		var kIndex = isWhite ? 31 : 15;
 
 		// King Side
 		if (flags.canKingCastle(color) != 0 && square[king + 1] == Piece.EMPTY && square[king + 2] == Piece.EMPTY &&
@@ -896,10 +889,11 @@ public class RegBoard extends BaseBoard
 		if (flags.canEnPassant() == 0)
 			return;
 
-		final int eps_file = flags.enPassantFile(),
-			eps = eps_file + ((color == Piece.WHITE)? Piece.A5 : Piece.A4),
-			your_pawn = (color == Piece.WHITE)? Piece.WHITE_PAWN : Piece.BLACK_PAWN,
-			opp_pawn = -your_pawn;
+		var isWhite = color == Piece.WHITE;
+		var eps_file = flags.enPassantFile();
+		var eps = eps_file + (isWhite ? Piece.A5 : Piece.A4);
+		var your_pawn = isWhite ? Piece.WHITE_PAWN : Piece.BLACK_PAWN;
+		var opp_pawn = -your_pawn;
 		undoFlags.set(flags);
 
 		// en passant to left

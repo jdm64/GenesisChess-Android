@@ -371,10 +371,9 @@ public abstract class BaseBoard implements Board
 				var to_piece = square[to];
 				var to_type = Math.abs(to_piece);
 				if (CAPTURE_MOVE(Color, to_piece)) {
-					if (k == 1 && to_type == Piece.KING)
+					if (to_type == Piece.ROOK || to_type == Piece.QUEEN || (k == 1 && to_type == Piece.KING)) {
 						return true;
-					else if (to_type == Piece.ROOK || to_type == Piece.QUEEN)
-						return true;
+					}
 					break;
 				} else if (OWN_PIECE(Color, to_piece)) {
 					break;
@@ -420,8 +419,7 @@ public abstract class BaseBoard implements Board
 			if (CAPTURE_MOVE(square[From], to_piece)) {
 				if (k == 1 && to_type == Piece.KING)
 					return true;
-				else
-					return to_type == Piece.ROOK || to_type == Piece.QUEEN;
+				return to_type == Piece.ROOK || to_type == Piece.QUEEN;
 			} else if (OWN_PIECE(square[From], to_piece)) {
 				return false;
 			}
@@ -473,7 +471,7 @@ public abstract class BaseBoard implements Board
 			n++;
 		}
 		ply = Integer.parseInt(num.toString());
-		stm = (ply % 2 != 0)? Piece.BLACK : Piece.WHITE;
+		stm = ply % 2 == 0 ? Piece.WHITE : Piece.BLACK;
 
 		setMaxPly();
 

@@ -132,8 +132,10 @@ public class GenBoard extends BaseBoard
 
 	private int pieceIndex(final int loc, final int type)
 	{
-		var start = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type)];
-		var end = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type) + 1];
+		var idx = (type < 0)? 0 : 16;
+		var piece_type = Math.abs(type);
+		var start = idx + idxOffset[piece_type];
+		var end = idx + idxOffset[piece_type + 1];
 
 		for (var i = start; i < end; i++) {
 			if (piece[i] == loc)
@@ -393,8 +395,10 @@ public class GenBoard extends BaseBoard
 	@Override
 	protected boolean setPiece(int loc, int type)
 	{
-		var start = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type)];
-		var end = ((type < 0)? 0 : 16) + idxOffset[Math.abs(type) + 1];
+		var idx = type < 0 ? 0 : 16;
+		var abs_type = Math.abs(type);
+		var start = idx + idxOffset[abs_type];
+		var end = idx + idxOffset[abs_type + 1];
 
 		for (var i = start; i < end; i++) {
 			if (piece[i] == Piece.DEAD) {
@@ -423,9 +427,7 @@ public class GenBoard extends BaseBoard
 			if (st[n] == ':') {
 				n++;
 				break;
-			} else if (!Character.isLetter(st[n])) {
-				return -1;
-			} else if (!setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
+			} else if (!Character.isLetter(st[n]) || !setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
 				return -1;
 			}
 		}
@@ -498,7 +500,7 @@ public class GenBoard extends BaseBoard
 		var diff = From - To;
 		var idx = IntArray.indexOf(QUEEN_OFFSETS, diff);
 		if (idx >= 0) {
-			return idx % 2 != 0 ? (square[To] == Piece.EMPTY) : CAPTURE_MOVE(square[From], square[To]);
+			return idx % 2 == 0 ? CAPTURE_MOVE(square[From], square[To]) : (square[To] == Piece.EMPTY);
 		}
 		return false;
 	}
@@ -511,9 +513,8 @@ public class GenBoard extends BaseBoard
 				var to_piece = Math.abs(square[to]);
 				if (to_piece == Piece.BISHOP || to_piece == Piece.QUEEN) {
 					return true;
-				} else {
-					return k == 1 && (to_piece == Piece.PAWN || to_piece == Piece.KING);
 				}
+				return k == 1 && (to_piece == Piece.PAWN || to_piece == Piece.KING);
 			} else if (OWN_PIECE(square[From], square[to])) {
 				return false;
 			}
@@ -529,10 +530,9 @@ public class GenBoard extends BaseBoard
 				var to_piece = square[to];
 				var to_type = Math.abs(to_piece);
 				if (CAPTURE_MOVE(Color, to_piece)) {
-					if (k == 1 && (to_type == Piece.PAWN || to_type == Piece.KING))
+					if (to_type == Piece.BISHOP || to_type == Piece.QUEEN || (k == 1 && (to_type == Piece.PAWN || to_type == Piece.KING))) {
 						return true;
-					else if (to_type == Piece.BISHOP || to_type == Piece.QUEEN)
-						return true;
+					}
 					break;
 				} else if (OWN_PIECE(Color, to_piece)) {
 					break;

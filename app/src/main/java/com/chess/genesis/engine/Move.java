@@ -57,16 +57,18 @@ public abstract class Move implements Parcelable, Supplier<Move>
 
 	public final static int EP_FILE = 0x07;
 	public final static int CAN_EP = 0x08;
+	public final static int EP_FLAG = CAN_EP | EP_FILE;
 	public final static int CASTLE_KS = 0x10;
 	public final static int CASTLE_QS = 0x20;
 	public final static int WK_CASTLE = 0x10;
 	public final static int WQ_CASTLE = 0x20;
 	public final static int BK_CASTLE = 0x40;
 	public final static int BQ_CASTLE = 0x80;
-	public final static int W_CASTLE = (WK_CASTLE | WQ_CASTLE);
-	public final static int B_CASTLE = (BK_CASTLE | BQ_CASTLE);
-	public final static int K_CASTLE = (WK_CASTLE | BK_CASTLE);
-	public final static int Q_CASTLE = (WQ_CASTLE | BQ_CASTLE);
+	public final static int W_CASTLE = WK_CASTLE | WQ_CASTLE;
+	public final static int B_CASTLE = BK_CASTLE | BQ_CASTLE;
+	public final static int K_CASTLE = WK_CASTLE | BK_CASTLE;
+	public final static int Q_CASTLE = WQ_CASTLE | BQ_CASTLE;
+	public final static int DEFAULT_FLAGS = W_CASTLE | B_CASTLE;
 
 	public static final char[] PIECE_SYM = {'k', 'q', 'r', 'b', 'n', 'p', ' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 
@@ -154,6 +156,11 @@ public abstract class Move implements Parcelable, Supplier<Move>
 	public int getPromote()
 	{
 		return 0;
+	}
+
+	public boolean isPromote(int stm)
+	{
+		return false;
 	}
 
 	protected abstract StringBuilder printLoc(final int loc);
