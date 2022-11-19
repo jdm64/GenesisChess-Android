@@ -71,6 +71,7 @@ public abstract class BaseBoard implements Board
 	abstract boolean setPiece(int loc, int type);
 	abstract void parseReset();
 	abstract void setMaxPly();
+	abstract MoveListPool movePool();
 
 	abstract int[] genAll_Pawn(int From, int[] list);
 	abstract int[] genCapture_Pawn(int From, int[] list);
@@ -192,6 +193,21 @@ public abstract class BaseBoard implements Board
 		if (stmCk || move.index == king)
 			return inCheck(color);
 		return attackLine(piece[king], move.from) || attackLine(piece[king], move.to);
+	}
+
+	@Override
+	public int isMate()
+	{
+		var mList = getMoveList(stm, Move.MOVE_ALL);
+		try {
+			if (mList.size != 0)
+				return Move.NOT_MATE;
+			else if (inCheck(stm))
+				return Move.CHECK_MATE;
+			return Move.STALE_MATE;
+		} finally {
+			movePool().put(mList);
+		}
 	}
 
 	@Override

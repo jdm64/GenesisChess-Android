@@ -130,6 +130,12 @@ public class GenBoard extends BaseBoard
 		return moveType.get();
 	}
 
+	@Override
+	public MoveListPool movePool()
+	{
+		return pool;
+	}
+
 	private int pieceIndex(final int loc, final int type)
 	{
 		var idx = (type < 0)? 0 : 16;
@@ -264,21 +270,6 @@ public class GenBoard extends BaseBoard
 
 		stm ^= -2;
 		ply--;
-	}
-
-	@Override
-	public int isMate()
-	{
-		final MoveList mList = getMoveList(stm, Move.MOVE_ALL);
-	try {
-		if (mList.size != 0)
-			return Move.NOT_MATE;
-		else if (inCheck(stm))
-			return Move.CHECK_MATE;
-		return Move.STALE_MATE;
-	} finally {
-		pool.put(mList);
-	}
 	}
 
 	@Override

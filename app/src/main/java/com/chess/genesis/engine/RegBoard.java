@@ -132,6 +132,12 @@ public class RegBoard extends BaseBoard
 		return moveType.get();
 	}
 
+	@Override
+	public MoveListPool movePool()
+	{
+		return pool;
+	}
+
 	private int pieceIndex(final int loc, final int type)
 	{
 		final int start = (type > 0)? 16:0, end = (type > 0)? 32:16;
@@ -322,21 +328,6 @@ public class RegBoard extends BaseBoard
 		flags.bits = UndoFlags.bits;
 		stm ^= -2;
 		ply--;
-	}
-
-	@Override
-	public int isMate()
-	{
-		final MoveList mList = getMoveList(stm, Move.MOVE_ALL);
-	try {
-		if (mList.size != 0)
-			return Move.NOT_MATE;
-		else if (inCheck(stm))
-			return Move.CHECK_MATE;
-		return Move.STALE_MATE;
-	} finally {
-		pool.put(mList);
-	}
 	}
 
 	@Override
