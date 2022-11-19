@@ -1,5 +1,5 @@
 /* GenChess, a genesis chess engine
- * Copyright (C) 2014, Justin Madru (justin.jdm64@gmail.com)
+ * Copyright (C) 2022, Justin Madru (justin.jdm64@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,38 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.chess.genesis.engine;
 
-import java.util.function.*;
-import androidx.annotation.*;
+import java.util.*;
 
-public class MoveList implements Iterable<MoveNode>
+public class MoveListIter implements Iterator<MoveNode>
 {
-	public final MoveNode[] list;
-	private final MoveListIter iter = new MoveListIter(this);
-	public int size;
+	private final MoveList list;
+	private int index = 0;
 
-	public MoveList(Supplier<Move> moveType)
+	public MoveListIter(final MoveList _list)
 	{
-		size = 0;
-		list = new MoveNode[320];
-		for (int i = 0; i < 320; i++) {
-			list[i] = new MoveNode(moveType);
-		}
+		list = _list;
 	}
 
-	public void add(final MoveNode move)
-	{
-		list[size++].set(move);
-	}
-
-	@NonNull
 	@Override
-	public MoveListIter iterator()
+	public boolean hasNext()
 	{
-		iter.reset();
-		return iter;
+		return index < list.size;
+	}
+
+	@Override
+	public MoveNode next()
+	{
+		return list.list[index++];
+	}
+
+	@Override
+	public void remove()
+	{
+		// do nothing
+	}
+
+	public void reset()
+	{
+		index = 0;
 	}
 }
-
