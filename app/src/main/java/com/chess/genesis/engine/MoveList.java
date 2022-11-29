@@ -17,7 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import java.util.function.*;
 import androidx.annotation.*;
 
 public class MoveList implements Iterable<MoveNode>
@@ -26,12 +25,12 @@ public class MoveList implements Iterable<MoveNode>
 	private final MoveListIter iter = new MoveListIter(this);
 	public int size;
 
-	public MoveList(Supplier<Move> moveType)
+	public MoveList()
 	{
 		size = 0;
 		list = new MoveNode[320];
 		for (int i = 0; i < 320; i++) {
-			list[i] = new MoveNode(moveType);
+			list[i] = new MoveNode();
 		}
 	}
 

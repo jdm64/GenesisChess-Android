@@ -17,10 +17,10 @@
 
 package com.chess.genesis.engine;
 
-import java.util.function.*;
 import android.os.*;
+import androidx.annotation.*;
 
-public abstract class Move implements Parcelable, Supplier<Move>
+public class Move implements Parcelable
 {
 	public final static int NUM_MASK = 0x07;
 	public final static int EP_FLAG = 1 << 3;
@@ -32,25 +32,40 @@ public abstract class Move implements Parcelable, Supplier<Move>
 
 	public static final char[] PIECE_SYM = {'k', 'q', 'r', 'b', 'n', 'p', ' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 
+	public static final Creator<Move> CREATOR = new Creator<>()
+	{
+		@Override
+		public Move createFromParcel(Parcel in)
+		{
+			return new Move(in);
+		}
+
+		@Override
+		public Move[] newArray(int size)
+		{
+			return new Move[size];
+		}
+	};
+
 	public int index;
 	public int xindex;
 	public int from;
 	public int to;
-
-	// only for RegMove
 	public int flags;
 
-	Move()
+	public Move()
 	{
 		index = xindex = from = to = Piece.NULL_MOVE;
+		flags = 0;
 	}
 
-	Move(final Parcel in)
+	public Move(Parcel in)
 	{
 		index = in.readInt();
 		xindex = in.readInt();
 		from = in.readInt();
 		to = in.readInt();
+		flags = in.readInt();
 	}
 
 	public static String printSq(int sq)
@@ -71,6 +86,7 @@ public abstract class Move implements Parcelable, Supplier<Move>
 		out.writeInt(xindex);
 		out.writeInt(from);
 		out.writeInt(to);
+		out.writeInt(flags);
 	}
 
 	public void set(final Move move)
@@ -79,6 +95,7 @@ public abstract class Move implements Parcelable, Supplier<Move>
 		xindex = move.xindex;
 		from = move.from;
 		to = move.to;
+		flags = move.flags;
 	}
 
 	public boolean isNull()
@@ -93,37 +110,174 @@ public abstract class Move implements Parcelable, Supplier<Move>
 
 	public int getCastle()
 	{
-		return 0;
+		return flags & CASTLE_FLAG;
 	}
 
 	public void setCastle(int side)
 	{
+		flags = side & CASTLE_FLAG;
 	}
 
 	public void setEnPassant()
 	{
+		flags = EP_FLAG;
 	}
 
 	public boolean getEnPassant()
 	{
-		return false;
+		return (flags & EP_FLAG) != 0;
+	}
+
+	public int getPlace()
+	{
+		return (flags & PLACE_FLAG) != 0 ? flags & NUM_MASK : 0;
+	}
+
+	public void setPlace(int piece)
+	{
+		flags = PLACE_FLAG | (piece & NUM_MASK);
+	}
+
+	public static boolean couldBePromote(int to, int stm)
+	{
+		return stm == Piece.WHITE ? (to >= Piece.A8) : (to <= Piece.H1);
 	}
 
 	public void setPromote(int type)
 	{
+		flags = PROMOTE_FLAG | (type & NUM_MASK);
 	}
 
 	public int getPromote()
 	{
-		return 0;
+		return (flags & PROMOTE_FLAG) != 0 ? (flags & NUM_MASK) : 0;
 	}
 
-	public boolean isPromote(int stm)
+	public boolean parse(String str)
 	{
-		return false;
+		if (str == null || str.isEmpty())
+			return false;
+		final char[] s = str.toCharArray();
+
+		switch (s[0]) {
+		case 'O':
+		case 'o':
+		case '0':
+			if (s[1] != '-')
+				return false;
+
+			if (s[2] != 'O' && s[2] != 'o' && s[2] != '0')
+				return false;
+			if (s.length == 3) {
+				setCastle(CASTLE_KS);
+				return true;
+			}
+			if (s[3] != '-')
+				return false;
+			if (s[4] != 'O' && s[4] != 'o' && s[4] != '0')
+				return false;
+			setCastle(CASTLE_QS);
+			return true;
+		case 'a':	case 'b':
+		case 'c':	case 'd':
+		case 'e':	case 'f':
+		case 'g':	case 'h':
+			break;
+		case 'P':
+			setPlace(Piece.PAWN);
+			break;
+		case 'N':
+			setPlace(Piece.KNIGHT);
+			break;
+		case 'B':
+			setPlace(Piece.BISHOP);
+			break;
+		case 'R':
+			setPlace(Piece.ROOK);
+			break;
+		case 'Q':
+			setPlace(Piece.QUEEN);
+			break;
+		case 'K':
+			setPlace(Piece.KING);
+			break;
+		default:
+			return false;
+		}
+
+		if (getPlace() != 0) {
+			// parse placement move
+			from = Piece.PLACEABLE;
+			to = cordToIdx(s[1], s[2]);
+			return to >= 0;
+		}
+
+		from = cordToIdx(s[0], s[1]);
+		to = cordToIdx(s[2], s[3]);
+
+		if (s.length == 5) {
+			switch (s[4]) {
+			case 'Q':
+				setPromote(Piece.QUEEN);
+				break;
+			case 'R':
+				setPromote(Piece.ROOK);
+				break;
+			case 'B':
+				setPromote(Piece.BISHOP);
+				break;
+			case 'N':
+				setPromote(Piece.KNIGHT);
+				break;
+			default:
+				return false;
+			}
+		}
+		return from >= 0 && to >= 0;
 	}
 
-	protected abstract StringBuilder printLoc(final int loc);
+	private static int cordToIdx(char a, char b)
+	{
+		if (a < 'a' || a > 'h' || b < '1' || b > '8')
+			return Piece.NULL_MOVE;
+		return 16 * (b - '1') + (a - 'a');
+	}
 
-	public abstract boolean parse(final String str);
+	@NonNull
+	@Override
+	public String toString()
+	{
+		var castle = getCastle();
+		if (castle != 0) {
+			return castle == CASTLE_KS ? "O-O" : "O-O-O";
+		}
+
+		var out = new StringBuilder();
+
+		var place = getPlace();
+		if (place != 0) {
+			out.append(PIECE_SYM[place + 6]);
+		} else {
+			out.append(printSq(from));
+		}
+
+		out.append(printSq(to));
+
+		switch (getPromote()) {
+		case Piece.KNIGHT:
+			out.append('N');
+			break;
+		case Piece.BISHOP:
+			out.append('B');
+			break;
+		case Piece.ROOK:
+			out.append('R');
+			break;
+		case Piece.QUEEN:
+			out.append('Q');
+			break;
+		}
+
+		return out.toString();
+	}
 }

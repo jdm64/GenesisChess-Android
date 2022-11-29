@@ -17,7 +17,6 @@
 
 package com.chess.genesis.engine;
 
-import java.util.function.*;
 import android.util.*;
 
 public interface Board
@@ -107,8 +106,6 @@ public interface Board
 
 	Board copy();
 
-	Supplier<Move> moveGenerator();
-	Move newMove();
 	void reset();
 
 	int pieceLoc(int index);

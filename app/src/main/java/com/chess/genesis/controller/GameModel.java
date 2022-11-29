@@ -37,7 +37,7 @@ public abstract class GameModel implements IGameModel
 		view = _view;
 		board = _board;
 		moveHandler = new MoveHandler(this, view);
-		history = new TimedObjectArr<>(board.moveGenerator());
+		history = new TimedObjectArr<>(Move::new);
 	}
 
 	@Override

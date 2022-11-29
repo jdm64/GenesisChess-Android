@@ -43,7 +43,7 @@ public class GameParser
 			return pos;
 		}
 		final String[] movehistory = _history.trim().split(" +");
-		final ObjectArray<Move> history = new ObjectArray<>(board.moveGenerator());
+		final ObjectArray<Move> history = new ObjectArray<>(Move::new);
 
 		for (final String element : movehistory) {
 			var res = board.parseMove(element);

@@ -17,12 +17,9 @@
 
 package com.chess.genesis.engine;
 
-import java.util.function.*;
-
 class TransTable
 {
 	private final TransItem[] table;
-	private final Supplier<Move> moveType;
 	private final int size;
 
 	public TransTable(final Board board, final int num_MB)
@@ -36,7 +33,6 @@ class TransTable
 
 		size = (num_MB * 1048576) / 288;
 		table = new TransItem[size];
-		moveType = board.moveGenerator();
 	}
 
 	public boolean getItem(final long hash, final TransItem item)
@@ -52,7 +48,7 @@ class TransTable
 	{
 		final int index = (int) Math.abs(hash % size);
 		final TransItem item = table[index] == null?
-			(table[index] = new TransItem(moveType)) : table[index];
+			(table[index] = new TransItem()) : table[index];
 
 		item.hash = hash;
 		item.score = score;

@@ -26,7 +26,7 @@ public class GenEngine extends Engine
 	public GenEngine(Board boardType)
 	{
 		super(boardType);
-		placeKiller = new ObjectArray<>(boardType.moveGenerator());
+		placeKiller = new ObjectArray<>(Move::new);
 	}
 
 	private int Quiescence(final int _alpha, final int beta, final int depth)

@@ -18,7 +18,6 @@
 package com.chess.genesis.engine;
 
 import static com.chess.genesis.engine.Board.*;
-import java.util.function.*;
 import android.util.*;
 
 public class RegBoard extends BaseBoard
@@ -90,10 +89,9 @@ public class RegBoard extends BaseBoard
 
 	private static final long[] hashBox = new long[ZBOX_SIZE];
 	private static long startHash;
-	private static final Move moveType = new RegMove();
-	private static final MoveListPool pool = new MoveListPool(moveType);
+	private static final MoveListPool pool = new MoveListPool();
 
-	private final MoveNode item = new MoveNode(moveType);
+	private final MoveNode item = new MoveNode();
 	private final MoveFlags undoFlags = new MoveFlags();
 	private final MoveFlags flags = new MoveFlags();
 
@@ -119,18 +117,6 @@ public class RegBoard extends BaseBoard
 	public RegBoard copy()
 	{
 		return new RegBoard(this);
-	}
-
-	@Override
-	public Supplier<Move> moveGenerator()
-	{
-		return moveType;
-	}
-
-	@Override
-	public Move newMove()
-	{
-		return moveType.get();
 	}
 
 	@Override
@@ -353,7 +339,7 @@ public class RegBoard extends BaseBoard
 			return validCastle(move, stm) == VALID_MOVE;
 		} else if (move.getEnPassant() && flags.canEnPassant() != 0) {
 			return validEnPassant(move, stm) == VALID_MOVE;
-		} else if (move.isPromote(stm) && Math.abs(square[move.from]) == Piece.PAWN) {
+		} else if (Move.couldBePromote(move.to, stm) && Math.abs(square[move.from]) == Piece.PAWN) {
 			if (move.getPromote() == 0)
 				move.setPromote(Piece.QUEEN);
 		} else {
@@ -432,7 +418,7 @@ public class RegBoard extends BaseBoard
 	@Override
 	public Pair<Move,Integer> parseMove(String moveStr)
 	{
-		var move = newMove();
+		var move = new Move();
 		if (!move.parse(moveStr))
 			return new Pair<>(move, INVALID_FORMAT);
 
@@ -454,7 +440,7 @@ public class RegBoard extends BaseBoard
 			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == VALID_MOVE)
 				return new Pair<>(move, VALID_MOVE);
 
-			if (!move.isPromote(color)) {
+			if (!Move.couldBePromote(move.to, color)) {
 				move.flags = 0;
 				break;
 			} else if (move.getPromote() == 0) {
@@ -800,7 +786,7 @@ public class RegBoard extends BaseBoard
 				item.move.from = piece[idx];
 				item.move.index = idx;
 
-				if (Math.abs(pieceType[idx]) == Piece.PAWN && item.move.isPromote(color)) {
+				if (Math.abs(pieceType[idx]) == Piece.PAWN && Move.couldBePromote(item.move.to, color)) {
 					item.move.setPromote(Piece.QUEEN);
 
 					make(item.move);

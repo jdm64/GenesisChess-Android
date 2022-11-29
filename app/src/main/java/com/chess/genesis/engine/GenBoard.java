@@ -18,8 +18,6 @@
 package com.chess.genesis.engine;
 
 import static com.chess.genesis.engine.Board.*;
-import java.util.*;
-import java.util.function.*;
 import android.util.*;
 
 public class GenBoard extends BaseBoard
@@ -91,10 +89,9 @@ public class GenBoard extends BaseBoard
 
 	private static final long[] hashBox = new long[ZBOX_SIZE];
 	private static long startHash;
-	private static final Move moveType = new GenMove();
-	private static final MoveListPool pool = new MoveListPool(moveType);
+	private static final MoveListPool pool = new MoveListPool();
 
-	private final MoveNode item = new MoveNode(moveType);
+	private final MoveNode item = new MoveNode();
 
 	public GenBoard()
 	{
@@ -117,18 +114,6 @@ public class GenBoard extends BaseBoard
 	public GenBoard copy()
 	{
 		return new GenBoard(this);
-	}
-
-	@Override
-	public Supplier<Move> moveGenerator()
-	{
-		return moveType;
-	}
-
-	@Override
-	public Move newMove()
-	{
-		return moveType.get();
 	}
 
 	@Override
@@ -311,14 +296,14 @@ public class GenBoard extends BaseBoard
 	@Override
 	public Pair<Move,Integer> parseMove(String moveStr)
 	{
-		var move = newMove();
+		var move = new Move();
 		if (!move.parse(moveStr)) {
 			return new Pair<>(move, INVALID_FORMAT);
 		}
 
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
-			move.index = pieceIndex(Piece.PLACEABLE, move.index * stm);
+			move.index = pieceIndex(Piece.PLACEABLE, move.getPlace() * stm);
 			if (move.index == Piece.NONE)
 				return new Pair<>(move, NOPIECE_ERROR);
 			move.xindex = pieceIndex(move.to);
@@ -594,6 +579,7 @@ public class GenBoard extends BaseBoard
 			item.move.to = loc;
 			item.move.xindex = Piece.NONE;
 			item.move.from = Piece.PLACEABLE;
+			item.move.setPlace(Math.abs(pieceType));
 
 			make(item.move);
 			// place moves are only valid if neither side is inCheck

@@ -43,7 +43,7 @@ public class GameEntity
 	public String lastMoveTo()
 	{
 		var moves = history != null ? history.split(" +") : new String[]{""};
-		var move = gametype == Enums.GENESIS_CHESS ? new GenMove() : new RegMove();
+		var move = new Move();
 		if (!move.parse(moves[moves.length - 1]))
 			return "--";
 		if (move.getCastle() != 0)

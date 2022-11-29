@@ -68,7 +68,7 @@ public class ComputerPlayer extends LocalPlayer
 
 		model.currentMove();
 
-		var vMove = board.newMove();
+		var vMove = new Move();
 		if (board.validMove(move, vMove))
 			model.applyMove(vMove, true);
 	}

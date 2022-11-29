@@ -17,22 +17,15 @@
 package com.chess.genesis.engine;
 
 import java.util.*;
-import java.util.function.*;
 
 public class MoveListPool
 {
 	private final Queue<MoveList> pool = new ArrayDeque<>();
-	private final Supplier<Move> moveType;
-
-	public MoveListPool(Supplier<Move> _moveType)
-	{
-		moveType = _moveType;
-	}
 
 	public MoveList get()
 	{
 		if (pool.size() < 1)
-			return new MoveList(moveType);
+			return new MoveList();
 		synchronized (pool) {
 			return pool.remove();
 		}

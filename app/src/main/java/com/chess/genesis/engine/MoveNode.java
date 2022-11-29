@@ -17,26 +17,24 @@
 
 package com.chess.genesis.engine;
 
-import java.util.function.*;
-
 public class MoveNode implements Comparable<MoveNode>
 {
 	public final Move move;
 	public int score;
 	public boolean check;
 
-	public MoveNode(Supplier<Move> moveType)
+	public MoveNode()
 	{
 		score = 0;
 		check = false;
-		move = moveType.get();
+		move = new Move();
 	}
 
 	public MoveNode(final MoveNode node)
 	{
 		score = node.score;
 		check = node.check;
-		move = node.move.get();
+		move = new Move();
 		move.set(node.move);
 	}
 

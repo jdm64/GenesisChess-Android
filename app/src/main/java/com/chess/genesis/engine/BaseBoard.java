@@ -18,7 +18,6 @@
 package com.chess.genesis.engine;
 
 import static com.chess.genesis.engine.Board.*;
-import java.util.*;
 
 public abstract class BaseBoard implements Board
 {
