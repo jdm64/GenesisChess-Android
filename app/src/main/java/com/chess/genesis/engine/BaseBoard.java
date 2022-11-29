@@ -17,6 +17,7 @@
 
 package com.chess.genesis.engine;
 
+import static com.chess.genesis.engine.Board.*;
 import java.util.*;
 
 public abstract class BaseBoard implements Board
@@ -84,56 +85,6 @@ public abstract class BaseBoard implements Board
 	abstract void printZFen_Specific(StringBuilder fen);
 	abstract int parseZFen_Specific(int n, String pos);
 
-	static int COL(final int x)
-	{
-		return x & 7;
-	}
-
-	static boolean ON_BOARD(final int sq)
-	{
-		return (sq & 0x88) == 0;
-	}
-
-	static boolean OFF_BOARD(final int sq)
-	{
-		return (sq & 0x88) != 0;
-	}
-
-	static boolean OWN_PIECE(final int A, final int B)
-	{
-		return (A * B >  0);
-	}
-
-	static boolean CAPTURE_MOVE(final int A, final int B)
-	{
-		return (A * B <  0);
-	}
-
-	private static boolean ANY_MOVE(final int A, final int B)
-	{
-		return (A * B <= 0);
-	}
-
-	public static int EE64(final int x)
-	{
-		return ((x & 7) + x) >> 1;
-	}
-
-	public static int EE64F(final int x)
-	{
-		return ((7 - (x >> 4)) << 3) + (x & 7);
-	}
-
-	public static int SF88(final int x)
-	{
-		return (x & ~7) + x;
-	}
-
-	public static int SFF88(final int x)
-	{
-		return ((7 - (x >> 3)) << 4) + (x & 7);
-	}
-
 	@Override
 	public int pieceLoc(int index)
 	{
@@ -198,13 +149,13 @@ public abstract class BaseBoard implements Board
 	@Override
 	public int isMate()
 	{
-		var mList = getMoveList(stm, Move.MOVE_ALL);
+		var mList = getMoveList(stm, MOVE_ALL);
 		try {
 			if (mList.size != 0)
-				return Move.NOT_MATE;
+				return NOT_MATE;
 			else if (inCheck(stm))
-				return Move.CHECK_MATE;
-			return Move.STALE_MATE;
+				return CHECK_MATE;
+			return STALE_MATE;
 		} finally {
 			movePool().put(mList);
 		}

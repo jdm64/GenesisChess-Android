@@ -122,7 +122,7 @@ public abstract class Engine
 
 	private void think()
 	{
-		curr = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+		curr = board.getMoveList(board.getStm(), Board.MOVE_ALL);
 		if (curr.size == 0)
 			return;
 		for (int depth = 1; true; depth++) {

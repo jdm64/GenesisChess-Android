@@ -45,7 +45,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		setOnLongClickListener(this);
 
 		for (int i = 0; i < 64; i++) {
-			squares[i] = new BoardSquare(this, painter, BaseBoard.SFF88(i));
+			squares[i] = new BoardSquare(this, painter, Board.SFF88(i));
 		}
 	}
 
@@ -125,7 +125,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 
 	public IBoardSq getSquare(int index)
 	{
-		return squares[BaseBoard.EE64F(index)];
+		return squares[Board.EE64F(index)];
 	}
 
 	private IBoardSq getTouchedSquare()

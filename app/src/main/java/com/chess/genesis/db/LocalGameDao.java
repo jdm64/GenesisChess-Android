@@ -160,7 +160,7 @@ public interface LocalGameDao
 		}
 
 		var res = board.parseMove(move);
-		if (res.second != Move.VALID_MOVE) {
+		if (res.second != Board.VALID_MOVE) {
 			return false;
 		}
 
@@ -186,7 +186,7 @@ public interface LocalGameDao
 		}
 
 		var res = board.parseMove(msg.move_str);
-		if (res.second != Move.VALID_MOVE) {
+		if (res.second != Board.VALID_MOVE) {
 			return false;
 		}
 

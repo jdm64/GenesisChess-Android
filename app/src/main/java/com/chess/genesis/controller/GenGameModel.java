@@ -48,8 +48,8 @@ public class GenGameModel extends GameModel
 		preApplyMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			var type = Move.InitPieceType[move.index];
-			var from = view.getPlaceSq(type + Move.PLACEOFFSET);
+			var type = Board.InitPieceType[move.index];
+			var from = view.getPlaceSq(type + Board.PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
 			from.minusCount();
@@ -83,8 +83,8 @@ public class GenGameModel extends GameModel
 		preRevertMove();
 
 		if (move.from == Piece.PLACEABLE) {
-			var type = Move.InitPieceType[move.index];
-			var from = view.getPlaceSq(type + Move.PLACEOFFSET);
+			var type = Board.InitPieceType[move.index];
+			var from = view.getPlaceSq(type + Board.PLACEOFFSET);
 			var to = view.getBoardSq(move.to);
 
 			from.plusCount();
@@ -100,7 +100,7 @@ public class GenGameModel extends GameModel
 			if (move.xindex == Piece.NONE)
 				to.setPiece(Piece.EMPTY);
 			else
-				to.setPiece(Move.InitPieceType[move.xindex]);
+				to.setPiece(Board.InitPieceType[move.xindex]);
 		}
 
 		board.unmake(move);

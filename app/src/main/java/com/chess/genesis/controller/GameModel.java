@@ -87,7 +87,7 @@ public abstract class GameModel implements IGameModel
 		for (var element : movehistory) {
 			var parts = element.split(",");
 			var res = board.parseMove(parts[0]);
-			if (res.second != Move.VALID_MOVE)
+			if (res.second != Board.VALID_MOVE)
 				break;
 			addMove(res.first, Long.parseLong(parts[1]));
 		}
@@ -100,7 +100,7 @@ public abstract class GameModel implements IGameModel
 		// set board pieces
 		var squares = board.getBoardArray();
 		for (int i = 0; i < 64; i++) {
-			var loc = BaseBoard.SF88(i);
+			var loc = Board.SF88(i);
 			var button = view.getBoardSq(loc);
 			button.reset();
 			button.setPiece(squares[loc]);

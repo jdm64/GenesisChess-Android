@@ -17,6 +17,7 @@
 
 package com.chess.genesis.engine;
 
+import static com.chess.genesis.engine.Board.*;
 import java.util.function.*;
 import android.util.*;
 
@@ -154,7 +155,7 @@ public class RegBoard extends BaseBoard
 	{
 		square = new int[128];
 		piece = IntArray.clone(InitRegPiece);
-		pieceType = IntArray.clone(Move.InitPieceType);
+		pieceType = IntArray.clone(InitPieceType);
 		for (int i = 0; i < 32; i++)
 			square[piece[i]] = pieceType[i];
 
@@ -208,7 +209,7 @@ public class RegBoard extends BaseBoard
 		if (move.getCastle() != 0) {
 			final boolean left = (move.getCastle() == Move.CASTLE_QS);
 			final int castleTo = move.to + (left? 1 : -1);
-			final int castleI = pieceIndex(move.to - (move.to & Move.EP_FILE) + (left? 0 : 7), color * Piece.ROOK);
+			var castleI = pieceIndex(move.to - (move.to & MoveFlags.EP_FILE) + (left? 0 : 7), color * Piece.ROOK);
 
 			key ^= hashBox[13 * EE64(piece[castleI]) + pieceType[castleI] + 6];
 			key ^= hashBox[13 * EE64(castleTo) + pieceType[castleI] + 6];
@@ -264,7 +265,7 @@ public class RegBoard extends BaseBoard
 				square[piece[move.xindex]] = Piece.EMPTY;
 			piece[move.xindex] = Piece.DEAD;
 		} else if (Math.abs(pieceType[move.index]) == Piece.PAWN && Math.abs(move.to - move.from) == 32) {
-			flags.setEnPassant(move.to & Move.EP_FILE);
+			flags.setEnPassant(COL(move.to));
 			key ^= hashBox[ENPASSANT_HASH];
 		}
 
@@ -280,14 +281,14 @@ public class RegBoard extends BaseBoard
 		final int color = isWhite? Piece.WHITE : Piece.BLACK,
 			bits = flags.bits ^ UndoFlags.bits;
 
-		key ^= ((bits & (isWhite? Move.WK_CASTLE : Move.BK_CASTLE)) != 0)? hashBox[CASTLE_HASH + color] : 0;
-		key ^= ((bits & (isWhite? Move.WQ_CASTLE : Move.BQ_CASTLE)) != 0)? hashBox[CASTLE_HASH + 2 * color] : 0;
-		key ^= ((bits & Move.CAN_EP) != 0)? hashBox[ENPASSANT_HASH] : 0;
+		key ^= ((bits & (isWhite? MoveFlags.WK_CASTLE : MoveFlags.BK_CASTLE)) != 0)? hashBox[CASTLE_HASH + color] : 0;
+		key ^= ((bits & (isWhite? MoveFlags.WQ_CASTLE : MoveFlags.BQ_CASTLE)) != 0)? hashBox[CASTLE_HASH + 2 * color] : 0;
+		key ^= ((bits & MoveFlags.EP_FLAG) != 0)? hashBox[ENPASSANT_HASH] : 0;
 		key ^= hashBox[13 * EE64(move.to) + pieceType[move.index] + 6];
 
 		if (move.getCastle() != 0) {
 			final boolean left = (move.from - move.to > 0);
-			final int castleFrom = move.to - (move.to & Move.EP_FILE) + (left? 0 : 7);
+			var castleFrom = move.to - COL(move.to) + (left? 0 : 7);
 			final int castleI = pieceIndex(move.to + (left? 1 : -1), isWhite? Piece.WHITE_ROOK : Piece.BLACK_ROOK);
 
 			key ^= hashBox[13 * EE64(piece[castleI]) + pieceType[castleI] + 6];
@@ -349,9 +350,9 @@ public class RegBoard extends BaseBoard
 			return false;
 
 		if (move.getCastle() != 0) {
-			return validCastle(move, stm) == Move.VALID_MOVE;
+			return validCastle(move, stm) == VALID_MOVE;
 		} else if (move.getEnPassant() && flags.canEnPassant() != 0) {
-			return validEnPassant(move, stm) == Move.VALID_MOVE;
+			return validEnPassant(move, stm) == VALID_MOVE;
 		} else if (move.isPromote(stm) && Math.abs(square[move.from]) == Piece.PAWN) {
 			if (move.getPromote() == 0)
 				move.setPromote(Piece.QUEEN);
@@ -377,10 +378,10 @@ public class RegBoard extends BaseBoard
 	{
 		// can we castle on that side
 		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
-			return Move.CANT_CASTLE;
+			return CANT_CASTLE;
 		// can't castle while in check
 		if (inCheck(color))
-			return Move.CANT_CASTLE;
+			return CANT_CASTLE;
 
 		final int king = (color == Piece.WHITE)? Piece.E1 : Piece.E8;
 
@@ -392,7 +393,7 @@ public class RegBoard extends BaseBoard
 			move.xindex = Piece.NONE;
 			move.from = king;
 			move.to = king + 2;
-			return Move.VALID_MOVE;
+			return VALID_MOVE;
 		} else if (move.getCastle() == Move.CASTLE_QS && square[king - 1] == Piece.EMPTY && square[king - 2] == Piece.EMPTY &&
 		square[king - 3] == Piece.EMPTY && !isAttacked(king - 1, color) && !isAttacked(king - 2, color) &&
 		Math.abs(square[((color == Piece.WHITE)? Piece.A1:Piece.A8)]) == Piece.ROOK) {
@@ -400,9 +401,9 @@ public class RegBoard extends BaseBoard
 			move.xindex = Piece.NONE;
 			move.from = king;
 			move.to = king - 2;
-			return Move.VALID_MOVE;
+			return VALID_MOVE;
 		}
-		return Move.CANT_CASTLE;
+		return CANT_CASTLE;
 	}
 
 	private int validEnPassant(final Move move, final int color)
@@ -416,16 +417,16 @@ public class RegBoard extends BaseBoard
 			move.xindex = pieceIndex(ep, square[ep]);
 			move.setEnPassant();
 
-			int ret = Move.VALID_MOVE;
+			int ret = VALID_MOVE;
 
 			make(move);
 			// stm is opponent after make
 			if (inCheck(stm ^ -2))
-				ret = Move.IN_CHECK;
+				ret = IN_CHECK;
 			unmake(move, undoFlags);
 			return ret;
 		}
-		return Move.INVALID_MOVEMENT;
+		return INVALID_MOVEMENT;
 	}
 
 	@Override
@@ -433,7 +434,7 @@ public class RegBoard extends BaseBoard
 	{
 		var move = newMove();
 		if (!move.parse(moveStr))
-			return new Pair<>(move, Move.INVALID_FORMAT);
+			return new Pair<>(move, INVALID_FORMAT);
 
 		undoFlags.set(flags);
 		final int color = getStm();
@@ -445,13 +446,13 @@ public class RegBoard extends BaseBoard
 		move.index = pieceIndex(move.from, square[move.from]);
 
 		if (move.index == Piece.NONE)
-			return new Pair<>(move, Move.INVALID_MOVEMENT);
+			return new Pair<>(move, INVALID_MOVEMENT);
 
 		switch (Math.abs(pieceType[move.index])) {
 		case Piece.PAWN:
 			// en passant
-			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == Move.VALID_MOVE)
-				return new Pair<>(move, Move.VALID_MOVE);
+			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == VALID_MOVE)
+				return new Pair<>(move, VALID_MOVE);
 
 			if (!move.isPromote(color)) {
 				move.flags = 0;
@@ -473,22 +474,22 @@ public class RegBoard extends BaseBoard
 		}
 
 		if (move.index == Piece.NONE)
-			return new Pair<>(move, Move.NOPIECE_ERROR);
+			return new Pair<>(move, NOPIECE_ERROR);
 		else if (square[move.from] * color < 0)
-			return new Pair<>(move, Move.DONT_OWN);
+			return new Pair<>(move, DONT_OWN);
 		move.xindex = pieceIndex(move.to, square[move.to]);
 		if (move.xindex != Piece.NONE && square[move.to] * color > 0)
-			return new Pair<>(move, Move.CAPTURE_OWN);
+			return new Pair<>(move, CAPTURE_OWN);
 
 		if (!fromTo(move.from, move.to))
-			return new Pair<>(move, Move.INVALID_MOVEMENT);
+			return new Pair<>(move, INVALID_MOVEMENT);
 
-		int ret = Move.VALID_MOVE;
+		int ret = VALID_MOVE;
 
 		make(move);
 		// stm is opponent after make
 		if (inCheck(stm ^ -2))
-			ret = Move.IN_CHECK;
+			ret = IN_CHECK;
 		unmake(move, undoFlags);
 
 		return new Pair<>(move, ret);
@@ -501,7 +502,7 @@ public class RegBoard extends BaseBoard
 			square[i] = Piece.EMPTY;
 		for (var i = 0; i < 32; i++) {
 			piece[i] = Piece.DEAD;
-			pieceType[i] = Move.InitPieceType[i];
+			pieceType[i] = InitPieceType[i];
 		}
 		flags.reset();
 	}
@@ -584,16 +585,16 @@ public class RegBoard extends BaseBoard
 		for (; st[n] != ':'; n++) {
 			switch (st[n]) {
 			case 'K':
-				castle |= Move.WK_CASTLE;
+				castle |= MoveFlags.WK_CASTLE;
 				break;
 			case 'Q':
-				castle |= Move.WQ_CASTLE;
+				castle |= MoveFlags.WQ_CASTLE;
 				break;
 			case 'k':
-				castle |= Move.BK_CASTLE;
+				castle |= MoveFlags.BK_CASTLE;
 				break;
 			case 'q':
-				castle |= Move.BQ_CASTLE;
+				castle |= MoveFlags.BQ_CASTLE;
 				break;
 			}
 		}
@@ -604,7 +605,7 @@ public class RegBoard extends BaseBoard
 		if (st[n] != ':') {
 			var eps = (st[n++] - 'a');
 			eps += 16 * (st[n++] - '1');
-			flags.setEnPassant(eps & Move.EP_FILE);
+			flags.setEnPassant(COL(eps));
 		}
 		n++;
 		return n;
@@ -781,14 +782,14 @@ public class RegBoard extends BaseBoard
 
 			final int[] loc;
 			switch (moveType) {
-			case Move.MOVE_ALL:
+			case MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
 				break;
-			case Move.MOVE_CAPTURE:
+			case MOVE_CAPTURE:
 				loc = genCapture(piece[idx]);
 				break;
-			case Move.MOVE_MOVE:
+			case MOVE_MOVE:
 				loc = genMove(piece[idx]);
 				break;
 			}
@@ -928,17 +929,17 @@ public class RegBoard extends BaseBoard
 		data.size = 0;
 
 		switch (moveType) {
-		case Move.MOVE_ALL:
+		case MOVE_ALL:
 		default:
 			getMoveList(data, color, moveType);
 			getCastleMoveList(data, color);
 			getEnPassantMoveList(data, color);
 			break;
-		case Move.MOVE_CAPTURE:
+		case MOVE_CAPTURE:
 			getMoveList(data, color, moveType);
 			getEnPassantMoveList(data, color);
 			break;
-		case Move.MOVE_MOVE:
+		case MOVE_MOVE:
 			getMoveList(data, color, moveType);
 			getCastleMoveList(data, color);
 			break;

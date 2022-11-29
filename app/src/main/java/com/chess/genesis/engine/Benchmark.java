@@ -43,7 +43,7 @@ public class Benchmark
 		if (depth == 0 || System.currentTimeMillis() > end)
 			return 1;
 
-		final MoveList ptr = gboard.getMoveList(gboard.getStm(), Move.MOVE_ALL);
+		var ptr = gboard.getMoveList(gboard.getStm(), Board.MOVE_ALL);
 
 		long nodes = 0;
 		for (final MoveNode node : ptr) {
@@ -61,7 +61,7 @@ public class Benchmark
 			return 1;
 
 		rboard.getMoveFlags(flags);
-		final MoveList ptr = rboard.getMoveList(rboard.getStm(), Move.MOVE_ALL);
+		var ptr = rboard.getMoveList(rboard.getStm(), Board.MOVE_ALL);
 
 		long nodes = 0;
 		for (final MoveNode node : ptr) {

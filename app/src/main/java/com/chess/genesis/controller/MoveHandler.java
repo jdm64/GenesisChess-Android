@@ -145,7 +145,7 @@ public class MoveHandler implements IMoveHandler
 	public void onPlaceClick(ICountSq pb, int ycolor)
 	{
 		var piece = pb.getPiece();
-		var index = piece + Move.PLACEOFFSET;
+		var index = piece + Board.PLACEOFFSET;
 
 		// only select your own pieces on your turn where count > 0
 		if (board.getStm() != ycolor || piece * ycolor < 0 || pb.getCount() <= 0)
@@ -169,7 +169,7 @@ public class MoveHandler implements IMoveHandler
 	{
 		type = SelectType.PIECE_MOVES;
 		selected = square;
-		var moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+		var moveList = board.getMoveList(board.getStm(), Board.MOVE_ALL);
 		for (var node : moveList) {
 			if (node.move.from == selected) {
 				hints.add(node.move.to);
@@ -184,7 +184,7 @@ public class MoveHandler implements IMoveHandler
 	{
 		type = SelectType.MOVES_TO;
 		selected = square;
-		var moveList = board.getMoveList(board.getStm(), Move.MOVE_ALL);
+		var moveList = board.getMoveList(board.getStm(), Board.MOVE_ALL);
 		for (var node : moveList) {
 			if (node.move.to == selected && node.move.from != Piece.PLACEABLE) {
 				hints.add(node.move.from);

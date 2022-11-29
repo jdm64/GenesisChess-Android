@@ -83,13 +83,13 @@ public class RegMove extends Move
 	@Override
 	public void setEnPassant()
 	{
-		flags = CAN_EP;
+		flags = EP_FLAG;
 	}
 
 	@Override
 	public boolean getEnPassant()
 	{
-		return (flags & CAN_EP) != 0;
+		return (flags & EP_FLAG) != 0;
 	}
 
 	@Override
@@ -108,13 +108,6 @@ public class RegMove extends Move
 	public boolean isPromote(int color)
 	{
 		return (color == Piece.WHITE) ? (to >= Piece.A8) : (to <= Piece.H1);
-	}
-
-	public int type()
-	{
-		if (xindex != Piece.NONE)
-			return Move.MOVE_CAPTURE;
-		return Move.MOVE_MOVE;
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class GameParser
 
 		for (final String element : movehistory) {
 			var res = board.parseMove(element);
-			if (res.second != Move.VALID_MOVE)
+			if (res.second != Board.VALID_MOVE)
 				break;
 			history.push(res.first);
 			board.make(res.first);

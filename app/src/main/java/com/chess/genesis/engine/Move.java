@@ -22,53 +22,13 @@ import android.os.*;
 
 public abstract class Move implements Parcelable, Supplier<Move>
 {
-	public static final int[] InitPieceType = {
-		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
-		Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
-		Piece.BLACK_KNIGHT, Piece.BLACK_KNIGHT, Piece.BLACK_BISHOP, Piece.BLACK_BISHOP,
-		Piece.BLACK_ROOK,   Piece.BLACK_ROOK,   Piece.BLACK_QUEEN,  Piece.BLACK_KING,
-		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
-		Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
-		Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
-		Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
-
-	public final static int PLACEOFFSET = 1000;
-
-	public static final int VALID_MOVE = 0;
-	public static final int INVALID_FORMAT = 1;
-	public static final int NOPIECE_ERROR = 2;
-	public static final int DONT_OWN = 3;
-	public static final int KING_FIRST = 4;
-	public static final int NON_EMPTY_PLACE = 5;
-	public static final int CAPTURE_OWN = 6;
-	public static final int INVALID_MOVEMENT = 7;
-	public static final int IN_CHECK = 8;
-	public static final int IN_CHECK_PLACE = 9;
-	public static final int CANT_CASTLE = 10;
-
-	public static final int MOVE_ALL = 0;
-	public static final int MOVE_CAPTURE = 1;
-	public static final int MOVE_MOVE = 2;
-	public static final int MOVE_PLACE = 3;
-
-	public static final int NOT_MATE = 0;
-	public static final int CHECK_MATE = 1;
-	public static final int STALE_MATE = 2;
-
-	public final static int EP_FILE = 0x07;
-	public final static int CAN_EP = 0x08;
-	public final static int EP_FLAG = CAN_EP | EP_FILE;
-	public final static int CASTLE_KS = 0x10;
-	public final static int CASTLE_QS = 0x20;
-	public final static int WK_CASTLE = 0x10;
-	public final static int WQ_CASTLE = 0x20;
-	public final static int BK_CASTLE = 0x40;
-	public final static int BQ_CASTLE = 0x80;
-	public final static int W_CASTLE = WK_CASTLE | WQ_CASTLE;
-	public final static int B_CASTLE = BK_CASTLE | BQ_CASTLE;
-	public final static int K_CASTLE = WK_CASTLE | BK_CASTLE;
-	public final static int Q_CASTLE = WQ_CASTLE | BQ_CASTLE;
-	public final static int DEFAULT_FLAGS = W_CASTLE | B_CASTLE;
+	public final static int NUM_MASK = 0x07;
+	public final static int EP_FLAG = 1 << 3;
+	public final static int CASTLE_KS = 1 << 4;
+	public final static int CASTLE_QS = 1 << 5;
+	public final static int CASTLE_FLAG = (CASTLE_KS | CASTLE_QS);
+	public final static int PROMOTE_FLAG = 1 << 6;
+	public final static int PLACE_FLAG = 1 << 7;
 
 	public static final char[] PIECE_SYM = {'k', 'q', 'r', 'b', 'n', 'p', ' ', 'P', 'N', 'B', 'R', 'Q', 'K'};
 

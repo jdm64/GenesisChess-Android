@@ -17,6 +17,7 @@
 
 package com.chess.genesis.engine;
 
+import static com.chess.genesis.engine.Board.*;
 import java.util.*;
 import java.util.function.*;
 import android.util.*;
@@ -163,7 +164,7 @@ public class GenBoard extends BaseBoard
 	{
 		square = new int[128];
 		piece = new int[32];
-		pieceType = IntArray.clone(Move.InitPieceType);
+		pieceType = IntArray.clone(InitPieceType);
 		for (int i = 0; i < 32; i++)
 			piece[i] = Piece.PLACEABLE;
 
@@ -312,41 +313,41 @@ public class GenBoard extends BaseBoard
 	{
 		var move = newMove();
 		if (!move.parse(moveStr)) {
-			return new Pair<>(move, Move.INVALID_FORMAT);
+			return new Pair<>(move, INVALID_FORMAT);
 		}
 
 		// setup move.(x)index
 		if (move.from == Piece.PLACEABLE) {
 			move.index = pieceIndex(Piece.PLACEABLE, move.index * stm);
 			if (move.index == Piece.NONE)
-				return new Pair<>(move, Move.NOPIECE_ERROR);
+				return new Pair<>(move, NOPIECE_ERROR);
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE)
-				return new Pair<>(move, Move.NON_EMPTY_PLACE);
+				return new Pair<>(move, NON_EMPTY_PLACE);
 		} else {
 			move.index = pieceIndex(move.from);
 			if (move.index == Piece.NONE)
-				return new Pair<>(move, Move.NOPIECE_ERROR);
+				return new Pair<>(move, NOPIECE_ERROR);
 			else if (square[move.from] * stm < 0)
-				return new Pair<>(move, Move.DONT_OWN);
+				return new Pair<>(move, DONT_OWN);
 			move.xindex = pieceIndex(move.to);
 			if (move.xindex != Piece.NONE && square[move.to] * stm > 0)
-				return new Pair<>(move, Move.CAPTURE_OWN);
+				return new Pair<>(move, CAPTURE_OWN);
 		}
 		// must place king first
 		if (ply < 2 && Math.abs(pieceType[move.index]) != Piece.KING)
-			return new Pair<>(move, Move.KING_FIRST);
+			return new Pair<>(move, KING_FIRST);
 
 		if (move.from != Piece.PLACEABLE && !fromTo(move.from, move.to))
-			return new Pair<>(move, Move.INVALID_MOVEMENT);
-		int ret = Move.VALID_MOVE;
+			return new Pair<>(move, INVALID_MOVEMENT);
+		int ret = VALID_MOVE;
 
 		make(move);
 		// curr is opponent after make
 		if (inCheck(stm ^ -2))
-			ret = Move.IN_CHECK;
+			ret = IN_CHECK;
 		else if (move.from == Piece.PLACEABLE && inCheck(stm))
-			ret = Move.IN_CHECK_PLACE;
+			ret = IN_CHECK_PLACE;
 		unmake(move);
 
 		return new Pair<>(move, ret);
@@ -359,7 +360,7 @@ public class GenBoard extends BaseBoard
 			square[i] = Piece.EMPTY;
 		for (var i = 0; i < 32; i++) {
 			piece[i] = Piece.DEAD;
-			pieceType[i] = Move.InitPieceType[i];
+			pieceType[i] = InitPieceType[i];
 		}
 	}
 
@@ -430,7 +431,7 @@ public class GenBoard extends BaseBoard
 	{
 		for (var i = 0; i < 32; i++) {
 			if (piece[i] == Piece.PLACEABLE)
-				fen.append(Move.PIECE_SYM[Move.InitPieceType[i] + 6]);
+				fen.append(Move.PIECE_SYM[InitPieceType[i] + 6]);
 		}
 	}
 
@@ -544,14 +545,14 @@ public class GenBoard extends BaseBoard
 
 			final int[] loc;
 			switch (moveType) {
-			case Move.MOVE_ALL:
+			case MOVE_ALL:
 			default:
 				loc = genAll(piece[idx]);
 				break;
-			case Move.MOVE_CAPTURE:
+			case MOVE_CAPTURE:
 				loc = genCapture(piece[idx]);
 				break;
-			case Move.MOVE_MOVE:
+			case MOVE_MOVE:
 				loc = genMove(piece[idx]);
 				break;
 			}
@@ -612,20 +613,20 @@ public class GenBoard extends BaseBoard
 		data.size = 0;
 
 		switch (moveType) {
-		case Move.MOVE_ALL:
+		case MOVE_ALL:
 			if (ply < 2) {
 				getPlaceMoveList(data, Piece.KING * color);
 				break;
 			}
-			getMoveList(data, color, Move.MOVE_ALL);
+			getMoveList(data, color, MOVE_ALL);
 			for (int type = Piece.QUEEN; type >= Piece.PAWN; type--)
 				getPlaceMoveList(data, type * color);
 			break;
-		case Move.MOVE_CAPTURE:
-		case Move.MOVE_MOVE:
+		case MOVE_CAPTURE:
+		case MOVE_MOVE:
 			getMoveList(data, color, moveType);
 			break;
-		case Move.MOVE_PLACE:
+		case MOVE_PLACE:
 			if (ply < 2) {
 				getPlaceMoveList(data, Piece.KING * color);
 				break;

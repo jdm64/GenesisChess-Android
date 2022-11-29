@@ -98,7 +98,7 @@ public class PlaceView extends LinearLayout implements OnClickListener
 
 	public ICountSq getPiece(int index)
 	{
-		var type = index - Move.PLACEOFFSET;
+		var type = index - Board.PLACEOFFSET;
 		return squares[type + 6];
 	}
 

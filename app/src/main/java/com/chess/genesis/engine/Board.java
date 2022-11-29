@@ -22,6 +22,89 @@ import android.util.*;
 
 public interface Board
 {
+	int[] InitPieceType = {
+	    Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
+	    Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,   Piece.BLACK_PAWN,
+	    Piece.BLACK_KNIGHT, Piece.BLACK_KNIGHT, Piece.BLACK_BISHOP, Piece.BLACK_BISHOP,
+	    Piece.BLACK_ROOK,   Piece.BLACK_ROOK,   Piece.BLACK_QUEEN,  Piece.BLACK_KING,
+	    Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
+	    Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,   Piece.WHITE_PAWN,
+	    Piece.WHITE_KNIGHT, Piece.WHITE_KNIGHT, Piece.WHITE_BISHOP, Piece.WHITE_BISHOP,
+	    Piece.WHITE_ROOK,   Piece.WHITE_ROOK,   Piece.WHITE_QUEEN,  Piece.WHITE_KING};
+
+	int PLACEOFFSET = 1000;
+
+	int VALID_MOVE = 0;
+	int INVALID_FORMAT = 1;
+	int NOPIECE_ERROR = 2;
+	int DONT_OWN = 3;
+	int KING_FIRST = 4;
+	int NON_EMPTY_PLACE = 5;
+	int CAPTURE_OWN = 6;
+	int INVALID_MOVEMENT = 7;
+	int IN_CHECK = 8;
+	int IN_CHECK_PLACE = 9;
+	int CANT_CASTLE = 10;
+
+	int MOVE_ALL = 0;
+	int MOVE_CAPTURE = 1;
+	int MOVE_MOVE = 2;
+	int MOVE_PLACE = 3;
+
+	int NOT_MATE = 0;
+	int CHECK_MATE = 1;
+	int STALE_MATE = 2;
+
+	static int COL(final int x)
+	{
+		return x & 7;
+	}
+
+	static boolean ON_BOARD(final int sq)
+	{
+		return (sq & 0x88) == 0;
+	}
+
+	static boolean OFF_BOARD(final int sq)
+	{
+		return (sq & 0x88) != 0;
+	}
+
+	static boolean OWN_PIECE(final int A, final int B)
+	{
+		return (A * B >  0);
+	}
+
+	static boolean CAPTURE_MOVE(final int A, final int B)
+	{
+		return (A * B <  0);
+	}
+
+	static boolean ANY_MOVE(final int A, final int B)
+	{
+		return (A * B <= 0);
+	}
+
+	static int EE64(final int x)
+	{
+		return ((x & 7) + x) >> 1;
+	}
+
+	static int EE64F(final int x)
+	{
+		return ((7 - (x >> 4)) << 3) + (x & 7);
+	}
+
+	static int SF88(final int x)
+	{
+		return (x & ~7) + x;
+	}
+
+	static int SFF88(final int x)
+	{
+		return ((7 - (x >> 3)) << 4) + (x & 7);
+	}
+
 	Board copy();
 
 	Supplier<Move> moveGenerator();
@@ -61,14 +144,14 @@ public interface Board
 	{
 		var move = "";
 		if (from > 0x88) {
-			move += Move.PIECE_SYM[Math.abs(from - Move.PLACEOFFSET) + 6];
+			move += Move.PIECE_SYM[Math.abs(from - Board.PLACEOFFSET) + 6];
 		} else {
 			move += Move.printSq(from);
 		}
 		move += Move.printSq(to);
 
 		var res = parseMove(move);
-		return res.second == Move.VALID_MOVE ? res.first : null;
+		return res.second == Board.VALID_MOVE ? res.first : null;
 	}
 
 	int eval();

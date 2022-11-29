@@ -21,6 +21,18 @@ import java.util.function.*;
 
 public class MoveFlags implements Supplier<MoveFlags>
 {
+	public final static int EP_FILE = 0x7;
+	public final static int EP_FLAG = 1 << 3;
+	public final static int EP_MASK = EP_FLAG | EP_FILE;
+	public final static int WK_CASTLE = 1 << 4;
+	public final static int WQ_CASTLE = 1 << 5;
+	public final static int BK_CASTLE = 1 << 6;
+	public final static int BQ_CASTLE = 1 << 7;
+	public final static int W_CASTLE = WK_CASTLE | WQ_CASTLE;
+	public final static int B_CASTLE = BK_CASTLE | BQ_CASTLE;
+	public final static int WB_CASTLE = W_CASTLE | B_CASTLE;
+	public final static int DEFAULT_FLAGS = W_CASTLE | B_CASTLE;
+
 	public int bits;
 
 	public MoveFlags()
@@ -46,61 +58,61 @@ public class MoveFlags implements Supplier<MoveFlags>
 
 	public final void reset()
 	{
-		bits = Move.DEFAULT_FLAGS;
+		bits = DEFAULT_FLAGS;
 	}
 
 	public int canEnPassant()
 	{
-		return bits & Move.CAN_EP;
+		return bits & EP_FLAG;
 	}
 
 	public int enPassantFile()
 	{
-		return bits & Move.EP_FILE;
+		return bits & EP_FILE;
 	}
 
 	public void setEnPassant(final int file)
 	{
-		bits = (bits & ~Move.EP_FLAG) | (file | Move.CAN_EP);
+		bits = (bits & ~EP_MASK) | EP_FLAG | file;
 	}
 
 	public void clearEnPassant()
 	{
-		bits &= ~Move.EP_FLAG;
+		bits &= ~EP_MASK;
 	}
 
 	public int canCastle(final int color)
 	{
-		return bits & ((color == Piece.WHITE)? Move.W_CASTLE : Move.B_CASTLE);
+		return bits & (color == Piece.WHITE ? W_CASTLE : B_CASTLE);
 	}
 
 	public int canKingCastle(final int color)
 	{
-		return bits & ((color == Piece.WHITE)? Move.WK_CASTLE : Move.BK_CASTLE);
+		return bits & (color == Piece.WHITE ? WK_CASTLE : BK_CASTLE);
 	}
 
 	public int canQueenCastle(final int color)
 	{
-		return bits & ((color == Piece.WHITE)? Move.WQ_CASTLE : Move.BQ_CASTLE);
+		return bits & (color == Piece.WHITE ? WQ_CASTLE : BQ_CASTLE);
 	}
 
 	public void clearCastle(final int color)
 	{
-		bits &= ((color == Piece.WHITE)? ~Move.W_CASTLE : ~Move.B_CASTLE);
+		bits &= color == Piece.WHITE ? ~W_CASTLE : ~B_CASTLE;
 	}
 
 	public void clearKingCastle(final int color)
 	{
-		bits &= ((color == Piece.WHITE)? ~Move.WK_CASTLE : ~Move.BK_CASTLE);
+		bits &= color == Piece.WHITE ? ~WK_CASTLE : ~BK_CASTLE;
 	}
 
 	public void clearQueenCastle(final int color)
 	{
-		bits &= ((color == Piece.WHITE)? ~Move.WQ_CASTLE : ~Move.BQ_CASTLE);
+		bits &= color == Piece.WHITE ? ~WQ_CASTLE : ~BQ_CASTLE;
 	}
 
 	public void setCastle(final int value)
 	{
-		bits &= (0xff & value);
+		bits = (bits & ~WB_CASTLE) | value;
 	}
 }
