@@ -177,7 +177,7 @@ public class MoveHandler implements IMoveHandler
 				button.setHighlight(true);
 			}
 		}
-		board.getMoveListPool().put(moveList);
+		BaseBoard.pool.put(moveList);
 	}
 
 	private void showMovesTo(int square)
@@ -192,6 +192,6 @@ public class MoveHandler implements IMoveHandler
 				button.setHighlight(true);
 			}
 		}
-		board.getMoveListPool().put(moveList);
+		BaseBoard.pool.put(moveList);
 	}
 }

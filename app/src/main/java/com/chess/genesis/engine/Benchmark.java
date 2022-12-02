@@ -36,6 +36,7 @@ public class Benchmark
 		rboard = new RegBoard();
 		gboard = new GenBoard();
 		flags = new MoveFlags();
+		pool = BaseBoard.pool;
 	}
 
 	private long GenPerft(final int depth)
@@ -80,7 +81,6 @@ public class Benchmark
 		tNodes = 0;
 		start = now;
 		end = start + 5000;
-		pool = gboard.getMoveListPool();
 
 		for (int i = 1; true; i++) {
 			tNodes += GenPerft(i);
@@ -99,7 +99,6 @@ public class Benchmark
 		tNodes = 0;
 		start = now;
 		end = start + 5000;
-		pool = rboard.getMoveListPool();
 
 		for (int i = 1; true; i++) {
 			tNodes += RegPerft(i);

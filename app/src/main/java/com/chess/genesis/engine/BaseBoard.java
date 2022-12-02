@@ -60,6 +60,8 @@ public abstract class BaseBoard implements Board
 
 	private final int[] list = new int[28];
 
+	public static final MoveListPool pool = new MoveListPool();
+
 	int[] square;
 	int[] piece;
 	int[] pieceType;
@@ -71,7 +73,6 @@ public abstract class BaseBoard implements Board
 	abstract boolean setPiece(int loc, int type);
 	abstract void parseReset();
 	abstract void setMaxPly();
-	abstract MoveListPool movePool();
 
 	abstract int[] genAll_Pawn(int From, int[] list);
 	abstract int[] genCapture_Pawn(int From, int[] list);
@@ -156,7 +157,7 @@ public abstract class BaseBoard implements Board
 				return CHECK_MATE;
 			return STALE_MATE;
 		} finally {
-			movePool().put(mList);
+			pool.put(mList);
 		}
 	}
 

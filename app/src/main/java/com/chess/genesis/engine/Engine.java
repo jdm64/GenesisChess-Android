@@ -55,7 +55,7 @@ public abstract class Engine
 		moveKiller = new ObjectArray<>(Move::new);
 		ttItem = new TransItem();
 		tt = new TransTable(boardType, 8);
-		pool = boardType.getMoveListPool();
+		pool = BaseBoard.pool;
 	}
 
 	public static Engine create(Board board)

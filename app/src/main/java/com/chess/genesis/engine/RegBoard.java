@@ -89,7 +89,6 @@ public class RegBoard extends BaseBoard
 
 	private static final long[] hashBox = new long[ZBOX_SIZE];
 	private static long startHash;
-	private static final MoveListPool pool = new MoveListPool();
 
 	private final MoveNode item = new MoveNode();
 	private final MoveFlags undoFlags = new MoveFlags();
@@ -117,12 +116,6 @@ public class RegBoard extends BaseBoard
 	public RegBoard copy()
 	{
 		return new RegBoard(this);
-	}
-
-	@Override
-	public MoveListPool movePool()
-	{
-		return pool;
 	}
 
 	private int pieceIndex(final int loc, final int type)
@@ -173,12 +166,6 @@ public class RegBoard extends BaseBoard
 	}
 
 	@Override
-	public MoveListPool getMoveListPool()
-	{
-		return pool;
-	}
-
-	@Override
 	public void getMoveFlags(final MoveFlags Flags)
 	{
 		Flags.set(flags);
@@ -199,9 +186,9 @@ public class RegBoard extends BaseBoard
 
 			key ^= hashBox[13 * EE64(piece[castleI]) + pieceType[castleI] + 6];
 			key ^= hashBox[13 * EE64(castleTo) + pieceType[castleI] + 6];
-			if (flags.canKingCastle(color) != 0)
+			if (flags.canKingCastle(color))
 				key ^= hashBox[CASTLE_HASH + color];
-			if (flags.canQueenCastle(color) != 0)
+			if (flags.canQueenCastle(color))
 				key ^= hashBox[CASTLE_HASH + color * 2];
 
 			square[castleTo] = pieceType[castleI];
@@ -211,17 +198,17 @@ public class RegBoard extends BaseBoard
 			mScore -= stm * locValue[Piece.ROOK][EE64(castleI)];
 			flags.clearCastle(color);
 		} else if (Math.abs(pieceType[move.index]) == Piece.ROOK) {
-			if (move.from == (isWhite? Piece.H1:Piece.H8) && flags.canKingCastle(color) != 0) {
+			if (move.from == (isWhite? Piece.H1:Piece.H8) && flags.canKingCastle(color)) {
 				flags.clearKingCastle(color);
 				key ^= hashBox[CASTLE_HASH + color];
-			} else if (move.from == (isWhite? Piece.A1:Piece.A8) && flags.canQueenCastle(color) != 0) {
+			} else if (move.from == (isWhite? Piece.A1:Piece.A8) && flags.canQueenCastle(color)) {
 				flags.clearQueenCastle(color);
 				key ^= hashBox[CASTLE_HASH + color * 2];
 			}
-		} else if (Math.abs(pieceType[move.index]) == Piece.KING && flags.canCastle(color) != 0) {
-			if (flags.canKingCastle(color) != 0)
+		} else if (Math.abs(pieceType[move.index]) == Piece.KING && flags.canCastle(color)) {
+			if (flags.canKingCastle(color))
 				key ^= hashBox[CASTLE_HASH + color];
-			if (flags.canQueenCastle(color) != 0)
+			if (flags.canQueenCastle(color))
 				key ^= hashBox[CASTLE_HASH + color * 2];
 
 			flags.clearCastle(color);
@@ -230,7 +217,7 @@ public class RegBoard extends BaseBoard
 		}
 		key ^= hashBox[13 * EE64(move.to) + pieceType[move.index] + 6];
 
-		if (flags.canEnPassant() != 0) {
+		if (flags.canEnPassant()) {
 			flags.clearEnPassant();
 			key ^= hashBox[ENPASSANT_HASH];
 		}
@@ -337,7 +324,7 @@ public class RegBoard extends BaseBoard
 
 		if (move.getCastle() != 0) {
 			return validCastle(move, stm) == VALID_MOVE;
-		} else if (move.getEnPassant() && flags.canEnPassant() != 0) {
+		} else if (move.getEnPassant() && flags.canEnPassant()) {
 			return validEnPassant(move, stm) == VALID_MOVE;
 		} else if (Move.couldBePromote(move.to, stm) && Math.abs(square[move.from]) == Piece.PAWN) {
 			if (move.getPromote() == 0)
@@ -363,7 +350,7 @@ public class RegBoard extends BaseBoard
 	private int validCastle(final Move move, final int color)
 	{
 		// can we castle on that side
-		if (flags.canCastle(color) == 0 || move.getCastle() == 0)
+		if (!flags.canCastle(color) || move.getCastle() == 0)
 			return CANT_CASTLE;
 		// can't castle while in check
 		if (inCheck(color))
@@ -437,7 +424,7 @@ public class RegBoard extends BaseBoard
 		switch (Math.abs(pieceType[move.index])) {
 		case Piece.PAWN:
 			// en passant
-			if (flags.canEnPassant() != 0 && validEnPassant(move, color) == VALID_MOVE)
+			if (flags.canEnPassant() && validEnPassant(move, color) == VALID_MOVE)
 				return new Pair<>(move, VALID_MOVE);
 
 			if (!Move.couldBePromote(move.to, color)) {
@@ -602,18 +589,18 @@ public class RegBoard extends BaseBoard
 	{
 		// print castle rights
 		if ((flags.bits & 0xf0) != 0) {
-			if (flags.canKingCastle(Piece.WHITE) != 0)
+			if (flags.canKingCastle(Piece.WHITE))
 				fen.append('K');
-			if (flags.canQueenCastle(Piece.WHITE) != 0)
+			if (flags.canQueenCastle(Piece.WHITE))
 				fen.append('Q');
-			if (flags.canKingCastle(Piece.BLACK) != 0)
+			if (flags.canKingCastle(Piece.BLACK))
 				fen.append('k');
-			if (flags.canQueenCastle(Piece.BLACK) != 0)
+			if (flags.canQueenCastle(Piece.BLACK))
 				fen.append('q');
 		}
 		fen.append(':');
 
-		if (flags.canEnPassant() != 0) {
+		if (flags.canEnPassant()) {
 			fen.append((char) ('a' + flags.enPassantFile()));
 			fen.append(ply % 2 == 0 ? '6' : '3');
 		}
@@ -833,7 +820,7 @@ public class RegBoard extends BaseBoard
 		var kIndex = isWhite ? 31 : 15;
 
 		// King Side
-		if (flags.canKingCastle(color) != 0 && square[king + 1] == Piece.EMPTY && square[king + 2] == Piece.EMPTY &&
+		if (flags.canKingCastle(color) && square[king + 1] == Piece.EMPTY && square[king + 2] == Piece.EMPTY &&
 		!isAttacked(king + 1, color) && !isAttacked(king + 2, color) &&
 		Math.abs(square[((color == Piece.WHITE)? Piece.H1:Piece.H8)]) == Piece.ROOK) {
 			item.move.xindex = Piece.NONE;
@@ -847,7 +834,7 @@ public class RegBoard extends BaseBoard
 			data.add(item);
 		}
 		// Queen Side
-		if (flags.canQueenCastle(color) != 0 && square[king - 1] == Piece.EMPTY && square[king - 2] == Piece.EMPTY &&
+		if (flags.canQueenCastle(color) && square[king - 1] == Piece.EMPTY && square[king - 2] == Piece.EMPTY &&
 		square[king - 3] == Piece.EMPTY && !isAttacked(king - 1, color) && !isAttacked(king - 2, color) &&
 		Math.abs(square[((color == Piece.WHITE)? Piece.A1:Piece.A8)]) == Piece.ROOK) {
 			item.move.xindex = Piece.NONE;
@@ -864,7 +851,7 @@ public class RegBoard extends BaseBoard
 
 	private void getEnPassantMoveList(final MoveList data, final int color)
 	{
-		if (flags.canEnPassant() == 0)
+		if (!flags.canEnPassant())
 			return;
 
 		var isWhite = color == Piece.WHITE;

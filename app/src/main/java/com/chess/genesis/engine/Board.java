@@ -119,7 +119,6 @@ public interface Board
 	int[] getBoardArray();
 	int[] getPieceCounts(final int Loc);
 
-	MoveListPool getMoveListPool();
 	void setStartHash(final long StartHash);
 	long[] getHashBox();
 

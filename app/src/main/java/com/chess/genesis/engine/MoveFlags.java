@@ -61,9 +61,9 @@ public class MoveFlags implements Supplier<MoveFlags>
 		bits = DEFAULT_FLAGS;
 	}
 
-	public int canEnPassant()
+	public boolean canEnPassant()
 	{
-		return bits & EP_FLAG;
+		return (bits & EP_FLAG) != 0;
 	}
 
 	public int enPassantFile()
@@ -81,19 +81,19 @@ public class MoveFlags implements Supplier<MoveFlags>
 		bits &= ~EP_MASK;
 	}
 
-	public int canCastle(final int color)
+	public boolean canCastle(final int color)
 	{
-		return bits & (color == Piece.WHITE ? W_CASTLE : B_CASTLE);
+		return (bits & (color == Piece.WHITE ? W_CASTLE : B_CASTLE)) != 0;
 	}
 
-	public int canKingCastle(final int color)
+	public boolean canKingCastle(final int color)
 	{
-		return bits & (color == Piece.WHITE ? WK_CASTLE : BK_CASTLE);
+		return (bits & (color == Piece.WHITE ? WK_CASTLE : BK_CASTLE)) != 0;
 	}
 
-	public int canQueenCastle(final int color)
+	public boolean canQueenCastle(final int color)
 	{
-		return bits & (color == Piece.WHITE ? WQ_CASTLE : BQ_CASTLE);
+		return (bits & (color == Piece.WHITE ? WQ_CASTLE : BQ_CASTLE)) != 0;
 	}
 
 	public void clearCastle(final int color)

@@ -89,7 +89,6 @@ public class GenBoard extends BaseBoard
 
 	private static final long[] hashBox = new long[ZBOX_SIZE];
 	private static long startHash;
-	private static final MoveListPool pool = new MoveListPool();
 
 	private final MoveNode item = new MoveNode();
 
@@ -114,12 +113,6 @@ public class GenBoard extends BaseBoard
 	public GenBoard copy()
 	{
 		return new GenBoard(this);
-	}
-
-	@Override
-	public MoveListPool movePool()
-	{
-		return pool;
 	}
 
 	private int pieceIndex(final int loc, final int type)
@@ -182,12 +175,6 @@ public class GenBoard extends BaseBoard
 	public void setStartHash(final long StartHash)
 	{
 		startHash = StartHash;
-	}
-
-	@Override
-	public MoveListPool getMoveListPool()
-	{
-		return pool;
 	}
 
 	@Override
