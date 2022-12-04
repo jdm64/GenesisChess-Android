@@ -18,7 +18,7 @@
 package com.chess.genesis.engine;
 
 import static com.chess.genesis.engine.Board.*;
-import android.util.*;
+import androidx.core.util.*;
 
 public class RegBoard extends BaseBoard
 {

@@ -17,7 +17,7 @@
 
 package com.chess.genesis.engine;
 
-import android.util.*;
+import androidx.core.util.*;
 
 public interface Board
 {
