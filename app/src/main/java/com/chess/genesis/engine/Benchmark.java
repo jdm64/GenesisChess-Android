@@ -22,91 +22,44 @@ public class Benchmark
 	public final static String REG_NPS = "rnps";
 	public final static String GEN_NPS = "gnps";
 
-	private final RegBoard rboard;
-	private final GenBoard gboard;
-	private final MoveFlags flags;
+	private final MoveFlags flags = new MoveFlags();
+	private final MoveListPool pool = BaseBoard.pool;
 
-	private MoveListPool pool;
-	private long start;
 	private long end;
-	private long tNodes;
 
-	public Benchmark()
-	{
-		rboard = new RegBoard();
-		gboard = new GenBoard();
-		flags = new MoveFlags();
-		pool = BaseBoard.pool;
-	}
-
-	private long GenPerft(final int depth)
+	private long perft(int depth, Board board)
 	{
 		if (depth == 0 || System.currentTimeMillis() > end)
 			return 1;
 
-		var ptr = gboard.getMoveList(gboard.getStm(), Board.MOVE_ALL);
+		board.getMoveFlags(flags);
+		var ptr = board.getMoveList(board.getStm(), Board.MOVE_ALL);
 
-		long nodes = 0;
-		for (final MoveNode node : ptr) {
-			gboard.make(node.move);
-			nodes += GenPerft(depth - 1);
-			gboard.unmake(node.move);
+		var nodes = 0;
+		for (MoveNode node : ptr) {
+			board.make(node.move);
+			nodes += perft(depth - 1, board);
+			board.unmake(node.move, flags);
 		}
 		pool.put(ptr);
 		return nodes;
 	}
 
-	private long RegPerft(final int depth)
+	public long run(Board board)
 	{
-		if (depth == 0 || System.currentTimeMillis() > end)
-			return 1;
+		var now = System.currentTimeMillis();
+		var tNodes = 0;
+		var start = now;
 
-		rboard.getMoveFlags(flags);
-		var ptr = rboard.getMoveList(rboard.getStm(), Board.MOVE_ALL);
-
-		long nodes = 0;
-		for (final MoveNode node : ptr) {
-			rboard.make(node.move);
-			nodes += RegPerft(depth - 1);
-			rboard.unmake(node.move, flags);
-		}
-		pool.put(ptr);
-		return nodes;
-	}
-
-	public long genBench()
-	{
-		long now = System.currentTimeMillis();
-
-		tNodes = 0;
-		start = now;
 		end = start + 5000;
 
 		for (int i = 1; true; i++) {
-			tNodes += GenPerft(i);
+			tNodes += perft(i, board);
 
 			now = System.currentTimeMillis();
 			if (now > end)
 				break;
 		}
-		return (1000 * tNodes) / (now - start);
-	}
-
-	public long regBench()
-	{
-		long now = System.currentTimeMillis();
-
-		tNodes = 0;
-		start = now;
-		end = start + 5000;
-
-		for (int i = 1; true; i++) {
-			tNodes += RegPerft(i);
-
-			now = System.currentTimeMillis();
-			if (now > end)
-				break;
-		}
-		return (1000 * tNodes) / (now - start);
+		return (1000L * tNodes) / (now - start);
 	}
 }

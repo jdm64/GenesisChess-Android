@@ -152,19 +152,6 @@ public class GenBoard extends BaseBoard
 		key = startHash;
 	}
 
-	// Do Not call the following functions!
-	@Override
-	public void getMoveFlags(final MoveFlags Flags)
-	{
-		throw new RuntimeException("RegBoard function called from GenBoard class");
-	}
-	@Override
-	public void unmake(final Move move, final MoveFlags undoFlags)
-	{
-		throw new RuntimeException("RegBoard function called from GenBoard class");
-	}
-	// ------
-
 	@Override
 	public long[] getHashBox()
 	{
@@ -212,7 +199,7 @@ public class GenBoard extends BaseBoard
 	}
 
 	@Override
-	public void unmake(final Move move)
+	public void unmake(final Move move, MoveFlags undoFlags)
 	{
 		piece[move.index] = move.from;
 		mScore += stm * locValue[Math.abs(square[move.to])][EE64(move.to)];
@@ -275,7 +262,7 @@ public class GenBoard extends BaseBoard
 			ret = false;
 		if (move.from == Piece.PLACEABLE && inCheck(stm))
 			ret = false;
-		unmake(move);
+		unmake(move, undoFlags);
 
 		return ret;
 	}
@@ -320,7 +307,7 @@ public class GenBoard extends BaseBoard
 			ret = IN_CHECK;
 		else if (move.from == Piece.PLACEABLE && inCheck(stm))
 			ret = IN_CHECK_PLACE;
-		unmake(move);
+		unmake(move, undoFlags);
 
 		return new Pair<>(move, ret);
 	}
@@ -541,7 +528,7 @@ public class GenBoard extends BaseBoard
 					item.score = eval();
 					data.add(item);
 				}
-				unmake(item.move);
+				unmake(item.move, undoFlags);
 			}
 		}
 	}
@@ -575,7 +562,7 @@ public class GenBoard extends BaseBoard
 				item.score = eval();
 				data.add(item);
 			}
-			unmake(item.move);
+			unmake(item.move, undoFlags);
 		}
 	}
 

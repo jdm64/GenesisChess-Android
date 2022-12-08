@@ -76,10 +76,10 @@ public class BenchmarkDialog extends DialogFragment implements DialogInterface.O
 			var benchmark = new Benchmark();
 			long[] count = new long[1];
 
-			count[0] = benchmark.genBench();
+			count[0] = benchmark.run(new GenBoard());
 			Util.runUI(() -> gnps.setText(count[0] + " moves/sec"));
 
-			count[0] = benchmark.regBench();
+			count[0] = benchmark.run(new RegBoard());
 			Util.runUI(() -> {
 				rnps.setText(count[0] + " moves/sec");
 				dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);

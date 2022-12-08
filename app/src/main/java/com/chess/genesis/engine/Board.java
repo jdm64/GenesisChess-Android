@@ -130,7 +130,6 @@ public interface Board
 	boolean parseZFen(String zFen);
 
 	void make(final Move move);
-	void unmake(final Move move);
 	void unmake(final Move move, final MoveFlags UndoFlags);
 
 	Pair<Move,Integer> parseMove(String moveStr);

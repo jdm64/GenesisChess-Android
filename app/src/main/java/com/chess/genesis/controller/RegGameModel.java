@@ -21,27 +21,9 @@ import com.chess.genesis.engine.*;
 
 public class RegGameModel extends GameModel
 {
-	final ObjectArray<MoveFlags> flagsHistory = new ObjectArray<>(new MoveFlags());
-
 	public RegGameModel(IGameView _view, IGameController controller)
 	{
 		super(new RegBoard(), _view, controller);
-	}
-
-	@Override
-	public void addMove(Move move, long time)
-	{
-		var flags = new MoveFlags();
-		board.getMoveFlags(flags);
-		flagsHistory.push(flags);
-		super.addMove(move, time);
-	}
-
-	@Override
-	public void reset()
-	{
-		super.reset();
-		flagsHistory.clear();
 	}
 
 	@Override

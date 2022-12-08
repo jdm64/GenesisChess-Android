@@ -62,6 +62,9 @@ public abstract class BaseBoard implements Board
 
 	public static final MoveListPool pool = new MoveListPool();
 
+	final MoveFlags undoFlags = new MoveFlags();
+	final MoveFlags flags = new MoveFlags();
+
 	int[] square;
 	int[] piece;
 	int[] pieceType;
@@ -113,6 +116,12 @@ public abstract class BaseBoard implements Board
 	public long hash()
 	{
 		return key;
+	}
+
+	@Override
+	public void getMoveFlags(MoveFlags Flags)
+	{
+		Flags.set(flags);
 	}
 
 	@Override

@@ -23,8 +23,9 @@ import com.chess.genesis.engine.*;
 public abstract class GameModel implements IGameModel
 {
 	protected final Board board;
+	protected final ObjectArray<MoveFlags> flagsHistory = new ObjectArray<>(MoveFlags::new);
 	protected final IMoveHandler moveHandler;
-	protected final TimedObjectArr<Move> history;
+	protected final TimedObjectArr<Move> history = new TimedObjectArr<>(Move::new);
 	protected final IGameView view;
 	protected final IGameController controller;
 
@@ -37,7 +38,6 @@ public abstract class GameModel implements IGameModel
 		view = _view;
 		board = _board;
 		moveHandler = new MoveHandler(this, view);
-		history = new TimedObjectArr<>(Move::new);
 	}
 
 	@Override
@@ -65,6 +65,7 @@ public abstract class GameModel implements IGameModel
 		history.clear();
 		board.reset();
 		moveHandler.clear();
+		flagsHistory.clear();
 	}
 
 	/**
@@ -72,6 +73,10 @@ public abstract class GameModel implements IGameModel
 	 */
 	protected void addMove(Move move, long time)
 	{
+		var flags = new MoveFlags();
+		board.getMoveFlags(flags);
+		flagsHistory.push(flags);
+
 		hindex++;
 		board.make(move);
 		history.pushWithTime(move, time);

@@ -103,7 +103,7 @@ public class GenGameModel extends GameModel
 				to.setPiece(Board.InitPieceType[move.xindex]);
 		}
 
-		board.unmake(move);
+		board.unmake(move, flagsHistory.get(hindex));
 		hindex--;
 
 		postRevertMove();

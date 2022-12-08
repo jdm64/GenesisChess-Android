@@ -91,8 +91,6 @@ public class RegBoard extends BaseBoard
 	private static long startHash;
 
 	private final MoveNode item = new MoveNode();
-	private final MoveFlags undoFlags = new MoveFlags();
-	private final MoveFlags flags = new MoveFlags();
 
 	public RegBoard()
 	{
@@ -145,14 +143,6 @@ public class RegBoard extends BaseBoard
 		flags.reset();
 	}
 
-	// Do Not call the following functions!
-	@Override
-	public void unmake(final Move move)
-	{
-		throw new RuntimeException("GenBoard function called from RegBoard");
-	}
-	// ------
-
 	@Override
 	public long[] getHashBox()
 	{
@@ -163,12 +153,6 @@ public class RegBoard extends BaseBoard
 	public void setStartHash(final long StartHash)
 	{
 		startHash = StartHash;
-	}
-
-	@Override
-	public void getMoveFlags(final MoveFlags Flags)
-	{
-		Flags.set(flags);
 	}
 
 	@Override

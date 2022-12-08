@@ -17,45 +17,38 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
+
 public abstract class Engine
 {
 	static final int MIN_SCORE = -(Integer.MAX_VALUE - 4);
-	private static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
+	static final int MAX_SCORE = (Integer.MAX_VALUE - 4);
 	static final int CHECKMATE_SCORE = MIN_SCORE;
 	static final int STALEMATE_SCORE = 0;
 
-	final BoolArray tactical;
-	final BoolArray isMate;
-	private final Rand64 rand;
+	final BoolArray tactical = new BoolArray();
+	final BoolArray isMate =  new BoolArray();
+	final Rand64 rand = new Rand64();
 
-	final ObjectArray<Move> pvMove;
-	final ObjectArray<Move> captureKiller;
-	final ObjectArray<Move> moveKiller;
-	final ObjectArray<Move> sMove;
+	final ObjectArray<Move> pvMove = new ObjectArray<>(Move::new);
+	final ObjectArray<Move> captureKiller = new ObjectArray<>(Move::new);
+	final ObjectArray<Move> moveKiller = new ObjectArray<>(Move::new);
+	final ObjectArray<Move> sMove = new ObjectArray<>(Move::new);
 
 	final TransTable tt;
-	final TransItem ttItem;
-	final MoveListPool pool;
+	final TransItem ttItem = new TransItem();
+	final MoveListPool pool = BaseBoard.pool;
+
+	final MoveFlags undoFlags = new MoveFlags();
 
 	MoveList curr;
 	Board board;
 	long endT;
-	boolean active;
+	boolean active = false;
 
 	Engine(Board boardType)
 	{
-		active = false;
-		tactical = new BoolArray();
-		isMate = new BoolArray();
-		rand = new Rand64();
-
-		sMove = new ObjectArray<>(Move::new);
-		pvMove = new ObjectArray<>(Move::new);
-		captureKiller = new ObjectArray<>(Move::new);
-		moveKiller = new ObjectArray<>(Move::new);
-		ttItem = new TransItem();
 		tt = new TransTable(boardType, 8);
-		pool = BaseBoard.pool;
 	}
 
 	public static Engine create(Board board)
@@ -68,7 +61,136 @@ public abstract class Engine
 		board = _board.copy();
 	}
 
-	protected abstract void search(int minScore, int maxScore, int i, int depth);
+	int Quiescence(int _alpha, int beta, int depth)
+	{
+		var ptr = board.getMoveList(board.getStm(), tactical.get(depth)? Board.MOVE_ALL : Board.MOVE_CAPTURE);
+
+		if (ptr.size == 0) {
+			pool.put(ptr);
+			return tactical.get(depth)? CHECKMATE_SCORE + board.getPly() : -board.eval();
+		}
+		board.getMoveFlags(undoFlags);
+
+		var score = -board.eval();
+		if (score >= beta) {
+			pool.put(ptr);
+			return score;
+		}
+		var best = MIN_SCORE;
+		var alpha = Math.max(_alpha, score);
+		Arrays.sort(ptr.list, 0, ptr.size);
+
+		for (MoveNode node : ptr) {
+			// set check for opponent
+			tactical.set(depth + 1, node.check);
+
+			board.make(node.move);
+			score = -Quiescence(-beta, -alpha, depth + 1);
+			board.unmake(node.move, undoFlags);
+
+			if (score >= beta) {
+				pool.put(ptr);
+				return score;
+			}
+			best = Math.max(best, score);
+			alpha = Math.max(alpha, score);
+		}
+		pool.put(ptr);
+		return best;
+	}
+
+	abstract int NegaScout(int inAlpha, int beta, int depth, int inLimit);
+
+	boolean NegaMoveType(Int alpha, int beta, Int best, int depth, int limit, ObjectArray<Move> killer, int type)
+	{
+		board.getMoveFlags(undoFlags);
+		best.val = MIN_SCORE;
+
+		// Try Killer Move
+		var kMove = killer.get(depth);
+		if (board.validMove(kMove, kMove)) {
+			isMate.set(depth, false);
+
+			board.make(kMove);
+
+			// set check for opponent
+			tactical.set(depth + 1, board.inCheck(board.getStm()));
+
+			best.val = -NegaScout(-beta, -alpha.val, depth + 1, limit);
+			board.unmake(kMove, undoFlags);
+
+			if (best.val >= beta) {
+				tt.setItem(board.hash(), best.val, kMove, limit - depth, TransItem.CUT_NODE);
+				return true;
+			} else if (best.val > alpha.val) {
+				alpha.val = best.val;
+				pvMove.get(depth).set(kMove);
+			}
+		}
+		// Try all of moveType Moves
+		var ptr = board.getMoveList(board.getStm(), type);
+
+		if (ptr.size == 0) {
+			pool.put(ptr);
+			return false;
+		}
+		Arrays.sort(ptr.list, 0, ptr.size);
+
+		isMate.set(depth, false);
+		var b = alpha.val + 1;
+		for (var node : ptr) {
+			board.make(node.move);
+
+			// set check for opponent
+			tactical.set(depth + 1, node.check);
+
+			node.score = -NegaScout(-b, -alpha.val, depth + 1, limit);
+			if (node.score > alpha.val && node.score < beta)
+				node.score = -NegaScout(-beta, -alpha.val, depth + 1, limit);
+			board.unmake(node.move, undoFlags);
+
+			best.val = Math.max(best.val, node.score);
+			if (best.val >= beta) {
+				killer.get(depth).set(node.move);
+				tt.setItem(board.hash(), best.val, killer.get(depth), limit - depth, TransItem.CUT_NODE);
+				pool.put(ptr);
+				return true;
+			} else if (best.val > alpha.val) {
+				alpha.val = best.val;
+				pvMove.get(depth).set(node.move);
+			}
+			b = alpha.val + 1;
+		}
+		pool.put(ptr);
+		return false;
+	}
+
+	protected void search(int Alpha, int beta, int depth, int limit)
+	{
+		board.getMoveFlags(undoFlags);
+
+		var alpha = Alpha;
+		var b = beta;
+		for (int n = 0; n < curr.size; n++) {
+			var node = curr.list[n];
+			tactical.set(depth + 1, node.check);
+
+			board.make(node.move);
+			node.score = -NegaScout(-b, -alpha, depth + 1, limit);
+			if (node.score > alpha && node.score < beta && n > 0)
+				node.score = -NegaScout(-beta, -alpha, depth + 1, limit);
+			board.unmake(node.move, undoFlags);
+
+			if (node.score > alpha) {
+				alpha = node.score;
+				pvMove.get(depth).set(node.move);
+				tt.setItem(board.hash(), alpha, pvMove.get(depth), limit - depth, TransItem.PV_NODE);
+			}
+			b = alpha + 1;
+		}
+		Arrays.sort(curr.list, 0, curr.size);
+		pruneWeakMoves();
+	}
 
 	private void pickRandomMove()
 	{
