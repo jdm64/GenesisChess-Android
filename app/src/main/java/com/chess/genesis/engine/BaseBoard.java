@@ -193,7 +193,8 @@ public abstract class BaseBoard implements Board
 					var to_piece = square[to];
 					if (ANY_MOVE(from_piece, to_piece)) {
 						list[next++] = to;
-					} else if (to_piece != Piece.EMPTY) {
+					}
+					if (to_piece != Piece.EMPTY) {
 						break;
 					}
 				}
