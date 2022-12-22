@@ -732,6 +732,8 @@ public class RegBoard extends BaseBoard
 						return true;
 					}
 					break;
+				} else if (OWN_PIECE(Color, to_piece)) {
+					break;
 				}
 			}
 		}
