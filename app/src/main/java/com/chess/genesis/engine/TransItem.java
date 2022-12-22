@@ -82,4 +82,10 @@ class TransItem
 		}
 		return false;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "TransItem{" + "move=" + move + ", score=" + score + ", depth=" + depth + ", type=" + type + '}';
+	}
 }

@@ -16,6 +16,8 @@
 
 package com.chess.genesis.engine;
 
+import java.util.*;
+
 public class IntArray
 {
 	private IntArray()
@@ -47,5 +49,13 @@ public class IntArray
 	public static boolean contains(int[] arr, int value)
 	{
 		return indexOf(arr, value) >= 0;
+	}
+
+	public static String toString(int[] arr)
+	{
+		var str = new StringBuilder();
+		for (var element : arr)
+			str.append(element).append(" ");
+		return str.toString().trim();
 	}
 }

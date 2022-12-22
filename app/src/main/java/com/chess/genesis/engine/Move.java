@@ -236,7 +236,7 @@ public class Move implements Parcelable
 		return from >= 0 && to >= 0;
 	}
 
-	private static int cordToIdx(char a, char b)
+	public static int cordToIdx(char a, char b)
 	{
 		if (a < 'a' || a > 'h' || b < '1' || b > '8')
 			return Piece.NULL_MOVE;
