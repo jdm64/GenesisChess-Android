@@ -533,13 +533,14 @@ public class RegBoard extends BaseBoard
 	}
 
 	@Override
-	public int parseZFen_Specific(int n, String pos)
+	public int parseFen_Specific(int n, String pos, boolean isZFen)
 	{
+		var div = isZFen ? ':' : ' ';
 		var st = pos.toCharArray();
 
 		// parse castle rights
 		var castle = 0;
-		for (; st[n] != ':'; n++) {
+		for (; st[n] != div; n++) {
 			switch (st[n]) {
 			case 'K':
 				castle |= MoveFlags.WK_CASTLE;
@@ -554,22 +555,28 @@ public class RegBoard extends BaseBoard
 				castle |= MoveFlags.BQ_CASTLE;
 				break;
 			}
+			if (st[n] == '-') {
+				n++;
+				break;
+			}
 		}
 		flags.setCastle(castle);
 
 		// parse en passant
 		n++;
-		if (st[n] != ':') {
+		if (Character.isAlphabetic(st[n])) {
 			var eps = (st[n++] - 'a');
 			eps += 16 * (st[n++] - '1');
 			flags.setEnPassant(COL(eps));
+		} else if (st[n] == '-') {
+			n++;
 		}
 		n++;
 		return n;
 	}
 
 	@Override
-	protected void printZFen_Specific(StringBuilder fen)
+	protected void printFen_Specific(StringBuilder fen, boolean isZFen)
 	{
 		// print castle rights
 		if ((flags.bits & 0xf0) != 0) {
@@ -581,12 +588,16 @@ public class RegBoard extends BaseBoard
 				fen.append('k');
 			if (flags.canQueenCastle(Piece.BLACK))
 				fen.append('q');
+		} else if (!isZFen) {
+			fen.append('-');
 		}
-		fen.append(':');
+		fen.append(isZFen ? ':' : ' ');
 
 		if (flags.canEnPassant()) {
 			fen.append((char) ('a' + flags.enPassantFile()));
 			fen.append(ply % 2 == 0 ? '6' : '3');
+		} else if (!isZFen) {
+			fen.append('-');
 		}
 	}
 

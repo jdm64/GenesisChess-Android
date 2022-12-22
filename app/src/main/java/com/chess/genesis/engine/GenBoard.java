@@ -370,12 +370,13 @@ public class GenBoard extends BaseBoard
 	}
 
 	@Override
-	protected int parseZFen_Specific(int n, String pos)
+	protected int parseFen_Specific(int n, String pos, boolean isZFen)
 	{
+		var div = isZFen ? ':' : ' ';
 		// parse placeable pieces
 		var st = pos.toCharArray();
 		for (;; n++) {
-			if (st[n] == ':') {
+			if (st[n] == div || st[n] == '-') {
 				n++;
 				break;
 			} else if (!Character.isLetter(st[n]) || !setPiece(Piece.PLACEABLE, stype[st[n] % 21])) {
@@ -386,11 +387,17 @@ public class GenBoard extends BaseBoard
 	}
 
 	@Override
-	protected void printZFen_Specific(StringBuilder fen)
+	protected void printFen_Specific(StringBuilder fen, boolean isZFen)
 	{
+		var hasPlace = false;
 		for (var i = 0; i < 32; i++) {
-			if (piece[i] == Piece.PLACEABLE)
+			if (piece[i] == Piece.PLACEABLE) {
 				fen.append(Move.PIECE_SYM[InitPieceType[i] + 6]);
+				hasPlace = true;
+			}
+		}
+		if (!hasPlace && !isZFen) {
+			fen.append('-');
 		}
 	}
 

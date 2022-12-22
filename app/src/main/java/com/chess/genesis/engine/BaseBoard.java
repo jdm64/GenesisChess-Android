@@ -85,8 +85,8 @@ public abstract class BaseBoard implements Board
 	abstract boolean isAttacked_Bishop(int From, int Color);
 	abstract boolean attackLine_Bishop(int From, int offset);
 
-	abstract void printZFen_Specific(StringBuilder fen);
-	abstract int parseZFen_Specific(int n, String pos);
+	abstract void printFen_Specific(StringBuilder fen, boolean isZFen);
+	abstract int parseFen_Specific(int n, String pos, boolean isZFen);
 
 	@Override
 	public int pieceLoc(int index)
@@ -437,7 +437,7 @@ public abstract class BaseBoard implements Board
 			}
 		}
 
-		n = parseZFen_Specific(n, pos);
+		n = parseFen_Specific(n, pos, true);
 		if (n < 0)
 			return false;
 
@@ -449,6 +449,74 @@ public abstract class BaseBoard implements Board
 		}
 		ply = Integer.parseInt(num.toString());
 		stm = ply % 2 == 0 ? Piece.WHITE : Piece.BLACK;
+
+		setMaxPly();
+
+		// check if color not on move is in check
+		return !inCheck(stm ^ -2);
+	}
+
+	@Override
+	public boolean parseFen(String pos)
+	{
+		parseReset();
+		final char[] st = pos.toCharArray();
+
+		// index counter for st
+		int n = 0;
+
+		// parse board
+		StringBuilder num = new StringBuilder();
+		boolean act = false;
+		for (int loc = 0; true; n++) {
+			if (Character.isDigit(st[n])) {
+				num.append(st[n]);
+				act = true;
+			} else if (Character.isLetter(st[n])) {
+				if (act) {
+					loc += Integer.parseInt(num.toString());
+					num = new StringBuilder();
+					act = false;
+				}
+				if (!setPiece(SFF88(loc), stype[st[n] % 21]))
+					return false;
+				loc++;
+			} else if (st[n] == '/') {
+				if (act) {
+					loc += Integer.parseInt(num.toString());
+					num = new StringBuilder();
+					act = false;
+				}
+			} else if (st[n] == ' ') {
+				n++;
+				break;
+			} else {
+				return false;
+			}
+		}
+
+		stm = st[n] == 'w' ? Piece.WHITE : Piece.BLACK;
+		n += 2;
+
+		n = parseFen_Specific(n, pos, false);
+		if (n < 0)
+			return false;
+
+		// TODO skip 50 move counter
+		while (n < st.length && Character.isDigit(st[n])) {
+			n++;
+		}
+
+		// full move counter
+		n++;
+		num = new StringBuilder();
+		while (n < st.length && Character.isDigit(st[n])) {
+			num.append(st[n]);
+			n++;
+		}
+
+		var fullPly = Integer.parseInt(num.toString());
+		ply = 2 * (fullPly - 1) + (stm == Piece.WHITE ? 0 : 1);
 
 		setMaxPly();
 
@@ -474,9 +542,46 @@ public abstract class BaseBoard implements Board
 			empty = 0;
 		}
 		fen.append(':');
-		printZFen_Specific(fen);
+		printFen_Specific(fen, true);
 		fen.append(':');
 		fen.append(ply);
+
+		return fen.toString();
+	}
+
+	@Override
+	public String printFen()
+	{
+		var fen = new StringBuilder();
+		for (int i = 0; i < 8; i++) {
+			int empty = 0;
+			for (int j = 0; j < 8; j++) {
+				// convert coordinate system
+				var n = SFF88(8 * i + j);
+				if (square[n] == Piece.EMPTY) {
+					empty++;
+					continue;
+				} else if (empty != 0) {
+					fen.append(empty);
+				}
+
+				fen.append(Move.PIECE_SYM[square[n] + 6]);
+				empty = 0;
+			}
+			if (empty != 0) {
+				fen.append(empty);
+			}
+			if (i < 7) {
+				fen.append('/');
+			}
+		}
+
+		fen.append(' ');
+		fen.append(ply % 2 == 0 ? 'w' : 'b');
+		fen.append(' ');
+		printFen_Specific(fen, false);
+		fen.append(" 0 "); // TODO 50 move rule
+		fen.append((ply / 2) + 1);
 
 		return fen.toString();
 	}

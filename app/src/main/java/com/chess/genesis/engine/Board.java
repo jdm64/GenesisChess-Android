@@ -129,6 +129,9 @@ public interface Board
 	String printZFen();
 	boolean parseZFen(String zFen);
 
+	String printFen();
+	boolean parseFen(String fen);
+
 	void make(final Move move);
 	void unmake(final Move move, final MoveFlags UndoFlags);
 
