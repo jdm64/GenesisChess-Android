@@ -33,7 +33,9 @@ public class RegBoardTest extends AbstractBoardTest
 		    {"rnbqkbnrp1ppppp8p1pP21PP1PPPPPRNBQKBNR:KQkq:b6:6", "rnbqkbnr/p1ppppp1/7p/1pP5/8/8/PP1PPPPP/RNBQKBNR w KQkq b6 0 4"},
 		    {"2r3k1p4pp5p2n1p5P2qr1Q4P1R3P4PP3R3K:::46", "2r3k1/p4pp1/4p2n/1p5P/2qr1Q2/2P1R3/P4PP1/2R3K1 w - - 0 24"},
 		    {"rnbqkb2pppppp1P32PPPPPP2RNBQKB:::22", "rnbqkb2/pppppp1P/8/8/8/8/PPPPPP2/RNBQKB2 w - - 0 12"},
-		    {"r3k2r48R3K2R:KQkq::52", "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 27"}
+		    {"r3k2r48R3K2R:KQkq::52", "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 27"},
+		    {"r1r2k7p1p2p2np2pPp5PnN1N6P2P5PP1R1R3K:::51", "r1r2k2/5p1p/2p2np1/1pPp4/1PnN1N2/4P2P/5PP1/R1R3K1 b - - 0 26"},
+		    {"5b1r2p1k3p4pQp4q4r1n1R10PP1B2NP4R2K:::53", "5b1r/2p1k3/p4pQp/4q3/1r1n1R2/8/PP1B2NP/4R2K b - - 0 27"}
 		};
 	}
 
@@ -87,6 +89,15 @@ public class RegBoardTest extends AbstractBoardTest
 		    {"1r4k7p7p3p2pBnQ1Pp7P2qP6B1R5K:::48", "0 0 0 0 0 0 0 0 0 0 0 0 0", "0 0 1 2 1 3 0 5 2 0 1 0 0"},
 		    {"rnbqkbnrpppppppp32PPPPPPPPRNBQKBNR:KQkq::0", "0 0 0 0 0 0 0 0 0 0 0 0 0", "0 0 0 0 0 0 0 0 0 0 0 0 0"},
 		    {"r3k2r48R3K2R:KQkq::53", "0 0 0 0 0 0 0 0 0 0 0 0 0", "0 1 0 2 2 8 0 8 2 2 0 1 0"}
+		};
+	}
+
+	static Object[][] testIsMate_Params()
+	{
+		return new Object[][] {
+		    {"5b1r2p1k3p4pQp4q4r1n1R10PP1B2NP4R2K:::53", Board.NOT_MATE},
+		    {"1r2k2rpp1b2p3p4p4P4B4pPP11R4n2K1q:::74", Board.CHECK_MATE},
+		    {"K6k1rr:::88", Board.STALE_MATE}
 		};
 	}
 }

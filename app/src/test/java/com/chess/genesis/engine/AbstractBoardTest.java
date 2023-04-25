@@ -113,6 +113,16 @@ public abstract class AbstractBoardTest
 		assertEquals(zfen, board.copy().printZFen());
 	}
 
+	@ParameterizedTest
+	@MethodSource("testIsMate_Params")
+	void testIsMate(String zfen, int mateType)
+	{
+		var board = getBoard();
+
+		board.parseZFen(zfen);
+		assertEquals(mateType, board.isMate());
+	}
+
 	static List<Pair<Move,MoveFlags>> applyMoves(String moves, Board board)
 	{
 		var moveList = new ArrayList<Pair<Move,MoveFlags>>();

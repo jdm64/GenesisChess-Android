@@ -76,4 +76,13 @@ class GenBoardTest extends AbstractBoardTest
 		    {"1r4k7p7p3p2pBnQ1Pp7P2qP6B1R5K:pppnbbrPPPPPNNR:48", "0 0 1 2 1 3 0 5 2 0 1 0 0", "0 0 0 0 0 0 0 0 0 0 0 0 0"}
 		};
 	}
+
+	static Object[][] testIsMate_Params()
+	{
+		return new Object[][] {
+		    {"5b1r2p1k3p4pQp4q4r1n1R10PP1B2NP4R2K::53", Board.NOT_MATE},
+		    {"3r1K15k6b6b5p8p1p::200", Board.CHECK_MATE},
+		    {"K6k1rr:::88", Board.STALE_MATE}
+		};
+	}
 }
