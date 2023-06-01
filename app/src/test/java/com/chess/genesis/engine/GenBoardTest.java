@@ -82,7 +82,7 @@ class GenBoardTest extends AbstractBoardTest
 		return new Object[][] {
 		    {"5b1r2p1k3p4pQp4q4r1n1R10PP1B2NP4R2K::53", Board.NOT_MATE},
 		    {"3r1K15k6b6b5p8p1p::200", Board.CHECK_MATE},
-		    {"K6k1rr:::88", Board.STALE_MATE}
+		    {"K6k1rr::88", Board.STALE_MATE}
 		};
 	}
 }

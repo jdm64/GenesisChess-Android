@@ -35,15 +35,11 @@ public abstract class AbstractBoardTest
 	{
 		var board = getBoard();
 
-		if (!fen.isEmpty()) {
-			board.parseFen(fen);
-			assertEquals(zfen, board.printZFen());
-		}
+		board.parseFen(fen);
+		assertEquals(zfen, board.printZFen());
 
-		if (!zfen.isEmpty()) {
-			board.parseZFen(zfen);
-			assertEquals(fen, board.printFen());
-		}
+		board.parseZFen(zfen);
+		assertEquals(fen, board.printFen());
 	}
 
 	@ParameterizedTest
