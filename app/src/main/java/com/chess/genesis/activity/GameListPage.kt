@@ -216,7 +216,8 @@ fun LocalGameList(nav: NavHostController) {
 			.fillMaxSize()
 			.padding(bottom = 8.dp)
 	) {
-		items(lazyItems) { gamedata ->
+		items(lazyItems.itemCount, lazyItems.itemKey { it.gameid }) { index ->
+			val gamedata = lazyItems[index]
 			if (gamedata != null) {
 				LocalGameItem(gamedata, editState, nav)
 			}

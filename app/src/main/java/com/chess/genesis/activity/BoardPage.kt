@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -91,7 +92,7 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 				}
 				scope.launch { state.hide() }
 			}),
-			icon = { Icon(Icons.Filled.List, "Game List") },
+			icon = { Icon(Icons.AutoMirrored.Filled.List, "Game List") },
 			text = { Text("Game List") }
 		)
 		ListItem(
@@ -231,10 +232,10 @@ fun BottomBar(state: ModalBottomSheetState, content: @Composable () -> Unit) {
 @Composable
 fun GameNav(gameCtlr: IGameController) {
 	IconButton(onClick = { gameCtlr.onBackClick() }) {
-		Icon(Icons.Filled.ArrowBack, "Back", Modifier.size(30.dp))
+		Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", Modifier.size(30.dp))
 	}
 	IconButton(onClick = { gameCtlr.onForwardClick() }) {
-		Icon(Icons.Filled.ArrowForward, "Forward", Modifier.size(30.dp))
+		Icon(Icons.AutoMirrored.Filled.ArrowForward, "Forward", Modifier.size(30.dp))
 	}
 	IconButton(onClick = { gameCtlr.onCurrentClick() }) {
 		Icon(Icons.Filled.PlayArrow, "Last", Modifier.size(30.dp))
