@@ -42,9 +42,9 @@ import kotlinx.coroutines.*
 class NewGameState {
 	var show = mutableStateOf(false)
 	var name = mutableStateOf("Untitled")
-	var type = mutableStateOf(Enums.GENESIS_CHESS)
-	var opp = mutableStateOf(Enums.INVITE_OPPONENT)
-	var color = mutableStateOf(Enums.RANDOM_OPP)
+	var type = mutableIntStateOf(Enums.GENESIS_CHESS)
+	var opp = mutableIntStateOf(Enums.INVITE_OPPONENT)
+	var color = mutableIntStateOf(Enums.RANDOM_OPP)
 }
 
 class EditGameState {
@@ -65,11 +65,11 @@ fun onLoadGame(data: LocalGameEntity, nav: NavHostController, context: Context) 
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		if (data.opp.value == Enums.INVITE_OPPONENT) {
-			val playAs = Enums.OppToPlayAs(data.opp.value)
+		if (data.opp.intValue == Enums.INVITE_OPPONENT) {
+			val playAs = Enums.OppToPlayAs(data.opp.intValue)
 			ZeroMQClient.bind(context) { client ->
 				client.createInvite(
-					data.type.value,
+					data.type.intValue,
 					playAs
 				)
 			}
@@ -169,9 +169,9 @@ fun GameListPage(nav: NavHostController) {
 		)
 	}
 
-	showNewGameDialog(newGameState, nav)
+	ShowNewGameDialog(newGameState, nav)
 
-	showImportInviteDialog(importState)
+	ShowImportInviteDialog(importState)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -224,11 +224,11 @@ fun LocalGameList(nav: NavHostController) {
 		}
 	}
 
-	showEditGameDialog(editState)
+	ShowEditGameDialog(editState)
 }
 
 @Composable
-fun showEditGameDialog(editState: MutableState<EditGameState>) {
+fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 	if (!editState.value.show.value) {
 		return
 	}
@@ -322,7 +322,7 @@ fun LocalGameItem(
 }
 
 @Composable
-fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) {
+fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) {
 	val state = data.value
 	if (!state.show.value) {
 		return
@@ -336,18 +336,18 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				Text("Game Type:", fontWeight = FontWeight.Bold)
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
-						selected = state.type.value == Enums.GENESIS_CHESS,
+						selected = state.type.intValue == Enums.GENESIS_CHESS,
 						onClick = {
-							state.type.value = Enums.GENESIS_CHESS
+							state.type.intValue = Enums.GENESIS_CHESS
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Genesis")
 					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						selected = state.type.value == Enums.REGULAR_CHESS,
+						selected = state.type.intValue == Enums.REGULAR_CHESS,
 						onClick = {
-							state.type.value = Enums.REGULAR_CHESS
+							state.type.intValue = Enums.REGULAR_CHESS
 						},
 						modifier = Modifier.size(36.dp)
 					)
@@ -360,27 +360,27 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				)
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
-						selected = state.opp.value == Enums.INVITE_OPPONENT,
+						selected = state.opp.intValue == Enums.INVITE_OPPONENT,
 						onClick = {
-							state.opp.value = Enums.INVITE_OPPONENT
+							state.opp.intValue = Enums.INVITE_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Invite")
 					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						selected = state.opp.value == Enums.HUMAN_OPPONENT,
+						selected = state.opp.intValue == Enums.HUMAN_OPPONENT,
 						onClick = {
-							state.opp.value = Enums.HUMAN_OPPONENT
+							state.opp.intValue = Enums.HUMAN_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Local")
 					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						selected = state.opp.value == Enums.CPU_OPPONENT,
+						selected = state.opp.intValue == Enums.CPU_OPPONENT,
 						onClick = {
-							state.opp.value = Enums.CPU_OPPONENT
+							state.opp.intValue = Enums.CPU_OPPONENT
 						},
 						modifier = Modifier.size(36.dp)
 					)
@@ -393,30 +393,30 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				)
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					RadioButton(
-						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
-						selected = state.color.value == Enums.RANDOM_OPP,
+						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+						selected = state.color.intValue == Enums.RANDOM_OPP,
 						onClick = {
-							state.color.value = Enums.RANDOM_OPP
+							state.color.intValue = Enums.RANDOM_OPP
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("Random")
 					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
-						selected = state.color.value == Enums.BLACK_OPP,
+						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+						selected = state.color.intValue == Enums.BLACK_OPP,
 						onClick = {
-							state.color.value = Enums.BLACK_OPP
+							state.color.intValue = Enums.BLACK_OPP
 						},
 						modifier = Modifier.size(36.dp)
 					)
 					Text("White")
 					Spacer(modifier = Modifier.width(6.dp))
 					RadioButton(
-						enabled = state.opp.value != Enums.HUMAN_OPPONENT,
-						selected = state.color.value == Enums.WHITE_OPP,
+						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+						selected = state.color.intValue == Enums.WHITE_OPP,
 						onClick = {
-							state.color.value = Enums.WHITE_OPP
+							state.color.intValue = Enums.WHITE_OPP
 						},
 						modifier = Modifier.size(36.dp)
 					)
@@ -452,7 +452,7 @@ fun showNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 }
 
 @Composable
-fun showImportInviteDialog(state: MutableState<ImportGameState>) {
+fun ShowImportInviteDialog(state: MutableState<ImportGameState>) {
 	if (!state.value.show.value) {
 		return
 	}
