@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.chess.genesis.R
@@ -54,7 +55,7 @@ fun MainApp() {
 	}
 
 	MaterialTheme {
-		NavHost(nav, "start") {
+		NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 			composable("start") { LoadingPage(nav) }
 			composable("list") { GameListPage(nav) }
 			composable("board/{gameId}") { entry ->
