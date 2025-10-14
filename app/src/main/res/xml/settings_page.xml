@@ -84,5 +84,10 @@
             app:persistent="false"
             app:title="CPU Benchmark"
             app:summary="See how fast your device can search moves"/>
+        <EditTextPreference
+            app:key="serverhost"
+            app:persistent="true"
+            app:title="Server URL"
+            app:summary="Set server URL to connect to"/>
     </PreferenceCategory>
 </PreferenceScreen>

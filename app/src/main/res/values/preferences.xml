@@ -2,7 +2,7 @@
 <resources>
 	<array name="pf_serverhost">
 		<item>serverhost</item>
-		<item>genesischess.com</item>
+		<item>tcp://genesischess.com:1993</item>
 	</array>
 	<array name="pf_netdebug">
 		<item>netdebug</item>

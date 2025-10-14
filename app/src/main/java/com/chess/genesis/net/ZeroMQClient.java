@@ -34,7 +34,6 @@ import com.chess.genesis.util.*;
 
 public class ZeroMQClient extends Service
 {
-	private final static String URL = "tcp://jdserver.org:1993";
 	private final static String ANON = "anonymous";
 	private final static int HEARTBEAT_LIMIT = 10000;
 
@@ -114,7 +113,9 @@ public class ZeroMQClient extends Service
 			try (var ctx = new ZContext()) {
 				isActive = true;
 				socket = ctx.createSocket(SocketType.DEALER);
-				socket.connect(URL);
+				var host = Pref.getString(this, R.array.pf_serverhost);
+				Log.i(getClass().getSimpleName(), "Connecting to: " + host);
+				socket.connect(host);
 				receiveFuture = Util.runThread(this::receiveLoop);
 				heartbeat();
 				sendLoop();
