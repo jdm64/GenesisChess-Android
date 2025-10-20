@@ -68,7 +68,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.compose.material:material:1.9.3'
+    implementation 'androidx.compose.material3:material3:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.navigation:navigation-compose:2.9.5'
     implementation 'androidx.room:room-paging:2.8.2'

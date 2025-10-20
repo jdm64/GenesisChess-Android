@@ -21,10 +21,10 @@ import android.widget.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
@@ -41,24 +41,27 @@ import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
 import kotlinx.coroutines.*
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GamePage(nav: NavHostController, gameId: String) {
-	val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+	val state = rememberModalBottomSheetState()
 	val ctx = LocalContext.current
 	val gameCtlr = remember { GameController(ctx, gameId) }
+	val scope = rememberCoroutineScope()
 
 	DisposableEffect(gameCtlr) {
 		onDispose { gameCtlr.onDispose() }
 	}
 
-	ModalBottomSheetLayout(
-		sheetElevation = 16.dp,
-		sheetShape = RoundedCornerShape(32.dp),
-		sheetState = state,
-		sheetContent = { GameMenu(gameCtlr, state, nav) })
-	{
-		GameContent(gameCtlr, state)
+	GameContent(gameCtlr, state)
+
+	if (state.isVisible) {
+		ModalBottomSheet(
+			onDismissRequest = { scope.launch { state.hide() } },
+			sheetState = state
+		) {
+			GameMenu(gameCtlr, state, nav)
+		}
 	}
 
 	ShowGameDialogs(gameCtlr)
@@ -66,9 +69,9 @@ fun GamePage(nav: NavHostController, gameId: String) {
 	ShowSubmitDialog(gameCtlr)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHostController) {
+fun GameMenu(gameCtlr: GameController, state: SheetState, nav: NavHostController) {
 	val ctx = LocalContext.current
 	val scope = rememberCoroutineScope()
 
@@ -82,8 +85,8 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 				Toast.makeText(ctx, "Game ID copied", Toast.LENGTH_SHORT).show()
 				scope.launch { state.hide() }
 			}),
-			icon = { Icon(Icons.Filled.Share, "Copy Game ID") },
-			text = { Text("Copy Game ID") }
+			leadingContent = { Icon(Icons.Filled.Share, "Copy Game ID") },
+			headlineContent = { Text("Copy Game ID") }
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
@@ -92,8 +95,8 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 				}
 				scope.launch { state.hide() }
 			}),
-			icon = { Icon(Icons.AutoMirrored.Filled.List, "Game List") },
-			text = { Text("Game List") }
+			leadingContent = { Icon(Icons.AutoMirrored.Filled.List, "Game List") },
+			headlineContent = { Text("Game List") }
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
@@ -102,15 +105,15 @@ fun GameMenu(gameCtlr: GameController, state: ModalBottomSheetState, nav: NavHos
 					state.hide()
 				}
 			}),
-			icon = { Icon(Icons.Filled.Settings, "Settings") },
-			text = { Text("Settings") }
+			leadingContent = { Icon(Icons.Filled.Settings, "Settings") },
+			headlineContent = { Text("Settings") }
 		)
 	}
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameContent(gameCtlr: IGameController, state: ModalBottomSheetState) {
+fun GameContent(gameCtlr: IGameController, state: SheetState) {
 	Column(
 		Modifier
 			.fillMaxHeight()
@@ -126,7 +129,7 @@ fun GameContent(gameCtlr: IGameController, state: ModalBottomSheetState) {
 @Composable
 fun TopBarInfo(gameCtlr: IGameController) {
 	val stmState = remember { gameCtlr.stmState }
-	val colors = MaterialTheme.colors
+	val colors = MaterialTheme.colorScheme
 	val mate = stmState.value.mate
 	val stm = stmState.value.stm
 	val yColor = stmState.value.yourColor
@@ -148,7 +151,7 @@ fun TopBarInfo(gameCtlr: IGameController) {
 					Modifier
 						.size(16.dp)
 						.clip(CircleShape)
-						.background(colors.secondaryVariant)
+						.background(colors.secondaryContainer)
 						.align(Alignment.CenterVertically)
 				)
 			}
@@ -170,7 +173,7 @@ fun TopBarInfo(gameCtlr: IGameController) {
 					Modifier
 						.size(16.dp)
 						.clip(CircleShape)
-						.background(colors.secondaryVariant)
+						.background(colors.secondaryContainer)
 						.align(Alignment.CenterVertically)
 				)
 			}
@@ -215,9 +218,9 @@ fun BoardAndPieces(gameCtlr: IGameController) {
 	}
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(state: ModalBottomSheetState, content: @Composable () -> Unit) {
+fun BottomBar(state: SheetState, content: @Composable () -> Unit) {
 	val scope = rememberCoroutineScope()
 
 	BottomAppBar(Modifier.height(60.dp)) {
@@ -255,7 +258,7 @@ fun ShowGameDialogs(gameCtlr: IGameController) {
 				)
 			},
 			text = { AndroidView({ gameCtlr.promoteView }) },
-			buttons = {
+			confirmButton = {
 				TextButton(onClick = { promoteState.value = false }) {
 					Text("Cancel")
 				}
@@ -270,7 +273,6 @@ fun ShowSubmitDialog(gameCtlr: GameController) {
 	if (!submitState.value.show) {
 		return
 	}
-	val ctx = LocalContext.current
 
 	Popup(alignment = Alignment.BottomCenter,
 		onDismissRequest = {

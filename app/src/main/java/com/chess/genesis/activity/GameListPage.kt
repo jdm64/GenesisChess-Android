@@ -19,10 +19,9 @@ import android.content.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
@@ -58,7 +57,7 @@ class ImportGameState {
 	var id = mutableStateOf("")
 }
 
-fun onLoadGame(data: LocalGameEntity, nav: NavHostController, context: Context) {
+fun onLoadGame(data: LocalGameEntity, nav: NavHostController) {
 	nav.navigate("board/" + data.gameid)
 }
 
@@ -76,7 +75,7 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 		} else {
 			val newGame = LocalGameDao.get(context).newLocalGame(data)
 			Dispatchers.Main.dispatch(Dispatchers.Main) {
-				onLoadGame(newGame, nav, context)
+				onLoadGame(newGame, nav)
 			}
 		}
 	}
@@ -111,62 +110,68 @@ fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 	}
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListPage(nav: NavHostController) {
 	val newGameState = remember { mutableStateOf(NewGameState()) }
-	val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-	val scaffoldState = rememberScaffoldState()
+	val sheetState = rememberModalBottomSheetState()
 	val coroutineScope = rememberCoroutineScope()
 	val importState = remember { mutableStateOf(ImportGameState()) }
+	var showBottomSheet by remember { mutableStateOf(false) }
 
-	ModalBottomSheetLayout(
-		sheetElevation = 16.dp,
-		sheetShape = RoundedCornerShape(32.dp),
-		sheetState = sheetState,
-		sheetContent = { ListMenu(sheetState, importState) })
-	{
-		Scaffold(
-			scaffoldState = scaffoldState,
-			topBar = {
-				TopAppBar {
-					Image(
-						modifier = Modifier
-							.fillMaxWidth()
-							.height(26.dp),
-						painter = painterResource(R.drawable.genesischess),
-						contentDescription = "Genesis Chess"
+	Scaffold(
+		topBar = {
+			TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+				containerColor = colorResource(R.color.blue_800),
+				titleContentColor = colorResource(R.color.blue_800),
+			), title = {
+				Image(
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(26.dp),
+					painter = painterResource(R.drawable.genesischess),
+					contentDescription = "Genesis Chess"
+				)
+			})
+		},
+		bottomBar = {
+			BottomAppBar {
+				IconButton(onClick = { showBottomSheet = true }) {
+					Icon(
+						Icons.Filled.Menu,
+						"menu",
+						Modifier.size(30.dp)
 					)
 				}
-			},
-			bottomBar = {
-				TopAppBar {
-					Row(
-						modifier = Modifier.fillMaxWidth(1f),
-						verticalAlignment = Alignment.CenterVertically,
-						horizontalArrangement = Arrangement.SpaceBetween
-					) {
-						IconButton(onClick = { coroutineScope.launch { sheetState.show() } }) {
-							Icon(
-								Icons.Filled.Menu,
-								"menu",
-								Modifier.size(30.dp)
-							)
-						}
-						IconButton(onClick = {
-							newGameState.value.show.value = true
-						}) {
-							Icon(
-								Icons.Filled.Add,
-								"New Game",
-								Modifier.size(30.dp)
-							)
-						}
+				Spacer(Modifier.weight(1f, true))
+				IconButton(onClick = {
+					newGameState.value.show.value = true
+				}) {
+					Icon(
+						Icons.Filled.Add,
+						"New Game",
+						Modifier.size(30.dp)
+					)
+				}
+			}
+		},
+	) { padding ->
+		LocalGameList(nav, padding)
+	}
+
+	if (showBottomSheet) {
+		ModalBottomSheet(
+			onDismissRequest = { showBottomSheet = false },
+			sheetState = sheetState
+		) {
+			ListMenu(onHide = {
+				coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+					if (!sheetState.isVisible) {
+						showBottomSheet = false
 					}
 				}
-			},
-			content = { LocalGameList(nav) },
-		)
+			}, importState = importState)
+		}
 	}
 
 	ShowNewGameDialog(newGameState, nav)
@@ -174,38 +179,32 @@ fun GameListPage(nav: NavHostController) {
 	ShowImportInviteDialog(importState)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ListMenu(sheetState: ModalBottomSheetState, importState: MutableState<ImportGameState>) {
+fun ListMenu(onHide: () -> Unit, importState: MutableState<ImportGameState>) {
 	val ctx = LocalContext.current
-	val scope = rememberCoroutineScope()
 
 	Column {
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
-				scope.launch {
-					importState.value.show.value = true
-					sheetState.hide()
-				}
+				importState.value.show.value = true
+				onHide()
 			}),
-			icon = { Icon(Icons.Filled.Email, "Import Invite Game") },
-			text = { Text("Import Invite Game") }
+			leadingContent = { Icon(Icons.Filled.Email, "Import Invite Game") },
+			headlineContent = { Text("Import Invite Game") }
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
-				scope.launch {
-					ctx.startActivity(Intent(ctx, SettingsPage::class.java))
-					sheetState.hide()
-				}
+				ctx.startActivity(Intent(ctx, SettingsPage::class.java))
+				onHide()
 			}),
-			icon = { Icon(Icons.Filled.Settings, "Settings") },
-			text = { Text("Settings") }
+			leadingContent = { Icon(Icons.Filled.Settings, "Settings") },
+			headlineContent = { Text("Settings") }
 		)
 	}
 }
 
 @Composable
-fun LocalGameList(nav: NavHostController) {
+fun LocalGameList(nav: NavHostController, padding: PaddingValues) {
 	val context = LocalContext.current
 	val pager = remember { Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames } }
 	val lazyItems = pager.flow.collectAsLazyPagingItems()
@@ -214,7 +213,7 @@ fun LocalGameList(nav: NavHostController) {
 	LazyColumn(
 		modifier = Modifier
 			.fillMaxSize()
-			.padding(bottom = 8.dp)
+			.padding(padding)
 	) {
 		items(lazyItems.itemCount, lazyItems.itemKey { it.gameid }) { index ->
 			val gamedata = lazyItems[index]
@@ -236,7 +235,16 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 
 	AlertDialog(onDismissRequest = { editState.value.show.value = false },
 		title = {
-			Text(text = "Edit", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+			Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+				Text(text = "Edit", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+				Spacer(modifier = Modifier.weight(1f, true))
+				Button(
+					colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+					onClick = { onDeleteGame(editState.value, context) }
+				) {
+					Text("Delete")
+				}
+			}
 		},
 		text = {
 			Column {
@@ -246,27 +254,16 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 					onValueChange = { editState.value.name.value = it })
 			}
 		},
-		buttons = {
-			Row(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(8.dp),
-				horizontalArrangement = Arrangement.SpaceBetween
-			) {
-				Button(colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
-					onClick = { onDeleteGame(editState.value, context) }
-				) {
-					Text("Delete")
-				}
-				OutlinedButton(onClick = { editState.value.show.value = false }) {
-					Text("Cancel")
-				}
-				Button(colors = ButtonDefaults.buttonColors(),
-					onClick = { onUpdateGame(editState.value, context) }) {
-					Text("Rename")
-				}
+		confirmButton = {
+			Button(onClick = { onUpdateGame(editState.value, context) }) {
+				Text("Rename")
 			}
-		}
+		},
+		dismissButton = {
+			OutlinedButton(onClick = { editState.value.show.value = false }) {
+				Text("Cancel")
+			}
+		},
 	)
 }
 
@@ -281,44 +278,42 @@ fun LocalGameItem(
 	val opponent = Enums.OpponentType(data.opponent)
 	val time = PrettyDate(data.stime).agoFormat()
 	val details = "type: $type  opponent: $opponent"
-	val ctx = LocalContext.current
 
 	Card(
 		modifier = Modifier
 			.padding(16.dp, 16.dp, 16.dp, 0.dp)
 			.fillMaxWidth()
-			.combinedClickable(onClick = { onLoadGame(data, nav, ctx) },
+			.combinedClickable(onClick = { onLoadGame(data, nav) },
 				onLongClick = { onEditGame(state, data) }),
-		elevation = 8.dp,
-		content = {
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				modifier = Modifier.padding(end = 4.dp)
-			) {
-				Button(onClick = {}, modifier = Modifier.padding(start = 4.dp)) {
-					Text(data.lastMoveTo(), fontSize = 20.sp)
-				}
-				Column(modifier = Modifier.padding(start = 8.dp)) {
-					Row(
-						Modifier.fillMaxWidth(),
-						horizontalArrangement = Arrangement.SpaceBetween
-					) {
-						Text(
-							text = data.name,
-							fontWeight = FontWeight.Bold,
-							fontSize = 18.sp
-						)
-						Text(time, fontSize = 12.sp)
-					}
+		elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+	) {
+		Row(
+			verticalAlignment = Alignment.CenterVertically,
+			modifier = Modifier.padding(end = 4.dp)
+		) {
+			Button(onClick = {}, modifier = Modifier.padding(start = 4.dp)) {
+				Text(data.lastMoveTo(), fontSize = 20.sp)
+			}
+			Column(modifier = Modifier.padding(start = 8.dp)) {
+				Row(
+					Modifier.fillMaxWidth(),
+					horizontalArrangement = Arrangement.SpaceBetween
+				) {
 					Text(
-						details,
-						fontSize = 14.sp,
-						fontStyle = FontStyle.Italic
+						text = data.name,
+						fontWeight = FontWeight.Bold,
+						fontSize = 18.sp
 					)
+					Text(time, fontSize = 12.sp)
 				}
+				Text(
+					details,
+					fontSize = 14.sp,
+					fontStyle = FontStyle.Italic
+				)
 			}
 		}
-	)
+	}
 }
 
 @Composable
@@ -340,7 +335,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.type.intValue = Enums.GENESIS_CHESS
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Genesis")
 					Spacer(modifier = Modifier.width(6.dp))
@@ -349,7 +343,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.type.intValue = Enums.REGULAR_CHESS
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Regular")
 				}
@@ -364,7 +357,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.opp.intValue = Enums.INVITE_OPPONENT
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Invite")
 					Spacer(modifier = Modifier.width(6.dp))
@@ -373,7 +365,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.opp.intValue = Enums.HUMAN_OPPONENT
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Local")
 					Spacer(modifier = Modifier.width(6.dp))
@@ -382,7 +373,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.opp.intValue = Enums.CPU_OPPONENT
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Computer")
 				}
@@ -398,7 +388,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.color.intValue = Enums.RANDOM_OPP
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Random")
 					Spacer(modifier = Modifier.width(6.dp))
@@ -408,7 +397,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.color.intValue = Enums.BLACK_OPP
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("White")
 					Spacer(modifier = Modifier.width(6.dp))
@@ -418,7 +406,6 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onClick = {
 							state.color.intValue = Enums.WHITE_OPP
 						},
-						modifier = Modifier.size(36.dp)
 					)
 					Text("Black")
 				}
@@ -433,19 +420,14 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onValueChange = { state.name.value = it })
 			}
 		},
-		buttons = {
-			Row(
-				Modifier
-					.fillMaxWidth()
-					.padding(8.dp),
-				horizontalArrangement = Arrangement.SpaceBetween
-			) {
-				TextButton(onClick = { state.show.value = false }) {
-					Text("Cancel")
-				}
-				TextButton(onClick = { onNewGame(state, nav, ctx) }) {
-					Text("Create")
-				}
+		confirmButton = {
+			TextButton(onClick = { onNewGame(state, nav, ctx) }) {
+				Text("Create")
+			}
+		},
+		dismissButton = {
+			TextButton(onClick = { state.show.value = false }) {
+				Text("Cancel")
 			}
 		}
 	)
@@ -475,19 +457,14 @@ fun ShowImportInviteDialog(state: MutableState<ImportGameState>) {
 					onValueChange = { state.value.id.value = it })
 			}
 		},
-		buttons = {
-			Row(
-				Modifier
-					.fillMaxWidth()
-					.padding(8.dp),
-				horizontalArrangement = Arrangement.SpaceBetween
-			) {
-				TextButton(onClick = { state.value.show.value = false }) {
-					Text("Cancel")
-				}
-				TextButton(onClick = { onImportGame(state, context) }) {
-					Text("Import")
-				}
+		confirmButton = {
+			TextButton(onClick = { onImportGame(state, context) }) {
+				Text("Import")
+			}
+		},
+		dismissButton = {
+			TextButton(onClick = { state.value.show.value = false }) {
+				Text("Cancel")
 			}
 		}
 	)

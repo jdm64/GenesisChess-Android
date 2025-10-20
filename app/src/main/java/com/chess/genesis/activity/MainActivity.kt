@@ -20,9 +20,7 @@ import android.os.*
 import androidx.activity.*
 import androidx.activity.compose.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.*
@@ -35,7 +33,9 @@ class MainActivity : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 
 		setContent {
-			MainApp()
+			GenesisChessTheme {
+				MainApp()
+			}
 		}
 	}
 }
@@ -54,15 +54,13 @@ fun MainApp() {
 		}
 	}
 
-	MaterialTheme {
-		NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
-			composable("start") { LoadingPage(nav) }
-			composable("list") { GameListPage(nav) }
-			composable("board/{gameId}") { entry ->
-				val id = entry.arguments?.getString("gameId")
-				if (id != null) {
-					GamePage(nav, id)
-				}
+	NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
+		composable("start") { LoadingPage(nav) }
+		composable("list") { GameListPage(nav) }
+		composable("board/{gameId}") { entry ->
+			val id = entry.arguments?.getString("gameId")
+			if (id != null) {
+				GamePage(nav, id)
 			}
 		}
 	}
