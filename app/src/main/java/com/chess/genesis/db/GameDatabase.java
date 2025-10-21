@@ -20,7 +20,7 @@ import androidx.room.*;
 
 @Database(
     version = 1,
-    entities = {LocalGameEntity.class}
+    entities = {ActiveGameEntity.class}
 )
 public abstract class GameDatabase extends RoomDatabase
 {
@@ -34,5 +34,5 @@ public abstract class GameDatabase extends RoomDatabase
 		return instance;
 	}
 
-	public abstract LocalGameDao getLocalGameDao();
+	public abstract ActiveGameDao activeGameDao();
 }

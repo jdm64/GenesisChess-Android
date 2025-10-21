@@ -24,8 +24,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.graphics.*
-
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.*
@@ -53,7 +51,7 @@ class NewGameState {
 class EditGameState {
 	var show = mutableStateOf(false)
 	var name = mutableStateOf("")
-	lateinit var data: LocalGameEntity
+	lateinit var data: ActiveGameEntity
 }
 
 class ImportGameState {
@@ -61,7 +59,7 @@ class ImportGameState {
 	var id = mutableStateOf("")
 }
 
-fun onLoadGame(data: LocalGameEntity, nav: NavHostController) {
+fun onLoadGame(data: ActiveGameEntity, nav: NavHostController) {
 	nav.navigate("board/" + data.gameid)
 }
 
@@ -77,7 +75,7 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 				)
 			}
 		} else {
-			val newGame = LocalGameDao.get(context).newLocalGame(data)
+			val newGame = ActiveGameDao.get(context).newLocalGame(data)
 			Dispatchers.Main.dispatch(Dispatchers.Main) {
 				onLoadGame(newGame, nav)
 			}
@@ -88,7 +86,7 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 fun onDeleteGame(state: EditGameState, context: Context) {
 	state.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		LocalGameDao.get(context).delete(state.data)
+		ActiveGameDao.get(context).delete(state.data)
 	}
 }
 
@@ -97,11 +95,11 @@ fun onUpdateGame(state: EditGameState, context: Context) {
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
 		val data = state.data
 		data.name = state.name.value
-		LocalGameDao.get(context).update(data)
+		ActiveGameDao.get(context).update(data)
 	}
 }
 
-fun onEditGame(state: MutableState<EditGameState>, data: LocalGameEntity) {
+fun onEditGame(state: MutableState<EditGameState>, data: ActiveGameEntity) {
 	state.value.data = data
 	state.value.name.value = data.name
 	state.value.show.value = true
@@ -160,7 +158,7 @@ fun GameListPage(nav: NavHostController) {
 			}
 		},
 	) { padding ->
-		LocalGameList(nav, padding)
+		ActiveGameList(nav, padding)
 	}
 
 	if (showBottomSheet) {
@@ -208,9 +206,9 @@ fun ListMenu(onHide: () -> Unit, importState: MutableState<ImportGameState>) {
 }
 
 @Composable
-fun LocalGameList(nav: NavHostController, padding: PaddingValues) {
+fun ActiveGameList(nav: NavHostController, padding: PaddingValues) {
 	val context = LocalContext.current
-	val pager = remember { Pager(PagingConfig(10)) { LocalGameDao.get(context).allGames } }
+	val pager = remember { Pager(PagingConfig(10)) { ActiveGameDao.get(context).allGames } }
 	val lazyItems = pager.flow.collectAsLazyPagingItems()
 	val editState = remember { mutableStateOf(EditGameState()) }
 
@@ -222,7 +220,7 @@ fun LocalGameList(nav: NavHostController, padding: PaddingValues) {
 		items(lazyItems.itemCount, lazyItems.itemKey { it.gameid }) { index ->
 			val gamedata = lazyItems[index]
 			if (gamedata != null) {
-				LocalGameItem(gamedata, editState, nav)
+				GameListCard(gamedata, editState, nav)
 			}
 		}
 	}
@@ -273,8 +271,8 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LocalGameItem(
-	data: LocalGameEntity,
+fun GameListCard(
+	data: ActiveGameEntity,
 	state: MutableState<EditGameState>,
 	nav: NavHostController
 ) {

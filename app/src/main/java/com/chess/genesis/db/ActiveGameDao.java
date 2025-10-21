@@ -28,14 +28,14 @@ import androidx.paging.*;
 import androidx.room.*;
 
 @Dao
-public interface LocalGameDao
+public interface ActiveGameDao
 {
-	static LocalGameDao get(Context context)
+	static ActiveGameDao get(Context context)
 	{
-		return GameDatabase.getInstance(context).getLocalGameDao();
+		return GameDatabase.getInstance(context).activeGameDao();
 	}
 
-	default LocalGameEntity newLocalGame(NewGameState data)
+	default ActiveGameEntity newLocalGame(NewGameState data)
 	{
 		var type = data.getType().getValue();
 		var opp = data.getOpp().getValue();
@@ -48,21 +48,19 @@ public interface LocalGameDao
 		case Enums.CPU_OPPONENT:
 			opp = color == Enums.WHITE_OPP ? Enums.CPU_WHITE_OPPONENT : Enums.CPU_BLACK_OPPONENT;
 			break;
-		case Enums.INVITE_OPPONENT:
-			opp = color == Enums.WHITE_OPP ? Enums.INVITE_WHITE_OPPONENT : Enums.INVITE_BLACK_OPPONENT;
 		case Enums.HUMAN_OPPONENT:
+			break;
 		default:
-			// do nothing
+			throw new IllegalStateException("Unexpected opponent type: " + opp);
 		}
 
 		return newLocalGame("Untitled", type, opp);
 	}
 
-	default LocalGameEntity newLocalGame(String gamename, int gametype, int opponent)
+	default ActiveGameEntity newLocalGame(String gamename, int gametype, int opponent)
 	{
-		var game = new LocalGameEntity();
-		game.gameid = (opponent == Enums.INVITE_WHITE_OPPONENT || opponent == Enums.INVITE_BLACK_OPPONENT) ?
-			Util.getSUID(6) : UUID.randomUUID().toString();
+		var game = new ActiveGameEntity();
+		game.gameid = UUID.randomUUID().toString();
 		game.name = gamename;
 		game.gametype = gametype;
 		game.opponent = opponent;
@@ -76,9 +74,9 @@ public interface LocalGameDao
 		return game;
 	}
 
-	default LocalGameEntity importInviteGame(String gameId, int gameType, int color)
+	default ActiveGameEntity importInviteGame(String gameId, int gameType, int color)
 	{
-		var game = new LocalGameEntity();
+		var game = new ActiveGameEntity();
 		game.gameid = gameId;
 		game.name = "Invite " + Enums.GameType(gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
 		game.gametype = gameType;
@@ -93,9 +91,9 @@ public interface LocalGameDao
 		return game;
 	}
 
-	default LocalGameEntity importInviteGame(ActiveGameDataMsg msg, Context ctx)
+	default ActiveGameEntity importInviteGame(ActiveGameDataMsg msg, Context ctx)
 	{
-		var game = new LocalGameEntity();
+		var game = new ActiveGameEntity();
 
 		String name;
 		var opp = msg.getOpponent(ctx);
@@ -196,22 +194,22 @@ public interface LocalGameDao
 		return true;
 	}
 
-	@Query("SELECT * FROM local_games WHERE gameid = :gameId")
-	LocalGameEntity getGame(String gameId);
+	@Query("SELECT * FROM " + ActiveGameEntity.TABLE_NAME + " WHERE gameid = :gameId")
+	ActiveGameEntity getGame(String gameId);
 
-	@Query("SELECT * FROM local_games ORDER BY stime DESC")
-	PagingSource<Integer, LocalGameEntity> getAllGames();
+	@Query("SELECT * FROM " + ActiveGameEntity.TABLE_NAME + " ORDER BY stime DESC")
+	PagingSource<Integer, ActiveGameEntity> getAllGames();
 
-	@Query("SELECT COUNT(*) FROM local_games WHERE opponent = "
+	@Query("SELECT COUNT(*) FROM " + ActiveGameEntity.TABLE_NAME + " WHERE opponent = "
 	    + Enums.INVITE_WHITE_OPPONENT + " OR opponent = " + Enums.INVITE_BLACK_OPPONENT + " LIMIT 1")
 	boolean hasInviteGame();
 
 	@Insert
-	void insert(LocalGameEntity game);
+	void insert(ActiveGameEntity game);
 
 	@Delete
-	void delete(LocalGameEntity game);
+	void delete(ActiveGameEntity game);
 
 	@Update
-	void update(LocalGameEntity game);
+	void update(ActiveGameEntity game);
 }

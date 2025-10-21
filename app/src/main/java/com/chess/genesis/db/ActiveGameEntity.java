@@ -17,9 +17,11 @@ package com.chess.genesis.db;
 
 import androidx.room.*;
 
-@Entity(tableName = "local_games")
-public class LocalGameEntity extends GameEntity
+@Entity(tableName = ActiveGameEntity.TABLE_NAME)
+public class ActiveGameEntity extends GameEntity
 {
+	public static final String TABLE_NAME = "active_games";
+
 	public int opponent;
 
 	@ColumnInfo(defaultValue = "Untitled")

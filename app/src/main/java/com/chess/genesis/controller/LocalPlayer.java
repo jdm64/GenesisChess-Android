@@ -50,7 +50,7 @@ public class LocalPlayer implements IPlayer
 	{
 		Util.runThread(() -> {
 			var data = model.saveBoard();
-			LocalGameDao.get(context).update((LocalGameEntity) data);
+			ActiveGameDao.get(context).update((ActiveGameEntity) data);
 		});
 	}
 

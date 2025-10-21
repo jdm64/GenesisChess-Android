@@ -40,7 +40,7 @@ public interface IGameController
 
 	MutableState<Boolean> isGenChess();
 
-	void setBoard(LocalGameEntity data);
+	void setBoard(ActiveGameEntity data);
 
 	void setBoard(String gameId);
 

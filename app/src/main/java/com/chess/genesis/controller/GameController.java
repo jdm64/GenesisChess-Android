@@ -63,7 +63,7 @@ public class GameController implements IGameController
 	}
 
 	@Override
-	public void setBoard(LocalGameEntity data)
+	public void setBoard(ActiveGameEntity data)
 	{
 		Util.setScreenOnFlag(ctx, true);
 
@@ -123,7 +123,7 @@ public class GameController implements IGameController
 	{
 		gameID = gameId;
 		Util.runThread(() -> {
-			var game = LocalGameDao.get(ctx).getGame(gameID);
+			var game = ActiveGameDao.get(ctx).getGame(gameID);
 			if (game != null) {
 				Util.runUI(()->setBoard(game));
 			}

@@ -1,0 +1,84 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "52f0aaa71e698cc5fdd2e5d6290eddf6",
+    "entities": [
+      {
+        "tableName": "active_games",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`opponent` INTEGER NOT NULL, `name` TEXT DEFAULT 'Untitled', `white` TEXT, `black` TEXT, `gameid` TEXT NOT NULL, `ctime` INTEGER NOT NULL, `stime` INTEGER NOT NULL DEFAULT 0, `gametype` INTEGER NOT NULL, `zfen` TEXT DEFAULT ' ', `history` TEXT DEFAULT ' ', PRIMARY KEY(`gameid`))",
+        "fields": [
+          {
+            "fieldPath": "opponent",
+            "columnName": "opponent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "defaultValue": "'Untitled'"
+          },
+          {
+            "fieldPath": "white",
+            "columnName": "white",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "black",
+            "columnName": "black",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gameid",
+            "columnName": "gameid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ctime",
+            "columnName": "ctime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stime",
+            "columnName": "stime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "gametype",
+            "columnName": "gametype",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zfen",
+            "columnName": "zfen",
+            "affinity": "TEXT",
+            "defaultValue": "' '"
+          },
+          {
+            "fieldPath": "history",
+            "columnName": "history",
+            "affinity": "TEXT",
+            "defaultValue": "' '"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "gameid"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '52f0aaa71e698cc5fdd2e5d6290eddf6')"
+    ]
+  }
+}

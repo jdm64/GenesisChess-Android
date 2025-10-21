@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.*;
 import android.os.*;
 import android.util.*;
-import android.widget.*;
 import org.zeromq.*;
 import org.zeromq.ZMQ.*;
 import com.chess.genesis.*;
@@ -264,7 +263,7 @@ public class ZeroMQClient extends Service
 				case ActiveGameDataMsg.ID:
 					var game = msg.as(ActiveGameDataMsg.class);
 					var ctx = getApplicationContext();
-					var dao = LocalGameDao.get(ctx);
+					var dao = ActiveGameDao.get(ctx);
 					if (game.is_new) {
 						dao.importInviteGame(game, ctx);
 					} else {
@@ -279,7 +278,7 @@ public class ZeroMQClient extends Service
 					break;
 				case LastMoveMsg.ID:
 					var moveMsg = msg.as(LastMoveMsg.class);
-					LocalGameDao.get(getApplicationContext()).saveMove(moveMsg);
+					ActiveGameDao.get(getApplicationContext()).saveMove(moveMsg);
 
 					var listener = moveListeners.get(moveMsg.game_id);
 					if (listener != null) {
