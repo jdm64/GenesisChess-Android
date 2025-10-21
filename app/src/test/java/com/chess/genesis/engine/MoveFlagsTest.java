@@ -159,11 +159,11 @@ class MoveFlagsTest
 		assertTrue(newFlag.canQueenCastle(Piece.BLACK));
 
 		var freshFlags = newFlag.get();
-		assertTrue(newFlag.canEnPassant());
+		assertFalse(freshFlags.canEnPassant());
 		assertEquals(4, newFlag.enPassantFile());
-		assertTrue(newFlag.canKingCastle(Piece.WHITE));
-		assertFalse(newFlag.canKingCastle(Piece.BLACK));
-		assertFalse(newFlag.canQueenCastle(Piece.WHITE));
-		assertTrue(newFlag.canQueenCastle(Piece.BLACK));
+		assertTrue(freshFlags.canKingCastle(Piece.WHITE));
+		assertTrue(freshFlags.canKingCastle(Piece.BLACK));
+		assertTrue(freshFlags.canQueenCastle(Piece.WHITE));
+		assertTrue(freshFlags.canQueenCastle(Piece.BLACK));
 	}
 }
