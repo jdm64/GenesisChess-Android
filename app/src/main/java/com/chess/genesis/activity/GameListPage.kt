@@ -24,9 +24,14 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
+import androidx.compose.ui.text.font.FontStyle.Companion.Italic
+import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import androidx.navigation.*
 import androidx.paging.*
@@ -40,7 +45,6 @@ import kotlinx.coroutines.*
 
 class NewGameState {
 	var show = mutableStateOf(false)
-	var name = mutableStateOf("Untitled")
 	var type = mutableIntStateOf(Enums.GENESIS_CHESS)
 	var opp = mutableIntStateOf(Enums.INVITE_OPPONENT)
 	var color = mutableIntStateOf(Enums.RANDOM_OPP)
@@ -248,7 +252,7 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 		},
 		text = {
 			Column {
-				Text("Game Name:", modifier = Modifier.padding(bottom = 4.dp))
+				Text("Game Name:", modifier = Modifier.padding(bottom = 4.dp), fontSize = 16.sp)
 				TextField(
 					value = editState.value.name.value,
 					onValueChange = { editState.value.name.value = it })
@@ -316,6 +320,7 @@ fun LocalGameItem(
 	}
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) {
 	val state = data.value
