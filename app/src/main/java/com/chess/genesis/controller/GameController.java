@@ -124,7 +124,9 @@ public class GameController implements IGameController
 		gameID = gameId;
 		Util.runThread(() -> {
 			var game = LocalGameDao.get(ctx).getGame(gameID);
-			Util.runUI(() -> setBoard(game));
+			if (game != null) {
+				Util.runUI(()->setBoard(game));
+			}
 		});
 	}
 
