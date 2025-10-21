@@ -37,40 +37,24 @@ public abstract class ZmqMsg
 		try {
 			var msgType = packer.unpackInt();
 
-			switch (msgType) {
-			case ActiveGameDataMsg.ID:
-				return new ActiveGameDataMsg().parse(packer);
-			case AnonAcctMsg.ID:
-				return new AnonAcctMsg().parse(packer);
-			case CreateInviteMsg.ID:
-				return new CreateInviteMsg().parse(packer);
-			case ErrorMsg.ID:
-				return new ErrorMsg().parse(packer);
-			case GetActiveDataMsg.ID:
-				return new GetActiveDataMsg().parse(packer);
-			case JoinInviteMsg.ID:
-				return new JoinInviteMsg().parse(packer);
-			case LastMoveMsg.ID:
-				return new LastMoveMsg().parse(packer);
-			case LoginMsg.ID:
-				return new LoginMsg().parse(packer);
-			case LoginResultMsg.ID:
-				return new LoginResultMsg().parse(packer);
-			case MakeMoveMsg.ID:
-				return new MakeMoveMsg().parse(packer);
-			case OkMsg.ID:
-				return new OkMsg().parse(packer);
-			case PingMsg.ID:
-				return new PingMsg().parse(packer);
-			case PongMsg.ID:
-				return new PongMsg().parse(packer);
-			case RegisterAnonMsg.ID:
-				return new RegisterAnonMsg().parse(packer);
-			case RegisterMsg.ID:
-				return new RegisterMsg().parse(packer);
-			default:
-				return new UnknownMsg(data);
-			}
+			return switch (msgType) {
+				case ActiveGameDataMsg.ID -> new ActiveGameDataMsg().parse(packer);
+				case AnonAcctMsg.ID -> new AnonAcctMsg().parse(packer);
+				case CreateInviteMsg.ID -> new CreateInviteMsg().parse(packer);
+				case ErrorMsg.ID -> new ErrorMsg().parse(packer);
+				case GetActiveDataMsg.ID -> new GetActiveDataMsg().parse(packer);
+				case JoinInviteMsg.ID -> new JoinInviteMsg().parse(packer);
+				case LastMoveMsg.ID -> new LastMoveMsg().parse(packer);
+				case LoginMsg.ID -> new LoginMsg().parse(packer);
+				case LoginResultMsg.ID -> new LoginResultMsg().parse(packer);
+				case MakeMoveMsg.ID -> new MakeMoveMsg().parse(packer);
+				case OkMsg.ID -> new OkMsg().parse(packer);
+				case PingMsg.ID -> new PingMsg().parse(packer);
+				case PongMsg.ID -> new PongMsg().parse(packer);
+				case RegisterAnonMsg.ID -> new RegisterAnonMsg().parse(packer);
+				case RegisterMsg.ID -> new RegisterMsg().parse(packer);
+				default -> new UnknownMsg(data);
+			};
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new UnknownMsg(data);
