@@ -328,111 +328,152 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 		return
 	}
 	val ctx = LocalContext.current
+	var expandedType by remember { mutableStateOf(false) }
+	var expandedOpp by remember { mutableStateOf(false) }
+	var expandedColor by remember { mutableStateOf(false) }
 
 	AlertDialog(onDismissRequest = { state.show.value = false },
 		title = { Text(text = "New Game", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
 		text = {
 			Column {
-				Text("Game Type:", fontWeight = FontWeight.Bold)
-				Row(verticalAlignment = Alignment.CenterVertically) {
-					RadioButton(
-						selected = state.type.intValue == Enums.GENESIS_CHESS,
-						onClick = {
-							state.type.intValue = Enums.GENESIS_CHESS
-						},
+				ExposedDropdownMenuBox(
+					expanded = expandedType,
+					onExpandedChange = { expandedType = it }
+				) {
+					TextField(
+						value = if (state.type.intValue == Enums.GENESIS_CHESS) "Genesis" else "Regular",
+						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+						label = { Text("Game Type:", fontSize = 18.sp, fontStyle = Italic) },
+						onValueChange = {},
+						readOnly = true,
+						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedType) },
+						modifier = Modifier.menuAnchor()
 					)
-					Text("Genesis")
-					Spacer(modifier = Modifier.width(6.dp))
-					RadioButton(
-						selected = state.type.intValue == Enums.REGULAR_CHESS,
-						onClick = {
-							state.type.intValue = Enums.REGULAR_CHESS
-						},
-					)
-					Text("Regular")
+					ExposedDropdownMenu(
+						expanded = expandedType,
+						onDismissRequest = { expandedType = false }
+					) {
+						DropdownMenuItem(
+							text = { Text("Genesis") },
+							onClick = {
+								state.type.intValue = Enums.GENESIS_CHESS
+								expandedType = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Regular") },
+							onClick = {
+								state.type.intValue = Enums.REGULAR_CHESS
+								expandedType = false
+							}
+						)
+					}
 				}
-				Text(
-					"Opponent Type:",
-					fontWeight = FontWeight.Bold,
-					modifier = Modifier.padding(top = 8.dp)
-				)
-				Row(verticalAlignment = Alignment.CenterVertically) {
-					RadioButton(
-						selected = state.opp.intValue == Enums.INVITE_OPPONENT,
-						onClick = {
-							state.opp.intValue = Enums.INVITE_OPPONENT
-						},
-					)
-					Text("Invite")
-					Spacer(modifier = Modifier.width(6.dp))
-					RadioButton(
-						selected = state.opp.intValue == Enums.HUMAN_OPPONENT,
-						onClick = {
-							state.opp.intValue = Enums.HUMAN_OPPONENT
-						},
-					)
-					Text("Local")
-					Spacer(modifier = Modifier.width(6.dp))
-					RadioButton(
-						selected = state.opp.intValue == Enums.CPU_OPPONENT,
-						onClick = {
-							state.opp.intValue = Enums.CPU_OPPONENT
-						},
-					)
-					Text("Computer")
-				}
-				Text(
-					"Play as Color:",
-					fontWeight = FontWeight.Bold,
-					modifier = Modifier.padding(top = 8.dp)
-				)
-				Row(verticalAlignment = Alignment.CenterVertically) {
-					RadioButton(
-						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
-						selected = state.color.intValue == Enums.RANDOM_OPP,
-						onClick = {
-							state.color.intValue = Enums.RANDOM_OPP
-						},
-					)
-					Text("Random")
-					Spacer(modifier = Modifier.width(6.dp))
-					RadioButton(
-						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
-						selected = state.color.intValue == Enums.BLACK_OPP,
-						onClick = {
-							state.color.intValue = Enums.BLACK_OPP
-						},
-					)
-					Text("White")
-					Spacer(modifier = Modifier.width(6.dp))
-					RadioButton(
-						enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
-						selected = state.color.intValue == Enums.WHITE_OPP,
-						onClick = {
-							state.color.intValue = Enums.WHITE_OPP
-						},
-					)
-					Text("Black")
-				}
-				Text(
-					"Name:",
-					fontWeight = FontWeight.Bold,
-					modifier = Modifier.padding(top = 8.dp)
-				)
 				Spacer(modifier = Modifier.height(8.dp))
-				TextField(
-					value = state.name.value,
-					onValueChange = { state.name.value = it })
+				ExposedDropdownMenuBox(
+					expanded = expandedOpp,
+					onExpandedChange = { expandedOpp = it }
+				) {
+					TextField(
+						value = when (state.opp.intValue) {
+							Enums.INVITE_OPPONENT -> "Invite"
+							Enums.HUMAN_OPPONENT -> "Local"
+							Enums.CPU_OPPONENT -> "Computer"
+							else -> ""
+						},
+						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+						label = { Text("Opponent Type:", fontSize = 18.sp, fontStyle = Italic) },
+						onValueChange = {},
+						readOnly = true,
+						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedOpp) },
+						modifier = Modifier.menuAnchor()
+					)
+					ExposedDropdownMenu(
+						expanded = expandedOpp,
+						onDismissRequest = { expandedOpp = false }
+					) {
+						DropdownMenuItem(
+							text = { Text("Invite") },
+							onClick = {
+								state.opp.intValue = Enums.INVITE_OPPONENT
+								expandedOpp = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Local") },
+							onClick = {
+								state.opp.intValue = Enums.HUMAN_OPPONENT
+								expandedOpp = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Computer") },
+							onClick = {
+								state.opp.intValue = Enums.CPU_OPPONENT
+								expandedOpp = false
+							}
+						)
+					}
+				}
+				Spacer(modifier = Modifier.height(8.dp))
+				ExposedDropdownMenuBox(
+					expanded = expandedColor,
+					onExpandedChange = { expandedColor = it }
+				) {
+					TextField(
+						value = when (state.color.intValue) {
+							Enums.RANDOM_OPP -> "Any"
+							Enums.BLACK_OPP -> "White"
+							Enums.WHITE_OPP -> "Black"
+							else -> ""
+						},
+						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+						label = { Text("Play as Color:", fontSize = 18.sp, fontStyle = Italic) },
+						onValueChange = {},
+						readOnly = true,
+						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedColor) },
+						modifier = Modifier.menuAnchor()
+					)
+					ExposedDropdownMenu(
+						expanded = expandedColor,
+						onDismissRequest = { expandedColor = false }
+					) {
+						DropdownMenuItem(
+							text = { Text("Any") },
+							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							onClick = {
+								state.color.intValue = Enums.RANDOM_OPP
+								expandedColor = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("White") },
+							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							onClick = {
+								state.color.intValue = Enums.BLACK_OPP
+								expandedColor = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Black") },
+							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							onClick = {
+								state.color.intValue = Enums.WHITE_OPP
+								expandedColor = false
+							}
+						)
+					}
+				}
 			}
 		},
 		confirmButton = {
-			TextButton(onClick = { onNewGame(state, nav, ctx) }) {
-				Text("Create")
+			Button(onClick = { onNewGame(state, nav, ctx) }) {
+				Text("Create", fontSize = 18.sp)
 			}
 		},
 		dismissButton = {
-			TextButton(onClick = { state.show.value = false }) {
-				Text("Cancel")
+			OutlinedButton(onClick = { state.show.value = false }) {
+				Text("Cancel", fontSize = 18.sp)
 			}
 		}
 	)

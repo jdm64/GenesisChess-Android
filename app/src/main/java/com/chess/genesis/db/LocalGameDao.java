@@ -37,7 +37,6 @@ public interface LocalGameDao
 
 	default LocalGameEntity newLocalGame(NewGameState data)
 	{
-		var name = data.getName().getValue();
 		var type = data.getType().getValue();
 		var opp = data.getOpp().getValue();
 		var color = data.getColor().getValue();
@@ -56,7 +55,7 @@ public interface LocalGameDao
 			// do nothing
 		}
 
-		return newLocalGame(name, type, opp);
+		return newLocalGame("Untitled", type, opp);
 	}
 
 	default LocalGameEntity newLocalGame(String gamename, int gametype, int opponent)
