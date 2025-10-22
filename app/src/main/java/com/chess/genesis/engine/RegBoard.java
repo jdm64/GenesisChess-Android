@@ -399,6 +399,8 @@ public class RegBoard extends BaseBoard
 		// if castle flag is set, move must a castle to be valid
 		if (move.getCastle() != 0)
 			return new Pair<>(move, validCastle(move, color));
+		else if (move.getPlace() != 0)
+			return new Pair<>(move, INVALID_FORMAT);
 
 		move.index = pieceIndex(move.from, square[move.from]);
 

@@ -100,4 +100,11 @@ public class RegBoardTest extends AbstractBoardTest
 		    {"K6k1rr:::88", Board.STALE_MATE}
 		};
 	}
+
+	static Object[][] testBadMoves_Params()
+	{
+		return new Object[][]{
+		    {"rnbqkbnrpppppppp32PPPPPPPPRNBQKBNR:KQkq::0", "Ka1", Board.INVALID_FORMAT},
+		};
+	}
 }

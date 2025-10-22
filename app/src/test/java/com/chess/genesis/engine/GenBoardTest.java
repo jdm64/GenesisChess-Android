@@ -85,4 +85,13 @@ class GenBoardTest extends AbstractBoardTest
 		    {"K6k1rr::88", Board.STALE_MATE}
 		};
 	}
+
+	static Object[][] testBadMoves_Params()
+	{
+		return new Object[][]{
+		    {"K6k1rr::88", "O-O-O", Board.INVALID_FORMAT},
+		    {"K6k1rr::88", "O-O", Board.INVALID_FORMAT},
+		    {"K6k1rr::88", "d7d8Q", Board.INVALID_FORMAT},
+		};
+	}
 }

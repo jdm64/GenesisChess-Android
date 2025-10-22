@@ -119,6 +119,15 @@ public abstract class AbstractBoardTest
 		assertEquals(mateType, board.isMate());
 	}
 
+	@ParameterizedTest
+	@MethodSource("testBadMoves_Params")
+	void testBadMoves(String zfen, String move, int expected)
+	{
+		var board = getBoard();
+		assertTrue(board.parseZFen(zfen));
+		assertEquals(expected, board.parseMove(move).second);
+	}
+
 	static List<Pair<Move,MoveFlags>> applyMoves(String moves, Board board)
 	{
 		var moveList = new ArrayList<Pair<Move,MoveFlags>>();

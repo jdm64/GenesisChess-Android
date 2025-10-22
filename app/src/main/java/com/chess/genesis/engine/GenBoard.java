@@ -273,6 +273,10 @@ public class GenBoard extends BaseBoard
 		var move = new Move();
 		if (!move.parse(moveStr)) {
 			return new Pair<>(move, INVALID_FORMAT);
+		} else if (move.getCastle() != 0) {
+			return new Pair<>(move, INVALID_FORMAT);
+		} else if (move.getPromote() != 0) {
+			return new Pair<>(move, INVALID_FORMAT);
 		}
 
 		// setup move.(x)index
