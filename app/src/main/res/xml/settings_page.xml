@@ -86,6 +86,7 @@
             app:summary="See how fast your device can search moves"/>
         <EditTextPreference
             app:key="serverhost"
+            app:defaultValue="tcp://genesischess.com:1993"
             app:persistent="true"
             app:title="Server URL"
             app:summary="Set server URL to connect to"/>
