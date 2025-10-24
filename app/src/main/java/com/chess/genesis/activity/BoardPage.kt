@@ -30,6 +30,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.viewinterop.*
@@ -133,16 +134,17 @@ fun TopBarInfo(gameCtlr: IGameController) {
 	val mate = stmState.value.mate
 	val stm = stmState.value.stm
 	val yColor = stmState.value.yourColor
+	val red = colorResource(R.color.red_A700)
 	val whiteColor =
-		if (mate * stm > 0) colors.error else if (stm > 0) colors.onPrimary else Color.Gray
+		if (mate * stm > 0) red else if (stm > 0) colors.onPrimary else Color.Gray
 	val blackColor =
-		if (mate * stm < 0) colors.error else if (stm < 0) colors.onPrimary else Color.Gray
+		if (mate * stm < 0) red else if (stm < 0) colors.onPrimary else Color.Gray
 
 	Row(Modifier.fillMaxWidth(1f)) {
 		Row(
 			Modifier
 				.fillMaxWidth(.5f)
-				.background(colors.primary)
+				.background(colorResource(R.color.blue_800))
 				.border(3.dp, whiteColor)
 				.padding(8.dp, 16.dp, 8.dp, 16.dp)
 		) {
@@ -164,7 +166,7 @@ fun TopBarInfo(gameCtlr: IGameController) {
 		Row(
 			Modifier
 				.fillMaxWidth(1f)
-				.background(colors.primary)
+				.background(colorResource(R.color.blue_800))
 				.border(3.dp, blackColor)
 				.padding(8.dp, 16.dp, 8.dp, 16.dp)
 		) {
