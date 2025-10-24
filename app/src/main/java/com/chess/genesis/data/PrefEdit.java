@@ -81,8 +81,9 @@ public class PrefEdit extends Pref
 		return this;
 	}
 
-	public void commit()
+	public PrefEdit commit()
 	{
 		editor.commit();
+		return this;
 	}
 }

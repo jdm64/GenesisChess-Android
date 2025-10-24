@@ -113,6 +113,10 @@ public class ZeroMQClient extends Service
 				isActive = true;
 				socket = ctx.createSocket(SocketType.DEALER);
 				var host = Pref.getString(this, R.array.pf_serverhost);
+				if (host == null || host.isBlank()) {
+					var pref = new PrefEdit(this).putString(R.array.pf_serverhost).commit();
+					host = pref.getString(R.array.pf_serverhost);
+				}
 				Log.i(getClass().getSimpleName(), "Connecting to: " + host);
 				socket.connect(host);
 				receiveFuture = Util.runThread(this::receiveLoop);
