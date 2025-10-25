@@ -24,12 +24,14 @@ import android.os.*;
 import android.util.*;
 import org.zeromq.*;
 import org.zeromq.ZMQ.*;
+import org.zeromq.ZMQException;
 import com.chess.genesis.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;
+import zmq.*;
 
 public class ZeroMQClient extends Service
 {
@@ -123,7 +125,7 @@ public class ZeroMQClient extends Service
 				heartbeat();
 				sendLoop();
 			} catch (Throwable e) {
-				e.printStackTrace();
+				Log.e(getClass().getSimpleName(), "Unexpected error", e);
 			} finally {
 				isActive = false;
 				Log.i(getClass().getSimpleName(), "Shutting down service");
@@ -156,7 +158,7 @@ public class ZeroMQClient extends Service
 					shutdown(true);
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Log.e(getClass().getSimpleName(), "Unexpected error", e);
 			}
 		});
 	}
@@ -238,7 +240,7 @@ public class ZeroMQClient extends Service
 		try {
 			sendQueue.put(msg);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(getClass().getSimpleName(), "Unexpected error", e);
 		}
 	}
 
@@ -303,8 +305,19 @@ public class ZeroMQClient extends Service
 					Log.e(getClass().getSimpleName(), "Unexpected message: " + msg);
 					break;
 				}
+			} catch (ZMQException ze) {
+				switch (ze.getErrorCode()) {
+				case ZError.ETERM:
+					Log.i(getClass().getSimpleName(), "ZMQ context terminated");
+					break;
+				case ZError.EINTR:
+					Log.i(getClass().getSimpleName(), "Socket interrupted because shutting down");
+					break;
+				default:
+					Log.e(getClass().getSimpleName(), "ZMQ error: " + ze);
+				}
 			} catch (Throwable e) {
-				e.printStackTrace();
+				Log.e(getClass().getSimpleName(), "Unexpected error", e);
 			}
 		}
 		Log.i(getClass().getSimpleName(), "Shutting down receiveLoop");
@@ -316,7 +329,7 @@ public class ZeroMQClient extends Service
 			try {
 				socket.send(sendQueue.take().toBytes());
 			} catch (Throwable e) {
-				e.printStackTrace();
+				Log.e(getClass().getSimpleName(), "Unexpected error", e);
 			}
 		}
 		Log.i(getClass().getSimpleName(), "Shutting down sendLoop");
