@@ -49,6 +49,11 @@ public class GameController implements IGameController
 		stmState = Util.getState(new StmState("White", "Black", 1, 0, yourColor));
 		submitState = Util.getState(new SubmitState());
 
+		// init default values so no NPE in onDestroy()
+		model = new GenGameModel(view, this);
+		white = new LocalPlayer(Piece.WHITE, model);
+		black = new LocalPlayer(Piece.BLACK, model);
+
 		setBoard(gameID);
 	}
 
