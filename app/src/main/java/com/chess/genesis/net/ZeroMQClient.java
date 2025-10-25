@@ -122,7 +122,6 @@ public class ZeroMQClient extends Service
 				Log.i(getClass().getSimpleName(), "Connecting to: " + host);
 				socket.connect(host);
 				receiveFuture = Util.runThread(this::receiveLoop);
-				heartbeat();
 				sendLoop();
 			} catch (Throwable e) {
 				Log.e(getClass().getSimpleName(), "Unexpected error", e);
