@@ -47,6 +47,10 @@ import kotlinx.coroutines.*
 fun GamePage(nav: NavHostController, gameId: String) {
 	val state = rememberModalBottomSheetState()
 	val ctx = LocalContext.current
+	LaunchedEffect(Unit) {
+		PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + gameId).commit()
+	}
+
 	val gameCtlr = remember { GameController(ctx, gameId) }
 	val scope = rememberCoroutineScope()
 

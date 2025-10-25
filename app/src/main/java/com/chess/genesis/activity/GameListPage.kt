@@ -115,6 +115,11 @@ fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListPage(nav: NavHostController) {
+	val ctx = LocalContext.current
+	LaunchedEffect(Unit) {
+		PrefEdit(ctx).putString(R.array.pf_lastpage, "list").commit()
+	}
+
 	val newGameState = remember { mutableStateOf(NewGameState()) }
 	val sheetState = rememberModalBottomSheetState()
 	val coroutineScope = rememberCoroutineScope()

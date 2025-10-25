@@ -44,16 +44,6 @@ class MainActivity : ComponentActivity() {
 fun MainApp() {
 	val nav = rememberNavController()
 
-	nav.addOnDestinationChangedListener { _, _, bundle ->
-		val intent = bundle?.get("android-support-nav:controller:deepLinkIntent")
-		if (intent is Intent) {
-			val path = intent.data?.path?.substring(1)
-			if (path != null) {
-				PrefEdit(nav.context).putString(R.array.pf_lastpage, path).commit()
-			}
-		}
-	}
-
 	NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 		composable("start") { LoadingPage(nav) }
 		composable("list") { GameListPage(nav) }
