@@ -167,7 +167,9 @@ public class ZeroMQClient extends Service
 	{
 		isActive = false;
 		ping();
-		receiveFuture.cancel(true);
+		if (receiveFuture != null) {
+			receiveFuture.cancel(true);
+		}
 		if (showError) {
 			Util.showToast("Server connection failed", this);
 		}
