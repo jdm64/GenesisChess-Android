@@ -69,7 +69,9 @@ fun GamePage(nav: NavHostController, gameId: String) {
 		}
 	}
 
-	ShowGameDialogs(gameCtlr)
+	ShowGenesisWarningDialog(ctx)
+
+	ShowPromoteDialog(gameCtlr)
 
 	ShowSubmitDialog(gameCtlr)
 }
@@ -252,7 +254,7 @@ fun GameNav(gameCtlr: IGameController) {
 }
 
 @Composable
-fun ShowGameDialogs(gameCtlr: IGameController) {
+fun ShowPromoteDialog(gameCtlr: IGameController) {
 	val promoteState = remember { gameCtlr.promoteState }
 	if (promoteState.value) {
 		AlertDialog(onDismissRequest = { promoteState.value = false },
@@ -316,4 +318,38 @@ fun ShowSubmitDialog(gameCtlr: GameController) {
 			}
 		}
 	}
+}
+
+@Composable
+fun ShowGenesisWarningDialog(ctx: Context) {
+	val show = remember { mutableStateOf(Pref.getBool(ctx, R.array.pf_showGenesisWarning)) }
+	if (!show.value) {
+		return;
+	}
+
+	AlertDialog(
+		onDismissRequest = {
+			show.value = false
+		},
+		title = {
+			Text(
+				text = "Genesis Chess Warning",
+				fontWeight = FontWeight.Bold,
+				fontSize = 20.sp,
+				color = colorResource(R.color.red_A700)
+			)
+		},
+		text = {
+			Text(fontSize = 16.sp,
+				text = "You are playing a chess variant called Genesis Chess. The board starts out empty and kings are placed first. Pawns are omnidirectional.")
+		},
+		confirmButton = {
+			Button(onClick = {
+				show.value = false
+				PrefEdit(ctx).putBool(R.array.pf_showGenesisWarning, false).commit()
+			}) {
+				Text("Confirm")
+			}
+		}
+	)
 }

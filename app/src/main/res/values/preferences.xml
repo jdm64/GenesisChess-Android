@@ -24,6 +24,10 @@
 		<item>showGenesisRules</item>
 		<item>true</item>
 	</array>
+	<array name="pf_showGenesisWarning">
+		<item>showGenesisWarning</item>
+		<item>true</item>
+	</array>
 	<array name="pf_viewAsBlack">
 		<item>viewAsBlack</item>
 		<item>true</item>
