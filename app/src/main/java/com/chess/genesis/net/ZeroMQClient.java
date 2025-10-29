@@ -21,7 +21,6 @@ import android.app.*;
 import android.content.Context;
 import android.content.*;
 import android.os.*;
-import android.util.*;
 import org.zeromq.*;
 import org.zeromq.ZMQ.*;
 import org.zeromq.ZMQException;
@@ -119,15 +118,14 @@ public class ZeroMQClient extends Service
 					var pref = new PrefEdit(this).putString(R.array.pf_serverhost).commit();
 					host = pref.getString(R.array.pf_serverhost);
 				}
-				Log.i(getClass().getSimpleName(), "Connecting to: " + host);
+				Util.log("Connecting to: " + host, this);
 				socket.connect(host);
 				receiveFuture = Util.runThread(this::receiveLoop);
 				sendLoop();
 			} catch (Throwable e) {
-				Log.e(getClass().getSimpleName(), "Unexpected error", e);
+				Util.logErr(e, this);
 			} finally {
 				isActive = false;
-				Log.i(getClass().getSimpleName(), "Shutting down service");
 			}
 		});
 	}
@@ -137,6 +135,7 @@ public class ZeroMQClient extends Service
 	{
 		isActive = false;
 		isLoggedin = false;
+		Util.log("Shutting down service", this);
 	}
 
 	public void listenMoves(String gameId, RemoteZeroMQPlayer player)
@@ -157,7 +156,7 @@ public class ZeroMQClient extends Service
 					shutdown(true);
 				}
 			} catch (InterruptedException e) {
-				Log.e(getClass().getSimpleName(), "Unexpected error", e);
+				Util.logErr(e, this);
 			}
 		});
 	}
@@ -241,7 +240,7 @@ public class ZeroMQClient extends Service
 		try {
 			sendQueue.put(msg);
 		} catch (InterruptedException e) {
-			Log.e(getClass().getSimpleName(), "Unexpected error", e);
+			Util.logErr(e, this);
 		}
 	}
 
@@ -303,25 +302,25 @@ public class ZeroMQClient extends Service
 					break;
 				case UnknownMsg.ID:
 				default:
-					Log.e(getClass().getSimpleName(), "Unexpected message: " + msg);
+					Util.logErr("Unexpected message: " + msg, this);
 					break;
 				}
 			} catch (ZMQException ze) {
 				switch (ze.getErrorCode()) {
 				case ZError.ETERM:
-					Log.i(getClass().getSimpleName(), "ZMQ context terminated");
+					Util.log("ZMQ context terminated", this);
 					break;
 				case ZError.EINTR:
-					Log.i(getClass().getSimpleName(), "Socket interrupted because shutting down");
+					Util.log("Socket interrupted because shutting down", this);
 					break;
 				default:
-					Log.e(getClass().getSimpleName(), "ZMQ error: " + ze);
+					Util.logErr(ze, this);
 				}
 			} catch (Throwable e) {
-				Log.e(getClass().getSimpleName(), "Unexpected error", e);
+				Util.logErr(e, this);
 			}
 		}
-		Log.i(getClass().getSimpleName(), "Shutting down receiveLoop");
+		Util.log("Shutting down receiveLoop", this);
 	}
 
 	private void sendLoop()
@@ -330,9 +329,9 @@ public class ZeroMQClient extends Service
 			try {
 				socket.send(sendQueue.take().toBytes());
 			} catch (Throwable e) {
-				Log.e(getClass().getSimpleName(), "Unexpected error", e);
+				Util.logErr(e, this);
 			}
 		}
-		Log.i(getClass().getSimpleName(), "Shutting down sendLoop");
+		Util.log("Shutting down sendLoop", this);
 	}
 }
