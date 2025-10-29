@@ -122,9 +122,11 @@ public class Util
 	}
 
 	private static Activity getActivity(Context context) {
-		if (context == null) return null;
-		if (context instanceof Activity) return (Activity) context;
-		if (context instanceof ContextWrapper) return getActivity(((ContextWrapper)context).getBaseContext());
-		return null;
+		return switch (context) {
+			case Activity activity -> activity;
+			case ContextWrapper contextWrapper ->
+			    getActivity(contextWrapper.getBaseContext());
+			case null, default -> null;
+		};
 	}
 }
