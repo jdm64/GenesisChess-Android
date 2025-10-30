@@ -26,6 +26,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.chess.genesis.R
 import com.chess.genesis.data.*
+import com.chess.genesis.net.*
 
 class MainActivity : ComponentActivity() {
 
@@ -37,6 +38,16 @@ class MainActivity : ComponentActivity() {
 				MainApp()
 			}
 		}
+	}
+
+	override fun onResume() {
+		ZeroMQClient.setAppActive(true)
+		super.onResume()
+	}
+
+	override fun onPause() {
+		ZeroMQClient.setAppActive(false)
+		super.onPause()
 	}
 }
 
