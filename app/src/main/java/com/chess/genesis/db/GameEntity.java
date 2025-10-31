@@ -15,7 +15,8 @@
  */
 package com.chess.genesis.db;
 
-import com.chess.genesis.data.*;
+import java.util.*;
+import android.util.*;
 import com.chess.genesis.engine.*;
 import androidx.annotation.*;
 import androidx.room.*;
@@ -39,6 +40,17 @@ public class GameEntity
 
 	@ColumnInfo(defaultValue = " ")
 	public String history;
+
+	public List<Pair<String,Long>> getMoves()
+	{
+		var moveHistory = history.trim().split(" +");
+		var moves = new ArrayList<Pair<String,Long>>();
+		for (var element : moveHistory) {
+			var parts = element.split(",");
+			moves.add(new Pair<>(parts[0], Long.parseLong(parts[1])));
+		}
+		return moves;
+	}
 
 	public String lastMoveTo()
 	{

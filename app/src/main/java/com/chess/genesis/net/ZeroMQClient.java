@@ -57,6 +57,8 @@ public class ZeroMQClient extends Service
 
 	public interface IMoveListener
 	{
+		void reloadBoard(GameEntity data);
+
 		void onMove(String moveStr, int idx);
 	}
 
@@ -302,12 +304,13 @@ public class ZeroMQClient extends Service
 					if (game.is_new) {
 						dao.importInviteGame(game, ctx);
 					} else {
-						var newMoves = dao.updateInviteGame(game, ctx);
+						var gameData = dao.updateActiveGame(game, ctx);
+						if (gameData == null) {
+							break;
+						}
 						var listener = moveListeners.get(game.game_id);
 						if (listener != null) {
-							for (var newMove : newMoves) {
-								listener.onMove(newMove.first, newMove.second);
-							}
+							listener.reloadBoard(gameData);
 						}
 					}
 					break;

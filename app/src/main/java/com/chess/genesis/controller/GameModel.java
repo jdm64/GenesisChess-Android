@@ -19,6 +19,7 @@ package com.chess.genesis.controller;
 import com.chess.genesis.api.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 
 public abstract class GameModel implements IGameModel
 {
@@ -88,13 +89,13 @@ public abstract class GameModel implements IGameModel
 		data = _data;
 		reset();
 
-		var movehistory = data.history.trim().split(" +");
-		for (var element : movehistory) {
-			var parts = element.split(",");
-			var res = board.parseMove(parts[0]);
-			if (res.second != Board.VALID_MOVE)
+		for (var element : data.getMoves()) {
+			var res = board.parseMove(element.first);
+			if (res.second != Board.VALID_MOVE) {
+				Util.logErr("Invalid move: " + element, this);
 				break;
-			addMove(res.first, Long.parseLong(parts[1]));
+			}
+			addMove(res.first, element.second);
 		}
 		loadBoard();
 	}

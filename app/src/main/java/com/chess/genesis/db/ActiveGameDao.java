@@ -119,27 +119,24 @@ public interface ActiveGameDao
 		return game;
 	}
 
-	default List<Pair<String,Integer>> updateInviteGame(ActiveGameDataMsg msg, Context ctx)
+	default ActiveGameEntity updateActiveGame(ActiveGameDataMsg msg, Context ctx)
 	{
 		var game = getGame(msg.game_id);
 		if (game == null) {
-			return Collections.emptyList();
+			Util.logErr("game not found: " + msg.game_id, this);
+			return null;
 		}
+
+		var updateRequired = !msg.movesString().equals(game.history);
 
 		game.stime = msg.save_time;
 		game.white = msg.white;
 		game.black = msg.black;
 		game.history = msg.movesString();
 
-		var newMoves = new ArrayList<Pair<String,Integer>>();
-		var moves = game.history.split(" +");
-		for (int i = moves.length - 1; i < msg.moves.size(); i++) {
-			newMoves.add(new Pair<>(msg.moves.get(i).first, i));
-		}
-
 		update(game);
 
-		return newMoves;
+		return updateRequired ? game : null;
 	}
 
 	default boolean saveMove(String gameId, int index, String move)

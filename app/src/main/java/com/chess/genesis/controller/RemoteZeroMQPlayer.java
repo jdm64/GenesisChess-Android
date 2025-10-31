@@ -17,6 +17,7 @@ package com.chess.genesis.controller;
 
 import android.content.*;
 import com.chess.genesis.api.*;
+import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.ZeroMQClient.*;
@@ -49,6 +50,12 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	public boolean canClick(int stm)
 	{
 		return false;
+	}
+
+	@Override
+	public void reloadBoard(GameEntity data)
+	{
+		model.setBoard(data);
 	}
 
 	@Override
