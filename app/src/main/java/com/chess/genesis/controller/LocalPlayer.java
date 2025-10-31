@@ -26,11 +26,13 @@ public class LocalPlayer implements IPlayer
 {
 	protected final IGameModel model;
 	protected final int yColor;
+	protected String playerName;
 
 	public LocalPlayer(int color, IGameModel _model)
 	{
 		yColor = color;
 		model = _model;
+		playerName = yColor == Piece.WHITE ? "White" : "Black";
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class LocalPlayer implements IPlayer
 	@Override
 	public String getStmName(boolean overwrite)
 	{
-		return yColor == Piece.WHITE ? "White" : "Black";
+		return playerName;
 	}
 
 	@Override

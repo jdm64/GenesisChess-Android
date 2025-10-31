@@ -39,7 +39,9 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	public RemoteZeroMQPlayer(int YColor, IGameModel Model, Context context)
 	{
 		super(YColor, Model);
-		gameId = model.saveBoard().gameid;
+		var game = model.saveBoard();
+		gameId = game.gameid;
+		playerName = YColor == Piece.WHITE ? "(W) " + game.whiteName() : "(B) " + game.blackName();
 		ZeroMQClient.bind(context, connection);
 	}
 

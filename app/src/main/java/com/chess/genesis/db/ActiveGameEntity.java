@@ -30,4 +30,16 @@ public class ActiveGameEntity extends GameEntity
 	public String white;
 
 	public String black;
+
+	@Override
+	public String whiteName()
+	{
+		return white;
+	}
+
+	@Override
+	public String blackName()
+	{
+		return black;
+	}
 }

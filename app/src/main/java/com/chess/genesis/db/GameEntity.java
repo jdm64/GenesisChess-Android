@@ -50,4 +50,14 @@ public class GameEntity
 			return "oo";
 		return Move.printSq(move.to);
 	}
+
+	public String whiteName()
+	{
+		return "White";
+	}
+
+	public String blackName()
+	{
+		return "Black";
+	}
 }

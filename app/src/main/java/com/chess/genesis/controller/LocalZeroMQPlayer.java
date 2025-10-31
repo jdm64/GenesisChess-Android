@@ -30,6 +30,7 @@ public class LocalZeroMQPlayer extends LocalPlayer
 	{
 		super(YColor, Model);
 		gameId = model.saveBoard().gameid;
+		playerName = (YColor == Piece.WHITE ? "(W)" : "(B)") + " You";
 		submitState = SubmitState;
 	}
 

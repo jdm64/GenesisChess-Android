@@ -38,7 +38,7 @@ public class ComputerPlayer extends LocalPlayer
 	{
 		var name = super.getStmName(overwrite);
 		if (overwrite && model.getBoard().getStm() == yColor)
-			name = name + " (thinking)";
+			name += " (thinking)";
 		return name;
 	}
 
