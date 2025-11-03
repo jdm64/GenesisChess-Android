@@ -36,11 +36,11 @@ public class RegGameModel extends GameModel
 			view.showPromoteDialog(move, board.getStm());
 			return;
 		}
-		applyMove(move, true);
+		applyMove(move, System.currentTimeMillis());
 	}
 
 	@Override
-	public void applyMove(Move move, boolean erase)
+	public void applyMove(Move move, long time)
 	{
 		preApplyMove();
 
@@ -73,14 +73,15 @@ public class RegGameModel extends GameModel
 		board.make(move);
 		hindex++;
 
-		postCommonMove(erase);
+		var overwrite = time > 0;
+		postCommonMove(overwrite);
 
-		if (erase) {
+		if (overwrite) {
 			if (hindex < history.size()) {
 				history.resize(hindex);
 				flagsHistory.resize(hindex);
 			}
-			history.push(move);
+			history.pushWithTime(move, time);
 			flagsHistory.push(flags);
 			controller.onMove(move);
 		}

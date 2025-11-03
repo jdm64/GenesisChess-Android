@@ -70,6 +70,6 @@ public class ComputerPlayer extends LocalPlayer
 
 		var vMove = new Move();
 		if (board.validMove(move, vMove))
-			model.applyMove(vMove, true);
+			model.applyMove(vMove, System.currentTimeMillis());
 	}
 }

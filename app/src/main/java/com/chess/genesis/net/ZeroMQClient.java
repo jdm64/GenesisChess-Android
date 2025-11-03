@@ -59,7 +59,7 @@ public class ZeroMQClient extends Service
 	{
 		void reloadBoard(GameEntity data);
 
-		void onMove(String moveStr, int idx);
+		void onMove(LastMoveMsg moveMsg);
 	}
 
 	public interface RunCommand
@@ -320,7 +320,7 @@ public class ZeroMQClient extends Service
 
 					var listener = moveListeners.get(moveMsg.game_id);
 					if (listener != null) {
-						listener.onMove(moveMsg.move_str, moveMsg.move_idx);
+						listener.onMove(moveMsg);
 					}
 					break;
 				case PongMsg.ID:

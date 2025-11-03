@@ -46,7 +46,10 @@ public interface IGameModel
 
 	void handleMove(int from, int to);
 
-	void applyMove(Move move, boolean erase);
+	/**
+	 * @param time positive time overwrites history
+	 */
+	void applyMove(Move move, long time);
 
 	void revertMove(Move move);
 

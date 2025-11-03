@@ -21,6 +21,7 @@ import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.ZeroMQClient.*;
+import com.chess.genesis.net.msgs.LastMoveMsg;
 
 public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 {
@@ -59,15 +60,15 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	}
 
 	@Override
-	public void onMove(String moveStr, int index)
+	public void onMove(LastMoveMsg moveMsg)
 	{
 		model.currentMove();
 
 		var board = model.getBoard();
-		var res = board.parseMove(moveStr);
+		var res = board.parseMove(moveMsg.move_str);
 		if (res.second != Board.VALID_MOVE)
 			return;
-		model.applyMove(res.first, true);
+		model.applyMove(res.first, moveMsg.move_time);
 	}
 
 	@Override

@@ -163,7 +163,7 @@ public abstract class GameModel implements IGameModel
 	{
 		if (isCurrentMove())
 			return;
-		applyMove(history.get(hindex + 1), false);
+		applyMove(history.get(hindex + 1), -1);
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public abstract class GameModel implements IGameModel
 	{
 		var len = history.size();
 		while (hindex + 1 < len)
-			applyMove(history.get(hindex + 1), false);
+			applyMove(history.get(hindex + 1), -1);
 	}
 
 	void preCommonMove()

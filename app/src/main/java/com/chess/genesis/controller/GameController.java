@@ -168,7 +168,7 @@ public class GameController implements IGameController
 	@Override
 	public void onPromoteClick(Move move)
 	{
-		model.applyMove(move, true);
+		model.applyMove(move, System.currentTimeMillis());
 		promoteState.setValue(false);
 	}
 

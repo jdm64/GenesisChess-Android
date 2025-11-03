@@ -39,11 +39,11 @@ public class GenGameModel extends GameModel
 		var move = board.parseMove(from, to);
 		if (move == null)
 			return;
-		applyMove(move, true);
+		applyMove(move, System.currentTimeMillis());
 	}
 
 	@Override
-	public void applyMove(Move move, boolean erase)
+	public void applyMove(Move move, long time)
 	{
 		preApplyMove();
 
@@ -67,12 +67,13 @@ public class GenGameModel extends GameModel
 		board.make(move);
 		hindex++;
 
-		postCommonMove(erase);
+		var overwrite = time > 0;
+		postCommonMove(overwrite);
 
-		if (erase) {
+		if (overwrite) {
 			if (hindex < history.size())
 				history.resize(hindex);
-			history.push(move);
+			history.pushWithTime(move, time);
 			controller.onMove(move);
 		}
 	}
