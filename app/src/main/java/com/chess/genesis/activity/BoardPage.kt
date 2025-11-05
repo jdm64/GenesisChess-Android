@@ -277,8 +277,16 @@ fun ShowPromoteDialog(gameCtlr: IGameController) {
 
 @Composable
 fun ShowSubmitDialog(gameCtlr: GameController) {
+
 	val submitState = remember { gameCtlr.submitState }
 	if (!submitState.value.show) {
+		return
+	}
+
+	if (Pref.getBool(LocalContext.current, R.array.pf_autoSubmitMove)) {
+		val move = submitState.value.move
+		gameCtlr.submitMove(move)
+		submitState.value = SubmitState()
 		return
 	}
 
