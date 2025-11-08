@@ -47,15 +47,20 @@ import kotlinx.coroutines.*
 fun GamePage(nav: NavHostController, gameId: String) {
 	val state = rememberModalBottomSheetState()
 	val ctx = LocalContext.current
+
+	val gameCtlr = remember { GameController(ctx, gameId) }
+	(ctx as MainActivity).currentController = gameCtlr
+
 	LaunchedEffect(Unit) {
 		PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + gameId).commit()
 	}
-
-	val gameCtlr = remember { GameController(ctx, gameId) }
 	val scope = rememberCoroutineScope()
 
 	DisposableEffect(gameCtlr) {
-		onDispose { gameCtlr.onDispose() }
+		onDispose {
+			ctx.currentController = null
+			gameCtlr.onDispose()
+		}
 	}
 
 	GameContent(gameCtlr, state)

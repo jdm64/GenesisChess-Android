@@ -15,7 +15,6 @@
  */
 package com.chess.genesis.activity
 
-import android.content.*
 import android.os.*
 import androidx.activity.*
 import androidx.activity.compose.*
@@ -25,10 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.chess.genesis.R
+import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
 import com.chess.genesis.net.*
 
 class MainActivity : ComponentActivity() {
+	var currentController: GameController? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
 
 	override fun onResume() {
 		ZeroMQClient.setAppActive(true)
+		currentController?.onResume()
 		super.onResume()
 	}
 

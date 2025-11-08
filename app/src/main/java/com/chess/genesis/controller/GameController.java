@@ -218,6 +218,13 @@ public class GameController implements IGameController
 	}
 
 	@Override
+	public void onResume()
+	{
+		white.onResume(ctx);
+		black.onResume(ctx);
+	}
+
+	@Override
 	public void onDispose()
 	{
 		Util.setScreenOnFlag(ctx, false);

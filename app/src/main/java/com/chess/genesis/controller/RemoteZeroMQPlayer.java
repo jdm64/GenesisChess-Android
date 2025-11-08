@@ -72,6 +72,14 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	}
 
 	@Override
+	public void onResume(Context context)
+	{
+		ZeroMQClient.bind(context, (c) -> {
+			c.listenMoves(gameId, this);
+		});
+	}
+
+	@Override
 	public void onDispose(Context context)
 	{
 		client.listenMoves(gameId, null);

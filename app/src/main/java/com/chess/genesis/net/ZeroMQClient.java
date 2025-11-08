@@ -18,6 +18,7 @@ package com.chess.genesis.net;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import android.app.*;
 import android.content.Context;
 import android.content.*;
@@ -39,18 +40,18 @@ public class ZeroMQClient extends Service
 	private final static long INACTIVITY_TIMEOUT = 2 * 60 * 1000L;
 	private final static long INACTIVITY_SLEEP = INACTIVITY_TIMEOUT / 8;
 
-	static boolean appActive = false;
+	static final AtomicBoolean appActive = new AtomicBoolean(false);
 
 	final LocalBinder binder = new LocalBinder();
 	final LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
-	final Map<String, IMoveListener> moveListeners = new HashMap<>();
+	final Map<String, IMoveListener> moveListeners = new ConcurrentHashMap<>();
 
 	ZContext ctx;
 	Socket socket;
-	long lastPing;
-	long lastPong;
-	long lastActiveTime;
-	boolean isLoggedin = false;
+	AtomicLong lastPing = new AtomicLong();
+	AtomicLong lastPong = new AtomicLong();
+	AtomicLong lastActiveTime = new AtomicLong();
+	AtomicBoolean isLoggedin = new AtomicBoolean(false);
 	Future<?> receiveFuture;
 	Future<?> checkFuture;
 	Future<?> sendFuture;
@@ -112,7 +113,7 @@ public class ZeroMQClient extends Service
 
 	public static void setAppActive(boolean active)
 	{
-		appActive = active;
+		appActive.set(active);
 	}
 
 	private void connect()
@@ -137,7 +138,7 @@ public class ZeroMQClient extends Service
 		}
 	}
 
-	private void disconnect()
+	private synchronized void disconnect()
 	{
 		if (ctx == null) {
 			return;
@@ -145,7 +146,8 @@ public class ZeroMQClient extends Service
 
 		Util.log("Disconnecting socket", this);
 
-		isLoggedin = false;
+		moveListeners.clear();
+		isLoggedin.set(false);
 		if (socket != null) {
 			socket.close();
 			socket = null;
@@ -193,10 +195,19 @@ public class ZeroMQClient extends Service
 		disconnect();
 	}
 
-	public void listenMoves(String gameId, RemoteZeroMQPlayer player)
+	public synchronized void listenMoves(String gameId, RemoteZeroMQPlayer player)
 	{
-		moveListeners.put(gameId, player);
-		if (player != null) {
+		if (player == null) {
+			moveListeners.remove(gameId);
+			return;
+		}
+
+		var last = moveListeners.put(gameId, player);
+		if (socket == null) {
+			connect();
+		}
+
+		if (last != player) {
 			getActiveData(gameId);
 		}
 	}
@@ -204,7 +215,7 @@ public class ZeroMQClient extends Service
 	public void ping()
 	{
 		send(PingMsg.build());
-		lastPing = System.currentTimeMillis();
+		lastPing.set(System.currentTimeMillis());
 	}
 
 	public void register(String username, String hash)
@@ -247,7 +258,7 @@ public class ZeroMQClient extends Service
 
 	private synchronized void do_login()
 	{
-		if (isLoggedin) {
+		if (isLoggedin.get()) {
 			return;
 		}
 
@@ -278,7 +289,7 @@ public class ZeroMQClient extends Service
 		while (socket != null) {
 			try {
 				var msg = ZmqMsg.parse(socket.recv());
-				lastActiveTime = System.currentTimeMillis();
+				lastActiveTime.set(System.currentTimeMillis());
 
 				switch (msg.type()) {
 				case PingMsg.ID:
@@ -291,11 +302,11 @@ public class ZeroMQClient extends Service
 					    .putString(R.array.pf_anon_username, acct.name)
 					    .putString(R.array.pf_isLoggedIn, ANON)
 					    .commit();
-					isLoggedin = true;
+					isLoggedin.set(true);
 					break;
 				case LoginResultMsg.ID:
 					var result = msg.as(LoginResultMsg.class);
-					isLoggedin = result.is_ok;
+					isLoggedin.set(result.is_ok);
 					break;
 				case ActiveGameDataMsg.ID:
 					var game = msg.as(ActiveGameDataMsg.class);
@@ -324,7 +335,7 @@ public class ZeroMQClient extends Service
 					}
 					break;
 				case PongMsg.ID:
-					lastPong = System.currentTimeMillis();
+					lastPong.set(System.currentTimeMillis());
 					break;
 				case OkMsg.ID:
 					break;
@@ -378,17 +389,17 @@ public class ZeroMQClient extends Service
 		}
 
 		socket.send(msg.toBytes());
-		lastActiveTime = System.currentTimeMillis();
+		lastActiveTime.set(System.currentTimeMillis());
 		Util.log("Sent message: " + msg, this);
 	}
 
 	private void inactivityCheckLoop()
 	{
-		lastActiveTime = System.currentTimeMillis();
+		lastActiveTime.set(System.currentTimeMillis());
 		while (socket != null) {
 			try {
 				Thread.sleep(INACTIVITY_SLEEP);
-				if (!appActive && sendQueue.isEmpty() && System.currentTimeMillis() - lastActiveTime > INACTIVITY_TIMEOUT) {
+				if (!appActive.get() && sendQueue.isEmpty() && System.currentTimeMillis() - lastActiveTime.get() > INACTIVITY_TIMEOUT) {
 					disconnect();
 				}
 			} catch (InterruptedException e) {

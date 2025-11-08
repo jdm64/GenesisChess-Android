@@ -68,5 +68,7 @@ public interface IGameController
 
 	void undoMove();
 
+	void onResume();
+
 	void onDispose();
 }
