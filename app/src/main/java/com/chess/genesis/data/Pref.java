@@ -16,11 +16,14 @@
 
 package com.chess.genesis.data;
 
+import java.util.AbstractMap.*;
+import java.util.Map.*;
 import android.content.*;
 import android.content.SharedPreferences.*;
 import android.content.res.*;
 import android.preference.*;
 import com.chess.genesis.R;
+import com.chess.genesis.util.*;
 import com.google.android.gms.tasks.*;
 import com.google.firebase.messaging.*;
 
@@ -28,6 +31,7 @@ public class Pref
 {
 	private final static int KEY_INDX = 0;
 	private final static int DEF_INDX = 1;
+	private final static String ANON = "anonymous";
 
 	private final SharedPreferences pref;
 	private final Resources res;
@@ -218,6 +222,33 @@ public class Pref
 	public boolean getBool(final int _key)
 	{
 		return getBool(pref, res, _key);
+	}
+
+	public static Entry<String,String> getUserPass(final Context context)
+	{
+		if (ANON.equals(getString(context, R.array.pf_isLoggedIn))) {
+			var user = getString(context, R.array.pf_anon_username);
+			var pass = getString(context, R.array.pf_anon_passhash);
+			return new SimpleEntry<>(user, pass);
+		} else {
+			return null;
+		}
+	}
+
+	public static String newAnonHash(Context ctx)
+	{
+		var hash = Util.getSUID(40);
+		new PrefEdit(ctx).putString(R.array.pf_anon_passhash, hash).commit();
+		return hash;
+	}
+
+	public static void storeAnonUser(Context context, String name)
+	{
+		new PrefEdit(context)
+		    .putString(R.array.pf_username, name)
+		    .putString(R.array.pf_anon_username, name)
+		    .putString(R.array.pf_isLoggedIn, ANON)
+		    .commit();
 	}
 
 	public synchronized static String getFirebaseId(Context ctx)

@@ -36,7 +36,6 @@ import zmq.*;
 
 public class ZeroMQClient extends Service
 {
-	private final static String ANON = "anonymous";
 	private final static long INACTIVITY_TIMEOUT = 2 * 60 * 1000L;
 	private final static long INACTIVITY_SLEEP = INACTIVITY_TIMEOUT / 8;
 
@@ -263,14 +262,11 @@ public class ZeroMQClient extends Service
 		}
 
 		var ctx = getApplicationContext();
-		if (ANON.equals(Pref.getString(ctx, R.array.pf_isLoggedIn))) {
-			var username = Pref.getString(ctx, R.array.pf_anon_username);
-			var hash = Pref.getString(ctx, R.array.pf_anon_passhash);
-			login(username, hash);
+		var account = Pref.getUserPass(ctx);
+		if (account != null) {
+			login(account.getKey(), account.getValue());
 		} else {
-			var hash = Util.getSUID(40);
-			new PrefEdit(ctx).putString(R.array.pf_anon_passhash, hash).commit();
-			registerAnon(hash);
+			registerAnon(Pref.newAnonHash(ctx));
 		}
 	}
 
@@ -297,11 +293,7 @@ public class ZeroMQClient extends Service
 					break;
 				case AnonAcctMsg.ID:
 					var acct = msg.as(AnonAcctMsg.class);
-					new PrefEdit(getApplicationContext())
-					    .putString(R.array.pf_username, acct.name)
-					    .putString(R.array.pf_anon_username, acct.name)
-					    .putString(R.array.pf_isLoggedIn, ANON)
-					    .commit();
+					Pref.storeAnonUser(getApplicationContext(), acct.name);
 					isLoggedin.set(true);
 					break;
 				case LoginResultMsg.ID:

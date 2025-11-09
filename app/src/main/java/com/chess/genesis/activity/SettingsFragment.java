@@ -37,10 +37,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 		var prefView = findPreference("benchmark");
 		prefView.setOnPreferenceClickListener(this);
 
-		var pref = new Pref(getContext());
+		var ctx = getContext();
+		var pref = new Pref(ctx);
+
 		for (var key : colorKeys) {
 			ColorPickerPreference picker = findPreference(pref.key(key));
 			picker.init(key, getParentFragmentManager());
+		}
+
+		var usernamePref = findPreference("currentUsername");
+		var account = Pref.getUserPass(ctx);
+		if (usernamePref != null && account != null) {
+			usernamePref.setSummary(account.getKey());
 		}
 
 		CallBackPreference callbackPref = findPreference("bcReset");
