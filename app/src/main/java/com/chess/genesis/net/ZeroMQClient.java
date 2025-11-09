@@ -180,6 +180,7 @@ public class ZeroMQClient extends Service
 	@Override
 	public void onCreate()
 	{
+		Util.log("Starting service", this);
 		sendFuture = Util.runThread(this::sendLoop);
 	}
 
