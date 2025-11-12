@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.*;
 import android.os.*;
 import org.zeromq.*;
+import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.*;
 import org.zeromq.ZMQException;
 import com.chess.genesis.*;
@@ -37,7 +38,7 @@ import zmq.*;
 public class ZeroMQClient extends Service
 {
 	private final static long INACTIVITY_TIMEOUT = 2 * 60 * 1000L;
-	private final static long INACTIVITY_SLEEP = INACTIVITY_TIMEOUT / 8;
+	private final static long CONNECTION_TIMEOUT = 5 * 1000L;
 
 	static final AtomicBoolean appActive = new AtomicBoolean(false);
 
@@ -47,13 +48,23 @@ public class ZeroMQClient extends Service
 
 	ZContext ctx;
 	Socket socket;
+	Socket monitorSock;
 	AtomicLong lastPing = new AtomicLong();
 	AtomicLong lastPong = new AtomicLong();
-	AtomicLong lastActiveTime = new AtomicLong();
+	AtomicLong lastReceive = new AtomicLong();
+	AtomicReference<Status> status = new AtomicReference<>(Status.DISCONNECTED);
 	AtomicBoolean isLoggedin = new AtomicBoolean(false);
 	Future<?> receiveFuture;
-	Future<?> checkFuture;
+	Future<?> inactivityFuture;
 	Future<?> sendFuture;
+	Future<?> monitorFuture;
+
+	public enum Status
+	{
+		DISCONNECTED,
+		CONNECTING,
+		CONNECTED
+	}
 
 	public interface IMoveListener
 	{
@@ -105,6 +116,7 @@ public class ZeroMQClient extends Service
 			public void onServiceConnected(ZeroMQClient client)
 			{
 				command.run(client);
+				client.showConnectionError();
 				ctx.unbindService(this);
 			}
 		});
@@ -115,9 +127,29 @@ public class ZeroMQClient extends Service
 		appActive.set(active);
 	}
 
+	public void showConnectionError()
+	{
+		if (status.get() == Status.CONNECTED) {
+			return;
+		}
+
+		Util.runThread(() -> {
+			try {
+				Thread.sleep(CONNECTION_TIMEOUT);
+				if (status.get() != Status.CONNECTED) {
+					Util.showToast("Error connecting to server", this);
+				}
+			} catch (InterruptedException e) {
+				// ignore
+			}
+		});
+	}
+
 	private void connect()
 	{
 		try {
+			status.set(Status.CONNECTING);
+			lastReceive.set(System.currentTimeMillis());
 			ctx = new ZContext();
 			socket = ctx.createSocket(SocketType.DEALER);
 
@@ -129,6 +161,10 @@ public class ZeroMQClient extends Service
 			Util.log("Connecting to: " + host, this);
 
 			socket.connect(host);
+			socket.monitor("inproc://monitor", ZMQ.EVENT_CONNECTED | ZMQ.EVENT_DISCONNECTED | ZMQ.EVENT_CONNECT_DELAYED);
+			monitorSock = ctx.createSocket(SocketType.PAIR);
+			monitorSock.connect("inproc://monitor");
+			monitorFuture = Util.runThread(this::monitorLoop);
 			receiveFuture = Util.runThread(this::receiveLoop);
 		} catch (Throwable e) {
 			Util.logErr(e, this);
@@ -143,10 +179,16 @@ public class ZeroMQClient extends Service
 			return;
 		}
 
-		Util.log("Disconnecting socket", this);
+		Util.log("Starting disconnect", this);
 
-		moveListeners.clear();
 		isLoggedin.set(false);
+		moveListeners.clear();
+		status.set(Status.DISCONNECTED);
+
+		if (monitorSock != null) {
+			monitorSock.close();
+			monitorSock = null;
+		}
 		if (socket != null) {
 			socket.close();
 			socket = null;
@@ -155,14 +197,20 @@ public class ZeroMQClient extends Service
 			ctx.close();
 			ctx = null;
 		}
+		if (monitorFuture != null) {
+			monitorFuture.cancel(true);
+			monitorFuture = null;
+		}
 		if (receiveFuture != null) {
 			receiveFuture.cancel(true);
 			receiveFuture = null;
 		}
-		if (checkFuture != null) {
-			checkFuture.cancel(true);
-			checkFuture = null;
+		if (inactivityFuture != null) {
+			inactivityFuture.cancel(true);
+			inactivityFuture = null;
 		}
+
+		Util.log("Disconnect finished", this);
 	}
 
 	private void reconnect()
@@ -209,6 +257,7 @@ public class ZeroMQClient extends Service
 
 		if (last != player) {
 			getActiveData(gameId);
+			showConnectionError();
 		}
 	}
 
@@ -282,11 +331,11 @@ public class ZeroMQClient extends Service
 
 	private void receiveLoop()
 	{
-		checkFuture = Util.runThread(this::inactivityCheckLoop);
+		inactivityFuture = Util.runThread(this::inactivityLoop);
 		while (socket != null) {
 			try {
 				var msg = ZmqMsg.parse(socket.recv());
-				lastActiveTime.set(System.currentTimeMillis());
+				lastReceive.set(System.currentTimeMillis());
 
 				switch (msg.type()) {
 				case PingMsg.ID:
@@ -342,18 +391,18 @@ public class ZeroMQClient extends Service
 					break;
 				}
 			} catch (ZMQException ze) {
-				switch (ze.getErrorCode()) {
-				case ZError.ETERM:
+				var err = ze.getErrorCode();
+				if (err == ZError.ETERM) {
 					Util.log("ZMQ context terminated", this);
-					break;
-				case ZError.EINTR:
+				} else if (err == ZError.EINTR) {
 					Util.log("Socket interrupted because shutting down", this);
-					break;
-				default:
+				} else {
 					Util.logErr(ze, this);
 				}
+				break;
 			} catch (Throwable e) {
 				Util.logErr(e, this);
+				break;
 			}
 		}
 		Util.log("Shutting down receiveLoop", this);
@@ -367,6 +416,7 @@ public class ZeroMQClient extends Service
 				socketSend(msg);
 			} catch (Throwable e) {
 				Util.logErr(e, this);
+				break;
 			}
 		}
 		Util.log("Shutting down sendLoop", this);
@@ -382,24 +432,51 @@ public class ZeroMQClient extends Service
 		}
 
 		socket.send(msg.toBytes());
-		lastActiveTime.set(System.currentTimeMillis());
 		Util.log("Sent message: " + msg, this);
 	}
 
-	private void inactivityCheckLoop()
+	private void inactivityLoop()
 	{
-		lastActiveTime.set(System.currentTimeMillis());
 		while (socket != null) {
 			try {
-				Thread.sleep(INACTIVITY_SLEEP);
-				if (!appActive.get() && sendQueue.isEmpty() && System.currentTimeMillis() - lastActiveTime.get() > INACTIVITY_TIMEOUT) {
+				Thread.sleep(CONNECTION_TIMEOUT);
+				if (!appActive.get() && sendQueue.isEmpty() && System.currentTimeMillis() - lastReceive.get() > INACTIVITY_TIMEOUT) {
 					disconnect();
 				}
-			} catch (InterruptedException e) {
+			} catch (Throwable e) {
 				Util.logErr(e, this);
 				break;
 			}
 		}
-		Util.log("Shutting down inactivityCheckLoop", this);
+		Util.log("Shutting down inactivityLoop", this);
+	}
+
+	private void monitorLoop()
+	{
+		while (monitorSock != null) {
+			try {
+				var event = ZMQ.Event.recv(monitorSock);
+				if (event == null) {
+					status.set(Status.DISCONNECTED);
+					continue;
+				}
+
+				switch (event.getEvent()) {
+				case ZMQ.EVENT_CONNECTED:
+					status.set(Status.CONNECTED);
+					break;
+				case ZMQ.EVENT_DISCONNECTED:
+					status.set(Status.DISCONNECTED);
+					break;
+				case ZMQ.EVENT_CONNECT_DELAYED:
+					status.set(Status.CONNECTING);
+					break;
+				}
+			} catch (Throwable e) {
+				Util.logErr(e, this);
+				break;
+			}
+		}
+		Util.log("Shutting down monitorLoop", this);
 	}
 }
