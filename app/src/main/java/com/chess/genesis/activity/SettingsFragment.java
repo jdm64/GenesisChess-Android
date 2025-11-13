@@ -16,6 +16,8 @@
 package com.chess.genesis.activity;
 
 import android.os.*;
+import android.util.*;
+import android.view.View;
 import com.chess.genesis.R;
 import com.chess.genesis.data.*;
 import com.chess.genesis.view.*;
@@ -53,6 +55,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
 		CallBackPreference callbackPref = findPreference("bcReset");
 		callbackPref.setCallBack(this);
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState)
+	{
+		super.onViewCreated(view, savedInstanceState);
+
+		var listView = getListView();
+		if (listView == null) {
+			return;
+		}
+
+		// NOTE: should be another way to do this?
+		var typedValue = new TypedValue();
+		if (getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+			var actionBarHeight = TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
+			listView.setPadding(listView.getPaddingLeft(), actionBarHeight, listView.getPaddingRight(), listView.getPaddingBottom());
+		}
 	}
 
 	@Override
