@@ -82,8 +82,6 @@ public class GameController implements IGameController
 
 		setPlayers(data.opponent);
 
-		onStmChange(true);
-
 		getStmPlayer().takeTurn(ctx);
 	}
 

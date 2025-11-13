@@ -98,6 +98,7 @@ public abstract class GameModel implements IGameModel
 			addMove(res.first, element.second);
 		}
 		loadBoard();
+		controller.onStmChange(true);
 	}
 
 	@Override
