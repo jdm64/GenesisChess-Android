@@ -22,10 +22,11 @@ public class LastMoveMsg extends ZmqMsg
 {
 	public static final int ID = 12;
 
-	public String game_id;
-	public String move_str;
-	public long move_time;
-	public int move_idx;
+	public String id;
+	public long time;
+	public int status;
+	public String move;
+	public int index;
 
 	@Override
 	public int type()
@@ -36,19 +37,21 @@ public class LastMoveMsg extends ZmqMsg
 	@Override
 	ZmqMsg parse(MessageUnpacker packer) throws IOException
 	{
-		game_id = packer.unpackString();
-		move_str = packer.unpackString();
-		move_time = packer.unpackLong();
-		move_idx = packer.unpackInt();
+		id = packer.unpackString();
+		time = packer.unpackLong();
+		status = packer.unpackInt();
+		move = packer.unpackString();
+		index = packer.unpackInt();
 		return this;
 	}
 
 	@Override
 	void toBytes(MessageBufferPacker packer) throws IOException
 	{
-		packer.packString(game_id);
-		packer.packString(move_str);
-		packer.packLong(move_time);
-		packer.packInt(move_idx);
+		packer.packString(id);
+		packer.packLong(time);
+		packer.packInt(status);
+		packer.packString(move);
+		packer.packInt(index);
 	}
 }

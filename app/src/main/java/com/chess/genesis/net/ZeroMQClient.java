@@ -371,7 +371,7 @@ public class ZeroMQClient extends Service
 					var moveMsg = msg.as(LastMoveMsg.class);
 					ActiveGameDao.get(getApplicationContext()).saveMove(moveMsg);
 
-					var listener = moveListeners.get(moveMsg.game_id);
+					var listener = moveListeners.get(moveMsg.id);
 					if (listener != null) {
 						listener.onMove(moveMsg);
 					}

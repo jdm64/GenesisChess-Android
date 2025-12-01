@@ -65,10 +65,10 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 		model.currentMove();
 
 		var board = model.getBoard();
-		var res = board.parseMove(moveMsg.move_str);
+		var res = board.parseMove(moveMsg.move);
 		if (res.second != Board.VALID_MOVE)
 			return;
-		model.applyMove(res.first, moveMsg.move_time);
+		model.applyMove(res.first, moveMsg.time);
 	}
 
 	@Override

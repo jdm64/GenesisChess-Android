@@ -167,7 +167,7 @@ public interface ActiveGameDao
 
 	default boolean saveMove(LastMoveMsg msg)
 	{
-		var game = getGame(msg.game_id);
+		var game = getGame(msg.id);
 		if (game == null) {
 			return false;
 		}
@@ -175,17 +175,17 @@ public interface ActiveGameDao
 		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
 		if (!board.parseZFen(game.zfen)) {
 			return false;
-		} else if (board.getPly() != msg.move_idx) {
+		} else if (board.getPly() != msg.index) {
 			return false;
 		}
 
-		var res = board.parseMove(msg.move_str);
+		var res = board.parseMove(msg.move);
 		if (res.second != Board.VALID_MOVE) {
 			return false;
 		}
 
-		game.history += " " + res.first + "," + msg.move_time;
-		game.stime = msg.move_time;
+		game.history += " " + res.first + "," + msg.time;
+		game.stime = msg.time;
 
 		update(game);
 		return true;
