@@ -18,7 +18,6 @@ package com.chess.genesis.db;
 import java.security.*;
 import java.util.*;
 import android.content.*;
-import android.util.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
@@ -112,7 +111,7 @@ public interface ActiveGameDao
 		game.gametype = msg.game_type;
 		game.opponent = msg.getOpponentType(ctx);
 		game.history = msg.movesString();
-		game.zfen = (game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
+		game.zfen = msg.zfen;
 
 		insert(game);
 
