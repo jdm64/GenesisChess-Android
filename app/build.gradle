@@ -82,7 +82,9 @@ dependencies {
     implementation 'org.msgpack:msgpack-core:0.9.10'
     implementation 'org.zeromq:jeromq:0.6.0'
     implementation 'androidx.compose.material:material-icons-extended:1.7.8'
+    implementation project(':processor')
 
+    annotationProcessor project(':processor')
     annotationProcessor 'androidx.room:room-compiler:2.8.3'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'

@@ -15,15 +15,15 @@
  */
 package com.chess.genesis.net.msgs;
 
-import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 import android.content.*;
 import android.util.*;
-import org.msgpack.core.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.processor.*;
 
+@ZmqMessage
 public class ActiveGameDataMsg extends ZmqMsg
 {
 	public static final int ID = 10;
@@ -57,42 +57,5 @@ public class ActiveGameDataMsg extends ZmqMsg
 	public int type()
 	{
 		return ID;
-	}
-
-	@Override
-	ZmqMsg parse(MessageUnpacker packer) throws IOException
-	{
-		game_id = packer.unpackString();
-		is_new = packer.unpackBoolean();
-		game_type = packer.unpackInt();
-		create_time = packer.unpackLong();
-		save_time = packer.unpackLong();
-		white = packer.unpackString();
-		black = packer.unpackString();
-		zfen = packer.unpackString();
-		var move_size = packer.unpackArrayHeader();
-		moves = new ArrayList<>();
-		for (int i = 0; i < move_size; i++) {
-			moves.add(new Pair<>(packer.unpackString(), packer.unpackLong()));
-		}
-		return this;
-	}
-
-	@Override
-	void toBytes(MessageBufferPacker packer) throws IOException
-	{
-		packer.packString(game_id);
-		packer.packBoolean(is_new);
-		packer.packInt(game_type);
-		packer.packLong(create_time);
-		packer.packLong(save_time);
-		packer.packString(white);
-		packer.packString(black);
-		packer.packString(zfen);
-		packer.packArrayHeader(moves.size());
-		for (var pair : moves) {
-			packer.packString(pair.first);
-			packer.packLong(pair.second);
-		}
 	}
 }

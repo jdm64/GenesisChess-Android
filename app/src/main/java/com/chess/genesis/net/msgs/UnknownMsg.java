@@ -34,19 +34,4 @@ public class UnknownMsg extends ZmqMsg
 	{
 		return ID;
 	}
-
-	@Override
-	ZmqMsg parse(MessageUnpacker packer) throws IOException
-	{
-		throw new IOException("Tried to parse UnknownMsg");
-	}
-
-	@Override
-	void toBytes(MessageBufferPacker packer) throws IOException
-	{
-		packer.packArrayHeader(data.length);
-		for (byte datum : data) {
-			packer.packByte(datum);
-		}
-	}
 }

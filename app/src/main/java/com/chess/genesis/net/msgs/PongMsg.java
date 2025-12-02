@@ -15,9 +15,9 @@
  */
 package com.chess.genesis.net.msgs;
 
-import java.io.*;
-import org.msgpack.core.*;
+import com.chess.genesis.processor.*;
 
+@ZmqMessage
 public class PongMsg extends ZmqMsg
 {
 	public static final int ID = 6;
@@ -37,20 +37,5 @@ public class PongMsg extends ZmqMsg
 	public int type()
 	{
 		return ID;
-	}
-
-	@Override
-	PongMsg parse(MessageUnpacker packer) throws IOException
-	{
-		start = packer.unpackLong();
-		end = packer.unpackLong();
-		return this;
-	}
-
-	@Override
-	void toBytes(MessageBufferPacker packer) throws IOException
-	{
-		packer.packLong(start);
-		packer.packLong(end);
 	}
 }

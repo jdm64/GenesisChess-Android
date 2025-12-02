@@ -17,14 +17,11 @@ package com.chess.genesis.net.msgs;
 
 import java.io.*;
 import org.msgpack.core.*;
+import com.chess.genesis.util.*;
 
 public abstract class ZmqMsg
 {
 	public abstract int type();
-
-	abstract ZmqMsg parse(MessageUnpacker packer) throws IOException;
-
-	abstract void toBytes(MessageBufferPacker packer) throws IOException;
 
 	public <T> T as(Class<T> theClass)
 	{
@@ -33,40 +30,17 @@ public abstract class ZmqMsg
 
 	public static ZmqMsg parse(byte[] data)
 	{
-		var packer = MessagePack.newDefaultUnpacker(data);
 		try {
-			var msgType = packer.unpackInt();
-
-			return switch (msgType) {
-				case ActiveGameDataMsg.ID -> new ActiveGameDataMsg().parse(packer);
-				case AnonAcctMsg.ID -> new AnonAcctMsg().parse(packer);
-				case CreateInviteMsg.ID -> new CreateInviteMsg().parse(packer);
-				case ErrorMsg.ID -> new ErrorMsg().parse(packer);
-				case GetActiveDataMsg.ID -> new GetActiveDataMsg().parse(packer);
-				case JoinInviteMsg.ID -> new JoinInviteMsg().parse(packer);
-				case LastMoveMsg.ID -> new LastMoveMsg().parse(packer);
-				case LoginMsg.ID -> new LoginMsg().parse(packer);
-				case LoginResultMsg.ID -> new LoginResultMsg().parse(packer);
-				case MakeMoveMsg.ID -> new MakeMoveMsg().parse(packer);
-				case OkMsg.ID -> new OkMsg().parse(packer);
-				case PingMsg.ID -> new PingMsg().parse(packer);
-				case PongMsg.ID -> new PongMsg().parse(packer);
-				case RegisterAnonMsg.ID -> new RegisterAnonMsg().parse(packer);
-				case RegisterMsg.ID -> new RegisterMsg().parse(packer);
-				default -> new UnknownMsg(data);
-			};
+			return ZmqMessageHelper.parse(data);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Util.logErr(e, ZmqMsg.class);
 			return new UnknownMsg(data);
 		}
 	}
 
 	public byte[] toBytes() throws IOException
 	{
-		var packer = MessagePack.newDefaultBufferPacker();
-		packer.packInt(type());
-		toBytes(packer);
-		return packer.toByteArray();
+		return ZmqMessageHelper.toBytes(this);
 	}
 
 	@Override
