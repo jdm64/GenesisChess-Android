@@ -18,6 +18,7 @@ package com.chess.genesis.data;
 
 import android.os.*;
 import org.json.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 
 public class GameParser
@@ -35,7 +36,7 @@ public class GameParser
 	private static GamePosition parsePosition(final String _history, final int gametype)
 	{
 		final GamePosition pos = new GamePosition();
-		final Board board = (gametype == Enums.GENESIS_CHESS)? new GenBoard() : new RegBoard();
+		final Board board = (gametype == GameType.GENESIS.id)? new GenBoard() : new RegBoard();
 
 		if (_history.length() < 3) {
 			pos.history = " ";
@@ -62,14 +63,14 @@ public class GameParser
 		final Bundle game = new Bundle();
 
 	try {
-		game.putInt("gametype", Enums.GameType(data.optString("gametype", "genesis")));
+		game.putInt("gametype", Enums.from(GameType.class, data.optString("gametype", "genesis")).id);
 	} catch (final RuntimeException e) {
-		game.putInt("gametype", Enums.GENESIS_CHESS);
+		game.putInt("gametype", GameType.GENESIS.id);
 	}
 	try {
-		game.putInt("opponent", Enums.OpponentType(data.optString("opponent", "human")));
+		game.putInt("opponent", Enums.from(OpponentType.class, data.optString("opponent", "human")).id);
 	} catch (final RuntimeException e) {
-		game.putInt("opponent", Enums.HUMAN_OPPONENT);
+		game.putInt("opponent", OpponentType.HUMAN.id);
 	}
 
 		game.putString("name", data.optString("name", "untitled"));
@@ -102,14 +103,14 @@ public class GameParser
 		final String name;
 		if (data.getString("name") == null) {
 			name = data.getString("white") + " Vs. " + data.getString("black");
-			game.put("eventtype", Enums.EventType(Integer.parseInt(data.getString("gametype"))));
+			game.put("eventtype", Enums.from(EventType.class, Integer.parseInt(data.getString("gametype"))));
 		} else {
 			name = data.getString("name");
-			game.put("opponent", Enums.OpponentType(Integer.parseInt(data.getString("opponent"))));
+			game.put("opponent", Enums.from(OpponentType.class, Integer.parseInt(data.getString("opponent"))));
 		}
 
 		game.put("name", name);
-		game.put("gametype", Enums.GameType(Integer.parseInt(data.getString("gametype"))));
+		game.put("gametype", Enums.from(GameType.class, Integer.parseInt(data.getString("gametype"))));
 		game.put("history", data.getString("history"));
 
 		return game;

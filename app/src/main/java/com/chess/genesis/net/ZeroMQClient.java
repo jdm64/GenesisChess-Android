@@ -30,6 +30,7 @@ import org.zeromq.ZMQException;
 import com.chess.genesis.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;

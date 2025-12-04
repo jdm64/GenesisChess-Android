@@ -36,6 +36,7 @@ import androidx.paging.*
 import androidx.paging.compose.*
 import com.chess.genesis.R
 import com.chess.genesis.data.*
+import com.chess.genesis.data.Enums.*
 import com.chess.genesis.db.*
 import com.chess.genesis.net.*
 import com.chess.genesis.util.*
@@ -43,9 +44,9 @@ import kotlinx.coroutines.*
 
 class NewGameState {
 	var show = mutableStateOf(false)
-	var type = mutableIntStateOf(Enums.GENESIS_CHESS)
-	var opp = mutableIntStateOf(Enums.INVITE_OPPONENT)
-	var color = mutableIntStateOf(Enums.RANDOM_OPP)
+	var type = mutableIntStateOf(GameType.GENESIS.id)
+	var opp = mutableIntStateOf(OpponentCat.REMOTE.id)
+	var color = mutableIntStateOf(ColorType.RANDOM.id)
 }
 
 class EditGameState {
@@ -66,12 +67,11 @@ fun onLoadGame(data: ActiveGameEntity, nav: NavHostController) {
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		if (data.opp.intValue == Enums.INVITE_OPPONENT) {
-			val playAs = Enums.OppToPlayAs(data.opp.intValue)
+		if (data.opp.intValue == OpponentCat.REMOTE.id) {
 			ZeroMQClient.bind(context) { client ->
 				client.createInvite(
 					data.type.intValue,
-					playAs
+					data.color.intValue
 				)
 			}
 		} else {
@@ -281,8 +281,8 @@ fun GameListCard(
 	state: MutableState<EditGameState>,
 	nav: NavHostController
 ) {
-	val type = Enums.GameType(data.gametype)
-	val opponent = Enums.OpponentType(data.opponent)
+	val type = Enums.from(GameType::class.java, data.gametype).name
+	val opponent = Enums.from(OpponentType::class.java, data.opponent).name
 	val time = PrettyDate(data.stime).agoFormat()
 	val details = "type: $type  opponent: $opponent"
 
@@ -344,7 +344,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onExpandedChange = { expandedType = it }
 				) {
 					TextField(
-						value = if (state.type.intValue == Enums.GENESIS_CHESS) "Genesis" else "Regular",
+						value = if (state.type.intValue == GameType.GENESIS.id) "Genesis" else "Regular",
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 						label = { Text("Game Type:", fontSize = 18.sp, fontStyle = Italic) },
 						onValueChange = {},
@@ -359,14 +359,14 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						DropdownMenuItem(
 							text = { Text("Genesis") },
 							onClick = {
-								state.type.intValue = Enums.GENESIS_CHESS
+								state.type.intValue = GameType.GENESIS.id
 								expandedType = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Regular") },
 							onClick = {
-								state.type.intValue = Enums.REGULAR_CHESS
+								state.type.intValue = GameType.REGULAR.id
 								expandedType = false
 							}
 						)
@@ -379,9 +379,9 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				) {
 					TextField(
 						value = when (state.opp.intValue) {
-							Enums.INVITE_OPPONENT -> "Invite"
-							Enums.HUMAN_OPPONENT -> "Local"
-							Enums.CPU_OPPONENT -> "Computer"
+							OpponentCat.REMOTE.id -> "Invite"
+							OpponentCat.HUMAN.id -> "Local"
+							OpponentCat.CPU.id -> "Computer"
 							else -> ""
 						},
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
@@ -398,21 +398,21 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						DropdownMenuItem(
 							text = { Text("Invite") },
 							onClick = {
-								state.opp.intValue = Enums.INVITE_OPPONENT
+								state.opp.intValue = OpponentCat.REMOTE.id
 								expandedOpp = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Local") },
 							onClick = {
-								state.opp.intValue = Enums.HUMAN_OPPONENT
+								state.opp.intValue = OpponentCat.HUMAN.id
 								expandedOpp = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Computer") },
 							onClick = {
-								state.opp.intValue = Enums.CPU_OPPONENT
+								state.opp.intValue = OpponentCat.CPU.id
 								expandedOpp = false
 							}
 						)
@@ -425,9 +425,9 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				) {
 					TextField(
 						value = when (state.color.intValue) {
-							Enums.RANDOM_OPP -> "Any"
-							Enums.BLACK_OPP -> "White"
-							Enums.WHITE_OPP -> "Black"
+							ColorType.RANDOM.id -> "Any"
+							ColorType.BLACK.id -> "White"
+							ColorType.WHITE.id -> "Black"
 							else -> ""
 						},
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
@@ -443,25 +443,25 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					) {
 						DropdownMenuItem(
 							text = { Text("Any") },
-							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							enabled = state.opp.intValue != OpponentType.HUMAN.id,
 							onClick = {
-								state.color.intValue = Enums.RANDOM_OPP
+								state.color.intValue = ColorType.RANDOM.id
 								expandedColor = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("White") },
-							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							enabled = state.opp.intValue != OpponentType.HUMAN.id,
 							onClick = {
-								state.color.intValue = Enums.BLACK_OPP
+								state.color.intValue = ColorType.BLACK.id
 								expandedColor = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Black") },
-							enabled = state.opp.intValue != Enums.HUMAN_OPPONENT,
+							enabled = state.opp.intValue != OpponentType.HUMAN.id,
 							onClick = {
-								state.color.intValue = Enums.WHITE_OPP
+								state.color.intValue = ColorType.WHITE.id
 								expandedColor = false
 							}
 						)

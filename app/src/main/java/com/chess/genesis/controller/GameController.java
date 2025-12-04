@@ -19,6 +19,7 @@ import android.content.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
@@ -72,9 +73,9 @@ public class GameController implements IGameController
 	{
 		Util.setScreenOnFlag(ctx, true);
 
-		var isGen = data.gametype == Enums.GENESIS_CHESS;
+		var isGen = data.gametype == GameType.GENESIS.id;
 		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);
-		yourColor = Enums.OppToYourColor(data.opponent);
+		yourColor = Enums.from(OpponentType.class, data.opponent).yourColor;
 		view.getBoardView().setViewAsBlack(viewAsBlack(data.gametype, data.opponent));
 
 		model.setBoard(data);
@@ -87,37 +88,36 @@ public class GameController implements IGameController
 
 	private boolean viewAsBlack(int gametype, int opponent)
 	{
-		if (gametype == Enums.GENESIS_CHESS) {
+		if (gametype == GameType.GENESIS.id) {
 			return false;
 		}
-		var playingBlack = opponent == Enums.CPU_WHITE_OPPONENT || opponent == Enums.INVITE_WHITE_OPPONENT;
+		var playingBlack = opponent == OpponentType.CPU_WHITE.id || opponent == OpponentType.REMOTE_WHITE.id;
 		return playingBlack && Pref.getBool(ctx, R.array.pf_viewAsBlack);
 	}
 
 	private void setPlayers(int oppType)
 	{
-		switch (oppType) {
-		default:
-		case Enums.HUMAN_OPPONENT:
-			white = new LocalPlayer(Piece.WHITE, model);
-			black = new LocalPlayer(Piece.BLACK, model);
-			return;
-		case Enums.CPU_WHITE_OPPONENT:
+		switch (Enums.from(OpponentType.class, oppType)) {
+		case OpponentType.CPU_WHITE:
 			white = new ComputerPlayer(Piece.WHITE, model);
 			black = new LocalPlayer(Piece.BLACK, model);
 			return;
-		case Enums.CPU_BLACK_OPPONENT:
+		case OpponentType.CPU_BLACK:
 			white = new LocalPlayer(Piece.WHITE, model);
 			black = new ComputerPlayer(Piece.BLACK, model);
 			return;
-		case Enums.INVITE_WHITE_OPPONENT:
+		case OpponentType.REMOTE_WHITE:
 			white = new RemoteZeroMQPlayer(Piece.WHITE, model, ctx);
 			black = new LocalZeroMQPlayer(Piece.BLACK, model, submitState);
 			return;
-		case Enums.INVITE_BLACK_OPPONENT:
+		case OpponentType.REMOTE_BLACK:
 			white = new LocalZeroMQPlayer(Piece.WHITE, model, submitState);
 			black = new RemoteZeroMQPlayer(Piece.BLACK, model, ctx);
 			return;
+		case OpponentType.HUMAN:
+		default:
+			white = new LocalPlayer(Piece.WHITE, model);
+			black = new LocalPlayer(Piece.BLACK, model);
 		}
 	}
 

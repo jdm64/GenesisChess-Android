@@ -21,6 +21,7 @@ import android.content.*;
 import android.util.*;
 import com.chess.genesis.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.processor.*;
 
 @ZmqMessage
@@ -50,7 +51,7 @@ public class ActiveGameDataMsg extends ZmqMsg
 
 	public int getOpponentType(Context ctx)
 	{
-		return Pref.getString(ctx, R.array.pf_username).equals(white) ? Enums.INVITE_BLACK_OPPONENT : Enums.INVITE_WHITE_OPPONENT;
+		return Pref.getString(ctx, R.array.pf_username).equals(white) ? OpponentType.REMOTE_BLACK.id : OpponentType.REMOTE_WHITE.id;
 	}
 
 	@Override

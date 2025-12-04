@@ -5,6 +5,10 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
+configurations {
+    enumProcessor
+}
+
 android {
     namespace 'com.chess.genesis'
     compileSdk = 36
@@ -56,6 +60,13 @@ android {
     buildFeatures {
         compose true
     }
+    sourceSets {
+        main {
+            java {
+                srcDir 'build/generated/source/enums'
+            }
+        }
+    }
     testOptions {
         unitTests.all {
             useJUnitPlatform()
@@ -84,6 +95,7 @@ dependencies {
     implementation 'androidx.compose.material:material-icons-extended:1.7.8'
     implementation project(':processor')
 
+    enumProcessor project(':processor')
     annotationProcessor project(':processor')
     annotationProcessor 'androidx.room:room-compiler:2.8.4'
 
@@ -94,4 +106,20 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
     androidTestImplementation 'androidx.test:rules:1.7.0'
+}
+
+tasks.register('generateEnums', JavaCompile) {
+    source = files('src/main/java/com/chess/genesis/data/Enums.java', 'src/main/java/com/chess/genesis/engine/Piece.java')
+    classpath = files(android.getBootClasspath()) + configurations.enumProcessor
+    destinationDirectory = file('build/generated/source/enums')
+    options.annotationProcessorPath = configurations.enumProcessor
+    options.compilerArgs = [
+        '-proc:only',
+        '-processor', 'com.chess.genesis.processor.EnumsConstProcessor'
+     ]
+}
+
+afterEvaluate {
+    tasks.named('compileDebugKotlin') { dependsOn generateEnums }
+    tasks.named('compileReleaseKotlin') { dependsOn generateEnums }
 }

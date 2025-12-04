@@ -20,6 +20,7 @@ import java.util.*;
 import android.content.*;
 import com.chess.genesis.activity.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;
@@ -36,24 +37,12 @@ public interface ActiveGameDao
 
 	default ActiveGameEntity newLocalGame(NewGameState data)
 	{
-		var type = data.getType().getValue();
-		var opp = data.getOpp().getValue();
-		var color = data.getColor().getValue();
+		var type = Enums.from(GameType.class, data.getType().getValue()).norm();
+		var oppCat = Enums.from(OpponentCat.class, data.getOpp().getValue());
+		var color = Enums.from(ColorType.class, data.getColor().getValue()).norm();
+		var opp = OpponentType.from(oppCat, color);
 
-		if (color == Enums.RANDOM_OPP)
-			color = new SecureRandom().nextBoolean() ? Enums.WHITE_OPP : Enums.BLACK_OPP;
-
-		switch (opp) {
-		case Enums.CPU_OPPONENT:
-			opp = color == Enums.WHITE_OPP ? Enums.CPU_WHITE_OPPONENT : Enums.CPU_BLACK_OPPONENT;
-			break;
-		case Enums.HUMAN_OPPONENT:
-			break;
-		default:
-			throw new IllegalStateException("Unexpected opponent type: " + opp);
-		}
-
-		return newLocalGame("Untitled", type, opp);
+		return newLocalGame("Untitled", type, opp.id);
 	}
 
 	default ActiveGameEntity newLocalGame(String gamename, int gametype, int opponent)
@@ -63,7 +52,7 @@ public interface ActiveGameDao
 		game.name = gamename;
 		game.gametype = gametype;
 		game.opponent = opponent;
-		game.zfen = (gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
+		game.zfen = (gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard()).printZFen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();
@@ -77,10 +66,10 @@ public interface ActiveGameDao
 	{
 		var game = new ActiveGameEntity();
 		game.gameid = gameId;
-		game.name = "Invite " + Enums.GameType(gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
+		game.name = "Invite " + Enums.from(GameType.class, gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
 		game.gametype = gameType;
-		game.opponent = color == Piece.WHITE ? Enums.INVITE_BLACK_OPPONENT : Enums.INVITE_WHITE_OPPONENT;
-		game.zfen = (gameType == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard()).printZFen();
+		game.opponent = color == Piece.WHITE ? OpponentType.REMOTE_BLACK.id : OpponentType.REMOTE_WHITE.id;
+		game.zfen = (gameType == GameType.GENESIS.id ? new GenBoard() : new RegBoard()).printZFen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();
@@ -145,7 +134,7 @@ public interface ActiveGameDao
 			return false;
 		}
 
-		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
+		var board = game.gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard();
 		if (!board.parseZFen(game.zfen)) {
 			return false;
 		} else if (board.getPly() + 1 != index) {
@@ -171,7 +160,7 @@ public interface ActiveGameDao
 			return false;
 		}
 
-		var board = game.gametype == Enums.GENESIS_CHESS ? new GenBoard() : new RegBoard();
+		var board = game.gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard();
 		if (!board.parseZFen(game.zfen)) {
 			return false;
 		} else if (board.getPly() != msg.index) {
@@ -197,7 +186,7 @@ public interface ActiveGameDao
 	PagingSource<Integer, ActiveGameEntity> getAllGames();
 
 	@Query("SELECT COUNT(*) FROM " + ActiveGameEntity.TABLE_NAME + " WHERE opponent = "
-	    + Enums.INVITE_WHITE_OPPONENT + " OR opponent = " + Enums.INVITE_BLACK_OPPONENT + " LIMIT 1")
+	    + EnumsFixed.OpponentType_REMOTE_WHITE + " OR opponent = " + EnumsFixed.OpponentType_REMOTE_BLACK + " LIMIT 1")
 	boolean hasInviteGame();
 
 	@Insert

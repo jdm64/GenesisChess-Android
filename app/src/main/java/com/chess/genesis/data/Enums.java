@@ -17,170 +17,155 @@
 package com.chess.genesis.data;
 
 import java.security.*;
+import java.util.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.processor.*;
 
-public final class Enums
+@EnumsConst
+public interface Enums<T extends Enum<T>>
 {
-	private Enums()
+	int getId();
+	String getName();
+
+	static <E extends Enum<E> & Enums<E>> E from(Class<E> enumClass, int id)
 	{
+		for (E e : Objects.requireNonNull(enumClass.getEnumConstants())) {
+			if (e.getId() == id) return e;
+		}
+		throw new IllegalArgumentException("Unknown id: " + id + " for: " + enumClass.getSimpleName());
 	}
 
-	// Game Types
-	public final static int ANY_CHESS = 0;
-	public final static int REGULAR_CHESS = 1;
-	public final static int GENESIS_CHESS = 2;
-
-	// Opponent Types
-	public final static int HUMAN_OPPONENT = 1;
-	public final static int CPU_WHITE_OPPONENT = 2;
-	public final static int CPU_BLACK_OPPONENT = 3;
-	public final static int INVITE_WHITE_OPPONENT = 4;
-	public final static int INVITE_BLACK_OPPONENT = 5;
-	public final static int CPU_OPPONENT = -1;
-	public final static int INVITE_OPPONENT = -2;
-
-	// Opponent Selection
-	public final static int RANDOM = 1;
-	public final static int INVITE = 2;
-
-	// Color Types
-	public final static int WHITE_OPP = 1;
-	public final static int BLACK_OPP = 2;
-	public final static int RANDOM_OPP = 3;
-
-	// Play As Color
-	public final static int PLAY_AS_WHITE = 1;
-	public final static int PLAY_AS_BLACK = 2;
-
-	// Game Status
-	public final static int ACTIVE = 1;
-	public final static int WHITE_MATE = 2;
-	public final static int BLACK_MATE = 3;
-	public final static int STALEMATE = 4;
-	public final static int IMPOSSIBLE = 5;
-	public final static int WHITE_RESIGN = 6;
-	public final static int BLACK_RESIGN = 7;
-	public final static int WHITE_IDLE = 8;
-	public final static int BLACK_IDLE = 9;
-	public final static int DRAW = 10;
-
-	public static String OpponentType(final int opponent)
+	static <E extends Enum<E> & Enums<E>> E from(Class<E> enumClass, String name)
 	{
-		return switch (opponent) {
-			case CPU_WHITE_OPPONENT -> "cpu-white";
-			case CPU_BLACK_OPPONENT -> "cpu-black";
-			case INVITE_WHITE_OPPONENT -> "invite-white";
-			case INVITE_BLACK_OPPONENT -> "invite-black";
-			default -> "human";
-		};
+		for (E e : Objects.requireNonNull(enumClass.getEnumConstants())) {
+			if (e.getName().equals(name)) return e;
+		}
+		throw new IllegalArgumentException("Unknown name: " + name + " for: " + enumClass.getSimpleName());
 	}
 
-	public static int OpponentType(final String opponent)
+	enum GameType implements Enums<GameType>
 	{
-		return switch (opponent) {
-			case "cpu-white" -> CPU_WHITE_OPPONENT;
-			case "cpu-black" -> CPU_BLACK_OPPONENT;
-			case "invite-white" -> INVITE_WHITE_OPPONENT;
-			case "invite-black" -> INVITE_BLACK_OPPONENT;
-			default -> HUMAN_OPPONENT;
-		};
+		ANY(0, "any"),
+		REGULAR(1, "regular"),
+		GENESIS(2, "genesis");
+
+		public final int id;
+		public final String name;
+
+		GameType(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+
+		public GameType norm()
+		{
+			if (this == ANY) {
+				return new SecureRandom().nextBoolean() ? REGULAR : GENESIS;
+			} else {
+				return this;
+			}
+		}
+
+		@Override public int getId() { return id; }
+		@Override public String getName() { return name; }
 	}
 
-	public static int OppToPlayAs(int value)
+	enum OpponentCat implements Enums<OpponentCat>
 	{
-		return switch (value) {
-			case WHITE_OPP -> PLAY_AS_BLACK;
-			case BLACK_OPP -> PLAY_AS_WHITE;
-			default -> new SecureRandom().nextBoolean() ? PLAY_AS_WHITE : PLAY_AS_BLACK;
-		};
+		HUMAN(1, "human"),
+		CPU(2, "cpu"),
+		REMOTE(3, "remote");
+
+		public final int id;
+		public final String name;
+
+		OpponentCat(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() { return id; }
+		@Override public String getName() { return name; }
 	}
 
-	public static int OppToYourColor(int value)
+	enum OpponentType implements Enums<OpponentType>
 	{
-		return switch (value) {
-			case CPU_BLACK_OPPONENT, INVITE_BLACK_OPPONENT -> Piece.WHITE;
-			case CPU_WHITE_OPPONENT, INVITE_WHITE_OPPONENT -> Piece.BLACK;
-			default -> Piece.EMPTY;
-		};
+		HUMAN(1, "human", Piece.EMPTY),
+		CPU_WHITE(2, "cpu-white", Piece.BLACK),
+		CPU_BLACK(3, "cpu-black", Piece.WHITE),
+		REMOTE_WHITE(4, "remote-white", Piece.BLACK),
+		REMOTE_BLACK(5, "remote-black", Piece.WHITE);
+
+		public final int id;
+		public final String name;
+		public final int yourColor;
+
+		OpponentType(int id, String name, int yourColor) {
+			this.id = id;
+			this.name = name;
+			this.yourColor = yourColor;
+		}
+
+		public static OpponentType from(OpponentCat oppCat, ColorType color)
+		{
+			if (color == ColorType.RANDOM) {
+				color = new SecureRandom().nextBoolean() ? ColorType.WHITE : ColorType.BLACK;
+			}
+
+			return switch (oppCat) {
+				case CPU ->
+					color == ColorType.WHITE ? OpponentType.CPU_BLACK : OpponentType.CPU_WHITE;
+				case REMOTE ->
+					color == ColorType.WHITE ? OpponentType.REMOTE_BLACK : OpponentType.REMOTE_WHITE;
+				default -> OpponentType.HUMAN;
+			};
+		}
+
+		@Override public int getId() { return id; }
+		@Override public String getName() { return name; }
 	}
 
-	public static String ColorType(final int color)
+	enum EventType implements Enums<EventType>
 	{
-		return switch (color) {
-			case WHITE_OPP -> "white";
-			case BLACK_OPP -> "black";
-			default -> "random";
-		};
+		LOCAL(0, "local"),
+		INVITE(1, "invite"),
+		MATCHED(2, "matched");
+
+		public final int id;
+		public final String name;
+
+		EventType(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() { return id; }
+		@Override public String getName() { return name; }
 	}
 
-	public static int EventType(final String eventtype)
+	enum ColorType implements Enums<ColorType>
 	{
-		return switch (eventtype) {
-			case "random" -> RANDOM;
-			case "invite" -> INVITE;
-			default -> throw new RuntimeException("unknown eventtype: " + eventtype);
-		};
-	}
+		RANDOM(0, "random"),
+		WHITE(1, "white"),
+		BLACK(2, "black");
 
-	public static String EventType(final int eventtype)
-	{
-		return switch (eventtype) {
-			case RANDOM -> "random";
-			case INVITE -> "invite";
-			default -> throw new RuntimeException("unknown eventtype: " + eventtype);
-		};
-	}
+		public final int id;
+		public final String name;
 
-	public static int GameType(final String gametype)
-	{
-		return switch (gametype) {
-			case "genesis" -> GENESIS_CHESS;
-			case "regular" -> REGULAR_CHESS;
-			default -> throw new RuntimeException("unknown gametype: " + gametype);
-		};
-	}
+		ColorType(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
 
-	public static String GameType(final int gametype)
-	{
-		return switch (gametype) {
-			case GENESIS_CHESS -> "genesis";
-			case REGULAR_CHESS -> "regular";
-			case ANY_CHESS -> "any";
-			default -> throw new RuntimeException("unknown gametype: " + gametype);
-		};
-	}
+		public ColorType norm() {
+			if (this == RANDOM) {
+				return new SecureRandom().nextBoolean() ? WHITE : BLACK;
+			} else {
+				return this;
+			}
+		}
 
-	public static int GameStatus(final String gamestatus)
-	{
-		return switch (gamestatus) {
-			case "active" -> ACTIVE;
-			case "white-mate" -> WHITE_MATE;
-			case "black-mate" -> BLACK_MATE;
-			case "stalemate" -> STALEMATE;
-			case "impossible" -> IMPOSSIBLE;
-			case "white-resign" -> WHITE_RESIGN;
-			case "black-resign" -> BLACK_RESIGN;
-			case "white-idle" -> WHITE_IDLE;
-			case "black-idle" -> BLACK_IDLE;
-			case "draw" -> DRAW;
-			default -> throw new RuntimeException("unknown gamestatus: " + gamestatus);
-		};
-	}
-
-	public static String GameStatus(final int gamestatus)
-	{
-		return switch (gamestatus) {
-			case ACTIVE -> "active";
-			case WHITE_MATE -> "white-mate";
-			case BLACK_MATE -> "black-mate";
-			case STALEMATE -> "stalemate";
-			case IMPOSSIBLE -> "impossible";
-			case WHITE_RESIGN -> "white-resign";
-			case BLACK_RESIGN -> "black-resign";
-			case WHITE_IDLE -> "white-idle";
-			case BLACK_IDLE -> "black-idle";
-			case DRAW -> "draw";
-			default -> throw new RuntimeException("unknown gamestatus: " + gamestatus);
-		};
+		@Override public int getId() { return id; }
+		@Override public String getName() { return name; }
 	}
 }
