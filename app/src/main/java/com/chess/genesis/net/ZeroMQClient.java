@@ -72,6 +72,8 @@ public class ZeroMQClient extends Service
 		void reloadBoard(GameEntity data);
 
 		void onMove(LastMoveMsg moveMsg);
+
+		void onResult(GameResultMsg resultMsg);
 	}
 
 	public interface RunCommand
@@ -283,10 +285,10 @@ public class ZeroMQClient extends Service
 		send(LoginMsg.build(username, hash));
 	}
 
-	public void createInvite(int gameType, int playAs)
+	public void createInvite(int gameType, int playAs, int clockType, int baseTime, int incTime)
 	{
 		do_login();
-		send(CreateInviteMsg.build(gameType, playAs));
+		send(CreateInviteMsg.build(gameType, playAs, clockType, baseTime, incTime));
 	}
 
 	public void getActiveData(String gameId)
@@ -337,6 +339,7 @@ public class ZeroMQClient extends Service
 			try {
 				var msg = ZmqMsg.parse(socket.recv());
 				lastReceive.set(System.currentTimeMillis());
+				IMoveListener listener;
 
 				switch (msg.type()) {
 				case PingMsg.ID:
@@ -355,14 +358,14 @@ public class ZeroMQClient extends Service
 					var game = msg.as(ActiveGameDataMsg.class);
 					var ctx = getApplicationContext();
 					var dao = ActiveGameDao.get(ctx);
-					if (game.is_new) {
+					if (game.status == GameStatus.WAITING_FOR_OPPONENT.id) {
 						dao.importInviteGame(game, ctx);
 					} else {
 						var gameData = dao.updateActiveGame(game, ctx);
 						if (gameData == null) {
 							break;
 						}
-						var listener = moveListeners.get(game.game_id);
+						listener = moveListeners.get(game.game_id);
 						if (listener != null) {
 							listener.reloadBoard(gameData);
 						}
@@ -372,9 +375,18 @@ public class ZeroMQClient extends Service
 					var moveMsg = msg.as(LastMoveMsg.class);
 					ActiveGameDao.get(getApplicationContext()).saveMove(moveMsg);
 
-					var listener = moveListeners.get(moveMsg.id);
+					listener = moveListeners.get(moveMsg.id);
 					if (listener != null) {
 						listener.onMove(moveMsg);
+					}
+					break;
+				case GameResultMsg.ID:
+					var resultMsg = msg.as(GameResultMsg.class);
+					ActiveGameDao.get(getApplicationContext()).saveResult(resultMsg);
+
+					listener = moveListeners.get(resultMsg.id);
+					if (listener != null) {
+						listener.onResult(resultMsg);
 					}
 					break;
 				case PongMsg.ID:

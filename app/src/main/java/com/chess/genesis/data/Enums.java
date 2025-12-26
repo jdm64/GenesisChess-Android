@@ -166,6 +166,56 @@ public interface Enums<T extends Enum<T>>
 		}
 
 		@Override public int getId() { return id; }
+
 		@Override public String getName() { return name; }
+	}
+
+	enum GameStatus implements Enums<GameStatus>
+	{
+		WAITING_FOR_OPPONENT(-1, "waiting-for-opponent"),
+		ACTIVE(1, "active"),
+		WHITE_MATE(2, "white-mate"),
+		BLACK_MATE(3, "black-mate"),
+		STALEMATE(4, "stalemate");
+
+		public final int id;
+		public final String name;
+
+		GameStatus(int id, String name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() {
+			return id;
+		}
+		@Override public String getName() {
+			return name;
+		}
+	}
+
+	enum ClockType implements Enums<ClockType>
+	{
+		NO_CLOCK(1, "no-clock"),
+		REALTIME(2, "realtime"),
+		PER_MOVE(3, "per-move");
+
+		public final int id;
+		public final String name;
+
+		ClockType(int id, String name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() {
+			return id;
+		}
+
+		@Override public String getName() {
+			return name;
+		}
 	}
 }

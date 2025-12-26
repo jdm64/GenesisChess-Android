@@ -30,10 +30,18 @@ public class ActiveGameDataMsg extends ZmqMsg
 	public static final int ID = 10;
 
 	public String game_id;
-	public boolean is_new;
+	public int event_type;
 	public int game_type;
+	public int status;
+	public int clock_type;
+
 	public long create_time;
 	public long save_time;
+	public int base_time;
+	public int inc_time;
+	public int white_time;
+	public int black_time;
+
 	public String white;
 	public String black;
 	public String zfen;

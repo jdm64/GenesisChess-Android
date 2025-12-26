@@ -1,5 +1,5 @@
 /* GenesisChess, an Android chess application
- * Copyright 2022, Justin Madru (justin.jdm64@gmail.com)
+ * Copyright 2025, Justin Madru (justin.jdm64@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chess.genesis.db;
+package com.chess.genesis.net.msgs;
 
-import androidx.room.*;
+import com.chess.genesis.processor.*;
 
-@Entity(tableName = ActiveGameEntity.TABLE_NAME)
-public class ActiveGameEntity extends GameEntity
-{
-	public static final String TABLE_NAME = "active_games";
+@ZmqMessage
+public class GameResultMsg extends ZmqMsg {
+	public static final int ID = 16;
 
-	public int opponent;
-
-	public String white;
-
-	public String black;
-
-	@Override
-	public String whiteName()
-	{
-		return white;
-	}
+	public String id;
+	public long saveTime;
+	public long whiteTime;
+	public long blackTime;
+	public int status;
 
 	@Override
-	public String blackName()
-	{
-		return black;
+	public int type() {
+		return ID;
 	}
 }

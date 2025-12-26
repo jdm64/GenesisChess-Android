@@ -19,8 +19,10 @@ import android.content.*;
 import androidx.room.*;
 
 @Database(
-    version = 1,
-    entities = {ActiveGameEntity.class}
+    version = 2,
+    exportSchema = true,
+    entities = {ActiveGameEntity.class},
+    autoMigrations = @AutoMigration(from = 1, to = 2)
 )
 public abstract class GameDatabase extends RoomDatabase
 {

@@ -15,7 +15,6 @@
  */
 package com.chess.genesis.db;
 
-import java.security.*;
 import java.util.*;
 import android.content.*;
 import com.chess.genesis.activity.*;
@@ -41,18 +40,31 @@ public interface ActiveGameDao
 		var oppCat = Enums.from(OpponentCat.class, data.getOpp().getValue());
 		var color = Enums.from(ColorType.class, data.getColor().getValue()).norm();
 		var opp = OpponentType.from(oppCat, color);
+		var clockType = Enums.from(ClockType.class, data.getClockType().getValue());
+		var baseTime = data.getBaseTime().getValue();
+		var incTime = data.getIncTime().getValue();
 
-		return newLocalGame("Untitled", type, opp.id);
-	}
+		if (clockType == ClockType.NO_CLOCK) {
+			baseTime = 0;
+			incTime = 0;
+		}
 
-	default ActiveGameEntity newLocalGame(String gamename, int gametype, int opponent)
-	{
 		var game = new ActiveGameEntity();
 		game.gameid = UUID.randomUUID().toString();
-		game.name = gamename;
-		game.gametype = gametype;
-		game.opponent = opponent;
-		game.zfen = (gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard()).printZFen();
+		game.name = "Untitled";
+
+		game.eventType = EventType.LOCAL.id;
+		game.gametype = type.id;
+		game.opponent = opp.id;
+		game.status = GameStatus.ACTIVE.id;
+
+		game.clockType = clockType.id;
+		game.baseTime = baseTime;
+		game.incTime = incTime;
+		game.whiteTime = baseTime * 1000;
+		game.blackTime = baseTime * 1000;
+
+		game.zfen = (type == GameType.GENESIS ? new GenBoard() : new RegBoard()).printZFen();
 		game.history = "";
 		game.ctime = System.currentTimeMillis();
 		game.stime = System.currentTimeMillis();
@@ -92,13 +104,23 @@ public interface ActiveGameDao
 		}
 
 		game.gameid = msg.game_id;
-		game.ctime = msg.create_time;
-		game.stime = msg.save_time;
 		game.name = name;
 		game.white = msg.white;
 		game.black = msg.black;
+
+		game.eventType = msg.event_type;
 		game.gametype = msg.game_type;
 		game.opponent = msg.getOpponentType(ctx);
+		game.status = msg.status;
+
+		game.clockType = msg.clock_type;
+		game.baseTime = msg.base_time;
+		game.incTime = msg.inc_time;
+		game.whiteTime = msg.white_time;
+		game.blackTime = msg.black_time;
+		game.ctime = msg.create_time;
+		game.stime = msg.save_time;
+
 		game.history = msg.movesString();
 		game.zfen = msg.zfen;
 
@@ -117,9 +139,16 @@ public interface ActiveGameDao
 
 		var updateRequired = !msg.movesString().equals(game.history);
 
-		game.stime = msg.save_time;
 		game.white = msg.white;
 		game.black = msg.black;
+
+		game.stime = msg.save_time;
+		game.status = msg.status;
+
+		game.whiteTime = msg.white_time;
+		game.blackTime = msg.black_time;
+
+		game.zfen = msg.zfen;
 		game.history = msg.movesString();
 
 		update(game);
@@ -172,8 +201,29 @@ public interface ActiveGameDao
 			return false;
 		}
 
-		game.history += " " + res.first + "," + msg.time;
-		game.stime = msg.time;
+		game.history += " " + res.first + "," + msg.moveTime;
+		game.stime = msg.moveTime;
+
+		if (board.getStm() == Piece.WHITE)
+			game.whiteTime = msg.timeLeft;
+		else
+			game.blackTime = msg.timeLeft;
+
+		update(game);
+		return true;
+	}
+
+	default boolean saveResult(GameResultMsg msg)
+	{
+		var game = getGame(msg.id);
+		if (game == null) {
+			return false;
+		}
+
+		game.status = msg.status;
+		game.stime = msg.saveTime;
+		game.whiteTime = msg.whiteTime;
+		game.blackTime = msg.blackTime;
 
 		update(game);
 		return true;

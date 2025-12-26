@@ -17,7 +17,9 @@ package com.chess.genesis.db;
 
 import java.util.*;
 import android.util.*;
+import com.chess.genesis.data.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.util.*;
 import androidx.annotation.*;
 import androidx.room.*;
 
@@ -28,17 +30,43 @@ public class GameEntity
 	@NonNull
 	public String gameid;
 
+	@ColumnInfo(defaultValue = "Untitled")
+	public String name;
+
+	@ColumnInfo(defaultValue = EnumsFixed.EventType_LOCAL_STR)
+	public int eventType;
+
+	@ColumnInfo(defaultValue = EnumsFixed.GameType_GENESIS_STR)
+	public int gametype;
+
+	@ColumnInfo(defaultValue = EnumsFixed.GameStatus_ACTIVE_STR)
+	public int status;
+
+	@ColumnInfo(defaultValue = EnumsFixed.ClockType_NO_CLOCK_STR)
+	public int clockType;
+
+	@ColumnInfo(defaultValue = "0")
+	public int baseTime;
+
+	@ColumnInfo(defaultValue = "0")
+	public int incTime;
+
+	@ColumnInfo(defaultValue = "0")
+	public long whiteTime;
+
+	@ColumnInfo(defaultValue = "0")
+	public long blackTime;
+
+	@ColumnInfo(defaultValue = "0")
 	public long ctime;
 
 	@ColumnInfo(defaultValue = "0")
 	public long stime;
 
-	public int gametype;
-
-	@ColumnInfo(defaultValue = " ")
+	@ColumnInfo(defaultValue = "")
 	public String zfen;
 
-	@ColumnInfo(defaultValue = " ")
+	@ColumnInfo(defaultValue = "")
 	public String history;
 
 	public List<Pair<String,Long>> getMoves()

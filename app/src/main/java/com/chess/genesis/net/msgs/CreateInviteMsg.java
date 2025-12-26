@@ -24,12 +24,18 @@ public class CreateInviteMsg extends ZmqMsg
 
 	public int game_type;
 	public int play_as;
+	public int clock_type;
+	public int base_time;
+	public int inc_time;
 
-	public static CreateInviteMsg build(int gameType, int playAs)
+	public static CreateInviteMsg build(int gameType, int playAs, int clockType, int baseTime, int incTime)
 	{
 		var msg = new CreateInviteMsg();
 		msg.game_type = gameType;
 		msg.play_as = playAs;
+		msg.clock_type = clockType;
+		msg.base_time = baseTime;
+		msg.inc_time = incTime;
 		return msg;
 	}
 

@@ -23,10 +23,11 @@ public class LastMoveMsg extends ZmqMsg
 	public static final int ID = 12;
 
 	public String id;
-	public long time;
+	public long moveTime;
+	public long timeLeft;
 	public int status;
-	public String move;
 	public int index;
+	public String move;
 
 	@Override
 	public int type()

@@ -47,6 +47,9 @@ class NewGameState {
 	var type = mutableIntStateOf(GameType.GENESIS.id)
 	var opp = mutableIntStateOf(OpponentCat.REMOTE.id)
 	var color = mutableIntStateOf(ColorType.RANDOM.id)
+	var clockType = mutableIntStateOf(ClockType.NO_CLOCK.id)
+	var baseTime = mutableIntStateOf(0)
+	var incTime = mutableIntStateOf(0)
 }
 
 class EditGameState {
@@ -71,7 +74,10 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 			ZeroMQClient.bind(context) { client ->
 				client.createInvite(
 					data.type.intValue,
-					data.color.intValue
+					data.color.intValue,
+					data.clockType.intValue,
+					data.baseTime.intValue,
+					data.incTime.intValue
 				)
 			}
 		} else {
@@ -334,6 +340,9 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 	var expandedType by remember { mutableStateOf(false) }
 	var expandedOpp by remember { mutableStateOf(false) }
 	var expandedColor by remember { mutableStateOf(false) }
+	var expandedClock by remember { mutableStateOf(false) }
+	var expandedBase by remember { mutableStateOf(false) }
+	var expandedInc by remember { mutableStateOf(false) }
 
 	AlertDialog(onDismissRequest = { state.show.value = false },
 		title = { Text(text = "New Game", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
@@ -465,6 +474,127 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 								expandedColor = false
 							}
 						)
+					}
+				}
+				Spacer(modifier = Modifier.height(8.dp))
+				ExposedDropdownMenuBox(
+					expanded = expandedClock,
+					onExpandedChange = { expandedClock = it }
+				) {
+					TextField(
+						value = when (state.clockType.intValue) {
+							ClockType.NO_CLOCK.id -> "No Clock"
+							ClockType.REALTIME.id -> "Realtime"
+							ClockType.PER_MOVE.id -> "Day Clock"
+							else -> ""
+						},
+						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+						label = { Text("Clock Type:", fontSize = 18.sp, fontStyle = Italic) },
+						onValueChange = {},
+						readOnly = true,
+						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClock) },
+						modifier = Modifier.menuAnchor()
+					)
+					ExposedDropdownMenu(
+						expanded = expandedClock,
+						onDismissRequest = { expandedClock = false }
+					) {
+						DropdownMenuItem(
+							text = { Text("No Clock") },
+							onClick = {
+								state.clockType.intValue = ClockType.NO_CLOCK.id
+								state.baseTime.intValue = 0
+								state.incTime.intValue = 0
+								expandedClock = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Realtime") },
+							onClick = {
+								state.clockType.intValue = ClockType.REALTIME.id
+								state.baseTime.intValue = 900
+								state.incTime.intValue = 5
+								expandedClock = false
+							}
+						)
+					}
+				}
+				if (state.clockType.intValue == ClockType.REALTIME.id) {
+					Spacer(modifier = Modifier.height(8.dp))
+					ExposedDropdownMenuBox(
+						expanded = expandedBase,
+						onExpandedChange = { expandedBase = it }
+					) {
+						TextField(
+							value = when (state.baseTime.intValue) {
+								120 -> "2 min"
+								180 -> "3 min"
+								300 -> "5 min"
+								600 -> "10 min"
+								900 -> "15 min"
+								1800 -> "30 min"
+								3600 -> "60 min"
+								5400 -> "90 min"
+								else -> ""
+							},
+							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+							label = { Text("Base Time:", fontSize = 18.sp, fontStyle = Italic) },
+							onValueChange = {},
+							readOnly = true,
+							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBase) },
+							modifier = Modifier.menuAnchor()
+						)
+						ExposedDropdownMenu(
+							expanded = expandedBase,
+							onDismissRequest = { expandedBase = false }
+						) {
+							listOf(120 to "2 min", 180 to "3 min", 300 to "5 min", 600 to "10 min", 900 to "15 min", 1800 to "30 min", 3600 to "60 min", 5400 to "90 min").forEach { (sec, display) ->
+								DropdownMenuItem(
+									text = { Text(display) },
+									onClick = {
+										state.baseTime.intValue = sec
+										expandedBase = false
+									}
+								)
+							}
+						}
+					}
+					Spacer(modifier = Modifier.height(8.dp))
+					ExposedDropdownMenuBox(
+						expanded = expandedInc,
+						onExpandedChange = { expandedInc = it }
+					) {
+						TextField(
+							value = when (state.incTime.intValue) {
+								0 -> "0 sec"
+								1 -> "1 sec"
+								2 -> "2 sec"
+								5 -> "5 sec"
+								10 -> "10 sec"
+								20 -> "20 sec"
+								else -> ""
+							},
+							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+							label = { Text("Increment:", fontSize = 18.sp, fontStyle = Italic) },
+							onValueChange = {},
+							readOnly = true,
+							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedInc) },
+							modifier = Modifier.menuAnchor()
+						)
+						ExposedDropdownMenu(
+							expanded = expandedInc,
+							onDismissRequest = { expandedInc = false }
+						) {
+							listOf(0 to "0 sec", 1 to "1 sec", 2 to "2 sec", 5 to "5 sec", 10 to "10 sec", 20 to "20 sec").forEach { (sec, display) ->
+								DropdownMenuItem(
+									text = { Text(display) },
+									onClick = {
+										state.incTime.intValue = sec
+										expandedInc = false
+									}
+								)
+							}
+						}
 					}
 				}
 			}
