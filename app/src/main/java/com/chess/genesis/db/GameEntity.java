@@ -46,6 +46,9 @@ public class GameEntity
 		var moveHistory = history.trim().split(" +");
 		var moves = new ArrayList<Pair<String,Long>>();
 		for (var element : moveHistory) {
+			if (element.isEmpty()) {
+				continue;
+			}
 			var parts = element.split(",");
 			moves.add(new Pair<>(parts[0], Long.parseLong(parts[1])));
 		}
