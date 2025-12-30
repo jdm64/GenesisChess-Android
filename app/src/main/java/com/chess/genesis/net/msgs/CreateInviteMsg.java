@@ -15,6 +15,7 @@
  */
 package com.chess.genesis.net.msgs;
 
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.processor.*;
 
 @ZmqMessage
@@ -28,12 +29,12 @@ public class CreateInviteMsg extends ZmqMsg
 	public int base_time;
 	public int inc_time;
 
-	public static CreateInviteMsg build(int gameType, int playAs, int clockType, int baseTime, int incTime)
+	public static CreateInviteMsg build(GameType gameType, ColorType playAs, ClockType clockType, int baseTime, int incTime)
 	{
 		var msg = new CreateInviteMsg();
-		msg.game_type = gameType;
-		msg.play_as = playAs;
-		msg.clock_type = clockType;
+		msg.game_type = gameType.norm().id;
+		msg.play_as = playAs.norm().id;
+		msg.clock_type = clockType.id;
 		msg.base_time = baseTime;
 		msg.inc_time = incTime;
 		return msg;

@@ -44,10 +44,10 @@ import kotlinx.coroutines.*
 
 class NewGameState {
 	var show = mutableStateOf(false)
-	var type = mutableIntStateOf(GameType.GENESIS.id)
-	var opp = mutableIntStateOf(OpponentCat.REMOTE.id)
-	var color = mutableIntStateOf(ColorType.RANDOM.id)
-	var clockType = mutableIntStateOf(ClockType.NO_CLOCK.id)
+	var type = mutableStateOf(GameType.GENESIS)
+	var opp = mutableStateOf(OpponentCat.REMOTE)
+	var color = mutableStateOf(ColorType.RANDOM)
+	var clockType = mutableStateOf(ClockType.NO_CLOCK)
 	var baseTime = mutableIntStateOf(0)
 	var incTime = mutableIntStateOf(0)
 }
@@ -70,12 +70,12 @@ fun onLoadGame(data: ActiveGameEntity, nav: NavHostController) {
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		if (data.opp.intValue == OpponentCat.REMOTE.id) {
+		if (data.opp.value == OpponentCat.REMOTE) {
 			ZeroMQClient.bind(context) { client ->
 				client.createInvite(
-					data.type.intValue,
-					data.color.intValue,
-					data.clockType.intValue,
+					data.type.value,
+					data.color.value,
+					data.clockType.value,
 					data.baseTime.intValue,
 					data.incTime.intValue
 				)
@@ -353,7 +353,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onExpandedChange = { expandedType = it }
 				) {
 					TextField(
-						value = if (state.type.intValue == GameType.GENESIS.id) "Genesis" else "Regular",
+						value = if (state.type.value == GameType.GENESIS) "Genesis" else "Regular",
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 						label = { Text("Game Type:", fontSize = 18.sp, fontStyle = Italic) },
 						onValueChange = {},
@@ -368,14 +368,14 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						DropdownMenuItem(
 							text = { Text("Genesis") },
 							onClick = {
-								state.type.intValue = GameType.GENESIS.id
+								state.type.value = GameType.GENESIS
 								expandedType = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Regular") },
 							onClick = {
-								state.type.intValue = GameType.REGULAR.id
+								state.type.value = GameType.REGULAR
 								expandedType = false
 							}
 						)
@@ -387,11 +387,10 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onExpandedChange = { expandedOpp = it }
 				) {
 					TextField(
-						value = when (state.opp.intValue) {
-							OpponentCat.REMOTE.id -> "Invite"
-							OpponentCat.HUMAN.id -> "Local"
-							OpponentCat.CPU.id -> "Computer"
-							else -> ""
+						value = when (state.opp.value) {
+							OpponentCat.REMOTE -> "Invite"
+							OpponentCat.HUMAN -> "Local"
+							OpponentCat.CPU -> "Computer"
 						},
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 						label = { Text("Opponent Type:", fontSize = 18.sp, fontStyle = Italic) },
@@ -407,21 +406,21 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						DropdownMenuItem(
 							text = { Text("Invite") },
 							onClick = {
-								state.opp.intValue = OpponentCat.REMOTE.id
+								state.opp.value = OpponentCat.REMOTE
 								expandedOpp = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Local") },
 							onClick = {
-								state.opp.intValue = OpponentCat.HUMAN.id
+								state.opp.value = OpponentCat.HUMAN
 								expandedOpp = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Computer") },
 							onClick = {
-								state.opp.intValue = OpponentCat.CPU.id
+								state.opp.value = OpponentCat.CPU
 								expandedOpp = false
 							}
 						)
@@ -433,11 +432,10 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onExpandedChange = { expandedColor = it }
 				) {
 					TextField(
-						value = when (state.color.intValue) {
-							ColorType.RANDOM.id -> "Any"
-							ColorType.BLACK.id -> "White"
-							ColorType.WHITE.id -> "Black"
-							else -> ""
+						value = when (state.color.value) {
+							ColorType.RANDOM -> "Any"
+							ColorType.BLACK -> "White"
+							ColorType.WHITE -> "Black"
 						},
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 						label = { Text("Play as Color:", fontSize = 18.sp, fontStyle = Italic) },
@@ -452,25 +450,25 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					) {
 						DropdownMenuItem(
 							text = { Text("Any") },
-							enabled = state.opp.intValue != OpponentType.HUMAN.id,
+							enabled = state.opp.value != OpponentCat.HUMAN,
 							onClick = {
-								state.color.intValue = ColorType.RANDOM.id
+								state.color.value = ColorType.RANDOM
 								expandedColor = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("White") },
-							enabled = state.opp.intValue != OpponentType.HUMAN.id,
+							enabled = state.opp.value != OpponentCat.HUMAN,
 							onClick = {
-								state.color.intValue = ColorType.BLACK.id
+								state.color.value = ColorType.BLACK
 								expandedColor = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Black") },
-							enabled = state.opp.intValue != OpponentType.HUMAN.id,
+							enabled = state.opp.value != OpponentCat.HUMAN,
 							onClick = {
-								state.color.intValue = ColorType.WHITE.id
+								state.color.value = ColorType.WHITE
 								expandedColor = false
 							}
 						)
@@ -482,11 +480,10 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					onExpandedChange = { expandedClock = it }
 				) {
 					TextField(
-						value = when (state.clockType.intValue) {
-							ClockType.NO_CLOCK.id -> "No Clock"
-							ClockType.REALTIME.id -> "Realtime"
-							ClockType.PER_MOVE.id -> "Day Clock"
-							else -> ""
+						value = when (state.clockType.value) {
+							ClockType.NO_CLOCK -> "No Clock"
+							ClockType.REALTIME -> "Realtime"
+							ClockType.PER_MOVE -> "Max Time per Move"
 						},
 						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 						label = { Text("Clock Type:", fontSize = 18.sp, fontStyle = Italic) },
@@ -502,41 +499,41 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						DropdownMenuItem(
 							text = { Text("No Clock") },
 							onClick = {
-								state.clockType.intValue = ClockType.NO_CLOCK.id
-								state.baseTime.intValue = 0
-								state.incTime.intValue = 0
+								state.clockType.value = ClockType.NO_CLOCK
+								state.baseTime.intValue = ClockTimes.SEC_0.time
+								state.incTime.intValue = ClockTimes.SEC_0.time
 								expandedClock = false
 							}
 						)
 						DropdownMenuItem(
 							text = { Text("Realtime") },
 							onClick = {
-								state.clockType.intValue = ClockType.REALTIME.id
-								state.baseTime.intValue = 900
-								state.incTime.intValue = 5
+								state.clockType.value = ClockType.REALTIME
+								state.baseTime.intValue = ClockTimes.MIN_15.time
+								state.incTime.intValue = ClockTimes.SEC_5.time
+								expandedClock = false
+							}
+						)
+						DropdownMenuItem(
+							text = { Text("Max Time per Move") },
+							onClick = {
+								state.clockType.value = ClockType.PER_MOVE
+								state.baseTime.intValue = ClockTimes.DAY_1.time
+								state.incTime.intValue = ClockTimes.SEC_0.time
 								expandedClock = false
 							}
 						)
 					}
 				}
-				if (state.clockType.intValue == ClockType.REALTIME.id) {
+
+				if (state.clockType.value == ClockType.REALTIME) {
 					Spacer(modifier = Modifier.height(8.dp))
 					ExposedDropdownMenuBox(
 						expanded = expandedBase,
 						onExpandedChange = { expandedBase = it }
 					) {
 						TextField(
-							value = when (state.baseTime.intValue) {
-								120 -> "2 min"
-								180 -> "3 min"
-								300 -> "5 min"
-								600 -> "10 min"
-								900 -> "15 min"
-								1800 -> "30 min"
-								3600 -> "60 min"
-								5400 -> "90 min"
-								else -> ""
-							},
+							value = ClockTimes.from(state.baseTime.intValue, ClockTimes.MIN_15),
 							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 							label = { Text("Base Time:", fontSize = 18.sp, fontStyle = Italic) },
 							onValueChange = {},
@@ -548,11 +545,20 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							expanded = expandedBase,
 							onDismissRequest = { expandedBase = false }
 						) {
-							listOf(120 to "2 min", 180 to "3 min", 300 to "5 min", 600 to "10 min", 900 to "15 min", 1800 to "30 min", 3600 to "60 min", 5400 to "90 min").forEach { (sec, display) ->
+							listOf(
+								ClockTimes.MIN_2,
+								ClockTimes.MIN_3,
+								ClockTimes.MIN_5,
+								ClockTimes.MIN_10,
+								ClockTimes.MIN_15,
+								ClockTimes.MIN_30,
+								ClockTimes.MIN_60,
+								ClockTimes.MIN_90
+							).forEach { time ->
 								DropdownMenuItem(
-									text = { Text(display) },
+									text = { Text(time.name) },
 									onClick = {
-										state.baseTime.intValue = sec
+										state.baseTime.intValue = time.time
 										expandedBase = false
 									}
 								)
@@ -565,15 +571,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onExpandedChange = { expandedInc = it }
 					) {
 						TextField(
-							value = when (state.incTime.intValue) {
-								0 -> "0 sec"
-								1 -> "1 sec"
-								2 -> "2 sec"
-								5 -> "5 sec"
-								10 -> "10 sec"
-								20 -> "20 sec"
-								else -> ""
-							},
+							value = ClockTimes.from(state.incTime.intValue, ClockTimes.SEC_0),
 							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
 							label = { Text("Increment:", fontSize = 18.sp, fontStyle = Italic) },
 							onValueChange = {},
@@ -585,11 +583,18 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							expanded = expandedInc,
 							onDismissRequest = { expandedInc = false }
 						) {
-							listOf(0 to "0 sec", 1 to "1 sec", 2 to "2 sec", 5 to "5 sec", 10 to "10 sec", 20 to "20 sec").forEach { (sec, display) ->
+							listOf(
+								ClockTimes.SEC_0,
+								ClockTimes.SEC_1,
+								ClockTimes.SEC_2,
+								ClockTimes.SEC_5,
+								ClockTimes.SEC_10,
+								ClockTimes.SEC_20
+							).forEach { time ->
 								DropdownMenuItem(
-									text = { Text(display) },
+									text = { Text(time.name) },
 									onClick = {
-										state.incTime.intValue = sec
+										state.incTime.intValue = time.time
 										expandedInc = false
 									}
 								)

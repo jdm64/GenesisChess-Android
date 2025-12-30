@@ -285,7 +285,7 @@ public class ZeroMQClient extends Service
 		send(LoginMsg.build(username, hash));
 	}
 
-	public void createInvite(int gameType, int playAs, int clockType, int baseTime, int incTime)
+	public void createInvite(GameType gameType, ColorType playAs, ClockType clockType, int baseTime, int incTime)
 	{
 		do_login();
 		send(CreateInviteMsg.build(gameType, playAs, clockType, baseTime, incTime));

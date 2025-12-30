@@ -218,4 +218,47 @@ public interface Enums<T extends Enum<T>>
 			return name;
 		}
 	}
+
+	enum ClockTimes implements Enums<ClockTimes>
+	{
+		SEC_0(0, "0 sec"),
+		SEC_1(1, "1 sec"),
+		SEC_2(2, "2 sec"),
+		SEC_5(5, "5 sec"),
+		SEC_10(10, "10 sec"),
+		SEC_20(20, "20 sec"),
+
+		MIN_2(120, "2 min"),
+		MIN_3(180, "3 min"),
+		MIN_5(300, "5 min"),
+		MIN_10(600, "10 min"),
+		MIN_15(900, "15 min"),
+		MIN_30(1800, "30 min"),
+		MIN_60(3600, "60 min"),
+		MIN_90(5400, "90 min"),
+
+		HRS_12(43200, "12 hrs"),
+		DAY_1(86400, "1 day"),
+		DAY_3(259200, "3 days");
+
+		public final int time;
+		public final String name;
+
+		ClockTimes(int time, String name)
+		{
+			this.time = time;
+			this.name = name;
+		}
+
+		public static String from(int time, ClockTimes def)
+		{
+			for (ClockTimes t : values()) {
+				if (t.time == time) return t.name;
+			}
+			return def.name;
+		}
+
+		@Override public int getId() { return time; }
+		@Override public String getName() { return name; }
+	}
 }

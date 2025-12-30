@@ -36,11 +36,11 @@ public interface ActiveGameDao
 
 	default ActiveGameEntity newLocalGame(NewGameState data)
 	{
-		var type = Enums.from(GameType.class, data.getType().getValue()).norm();
-		var oppCat = Enums.from(OpponentCat.class, data.getOpp().getValue());
-		var color = Enums.from(ColorType.class, data.getColor().getValue()).norm();
+		var type = data.getType().getValue().norm();
+		var oppCat = data.getOpp().getValue();
+		var color = data.getColor().getValue().norm();
 		var opp = OpponentType.from(oppCat, color);
-		var clockType = Enums.from(ClockType.class, data.getClockType().getValue());
+		var clockType = data.getClockType().getValue();
 		var baseTime = data.getBaseTime().getValue();
 		var incTime = data.getIncTime().getValue();
 
