@@ -602,6 +602,41 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						}
 					}
 				}
+				if (state.clockType.value == ClockType.PER_MOVE) {
+					Spacer(modifier = Modifier.height(8.dp))
+					ExposedDropdownMenuBox(
+						expanded = expandedBase,
+						onExpandedChange = { expandedBase = it }
+					) {
+						TextField(
+							value = ClockTimes.from(state.baseTime.intValue, ClockTimes.DAY_1),
+							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
+							label = { Text("Max Time per Move:", fontSize = 18.sp, fontStyle = Italic) },
+							onValueChange = {},
+							readOnly = true,
+							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBase) },
+							modifier = Modifier.menuAnchor()
+						)
+						ExposedDropdownMenu(
+							expanded = expandedBase,
+							onDismissRequest = { expandedBase = false }
+						) {
+							listOf(
+								ClockTimes.HRS_12,
+								ClockTimes.DAY_1,
+								ClockTimes.DAY_3
+							).forEach { time ->
+								DropdownMenuItem(
+									text = { Text(time.name) },
+									onClick = {
+										state.baseTime.intValue = time.time
+										expandedBase = false
+									}
+								)
+							}
+						}
+					}
+				}
 			}
 		},
 		confirmButton = {
