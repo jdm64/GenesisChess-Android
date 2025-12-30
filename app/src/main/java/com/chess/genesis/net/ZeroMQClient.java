@@ -256,6 +256,10 @@ public class ZeroMQClient extends Service
 		var last = moveListeners.put(gameId, player);
 		if (socket == null) {
 			connect();
+			if (socket == null) {
+				Util.log("Unable to connect to server", this);
+				return;
+			}
 		}
 
 		if (last != player) {
@@ -353,6 +357,9 @@ public class ZeroMQClient extends Service
 				case LoginResultMsg.ID:
 					var result = msg.as(LoginResultMsg.class);
 					isLoggedin.set(result.is_ok);
+					if (!result.is_ok) {
+						Util.showToast(result.msg, getApplicationContext());
+					}
 					break;
 				case ActiveGameDataMsg.ID:
 					var game = msg.as(ActiveGameDataMsg.class);
@@ -396,6 +403,7 @@ public class ZeroMQClient extends Service
 					break;
 				case ErrorMsg.ID:
 					var errMsg = msg.as(ErrorMsg.class);
+					Util.log("ErrorMsg: " + errMsg.msg, this);
 					Util.showToast(errMsg.msg, getApplicationContext());
 					break;
 				case UnknownMsg.ID:
@@ -442,6 +450,10 @@ public class ZeroMQClient extends Service
 		}
 		if (socket == null) {
 			reconnect();
+			if (socket == null) {
+				Util.log("Unable to reconnect to server", this);
+				return;
+			}
 		}
 
 		socket.send(msg.toBytes());
