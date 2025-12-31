@@ -24,7 +24,8 @@ public class LastMoveMsg extends ZmqMsg
 
 	public String id;
 	public long moveTime;
-	public long timeLeft;
+	public long whiteTime;
+	public long blackTime;
 	public int status;
 	public int index;
 	public String move;

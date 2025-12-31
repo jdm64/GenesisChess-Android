@@ -203,11 +203,8 @@ public interface ActiveGameDao
 
 		game.history += " " + res.first + "," + msg.moveTime;
 		game.stime = msg.moveTime;
-
-		if (board.getStm() == Piece.WHITE)
-			game.whiteTime = msg.timeLeft;
-		else
-			game.blackTime = msg.timeLeft;
+		game.whiteTime = msg.whiteTime;
+		game.blackTime = msg.blackTime;
 
 		update(game);
 		return true;
