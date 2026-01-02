@@ -16,11 +16,14 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 
 public interface IGameView
 {
+	StmView getStmView();
+
 	BoardView getBoardView();
 
 	CapturedLayout getCapturedView();

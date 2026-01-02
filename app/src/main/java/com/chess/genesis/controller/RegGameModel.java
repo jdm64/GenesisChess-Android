@@ -81,6 +81,8 @@ public class RegGameModel extends GameModel
 				history.resize(hindex);
 				flagsHistory.resize(hindex);
 			}
+
+			updateClock(time);
 			history.pushWithTime(move, time);
 			flagsHistory.push(flags);
 			controller.onMove(move);

@@ -28,13 +28,13 @@ public final class PieceImgPainter
 	final static int WHITE = 0;
 	final static int BLACK = 1;
 
-	private static int outerLight;
-	private static int outerDark;
-	private static int innerDark;
-	private static int innerLight;
-	private static int innerSelect;
-	private static int innerCheck;
-	private static int innerLast;
+	public static int outerLight;
+	public static int outerDark;
+	public static int innerDark;
+	public static int innerLight;
+	public static int innerSelect;
+	public static int innerCheck;
+	public static int innerLast;
 	private static boolean colorsSet = false;
 
 	private final static float recScale = (float) 0.9;
@@ -53,7 +53,7 @@ public final class PieceImgPainter
 		initColors(context);
 	}
 
-	private static void initColors(final Context context)
+	public static void initColors(final Context context)
 	{
 		if (colorsSet)
 			return;

@@ -32,7 +32,6 @@ public class GameController implements IGameController
 	private final IGameView view;
 	private final MutableState<Boolean> isGenState;
 	private final MutableState<Boolean> promoteState;
-	private final MutableState<StmState> stmState;
 	private final MutableState<SubmitState> submitState;
 
 	private IGameModel model;
@@ -47,7 +46,6 @@ public class GameController implements IGameController
 		view = new GameView(this, ctx);
 		promoteState = Util.getState(false);
 		isGenState = Util.getState(false);
-		stmState = Util.getState(new StmState("White", "Black", 1, 0, yourColor));
 		submitState = Util.getState(new SubmitState());
 
 		// init default values so no NPE in onDestroy()
@@ -83,6 +81,7 @@ public class GameController implements IGameController
 
 		setPlayers(data.opponent);
 
+		onStmChange(false);
 		getStmPlayer().takeTurn(ctx);
 	}
 
@@ -146,6 +145,12 @@ public class GameController implements IGameController
 	}
 
 	@Override
+	public StmView getStmView()
+	{
+		return view.getStmView();
+	}
+
+	@Override
 	public BoardView getBoardView()
 	{
 		return view.getBoardView();
@@ -180,14 +185,9 @@ public class GameController implements IGameController
 	public void onStmChange(boolean overwrite)
 	{
 		var board = model.getBoard();
-		var state = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate(), yourColor);
-		stmState.setValue(state);
-	}
-
-	@Override
-	public MutableState<StmState> getStmState()
-	{
-		return stmState;
+		var stmState = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate(), yourColor);
+		var clockState = model.getClockState();
+		getStmView().updateState(stmState, clockState);
 	}
 
 	@Override

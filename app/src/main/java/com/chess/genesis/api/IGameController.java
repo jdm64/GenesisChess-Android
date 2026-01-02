@@ -22,6 +22,8 @@ import androidx.compose.runtime.*;
 
 public interface IGameController
 {
+	StmView getStmView();
+
 	BoardView getBoardView();
 
 	CapturedLayout getCapturedView();
@@ -57,8 +59,6 @@ public interface IGameController
 	PlaceView getPlaceView();
 
 	void onStmChange(boolean overwrite);
-
-	MutableState<StmState> getStmState();
 
 	void onMove(Move move);
 

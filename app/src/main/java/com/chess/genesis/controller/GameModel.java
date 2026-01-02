@@ -17,6 +17,8 @@
 package com.chess.genesis.controller;
 
 import com.chess.genesis.api.*;
+import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
@@ -225,5 +227,42 @@ public abstract class GameModel implements IGameModel
 			hto.setLast(true);
 		}
 		postCommonMove(false);
+	}
+
+	@Override
+	public ClockState getClockState()
+	{
+		return new ClockState(
+		    Enums.from(ClockType.class, data.clockType),
+		    history.size() == 0 ? data.ctime : history.topWithTime().second,
+		    data.whiteTime,
+		    data.blackTime,
+		    board.getStm(),
+		    true
+		);
+	}
+
+	/**
+	 * Update the clock times based on the current game state and time control
+	 * NOTE: call before history.pushWithTime()
+	 */
+	protected void updateClock(long currMoveTime)
+	{
+		switch (Enums.from(ClockType.class, data.clockType)) {
+		case ClockType.NO_CLOCK:
+			return;
+		case ClockType.PER_MOVE:
+			data.whiteTime = data.baseTime;
+			data.blackTime = data.baseTime;
+			return;
+		case ClockType.REALTIME:
+			var lastMoveTime = history.size() == 0 ? data.ctime : history.topWithTime().second;
+			var timeElapsed = currMoveTime - lastMoveTime;
+			if (hindex % 2 == 0) {
+				data.whiteTime = data.whiteTime - timeElapsed + data.incTime;
+			} else {
+				data.blackTime = data.blackTime - timeElapsed + data.incTime;
+			}
+		}
 	}
 }

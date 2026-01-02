@@ -132,70 +132,9 @@ fun GameContent(gameCtlr: IGameController, state: SheetState) {
 			.background(Color.Gray),
 		verticalArrangement = Arrangement.SpaceBetween
 	) {
-		TopBarInfo(gameCtlr)
+		AndroidView({ gameCtlr.stmView })
 		BoardAndPieces(gameCtlr)
 		BottomBar(state) { GameNav(gameCtlr) }
-	}
-}
-
-@Composable
-fun TopBarInfo(gameCtlr: IGameController) {
-	val stmState = remember { gameCtlr.stmState }
-	val colors = MaterialTheme.colorScheme
-	val mate = stmState.value.mate
-	val stm = stmState.value.stm
-	val yColor = stmState.value.yourColor
-	val red = colorResource(R.color.red_A700)
-	val whiteColor =
-		if (mate * stm > 0) red else if (stm > 0) colors.onPrimary else Color.Gray
-	val blackColor =
-		if (mate * stm < 0) red else if (stm < 0) colors.onPrimary else Color.Gray
-
-	Row(Modifier.fillMaxWidth(1f)) {
-		Row(
-			Modifier
-				.fillMaxWidth(.5f)
-				.background(colorResource(R.color.blue_800))
-				.border(3.dp, whiteColor)
-				.padding(8.dp, 16.dp, 8.dp, 16.dp)
-		) {
-			if (yColor > 0) {
-				Box(
-					Modifier
-						.size(16.dp)
-						.clip(CircleShape)
-						.background(colors.secondaryContainer)
-						.align(Alignment.CenterVertically)
-				)
-			}
-			Text(
-				stmState.value.white,
-				color = colors.onPrimary,
-				modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp)
-			)
-		}
-		Row(
-			Modifier
-				.fillMaxWidth(1f)
-				.background(colorResource(R.color.blue_800))
-				.border(3.dp, blackColor)
-				.padding(8.dp, 16.dp, 8.dp, 16.dp)
-		) {
-			if (yColor < 0) {
-				Box(
-					Modifier
-						.size(16.dp)
-						.clip(CircleShape)
-						.background(colors.secondaryContainer)
-						.align(Alignment.CenterVertically)
-				)
-			}
-			Text(
-				stmState.value.black,
-				color = colors.onPrimary,
-				modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp)
-			)
-		}
 	}
 }
 

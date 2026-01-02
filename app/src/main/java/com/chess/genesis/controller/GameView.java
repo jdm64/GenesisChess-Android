@@ -26,6 +26,7 @@ public class GameView implements IGameView
 {
 	final IGameController controller;
 	final Context ctx;
+	final StmView stmView;
 	final BoardView boardView;
 
 	CapturedLayout capturedView;
@@ -36,12 +37,19 @@ public class GameView implements IGameView
 	{
 		ctx = context;
 		controller = gameCntlr;
+		stmView = new StmView(ctx);
 		boardView = new BoardView(ctx, null);
 		boardView.setController(controller);
 		if (Pref.getBool(context, R.array.pf_showCaptured)) {
 			capturedView = new CapturedLayout(ctx, null);
 			capturedView.setSizes("1/11");
 		}
+	}
+
+	@Override
+	public StmView getStmView()
+	{
+		return stmView;
 	}
 
 	@Override

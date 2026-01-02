@@ -16,6 +16,7 @@
 package com.chess.genesis.engine;
 
 import java.util.function.*;
+import android.util.*;
 import androidx.annotation.*;
 
 public class TimedObjectArr<Type> extends ObjectArray<Type>
@@ -87,6 +88,11 @@ public class TimedObjectArr<Type> extends ObjectArray<Type>
 	public void push(Type value)
 	{
 		pushWithTime(value, System.currentTimeMillis());
+	}
+
+	public Pair<Type,Long> topWithTime()
+	{
+		return new Pair<>(super.top(), times[times.length - 1]);
 	}
 
 	@Override
