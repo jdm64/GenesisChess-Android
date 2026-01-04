@@ -42,6 +42,10 @@ import com.chess.genesis.net.*
 import com.chess.genesis.util.*
 import kotlinx.coroutines.*
 
+object GVal {
+    val dialogFontSize: TextUnit = 16.sp
+}
+
 class NewGameState {
 	var show = mutableStateOf(false)
 	var type = mutableStateOf(GameType.GENESIS)
@@ -261,7 +265,7 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 		},
 		text = {
 			Column {
-				Text("Game Name:", modifier = Modifier.padding(bottom = 4.dp), fontSize = 16.sp)
+				Text("Game Name:", modifier = Modifier.padding(bottom = 4.dp), fontSize = GVal.dialogFontSize)
 				TextField(
 					value = editState.value.name.value,
 					onValueChange = { editState.value.name.value = it })
@@ -315,7 +319,7 @@ fun GameListCard(
 					Text(
 						text = data.name,
 						fontWeight = FontWeight.Bold,
-						fontSize = 18.sp
+						fontSize = GVal.dialogFontSize
 					)
 					Text(time, fontSize = 12.sp)
 				}
@@ -354,8 +358,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				) {
 					TextField(
 						value = if (state.type.value == GameType.GENESIS) "Genesis" else "Regular",
-						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-						label = { Text("Game Type:", fontSize = 18.sp, fontStyle = Italic) },
+						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+						label = { Text("Game Type:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 						onValueChange = {},
 						readOnly = true,
 						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedType) },
@@ -392,8 +396,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							OpponentCat.HUMAN -> "Local"
 							OpponentCat.CPU -> "Computer"
 						},
-						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-						label = { Text("Opponent Type:", fontSize = 18.sp, fontStyle = Italic) },
+						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+						label = { Text("Opponent Type:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 						onValueChange = {},
 						readOnly = true,
 						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedOpp) },
@@ -437,8 +441,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							ColorType.BLACK -> "White"
 							ColorType.WHITE -> "Black"
 						},
-						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-						label = { Text("Play as Color:", fontSize = 18.sp, fontStyle = Italic) },
+						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+						label = { Text("Play as Color:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 						onValueChange = {},
 						readOnly = true,
 						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedColor) },
@@ -485,8 +489,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							ClockType.REALTIME -> "Realtime"
 							ClockType.PER_MOVE -> "Max Time per Move"
 						},
-						textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-						label = { Text("Clock Type:", fontSize = 18.sp, fontStyle = Italic) },
+						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+						label = { Text("Clock Type:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 						onValueChange = {},
 						readOnly = true,
 						trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClock) },
@@ -534,8 +538,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					) {
 						TextField(
 							value = ClockTimes.from(state.baseTime.intValue, ClockTimes.MIN_15),
-							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-							label = { Text("Base Time:", fontSize = 18.sp, fontStyle = Italic) },
+							textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+							label = { Text("Base Time:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 							onValueChange = {},
 							readOnly = true,
 							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBase) },
@@ -572,8 +576,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					) {
 						TextField(
 							value = ClockTimes.from(state.incTime.intValue, ClockTimes.SEC_0),
-							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-							label = { Text("Increment:", fontSize = 18.sp, fontStyle = Italic) },
+							textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+							label = { Text("Increment:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 							onValueChange = {},
 							readOnly = true,
 							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedInc) },
@@ -610,8 +614,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					) {
 						TextField(
 							value = ClockTimes.from(state.baseTime.intValue, ClockTimes.DAY_1),
-							textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.End),
-							label = { Text("Max Time per Move:", fontSize = 18.sp, fontStyle = Italic) },
+							textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
+							label = { Text("Max Time per Move:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
 							onValueChange = {},
 							readOnly = true,
 							trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBase) },
@@ -641,12 +645,12 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 		},
 		confirmButton = {
 			Button(onClick = { onNewGame(state, nav, ctx) }) {
-				Text("Create", fontSize = 18.sp)
+				Text("Create", fontSize = GVal.dialogFontSize)
 			}
 		},
 		dismissButton = {
 			OutlinedButton(onClick = { state.show.value = false }) {
-				Text("Cancel", fontSize = 18.sp)
+				Text("Cancel", fontSize = GVal.dialogFontSize)
 			}
 		}
 	)
