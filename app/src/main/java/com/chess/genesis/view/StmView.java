@@ -142,15 +142,15 @@ public class StmView extends View
 
 		// Draw your color indicator
 		if (sideColor == stmState.yourColor) {
-			painter.setColor(isWhite ? PieceImgPainter.outerDark : PieceImgPainter.innerLight);
-			canvas.drawCircle(left + 0.20f * viewHeight, 0.30f * viewHeight, viewHeight / 10.0f, painter);
+			painter.setColor(PieceImgPainter.innerSelect);
+			canvas.drawCircle(left + 0.25f * viewHeight, 0.75f * viewHeight, viewHeight / 10.0f, painter);
 		}
 
 		// Draw player name
 		painter.setTextSize(viewHeight / 3.0f);
 		painter.setColor(isWhite ? PieceImgPainter.outerDark : PieceImgPainter.innerLight);
 		painter.setTextAlign(Paint.Align.LEFT);
-		canvas.drawText(playerName, left + 0.35f * viewHeight, 0.40f * viewHeight, painter);
+		canvas.drawText(playerName, left + 0.15f * viewHeight, 0.40f * viewHeight, painter);
 
 		// Draw time
 		painter.setTextAlign(Paint.Align.CENTER);
