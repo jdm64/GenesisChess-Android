@@ -232,37 +232,46 @@ public abstract class GameModel implements IGameModel
 	@Override
 	public ClockState getClockState()
 	{
+		var len = history.size();
+		var lastMove = switch (Enums.from(ClockType.class, data.clockType)) {
+			case ClockType.NO_CLOCK -> -1;
+			case ClockType.PER_MOVE -> len == 0 ? data.ctime : history.topWithTime().second;
+			case ClockType.REALTIME -> len < 2 ? -1 : history.topWithTime().second;
+		};
+
 		return new ClockState(
 		    Enums.from(ClockType.class, data.clockType),
-		    history.size() == 0 ? data.ctime : history.topWithTime().second,
+		    lastMove,
 		    data.whiteTime,
 		    data.blackTime,
-		    board.getStm(),
-		    true
+		    len % 2 == 0 ? Piece.WHITE : Piece.BLACK
 		);
 	}
 
 	/**
 	 * Update the clock times based on the current game state and time control
-	 * NOTE: call before history.pushWithTime()
 	 */
-	protected void updateClock(long currMoveTime)
+	@Override
+	public ClockState updateClock()
 	{
 		switch (Enums.from(ClockType.class, data.clockType)) {
 		case ClockType.NO_CLOCK:
-			return;
 		case ClockType.PER_MOVE:
-			data.whiteTime = data.baseTime;
-			data.blackTime = data.baseTime;
-			return;
+			break;
 		case ClockType.REALTIME:
-			var lastMoveTime = history.size() == 0 ? data.ctime : history.topWithTime().second;
-			var timeElapsed = currMoveTime - lastMoveTime;
-			if (hindex % 2 == 0) {
-				data.whiteTime = data.whiteTime - timeElapsed + data.incTime;
+			var len = history.size();
+			if (len <= 2) {
+				break;
+			}
+
+			var timeElapsed = history.getWithTime(len - 1).second -  history.getWithTime(len - 2).second;
+			if (len % 2 == 0) {
+				data.blackTime = data.blackTime - timeElapsed + (data.incTime * 1000L);
 			} else {
-				data.blackTime = data.blackTime - timeElapsed + data.incTime;
+				data.whiteTime = data.whiteTime - timeElapsed + (data.incTime * 1000L);
 			}
 		}
+
+		return getClockState();
 	}
 }

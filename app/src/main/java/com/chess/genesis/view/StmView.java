@@ -18,6 +18,7 @@ package com.chess.genesis.view;
 import java.util.*;
 import android.content.*;
 import android.graphics.*;
+import android.os.*;
 import android.view.*;
 import com.chess.genesis.api.*;
 import com.chess.genesis.data.Enums.*;
@@ -34,20 +35,50 @@ public class StmView extends View
 
 	private int viewHeight;
 
+	private final Handler timerHandler = new Handler(Looper.getMainLooper());
+	private final Runnable timerRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (clockState != null && clockState.type != ClockType.NO_CLOCK) {
+				invalidate();
+			}
+			timerHandler.postDelayed(this, 1000);
+		}
+	};
+
 	public StmView(Context context)
 	{
 		super(context);
 
 		PieceImgPainter.initColors(context);
 		stmState = new StmState("White", "Black", 0, 0, 0);
-		clockState = new ClockState(ClockType.NO_CLOCK, 0, 0, 0, 0, false);
+		clockState = new ClockState(ClockType.NO_CLOCK, -1, 0, 0, 0);
 	}
 
-	public void updateState(StmState stm, ClockState clock)
+	public void setStmState(StmState state)
 	{
-		stmState = stm;
+		stmState = state;
+		invalidate();
+	}
+
+	public void setClockState(ClockState clock)
+	{
 		clockState = clock;
 		invalidate();
+	}
+
+	@Override
+	protected void onAttachedToWindow()
+	{
+		super.onAttachedToWindow();
+		timerHandler.postDelayed(timerRunnable, 1000);
+	}
+
+	@Override
+	protected void onDetachedFromWindow()
+	{
+		super.onDetachedFromWindow();
+		timerHandler.removeCallbacks(timerRunnable);
 	}
 
 	@Override
@@ -79,9 +110,18 @@ public class StmView extends View
 	private void drawPlayerSection(boolean isWhite, Rect rect, Canvas canvas)
 	{
 		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
+		var isStm = stmState.stm == sideColor;
 		var playerName = isWhite ? stmState.white : stmState.black;
 		var playerTime = isWhite ? clockState.whiteTime : clockState.blackTime;
-		var timeStr = formatTime(playerTime); // TODO real time
+
+		var timeRemaining = playerTime;
+		if (sideColor == clockState.stm && clockState.type != ClockType.NO_CLOCK && clockState.lastMove > 0) {
+			var currentTime = System.currentTimeMillis();
+			var timeElapsed = currentTime - clockState.lastMove;
+			timeRemaining = playerTime - timeElapsed;
+		}
+
+		var timeStr = formatTime(timeRemaining);
 
 		var left = rect.left;
 		var top = rect.top;
@@ -90,7 +130,7 @@ public class StmView extends View
 		var centerX = (left + right) / 2;
 
 		// Draw stm indicator
-		if (sideColor == stmState.stm) {
+		if (isStm) {
 			painter.setColor(isWhite ? PieceImgPainter.outerDark : PieceImgPainter.outerLight);
 			canvas.drawRect(left, top, right, bottom, painter);
 		}

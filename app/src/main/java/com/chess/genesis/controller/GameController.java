@@ -82,6 +82,7 @@ public class GameController implements IGameController
 		setPlayers(data.opponent);
 
 		onStmChange(false);
+		getStmView().setClockState(model.updateClock());
 		getStmPlayer().takeTurn(ctx);
 	}
 
@@ -186,13 +187,14 @@ public class GameController implements IGameController
 	{
 		var board = model.getBoard();
 		var stmState = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate(), yourColor);
-		var clockState = model.getClockState();
-		getStmView().updateState(stmState, clockState);
+		getStmView().setStmState(stmState);
 	}
 
 	@Override
 	public void onMove(Move move)
 	{
+		getStmView().setClockState(model.updateClock());
+
 		getNonStmPlayer().finalizeMove(move, ctx);
 		getStmPlayer().takeTurn(ctx);
 	}

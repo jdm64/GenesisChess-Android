@@ -74,7 +74,6 @@ public class GenGameModel extends GameModel
 			if (hindex < history.size())
 				history.resize(hindex);
 
-			updateClock(time);
 			history.pushWithTime(move, time);
 			controller.onMove(move);
 		}

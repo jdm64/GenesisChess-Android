@@ -24,15 +24,13 @@ public class ClockState
 	public final long whiteTime;
 	public final long blackTime;
 	public final int stm;
-	public final boolean isRunning;
 
-	public ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm, boolean isRunning)
+	public ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm)
 	{
 		this.type = type;
 		this.lastMove = lastMove;
 		this.whiteTime = whiteTime;
 		this.blackTime = blackTime;
 		this.stm = stm;
-		this.isRunning = isRunning;
 	}
 }

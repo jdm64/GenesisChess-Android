@@ -56,4 +56,6 @@ public interface IGameModel
 	void undoMove();
 
 	ClockState getClockState();
+
+	ClockState updateClock();
 }
