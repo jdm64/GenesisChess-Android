@@ -186,7 +186,14 @@ public class GameController implements IGameController
 	public void onStmChange(boolean overwrite)
 	{
 		var board = model.getBoard();
-		var stmState = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), board.isMate(), yourColor);
+		var boardMate = board.isMate();
+		var gameStatus = switch (boardMate) {
+			case Board.NOT_MATE -> GameStatus.ACTIVE;
+			case Board.CHECK_MATE -> board.getStm() == Piece.WHITE ? GameStatus.WHITE_MATE : GameStatus.BLACK_MATE;
+			case Board.STALE_MATE -> GameStatus.STALEMATE;
+			default -> GameStatus.ACTIVE;
+		};
+		var stmState = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), gameStatus, yourColor);
 		getStmView().setStmState(stmState);
 	}
 

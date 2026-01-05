@@ -52,7 +52,7 @@ public class StmView extends View
 		super(context);
 
 		PieceImgPainter.initColors(context);
-		stmState = new StmState("White", "Black", 0, 0, 0);
+		stmState = new StmState("White", "Black", 0, GameStatus.ACTIVE, 0);
 		clockState = new ClockState(ClockType.NO_CLOCK, -1, 0, 0, 0);
 	}
 
@@ -131,8 +131,17 @@ public class StmView extends View
 		var centerX = (left + right) / 2;
 
 		// Draw stm indicator
-		if (isStm) {
-			painter.setColor(isWhite ? PieceImgPainter.outerDark : PieceImgPainter.outerLight);
+
+		if (timeRemaining < 0) {
+			painter.setColor(PieceImgPainter.innerCheck);
+			canvas.drawRect(left, top, right, bottom, painter);
+		} else if (isStm) {
+			var stmColor = switch (stmState.status) {
+				case WAITING_FOR_OPPONENT, ACTIVE -> isWhite ? PieceImgPainter.outerDark : PieceImgPainter.outerLight;
+				case WHITE_MATE, BLACK_MATE -> PieceImgPainter.innerCheck;
+				case STALEMATE -> PieceImgPainter.innerLast;
+			};
+			painter.setColor(stmColor);
 			canvas.drawRect(left, top, right, bottom, painter);
 		}
 

@@ -15,20 +15,22 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.data.Enums.GameStatus;
+
 public class StmState
 {
 	public String white;
 	public String black;
 	public int stm;
-	public int mate;
+	public GameStatus status;
 	public int yourColor;
 
-	public StmState(String White, String Black, int Stm, int Mate, int YourColor)
+	public StmState(String White, String Black, int Stm, GameStatus Status, int YourColor)
 	{
 		white = White;
 		black = Black;
 		stm = Stm;
-		mate = Mate;
+		status = Status;
 		yourColor = YourColor;
 	}
 }
