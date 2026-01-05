@@ -18,6 +18,7 @@ package com.chess.genesis.view;
 import java.util.*;
 import android.content.*;
 import android.graphics.*;
+import android.graphics.Paint.*;
 import android.os.*;
 import android.view.*;
 import com.chess.genesis.api.*;
@@ -149,11 +150,11 @@ public class StmView extends View
 		// Draw player name
 		painter.setTextSize(viewHeight / 3.0f);
 		painter.setColor(isWhite ? PieceImgPainter.outerDark : PieceImgPainter.innerLight);
-		painter.setTextAlign(Paint.Align.LEFT);
+		painter.setTextAlign(Align.LEFT);
 		canvas.drawText(playerName, left + 0.15f * viewHeight, 0.40f * viewHeight, painter);
 
 		// Draw time
-		painter.setTextAlign(Paint.Align.CENTER);
+		painter.setTextAlign(Align.CENTER);
 		canvas.drawText(timeStr, centerX, 0.85f * viewHeight, painter);
 	}
 
