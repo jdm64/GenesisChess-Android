@@ -17,20 +17,15 @@ package com.chess.genesis.api;
 
 import com.chess.genesis.engine.*;
 
-public class SubmitState
+public record SubmitState(boolean show, Move move)
 {
-	public final boolean show;
-	public final Move move;
-
 	public SubmitState()
 	{
-		show = false;
-		move = null;
+		this(false, null);
 	}
 
-	public SubmitState(Move submitMove)
+	public SubmitState(Move move)
 	{
-		show = true;
-		move = submitMove;
+		this(true, move);
 	}
 }

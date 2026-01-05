@@ -17,20 +17,6 @@ package com.chess.genesis.api;
 
 import com.chess.genesis.data.Enums.GameStatus;
 
-public class StmState
+public record StmState(String white, String black, int stm, GameStatus status, int yourColor)
 {
-	public String white;
-	public String black;
-	public int stm;
-	public GameStatus status;
-	public int yourColor;
-
-	public StmState(String White, String Black, int Stm, GameStatus Status, int YourColor)
-	{
-		white = White;
-		black = Black;
-		stm = Stm;
-		status = Status;
-		yourColor = YourColor;
-	}
 }

@@ -40,7 +40,7 @@ public class StmView extends View
 	private final Runnable timerRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (clockState != null && clockState.type != ClockType.NO_CLOCK) {
+			if (clockState != null && clockState.type() != ClockType.NO_CLOCK) {
 				invalidate();
 			}
 			timerHandler.postDelayed(this, 1000);
@@ -111,14 +111,14 @@ public class StmView extends View
 	private void drawPlayerSection(boolean isWhite, Rect rect, Canvas canvas)
 	{
 		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
-		var isStm = stmState.stm == sideColor;
-		var playerName = isWhite ? stmState.white : stmState.black;
-		var playerTime = isWhite ? clockState.whiteTime : clockState.blackTime;
+		var isStm = stmState.stm() == sideColor;
+		var playerName = isWhite ? stmState.white() : stmState.black();
+		var playerTime = isWhite ? clockState.whiteTime() : clockState.blackTime();
 
 		var timeRemaining = playerTime;
-		if (sideColor == clockState.stm && clockState.type != ClockType.NO_CLOCK && clockState.lastMove > 0) {
+		if (sideColor == clockState.stm() && clockState.type() != ClockType.NO_CLOCK && clockState.lastMove() > 0) {
 			var currentTime = System.currentTimeMillis();
-			var timeElapsed = currentTime - clockState.lastMove;
+			var timeElapsed = currentTime - clockState.lastMove();
 			timeRemaining = playerTime - timeElapsed;
 		}
 
@@ -136,7 +136,7 @@ public class StmView extends View
 			painter.setColor(PieceImgPainter.innerCheck);
 			canvas.drawRect(left, top, right, bottom, painter);
 		} else if (isStm) {
-			var stmColor = switch (stmState.status) {
+			var stmColor = switch (stmState.status()) {
 				case WAITING_FOR_OPPONENT, ACTIVE -> isWhite ? PieceImgPainter.outerDark : PieceImgPainter.outerLight;
 				case WHITE_MATE, BLACK_MATE -> PieceImgPainter.innerCheck;
 				case STALEMATE -> PieceImgPainter.innerLast;
@@ -151,7 +151,7 @@ public class StmView extends View
 		canvas.drawRect(left + margin, top + margin, right - margin, bottom - margin, painter);
 
 		// Draw your color indicator
-		if (sideColor == stmState.yourColor) {
+		if (sideColor == stmState.yourColor()) {
 			painter.setColor(PieceImgPainter.innerSelect);
 			canvas.drawCircle(left + 0.25f * viewHeight, 0.75f * viewHeight, viewHeight / 10.0f, painter);
 		}

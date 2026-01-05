@@ -17,20 +17,6 @@ package com.chess.genesis.api;
 
 import com.chess.genesis.data.Enums.*;
 
-public class ClockState
+public record ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm)
 {
-	public final ClockType type;
-	public final long lastMove;
-	public final long whiteTime;
-	public final long blackTime;
-	public final int stm;
-
-	public ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm)
-	{
-		this.type = type;
-		this.lastMove = lastMove;
-		this.whiteTime = whiteTime;
-		this.blackTime = blackTime;
-		this.stm = stm;
-	}
 }
