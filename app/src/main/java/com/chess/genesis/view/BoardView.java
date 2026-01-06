@@ -35,7 +35,14 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	private IGameController gameCtrl;
 	private MotionEvent lastTouch;
 	private int sqSize;
+	private int halfSq;
 	private boolean viewAsBlack = false;
+
+	// For dragging pieces
+	private boolean isDragging = false;
+	private IBoardSq dragSq = null;
+	private float downX, downY;
+	private final PointF dragPos = new PointF();
 
 	public BoardView(Context context, AttributeSet attrs)
 	{
@@ -75,6 +82,7 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 		setMeasuredDimension(size, size);
 
 		sqSize = size / 8;
+		halfSq = sqSize / 2;
 		painter.resize(sqSize);
 		setXY();
 	}
@@ -93,15 +101,71 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		for (int i = 0; i < 64; i++)
-			squares[i].draw(canvas);
+		for (int i = 0; i < 64; i++) {
+			var sq = squares[i];
+			sq.draw(canvas, !isDragging || sq != dragSq);
+		}
+		if (isDragging && dragSq != null) {
+			painter.offsetTo((int) dragPos.x - halfSq, (int) dragPos.y - halfSq);
+			painter.drawPiece(canvas, dragSq.getPiece());
+		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
 		lastTouch = event;
+		float x = event.getX();
+		float y = event.getY();
+
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			downX = x;
+			downY = y;
+			isDragging = false;
+			var touchSq = getTouchedSquare();
+			if (touchSq != null) {
+				if (!touchSq.isHighlighted()) {
+					performClick();
+				}
+				if (touchSq.getPiece() != Piece.EMPTY) {
+					dragSq = touchSq;
+				}
+			}
+			return true;
+		case MotionEvent.ACTION_MOVE:
+			if (!isDragging && dragSq != null && (Math.abs(x - downX) > halfSq || Math.abs(y - downY) > halfSq)) {
+				isDragging = true;
+			}
+
+			if (isDragging) {
+				dragPos.set(x, y);
+				invalidate();
+			}
+			return true;
+		case MotionEvent.ACTION_UP:
+			if (isDragging && dragSq.isHighlighted()) {
+				performClick();
+			} else {
+				var endSq = getTouchedSquare();
+				if (endSq != null && endSq.getPiece() == Piece.EMPTY && endSq.isHighlighted()) {
+					performClick();
+				}
+			}
+			clearDrag();
+			return true;
+		case MotionEvent.ACTION_CANCEL:
+			clearDrag();
+			break;
+		}
 		return super.onTouchEvent(event);
+	}
+
+	private void clearDrag()
+	{
+		isDragging = false;
+		dragSq = null;
+		invalidate();
 	}
 
 	@Override
@@ -130,11 +194,8 @@ public class BoardView extends View implements OnClickListener, OnLongClickListe
 
 	private IBoardSq getTouchedSquare()
 	{
-		final int[] loc = new int[2];
-		getLocationInWindow(loc);
-
-		int x = (int) Math.floor((lastTouch.getX() - loc[0]) / sqSize);
-		int y = (int) Math.floor((lastTouch.getY() - loc[1]) / sqSize);
+		int x = (int) Math.floor(lastTouch.getX() / sqSize);
+		int y = (int) Math.floor(lastTouch.getY() / sqSize);
 		int index = (8 * y + x);
 		if (viewAsBlack)
 			index = 63 - index;

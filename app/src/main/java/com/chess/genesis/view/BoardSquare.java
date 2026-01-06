@@ -48,9 +48,16 @@ public class BoardSquare implements IBoardSq
 
 	public void draw(final Canvas canvas)
 	{
+		draw(canvas, true);
+	}
+
+	public void draw(final Canvas canvas, boolean drawPiece)
+	{
 		painter.offsetTo(x, y);
 		painter.drawSquare(canvas, this);
-		painter.drawPiece(canvas, type);
+		if (drawPiece) {
+			painter.drawPiece(canvas, type);
+		}
 	}
 
 	@Override
