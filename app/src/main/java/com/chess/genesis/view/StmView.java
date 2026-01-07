@@ -122,8 +122,6 @@ public class StmView extends View
 			timeRemaining = playerTime - timeElapsed;
 		}
 
-		var timeStr = formatTime(timeRemaining);
-
 		var left = rect.left;
 		var top = rect.top;
 		var right = rect.right;
@@ -131,7 +129,6 @@ public class StmView extends View
 		var centerX = (left + right) / 2;
 
 		// Draw stm indicator
-
 		if (timeRemaining < 0) {
 			painter.setColor(PieceImgPainter.innerCheck);
 			canvas.drawRect(left, top, right, bottom, painter);
@@ -163,8 +160,11 @@ public class StmView extends View
 		canvas.drawText(playerName, left + 0.15f * viewHeight, 0.40f * viewHeight, painter);
 
 		// Draw time
-		painter.setTextAlign(Align.CENTER);
-		canvas.drawText(timeStr, centerX, 0.85f * viewHeight, painter);
+		if (clockState.type() != ClockType.NO_CLOCK) {
+			var timeStr = formatTime(timeRemaining);
+			painter.setTextAlign(Align.CENTER);
+			canvas.drawText(timeStr, centerX, 0.85f * viewHeight, painter);
+		}
 	}
 
 	private String formatTime(long ms)
