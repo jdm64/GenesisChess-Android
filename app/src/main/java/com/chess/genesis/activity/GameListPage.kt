@@ -16,6 +16,7 @@
 package com.chess.genesis.activity
 
 import android.content.*
+import android.util.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -54,6 +55,46 @@ class NewGameState {
 	var clockType = mutableStateOf(ClockType.NO_CLOCK)
 	var baseTime = mutableIntStateOf(0)
 	var incTime = mutableIntStateOf(0)
+
+	fun serialize(): String {
+		val map = mapOf(
+			"type" to type.value.id,
+			"opp" to opp.value.id,
+			"color" to color.value.id,
+			"clockType" to clockType.value.id,
+			"baseTime" to baseTime.intValue,
+			"incTime" to incTime.intValue
+		)
+		return map.entries.joinToString(";") { "${it.key}=${it.value}" }
+	}
+
+	fun deserialize(str: String) {
+		val map = str.split(";").associate {
+			val (key, value) = it.split("=")
+			key to value.toInt()
+		}
+		type.value = Enums.from(GameType::class.java, map["type"] ?: GameType.GENESIS.id)
+		opp.value = Enums.from(OpponentCat::class.java, map["opp"] ?: OpponentCat.REMOTE.id)
+		color.value = Enums.from(ColorType::class.java, map["color"] ?: ColorType.RANDOM.id)
+		clockType.value = Enums.from(ClockType::class.java, map["clockType"] ?: ClockType.NO_CLOCK.id)
+		baseTime.intValue = map["baseTime"] ?: 0
+		incTime.intValue = map["incTime"] ?: 0
+	}
+
+	fun loadFromPrefs(context: Context) {
+		val str = Pref(context).getString(R.array.pf_newGameState)
+		if (str.isNotEmpty()) {
+			try {
+				deserialize(str)
+			} catch (e: Exception) {
+				Log.e("NewGameState", "Failed to load preferences: $str", e)
+			}
+		}
+	}
+
+	fun saveToPrefs(context: Context) {
+		PrefEdit(context).putString(R.array.pf_newGameState, serialize()).commit()
+	}
 }
 
 class EditGameState {
@@ -72,6 +113,7 @@ fun onLoadGame(data: ActiveGameEntity, nav: NavHostController) {
 }
 
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
+	data.saveToPrefs(context)
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
 		if (data.opp.value == OpponentCat.REMOTE) {
@@ -131,6 +173,7 @@ fun GameListPage(nav: NavHostController) {
 	}
 
 	val newGameState = remember { mutableStateOf(NewGameState()) }
+	newGameState.value.loadFromPrefs(ctx)
 	val sheetState = rememberModalBottomSheetState()
 	val coroutineScope = rememberCoroutineScope()
 	val importState = remember { mutableStateOf(ImportGameState()) }

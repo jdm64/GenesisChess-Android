@@ -100,4 +100,8 @@
 		<item>bcInnerLast</item>
 		<item>@color/purple_deep_300</item>
 	</array>
+	<array name="pf_newGameState">
+		<item>newGameState</item>
+		<item></item>
+	</array>
 </resources>
