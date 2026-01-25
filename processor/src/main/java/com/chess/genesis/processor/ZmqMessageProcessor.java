@@ -51,6 +51,8 @@ public class ZmqMessageProcessor extends AbstractProcessor
 		code.append("import android.util.Pair;\n");
 		code.append("import java.io.IOException;\n");
 		code.append("import java.util.ArrayList;\n");
+		code.append("import java.util.HashMap;\n");
+		code.append("import java.util.Map;\n");
 		code.append("import org.msgpack.core.*;\n");
 		code.append("\n");
 		code.append("public class ZmqMessageHelper {\n");
@@ -150,17 +152,50 @@ public class ZmqMessageProcessor extends AbstractProcessor
 		var typeStr = type.toString();
 		return switch (typeStr) {
 			case "boolean" -> fieldName + " = packer.unpackBoolean();";
+			case "byte" -> fieldName + " = packer.unpackByte();";
 			case "int" -> fieldName + " = packer.unpackInt();";
 			case "long" -> fieldName + " = packer.unpackLong();";
 			case "java.lang.String" -> fieldName + " = packer.unpackString();";
-			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" ->
-                                fieldName + " = new ArrayList<>();\n"
-			        + "		var size = packer.unpackArrayHeader();\n"
-                                + "		for (int i = 0; i < size; i++) {\n"
-                                + "			msg." + fieldName + ".add(new Pair<>(packer.unpackString(), packer.unpackLong()));\n"
-                                + "		}";
+			case "java.util.List<java.lang.String>" -> unpackStringList(fieldName);
+			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> unpackMoveList(fieldName);
+			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> unpackRatingsMap(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
+	}
+
+	private String unpackStringList(String fieldName)
+	{
+		return fieldName + " = new ArrayList<>();\n"
+			+ "		var size = packer.unpackArrayHeader();\n"
+			+ "		for (int i = 0; i < size; i++) {\n"
+			+ "			msg." + fieldName + ".add(packer.unpackString());\n"
+			+ "		}";
+	}
+
+	private String unpackMoveList(String fieldName)
+	{
+		return fieldName + " = new ArrayList<>();\n"
+			+ "		var size = packer.unpackArrayHeader();\n"
+			+ "		for (int i = 0; i < size; i++) {\n"
+			+ "			msg." + fieldName + ".add(new Pair<>(packer.unpackString(), packer.unpackLong()));\n"
+			+ "		}";
+	}
+
+	private String unpackRatingsMap(String fieldName)
+	{
+		return fieldName + " = new HashMap<>();\n"
+			+ "		var size = packer.unpackMapHeader();\n"
+			+ "		for (int i = 0; i < size; i++) {\n"
+			+ "			var gameType = packer.unpackInt();\n"
+			+ "			var baseTime = packer.unpackInt();\n"
+			+ "			var incTime = packer.unpackInt();\n"
+			+ "			var key = new com.chess.genesis.net.GameKey(gameType, baseTime, incTime);\n"
+			+ "			var rating = packer.unpackDouble();\n"
+			+ "			var deviation = packer.unpackDouble();\n"
+			+ "			var volatility = packer.unpackDouble();\n"
+			+ "			var value = new com.chess.genesis.net.RatingValue(rating, deviation, volatility);\n"
+			+ "			msg." + fieldName + ".put(key, value);\n"
+			+ "		}";
 	}
 
 	private String getPack(TypeMirror type, String fieldName)
@@ -168,16 +203,46 @@ public class ZmqMessageProcessor extends AbstractProcessor
 		var typeStr = type.toString();
 		return switch (typeStr) {
 			case "boolean" -> "packer.packBoolean(msg." + fieldName + ");";
+			case "byte" -> "packer.packByte(msg." + fieldName + ");";
 			case "int" -> "packer.packInt(msg." + fieldName + ");";
 			case "long" -> "packer.packLong(msg." + fieldName + ");";
 			case "java.lang.String" -> "packer.packString(msg." + fieldName + ");";
-			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" ->
-				"packer.packArrayHeader(msg." + fieldName + ".size());\n"
-				+ "		for (var pair : msg." + fieldName + ") {\n"
-				+ "			packer.packString(pair.first);\n"
-				+ "			packer.packLong(pair.second);\n"
-				+ "		}";
+			case "java.util.List<java.lang.String>" -> packStringList(fieldName);
+			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> packMoveList(fieldName);
+			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> packRatingsMap(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
+	}
+
+	private String packStringList(String fieldName)
+	{
+		return "packer.packArrayHeader(msg." + fieldName + ".size());\n"
+			+ "		for (var item : msg." + fieldName + ") {\n"
+			+ "			packer.packString(item);\n"
+			+ "		}";
+	}
+
+	private String packMoveList(String fieldName)
+	{
+		return "packer.packArrayHeader(msg." + fieldName + ".size());\n"
+			+ "		for (var pair : msg." + fieldName + ") {\n"
+			+ "			packer.packString(pair.first);\n"
+			+ "			packer.packLong(pair.second);\n"
+			+ "		}";
+	}
+
+	private String packRatingsMap(String fieldName)
+	{
+		return "packer.packMapHeader(msg." + fieldName + ".size());\n"
+			+ "		for (var entry : msg." + fieldName + ".entrySet()) {\n"
+			+ "			var key = entry.getKey();\n"
+			+ "			var value = entry.getValue();\n"
+			+ "			packer.packInt(key.gameType());\n"
+			+ "			packer.packInt(key.baseTime());\n"
+			+ "			packer.packInt(key.incTime());\n"
+			+ "			packer.packDouble(value.rating());\n"
+			+ "			packer.packDouble(value.deviation());\n"
+			+ "			packer.packDouble(value.volatility());\n"
+			+ "		}";
 	}
 }

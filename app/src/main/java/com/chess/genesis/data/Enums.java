@@ -261,4 +261,26 @@ public interface Enums<T extends Enum<T>>
 		@Override public int getId() { return time; }
 		@Override public String getName() { return name; }
 	}
+
+	enum SyncType implements Enums<SyncType>
+	{
+		ACTIVE(1, "active"),
+		ARCHIVE(2, "archive");
+
+		public final int id;
+		public final String name;
+
+		SyncType(int id, String name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() {
+			return id;
+		}
+		@Override public String getName() {
+			return name;
+		}
+	}
 }
