@@ -79,6 +79,8 @@ fun GamePage(nav: NavHostController, gameId: String) {
 	ShowPromoteDialog(gameCtlr)
 
 	ShowSubmitDialog(gameCtlr)
+
+	ShowResignDialog(gameCtlr)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,6 +121,14 @@ fun GameMenu(gameCtlr: GameController, state: SheetState, nav: NavHostController
 			}),
 			leadingContent = { Icon(Icons.Filled.Settings, "Settings") },
 			headlineContent = { Text("Settings") }
+		)
+		ListItem(
+			modifier = Modifier.clickable(onClick = {
+				gameCtlr.getResignState().value = true
+				scope.launch { state.hide() }
+			}),
+			leadingContent = { Icon(Icons.Filled.Flag, "Resign") },
+			headlineContent = { Text("Resign") }
 		)
 	}
 }
@@ -270,6 +280,40 @@ fun ShowSubmitDialog(gameCtlr: GameController) {
 			}
 		}
 	}
+}
+
+@Composable
+fun ShowResignDialog(gameCtlr: GameController) {
+	val resignState = remember { gameCtlr.getResignState() }
+	if (!resignState.value) {
+		return
+	}
+
+	AlertDialog(onDismissRequest = { resignState.value = false },
+		title = {
+			Text(
+				text = "Resign Game",
+				fontWeight = FontWeight.Bold,
+				fontSize = 20.sp
+			)
+		},
+		text = {
+			Text("Are you sure you want to resign this game?")
+		},
+		dismissButton = {
+			TextButton(onClick = { resignState.value = false }) {
+				Text("Cancel")
+			}
+		},
+		confirmButton = {
+			TextButton(onClick = {
+				resignState.value = false
+				gameCtlr.resign()
+			}) {
+				Text("Resign")
+			}
+		}
+	)
 }
 
 @Composable

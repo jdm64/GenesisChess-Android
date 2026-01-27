@@ -33,6 +33,7 @@ public class GameController implements IGameController
 	private final MutableState<Boolean> isGenState;
 	private final MutableState<Boolean> promoteState;
 	private final MutableState<SubmitState> submitState;
+	private final MutableState<Boolean> resignState;
 
 	private IGameModel model;
 	private String gameID = "";
@@ -47,6 +48,7 @@ public class GameController implements IGameController
 		promoteState = Util.getState(false);
 		isGenState = Util.getState(false);
 		submitState = Util.getState(new SubmitState());
+		resignState = Util.getState(false);
 
 		// init default values so no NPE in onDestroy()
 		model = new GenGameModel(view, this);
@@ -219,6 +221,12 @@ public class GameController implements IGameController
 	}
 
 	@Override
+	public void resign()
+	{
+		getStmPlayer().resign(ctx);
+	}
+
+	@Override
 	public void undoMove()
 	{
 		model.undoMove();
@@ -249,6 +257,12 @@ public class GameController implements IGameController
 	public MutableState<Boolean> getPromoteState()
 	{
 		return promoteState;
+	}
+
+	@Override
+	public MutableState<Boolean> getResignState()
+	{
+		return resignState;
 	}
 
 	@Override

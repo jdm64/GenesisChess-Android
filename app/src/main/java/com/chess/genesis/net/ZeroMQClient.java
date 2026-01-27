@@ -312,6 +312,12 @@ public class ZeroMQClient extends Service
 		send(MakeMoveMsg.build(gameId, moveStr));
 	}
 
+	public void resign(String gameId)
+	{
+		do_login();
+		send(ResignMsg.build(gameId));
+	}
+
 	private synchronized void do_login()
 	{
 		if (isLoggedin.get()) {

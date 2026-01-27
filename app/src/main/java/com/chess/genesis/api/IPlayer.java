@@ -30,6 +30,8 @@ public interface IPlayer
 
 	void takeTurn(Context context);
 
+	default void resign(Context context) {}
+
 	default void onResume(Context context) {}
 
 	default void onDispose(Context context) {}

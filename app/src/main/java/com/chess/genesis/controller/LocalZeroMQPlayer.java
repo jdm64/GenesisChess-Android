@@ -52,4 +52,10 @@ public class LocalZeroMQPlayer extends LocalPlayer
 		ZeroMQClient.bind(context, (client) -> client.sendMove(gameId, move.toString()));
 		super.finalizeMove(move, context);
 	}
+
+	@Override
+	public void resign(Context context)
+	{
+		ZeroMQClient.bind(context, (client) -> client.resign(gameId));
+	}
 }

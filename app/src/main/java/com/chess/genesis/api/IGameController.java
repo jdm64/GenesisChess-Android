@@ -68,6 +68,10 @@ public interface IGameController
 
 	void undoMove();
 
+	MutableState<Boolean> getResignState();
+
+	void resign();
+
 	void onResume();
 
 	void onDispose();
