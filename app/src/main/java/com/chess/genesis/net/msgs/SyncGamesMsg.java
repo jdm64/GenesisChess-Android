@@ -15,6 +15,7 @@
  */
 package com.chess.genesis.net.msgs;
 
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.processor.*;
 
 @ZmqMessage
@@ -25,10 +26,10 @@ public class SyncGamesMsg extends ZmqMsg
 	public int mode;
 	public int page;
 
-	public static ZmqMsg build(int mode, int page)
+	public static ZmqMsg build(SyncType mode, int page)
 	{
 		var msg = new SyncGamesMsg();
-		msg.mode = mode;
+		msg.mode = mode.id;
 		msg.page = page;
 		return msg;
 	}

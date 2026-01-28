@@ -172,6 +172,13 @@ fun GameListPage(nav: NavHostController) {
 		PrefEdit(ctx).putString(R.array.pf_lastpage, "list").commit()
 	}
 
+	// Trigger sync on new connection
+	LaunchedEffect(Unit) {
+		ZeroMQClient.bind(ctx) { client ->
+			client.syncGames(SyncType.ACTIVE, 0)
+		}
+	}
+
 	val newGameState = remember { mutableStateOf(NewGameState()) }
 	newGameState.value.loadFromPrefs(ctx)
 	val sheetState = rememberModalBottomSheetState()

@@ -232,6 +232,9 @@ public interface ActiveGameDao
 	@Query("SELECT * FROM " + ActiveGameEntity.TABLE_NAME + " ORDER BY stime DESC")
 	PagingSource<Integer, ActiveGameEntity> getAllGames();
 
+	@Query("SELECT gameid FROM " + ActiveGameEntity.TABLE_NAME)
+	List<String> getAllGameIds();
+
 	@Query("SELECT COUNT(*) FROM " + ActiveGameEntity.TABLE_NAME + " WHERE opponent = "
 	    + EnumsFixed.OpponentType_REMOTE_WHITE + " OR opponent = " + EnumsFixed.OpponentType_REMOTE_BLACK + " LIMIT 1")
 	boolean hasInviteGame();

@@ -17,6 +17,7 @@ package com.chess.genesis.net;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import android.app.*;
@@ -55,6 +56,7 @@ public class ZeroMQClient extends Service
 	AtomicLong lastReceive = new AtomicLong();
 	AtomicReference<Status> status = new AtomicReference<>(Status.DISCONNECTED);
 	AtomicBoolean isLoggedin = new AtomicBoolean(false);
+	AtomicBoolean hasSynced = new AtomicBoolean(false);
 	Future<?> receiveFuture;
 	Future<?> inactivityFuture;
 	Future<?> sendFuture;
@@ -185,6 +187,7 @@ public class ZeroMQClient extends Service
 		Util.log("Starting disconnect", this);
 
 		isLoggedin.set(false);
+		hasSynced.set(false);
 		moveListeners.clear();
 		status.set(Status.DISCONNECTED);
 
@@ -318,18 +321,42 @@ public class ZeroMQClient extends Service
 		send(ResignMsg.build(gameId));
 	}
 
+	public void syncGames(SyncType mode, int page)
+	{
+		if (getUserPass() == null) {
+			return;
+		}
+
+		switch (mode) {
+		case SyncType.ACTIVE:
+			if (!hasSynced.getAndSet(true)) {
+				do_login();
+				send(SyncGamesMsg.build(mode, 0));
+			}
+			break;
+		case SyncType.ARCHIVE:
+			// TODO: sync archive games
+			break;
+		}
+	}
+
+	private Entry<String, String> getUserPass()
+	{
+		var ctx = getApplicationContext();
+		return Pref.getUserPass(ctx);
+	}
+
 	private synchronized void do_login()
 	{
 		if (isLoggedin.get()) {
 			return;
 		}
 
-		var ctx = getApplicationContext();
-		var account = Pref.getUserPass(ctx);
+		var account = getUserPass();
 		if (account != null) {
 			login(account.getKey(), account.getValue());
 		} else {
-			registerAnon(Pref.newAnonHash(ctx));
+			registerAnon(Pref.newAnonHash(getApplicationContext()));
 		}
 	}
 
@@ -412,6 +439,10 @@ public class ZeroMQClient extends Service
 					Util.log("ErrorMsg: " + errMsg.msg, this);
 					Util.showToast(errMsg.msg, getApplicationContext());
 					break;
+				case GamesListMsg.ID:
+					var gamesList = msg.as(GamesListMsg.class);
+					handleGamesList(gamesList);
+					break;
 				case UnknownMsg.ID:
 				default:
 					Util.logErr("Unexpected message: " + msg, this);
@@ -433,6 +464,19 @@ public class ZeroMQClient extends Service
 			}
 		}
 		Util.log("Shutting down receiveLoop", this);
+	}
+
+	private void handleGamesList(GamesListMsg msg)
+	{
+		var ctx = getApplicationContext();
+		var dao = ActiveGameDao.get(ctx);
+		var existingSet = new HashSet<>(dao.getAllGameIds());
+
+		msg.list.forEach(gameId -> {
+			if (!existingSet.contains(gameId)) {
+				getActiveData(gameId);
+			}
+		});
 	}
 
 	private void sendLoop()
