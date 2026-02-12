@@ -475,6 +475,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							text = { Text("Matched") },
 							onClick = {
 								state.opp.value = OpponentCat.MATCHED
+								state.clockType.value = ClockType.REALTIME
 								expandedOpp = false
 							}
 						)
@@ -489,6 +490,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							text = { Text("Local") },
 							onClick = {
 								state.opp.value = OpponentCat.HUMAN
+								state.color.value = ColorType.RANDOM
 								expandedOpp = false
 							}
 						)
@@ -504,7 +506,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				Spacer(modifier = Modifier.height(8.dp))
 				ExposedDropdownMenuBox(
 					expanded = expandedColor,
-					onExpandedChange = { expandedColor = it }
+					onExpandedChange = { expandedColor = it && state.opp.value != OpponentCat.HUMAN }
 				) {
 					TextField(
 						value = when (state.color.value) {
@@ -552,7 +554,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				Spacer(modifier = Modifier.height(8.dp))
 				ExposedDropdownMenuBox(
 					expanded = expandedClock,
-					onExpandedChange = { expandedClock = it }
+					onExpandedChange = { expandedClock = it && state.opp.value != OpponentCat.MATCHED }
 				) {
 					TextField(
 						value = when (state.clockType.value) {
