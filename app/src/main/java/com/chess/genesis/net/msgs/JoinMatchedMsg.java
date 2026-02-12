@@ -15,6 +15,7 @@
  */
 package com.chess.genesis.net.msgs;
 
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.processor.*;
 
 @ZmqMessage
@@ -27,11 +28,11 @@ public class JoinMatchedMsg extends ZmqMsg
 	public int baseTime;
 	public int incTime;
 
-	public static ZmqMsg build(int gameType, int playAs, int baseTime, int incTime)
+	public static JoinMatchedMsg build(GameType gameType, ColorType playAs, int baseTime, int incTime)
 	{
 		var msg = new JoinMatchedMsg();
-		msg.gameType = gameType;
-		msg.playAs = playAs;
+		msg.gameType = gameType.norm().id;
+		msg.playAs = playAs.id;
 		msg.baseTime = baseTime;
 		msg.incTime = incTime;
 		return msg;

@@ -74,7 +74,8 @@ public interface Enums<T extends Enum<T>>
 	{
 		HUMAN(1, "human"),
 		CPU(2, "cpu"),
-		REMOTE(3, "remote");
+		INVITE(3, "invite"),
+		MATCHED(4, "matched");
 
 		public final int id;
 		public final String name;
@@ -82,6 +83,16 @@ public interface Enums<T extends Enum<T>>
 		OpponentCat(int id, String name) {
 			this.id = id;
 			this.name = name;
+		}
+
+		public OpponentType toType(ColorType yColor)
+		{
+			yColor = yColor.norm();
+			return switch (this) {
+				case HUMAN -> OpponentType.HUMAN;
+				case CPU -> yColor == ColorType.WHITE ? OpponentType.CPU_BLACK : OpponentType.CPU_WHITE;
+				case INVITE, MATCHED -> yColor == ColorType.WHITE ? OpponentType.REMOTE_BLACK : OpponentType.REMOTE_WHITE;
+			};
 		}
 
 		@Override public int getId() { return id; }
@@ -104,21 +115,6 @@ public interface Enums<T extends Enum<T>>
 			this.id = id;
 			this.name = name;
 			this.yourColor = yourColor;
-		}
-
-		public static OpponentType from(OpponentCat oppCat, ColorType color)
-		{
-			if (color == ColorType.RANDOM) {
-				color = new SecureRandom().nextBoolean() ? ColorType.WHITE : ColorType.BLACK;
-			}
-
-			return switch (oppCat) {
-				case CPU ->
-					color == ColorType.WHITE ? OpponentType.CPU_BLACK : OpponentType.CPU_WHITE;
-				case REMOTE ->
-					color == ColorType.WHITE ? OpponentType.REMOTE_BLACK : OpponentType.REMOTE_WHITE;
-				default -> OpponentType.HUMAN;
-			};
 		}
 
 		@Override public int getId() { return id; }

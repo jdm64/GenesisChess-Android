@@ -39,7 +39,7 @@ public interface ActiveGameDao
 		var type = data.getType().getValue().norm();
 		var oppCat = data.getOpp().getValue();
 		var color = data.getColor().getValue().norm();
-		var opp = OpponentType.from(oppCat, color);
+		var opp = oppCat.toType(color);
 		var clockType = data.getClockType().getValue();
 		var baseTime = data.getBaseTime().getValue();
 		var incTime = data.getIncTime().getValue();

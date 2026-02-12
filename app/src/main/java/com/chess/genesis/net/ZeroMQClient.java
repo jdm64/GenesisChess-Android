@@ -298,6 +298,12 @@ public class ZeroMQClient extends Service
 		send(CreateInviteMsg.build(gameType, playAs, clockType, baseTime, incTime));
 	}
 
+	public void joinMatched(GameType gameType, ColorType playAs, int baseTime, int incTime)
+	{
+		do_login();
+		send(JoinMatchedMsg.build(gameType, playAs, baseTime, incTime));
+	}
+
 	public void getActiveData(String gameId)
 	{
 		send(GetActiveDataMsg.build(gameId));

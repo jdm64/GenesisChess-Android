@@ -50,7 +50,7 @@ object GVal {
 class NewGameState {
 	var show = mutableStateOf(false)
 	var type = mutableStateOf(GameType.GENESIS)
-	var opp = mutableStateOf(OpponentCat.REMOTE)
+	var opp = mutableStateOf(OpponentCat.MATCHED)
 	var color = mutableStateOf(ColorType.RANDOM)
 	var clockType = mutableStateOf(ClockType.NO_CLOCK)
 	var baseTime = mutableIntStateOf(0)
@@ -74,7 +74,7 @@ class NewGameState {
 			key to value.toInt()
 		}
 		type.value = Enums.from(GameType::class.java, map["type"] ?: GameType.GENESIS.id)
-		opp.value = Enums.from(OpponentCat::class.java, map["opp"] ?: OpponentCat.REMOTE.id)
+		opp.value = Enums.from(OpponentCat::class.java, map["opp"] ?: OpponentCat.MATCHED.id)
 		color.value = Enums.from(ColorType::class.java, map["color"] ?: ColorType.RANDOM.id)
 		clockType.value = Enums.from(ClockType::class.java, map["clockType"] ?: ClockType.NO_CLOCK.id)
 		baseTime.intValue = map["baseTime"] ?: 0
@@ -116,20 +116,33 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	data.saveToPrefs(context)
 	data.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		if (data.opp.value == OpponentCat.REMOTE) {
-			ZeroMQClient.bind(context) { client ->
-				client.createInvite(
-					data.type.value,
-					data.color.value,
-					data.clockType.value,
-					data.baseTime.intValue,
-					data.incTime.intValue
-				)
+		when (data.opp.value) {
+			OpponentCat.INVITE -> {
+				ZeroMQClient.bind(context) { client ->
+					client.createInvite(
+						data.type.value,
+						data.color.value,
+						data.clockType.value,
+						data.baseTime.intValue,
+						data.incTime.intValue
+					)
+				}
 			}
-		} else {
-			val newGame = ActiveGameDao.get(context).newLocalGame(data)
-			Dispatchers.Main.dispatch(Dispatchers.Main) {
-				onLoadGame(newGame, nav)
+			OpponentCat.MATCHED -> {
+				ZeroMQClient.bind(context) { client ->
+					client.joinMatched(
+						data.type.value,
+						data.color.value,
+						data.baseTime.intValue,
+						data.incTime.intValue
+					)
+				}
+			}
+			else -> {
+				val newGame = ActiveGameDao.get(context).newLocalGame(data)
+				Dispatchers.Main.dispatch(Dispatchers.Main) {
+					onLoadGame(newGame, nav)
+				}
 			}
 		}
 	}
@@ -442,9 +455,10 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 				) {
 					TextField(
 						value = when (state.opp.value) {
-							OpponentCat.REMOTE -> "Invite"
+							OpponentCat.INVITE -> "Invite"
 							OpponentCat.HUMAN -> "Local"
 							OpponentCat.CPU -> "Computer"
+							OpponentCat.MATCHED -> "Matched"
 						},
 						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
 						label = { Text("Opponent Type:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
@@ -458,9 +472,16 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 						onDismissRequest = { expandedOpp = false }
 					) {
 						DropdownMenuItem(
+							text = { Text("Matched") },
+							onClick = {
+								state.opp.value = OpponentCat.MATCHED
+								expandedOpp = false
+							}
+						)
+						DropdownMenuItem(
 							text = { Text("Invite") },
 							onClick = {
-								state.opp.value = OpponentCat.REMOTE
+								state.opp.value = OpponentCat.INVITE
 								expandedOpp = false
 							}
 						)
