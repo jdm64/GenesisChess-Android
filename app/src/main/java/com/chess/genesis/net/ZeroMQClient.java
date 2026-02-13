@@ -491,6 +491,9 @@ public class ZeroMQClient extends Service
 			try {
 				var msg = sendQueue.poll(5, TimeUnit.SECONDS);
 				socketSend(msg);
+			} catch (InterruptedException e) {
+				// expected shutdown
+				break;
 			} catch (Throwable e) {
 				Util.logErr(e, this);
 				break;
@@ -524,6 +527,9 @@ public class ZeroMQClient extends Service
 				if (!appActive.get() && sendQueue.isEmpty() && System.currentTimeMillis() - lastReceive.get() > INACTIVITY_TIMEOUT) {
 					disconnect();
 				}
+			} catch (InterruptedException e) {
+				// expected shutdown
+				break;
 			} catch (Throwable e) {
 				Util.logErr(e, this);
 				break;
