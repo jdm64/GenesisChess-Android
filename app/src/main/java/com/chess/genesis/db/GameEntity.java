@@ -103,4 +103,9 @@ public abstract class GameEntity
 			return "oo";
 		return Move.printSq(move.to);
 	}
+
+	public RatingsData getRatings()
+	{
+		return null;
+	}
 }

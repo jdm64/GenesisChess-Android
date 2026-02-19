@@ -43,4 +43,6 @@ public interface IGameView
 	PlaceView getPlaceView();
 
 	void setPlaceCounts(int[] counts);
+
+	void setRatings(RatingsData ratings);
 }

@@ -37,4 +37,13 @@ public class ArchiveGameEntity extends GameEntity
 	{
 		return GameSource.ARCHIVE;
 	}
+
+	@Override
+	public RatingsData getRatings()
+	{
+		if (whiteRatingBefore == 0) {
+			return null;
+		}
+		return new RatingsData(whiteRatingBefore, whiteRatingAfter, blackRatingBefore, blackRatingAfter);
+	}
 }

@@ -87,6 +87,7 @@ public class GameController implements IGameController
 
 		onStmChange(false);
 		getStmView().setClockState(model.updateClock());
+		view.setRatings(data.getRatings());
 		getStmPlayer().takeTurn(ctx);
 	}
 

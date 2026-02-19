@@ -120,4 +120,10 @@ public class GameView implements IGameView
 	{
 		getPlaceView().setPieces(counts);
 	}
+
+	@Override
+	public void setRatings(RatingsData ratings)
+	{
+		stmView.setRatings(ratings);
+	}
 }

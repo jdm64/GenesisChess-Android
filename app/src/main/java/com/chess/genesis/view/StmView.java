@@ -29,6 +29,7 @@ public class StmView extends View
 {
 	private StmState stmState;
 	private ClockState clockState;
+	private RatingsData ratings;
 
 	private final Paint painter = new Paint();
 	private final Rect whiteBox = new Rect();
@@ -65,6 +66,12 @@ public class StmView extends View
 	public void setClockState(ClockState clock)
 	{
 		clockState = clock;
+		invalidate();
+	}
+
+	public void setRatings(RatingsData data)
+	{
+		ratings = data;
 		invalidate();
 	}
 
@@ -164,6 +171,16 @@ public class StmView extends View
 			var timeStr = formatTime(timeRemaining);
 			painter.setTextAlign(Align.CENTER);
 			canvas.drawText(timeStr, centerX, 0.85f * viewHeight, painter);
+		}
+
+		if (ratings != null) {
+			var ratingChange = isWhite ? ratings.whiteDiff() : ratings.blackDiff();
+			var ratingStr = String.format(Locale.getDefault(), "%+.1f", ratingChange);
+			painter.setTextSize(viewHeight / 5.0f);
+			painter.setColor(ratingChange < 0 ? PieceImgPainter.innerCheck : PieceImgPainter.innerSelect);
+			painter.setTextAlign(isWhite ? Align.LEFT : Align.RIGHT);
+			var x = isWhite ? left + 0.15f * viewHeight : right - 0.15f * viewHeight;
+			canvas.drawText(ratingStr, x, 1.20f * viewHeight, painter);
 		}
 	}
 
