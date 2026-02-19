@@ -30,6 +30,12 @@ public class GameEntity
 	@NonNull
 	public String gameid;
 
+	public int opponent;
+
+	public String white;
+
+	public String black;
+
 	@ColumnInfo(defaultValue = "Untitled")
 	public String name;
 
@@ -92,15 +98,5 @@ public class GameEntity
 		if (move.getCastle() != 0)
 			return "oo";
 		return Move.printSq(move.to);
-	}
-
-	public String whiteName()
-	{
-		return "White";
-	}
-
-	public String blackName()
-	{
-		return "Black";
 	}
 }

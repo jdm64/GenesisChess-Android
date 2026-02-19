@@ -21,22 +21,4 @@ import androidx.room.*;
 public class ActiveGameEntity extends GameEntity
 {
 	public static final String TABLE_NAME = "active_games";
-
-	public int opponent;
-
-	public String white;
-
-	public String black;
-
-	@Override
-	public String whiteName()
-	{
-		return white;
-	}
-
-	@Override
-	public String blackName()
-	{
-		return black;
-	}
 }
