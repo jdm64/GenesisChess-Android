@@ -105,7 +105,8 @@ public interface Enums<T extends Enum<T>>
 		CPU_WHITE(2, "cpu-white", Piece.BLACK),
 		CPU_BLACK(3, "cpu-black", Piece.WHITE),
 		REMOTE_WHITE(4, "remote-white", Piece.BLACK),
-		REMOTE_BLACK(5, "remote-black", Piece.WHITE);
+		REMOTE_BLACK(5, "remote-black", Piece.WHITE),
+		ARCHIVED(6, "archived", Piece.EMPTY);
 
 		public final int id;
 		public final String name;
@@ -267,6 +268,28 @@ public interface Enums<T extends Enum<T>>
 		public final String name;
 
 		SyncType(int id, String name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		@Override public int getId() {
+			return id;
+		}
+		@Override public String getName() {
+			return name;
+		}
+	}
+
+	enum GameSource implements Enums<GameSource>
+	{
+		ACTIVE(0, "active"),
+		ARCHIVE(1, "archive");
+
+		public final int id;
+		public final String name;
+
+		GameSource(int id, String name)
 		{
 			this.id = id;
 			this.name = name;

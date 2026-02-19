@@ -109,7 +109,7 @@ class ImportGameState {
 }
 
 fun onLoadGame(data: ActiveGameEntity, nav: NavHostController) {
-	nav.navigate("board/" + data.gameid)
+	nav.navigate("board/active/" + data.gameid)
 }
 
 fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {

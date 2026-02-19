@@ -1,0 +1,288 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "9d265bd1a9800cdf72bbf23a64e29044",
+    "entities": [
+      {
+        "tableName": "active_games",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hasArchiveData` INTEGER NOT NULL DEFAULT 0, `gameid` TEXT NOT NULL, `opponent` INTEGER NOT NULL, `white` TEXT, `black` TEXT, `name` TEXT DEFAULT 'Untitled', `eventType` INTEGER NOT NULL DEFAULT 0, `gametype` INTEGER NOT NULL DEFAULT 2, `status` INTEGER NOT NULL DEFAULT 1, `clockType` INTEGER NOT NULL DEFAULT 1, `baseTime` INTEGER NOT NULL DEFAULT 0, `incTime` INTEGER NOT NULL DEFAULT 0, `whiteTime` INTEGER NOT NULL DEFAULT 0, `blackTime` INTEGER NOT NULL DEFAULT 0, `ctime` INTEGER NOT NULL DEFAULT 0, `stime` INTEGER NOT NULL DEFAULT 0, `zfen` TEXT DEFAULT '', `history` TEXT DEFAULT '', PRIMARY KEY(`gameid`))",
+        "fields": [
+          {
+            "fieldPath": "hasArchiveData",
+            "columnName": "hasArchiveData",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "gameid",
+            "columnName": "gameid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponent",
+            "columnName": "opponent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "white",
+            "columnName": "white",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "black",
+            "columnName": "black",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "defaultValue": "'Untitled'"
+          },
+          {
+            "fieldPath": "eventType",
+            "columnName": "eventType",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "gametype",
+            "columnName": "gametype",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "2"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "clockType",
+            "columnName": "clockType",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "baseTime",
+            "columnName": "baseTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "incTime",
+            "columnName": "incTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "whiteTime",
+            "columnName": "whiteTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "blackTime",
+            "columnName": "blackTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "ctime",
+            "columnName": "ctime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "stime",
+            "columnName": "stime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "zfen",
+            "columnName": "zfen",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "history",
+            "columnName": "history",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "gameid"
+          ]
+        }
+      },
+      {
+        "tableName": "archive_games",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`whiteRatingBefore` REAL NOT NULL, `whiteRatingAfter` REAL NOT NULL, `blackRatingBefore` REAL NOT NULL, `blackRatingAfter` REAL NOT NULL, `gameid` TEXT NOT NULL, `opponent` INTEGER NOT NULL, `white` TEXT, `black` TEXT, `name` TEXT DEFAULT 'Untitled', `eventType` INTEGER NOT NULL DEFAULT 0, `gametype` INTEGER NOT NULL DEFAULT 2, `status` INTEGER NOT NULL DEFAULT 1, `clockType` INTEGER NOT NULL DEFAULT 1, `baseTime` INTEGER NOT NULL DEFAULT 0, `incTime` INTEGER NOT NULL DEFAULT 0, `whiteTime` INTEGER NOT NULL DEFAULT 0, `blackTime` INTEGER NOT NULL DEFAULT 0, `ctime` INTEGER NOT NULL DEFAULT 0, `stime` INTEGER NOT NULL DEFAULT 0, `zfen` TEXT DEFAULT '', `history` TEXT DEFAULT '', PRIMARY KEY(`gameid`))",
+        "fields": [
+          {
+            "fieldPath": "whiteRatingBefore",
+            "columnName": "whiteRatingBefore",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "whiteRatingAfter",
+            "columnName": "whiteRatingAfter",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blackRatingBefore",
+            "columnName": "blackRatingBefore",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blackRatingAfter",
+            "columnName": "blackRatingAfter",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gameid",
+            "columnName": "gameid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opponent",
+            "columnName": "opponent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "white",
+            "columnName": "white",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "black",
+            "columnName": "black",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "defaultValue": "'Untitled'"
+          },
+          {
+            "fieldPath": "eventType",
+            "columnName": "eventType",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "gametype",
+            "columnName": "gametype",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "2"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "clockType",
+            "columnName": "clockType",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "baseTime",
+            "columnName": "baseTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "incTime",
+            "columnName": "incTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "whiteTime",
+            "columnName": "whiteTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "blackTime",
+            "columnName": "blackTime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "ctime",
+            "columnName": "ctime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "stime",
+            "columnName": "stime",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "zfen",
+            "columnName": "zfen",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "history",
+            "columnName": "history",
+            "affinity": "TEXT",
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "gameid"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d265bd1a9800cdf72bbf23a64e29044')"
+    ]
+  }
+}

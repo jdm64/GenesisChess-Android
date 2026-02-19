@@ -15,10 +15,20 @@
  */
 package com.chess.genesis.db;
 
+import com.chess.genesis.data.Enums.*;
 import androidx.room.*;
 
 @Entity(tableName = ActiveGameEntity.TABLE_NAME)
 public class ActiveGameEntity extends GameEntity
 {
 	public static final String TABLE_NAME = "active_games";
+
+	@ColumnInfo(defaultValue = "0")
+	public boolean hasArchiveData;
+
+	@Override
+	public GameSource getSource()
+	{
+		return GameSource.ACTIVE;
+	}
 }

@@ -309,6 +309,11 @@ public class ZeroMQClient extends Service
 		send(GetActiveDataMsg.build(gameId));
 	}
 
+	public void getArchiveData(String gameId)
+	{
+		send(GetArchiveDataMsg.build(gameId));
+	}
+
 	public void joinInvite(String gameId)
 	{
 		do_login();
@@ -417,6 +422,17 @@ public class ZeroMQClient extends Service
 						}
 					}
 					break;
+				case ArchiveGameDataMsg.ID:
+					var archiveMsg = msg.as(ArchiveGameDataMsg.class);
+					var archiveCtx = getApplicationContext();
+					var archiveDao = ArchiveGameDao.get(archiveCtx);
+					var archiveEntity = archiveDao.updateArchiveGame(archiveMsg);
+
+					listener = moveListeners.get(archiveMsg.game_id);
+					if (listener != null) {
+						listener.reloadBoard(archiveEntity);
+					}
+					break;
 				case LastMoveMsg.ID:
 					var moveMsg = msg.as(LastMoveMsg.class);
 					ActiveGameDao.get(getApplicationContext()).saveMove(moveMsg);
@@ -428,7 +444,7 @@ public class ZeroMQClient extends Service
 					break;
 				case GameResultMsg.ID:
 					var resultMsg = msg.as(GameResultMsg.class);
-					ActiveGameDao.get(getApplicationContext()).saveResult(resultMsg);
+					ArchiveGameDao.get(getApplicationContext()).copyFromActive(resultMsg, getApplicationContext());
 
 					listener = moveListeners.get(resultMsg.id);
 					if (listener != null) {

@@ -50,6 +50,12 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public IGameController getController()
+	{
+		return controller;
+	}
+
+	@Override
 	public ObjectArray<Move> getHistory()
 	{
 		return history;

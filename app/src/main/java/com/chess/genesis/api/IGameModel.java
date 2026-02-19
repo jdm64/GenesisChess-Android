@@ -60,4 +60,6 @@ public interface IGameModel
 	ClockState getClockState();
 
 	ClockState updateClock();
+
+	IGameController getController();
 }

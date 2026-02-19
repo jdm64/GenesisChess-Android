@@ -40,19 +40,21 @@ import com.chess.genesis.R
 import com.chess.genesis.api.*
 import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
+import com.chess.genesis.data.Enums.GameSource
 import kotlinx.coroutines.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GamePage(nav: NavHostController, gameId: String) {
+fun GamePage(nav: NavHostController, source: String, gameId: String) {
 	val state = rememberModalBottomSheetState()
 	val ctx = LocalContext.current
 
-	val gameCtlr = remember { GameController(ctx, gameId) }
+	val gameSource = Enums.from(GameSource::class.java, source)
+	val gameCtlr = remember { GameController(ctx, gameSource, gameId) }
 	(ctx as MainActivity).currentController = gameCtlr
 
 	LaunchedEffect(Unit) {
-		PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + gameId).commit()
+		PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + source + "/" + gameId).commit()
 	}
 	val scope = rememberCoroutineScope()
 

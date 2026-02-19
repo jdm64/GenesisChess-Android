@@ -13,25 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chess.genesis.net.msgs;
+package com.chess.genesis.db;
 
-import com.chess.genesis.processor.*;
+import androidx.room.*;
+import com.chess.genesis.api.*;
+import com.chess.genesis.data.Enums.*;
 
-@ZmqMessage
-public class LastMoveMsg extends ZmqMsg
+@Entity(tableName = ArchiveGameEntity.TABLE_NAME)
+public class ArchiveGameEntity extends GameEntity
 {
-	public static final int ID = 12;
+	public static final String TABLE_NAME = "archive_games";
 
-	public String id;
-	public long moveTime;
-	public long whiteTime;
-	public long blackTime;
-	public int index;
-	public String move;
+	public double whiteRatingBefore;
+
+	public double whiteRatingAfter;
+
+	public double blackRatingBefore;
+
+	public double blackRatingAfter;
 
 	@Override
-	public int type()
+	public GameSource getSource()
 	{
-		return ID;
+		return GameSource.ARCHIVE;
 	}
 }

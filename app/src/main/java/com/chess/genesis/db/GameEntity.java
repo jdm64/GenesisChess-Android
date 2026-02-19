@@ -17,14 +17,16 @@ package com.chess.genesis.db;
 
 import java.util.*;
 import android.util.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
+import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.util.*;
 import androidx.annotation.*;
 import androidx.room.*;
 
 @Entity
-public class GameEntity
+public abstract class GameEntity
 {
 	@PrimaryKey
 	@NonNull
@@ -74,6 +76,8 @@ public class GameEntity
 
 	@ColumnInfo(defaultValue = "")
 	public String history;
+
+	public abstract GameSource getSource();
 
 	public List<Pair<String,Long>> getMoves()
 	{

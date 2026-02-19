@@ -185,10 +185,16 @@ public interface ActiveGameDao
 	default boolean saveMove(LastMoveMsg msg)
 	{
 		var game = getGame(msg.id);
-		if (game == null) {
-			return false;
+		if (game != null && saveMove(game, msg)) {
+			update(game);
+			return true;
 		}
 
+		return false;
+	}
+
+	static boolean saveMove(ActiveGameEntity game, LastMoveMsg msg)
+	{
 		var board = game.gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard();
 		if (!board.parseZFen(game.zfen)) {
 			return false;
@@ -205,24 +211,6 @@ public interface ActiveGameDao
 		game.stime = msg.moveTime;
 		game.whiteTime = msg.whiteTime;
 		game.blackTime = msg.blackTime;
-
-		update(game);
-		return true;
-	}
-
-	default boolean saveResult(GameResultMsg msg)
-	{
-		var game = getGame(msg.id);
-		if (game == null) {
-			return false;
-		}
-
-		game.status = msg.status;
-		game.stime = msg.saveTime;
-		game.whiteTime = msg.whiteTime;
-		game.blackTime = msg.blackTime;
-
-		update(game);
 		return true;
 	}
 
@@ -247,4 +235,7 @@ public interface ActiveGameDao
 
 	@Update
 	void update(ActiveGameEntity game);
+
+	@Query("DELETE FROM " + ActiveGameEntity.TABLE_NAME + " WHERE gameid = :gameId")
+	void deleteGame(String gameId);
 }

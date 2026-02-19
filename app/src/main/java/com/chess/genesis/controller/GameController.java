@@ -15,6 +15,8 @@
  */
 package com.chess.genesis.controller;
 
+import java.lang.ref.*;
+import java.util.concurrent.atomic.*;
 import android.content.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
@@ -41,7 +43,7 @@ public class GameController implements IGameController
 	private IPlayer black;
 	private int yourColor = 0;
 
-	public GameController(Context context, String gameID)
+	public GameController(Context context, GameSource source, String gameID)
 	{
 		ctx = context;
 		view = new GameView(this, ctx);
@@ -55,7 +57,7 @@ public class GameController implements IGameController
 		white = new LocalPlayer(Piece.WHITE, model);
 		black = new LocalPlayer(Piece.BLACK, model);
 
-		setBoard(gameID);
+		setBoard(source, gameID);
 	}
 
 	private IPlayer getStmPlayer()
@@ -69,7 +71,7 @@ public class GameController implements IGameController
 	}
 
 	@Override
-	public void setBoard(ActiveGameEntity data)
+	public void setBoard(GameEntity data)
 	{
 		Util.setScreenOnFlag(ctx, true);
 
@@ -116,6 +118,10 @@ public class GameController implements IGameController
 			white = new LocalZeroMQPlayer(Piece.WHITE, model, submitState);
 			black = new RemoteZeroMQPlayer(Piece.BLACK, model, ctx);
 			return;
+		case OpponentType.ARCHIVED:
+			white = new ArchivedPlayer(Piece.WHITE, model);
+			black = new ArchivedPlayer(Piece.BLACK, model);
+			return;
 		case OpponentType.HUMAN:
 		default:
 			white = new LocalPlayer(Piece.WHITE, model);
@@ -124,13 +130,37 @@ public class GameController implements IGameController
 	}
 
 	@Override
-	public void setBoard(String gameId)
+	public void setBoard(GameSource source, String gameId)
 	{
 		gameID = gameId;
 		Util.runThread(() -> {
-			var game = ActiveGameDao.get(ctx).getGame(gameID);
+			GameEntity game = source == GameSource.ARCHIVE
+				? ArchiveGameDao.get(ctx).getGame(gameID)
+				: ActiveGameDao.get(ctx).getGame(gameID);
+
+			if (game instanceof ActiveGameEntity actGame && actGame.hasArchiveData) {
+				var archGame = ArchiveGameDao.get(ctx).getGame(gameID);
+				if (archGame != null) {
+					ActiveGameDao.get(ctx).deleteGame(gameID);
+					game = archGame;
+				}
+			}
+
 			if (game != null) {
-				Util.runUI(()->setBoard(game));
+				var ref = new WeakReference<>(game);
+				Util.runUI(() -> setBoard(ref.get()));
+			}
+		});
+	}
+
+	@Override
+	public void reloadAsArchived()
+	{
+		Util.runThread(() -> {
+			var game = ArchiveGameDao.get(ctx).getGame(gameID);
+			if (game != null) {
+				ActiveGameDao.get(ctx).deleteGame(gameID);
+				Util.runUI(() -> setBoard(game));
 			}
 		});
 	}

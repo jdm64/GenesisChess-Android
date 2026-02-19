@@ -16,6 +16,7 @@
 package com.chess.genesis.api;
 
 import com.chess.genesis.db.*;
+import com.chess.genesis.data.Enums.GameSource;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
@@ -42,9 +43,11 @@ public interface IGameController
 
 	MutableState<Boolean> isGenChess();
 
-	void setBoard(ActiveGameEntity data);
+	void setBoard(GameEntity data);
 
-	void setBoard(String gameId);
+	void setBoard(GameSource source, String gameId);
+
+	void reloadAsArchived();
 
 	String getGameId();
 

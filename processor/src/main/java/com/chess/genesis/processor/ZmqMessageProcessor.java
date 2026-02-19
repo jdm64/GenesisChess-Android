@@ -159,6 +159,7 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			case "java.util.List<java.lang.String>" -> unpackStringList(fieldName);
 			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> unpackMoveList(fieldName);
 			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> unpackRatingsMap(fieldName);
+			case "android.util.Pair<java.lang.Double,java.lang.Double>" -> unpackDoublePair(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
 	}
@@ -198,6 +199,11 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			+ "		}";
 	}
 
+	private String unpackDoublePair(String fieldName)
+	{
+		return fieldName + " = new Pair<>(packer.unpackDouble(), packer.unpackDouble());";
+	}
+
 	private String getPack(TypeMirror type, String fieldName)
         {
 		var typeStr = type.toString();
@@ -210,6 +216,7 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			case "java.util.List<java.lang.String>" -> packStringList(fieldName);
 			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> packMoveList(fieldName);
 			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> packRatingsMap(fieldName);
+			case "android.util.Pair<java.lang.Double,java.lang.Double>" -> packDoublePair(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
 	}
@@ -244,5 +251,11 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			+ "			packer.packDouble(value.deviation());\n"
 			+ "			packer.packDouble(value.volatility());\n"
 			+ "		}";
+	}
+
+	private String packDoublePair(String fieldName)
+	{
+		return "packer.packDouble(msg." + fieldName + ".first);\n"
+			+ "		packer.packDouble(msg." + fieldName + ".second);";
 	}
 }

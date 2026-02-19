@@ -56,7 +56,11 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	@Override
 	public void reloadBoard(GameEntity data)
 	{
-		model.setBoard(data);
+		if (model.getGameEntity().getSource() == data.getSource()) {
+			model.setBoard(data);
+		} else {
+			model.getController().setBoard(data);
+		}
 	}
 
 	@Override
@@ -74,7 +78,12 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	@Override
 	public void onResult(GameResultMsg resultMsg)
 	{
-		// TODO
+		var lastMove = resultMsg.toLastMoveMsg();
+		if (lastMove != null) {
+			onMove(lastMove);
+		}
+
+		model.getController().reloadAsArchived();
 	}
 
 	@Override

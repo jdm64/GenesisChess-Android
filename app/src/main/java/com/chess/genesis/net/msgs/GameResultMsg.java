@@ -16,6 +16,7 @@
 package com.chess.genesis.net.msgs;
 
 import com.chess.genesis.processor.*;
+import android.util.Pair;
 
 @ZmqMessage
 public class GameResultMsg extends ZmqMsg {
@@ -26,9 +27,28 @@ public class GameResultMsg extends ZmqMsg {
 	public long whiteTime;
 	public long blackTime;
 	public int status;
+	public int moveIdx;
+	public String moveStr;
+	public Pair<Double,Double> whiteRating;
+	public Pair<Double,Double> blackRating;
 
 	@Override
 	public int type() {
 		return ID;
+	}
+
+	public LastMoveMsg toLastMoveMsg()
+	{
+		if (moveStr == null || moveStr.isEmpty())
+			return null;
+
+		var msg = new LastMoveMsg();
+		msg.id = id;
+		msg.moveTime = saveTime;
+		msg.whiteTime = whiteTime;
+		msg.blackTime = blackTime;
+		msg.index = moveIdx;
+		msg.move = moveStr;
+		return msg;
 	}
 }

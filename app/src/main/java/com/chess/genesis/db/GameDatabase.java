@@ -19,10 +19,13 @@ import android.content.*;
 import androidx.room.*;
 
 @Database(
-    version = 2,
+    version = 4,
     exportSchema = true,
-    entities = {ActiveGameEntity.class},
-    autoMigrations = @AutoMigration(from = 1, to = 2)
+    entities = {ActiveGameEntity.class, ArchiveGameEntity.class},
+    autoMigrations = {
+	@AutoMigration(from = 1, to = 2),
+	@AutoMigration(from = 2, to = 3)
+    }
 )
 public abstract class GameDatabase extends RoomDatabase
 {
@@ -31,10 +34,14 @@ public abstract class GameDatabase extends RoomDatabase
 	public static GameDatabase getInstance(Context context)
 	{
 		if (instance == null) {
-			instance = Room.databaseBuilder(context.getApplicationContext(), GameDatabase.class,"gamedb").build();
+			instance = Room.databaseBuilder(context.getApplicationContext(), GameDatabase.class,"gamedb")
+				.addMigrations(new Migration3to4())
+				.build();
 		}
 		return instance;
 	}
 
 	public abstract ActiveGameDao activeGameDao();
+
+	public abstract ArchiveGameDao archiveGameDao();
 }

@@ -60,10 +60,11 @@ fun MainApp() {
 	NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 		composable("start") { LoadingPage(nav) }
 		composable("list") { GameListPage(nav) }
-		composable("board/{gameId}") { entry ->
+		composable("board/{source}/{gameId}") { entry ->
+			val source = entry.arguments?.getString("source")
 			val id = entry.arguments?.getString("gameId")
-			if (id != null) {
-				GamePage(nav, id)
+			if (source != null && id != null) {
+				GamePage(nav, source, id)
 			}
 		}
 	}

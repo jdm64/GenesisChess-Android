@@ -18,16 +18,18 @@ package com.chess.genesis.net.msgs;
 import com.chess.genesis.processor.*;
 
 @ZmqMessage
-public class LastMoveMsg extends ZmqMsg
+public class GetArchiveDataMsg extends ZmqMsg
 {
-	public static final int ID = 12;
+	public static final int ID = 23;
 
-	public String id;
-	public long moveTime;
-	public long whiteTime;
-	public long blackTime;
-	public int index;
-	public String move;
+	public String game_id;
+
+	public static ZmqMsg build(String gameId)
+	{
+		var msg = new GetArchiveDataMsg();
+		msg.game_id = gameId;
+		return msg;
+	}
 
 	@Override
 	public int type()
