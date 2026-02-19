@@ -140,6 +140,12 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public GameEntity getGameEntity()
+	{
+		return data;
+	}
+
+	@Override
 	public boolean isCurrentMove()
 	{
 		return hindex + 1 >= history.size();

@@ -34,6 +34,8 @@ public interface IGameModel
 
 	GameEntity saveBoard();
 
+	GameEntity getGameEntity();
+
 	void loadBoard();
 
 	boolean isCurrentMove();
