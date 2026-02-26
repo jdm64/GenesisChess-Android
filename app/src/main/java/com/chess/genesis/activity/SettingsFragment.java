@@ -20,16 +20,31 @@ import android.util.*;
 import android.view.View;
 import com.chess.genesis.R;
 import com.chess.genesis.data.*;
+import com.chess.genesis.net.*;
+import com.chess.genesis.net.ZeroMQClient.*;
+import com.chess.genesis.net.msgs.*;
+import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.preference.*;
 import androidx.preference.Preference.*;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
-    OnPreferenceClickListener, CallBackPreference.CallBack
+    OnPreferenceClickListener, CallBackPreference.CallBack, IPingListener
 {
 	private final static int[] colorKeys = new int[]{R.array.pf_bcInnerCheck, R.array.pf_bcInnerDark,
 	    R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
 	    R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
+
+	ZeroMQClient client;
+
+	final LocalConnection connection = new LocalConnection()
+	{
+		@Override
+		public void onServiceConnected(ZeroMQClient zmqClient)
+		{
+			client = zmqClient;
+		}
+	};
 
 	@Override
 	public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
@@ -38,6 +53,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
 		var prefView = findPreference("benchmark");
 		prefView.setOnPreferenceClickListener(this);
+
+		var pingServerPref = findPreference("pingServer");
+		pingServerPref.setOnPreferenceClickListener(this);
 
 		var ctx = getContext();
 		var pref = new Pref(ctx);
@@ -55,12 +73,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
 		CallBackPreference callbackPref = findPreference("bcReset");
 		callbackPref.setCallBack(this);
+
+		var serverHostPref = findPreference("serverhost");
+		if (serverHostPref != null) {
+			serverHostPref.setOnPreferenceChangeListener((p, newValue) -> {
+				client.reconnect();
+				client.listenPing(this);
+				return true;
+			});
+		}
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
 		super.onViewCreated(view, savedInstanceState);
+
+		ZeroMQClient.bind(requireContext(), connection);
 
 		var listView = getListView();
 		if (listView == null) {
@@ -94,6 +123,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
 		if (key.equals("benchmark"))
 			BenchmarkDialog.create().show(getParentFragmentManager(), "");
+		if (key.equals("pingServer")) {
+			client.listenPing(this);
+		}
 		return true;
 	}
 
@@ -106,5 +138,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 			ColorPickerPreference colorPref = findPreference(pref.key(key));
 			colorPref.update();
 		}
+	}
+
+	@Override
+	public void onPong(PongMsg msg, long pingTime)
+	{
+		var clockDiff = msg.getPing() - pingTime / 2;
+		Util.showToast("Ping: " + pingTime + " ms | Drift: " + clockDiff + " ms", requireContext());
+	}
+
+	@Override
+	public void onDestroyView()
+	{
+		client.unlistenPing(this);
+		getContext().unbindService(connection);
+		super.onDestroyView();
 	}
 }

@@ -47,6 +47,7 @@ public class ZeroMQClient extends Service
 	final LocalBinder binder = new LocalBinder();
 	final LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
 	final Map<String, IMoveListener> moveListeners = new ConcurrentHashMap<>();
+	final Set<IPingListener> pingListeners = ConcurrentHashMap.newKeySet();
 
 	ZContext ctx;
 	Socket socket;
@@ -76,6 +77,11 @@ public class ZeroMQClient extends Service
 		void onMove(LastMoveMsg moveMsg);
 
 		void onResult(GameResultMsg resultMsg);
+	}
+
+	public interface IPingListener
+	{
+		void onPong(PongMsg msg, long pingTime);
 	}
 
 	public interface RunCommand
@@ -189,6 +195,7 @@ public class ZeroMQClient extends Service
 		isLoggedin.set(false);
 		hasSynced.set(false);
 		moveListeners.clear();
+		pingListeners.clear();
 		status.set(Status.DISCONNECTED);
 
 		if (monitorSock != null) {
@@ -219,7 +226,7 @@ public class ZeroMQClient extends Service
 		Util.log("Disconnect finished", this);
 	}
 
-	private void reconnect()
+	public void reconnect()
 	{
 		disconnect();
 		connect();
@@ -271,10 +278,17 @@ public class ZeroMQClient extends Service
 		}
 	}
 
-	public void ping()
+	public void listenPing(IPingListener listener)
 	{
-		send(PingMsg.build());
-		lastPing.set(System.currentTimeMillis());
+		pingListeners.add(listener);
+		var pingMsg = PingMsg.build();
+		lastPing.set(pingMsg.time);
+		send(pingMsg);
+	}
+
+	public void unlistenPing(IPingListener listener)
+	{
+		pingListeners.remove(listener);
 	}
 
 	public void register(String username, String hash)
@@ -453,6 +467,11 @@ public class ZeroMQClient extends Service
 					break;
 				case PongMsg.ID:
 					lastPong.set(System.currentTimeMillis());
+					var pongMsg = msg.as(PongMsg.class);
+					var pingTime = lastPong.get() - lastPing.get();
+					pingListeners.forEach(l -> {
+						l.onPong(pongMsg, pingTime);
+					});
 					break;
 				case OkMsg.ID:
 					break;

@@ -33,6 +33,11 @@ public class PongMsg extends ZmqMsg
 		return pong;
 	}
 
+	public long getPing()
+	{
+		return end - start;
+	}
+
 	@Override
 	public int type()
 	{

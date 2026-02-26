@@ -103,5 +103,10 @@
             app:persistent="true"
             app:title="Server URL"
             app:summary="Set server URL to connect to"/>
+        <Preference
+            app:key="pingServer"
+            app:persistent="false"
+            app:title="Ping Server"
+            app:summary="Test connection latency"/>
     </PreferenceCategory>
 </PreferenceScreen>
