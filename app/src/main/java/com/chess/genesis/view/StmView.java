@@ -30,6 +30,7 @@ public class StmView extends View
 	private StmState stmState;
 	private ClockState clockState;
 	private RatingsData ratings;
+	private IGameController controller;
 
 	private final Paint painter = new Paint();
 	private final Rect whiteBox = new Rect();
@@ -41,17 +42,24 @@ public class StmView extends View
 	private final Runnable timerRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (clockState != null && clockState.type() != ClockType.NO_CLOCK) {
-				invalidate();
+			if (clockState.type() == ClockType.NO_CLOCK) {
+				return;
 			}
-			timerHandler.postDelayed(this, 1000);
+
+			invalidate();
+			if (clockState.isTimeout()) {
+				controller.onClockTimeout();
+				return;
+			}
+			timerHandler.postDelayed(this, clockState.delay());
 		}
 	};
 
-	public StmView(Context context)
+	public StmView(Context context, IGameController controller)
 	{
 		super(context);
 
+		this.controller = controller;
 		PieceImgPainter.initColors(context);
 		stmState = new StmState("White", "Black", 0, GameStatus.ACTIVE, 0);
 		clockState = new ClockState(ClockType.NO_CLOCK, -1, 0, 0, 0);
@@ -79,7 +87,7 @@ public class StmView extends View
 	protected void onAttachedToWindow()
 	{
 		super.onAttachedToWindow();
-		timerHandler.postDelayed(timerRunnable, 1000);
+		timerHandler.postDelayed(timerRunnable, clockState.delay());
 	}
 
 	@Override
@@ -120,14 +128,7 @@ public class StmView extends View
 		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
 		var isStm = stmState.stm() == sideColor;
 		var playerName = isWhite ? stmState.white() : stmState.black();
-		var playerTime = isWhite ? clockState.whiteTime() : clockState.blackTime();
-
-		var timeRemaining = playerTime;
-		if (sideColor == clockState.stm() && clockState.type() != ClockType.NO_CLOCK && clockState.lastMove() > 0) {
-			var currentTime = System.currentTimeMillis();
-			var timeElapsed = currentTime - clockState.lastMove();
-			timeRemaining = playerTime - timeElapsed;
-		}
+		var timeRemaining = clockState.remaining(isWhite);
 
 		var left = rect.left;
 		var top = rect.top;

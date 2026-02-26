@@ -16,7 +16,35 @@
 package com.chess.genesis.api;
 
 import com.chess.genesis.data.Enums.*;
+import com.chess.genesis.engine.*;
 
 public record ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm)
 {
+	public long remaining(boolean isWhite)
+	{
+		var playerTime = isWhite ? whiteTime : blackTime;
+		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
+
+		if (sideColor == stm && type != ClockType.NO_CLOCK && lastMove > 0) {
+			var timeElapsed = System.currentTimeMillis() - lastMove;
+			return playerTime - timeElapsed;
+		}
+		return playerTime;
+	}
+
+	public boolean isTimeout()
+	{
+		if (type == ClockType.NO_CLOCK) {
+			return false;
+		}
+		return remaining(stm == Piece.WHITE) < 0;
+	}
+
+	public int delay()
+	{
+		if (type == ClockType.NO_CLOCK) {
+			return 1000;
+		}
+		return remaining(stm == Piece.WHITE) < 10000 ? 50 : 1000;
+	}
 }

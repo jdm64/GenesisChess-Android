@@ -37,7 +37,7 @@ public class GameView implements IGameView
 	{
 		ctx = context;
 		controller = gameCntlr;
-		stmView = new StmView(ctx);
+		stmView = new StmView(ctx, controller);
 		boardView = new BoardView(ctx, null);
 		boardView.setController(controller);
 		if (Pref.getBool(context, R.array.pf_showCaptured)) {

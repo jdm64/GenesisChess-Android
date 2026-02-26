@@ -75,6 +75,8 @@ public interface IGameController
 
 	void resign();
 
+	void onClockTimeout();
+
 	void onResume();
 
 	void onDispose();

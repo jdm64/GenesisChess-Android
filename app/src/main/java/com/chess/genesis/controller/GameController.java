@@ -24,6 +24,7 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
+import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
@@ -255,6 +256,15 @@ public class GameController implements IGameController
 	public void resign()
 	{
 		getStmPlayer().resign(ctx);
+	}
+
+	@Override
+	public void onClockTimeout()
+	{
+		var oppType = Enums.from(OpponentType.class, model.getGameEntity().opponent);
+		if (oppType == OpponentType.REMOTE_WHITE || oppType == OpponentType.REMOTE_BLACK) {
+			ZeroMQClient.bind(ctx, client -> client.getActiveData(gameID));
+		}
 	}
 
 	@Override
