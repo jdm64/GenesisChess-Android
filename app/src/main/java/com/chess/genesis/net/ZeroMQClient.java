@@ -423,29 +423,13 @@ public class ZeroMQClient extends Service
 					var game = msg.as(ActiveGameDataMsg.class);
 					var ctx = getApplicationContext();
 					var dao = ActiveGameDao.get(ctx);
-					if (game.status == GameStatus.WAITING_FOR_OPPONENT.id) {
-						dao.importInviteGame(game, ctx);
-					} else {
-						var gameData = dao.updateActiveGame(game, ctx);
-						if (gameData == null) {
-							break;
-						}
-						listener = moveListeners.get(game.game_id);
-						if (listener != null) {
-							listener.reloadBoard(gameData);
-						}
-					}
+					handleBoardReload(dao.update(game, ctx));
 					break;
 				case ArchiveGameDataMsg.ID:
 					var archiveMsg = msg.as(ArchiveGameDataMsg.class);
 					var archiveCtx = getApplicationContext();
 					var archiveDao = ArchiveGameDao.get(archiveCtx);
-					var archiveEntity = archiveDao.updateArchiveGame(archiveMsg);
-
-					listener = moveListeners.get(archiveMsg.game_id);
-					if (listener != null) {
-						listener.reloadBoard(archiveEntity);
-					}
+					handleBoardReload(archiveDao.update(archiveMsg));
 					break;
 				case LastMoveMsg.ID:
 					var moveMsg = msg.as(LastMoveMsg.class);
@@ -505,6 +489,18 @@ public class ZeroMQClient extends Service
 			}
 		}
 		Util.log("Shutting down receiveLoop", this);
+	}
+
+	private void handleBoardReload(GameEntity data)
+	{
+		if (data == null) {
+			return;
+		}
+
+		var listener = moveListeners.get(data.gameid);
+		if (listener != null) {
+			listener.reloadBoard(data);
+		}
 	}
 
 	private void handleGamesList(GamesListMsg msg)

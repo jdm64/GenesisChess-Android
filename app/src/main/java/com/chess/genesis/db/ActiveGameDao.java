@@ -22,7 +22,6 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.msgs.*;
-import com.chess.genesis.util.*;
 import androidx.paging.*;
 import androidx.room.*;
 
@@ -74,24 +73,7 @@ public interface ActiveGameDao
 		return game;
 	}
 
-	default ActiveGameEntity importInviteGame(String gameId, int gameType, int color)
-	{
-		var game = new ActiveGameEntity();
-		game.gameid = gameId;
-		game.name = "Invite " + Enums.from(GameType.class, gameType) + "; Play " + (color == Piece.WHITE ? "white" : "black");
-		game.gametype = gameType;
-		game.opponent = color == Piece.WHITE ? OpponentType.REMOTE_BLACK.id : OpponentType.REMOTE_WHITE.id;
-		game.zfen = (gameType == GameType.GENESIS.id ? new GenBoard() : new RegBoard()).printZFen();
-		game.history = "";
-		game.ctime = System.currentTimeMillis();
-		game.stime = System.currentTimeMillis();
-
-		insert(game);
-
-		return game;
-	}
-
-	default ActiveGameEntity importInviteGame(ActiveGameDataMsg msg, Context ctx)
+	default void insert(ActiveGameDataMsg msg, Context ctx)
 	{
 		var game = new ActiveGameEntity();
 
@@ -125,19 +107,17 @@ public interface ActiveGameDao
 		game.zfen = msg.zfen;
 
 		insert(game);
-
-		return game;
 	}
 
-	default ActiveGameEntity updateActiveGame(ActiveGameDataMsg msg, Context ctx)
+	default ActiveGameEntity update(ActiveGameDataMsg msg, Context ctx)
 	{
 		var game = getGame(msg.game_id);
 		if (game == null) {
-			Util.logErr("game not found: " + msg.game_id, this);
+			insert(msg, ctx);
 			return null;
 		}
 
-		var updateRequired = !msg.movesString().equals(game.history);
+		var updateRequired = !msg.movesString().equals(game.history) || game.status != msg.status;
 
 		game.white = msg.white;
 		game.black = msg.black;
@@ -154,32 +134,6 @@ public interface ActiveGameDao
 		update(game);
 
 		return updateRequired ? game : null;
-	}
-
-	default boolean saveMove(String gameId, int index, String move)
-	{
-		var game = getGame(gameId);
-		if (game == null) {
-			return false;
-		}
-
-		var board = game.gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard();
-		if (!board.parseZFen(game.zfen)) {
-			return false;
-		} else if (board.getPly() + 1 != index) {
-			return false;
-		}
-
-		var res = board.parseMove(move);
-		if (res.second != Board.VALID_MOVE) {
-			return false;
-		}
-
-		game.history += " " + res.first;
-		game.stime = System.currentTimeMillis();
-
-		update(game);
-		return true;
 	}
 
 	default boolean saveMove(LastMoveMsg msg)

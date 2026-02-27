@@ -80,7 +80,7 @@ public interface ArchiveGameDao
 		return true;
 	}
 
-	default ArchiveGameEntity updateArchiveGame(ArchiveGameDataMsg msg)
+	default ArchiveGameEntity update(ArchiveGameDataMsg msg)
 	{
 		var existing = getGame(msg.game_id);
 		var entity = existing != null ? existing : new ArchiveGameEntity();
