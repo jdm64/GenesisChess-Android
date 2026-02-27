@@ -52,9 +52,9 @@ class NewGameState {
 	var type = mutableStateOf(GameType.GENESIS)
 	var opp = mutableStateOf(OpponentCat.MATCHED)
 	var color = mutableStateOf(ColorType.RANDOM)
-	var clockType = mutableStateOf(ClockType.NO_CLOCK)
-	var baseTime = mutableIntStateOf(0)
-	var incTime = mutableIntStateOf(0)
+	var clockType = mutableStateOf(ClockType.REALTIME)
+	var baseTime = mutableIntStateOf(ClockTimes.MIN_15.time)
+	var incTime = mutableIntStateOf(ClockTimes.SEC_0.time)
 
 	fun serialize(): String {
 		val map = mapOf(
