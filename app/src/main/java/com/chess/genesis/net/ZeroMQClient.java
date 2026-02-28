@@ -124,7 +124,7 @@ public class ZeroMQClient extends Service
 		Util.runThread(() -> {
 			try {
 				Thread.sleep(CONNECTION_TIMEOUT);
-				if (status.get() != Status.CONNECTED) {
+				if (status.get() == Status.CONNECTING) {
 					Util.showToast("Error connecting to server", this);
 				}
 			} catch (InterruptedException e) {
