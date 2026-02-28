@@ -22,6 +22,7 @@ import com.chess.genesis.R;
 import com.chess.genesis.data.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.ZeroMQClient.*;
+import com.chess.genesis.net.ZeroMQHandler.*;
 import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
@@ -35,14 +36,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 	    R.array.pf_bcInnerLast, R.array.pf_bcInnerLight, R.array.pf_bcInnerSelect,
 	    R.array.pf_bcOuterDark, R.array.pf_bcOuterLight };
 
-	ZeroMQClient client;
+	ZeroMQHandler handler;
 
 	final LocalConnection connection = new LocalConnection()
 	{
 		@Override
-		public void onServiceConnected(ZeroMQClient zmqClient)
+		public void onServiceConnected(ZeroMQHandler zeroMQHandler)
 		{
-			client = zmqClient;
+			handler = zeroMQHandler;
 		}
 	};
 
@@ -77,8 +78,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 		var serverHostPref = findPreference("serverhost");
 		if (serverHostPref != null) {
 			serverHostPref.setOnPreferenceChangeListener((p, newValue) -> {
-				client.reconnect();
-				client.listenPing(this);
+				handler.reconnect();
+				handler.listenPing(this);
 				return true;
 			});
 		}
@@ -124,7 +125,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 		if (key.equals("benchmark"))
 			BenchmarkDialog.create().show(getParentFragmentManager(), "");
 		if (key.equals("pingServer")) {
-			client.listenPing(this);
+			handler.listenPing(this);
 		}
 		return true;
 	}
@@ -150,7 +151,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 	@Override
 	public void onDestroyView()
 	{
-		client.unlistenPing(this);
+		handler.unlistenPing(this);
 		getContext().unbindService(connection);
 		super.onDestroyView();
 	}

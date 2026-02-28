@@ -118,8 +118,8 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
 		when (data.opp.value) {
 			OpponentCat.INVITE -> {
-				ZeroMQClient.bind(context) { client ->
-					client.createInvite(
+				ZeroMQClient.bind(context) { handler ->
+					handler.createInvite(
 						data.type.value,
 						data.color.value,
 						data.clockType.value,
@@ -129,8 +129,8 @@ fun onNewGame(data: NewGameState, nav: NavHostController, context: Context) {
 				}
 			}
 			OpponentCat.MATCHED -> {
-				ZeroMQClient.bind(context) { client ->
-					client.joinMatched(
+				ZeroMQClient.bind(context) { handler ->
+					handler.joinMatched(
 						data.type.value,
 						data.color.value,
 						data.baseTime.intValue,
@@ -173,7 +173,7 @@ fun onEditGame(state: MutableState<EditGameState>, data: ActiveGameEntity) {
 fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 	state.value.show.value = false
 	Dispatchers.IO.dispatch(Dispatchers.IO) {
-		ZeroMQClient.bind(context) { client -> client.joinInvite(state.value.id.value) }
+		ZeroMQClient.bind(context) { handler -> handler.joinInvite(state.value.id.value) }
 	}
 }
 

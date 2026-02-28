@@ -263,7 +263,7 @@ public class GameController implements IGameController
 	{
 		var oppType = Enums.from(OpponentType.class, model.getGameEntity().opponent);
 		if (oppType == OpponentType.REMOTE_WHITE || oppType == OpponentType.REMOTE_BLACK) {
-			ZeroMQClient.bind(ctx, client -> client.getActiveData(gameID));
+			ZeroMQClient.bind(ctx, handler -> handler.getActiveData(gameID));
 		}
 	}
 

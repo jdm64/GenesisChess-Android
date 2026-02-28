@@ -21,20 +21,21 @@ import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.*;
 import com.chess.genesis.net.ZeroMQClient.*;
+import com.chess.genesis.net.ZeroMQHandler.*;
 import com.chess.genesis.net.msgs.*;
 
 public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 {
 	final String gameId;
-	ZeroMQClient client;
+	ZeroMQHandler handler;
 
 	final LocalConnection connection = new LocalConnection()
 	{
 		@Override
-		public void onServiceConnected(ZeroMQClient mqttClient)
+		public void onServiceConnected(ZeroMQHandler zeroMQHandler)
 		{
-			client = mqttClient;
-			client.listenMoves(gameId, RemoteZeroMQPlayer.this);
+			handler = zeroMQHandler;
+			handler.listenMoves(gameId, RemoteZeroMQPlayer.this);
 		}
 	};
 
@@ -97,7 +98,7 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	@Override
 	public void onDispose(Context context)
 	{
-		client.listenMoves(gameId, null);
+		handler.listenMoves(gameId, null);
 		context.unbindService(connection);
 	}
 }

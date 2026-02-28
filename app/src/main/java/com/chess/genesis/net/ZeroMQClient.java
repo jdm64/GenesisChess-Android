@@ -16,8 +16,6 @@
 package com.chess.genesis.net;
 
 import java.io.*;
-import java.util.*;
-import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import android.app.*;
@@ -31,8 +29,6 @@ import org.zeromq.ZMQException;
 import com.chess.genesis.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
-import com.chess.genesis.data.Enums.*;
-import com.chess.genesis.db.*;
 import com.chess.genesis.net.msgs.*;
 import com.chess.genesis.util.*;
 import zmq.*;
@@ -46,60 +42,41 @@ public class ZeroMQClient extends Service
 
 	final LocalBinder binder = new LocalBinder();
 	final LinkedBlockingQueue<ZmqMsg> sendQueue = new LinkedBlockingQueue<>();
-	final Map<String, IMoveListener> moveListeners = new ConcurrentHashMap<>();
-	final Set<IPingListener> pingListeners = ConcurrentHashMap.newKeySet();
+	final ZeroMQHandler handler = new ZeroMQHandler(this);
+	final AtomicLong lastReceive = new AtomicLong();
+	final AtomicReference<Status> status = new AtomicReference<>(Status.DISCONNECTED);
 
 	ZContext ctx;
 	Socket socket;
 	Socket monitorSock;
-	AtomicLong lastPing = new AtomicLong();
-	AtomicLong lastPong = new AtomicLong();
-	AtomicLong lastReceive = new AtomicLong();
-	AtomicReference<Status> status = new AtomicReference<>(Status.DISCONNECTED);
-	AtomicBoolean isLoggedin = new AtomicBoolean(false);
-	AtomicBoolean hasSynced = new AtomicBoolean(false);
 	Future<?> receiveFuture;
 	Future<?> inactivityFuture;
 	Future<?> sendFuture;
 	Future<?> monitorFuture;
 
-	public enum Status
+	private enum Status
 	{
 		DISCONNECTED,
 		CONNECTING,
 		CONNECTED
 	}
 
-	public interface IMoveListener
-	{
-		void reloadBoard(GameEntity data);
-
-		void onMove(LastMoveMsg moveMsg);
-
-		void onResult(GameResultMsg resultMsg);
-	}
-
-	public interface IPingListener
-	{
-		void onPong(PongMsg msg, long pingTime);
-	}
-
 	public interface RunCommand
 	{
-		void run(ZeroMQClient client);
+		void run(ZeroMQHandler handler);
 	}
 
 	public class LocalBinder extends Binder
 	{
-		public ZeroMQClient get()
+		public ZeroMQHandler get()
 		{
-			return ZeroMQClient.this;
+			return getHandler();
 		}
 	}
 
 	public static abstract class LocalConnection implements ServiceConnection
 	{
-		public abstract void onServiceConnected(ZeroMQClient client);
+		public abstract void onServiceConnected(ZeroMQHandler handler);
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service)
@@ -124,10 +101,10 @@ public class ZeroMQClient extends Service
 		bind(ctx, new LocalConnection()
 		{
 			@Override
-			public void onServiceConnected(ZeroMQClient client)
+			public void onServiceConnected(ZeroMQHandler handler)
 			{
-				command.run(client);
-				client.showConnectionError();
+				command.run(handler);
+				handler.showConnectionError();
 				ctx.unbindService(this);
 			}
 		});
@@ -154,6 +131,22 @@ public class ZeroMQClient extends Service
 				// ignore
 			}
 		});
+	}
+
+	public ZeroMQHandler getHandler()
+	{
+		return handler;
+	}
+
+	public void tryConnect()
+	{
+		if (socket != null) {
+			return;
+		}
+		connect();
+		if (socket == null) {
+			Util.log("Unable to connect to server", this);
+		}
 	}
 
 	private void connect()
@@ -192,10 +185,7 @@ public class ZeroMQClient extends Service
 
 		Util.log("Starting disconnect", this);
 
-		isLoggedin.set(false);
-		hasSynced.set(false);
-		moveListeners.clear();
-		pingListeners.clear();
+		handler.clear();
 		status.set(Status.DISCONNECTED);
 
 		if (monitorSock != null) {
@@ -256,136 +246,7 @@ public class ZeroMQClient extends Service
 		disconnect();
 	}
 
-	public synchronized void listenMoves(String gameId, RemoteZeroMQPlayer player)
-	{
-		if (player == null) {
-			moveListeners.remove(gameId);
-			return;
-		}
-
-		var last = moveListeners.put(gameId, player);
-		if (socket == null) {
-			connect();
-			if (socket == null) {
-				Util.log("Unable to connect to server", this);
-				return;
-			}
-		}
-
-		if (last != player) {
-			getActiveData(gameId);
-			showConnectionError();
-		}
-	}
-
-	public void listenPing(IPingListener listener)
-	{
-		pingListeners.add(listener);
-		var pingMsg = PingMsg.build();
-		lastPing.set(pingMsg.time);
-		send(pingMsg);
-	}
-
-	public void unlistenPing(IPingListener listener)
-	{
-		pingListeners.remove(listener);
-	}
-
-	public void register(String username, String hash)
-	{
-		send(RegisterMsg.build(username, hash));
-	}
-
-	public void registerAnon(String hash)
-	{
-		send(RegisterAnonMsg.build(hash));
-	}
-
-	public void login(String username, String hash)
-	{
-		send(LoginMsg.build(username, hash));
-	}
-
-	public void createInvite(GameType gameType, ColorType playAs, ClockType clockType, int baseTime, int incTime)
-	{
-		do_login();
-		send(CreateInviteMsg.build(gameType, playAs, clockType, baseTime, incTime));
-	}
-
-	public void joinMatched(GameType gameType, ColorType playAs, int baseTime, int incTime)
-	{
-		do_login();
-		send(JoinMatchedMsg.build(gameType, playAs, baseTime, incTime));
-	}
-
-	public void getActiveData(String gameId)
-	{
-		send(GetActiveDataMsg.build(gameId));
-	}
-
-	public void getArchiveData(String gameId)
-	{
-		send(GetArchiveDataMsg.build(gameId));
-	}
-
-	public void joinInvite(String gameId)
-	{
-		do_login();
-		send(JoinInviteMsg.build(gameId));
-	}
-
-	public void sendMove(String gameId, String moveStr)
-	{
-		do_login();
-		send(MakeMoveMsg.build(gameId, moveStr));
-	}
-
-	public void resign(String gameId)
-	{
-		do_login();
-		send(ResignMsg.build(gameId));
-	}
-
-	public void syncGames(SyncType mode, int page)
-	{
-		if (getUserPass() == null) {
-			return;
-		}
-
-		switch (mode) {
-		case SyncType.ACTIVE:
-			if (!hasSynced.getAndSet(true)) {
-				do_login();
-				send(SyncGamesMsg.build(mode, 0));
-			}
-			break;
-		case SyncType.ARCHIVE:
-			// TODO: sync archive games
-			break;
-		}
-	}
-
-	private Entry<String, String> getUserPass()
-	{
-		var ctx = getApplicationContext();
-		return Pref.getUserPass(ctx);
-	}
-
-	private synchronized void do_login()
-	{
-		if (isLoggedin.get()) {
-			return;
-		}
-
-		var account = getUserPass();
-		if (account != null) {
-			login(account.getKey(), account.getValue());
-		} else {
-			registerAnon(Pref.newAnonHash(getApplicationContext()));
-		}
-	}
-
-	private void send(ZmqMsg msg)
+	public void send(ZmqMsg msg)
 	{
 		try {
 			sendQueue.put(msg);
@@ -401,78 +262,7 @@ public class ZeroMQClient extends Service
 			try {
 				var msg = ZmqMsg.parse(socket.recv());
 				lastReceive.set(System.currentTimeMillis());
-				IMoveListener listener;
-
-				switch (msg.type()) {
-				case PingMsg.ID:
-					socketSend(PongMsg.build(msg.as(PingMsg.class)));
-					break;
-				case AnonAcctMsg.ID:
-					var acct = msg.as(AnonAcctMsg.class);
-					Pref.storeAnonUser(getApplicationContext(), acct.name);
-					isLoggedin.set(true);
-					break;
-				case LoginResultMsg.ID:
-					var result = msg.as(LoginResultMsg.class);
-					isLoggedin.set(result.is_ok);
-					if (!result.is_ok) {
-						Util.showToast(result.msg, getApplicationContext());
-					}
-					break;
-				case ActiveGameDataMsg.ID:
-					var game = msg.as(ActiveGameDataMsg.class);
-					var ctx = getApplicationContext();
-					var dao = ActiveGameDao.get(ctx);
-					handleBoardReload(dao.update(game, ctx));
-					break;
-				case ArchiveGameDataMsg.ID:
-					var archiveMsg = msg.as(ArchiveGameDataMsg.class);
-					var archiveCtx = getApplicationContext();
-					var archiveDao = ArchiveGameDao.get(archiveCtx);
-					handleBoardReload(archiveDao.update(archiveMsg));
-					break;
-				case LastMoveMsg.ID:
-					var moveMsg = msg.as(LastMoveMsg.class);
-					ActiveGameDao.get(getApplicationContext()).saveMove(moveMsg);
-
-					listener = moveListeners.get(moveMsg.id);
-					if (listener != null) {
-						listener.onMove(moveMsg);
-					}
-					break;
-				case GameResultMsg.ID:
-					var resultMsg = msg.as(GameResultMsg.class);
-					ArchiveGameDao.get(getApplicationContext()).copyFromActive(resultMsg, getApplicationContext());
-
-					listener = moveListeners.get(resultMsg.id);
-					if (listener != null) {
-						listener.onResult(resultMsg);
-					}
-					break;
-				case PongMsg.ID:
-					lastPong.set(System.currentTimeMillis());
-					var pongMsg = msg.as(PongMsg.class);
-					var pingTime = lastPong.get() - lastPing.get();
-					pingListeners.forEach(l -> {
-						l.onPong(pongMsg, pingTime);
-					});
-					break;
-				case OkMsg.ID:
-					break;
-				case ErrorMsg.ID:
-					var errMsg = msg.as(ErrorMsg.class);
-					Util.log("ErrorMsg: " + errMsg.msg, this);
-					Util.showToast(errMsg.msg, getApplicationContext());
-					break;
-				case GamesListMsg.ID:
-					var gamesList = msg.as(GamesListMsg.class);
-					handleGamesList(gamesList);
-					break;
-				case UnknownMsg.ID:
-				default:
-					Util.logErr("Unexpected message: " + msg, this);
-					break;
-				}
+				handler.handle(msg);
 			} catch (ZMQException ze) {
 				var err = ze.getErrorCode();
 				if (err == ZError.ETERM) {
@@ -489,31 +279,6 @@ public class ZeroMQClient extends Service
 			}
 		}
 		Util.log("Shutting down receiveLoop", this);
-	}
-
-	private void handleBoardReload(GameEntity data)
-	{
-		if (data == null) {
-			return;
-		}
-
-		var listener = moveListeners.get(data.gameid);
-		if (listener != null) {
-			listener.reloadBoard(data);
-		}
-	}
-
-	private void handleGamesList(GamesListMsg msg)
-	{
-		var ctx = getApplicationContext();
-		var dao = ActiveGameDao.get(ctx);
-		var existingSet = new HashSet<>(dao.getAllGameIds());
-
-		msg.list.forEach(gameId -> {
-			if (!existingSet.contains(gameId)) {
-				getActiveData(gameId);
-			}
-		});
 	}
 
 	private void sendLoop()
