@@ -188,9 +188,17 @@ public class ZeroMQClient extends Service
 		handler.clear();
 		status.set(Status.DISCONNECTED);
 
+		if (monitorFuture != null) {
+			monitorFuture.cancel(true);
+			monitorFuture = null;
+		}
 		if (monitorSock != null) {
 			monitorSock.close();
 			monitorSock = null;
+		}
+		if (receiveFuture != null) {
+			receiveFuture.cancel(true);
+			receiveFuture = null;
 		}
 		if (socket != null) {
 			socket.close();
@@ -200,18 +208,8 @@ public class ZeroMQClient extends Service
 			ctx.close();
 			ctx = null;
 		}
-		if (monitorFuture != null) {
-			monitorFuture.cancel(true);
-			monitorFuture = null;
-		}
-		if (receiveFuture != null) {
-			receiveFuture.cancel(true);
-			receiveFuture = null;
-		}
-		if (inactivityFuture != null) {
-			inactivityFuture.cancel(true);
-			inactivityFuture = null;
-		}
+
+		inactivityFuture = null;
 
 		Util.log("Disconnect finished", this);
 	}
