@@ -179,16 +179,19 @@ fun onImportGame(state: MutableState<ImportGameState>, context: Context) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameListPage(nav: NavHostController) {
+fun GameListPage(nav: NavHostController, mode: GameSource) {
 	val ctx = LocalContext.current
+	val isActive = mode == GameSource.ACTIVE
+
 	LaunchedEffect(Unit) {
-		PrefEdit(ctx).putString(R.array.pf_lastpage, "list").commit()
+		PrefEdit(ctx).putString(R.array.pf_lastpage, "list/${mode.name}").commit()
 	}
 
-	// Trigger sync on new connection
-	LaunchedEffect(Unit) {
-		ZeroMQClient.bind(ctx) { client ->
-			client.syncGames(SyncType.ACTIVE, 0)
+	if (isActive) {
+		LaunchedEffect(Unit) {
+			ZeroMQClient.bind(ctx) { client ->
+				client.syncGames(SyncType.ACTIVE, 0)
+			}
 		}
 	}
 
@@ -224,19 +227,21 @@ fun GameListPage(nav: NavHostController) {
 					)
 				}
 				Spacer(Modifier.weight(1f, true))
-				IconButton(onClick = {
-					newGameState.value.show.value = true
-				}) {
-					Icon(
-						Icons.Filled.Add,
-						"New Game",
-						Modifier.size(30.dp)
-					)
+				if (isActive) {
+					IconButton(onClick = {
+						newGameState.value.show.value = true
+					}) {
+						Icon(
+							Icons.Filled.Add,
+							"New Game",
+							Modifier.size(30.dp)
+						)
+					}
 				}
 			}
 		},
 	) { padding ->
-		ActiveGameList(nav, padding)
+		GameList(nav, padding, mode)
 	}
 
 	if (showBottomSheet) {
@@ -244,33 +249,55 @@ fun GameListPage(nav: NavHostController) {
 			onDismissRequest = { showBottomSheet = false },
 			sheetState = sheetState
 		) {
-			ListMenu(onHide = {
-				coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-					if (!sheetState.isVisible) {
-						showBottomSheet = false
+			ListMenu(
+				mode = mode,
+				nav = nav,
+				onHide = {
+					coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+						if (!sheetState.isVisible) {
+							showBottomSheet = false
+						}
 					}
-				}
-			}, importState = importState)
+				},
+				importState = importState
+			)
 		}
 	}
 
-	ShowNewGameDialog(newGameState, nav)
-
-	ShowImportInviteDialog(importState)
+	if (isActive) {
+		ShowNewGameDialog(newGameState, nav)
+		ShowImportInviteDialog(importState)
+	}
 }
 
 @Composable
-fun ListMenu(onHide: () -> Unit, importState: MutableState<ImportGameState>) {
+fun ListMenu(
+	mode: GameSource,
+	nav: NavHostController,
+	onHide: () -> Unit,
+	importState: MutableState<ImportGameState>
+) {
 	val ctx = LocalContext.current
+	val isActive = mode == GameSource.ACTIVE
 
 	Column {
+		if (isActive) {
+			ListItem(
+				modifier = Modifier.clickable(onClick = {
+					importState.value.show.value = true
+					onHide()
+				}),
+				leadingContent = { Icon(Icons.Filled.Email, "Import Invite Game") },
+				headlineContent = { Text("Import Invite Game") }
+			)
+		}
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
-				importState.value.show.value = true
+				nav.navigate(if (isActive) "list/archive" else "list/active")
 				onHide()
 			}),
-			leadingContent = { Icon(Icons.Filled.Email, "Import Invite Game") },
-			headlineContent = { Text("Import Invite Game") }
+			leadingContent = { Icon(if (isActive) Icons.Filled.Archive else Icons.Filled.List, if (isActive) "Archive Games" else "Active Games") },
+			headlineContent = { Text(if (isActive) "Archive Games" else "Active Games") }
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
@@ -284,9 +311,12 @@ fun ListMenu(onHide: () -> Unit, importState: MutableState<ImportGameState>) {
 }
 
 @Composable
-fun ActiveGameList(nav: NavHostController, padding: PaddingValues) {
+fun GameList(nav: NavHostController, padding: PaddingValues, mode: GameSource) {
 	val context = LocalContext.current
-	val pager = remember { Pager(PagingConfig(10)) { ActiveGameDao.get(context).allGames } }
+	val isActive = mode == GameSource.ACTIVE
+	val pager = remember(isActive) { Pager(PagingConfig(10)) {
+		if (isActive) ActiveGameDao.get(context).allGames else ArchiveGameDao.get(context).allGames
+	}}
 	val lazyItems = pager.flow.collectAsLazyPagingItems()
 	val editState = remember { mutableStateOf(EditGameState()) }
 
@@ -298,12 +328,14 @@ fun ActiveGameList(nav: NavHostController, padding: PaddingValues) {
 		items(lazyItems.itemCount, lazyItems.itemKey { it.gameid }) { index ->
 			val gamedata = lazyItems[index]
 			if (gamedata != null) {
-				GameListCard(gamedata, editState, nav)
+				GameListCard(gamedata, editState, nav, isActive)
 			}
 		}
 	}
 
-	ShowEditGameDialog(editState)
+	if (isActive) {
+		ShowEditGameDialog(editState)
+	}
 }
 
 @Composable
@@ -350,9 +382,10 @@ fun ShowEditGameDialog(editState: MutableState<EditGameState>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GameListCard(
-	data: ActiveGameEntity,
+	data: GameEntity,
 	state: MutableState<EditGameState>,
-	nav: NavHostController
+	nav: NavHostController,
+	isActive: Boolean
 ) {
 	val type = Enums.from(GameType::class.java, data.gametype).name
 	val opponent = Enums.from(OpponentType::class.java, data.opponent).name
@@ -363,8 +396,10 @@ fun GameListCard(
 		modifier = Modifier
 			.padding(16.dp, 16.dp, 16.dp, 0.dp)
 			.fillMaxWidth()
-			.combinedClickable(onClick = { onLoadGame(data, nav) },
-				onLongClick = { onEditGame(state, data) }),
+			.combinedClickable(
+				onClick = { nav.navigate("board/${data.source.name}/${data.gameid}") },
+				onLongClick = { if (isActive) onEditGame(state, data as ActiveGameEntity) }
+			),
 		elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
 	) {
 		Row(

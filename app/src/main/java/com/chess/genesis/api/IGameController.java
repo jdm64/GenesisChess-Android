@@ -49,6 +49,8 @@ public interface IGameController
 
 	void reloadAsArchived();
 
+	GameSource getSource();
+
 	String getGameId();
 
 	MutableState<Boolean> getPromoteState();

@@ -26,6 +26,7 @@ import androidx.navigation.compose.*
 import com.chess.genesis.R
 import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
+import com.chess.genesis.data.Enums.*
 import com.chess.genesis.net.*
 
 class MainActivity : ComponentActivity() {
@@ -59,7 +60,12 @@ fun MainApp() {
 
 	NavHost(nav, "start", modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 		composable("start") { LoadingPage(nav) }
-		composable("list") { GameListPage(nav) }
+		composable("list/{mode}") { entry ->
+			val mode = entry.arguments?.getString("mode")?.let {
+				Enums.from(GameSource::class.java, it)
+			} ?: GameSource.ACTIVE
+			GameListPage(nav, mode)
+		}
 		composable("board/{source}/{gameId}") { entry ->
 			val source = entry.arguments?.getString("source")
 			val id = entry.arguments?.getString("gameId")
@@ -76,7 +82,10 @@ fun LoadingPage(nav: NavHostController) {
 
 	LaunchedEffect(1) {
 		Thread.sleep(125)
-		val page = Pref.getString(nav.context, R.array.pf_lastpage)
+		var page = Pref.getString(nav.context, R.array.pf_lastpage)
+		if (page.equals("list")) {
+			page = "list/active"
+		}
 		nav.popBackStack()
 		nav.navigate(page)
 	}

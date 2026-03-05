@@ -42,6 +42,8 @@ import com.chess.genesis.controller.*
 import com.chess.genesis.data.*
 import com.chess.genesis.data.Enums.GameSource
 import kotlinx.coroutines.*
+import java.util.*
+import kotlin.jvm.optionals.getOrElse
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,8 +108,10 @@ fun GameMenu(gameCtlr: GameController, state: SheetState, nav: NavHostController
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
-				if (!nav.popBackStack("list", false)) {
-					nav.navigate("list")
+				if (!nav.popBackStack("list/{mode}", false)) {
+					val source = Optional.ofNullable(gameCtlr.source)
+					val mode = source.getOrElse { GameSource.ACTIVE }
+					nav.navigate("list/" + mode.name)
 				}
 				scope.launch { state.hide() }
 			}),

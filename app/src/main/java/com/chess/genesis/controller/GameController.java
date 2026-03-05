@@ -132,6 +132,13 @@ public class GameController implements IGameController
 	}
 
 	@Override
+	public GameSource getSource()
+	{
+		var entity = model.getGameEntity();
+		return entity != null ? entity.getSource() : null;
+	}
+
+	@Override
 	public void setBoard(GameSource source, String gameId)
 	{
 		gameID = gameId;
