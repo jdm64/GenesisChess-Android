@@ -45,6 +45,6 @@ public record ClockState(ClockType type, long lastMove, long whiteTime, long bla
 		if (type == ClockType.NO_CLOCK) {
 			return 1000;
 		}
-		return remaining(stm == Piece.WHITE) < 10000 ? 50 : 1000;
+		return remaining(stm == Piece.WHITE) < 10000 ? 25 : 250;
 	}
 }
