@@ -177,11 +177,11 @@ public class StmView extends View
 		if (ratings != null) {
 			var ratingChange = isWhite ? ratings.whiteDiff() : ratings.blackDiff();
 			var ratingStr = String.format(Locale.getDefault(), "%+.1f", ratingChange);
-			painter.setTextSize(viewHeight / 5.0f);
+			painter.setTextSize(viewHeight / 4.0f);
 			painter.setColor(ratingChange < 0 ? PieceImgPainter.innerCheck : PieceImgPainter.innerSelect);
 			painter.setTextAlign(isWhite ? Align.LEFT : Align.RIGHT);
 			var x = isWhite ? left + 0.15f * viewHeight : right - 0.15f * viewHeight;
-			canvas.drawText(ratingStr, x, 1.20f * viewHeight, painter);
+			canvas.drawText(ratingStr, x, 1.25f * viewHeight, painter);
 		}
 	}
 
