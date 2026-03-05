@@ -71,6 +71,15 @@ public class GameController implements IGameController
 		return model.getBoard().getStm() == Piece.WHITE ? black : white;
 	}
 
+	private IPlayer getYourPlayer()
+	{
+		return switch (yourColor) {
+			case Piece.WHITE -> white;
+			case Piece.BLACK -> black;
+			default -> null;
+		};
+	}
+
 	@Override
 	public void setBoard(GameEntity data)
 	{
@@ -262,7 +271,10 @@ public class GameController implements IGameController
 	@Override
 	public void resign()
 	{
-		getStmPlayer().resign(ctx);
+		var player = getYourPlayer();
+		if (player != null) {
+			player.resign(ctx);
+		}
 	}
 
 	@Override
