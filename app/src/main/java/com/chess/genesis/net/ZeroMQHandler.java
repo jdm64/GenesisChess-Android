@@ -186,6 +186,7 @@ public class ZeroMQHandler
 				getActiveData(gameId);
 			}
 		});
+		hasSynced.set(true);
 	}
 
 	void handleUnknown(ZmqMsg msg)
@@ -297,7 +298,7 @@ public class ZeroMQHandler
 
 		switch (mode) {
 		case SyncType.ACTIVE:
-			if (!hasSynced.getAndSet(true)) {
+			if (!hasSynced.get()) {
 				do_login();
 				client.send(SyncGamesMsg.build(mode, 0));
 			}
