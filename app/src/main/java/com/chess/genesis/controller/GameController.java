@@ -84,6 +84,7 @@ public class GameController implements IGameController
 	public void setBoard(GameEntity data)
 	{
 		Util.setScreenOnFlag(ctx, true);
+		new PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + data.getSource().name + "/" + data.gameid).commit();
 
 		var isGen = data.gametype == GameType.GENESIS.id;
 		model = isGen ? new GenGameModel(view, this) : new RegGameModel(view, this);

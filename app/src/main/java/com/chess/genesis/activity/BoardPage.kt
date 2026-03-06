@@ -53,9 +53,6 @@ fun GamePage(nav: NavHostController, source: String, gameId: String) {
 	val gameCtlr = remember { GameController(ctx, gameSource, gameId) }
 	(ctx as MainActivity).currentController = gameCtlr
 
-	LaunchedEffect(Unit) {
-		PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + source + "/" + gameId).commit()
-	}
 	val scope = rememberCoroutineScope()
 
 	DisposableEffect(gameCtlr) {
