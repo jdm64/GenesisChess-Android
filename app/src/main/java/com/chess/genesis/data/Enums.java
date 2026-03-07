@@ -173,7 +173,11 @@ public interface Enums<T extends Enum<T>>
 		ACTIVE(1, "active"),
 		WHITE_MATE(2, "white-mate"),
 		BLACK_MATE(3, "black-mate"),
-		STALEMATE(4, "stalemate");
+		STALEMATE(4, "stalemate"),
+		WHITE_TIMEOUT(5, "white-timeout"),
+		BLACK_TIMEOUT(6, "black-timeout"),
+		WHITE_RESIGN(7, "white-resign"),
+		BLACK_RESIGN(8, "black-resign");
 
 		public final int id;
 		public final String name;
@@ -182,6 +186,11 @@ public interface Enums<T extends Enum<T>>
 		{
 			this.id = id;
 			this.name = name;
+		}
+
+		public boolean isGameActive()
+		{
+			return this == GameStatus.ACTIVE || this == GameStatus.WAITING_FOR_OPPONENT;
 		}
 
 		@Override public int getId() {

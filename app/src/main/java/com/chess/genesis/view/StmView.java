@@ -42,7 +42,7 @@ public class StmView extends View
 	private final Runnable timerRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (clockState.type() == ClockType.NO_CLOCK) {
+			if (!clockState.hasClock()) {
 				return;
 			}
 
@@ -137,14 +137,16 @@ public class StmView extends View
 		var centerX = (left + right) / 2;
 
 		// Draw stm indicator
-		if (timeRemaining < 0) {
+		if (clockState.hasClock() && timeRemaining <= 0) {
 			painter.setColor(PieceImgPainter.innerCheck);
 			canvas.drawRect(left, top, right, bottom, painter);
 		} else if (isStm) {
 			var stmColor = switch (stmState.status()) {
 				case WAITING_FOR_OPPONENT, ACTIVE -> isWhite ? PieceImgPainter.outerDark : PieceImgPainter.outerLight;
-				case WHITE_MATE, BLACK_MATE -> PieceImgPainter.innerCheck;
+				case WHITE_MATE, BLACK_MATE, WHITE_TIMEOUT, BLACK_TIMEOUT -> PieceImgPainter.innerCheck;
 				case STALEMATE -> PieceImgPainter.innerLast;
+				case WHITE_RESIGN -> isWhite ? PieceImgPainter.innerCheck : PieceImgPainter.outerLight;
+				case BLACK_RESIGN -> isWhite ? PieceImgPainter.outerDark : PieceImgPainter.innerCheck;
 			};
 			painter.setColor(stmColor);
 			canvas.drawRect(left, top, right, bottom, painter);

@@ -20,12 +20,17 @@ import com.chess.genesis.engine.*;
 
 public record ClockState(ClockType type, long lastMove, long whiteTime, long blackTime, int stm)
 {
+	public boolean hasClock()
+	{
+		return type != ClockType.NO_CLOCK;
+	}
+
 	public long remaining(boolean isWhite)
 	{
 		var playerTime = isWhite ? whiteTime : blackTime;
 		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
 
-		if (sideColor == stm && type != ClockType.NO_CLOCK && lastMove > 0) {
+		if (sideColor == stm && hasClock() && lastMove > 0) {
 			var timeElapsed = System.currentTimeMillis() - lastMove;
 			return playerTime - timeElapsed;
 		}
@@ -34,17 +39,17 @@ public record ClockState(ClockType type, long lastMove, long whiteTime, long bla
 
 	public boolean isTimeout()
 	{
-		if (type == ClockType.NO_CLOCK) {
-			return false;
+		if (hasClock()) {
+			return remaining(stm == Piece.WHITE) < 0;
 		}
-		return remaining(stm == Piece.WHITE) < 0;
+		return false;
 	}
 
 	public int delay()
 	{
-		if (type == ClockType.NO_CLOCK) {
-			return 1000;
+		if (hasClock()) {
+			return remaining(stm == Piece.WHITE) < 10000 ? 25 : 250;
 		}
-		return remaining(stm == Piece.WHITE) < 10000 ? 25 : 250;
+		return 1000;
 	}
 }

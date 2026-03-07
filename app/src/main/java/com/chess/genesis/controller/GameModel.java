@@ -245,11 +245,12 @@ public abstract class GameModel implements IGameModel
 	public ClockState getClockState()
 	{
 		var len = history.size();
-		var lastMove = switch (Enums.from(ClockType.class, data.clockType)) {
+		var status = Enums.from(GameStatus.class, data.status);
+		long lastMove = status.isGameActive() ? switch (Enums.from(ClockType.class, data.clockType)) {
 			case ClockType.NO_CLOCK -> -1;
 			case ClockType.PER_MOVE -> len == 0 ? data.ctime : history.topWithTime().second;
 			case ClockType.REALTIME -> len < 2 ? -1 : history.topWithTime().second;
-		};
+		} : -1;
 
 		return new ClockState(
 		    Enums.from(ClockType.class, data.clockType),
