@@ -50,7 +50,7 @@ fun GamePage(nav: NavHostController, source: String, gameId: String) {
 	val ctx = LocalContext.current
 
 	val gameSource = Enums.from(GameSource::class.java, source)
-	val gameCtlr = remember { GameController(ctx, gameSource, gameId) }
+	val gameCtlr = remember { GameController(ctx, gameSource, gameId, nav) }
 	(ctx as MainActivity).currentController = gameCtlr
 
 	val scope = rememberCoroutineScope()

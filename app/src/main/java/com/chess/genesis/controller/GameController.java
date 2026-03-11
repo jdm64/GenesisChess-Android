@@ -16,7 +16,6 @@
 package com.chess.genesis.controller;
 
 import java.lang.ref.*;
-import java.util.concurrent.atomic.*;
 import android.content.*;
 import com.chess.genesis.R;
 import com.chess.genesis.api.*;
@@ -28,6 +27,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
+import androidx.navigation.*;
 
 public class GameController implements IGameController
 {
@@ -37,6 +37,7 @@ public class GameController implements IGameController
 	private final MutableState<Boolean> promoteState;
 	private final MutableState<SubmitState> submitState;
 	private final MutableState<Boolean> resignState;
+	private final NavHostController nav;
 
 	private IGameModel model;
 	private String gameID = "";
@@ -44,9 +45,10 @@ public class GameController implements IGameController
 	private IPlayer black;
 	private int yourColor = 0;
 
-	public GameController(Context context, GameSource source, String gameID)
+	public GameController(Context context, GameSource source, String gameID, NavHostController navController)
 	{
 		ctx = context;
+		nav = navController;
 		view = new GameView(this, ctx);
 		promoteState = Util.getState(false);
 		isGenState = Util.getState(false);
@@ -165,10 +167,17 @@ public class GameController implements IGameController
 				}
 			}
 
-			if (game != null) {
-				var ref = new WeakReference<>(game);
-				Util.runUI(() -> setBoard(ref.get()));
-			}
+			var ref = new WeakReference<>(game);
+			Util.runUI(() -> {
+				var gameData = ref.get();
+				if (gameData != null) {
+					setBoard(ref.get());
+				} else {
+					if (!nav.popBackStack("list/" + source.name, false)) {
+						nav.navigate("list/" + source.name);
+					}
+				}
+			});
 		});
 	}
 
