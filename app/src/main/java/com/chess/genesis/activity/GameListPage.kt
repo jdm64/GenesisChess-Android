@@ -226,11 +226,17 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 						Modifier.size(30.dp)
 					)
 				}
-				Spacer(Modifier.weight(1f, true))
-				if (isActive) {
-					IconButton(onClick = {
-						newGameState.value.show.value = true
-					}) {
+				Spacer(Modifier.weight(1f))
+				Text(
+					text = if (isActive) "Active Games" else "Archive Games",
+					style = MaterialTheme.typography.titleLarge,
+					textAlign = TextAlign.Center
+				)
+				Spacer(Modifier.weight(1f))
+				IconButton(onClick = {
+					if (isActive) newGameState.value.show.value = true
+				}) {
+					if (isActive) {
 						Icon(
 							Icons.Filled.Add,
 							"New Game",
