@@ -103,6 +103,14 @@ fun GameMenu(gameCtlr: GameController, state: SheetState, nav: NavHostController
 		)
 		ListItem(
 			modifier = Modifier.clickable(onClick = {
+				gameCtlr.resignState.value = true
+				scope.launch { state.hide() }
+			}),
+			leadingContent = { Icon(Icons.Filled.Flag, "Resign") },
+			headlineContent = { Text("Resign") }
+		)
+		ListItem(
+			modifier = Modifier.clickable(onClick = {
 				if (!nav.popBackStack("list/{mode}", false)) {
 					val source = Optional.ofNullable(gameCtlr.source)
 					val mode = source.getOrElse { GameSource.ACTIVE }
@@ -122,14 +130,6 @@ fun GameMenu(gameCtlr: GameController, state: SheetState, nav: NavHostController
 			}),
 			leadingContent = { Icon(Icons.Filled.Settings, "Settings") },
 			headlineContent = { Text("Settings") }
-		)
-		ListItem(
-			modifier = Modifier.clickable(onClick = {
-				gameCtlr.getResignState().value = true
-				scope.launch { state.hide() }
-			}),
-			leadingContent = { Icon(Icons.Filled.Flag, "Resign") },
-			headlineContent = { Text("Resign") }
 		)
 	}
 }
