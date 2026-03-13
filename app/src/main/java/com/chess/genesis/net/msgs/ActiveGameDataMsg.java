@@ -20,6 +20,7 @@ import java.util.stream.*;
 import android.content.*;
 import android.util.*;
 import com.chess.genesis.*;
+import com.chess.genesis.api.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.processor.*;
@@ -60,6 +61,14 @@ public class ActiveGameDataMsg extends ZmqMsg
 	public int getOpponentType(Context ctx)
 	{
 		return Pref.getString(ctx, R.array.pf_username).equals(white) ? OpponentType.REMOTE_BLACK.id : OpponentType.REMOTE_WHITE.id;
+	}
+
+	public WaitingData getWaiting(Context ctx)
+	{
+		var username = Pref.getString(ctx, R.array.pf_username);
+		var isWhite = username.equals(white);
+		var playAs = isWhite ? ColorType.WHITE.id : ColorType.BLACK.id;
+		return new WaitingData(game_type, playAs, base_time, inc_time);
 	}
 
 	@Override

@@ -113,6 +113,7 @@ public interface ActiveGameDao
 	{
 		var game = getGame(msg.game_id);
 		if (game == null) {
+			WaitingGames.remove(ctx, msg.getWaiting(ctx));
 			insert(msg, ctx);
 			return null;
 		}

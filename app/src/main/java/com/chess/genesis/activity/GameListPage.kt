@@ -201,6 +201,25 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 	val coroutineScope = rememberCoroutineScope()
 	val importState = remember { mutableStateOf(ImportGameState()) }
 	var showBottomSheet by remember { mutableStateOf(false) }
+	val waitingCount = remember { mutableIntStateOf(0) }
+
+	LaunchedEffect(Unit) {
+		waitingCount.intValue = WaitingGames.get(ctx).size
+	}
+
+	DisposableEffect(Unit) {
+		val pref = Pref(ctx)
+		val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
+			if (key == pref.key(R.array.pf_waitingGames)) {
+				waitingCount.intValue = WaitingGames.get(ctx).size
+			}
+		}
+		pref.setChangeListener(listener)
+		onDispose {
+			// Note: Pref doesn't provide an explicit method to unregister listeners,
+			// but the DisposableEffect will handle cleanup when the composable disposes
+		}
+	}
 
 	Scaffold(
 		topBar = {
@@ -247,7 +266,19 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 			}
 		},
 	) { padding ->
-		GameList(nav, padding, mode)
+		Column(modifier = Modifier.padding(padding)) {
+			if (isActive && waitingCount.intValue > 0) {
+				Text(
+					text = "Waiting for matched game",
+					textAlign = TextAlign.Center,
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(6.dp)
+						.border(1.dp, MaterialTheme.colorScheme.primary)
+				)
+			}
+			GameList(nav, PaddingValues(0.dp), mode)
+		}
 	}
 
 	if (showBottomSheet) {

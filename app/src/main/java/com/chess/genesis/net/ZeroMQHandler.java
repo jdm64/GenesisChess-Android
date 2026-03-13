@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import android.content.*;
+import com.chess.genesis.*;
 import com.chess.genesis.controller.*;
 import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
@@ -90,6 +91,9 @@ public class ZeroMQHandler
 			break;
 		case GamesListMsg.ID:
 			handleGamesList(msg.as(GamesListMsg.class));
+			break;
+		case MatchQueuedMsg.ID:
+			handleMatchQueued(msg.as(MatchQueuedMsg.class));
 			break;
 		case UnknownMsg.ID:
 		default:
@@ -187,6 +191,11 @@ public class ZeroMQHandler
 			}
 		});
 		hasSynced.set(true);
+	}
+
+	void handleMatchQueued(MatchQueuedMsg msg)
+	{
+		WaitingGames.put(getContext(), msg.toData());
 	}
 
 	void handleUnknown(ZmqMsg msg)

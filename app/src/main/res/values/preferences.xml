@@ -104,4 +104,8 @@
 		<item>newGameState</item>
 		<item></item>
 	</array>
+	<array name="pf_waitingGames">
+		<item>waitingGames</item>
+		<item></item>
+	</array>
 </resources>
