@@ -196,7 +196,7 @@ public class StmView extends View
 		// If time is under 10 seconds, format as X.YYYs
 		if (ms < 10000) {
 			var seconds = ms / 1000.0;
-			return String.format(Locale.getDefault(), "%.3fs", seconds);
+			return String.format(Locale.getDefault(), "%.1fs", seconds);
 		}
 
 		var totalSeconds = ms / 1000;
