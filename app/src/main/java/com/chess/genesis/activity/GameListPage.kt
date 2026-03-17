@@ -357,10 +357,20 @@ fun GameList(nav: NavHostController, padding: PaddingValues, mode: GameSource) {
 	val lazyItems = pager.flow.collectAsLazyPagingItems()
 	val editState = remember { mutableStateOf(EditGameState()) }
 
+	var previousItemCount by remember { mutableIntStateOf(0) }
+	val lazyListState = rememberLazyListState()
+	LaunchedEffect(lazyItems.itemCount) {
+		if (lazyItems.itemCount > previousItemCount && previousItemCount > 0) {
+			lazyListState.animateScrollToItem(0)
+		}
+		previousItemCount = lazyItems.itemCount
+	}
+
 	LazyColumn(
 		modifier = Modifier
 			.fillMaxSize()
-			.padding(padding)
+			.padding(padding),
+		state = lazyListState
 	) {
 		items(lazyItems.itemCount, lazyItems.itemKey { it.gameid }) { index ->
 			val gamedata = lazyItems[index]
