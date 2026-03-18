@@ -52,6 +52,12 @@ class MainActivity : ComponentActivity() {
 		ZeroMQClient.setAppActive(false)
 		super.onPause()
 	}
+
+	override fun onDestroy() {
+		currentController?.onDispose()
+		currentController = null
+		super.onDestroy()
+	}
 }
 
 @Composable
