@@ -59,6 +59,7 @@ public class GameController implements IGameController
 		model = new GenGameModel(view, this);
 		white = new LocalPlayer(Piece.WHITE, model);
 		black = new LocalPlayer(Piece.BLACK, model);
+		Util.setScreenOnFlag(ctx, true);
 
 		setBoard(source, gameID);
 	}
@@ -85,7 +86,6 @@ public class GameController implements IGameController
 	@Override
 	public void setBoard(GameEntity data)
 	{
-		Util.setScreenOnFlag(ctx, true);
 		new PrefEdit(ctx).putString(R.array.pf_lastpage, "board/" + data.getSource().name + "/" + data.gameid).commit();
 
 		var isGen = data.gametype == GameType.GENESIS.id;
