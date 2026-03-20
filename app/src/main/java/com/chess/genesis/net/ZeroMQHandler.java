@@ -95,6 +95,9 @@ public class ZeroMQHandler
 		case MatchQueuedMsg.ID:
 			handleMatchQueued(msg.as(MatchQueuedMsg.class));
 			break;
+		case LoginRequiredMsg.ID:
+			handleLoginRequired(msg.as(LoginRequiredMsg.class));
+			break;
 		case UnknownMsg.ID:
 		default:
 			handleUnknown(msg);
@@ -196,6 +199,12 @@ public class ZeroMQHandler
 	void handleMatchQueued(MatchQueuedMsg msg)
 	{
 		WaitingGames.put(getContext(), msg.toData());
+	}
+
+	void handleLoginRequired(LoginRequiredMsg msg)
+	{
+		isLoggedIn.set(false);
+		Util.showToast(msg.msg, getContext());
 	}
 
 	void handleUnknown(ZmqMsg msg)
