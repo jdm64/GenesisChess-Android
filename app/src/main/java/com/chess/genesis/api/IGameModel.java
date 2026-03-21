@@ -40,6 +40,8 @@ public interface IGameModel
 
 	boolean isCurrentMove();
 
+	boolean isGameActive();
+
 	void backMove();
 
 	void forwardMove();

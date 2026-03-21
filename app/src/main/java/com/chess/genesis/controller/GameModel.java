@@ -158,6 +158,12 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public boolean isGameActive()
+	{
+		return data.status == GameStatus.ACTIVE.id || data.status == GameStatus.WAITING_FOR_OPPONENT.id;
+	}
+
+	@Override
 	public void undoMove()
 	{
 		if (hindex < 0)

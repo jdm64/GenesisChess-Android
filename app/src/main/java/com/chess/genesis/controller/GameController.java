@@ -335,10 +335,15 @@ public class GameController implements IGameController
 		return resignState;
 	}
 
+	private boolean preventClick()
+	{
+		return !model.isGameActive() || !getStmPlayer().canClick(model.getBoard().getStm());
+	}
+
 	@Override
 	public void onBoardClick(IBoardSq sq)
 	{
-		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+		if (preventClick())
 			return;
 
 		model.getMoveHandler().onBoardClick(sq, model.getBoard().getStm());
@@ -347,7 +352,7 @@ public class GameController implements IGameController
 	@Override
 	public void onBoardLongClick(IBoardSq sq)
 	{
-		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+		if (preventClick())
 			return;
 
 		model.getMoveHandler().onBoardLongClick(sq, model.getBoard().getStm());
@@ -356,7 +361,7 @@ public class GameController implements IGameController
 	@Override
 	public void onPlaceClick(ICountSq sq)
 	{
-		if (!getStmPlayer().canClick(model.getBoard().getStm()))
+		if (preventClick())
 			return;
 
 		model.getMoveHandler().onPlaceClick(sq, model.getBoard().getStm());
