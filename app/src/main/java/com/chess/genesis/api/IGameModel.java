@@ -24,7 +24,7 @@ public interface IGameModel
 
 	Board getBoard();
 
-	ObjectArray<Move> getHistory();
+	TimedObjectArr<Move> getHistory();
 
 	IMoveHandler getMoveHandler();
 

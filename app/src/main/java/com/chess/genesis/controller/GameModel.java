@@ -56,7 +56,7 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
-	public ObjectArray<Move> getHistory()
+	public TimedObjectArr<Move> getHistory()
 	{
 		return history;
 	}
