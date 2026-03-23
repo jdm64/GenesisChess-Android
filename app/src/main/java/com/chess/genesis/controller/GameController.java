@@ -290,10 +290,14 @@ public class GameController implements IGameController
 	@Override
 	public void onClockTimeout()
 	{
-		var oppType = Enums.from(OpponentType.class, model.getGameEntity().opponent);
-		if (oppType == OpponentType.REMOTE_WHITE || oppType == OpponentType.REMOTE_BLACK) {
-			ZeroMQClient.bind(ctx, handler -> handler.getActiveData(gameID));
-		}
+		Util.runThread(() -> {
+			var data = model.saveTimeout();
+			if (data instanceof ActiveGameEntity activeGame) {
+				ActiveGameDao.get(ctx).update(activeGame);
+			}
+		});
+
+		getStmPlayer().onClockTimeout(ctx);
 	}
 
 	@Override

@@ -146,6 +146,20 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
+	public GameEntity saveTimeout()
+	{
+		var stmWhite = board.getStm() == Piece.WHITE;
+		data.status = stmWhite ? GameStatus.WHITE_TIMEOUT.id : GameStatus.BLACK_TIMEOUT.id;
+		data.stime = System.currentTimeMillis();
+		if (stmWhite)
+			data.whiteTime = 0;
+		else
+			data.blackTime = 0;
+
+		return data;
+	}
+
+	@Override
 	public GameEntity getGameEntity()
 	{
 		return data;

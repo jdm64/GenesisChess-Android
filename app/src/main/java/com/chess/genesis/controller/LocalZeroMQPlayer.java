@@ -58,4 +58,10 @@ public class LocalZeroMQPlayer extends LocalPlayer
 	{
 		ZeroMQClient.bind(context, (handler) -> handler.resign(gameId));
 	}
+
+	@Override
+	public void onClockTimeout(Context context)
+	{
+		ZeroMQClient.bind(context, (handler) -> handler.getActiveData(gameId));
+	}
 }

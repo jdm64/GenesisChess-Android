@@ -34,6 +34,8 @@ public interface IGameModel
 
 	GameEntity saveBoard();
 
+	GameEntity saveTimeout();
+
 	GameEntity getGameEntity();
 
 	void loadBoard();

@@ -35,4 +35,6 @@ public interface IPlayer
 	default void onResume(Context context) {}
 
 	default void onDispose(Context context) {}
+
+	default void onClockTimeout(Context context) {}
 }
