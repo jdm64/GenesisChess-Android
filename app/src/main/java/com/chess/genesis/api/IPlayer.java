@@ -22,9 +22,9 @@ public interface IPlayer
 {
 	boolean canClick(int stm);
 
-	String getStmName(boolean overwrite);
+	String getName(boolean isStm);
 
-	void finalizeMove(Move move, Context context);
+	boolean finalizeMove(Move move, Context context);
 
 	default void submitMove(Move move, Context context) {}
 

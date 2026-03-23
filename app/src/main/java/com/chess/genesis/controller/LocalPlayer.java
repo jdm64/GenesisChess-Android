@@ -42,18 +42,19 @@ public class LocalPlayer implements IPlayer
 	}
 
 	@Override
-	public String getStmName(boolean overwrite)
+	public String getName(boolean isStm)
 	{
 		return playerName;
 	}
 
 	@Override
-	public void finalizeMove(Move move, Context context)
+	public boolean finalizeMove(Move move, Context context)
 	{
 		Util.runThread(() -> {
 			var data = model.saveBoard();
 			ActiveGameDao.get(context).update((ActiveGameEntity) data);
 		});
+		return true;
 	}
 
 	@Override

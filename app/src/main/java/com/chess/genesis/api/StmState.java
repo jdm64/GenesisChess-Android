@@ -15,8 +15,47 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.data.Enums.ClockType;
 import com.chess.genesis.data.Enums.GameStatus;
+import com.chess.genesis.engine.Piece;
 
-public record StmState(String white, String black, int stm, GameStatus status, int yourColor)
+public record StmState(String white, String black, int yourColor, int stm, GameStatus status, ClockType type, long lastMove, long whiteTime, long blackTime)
 {
+	public boolean hasClock()
+	{
+		return type != ClockType.NO_CLOCK;
+	}
+
+	public boolean clockRunning(int sideColor)
+	{
+		return hasClock() && lastMove > 0 && sideColor == stm && status.isGameActive();
+	}
+
+	public long remaining(boolean isWhite)
+	{
+		var playerTime = isWhite ? whiteTime : blackTime;
+		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
+
+		if (clockRunning(sideColor)) {
+			var timeElapsed = System.currentTimeMillis() - lastMove;
+			return playerTime - timeElapsed;
+		}
+		return playerTime;
+	}
+
+	public boolean isTimeout()
+	{
+		if (hasClock()) {
+			return remaining(stm == Piece.WHITE) < 0;
+		}
+		return false;
+	}
+
+	public int delay()
+	{
+		if (hasClock()) {
+			return remaining(stm == Piece.WHITE) < 10000 ? 25 : 250;
+		}
+		return 1000;
+	}
 }

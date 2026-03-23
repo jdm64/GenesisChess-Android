@@ -41,9 +41,10 @@ public class LocalZeroMQPlayer extends LocalPlayer
 	}
 
 	@Override
-	public void finalizeMove(Move move, Context context)
+	public boolean finalizeMove(Move move, Context context)
 	{
 		submitState.setValue(new SubmitState(move));
+		return false;
 	}
 
 	@Override

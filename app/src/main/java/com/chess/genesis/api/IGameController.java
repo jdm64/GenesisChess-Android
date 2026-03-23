@@ -63,7 +63,7 @@ public interface IGameController
 
 	PlaceView getPlaceView();
 
-	void onStmChange(boolean overwrite);
+	void onStmChange();
 
 	void onMove(Move move);
 

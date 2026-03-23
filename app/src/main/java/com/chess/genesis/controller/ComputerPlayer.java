@@ -34,19 +34,19 @@ public class ComputerPlayer extends LocalPlayer
 	}
 
 	@Override
-	public String getStmName(boolean overwrite)
+	public String getName(boolean isStm)
 	{
-		var name = super.getStmName(overwrite);
-		if (overwrite && model.getBoard().getStm() == yColor)
+		var name = super.getName(isStm);
+		if (isStm && model.getBoard().getStm() == yColor)
 			name += " (thinking)";
 		return name;
 	}
 
 	@Override
-	public void finalizeMove(Move move, Context context)
+	public boolean finalizeMove(Move move, Context context)
 	{
 		engine.setEndTime(0);
-		super.finalizeMove(move, context);
+		return super.finalizeMove(move, context);
 	}
 
 	@Override

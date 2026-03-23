@@ -23,7 +23,6 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.db.*;
 import com.chess.genesis.engine.*;
-import com.chess.genesis.net.*;
 import com.chess.genesis.util.*;
 import com.chess.genesis.view.*;
 import androidx.compose.runtime.*;
@@ -98,8 +97,7 @@ public class GameController implements IGameController
 
 		setPlayers(data.opponent);
 
-		onStmChange(false);
-		getStmView().setClockState(model.updateClock());
+		onStmChange();
 		view.setRatings(data.getRatings());
 		getStmPlayer().takeTurn(ctx);
 	}
@@ -243,26 +241,22 @@ public class GameController implements IGameController
 	}
 
 	@Override
-	public void onStmChange(boolean overwrite)
+	public void onStmChange()
 	{
 		var board = model.getBoard();
-		var boardMate = board.isMate();
-		var gameStatus = switch (boardMate) {
-			case Board.NOT_MATE -> GameStatus.ACTIVE;
-			case Board.CHECK_MATE -> board.getStm() == Piece.WHITE ? GameStatus.WHITE_MATE : GameStatus.BLACK_MATE;
-			case Board.STALE_MATE -> GameStatus.STALEMATE;
-			default -> GameStatus.ACTIVE;
-		};
-		var stmState = new StmState(white.getStmName(overwrite), black.getStmName(overwrite), board.getStm(), gameStatus, yourColor);
-		getStmView().setStmState(stmState);
+		var isWhiteStm = board.getStm() == Piece.WHITE;
+		var whiteName = white.getName(isWhiteStm);
+		var blackName = black.getName(!isWhiteStm);
+
+		getStmView().setState(model.updateStmState(whiteName, blackName, yourColor));
 	}
 
 	@Override
 	public void onMove(Move move)
 	{
-		getStmView().setClockState(model.updateClock());
-
-		getNonStmPlayer().finalizeMove(move, ctx);
+		if (getNonStmPlayer().finalizeMove(move, ctx)) {
+			onStmChange();
+		}
 		getStmPlayer().takeTurn(ctx);
 	}
 
@@ -276,6 +270,7 @@ public class GameController implements IGameController
 	public void submitMove(Move move)
 	{
 		getNonStmPlayer().submitMove(move, ctx);
+		onStmChange();
 	}
 
 	@Override

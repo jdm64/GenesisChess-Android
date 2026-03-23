@@ -21,14 +21,15 @@ public class ArchivedPlayer implements IPlayer
 	}
 
 	@Override
-	public String getStmName(boolean overwrite)
+	public String getName(boolean isStm)
 	{
 		return playerName;
 	}
 
 	@Override
-	public void finalizeMove(Move move, Context context)
+	public boolean finalizeMove(Move move, Context context)
 	{
+		return true;
 	}
 
 	@Override

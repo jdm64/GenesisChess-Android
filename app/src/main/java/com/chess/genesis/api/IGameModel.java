@@ -61,9 +61,7 @@ public interface IGameModel
 
 	void undoMove();
 
-	ClockState getClockState();
-
-	ClockState updateClock();
+	StmState updateStmState(String whiteName, String blackName, int yourColor);
 
 	IGameController getController();
 }

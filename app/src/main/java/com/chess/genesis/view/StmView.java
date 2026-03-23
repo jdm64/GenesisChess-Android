@@ -28,7 +28,6 @@ import com.chess.genesis.engine.*;
 public class StmView extends View
 {
 	private StmState stmState;
-	private ClockState clockState;
 	private RatingsData ratings;
 	private IGameController controller;
 
@@ -42,16 +41,16 @@ public class StmView extends View
 	private final Runnable timerRunnable = new Runnable() {
 		@Override
 		public void run() {
-			if (!clockState.hasClock()) {
+			if (!stmState.hasClock()) {
 				return;
 			}
 
 			invalidate();
-			if (clockState.isTimeout()) {
+			if (stmState.isTimeout()) {
 				controller.onClockTimeout();
 				return;
 			}
-			timerHandler.postDelayed(this, clockState.delay());
+			timerHandler.postDelayed(this, stmState.delay());
 		}
 	};
 
@@ -61,19 +60,12 @@ public class StmView extends View
 
 		this.controller = controller;
 		PieceImgPainter.initColors(context);
-		stmState = new StmState("White", "Black", 0, GameStatus.ACTIVE, 0);
-		clockState = new ClockState(ClockType.NO_CLOCK, -1, 0, 0, 0);
+		stmState = new StmState("White", "Black", Piece.EMPTY, Piece.EMPTY, GameStatus.ACTIVE, ClockType.NO_CLOCK, -1, 0, 0);
 	}
 
-	public void setStmState(StmState state)
+	public void setState(StmState state)
 	{
 		stmState = state;
-		invalidate();
-	}
-
-	public void setClockState(ClockState clock)
-	{
-		clockState = clock;
 		invalidate();
 	}
 
@@ -87,7 +79,7 @@ public class StmView extends View
 	protected void onAttachedToWindow()
 	{
 		super.onAttachedToWindow();
-		timerHandler.postDelayed(timerRunnable, clockState.delay());
+		timerHandler.postDelayed(timerRunnable, stmState.delay());
 	}
 
 	@Override
@@ -114,8 +106,7 @@ public class StmView extends View
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		// Check if we have valid state data
-		if (stmState == null || clockState == null) {
+		if (stmState == null) {
 			return;
 		}
 
@@ -128,7 +119,7 @@ public class StmView extends View
 		var sideColor = isWhite ? Piece.WHITE : Piece.BLACK;
 		var isStm = stmState.stm() == sideColor;
 		var playerName = isWhite ? stmState.white() : stmState.black();
-		var timeRemaining = clockState.remaining(isWhite);
+		var timeRemaining = stmState.remaining(isWhite);
 
 		var left = rect.left;
 		var top = rect.top;
@@ -137,7 +128,7 @@ public class StmView extends View
 		var centerX = (left + right) / 2;
 
 		// Draw stm indicator
-		if (clockState.hasClock() && timeRemaining <= 0) {
+		if (stmState.hasClock() && timeRemaining <= 0) {
 			painter.setColor(PieceImgPainter.innerCheck);
 			canvas.drawRect(left, top, right, bottom, painter);
 		} else if (isStm) {
@@ -170,7 +161,7 @@ public class StmView extends View
 		canvas.drawText(playerName, left + 0.15f * viewHeight, 0.40f * viewHeight, painter);
 
 		// Draw time
-		if (clockState.type() != ClockType.NO_CLOCK) {
+		if (stmState.type() != ClockType.NO_CLOCK) {
 			var timeStr = formatTime(timeRemaining);
 			painter.setTextAlign(Align.CENTER);
 			canvas.drawText(timeStr, centerX, 0.85f * viewHeight, painter);

@@ -106,7 +106,7 @@ public abstract class GameModel implements IGameModel
 			addMove(res.first, element.second);
 		}
 		loadBoard();
-		controller.onStmChange(true);
+		controller.onStmChange();
 	}
 
 	@Override
@@ -247,8 +247,6 @@ public abstract class GameModel implements IGameModel
 		}
 		// set captured pieces
 		view.setCapturedCounts(board.getPieceCounts(Piece.DEAD));
-
-		controller.onStmChange(overwrite);
 	}
 
 	void postRevertMove()
@@ -262,49 +260,36 @@ public abstract class GameModel implements IGameModel
 	}
 
 	@Override
-	public ClockState getClockState()
+	public StmState updateStmState(String whiteName, String blackName, int yourColor)
 	{
 		var len = history.size();
+		var stm = board.getStm();
+
 		var status = Enums.from(GameStatus.class, data.status);
-		long lastMove = status.isGameActive() ? switch (Enums.from(ClockType.class, data.clockType)) {
+		status = status.isGameActive() ? switch (board.isMate()) {
+			case Board.NOT_MATE -> GameStatus.ACTIVE;
+			case Board.CHECK_MATE -> stm == Piece.WHITE ? GameStatus.WHITE_MATE : GameStatus.BLACK_MATE;
+			case Board.STALE_MATE -> GameStatus.STALEMATE;
+			default -> status;
+		} : status;
+
+		var clockType = Enums.from(ClockType.class, data.clockType);
+		long lastMove = status.isGameActive() ? switch (clockType) {
 			case ClockType.NO_CLOCK -> -1;
 			case ClockType.PER_MOVE -> len == 0 ? data.ctime : history.topWithTime().second;
 			case ClockType.REALTIME -> len < 2 ? -1 : history.topWithTime().second;
 		} : -1;
 
-		return new ClockState(
-		    Enums.from(ClockType.class, data.clockType),
-		    lastMove,
-		    data.whiteTime,
-		    data.blackTime,
-		    len % 2 == 0 ? Piece.WHITE : Piece.BLACK
-		);
-	}
 
-	/**
-	 * Update the clock times based on the current game state and time control
-	 */
-	@Override
-	public ClockState updateClock()
-	{
-		switch (Enums.from(ClockType.class, data.clockType)) {
-		case ClockType.NO_CLOCK:
-		case ClockType.PER_MOVE:
-			break;
-		case ClockType.REALTIME:
-			var len = history.size();
-			if (len <= 2) {
-				break;
-			}
-
-			var timeElapsed = history.getWithTime(len - 1).second -  history.getWithTime(len - 2).second;
-			if (len % 2 == 0) {
+		if (status.isGameActive() && clockType == ClockType.REALTIME && len > 2) {
+			var timeElapsed = history.getWithTime(len - 1).second - history.getWithTime(len - 2).second;
+			if (stm == Piece.WHITE) {
 				data.blackTime = data.blackTime - timeElapsed + (data.incTime * 1000L);
 			} else {
 				data.whiteTime = data.whiteTime - timeElapsed + (data.incTime * 1000L);
 			}
 		}
 
-		return getClockState();
+		return new StmState(whiteName, blackName, yourColor, stm, status, clockType, lastMove, data.whiteTime, data.blackTime);
 	}
 }
