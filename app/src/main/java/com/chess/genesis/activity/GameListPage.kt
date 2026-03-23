@@ -593,8 +593,8 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 					TextField(
 						value = when (state.color.value) {
 							ColorType.RANDOM -> "Any"
-							ColorType.BLACK -> "White"
-							ColorType.WHITE -> "Black"
+							ColorType.WHITE -> "White"
+							ColorType.BLACK -> "Black"
 						},
 						textStyle = TextStyle(fontSize = GVal.dialogFontSize, textAlign = TextAlign.End),
 						label = { Text("Play as Color:", fontSize = GVal.dialogFontSize, fontStyle = Italic) },
@@ -619,7 +619,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							text = { Text("White") },
 							enabled = state.opp.value != OpponentCat.HUMAN,
 							onClick = {
-								state.color.value = ColorType.BLACK
+								state.color.value = ColorType.WHITE
 								expandedColor = false
 							}
 						)
@@ -627,7 +627,7 @@ fun ShowNewGameDialog(data: MutableState<NewGameState>, nav: NavHostController) 
 							text = { Text("Black") },
 							enabled = state.opp.value != OpponentCat.HUMAN,
 							onClick = {
-								state.color.value = ColorType.WHITE
+								state.color.value = ColorType.BLACK
 								expandedColor = false
 							}
 						)
