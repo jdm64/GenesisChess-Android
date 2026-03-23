@@ -36,24 +36,29 @@ public class Util
 
 	private Util() {}
 
+	private static String clsName(Object cls)
+	{
+		return cls instanceof Class ? ((Class<?>) cls).getSimpleName() : cls.getClass().getSimpleName();
+	}
+
 	public static void logErr(String msg, Object cls)
 	{
-		Log.e(cls.getClass().getSimpleName(), msg);
+		Log.e(clsName(cls), msg);
 	}
 
 	public static void logErr(Throwable t, Object cls)
 	{
-		Log.e(cls.getClass().getSimpleName(), t.getMessage(), t);
+		Log.e(clsName(cls), t.getMessage(), t);
 	}
 
 	public static void log(String msg, Object cls)
 	{
-		Log.i(cls.getClass().getSimpleName(), msg);
+		Log.i(clsName(cls), msg);
 	}
 
 	public static void log(Throwable t, Object cls)
 	{
-		Log.i(cls.getClass().getSimpleName(), t.getMessage(), t);
+		Log.i(clsName(cls), t.getMessage(), t);
 	}
 
 	public synchronized static Future<?> runThread(Runnable runner)
