@@ -23,6 +23,7 @@ import com.chess.genesis.net.*;
 import com.chess.genesis.net.ZeroMQClient.*;
 import com.chess.genesis.net.ZeroMQHandler.*;
 import com.chess.genesis.net.msgs.*;
+import com.chess.genesis.util.*;
 
 public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 {
@@ -67,12 +68,19 @@ public class RemoteZeroMQPlayer extends LocalPlayer implements IMoveListener
 	@Override
 	public void onMove(LastMoveMsg moveMsg)
 	{
+		if (model.getHistory().size() != moveMsg.index) {
+			return;
+		}
+
 		model.currentMove();
 
 		var board = model.getBoard();
 		var res = board.parseMove(moveMsg.move);
-		if (res.second != Board.VALID_MOVE)
+		if (res.second != Board.VALID_MOVE) {
+			Util.logErr("Failed to parse move: " + moveMsg, this);
 			return;
+		}
+
 		model.applyMove(res.first, moveMsg.moveTime);
 	}
 

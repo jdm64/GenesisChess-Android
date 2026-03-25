@@ -22,6 +22,7 @@ import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
 import com.chess.genesis.engine.*;
 import com.chess.genesis.net.msgs.*;
+import com.chess.genesis.util.*;
 import androidx.paging.*;
 import androidx.room.*;
 
@@ -150,20 +151,27 @@ public interface ActiveGameDao
 
 	static boolean saveMove(ActiveGameEntity game, LastMoveMsg msg)
 	{
+		if (game.getMoves().size() != msg.index) {
+			return false;
+		}
+
 		var board = game.gametype == GameType.GENESIS.id ? new GenBoard() : new RegBoard();
 		if (!board.parseZFen(game.zfen)) {
-			return false;
-		} else if (board.getPly() != msg.index) {
+			Util.logErr("Failed to parse ZFen: " + game.zfen, ActiveGameDao.class);
 			return false;
 		}
 
 		var res = board.parseMove(msg.move);
 		if (res.second != Board.VALID_MOVE) {
+			Util.logErr("Got invalid move from server: " + msg, ActiveGameDao.class);
 			return false;
 		}
 
+		board.make(res.first);
+
+		game.stime = System.currentTimeMillis();
+		game.zfen = board.printZFen();
 		game.history += " " + res.first + "," + msg.moveTime;
-		game.stime = msg.moveTime;
 		game.whiteTime = msg.whiteTime;
 		game.blackTime = msg.blackTime;
 		return true;

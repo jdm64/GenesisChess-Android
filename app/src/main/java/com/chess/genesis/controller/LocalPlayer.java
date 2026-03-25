@@ -46,20 +46,4 @@ public class LocalPlayer implements IPlayer
 	{
 		return playerName;
 	}
-
-	@Override
-	public boolean finalizeMove(Move move, Context context)
-	{
-		Util.runThread(() -> {
-			var data = model.saveBoard();
-			ActiveGameDao.get(context).update((ActiveGameEntity) data);
-		});
-		return true;
-	}
-
-	@Override
-	public void takeTurn(Context context)
-	{
-		// Do nothing
-	}
 }

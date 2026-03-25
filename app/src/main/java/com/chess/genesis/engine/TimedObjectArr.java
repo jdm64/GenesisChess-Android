@@ -70,11 +70,16 @@ public class TimedObjectArr<Type> extends ObjectArray<Type>
 		return new Pair<>(super.get(index), times[index]);
 	}
 
-	public void setWithTime(int index, Type value, long time)
+	public void setTime(int index, long time)
 	{
 		if (index >= times.length)
 			copy(index + 1);
 		times[index] = time;
+	}
+
+	public void setWithTime(int index, Type value, long time)
+	{
+		setTime(index, time);
 		super.set(index, value);
 	}
 

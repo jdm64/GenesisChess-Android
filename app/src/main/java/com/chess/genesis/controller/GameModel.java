@@ -280,13 +280,19 @@ public abstract class GameModel implements IGameModel
 			case ClockType.REALTIME -> len < 2 ? -1 : history.topWithTime().second;
 		} : -1;
 
+		if (status.isGameActive() && clockType == ClockType.REALTIME) {
+			// Saved time might include delay from confirm dialog or network -- so reset it
+			if (len > 0) {
+				history.setTime(len - 1, System.currentTimeMillis());
+			}
 
-		if (status.isGameActive() && clockType == ClockType.REALTIME && len > 2) {
-			var timeElapsed = history.getWithTime(len - 1).second - history.getWithTime(len - 2).second;
-			if (stm == Piece.WHITE) {
-				data.blackTime = data.blackTime - timeElapsed + (data.incTime * 1000L);
-			} else {
-				data.whiteTime = data.whiteTime - timeElapsed + (data.incTime * 1000L);
+			if (len > 2) {
+				var timeElapsed = history.getWithTime(len - 1).second - history.getWithTime(len - 2).second;
+				if (stm == Piece.WHITE) {
+					data.blackTime = data.blackTime - timeElapsed + (data.incTime * 1000L);
+				} else {
+					data.whiteTime = data.whiteTime - timeElapsed + (data.incTime * 1000L);
+				}
 			}
 		}
 

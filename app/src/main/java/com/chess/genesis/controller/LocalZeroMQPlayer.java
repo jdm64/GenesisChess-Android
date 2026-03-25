@@ -41,17 +41,16 @@ public class LocalZeroMQPlayer extends LocalPlayer
 	}
 
 	@Override
-	public boolean finalizeMove(Move move, Context context)
+	public boolean finalizeAndShowConfirm(Move move, Context context)
 	{
 		submitState.setValue(new SubmitState(move));
-		return false;
+		return true;
 	}
 
 	@Override
 	public void submitMove(Move move, Context context)
 	{
 		ZeroMQClient.bind(context, (handler) -> handler.sendMove(gameId, move.toString()));
-		super.finalizeMove(move, context);
 	}
 
 	@Override

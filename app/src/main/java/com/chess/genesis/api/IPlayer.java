@@ -24,11 +24,11 @@ public interface IPlayer
 
 	String getName(boolean isStm);
 
-	boolean finalizeMove(Move move, Context context);
+	default boolean finalizeAndShowConfirm(Move move, Context context) { return false; }
 
 	default void submitMove(Move move, Context context) {}
 
-	void takeTurn(Context context);
+	default void takeTurn(Context context) {}
 
 	default void resign(Context context) {}
 

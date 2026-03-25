@@ -249,15 +249,24 @@ public class GameController implements IGameController
 		var blackName = black.getName(!isWhiteStm);
 
 		getStmView().setState(model.updateStmState(whiteName, blackName, yourColor));
+
+		Util.runThread(() -> {
+			var data = model.saveBoard();
+			if (data instanceof ActiveGameEntity activeGame) {
+				ActiveGameDao.get(ctx).update(activeGame);
+			}
+		});
+
+		getStmPlayer().takeTurn(ctx);
 	}
 
 	@Override
 	public void onMove(Move move)
 	{
-		if (getNonStmPlayer().finalizeMove(move, ctx)) {
-			onStmChange();
+		if (getNonStmPlayer().finalizeAndShowConfirm(move, ctx)) {
+			return;
 		}
-		getStmPlayer().takeTurn(ctx);
+		onStmChange();
 	}
 
 	@Override

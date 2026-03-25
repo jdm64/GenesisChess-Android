@@ -43,10 +43,10 @@ public class ComputerPlayer extends LocalPlayer
 	}
 
 	@Override
-	public boolean finalizeMove(Move move, Context context)
+	public boolean finalizeAndShowConfirm(Move move, Context context)
 	{
 		engine.setEndTime(0);
-		return super.finalizeMove(move, context);
+		return false;
 	}
 
 	@Override

@@ -25,15 +25,4 @@ public class ArchivedPlayer implements IPlayer
 	{
 		return playerName;
 	}
-
-	@Override
-	public boolean finalizeMove(Move move, Context context)
-	{
-		return true;
-	}
-
-	@Override
-	public void takeTurn(Context context)
-	{
-	}
 }
