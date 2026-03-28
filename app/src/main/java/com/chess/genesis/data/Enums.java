@@ -271,7 +271,8 @@ public interface Enums<T extends Enum<T>>
 	enum SyncType implements Enums<SyncType>
 	{
 		ACTIVE(1, "active"),
-		ARCHIVE(2, "archive");
+		ARCHIVE(2, "archive"),
+		WAITLIST(3, "waitlist");
 
 		public final int id;
 		public final String name;

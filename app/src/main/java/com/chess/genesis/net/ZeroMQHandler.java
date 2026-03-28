@@ -95,6 +95,9 @@ public class ZeroMQHandler
 		case MatchQueuedMsg.ID:
 			handleMatchQueued(msg.as(MatchQueuedMsg.class));
 			break;
+		case WaitingListMsg.ID:
+			handleWaitingList(msg.as(WaitingListMsg.class));
+			break;
 		case LoginRequiredMsg.ID:
 			handleLoginRequired(msg.as(LoginRequiredMsg.class));
 			break;
@@ -201,6 +204,11 @@ public class ZeroMQHandler
 		WaitingGames.put(getContext(), msg.toData());
 	}
 
+	void handleWaitingList(WaitingListMsg msg)
+	{
+		WaitingGames.set(getContext(), msg.list);
+	}
+
 	void handleLoginRequired(LoginRequiredMsg msg)
 	{
 		isLoggedIn.set(false);
@@ -280,6 +288,12 @@ public class ZeroMQHandler
 		client.send(JoinMatchedMsg.build(gameType, playAs, baseTime, incTime));
 	}
 
+	public void removeWaiting(GameType gameType, ColorType playAs, int baseTime, int incTime)
+	{
+		do_login();
+		client.send(RemoveWaitingMsg.build(gameType, playAs, baseTime, incTime));
+	}
+
 	public void getActiveData(String gameId)
 	{
 		client.send(GetActiveDataMsg.build(gameId));
@@ -323,6 +337,10 @@ public class ZeroMQHandler
 			break;
 		case SyncType.ARCHIVE:
 			// TODO: sync archive games
+			break;
+		case SyncType.WAITLIST:
+			do_login();
+			client.send(SyncGamesMsg.build(mode, 0));
 			break;
 		}
 	}

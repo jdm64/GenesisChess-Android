@@ -15,7 +15,9 @@
  */
 package com.chess.genesis.api;
 
+import com.chess.genesis.data.*;
 import com.chess.genesis.data.Enums.*;
+import com.chess.genesis.data.Enums.ClockTimes;
 import com.chess.genesis.net.msgs.*;
 
 public record WaitingData(int gameType, int playAs, int baseTime, int incTime)
@@ -44,5 +46,22 @@ public record WaitingData(int gameType, int playAs, int baseTime, int incTime)
 		    Integer.parseInt(parts[1]),
 		    Integer.parseInt(parts[2]),
 		    Integer.parseInt(parts[3]));
+	}
+
+	public String toDisplay()
+	{
+		var gameTypeStr = switch (Enums.from(GameType.class, gameType)) {
+			case GameType.REGULAR -> "Regular";
+			case GameType.GENESIS -> "Genesis";
+			default -> "Any";
+		};
+		var playAsStr = switch (Enums.from(ColorType.class, playAs)) {
+			case ColorType.WHITE -> "White";
+			case ColorType.BLACK -> "Black";
+			default -> "Random";
+		};
+		var baseTimeStr = ClockTimes.from(baseTime, ClockTimes.MIN_15);
+		var incTimeStr = ClockTimes.from(incTime, ClockTimes.SEC_0);
+		return gameTypeStr + " with " + playAsStr + "\n" + baseTimeStr + " + " + incTimeStr;
 	}
 }

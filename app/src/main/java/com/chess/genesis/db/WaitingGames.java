@@ -63,6 +63,11 @@ public class WaitingGames
 		save(ctx, set);
 	}
 
+	public static void set(Context ctx, List<WaitingData> list)
+	{
+		save(ctx, new HashSet<>(list));
+	}
+
 	private static void save(Context ctx, Set<WaitingData> set)
 	{
 		var str = set.stream().map(WaitingData::toPref).collect(Collectors.joining(SEPARATOR));

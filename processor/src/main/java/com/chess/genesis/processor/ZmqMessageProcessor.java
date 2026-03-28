@@ -160,6 +160,7 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> unpackMoveList(fieldName);
 			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> unpackRatingsMap(fieldName);
 			case "android.util.Pair<java.lang.Double,java.lang.Double>" -> unpackDoublePair(fieldName);
+			case "java.util.List<com.chess.genesis.api.WaitingData>" -> unpackWaitingDataList(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
 	}
@@ -204,6 +205,19 @@ public class ZmqMessageProcessor extends AbstractProcessor
 		return fieldName + " = new Pair<>(packer.unpackDouble(), packer.unpackDouble());";
 	}
 
+	private String unpackWaitingDataList(String fieldName)
+	{
+		return fieldName + " = new ArrayList<>();\n"
+			+ "		var size = packer.unpackArrayHeader();\n"
+			+ "		for (int i = 0; i < size; i++) {\n"
+			+ "			var gameType = packer.unpackInt();\n"
+			+ "			var playAs = packer.unpackInt();\n"
+			+ "			var baseTime = packer.unpackInt();\n"
+			+ "			var incTime = packer.unpackInt();\n"
+			+ "			msg." + fieldName + ".add(new com.chess.genesis.api.WaitingData(gameType, playAs, baseTime, incTime));\n"
+			+ "		}";
+	}
+
 	private String getPack(TypeMirror type, String fieldName)
         {
 		var typeStr = type.toString();
@@ -217,6 +231,7 @@ public class ZmqMessageProcessor extends AbstractProcessor
 			case "java.util.List<android.util.Pair<java.lang.String,java.lang.Long>>" -> packMoveList(fieldName);
 			case "java.util.Map<com.chess.genesis.net.GameKey,com.chess.genesis.net.RatingValue>" -> packRatingsMap(fieldName);
 			case "android.util.Pair<java.lang.Double,java.lang.Double>" -> packDoublePair(fieldName);
+			case "java.util.List<com.chess.genesis.api.WaitingData>" -> packWaitingDataList(fieldName);
 			default -> throw new IllegalArgumentException("Unsupported type: " + typeStr);
 		};
 	}
@@ -257,5 +272,16 @@ public class ZmqMessageProcessor extends AbstractProcessor
 	{
 		return "packer.packDouble(msg." + fieldName + ".first);\n"
 			+ "		packer.packDouble(msg." + fieldName + ".second);";
+	}
+
+	private String packWaitingDataList(String fieldName)
+	{
+		return "packer.packArrayHeader(msg." + fieldName + ".size());\n"
+			+ "		for (var item : msg." + fieldName + ") {\n"
+			+ "			packer.packInt(item.gameType());\n"
+			+ "			packer.packInt(item.playAs());\n"
+			+ "			packer.packInt(item.baseTime());\n"
+			+ "			packer.packInt(item.incTime());\n"
+			+ "		}";
 	}
 }

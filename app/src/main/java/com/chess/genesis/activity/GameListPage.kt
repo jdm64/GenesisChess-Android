@@ -36,6 +36,7 @@ import androidx.navigation.*
 import androidx.paging.*
 import androidx.paging.compose.*
 import com.chess.genesis.R
+import com.chess.genesis.api.*
 import com.chess.genesis.data.*
 import com.chess.genesis.data.Enums.*
 import com.chess.genesis.db.*
@@ -202,6 +203,7 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 	val importState = remember { mutableStateOf(ImportGameState()) }
 	var showBottomSheet by remember { mutableStateOf(false) }
 	val waitingCount = remember { mutableIntStateOf(0) }
+	val showWaitingList = remember { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
 		waitingCount.intValue = WaitingGames.get(ctx).size
@@ -275,6 +277,7 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 						.fillMaxWidth()
 						.padding(6.dp)
 						.border(1.dp, MaterialTheme.colorScheme.primary)
+						.clickable { showWaitingList.value = true }
 				)
 			}
 			GameList(nav, PaddingValues(0.dp), mode)
@@ -304,6 +307,7 @@ fun GameListPage(nav: NavHostController, mode: GameSource) {
 	if (isActive) {
 		ShowNewGameDialog(newGameState, nav)
 		ShowImportInviteDialog(importState)
+		ShowWaitingListDialog(showWaitingList, waitingCount)
 	}
 }
 
@@ -836,7 +840,7 @@ fun ShowImportInviteDialog(state: MutableState<ImportGameState>) {
 			}
 		},
 		confirmButton = {
-			TextButton(onClick = { onImportGame(state, context) }) {
+			TextButton(onClick = { state.value.show.value = false }) {
 				Text("Import")
 			}
 		},
@@ -845,5 +849,85 @@ fun ShowImportInviteDialog(state: MutableState<ImportGameState>) {
 				Text("Cancel")
 			}
 		}
+	)
+}
+
+@Composable
+fun ShowWaitingListDialog(
+	show: MutableState<Boolean>,
+	waitingCount: MutableIntState
+) {
+	if (!show.value) {
+		return
+	}
+	val context = LocalContext.current
+	val waitingList = remember { mutableStateListOf<WaitingData>() }
+
+	LaunchedEffect(show.value) {
+		waitingList.clear()
+		waitingList.addAll(WaitingGames.get(context))
+	}
+
+	DisposableEffect(Unit) {
+		val pref = Pref(context)
+		val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+			if (key == pref.key(R.array.pf_waitingGames)) {
+				waitingList.clear()
+				waitingList.addAll(WaitingGames.get(context))
+				waitingCount.intValue = waitingList.size
+			}
+		}
+		pref.setChangeListener(listener)
+		onDispose {
+			// cleanup
+		}
+	}
+
+	AlertDialog(
+		onDismissRequest = { show.value = false },
+		title = {
+			Text(text = "Waiting for Matched Game", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+		},
+		text = {
+			Column {
+				if (waitingList.isEmpty()) {
+					Text("No games waiting")
+				} else {
+					LazyColumn {
+						items(waitingList.size) { index ->
+							val item = waitingList[index]
+							Row(
+								modifier = Modifier
+									.fillMaxWidth()
+									.padding(vertical = 4.dp),
+								verticalAlignment = Alignment.CenterVertically
+							) {
+								Text(
+									text = item.toDisplay(),
+									modifier = Modifier.weight(1f)
+								)
+								Button(
+									onClick = {
+										ZeroMQClient.bind(context) { handler ->
+											handler.removeWaiting(
+												Enums.from(GameType::class.java, item.gameType()),
+												Enums.from(ColorType::class.java, item.playAs()),
+												item.baseTime(),
+												item.incTime()
+											)
+										}
+									},
+									colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+								) {
+									Text("Delete")
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		confirmButton = {},
+		dismissButton = {}
 	)
 }
